@@ -1,0 +1,275 @@
+/* eslint-disable no-unused-vars */
+import AddUserModal from '@appComponents/modals/addUserModal';
+import {
+  CommanMessage,
+  UserManagement as UserMessage,
+} from '@constants/successErrorMessages.constant';
+import { _User } from '@definations/user.type';
+import { Logout } from '@helpers/common.helper';
+import getLocation from '@helpers/getLocation';
+import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import {
+  AddCustomerUser,
+  deleteCustomerUserList,
+  getCustomerUserList,
+  UpdateCustomerUser,
+} from '@services/customerUser.service';
+import {
+  CustomerAddResponse,
+  CustomerUsersObject,
+} from '@services/responses/customerUser';
+import { useEffect, useState } from 'react';
+
+export type User = {
+  email: string;
+  createdDate?: Date;
+  role: string;
+  lastLoggedIn?: Date;
+  firstName: string;
+  lastName: string;
+};
+
+const UserManagement = () => {
+  const { showModal, setShowLoader } = useActions_v2();
+  const { logInUser, logoutClearCart, setWishListEmpty } = useActions_v2();
+  const customer = useTypedSelector_v2((state) => state.user.customer);
+  const store = useTypedSelector_v2((state) => state.store.id);
+  const [userList, setUserList] = useState<CustomerUsersObject[] | null>(null);
+  const [showAddUserModal, setShowAddUserModal] = useState(false);
+  const [editData, setEditData] = useState<CustomerUsersObject | null>(null);
+  const closeModal = () => {
+    setShowAddUserModal(false);
+    setEditData(null);
+  };
+
+  const logoutHandler = () => {
+    logoutClearCart();
+    setWishListEmpty([]);
+    Logout(logInUser);
+  };
+
+  const fetchUserList = async () => {
+    const userList = await getCustomerUserList(customer?.id || 0);
+    if (userList) {
+      setUserList(userList);
+    }
+  };
+  useEffect(() => {
+    if (customer?.id) {
+      fetchUserList();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [customer?.id]);
+
+  const submitHandler = async (
+    values: _User,
+    formikProps: {
+      setFieldError: (arg0: string, arg1: string | undefined) => void;
+    },
+  ) => {
+    const location = await getLocation();
+    const isUpdating = Boolean(editData);
+    const userObject = {
+      storeCustomerUsersModel: {
+        id: isUpdating ? editData?.id : 0,
+        rowVersion: '',
+        location: location.country,
+        ipAddress: location.ip_address,
+        macAddress: '00-00-00-00-00-00',
+        firstname: values.firstName ? values.firstName : '',
+        lastName: values.lastName ? values.lastName : '',
+        email: values.email,
+        customerRoleId: values.role,
+        customerId: customer?.id ? customer.id : 0,
+        storeId: store,
+        recStatus: 'A',
+      },
+    };
+    setShowLoader(true);
+    try {
+      const res = (await (isUpdating ? UpdateCustomerUser : AddCustomerUser)(
+        userObject,
+      )) as unknown as CustomerAddResponse;
+      if (res) {
+        showModal({
+          message: isUpdating
+            ? UserMessage.UpdatedSuccessfully
+            : UserMessage.AddedSuccessfully,
+          title: 'Success',
+        });
+        fetchUserList();
+        closeModal();
+      } else {
+        if (res['storeCustomerUsersModel.Email']) {
+          formikProps.setFieldError(
+            'email',
+            res['storeCustomerUsersModel.Email'],
+          );
+        } else {
+          showModal({ message: CommanMessage.Failed, title: 'Failed' });
+          closeModal();
+        }
+      }
+    } catch (error) {
+      showModal({ message: CommanMessage.Failed, title: 'Failed' });
+    }
+    setShowLoader(false);
+  };
+  const isAdmin =
+    customer?.customerRoleId === 0 || customer?.customerRoleId === 2
+      ? true
+      : false;
+  const deleteUser = async (customerId: number) => {
+    const isConfirm = await confirm('Are you sure? You want to delete this.');
+    if (isConfirm) {
+      setShowLoader(true);
+      try {
+        await deleteCustomerUserList(customerId);
+        await fetchUserList();
+        showModal({
+          message: UserMessage.DeletedSuccessfully,
+          title: 'Success',
+        });
+      } catch (error) {
+        showModal({ message: CommanMessage.Failed, title: 'Failed' });
+      }
+      setShowLoader(false);
+    }
+  };
+
+  return (
+    <>
+      <section className='pt-[40px] pb-[40px]'>
+        <div className='cotainer mx-10'>
+          <div className='mx-auto space-y-10 sm:px-[16px] lg:px-0 pb-[8px]'>
+            <div className='bg-[#ffffff] border-t border-b border-[#d2d2d2] sm:border'>
+              {isAdmin && (
+                <div className='flex items-center p-4 border-b border-gray-200 sm:p-6 sm:grid sm:grid-cols-4 sm:gap-x-6 bg-gray-50'>
+                  <div className='flex-1 grid grid-cols-2 gap-x-[24px] text-sm sm:col-span-4 sm:grid-cols-4 md:col-span-2'></div>
+                  <div className='hidden md:col-span-2 md:flex md:items-center md:justify-end md:space-x-4'>
+                    <button
+                      data-modal-toggle='adduserModal'
+                      className='btn btn-secondary btn-md'
+                      onClick={() => setShowAddUserModal(true)}
+                    >
+                      <span>Add User</span>
+                    </button>
+                  </div>
+                </div>
+              )}
+              <ul
+                role='list'
+                className='divide-y divide-[#ddd] text-default-text bg-light-gray px-[20px]'
+              >
+                <li className='p-2 sm:p-4'>
+                  <div className='flex flex-wrap'>
+                    <div className='w-full lg:w-1/3'>
+                      {customer?.firstname} {customer?.lastName}
+                    </div>
+                    <div className='w-full lg:w-1/3'>
+                      Created on:{' '}
+                      {customer && customer.createdDate
+                        ? new Date(customer.createdDate).toLocaleDateString()
+                        : '-'}
+                    </div>
+                    <div className='w-full lg:w-1/3'>
+                      {customer && customer.customerRoleId === 1
+                        ? 'You are a User'
+                        : 'You have admin acceess'}
+                    </div>
+                  </div>
+                </li>
+                <li className='p-2 sm:p-4'>
+                  <div className='flex flex-wrap'>
+                    <div className='w-full lg:w-1/3'>{customer?.email}</div>
+                    <div className='w-full lg:w-1/3'>
+                      Last log on: {new Date().toLocaleDateString()}
+                    </div>
+                    <div className='w-full lg:w-1/3'>
+                      <button onClick={logoutHandler}>
+                        Logout
+                      </button>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+
+            {isAdmin && (
+              <div className='bg-[#ffffff] sm:border overflow-auto'>
+                <table className='table w-full border border-[#ddd]'>
+                  <thead className=''>
+                    <tr className='divide-x divide-[#ddd] text-left text-default-text bg-light-gray'>
+                      <th className='p-2'>Username</th>
+                      <th className='p-2'>Role</th>
+                      <th className='p-2'>Rec Status</th>
+                      <th className='p-2'>Email Address</th>
+                      <th className='p-2'>Created date</th>
+                      <th className='p-2'>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody className='divide-y divide-[#ddd] text-left text-default-text'>
+                    {userList &&
+                      userList.map((user, index) => (
+                        <tr key={index} className=''>
+                          <td className='border-b border-r border-[#ddd] px-[12px] py-[12px]'>
+                            {user.firstname} {user.lastname}
+                          </td>
+                          <td className='border-b border-r border-[#ddd] px-[12px] py-[12px]'>
+                            {user.customerRoleName}
+                          </td>
+                          <td className='border-b border-r border-[#ddd] px-[12px] py-[12px]'>
+                            {user.recStatus}
+                          </td>
+                          <td className='border-b border-r border-[#ddd] px-[12px] py-[12px]'>
+                            {user.email}
+                          </td>
+                          <td className='border-b border-r border-[#ddd] px-[12px] py-[12px]'>
+                            {new Date(user.createdDate).toLocaleDateString()}
+                          </td>
+                          <td className='border-b border-r border-[#ddd] px-[12px] py-[12px]'>
+                            <div className='flex flex-wrap gap-x-4'>
+                              <EditIcon
+                                className='text-primary'
+                                onClick={() => {
+                                  setEditData(user);
+                                  setShowAddUserModal(true);
+                                }}
+                              />
+                              <DeleteIcon
+                                onClick={() => deleteUser(user?.id || 0)}
+                                className='text-red-500'
+                              />
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
+                {!userList?.length ? (
+                  <div className='text-center col-span-8 p-2'>
+                    No record found.
+                  </div>
+                ) : (
+                  <></>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+      {showAddUserModal && (
+        <AddUserModal
+          store={store}
+          submitHandler={submitHandler}
+          closeModal={closeModal}
+          editData={editData}
+        />
+      )}
+    </>
+  );
+};
+
+export default UserManagement;

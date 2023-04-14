@@ -1,0 +1,43 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@utils/*": ["utils_v2/*"],
+      "@definations/*": ["definations_v2/*"],
+      "@configs/*": ["configs_v2/*"],
+      "@services/*": ["services_v2/*"],
+      "@constants/*": ["constants_v2/*"],
+      "@appComponents/*": ["appComponents_v2/*"],
+      "@controllers/*": ["controllers_v2/*"],
+      "@payloads/*": ["services_v2/payloads/*"],
+      "@responses/*": ["services_v2/responses/*"],
+      "@redux/*": ["redux_v2/*"],
+      "@hooks_v2/*": ["hooks_v2/*"],
+      "@templates/*": ["Templates/*"],
+      "@header/*": ["Templates/Header/*"],
+      "@helpers/*": ["helpers_v2/*"],
+      "@images/*": ["assets/images/*"]
+    },
+    "target": "es5",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "controllers_v2/checkoutController"
+  ],
+  "exclude": ["node_modules", "public"]
+}

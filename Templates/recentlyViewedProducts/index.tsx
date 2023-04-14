@@ -1,0 +1,18 @@
+import { NextPage } from 'next';
+import {
+  _RecentlyViewedProps,
+  _RecentlyViewedTemplates,
+} from './RecetlyViewed.d';
+import ProductRecetlyViewed_Type1 from './RecetlyViewed_Type1';
+import ProductRecetlyViewed_Type2 from './RecetlyViewed_Type2';
+
+const ProductRecetlyViewedTemplates: _RecentlyViewedTemplates = {
+  type1: ProductRecetlyViewed_Type1,
+  type2: ProductRecetlyViewed_Type2,
+};
+const ProductRecentlyViewed: NextPage<_RecentlyViewedProps> = ({ product }) => {
+  const ProductRecetlyViewedTemplate = ProductRecetlyViewedTemplates['type1'];
+  return <ProductRecetlyViewedTemplate product={product} />;
+};
+
+export default ProductRecentlyViewed;

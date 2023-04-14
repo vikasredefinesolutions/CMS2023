@@ -1,0 +1,4 @@
+interface _OrderDetailsTemplates {
+  type1: React.FC;
+  type2: React.FC;
+}

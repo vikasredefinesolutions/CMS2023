@@ -1,0 +1,36 @@
+export interface _UpdateUserType {
+  id: number;
+  firstname: string;
+  lastName: string;
+  email: string;
+  password: string;
+  companyId: number;
+  tierId: number;
+  isRegistered: number;
+  storeId: number;
+  sharedCustomerId: number;
+  isLocked: boolean;
+  navCustomerId: string;
+  isSuperuser: boolean;
+  customerType: string;
+  isTaxableuser: boolean;
+  industryId: number;
+  customerRoleId: number;
+  birthDate: null;
+  gender: string;
+  isForceAdminForResetPassword: boolean;
+  resetPasswordRequestDate: null;
+  resetPasswordChangedDate: null;
+  forgotPasswordResetToken: null;
+  klaviyoProfileId: string;
+  isUseNet: boolean;
+  recStatus: string;
+  createdDate: string;
+  createdBy: number;
+  modifiedDate: string;
+  modifiedBy: number;
+  rowVersion: string;
+  location: string;
+  ipAddress: string;
+  macAddress: string;
+}
