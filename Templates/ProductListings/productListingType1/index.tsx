@@ -7,6 +7,7 @@ import React, { Fragment } from 'react';
 
 import { GetlAllProductList, _ListingProps } from '../ProductListingType';
 import FilterChips from './components/FilterChips';
+import FreeBanner from './components/FreeBanner';
 import SideFilter from './components/SideFilter';
 import TemplateOneFilterBar from './components/TemplateOneFilterBar';
 import TemplateOneListing from './components/TemplateOneListing';
@@ -36,6 +37,7 @@ const ProductListingType1: React.FC<_ListingProps> = ({
 }) => {
   return (
     <>
+      <FreeBanner />
       <section id=''>
         <div className='bg-white'>
           <div className='container mx-auto '>

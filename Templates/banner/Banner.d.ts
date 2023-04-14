@@ -6,6 +6,7 @@ export interface _BannerTemplates {
   type2: React.FC<_BannerComponentProps>;
   type3: React.FC<_BannerComponentProps>;
   type4: React.FC<_BannerComponentProps>;
+  type5: React.FC<_BannerComponentProps>;
 }
 
 export interface _BannerComponentProps {

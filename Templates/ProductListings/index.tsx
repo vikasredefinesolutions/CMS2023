@@ -49,7 +49,7 @@ const ProductListing: React.FC<_ProductListingProps & { id: string }> = ({
     clearFilters,
     sorting,
   } = ProductListController(pageData, slug, checkedFilters, pageData?.brandId);
-  const Component = productListingTemplates[`type${id}` as 'type1'];
+  const Component = productListingTemplates[`type2` as 'type2'];
   return (
     <Component
       showSortMenu={showSortMenu}

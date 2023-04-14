@@ -6,12 +6,14 @@ import BannerType1 from './bannerType1';
 import BannerType2 from './bannerType2';
 import BannerType3 from './bannerType3';
 import BannerType4 from './bannerType4';
+import BannerType5 from './bannerType5';
 
 const bannerTemplates: _BannerTemplates = {
   type1: BannerType1,
   type2: BannerType2,
   type3: BannerType3,
   type4: BannerType4,
+  type5: BannerType5,
 };
 
 const Banner: React.FC<_BannerProps & { id: string }> = ({
@@ -20,8 +22,7 @@ const Banner: React.FC<_BannerProps & { id: string }> = ({
   seType,
   slug,
 }) => {
-  const Component =
-    bannerTemplates[`${id}` as 'type1' | 'type2' | 'type3' | 'type4'];
+  const Component = bannerTemplates[`type5` as 'type5'];
   const isbrand: boolean = seType === 'brand' ? true : false;
   const [banner, setBanner] = useState<_BannerRes[] | null>(null);
   const [showModal, setShowModal] = useState<string | null>(null);

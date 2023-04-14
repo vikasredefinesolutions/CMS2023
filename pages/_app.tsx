@@ -4,7 +4,7 @@ import * as _AppController from '@controllers/_AppController.async';
 import { TrackFile } from '@services/tracking.service';
 import App, { AppContext, AppInitialProps, AppProps } from 'next/app';
 import { useRouter } from 'next/router';
-import 'public/assets/css/main.css';
+// import 'public/assets/css/main.css';
 import 'public/assets/css/spinner.css';
 import { useEffect } from 'react';
 import { _globalStore } from 'store.global';
