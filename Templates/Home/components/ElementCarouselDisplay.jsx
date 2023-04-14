@@ -166,6 +166,7 @@ const handleTransition= ()=>{
             animationHandler="fade"
             transitionTime="700"
           >
+            
             {bannerArr.images.map((image) => {
               return (
               
