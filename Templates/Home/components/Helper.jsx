@@ -52,7 +52,7 @@ export const updateSetProperties = (element) => {
 
       if (value.type == 'btn_link') {
         buttonId = key.replace('_link', '');
-        if (x.querySelectorAll('#' + buttonId).length > 0) {
+        if (x && x.querySelectorAll('#' + buttonId).length > 0) {
           x.querySelectorAll('#' + buttonId)[0].href = value.value;
         }
       }
@@ -77,7 +77,7 @@ export const updateSetProperties = (element) => {
 
       if (value.type == 'btn_link_target') {
         buttonId = key.replace('_window', '');
-        if (x.querySelectorAll('#' + buttonId).length > 0) {
+        if (x && x.querySelectorAll('#' + buttonId).length > 0) {
           x.querySelectorAll('#' + buttonId)[0].target = value.value;
         }
       }
@@ -85,7 +85,7 @@ export const updateSetProperties = (element) => {
       if (value.type == 'btn_display') {
         if (value.value == 'No') {
           buttonId = key.replace('_display', '');
-          if (x.querySelectorAll('#' + buttonId).length > 0) {
+          if (x && x.querySelectorAll('#' + buttonId).length > 0) {
             x.querySelectorAll('#' + buttonId)[0].remove();
           }
         }
@@ -197,21 +197,21 @@ export const updateSetProperties = (element) => {
       }
     });
 
-    if (x.querySelectorAll('#Button').length > 0) {
+    if (x && x.querySelectorAll('#Button').length > 0) {
       x.querySelectorAll('#Button')[0].className = Button_className;
       if (x.querySelectorAll('#ButtonParent').length > 0) {
         x.querySelectorAll('#ButtonParent')[0].className = Button_parent;
       }
     }
 
-    if (x.querySelectorAll('#Button1').length > 0) {
+    if (x && x.querySelectorAll('#Button1').length > 0) {
       x.querySelectorAll('#Button1')[0].className = Button1_className;
       if (x.querySelectorAll('#Button1Parent').length > 0) {
         x.querySelectorAll('#Button1Parent')[0].className = Button1_parent;
       }
     }
 
-    if (x.querySelectorAll('#Button2').length > 0) {
+    if (x && x.querySelectorAll('#Button2').length > 0) {
       x.querySelectorAll('#Button2')[0].className = Button2_className;
       if (x.querySelectorAll('#Button2Parent').length > 0) {
         x.querySelectorAll('#Button2Parent')[0].className = Button2_parent;
@@ -225,7 +225,7 @@ export const updateSetProperties = (element) => {
       }
 
       if (value.type == 'text') {
-        if (x.querySelectorAll('#' + key).length > 0) {
+        if (x && x.querySelectorAll('#' + key).length > 0) {
           x.querySelectorAll('#' + key)[0].innerHTML = value.value;
         }
       }
@@ -239,7 +239,7 @@ export const updateSetProperties = (element) => {
           propName !== 'Button2'
         ) {
           if (
-            value.value !== '' &&
+            value.value !== '' && x && 
             x.querySelectorAll('#' + propName).length > 0
           ) {
             x.querySelectorAll('#' + propName)[0].className = value.value;
@@ -249,19 +249,19 @@ export const updateSetProperties = (element) => {
 
       if (value.type == 'fontcolor') {
         let propName = key.replace('_font_color', '');
-        if (x.querySelectorAll('#' + propName).length > 0)
+        if (x && x.querySelectorAll('#' + propName).length > 0)
           x.querySelectorAll('#' + propName)[0].style = 'color: ' + value.value;
       }
 
       if (value.type == 'transform') {
         let propName = key.replace('_text_transform', '');
-        if (x.querySelectorAll('#' + propName).length > 0) {
+        if (x && x.querySelectorAll('#' + propName).length > 0) {
           x.querySelectorAll('#' + propName)[0].classList.add(value.value);
         }
       }
 
       if (value.type == 'image') {
-        if(x.querySelectorAll('#'+key).length > 0)
+        if(x && x.querySelectorAll('#'+key).length > 0)
             {
 
               let classAlign = '';
@@ -467,7 +467,7 @@ export const updateSetProperties = (element) => {
                     }
                   }
                 }
-                  if(x.querySelectorAll('#'+key+'_img').length > 0)
+                  if(x && x.querySelectorAll('#'+key+'_img').length > 0)
                   {
                     x.querySelectorAll('#'+key+'_img')[0].src = value.value;
                   }
@@ -496,27 +496,31 @@ export const updateSetProperties = (element) => {
                     }
                     // if(imageSize == '')
                     //   imageSize = 'max-w-none';
-                    x.querySelectorAll('#' + key)[0].className = classAlign;
-                    x.querySelectorAll('#' + key)[0].innerHTML =
-                      '<a href="' +
-                      link +
-                      '" class="inline-block group" id="' +
-                      key +
-                      '_img_link"><img id="' +
-                      key +
-                      '_img" class="' +
-                      imageSize +
-                      ' ' +
-                      effectClass +
-                      ' ' +
-                      imgClass +
-                      '" src="' +
-                      value.value +
-                      '" alt="' +
-                      alt +
-                      '" title="' +
-                      alt +
-                      '" /> </a>';
+                    if(x)
+                    {
+                      x.querySelectorAll('#' + key)[0].className = classAlign;
+                      x.querySelectorAll('#' + key)[0].innerHTML =
+                        '<a href="' +
+                        link +
+                        '" class="inline-block group" id="' +
+                        key +
+                        '_img_link"><img id="' +
+                        key +
+                        '_img" class="' +
+                        imageSize +
+                        ' ' +
+                        effectClass +
+                        ' ' +
+                        imgClass +
+                        '" src="' +
+                        value.value +
+                        '" alt="' +
+                        alt +
+                        '" title="' +
+                        alt +
+                        '" /> </a>';
+                    }
+
                   }
               }
               
@@ -546,7 +550,7 @@ export const updateSetProperties = (element) => {
       if (value.type == 'fontsize') {
         let propname = key.replace('_font_size', '');
         if (
-          x.querySelectorAll('#' + propname).length > 0 &&
+          x && x.querySelectorAll('#' + propname).length > 0 &&
           isNaN(value.value)
         ) {
           assignMultipleClass(
@@ -587,7 +591,7 @@ export const updateSetProperties = (element) => {
       
       if(value.type === 'width')
       {
-        if(value.value)
+        if(value.value && x)
           x.querySelectorAll('#'+key)[0].classList.add(value.value);
       }
       
@@ -604,7 +608,7 @@ export const updateSetProperties = (element) => {
           let sectionWidth = propname.section_width ?? '';
 
           fields.forEach(el => {
-            if(x.querySelectorAll('#'+el+'_pos').length > 0) {
+            if(x && x.querySelectorAll('#'+el+'_pos').length > 0) {
               if(textHPos)
                 x.querySelectorAll('#'+el+'_pos')[0].className = 'flex absolute '+fontSize+' inset-0 p-1 lg:p-4 text-white '+textHPos+' '+textVPos;
               else
@@ -649,7 +653,7 @@ export const updateSetProperties = (element) => {
         
         if(iorvideo && iorvideo === 'Video')
         {
-          if(x.querySelectorAll('#'+kn).length > 0)
+          if(x && x.querySelectorAll('#'+kn).length > 0)
           {
             x.querySelectorAll('#'+kn)[0].innerHTML = '<iframe class="w-full aspect-video" src="https://www.youtube.com/embed/'+value.value+'?rel=0" allow="autoplay; encrypted-media" frameborder="0"></iframe>'
           }
@@ -668,7 +672,7 @@ export const updateSetProperties = (element) => {
         });
         if(iorvideo && iorvideo === 'Video')
         {
-         if(x.querySelectorAll('#'+kn).length > 0)
+         if(x && x.querySelectorAll('#'+kn).length > 0)
           {
             x.querySelectorAll('#'+kn)[0].innerHTML = '<iframe src="https://player.vimeo.com/video/'+value.value+'?background=1" frameborder="0" allow="autoplay; fullscreen" allowfullscreen="" style="" class="w-full aspect-video"></iframe>';
           }
@@ -676,7 +680,7 @@ export const updateSetProperties = (element) => {
       }
 
       if (value.type == 'text') {
-        if (x.querySelectorAll('#' + key).length > 0) {
+        if (x && x.querySelectorAll('#' + key).length > 0) {
           x.querySelectorAll('#' + key)[0].innerHTML = value.value;
         }
       }
@@ -740,13 +744,13 @@ export const updateSetProperties = (element) => {
             acValues={value.value}
           />,
         );
-        if (x.querySelectorAll('#' + value.type).length > 0) {
+        if (x && x.querySelectorAll('#' + value.type).length > 0) {
           x.querySelectorAll('#' + value.type)[0].innerHTML =
             ourComponetiNString;
         }
       }
 
-      if (value.type == 'side_change' && key == 'Sidechange') {
+      if (x && value.type == 'side_change' && key == 'Sidechange') {
         x.querySelectorAll('#left-section')[0].classList.remove('lg:order-2');
         x.querySelectorAll('#left-section')[0].classList.remove('lg:order-1');
 
@@ -781,11 +785,12 @@ export const updateSetProperties = (element) => {
             value.value,
           );
 
-          x.querySelectorAll('#banner_display')[0].innerHTML = strHTML;
+          
+          querySelectorAll('#banner_display')[0].innerHTML = strHTML;
         }
       }
       if (value.type == 'dynamic') {
-        if (element.properties[value.type] !== undefined) {
+        if (element.properties[value.type] !== undefined && x) {
           let functionName = element.properties[value.type].html;
 
           let strHTML = dynamicFunctions[functionName](value.value, element);
@@ -897,7 +902,7 @@ export const updateSetProperties = (element) => {
       )
     ) {
       if (
-        element.selectedVal.ElementConfiguration_Image_display.value == 'No'
+        element.selectedVal.ElementConfiguration_Image_display.value == 'No' && x
       ) {
         imgDisplay = false;
         x.querySelectorAll('#left-section')[0].classList.add('hidden');
@@ -916,7 +921,7 @@ export const updateSetProperties = (element) => {
       )
     ) {
       if (
-        element.selectedVal.ElementConfiguration_final_class.value.trim() !== ''
+        element.selectedVal.ElementConfiguration_final_class.value.trim() !== '' && x
       )
         x.querySelectorAll('#right-section')[0].className =
           element.selectedVal.ElementConfiguration_final_class.value.trim();
@@ -928,7 +933,7 @@ export const updateSetProperties = (element) => {
       )
     ) {
       if (
-        element.selectedVal.ElementConfiguration_Text_display.value === 'No'
+        element.selectedVal.ElementConfiguration_Text_display.value === 'No' && x
       ) {
         textDisplay = false;
         x.querySelectorAll('#right-section')[0].classList.add('hidden');
@@ -936,7 +941,7 @@ export const updateSetProperties = (element) => {
       }
     }
 
-    if (textDisplay && imgDisplay) {
+    if (textDisplay && imgDisplay && x) {
       if (
         Object.keys(element.selectedVal).includes(
           'ElementConfiguration_Image_position',
@@ -982,7 +987,7 @@ export const updateSetProperties = (element) => {
 
       if (layoutAdjust || Object.keys(element.selectedVal).includes('Layout')) {
         let layout = 50;
-        if (Object.keys(element.selectedVal).includes('Layout')) {
+        if (x && Object.keys(element.selectedVal).includes('Layout')) {
           layout = element.selectedVal.Layout.value;
           removeWidthClass(x);
           x.querySelectorAll('#left-section')[0].classList.remove('w-full');

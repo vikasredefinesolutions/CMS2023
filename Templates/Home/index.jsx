@@ -286,7 +286,7 @@ const Home = (props) => {
 
                    
                   return (
-                    <div
+<>                    {componentValue.visibility === 'on' && <div
                       key={index}
                       className={`w-full mx-auto ${componentValue.visibility == 'off' ? 'hidden' : ''} ${backgroundStyle === 'outer' ? backgroundImageClass : ''}`} 
                       
@@ -372,7 +372,7 @@ const Home = (props) => {
                       }
                     </div>  
                     </section>
-                    </div>
+                    </div> }</>
                   );
 
                   // return <div key={index} className="text-center p-5 border my-2" dangerouslySetInnerHTML={{ __html: comphtml }}></div>
