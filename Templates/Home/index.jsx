@@ -1,4 +1,8 @@
 //import React, { useState, useEffect, useRef } from "react";
+import ElementAccordionDisplay from '@templates/Home/components/ElementAccordionDisplay';
+import ElementCarouselDisplay from '@templates/Home/components/ElementCarouselDisplay';
+import FeaturedProducts from '@templates/Home/components/FeaturedProducts';
+import SocialShare from '@templates/Home/components/SocialShare';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
 import { useEffect, useState } from 'react';
 
@@ -285,10 +289,98 @@ const Home = (props) => {
                       innerDivClass += ' ' + 'mb-['+componentValue.selectedVal.container_bottom_margin.value+'px]';                                                          
                   }
 
-                 
-                  return (
-                    "Hello"
+                {componentValue.visibility === 'on' && <>
+                   return (
+                    <div
+                      key={index}
+                      className={`w-full mx-auto ${componentValue.visibility === 'off' ? 'hidden' : ''} ${backgroundStyle === 'outer' ? backgroundImageClass : ''}`} 
+                      
+                      style={ loadBackgroundType(componentValue) == 'image' ? { backgroundImage: backgroundStyle === 'outer' ? backgroundDefault : 'none' } : { background: backgroundStyle === 'outer' ? backgroundDefault : 'none' }}
+                      id={`div${componentValue.no}`}
+                      // ref={ref => {
+                      //     refArray.current[componentValue.uid] = ref; // took this from your guide's example.
+                      // }}
+                    >
+                    <section className={`${additionalclass}`} >
+                     <div className={`${innerDivClass} ${backgroundStyle === 'inner' ? backgroundImageClass : ''}`} style={ loadBackgroundType(componentValue) == 'image' ? { backgroundImage: backgroundStyle === 'inner' ? backgroundDefault : 'none' } : { background: backgroundStyle === 'inner' ? backgroundDefault : 'none' }} >     
+                     {Object.keys(componentValue.properties).includes('PlainText') ? (<>
+                      <div dangerouslySetInnerHTML={{ __html: componentValue.selectedVal?.PlainText.value }} />
+                     </>) : ( <>
+                        {Object.keys(componentValue.properties).includes(
+                            'socialshare',
+                          ) ? (<><SocialShare /> </>) : ( <>
+                          
+                          {Object.keys(componentValue.selectedVal).includes(
+                            'featuredproducts_section_title',
+                          ) ||
+                          Object.keys(componentValue.selectedVal).includes(
+                            'featuredproducts_product_count',
+                          ) ? (
+                            <>
+                            <FeaturedProducts
+                                dataArr={componentValue.selectedVal}
+                              />
+                            </>
+                          ) : (
+                            <>
+                              {Object.keys(componentValue.selectedVal).includes(
+                                'carousel',
+                              ) ? (
+                                <>
+                                  <ElementCarouselDisplay
+                                    bannerArr={
+                                      componentValue.selectedVal.carousel.value
+                                    }
+                                  />
+                                </>
+                              ) : (
+                                <>
+                                  {Object.keys(componentValue.selectedVal).includes(
+                                    'FullAccordion',
+                                  ) ? (
+                                    <>
+                                      
+                                        {componentValue?.selectedVal?.Title && (
+                                          <div class='text-box-h2 mb-4' id='Title'>
+                                            {componentValue.selectedVal.Title.value ?? ''}
+                                          </div>
+                                        )}
+                                        <ul className='w-full'>
+                                          <ElementAccordionDisplay
+                                          selected_Values={componentValue.selectedVal} 
+                                            acValues={
+                                              componentValue.selectedVal
+                                                .FullAccordion.value
+                                            }
+                                          
+                                          />
+                                        </ul>
+                                    
+                                    </>
+                                  ) : (
+                                    <>
+                                      <div
+                                        className={componentValue.uuid}
+                                        dangerouslySetInnerHTML={{
+                                          __html: componentValue.html,
+                                        }}
+                                      ></div>
+                                    </>
+                                  )}
+                                </>
+                              )}
+                            </>
+                          )} </>)
+                        }
+                        </>
+                        )
+                      }
+                    </div>  
+                    </section>
+                    </div>
                   );
+                </>}
+                 
 
                   // return <div key={index} className="text-center p-5 border my-2" dangerouslySetInnerHTML={{ __html: comphtml }}></div>
                 })
