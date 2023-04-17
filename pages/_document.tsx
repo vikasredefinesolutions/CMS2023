@@ -3,8 +3,7 @@ import Document, {
   DocumentInitialProps,
   Head,
   Html,
-  Main,
-  NextScript
+  Main
 } from 'next/document';
 import { _globalStore } from 'store.global';
 import config, { cssApis } from '../configs_v2/api.config';
@@ -87,7 +86,7 @@ class MyDocument extends Document {
            <link
             rel='stylesheet'
             type='text/css'
-            href={`https://www.ystore.us/HTML/RedefineCommerce/Ecom-front/corporategear/tailwin-css-29.css`}
+            href={`https://redefinecommerce.blob.core.windows.net/rdcbeta/1/store/tailwin-css-29.css`}
           />
           
 
@@ -156,22 +155,7 @@ class MyDocument extends Document {
         </Head>
         <body className='font-Outfit bg-white'>
           <Main />
-          <NextScript />
-
-          {/* -----------------------KLEVU------------------------- */}
-          <script
-            type='text/javascript'
-            dangerouslySetInnerHTML={{
-              __html: `var klevu_cms_module_enabled = true, klevu_cmsSearchEnabled = true, klevu_current_version = '20.0.1';
-        var klevu_storeLandingPageUrl = 'https://www.corporategear.com/home/Search', klevu_showQuickSearchOnEnter = false, klevu_searchQueryParam = 'q';
-        var klevu_apiKey = 'klevu-14936563081965977',
-            searchTextBoxName = 'txtSearch',
-            klevu_lang = 'en',
-            klevu_result_top_margin = '',
-            klevu_result_left_margin = '';
-        (function () { var ws = document.createElement('script'), kl_protocol = ("https:" === document.location.protocol ? "https://" : "http://"); ws.type = 'text/javascript'; ws.async = true; ws.src = kl_protocol + 'js.klevu.com/klevu-js-v1/js/klevu-webstore.js'; ws.charset = "UTF-8"; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ws, s); })();`,
-            }}
-          ></script>
+          
         </body>
       </Html>
     );
