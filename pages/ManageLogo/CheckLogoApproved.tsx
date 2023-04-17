@@ -1,4 +1,4 @@
-import { type1, type2 } from '@constants/dummy.constant';
+import { type2 } from '@constants/dummy.constant';
 import CheckLogoApproved from '@templates/CheckLogoApproved';
 
 const index = () => {

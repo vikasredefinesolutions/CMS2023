@@ -55,7 +55,7 @@ const ResetPassword_type1: React.FC<{ token: string }> = ({ token }) => {
       })
       .catch(() => {})
       .finally(() => {
-        setShowLoader(true);
+        setShowLoader(false);
       });
   };
 

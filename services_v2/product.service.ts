@@ -51,7 +51,8 @@ export type _ProducDetailAPIs_V2 =
   | 'FetchLogoLocationByProductId'
   | 'SumbitRequestConsultationDetails'
   | 'FetchFeaturedProducts'
-  | 'FetchProductsBySKUs';
+  | 'FetchProductsBySKUs'
+  | 'SendCompareLinkByEmail';
 
 export type _ProductDetailService_V2 = {
   service: 'productDetails';
@@ -492,6 +493,28 @@ export const FetchProductsBySKUs = async (payload: {
     name: {
       service: 'productDetails',
       api: 'FetchProductsBySKUs',
+    },
+    request: {
+      url: url,
+      method: 'POST',
+      data: payload,
+    },
+  });
+
+  return response;
+};
+
+export const SendCompareLinkByEmail = async (payload: {
+  storeId: number;
+  Email: string;
+  Link: string;
+}) => {
+  const url = `StoreCustomer/SendLinkCompare/${payload.Email}/${payload.storeId}/${payload.Link}.json`;
+  console.log(url, 'ur;');
+  const response = await CallAPI_v2({
+    name: {
+      service: 'productDetails',
+      api: 'SendCompareLinkByEmail',
     },
     request: {
       url: url,

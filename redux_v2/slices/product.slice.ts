@@ -4,6 +4,7 @@ import { _SizeChartTransformed } from '@definations/APIs/sizeChart.res';
 import { createSlice } from '@reduxjs/toolkit';
 import { updatedLogosHandler } from './product.slice.helper';
 import {
+  _LogoDetail,
   _ProductStore,
   _Product_SetValues_Action,
   _Product_UpdateLogoDetails_Actions,
@@ -279,7 +280,6 @@ export const productSlice = createSlice({
           });
           state.som_logos.allowNextLogo = true;
         }
-
         return;
       }
 
@@ -423,12 +423,15 @@ export const productSlice = createSlice({
       state,
       action: {
         payload: {
-          value: string;
-          label: string;
+          logoLocationDetailId: number;
+          name: string;
+          image: string;
+          threeDImage: string;
+          threeDLogoLocationClass: string;
+          price: number;
+          cost: number;
+          brandGuideLines: boolean;
           addOrRemove: 'ADD' | 'REMOVE';
-          logo: {
-            url: string;
-          };
         };
       },
     ) => {
@@ -437,16 +440,21 @@ export const productSlice = createSlice({
       if (addOrRemove === 'REMOVE') {
         state.toCheckout.availableOptions =
           state.toCheckout.availableOptions?.filter(
-            (opt) => opt.value !== action.payload.value,
+            (opt) => opt.name !== action.payload.name,
           ) || null;
         state.toCheckout.allowNextLogo = true;
       }
 
       if (addOrRemove === 'ADD') {
         state.toCheckout.availableOptions?.push({
-          label: action.payload.label,
-          value: action.payload.value,
-          logo: { url: action.payload.logo.url },
+          logoLocationDetailId: action.payload.logoLocationDetailId,
+          name: action.payload.name,
+          image: action.payload.image,
+          threeDImage: action.payload.threeDImage,
+          threeDLogoLocationClass: action.payload.threeDLogoLocationClass,
+          price: action.payload.price,
+          cost: action.payload.cost,
+          brandGuideLines: action.payload.brandGuideLines,
         });
         state.toCheckout.allowNextLogo = true;
       }
@@ -507,11 +515,14 @@ export const productSlice = createSlice({
       state,
       action: {
         payload: {
-          label: string;
-          value: string;
-          logo: {
-            url: string;
-          };
+          logoLocationDetailId: number;
+          name: string;
+          image: string;
+          threeDImage: string;
+          threeDLogoLocationClass: string;
+          price: number;
+          cost: number;
+          brandGuideLines: boolean;
         }[];
       },
     ) => {
@@ -876,16 +887,21 @@ export const productSlice = createSlice({
       action: {
         payload: {
           location: {
-            imageUrl: string;
-            label: string;
-            value: string;
+            logoLocationDetailId: number;
+            name: string;
+            image: string;
+            threeDImage: string;
+            threeDLogoLocationClass: string;
+            price: number;
+            cost: number;
+            brandGuideLines: boolean;
           } | null;
           url?: string;
           name?: string;
         };
       },
     ) => {
-      let logos = [];
+      let logos: _LogoDetail[] = [];
       const upcomingLogo = action.payload;
       const oldLogos = state.toCheckout.logos;
 
@@ -897,50 +913,37 @@ export const productSlice = createSlice({
             name: upcomingLogo?.name || '',
           },
           location: upcomingLogo.location || {
-            imageUrl: '',
-            label: '',
-            value: '',
+            logoLocationDetailId: 0,
+            name: '',
+            image: '',
+            threeDImage: '',
+            threeDLogoLocationClass: '',
+            price: 0,
+            cost: 0,
+            brandGuideLines: false,
+          },
+        });
+      } else {
+        logos = [...oldLogos];
+
+        logos.push({
+          no: logos.length - 1,
+          logo: {
+            url: upcomingLogo?.url || '',
+            name: upcomingLogo?.name || '',
+          },
+          location: upcomingLogo.location || {
+            logoLocationDetailId: 0,
+            name: '',
+            image: '',
+            threeDImage: '',
+            threeDLogoLocationClass: '',
+            price: 0,
+            cost: 0,
+            brandGuideLines: false,
           },
         });
       }
-
-      if (oldLogos !== null) {
-        logos = [...oldLogos];
-
-        const logoExist = oldLogos.find(
-          (logo) => logo.location.value === upcomingLogo.location?.value,
-        );
-
-        if (logoExist) {
-          logos = logos.map((logo) => {
-            if (logo.location.value === upcomingLogo.location?.value) {
-              return {
-                ...logo,
-                logo: {
-                  url: upcomingLogo.url || '',
-                  name: upcomingLogo.name || '',
-                },
-              };
-            }
-            return logo;
-          });
-        }
-        if (!logoExist) {
-          logos.push({
-            no: logos.length,
-            logo: {
-              url: upcomingLogo?.url || '',
-              name: upcomingLogo?.name || '',
-            },
-            location: upcomingLogo.location || {
-              imageUrl: '',
-              value: '',
-              label: '',
-            },
-          });
-        }
-      }
-
       state.toCheckout.logos = logos;
     },
     updateCheckoutObject: (state, action) => {

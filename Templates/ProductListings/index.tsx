@@ -2,6 +2,7 @@ import ProductListController from '@controllers/productListController';
 import { useActions_v2 } from '@hooks_v2/index';
 import React, { useEffect } from 'react';
 
+import { __pagesText } from '@constants/pages.text';
 import {
   _ProductListingProps,
   _ProductListingTemplates,
@@ -49,7 +50,10 @@ const ProductListing: React.FC<_ProductListingProps & { id: string }> = ({
     clearFilters,
     sorting,
   } = ProductListController(pageData, slug, checkedFilters, pageData?.brandId);
-  const Component = productListingTemplates[`type2` as 'type2'];
+  const Component = productListingTemplates[`type1` as 'type1'];
+  if (product.length === 0) {
+    return <> {__pagesText.productListing.noProductsFound}</>;
+  }
   return (
     <Component
       showSortMenu={showSortMenu}

@@ -25,6 +25,7 @@ export interface _RedesignStore {
   isSewOutEnable: boolean;
   sewOutCharges: number;
   mediaBaseUrl: string;
+  imageFolderPath: string;
 }
 
 // Define the initial state using that type
@@ -46,6 +47,7 @@ const initialState: _RedesignStore = {
   isSewOutEnable: false,
   sewOutCharges: 0,
   mediaBaseUrl: '',
+  imageFolderPath: '',
 };
 
 export const storeSlice = createSlice({
@@ -77,6 +79,7 @@ export const storeSlice = createSlice({
       state.sewOutCharges = store.sewOutCharges;
       state.isSewOutEnable = store.isSewOutEnable;
       state.mediaBaseUrl = store.mediaBaseUrl;
+      state.imageFolderPath = store.imageFolderPath;
     },
 
     change_Layout: (

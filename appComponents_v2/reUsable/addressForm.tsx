@@ -1,6 +1,6 @@
 import { defaultCountry } from '@configs/page.config';
 import { AddressFormRefType } from '@controllers/checkoutController/CheckoutAddressForm';
-import { getCountryList, getStatesList } from '@services/address.service';
+import { FetchCountriesList, FetchStatesList } from '@services/general.service';
 import { useEffect, useState } from 'react';
 const AddressForm = (props: AddressFormRefType) => {
   const {
@@ -27,9 +27,7 @@ const AddressForm = (props: AddressFormRefType) => {
   >([]);
 
   useEffect(() => {
-    getCountryList().then((country) => {
-      setCountry(country);
-    });
+    FetchCountriesList().then((res) => res && setCountry(res));
   }, []);
 
   useEffect(() => {}, [country]);
@@ -43,7 +41,7 @@ const AddressForm = (props: AddressFormRefType) => {
     }
     const obj = country.find((count) => count.name === values.countryName);
     if (obj) {
-      getStatesList(obj.id).then((state) => setState(state));
+      FetchStatesList(obj.id).then((res) => res && setState(res));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [values.countryName, country]);

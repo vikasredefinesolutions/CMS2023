@@ -73,13 +73,13 @@ const BrandProductListing: React.FC<_props> = ({
                       />
                     ),
                   )
-                : totalBrands.map((_) => {
+                : totalBrands.map((_, index) => {
                     return (
-                      <>
+                      <React.Fragment key={index}>
                         <li className='text-center relative border border-gray-200 border-solid'>
                           <FeaturedSkeleton />
                         </li>
-                      </>
+                      </React.Fragment>
                     );
                   })}
             </ul>

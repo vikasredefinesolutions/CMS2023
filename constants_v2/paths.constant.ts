@@ -20,7 +20,7 @@ export const paths = {
   GIFT_CARD_DETAILS: '/giftcards/:giftId',
   loggedInMenu: {
     title: '/myaccount/accountsettings',
-    order: '/Orders',
+    order: '/orders',
     settings: '/myaccount/accountsettings',
     help: '/help',
     manageLogo: '/ManageLogo/ManageLogo',
@@ -29,7 +29,7 @@ export const paths = {
     account_settings: '/myaccount/accountsettings',
     user_management: '/myaccount/UserManagement',
     manage_logo: '/myaccount/ManageLogo',
-    orders: '/Orders',
+    orders: '/orders',
     order_details: 'Orders/Orderdetails',
     address: '/myaccount/Address',
   },

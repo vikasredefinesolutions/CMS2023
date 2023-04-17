@@ -8,7 +8,6 @@ import Document, {
 } from 'next/document';
 import { _globalStore } from 'store.global';
 import config, { cssApis } from '../configs_v2/api.config';
-import { __pagesConstant } from '../constants_v2/pages.constant';
 
 let storeId: null | number = null;
 let faviconURL: string = '';
@@ -80,9 +79,7 @@ class MyDocument extends Document {
           <link
             rel='stylesheet'
             type='text/css'
-            href={`${_globalStore.blobUrl}/${
-              _globalStore.blobRootDirectory
-            }/${1}/store/${storeId}/css/${storeId}.css`}
+            href={`${_globalStore.blobUrl}/${_globalStore.blobRootDirectory}/${_globalStore.companyId}/store/${storeId}/css/${storeId}.css`}
           />
           <link
             rel='stylesheet'
@@ -93,9 +90,7 @@ class MyDocument extends Document {
           <link
             rel='stylesheet'
             type='text/css'
-            href={`${_globalStore.blobUrl}/${
-              _globalStore.blobRootDirectory
-            }/${1}/store/${storeId}/css/custom.css`}
+            href={`${_globalStore.blobUrl}/${_globalStore.blobRootDirectory}/${_globalStore.companyId}/store/${storeId}/css/custom.css`}
           />
 
           {/* -----------------------SLIDER STYLESHEETS------------------------- */}
@@ -144,13 +139,6 @@ class MyDocument extends Document {
               __html:
                 'var klevu_addPageNumberToUrl = true,klevu_addSelectedFiltersToUrl = true; ',
             }}
-          ></script>
-
-          {/* -----------------------KLAVIYO------------------------- */}
-          <script
-            type='text/javascript'
-            src={`${config.baseUrl.klaviyo}?company_id=${__pagesConstant._document.klaviyoKey}`}
-            async
           ></script>
         </Head>
         <body className='font-Outfit bg-white'>

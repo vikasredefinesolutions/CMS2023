@@ -18,7 +18,7 @@ interface _props {
   onBlur: (e: React.FocusEvent<any, Element>) => void;
 }
 
-const SU_Input: React.FC<_props> = ({
+const SU1_Input: React.FC<_props> = ({
   name,
   type = 'text',
   value,
@@ -83,4 +83,4 @@ const SU_Input: React.FC<_props> = ({
   );
 };
 
-export default SU_Input;
+export default SU1_Input;

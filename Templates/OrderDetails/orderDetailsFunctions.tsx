@@ -296,7 +296,10 @@ export const mergeAllSizes = (
   return sizes;
 };
 
-export const BillingAddress = (billing: _MyAcc_OrderBillingDetails) => {
+export const BillingAddress = (
+  billing: _MyAcc_OrderBillingDetails,
+  type: '1' | '2' = '1',
+) => {
   let address = '';
   if (billing?.billingAddress1) {
     address += `${billing.billingAddress1}`;
@@ -322,6 +325,15 @@ export const BillingAddress = (billing: _MyAcc_OrderBillingDetails) => {
     address += `${billing.billingZip} `;
   }
 
+  if (type === '2') {
+    return (
+      <div>
+        <div className='font-[600]'>Bill to:</div>
+        <div className=''>{address}</div>
+      </div>
+    );
+  }
+
   return (
     <div className='w-full lg:w-1/3 px-2'>
       <div className='border border-gray-200 h-full bg-white'>
@@ -332,7 +344,10 @@ export const BillingAddress = (billing: _MyAcc_OrderBillingDetails) => {
   );
 };
 
-export const ShippingAddress = (billing: _MyAcc_OrderBillingDetails) => {
+export const ShippingAddress = (
+  billing: _MyAcc_OrderBillingDetails,
+  type: '1' | '2' = '1',
+) => {
   let address = '';
   if (billing?.shippingAddress1) {
     address += `${billing.shippingAddress1}`;
@@ -356,6 +371,15 @@ export const ShippingAddress = (billing: _MyAcc_OrderBillingDetails) => {
   if (billing?.shippingZip) {
     address += ', ';
     address += `${billing.billingZip}`;
+  }
+
+  if (type === '2') {
+    return (
+      <div>
+        <div className='font-[600]'>Ship to:</div>
+        <div className=''>{address}</div>
+      </div>
+    );
   }
 
   return (

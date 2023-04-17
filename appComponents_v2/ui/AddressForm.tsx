@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { addressMessages } from '@constants/validationMessages';
 import { AddUpdateAddressRequest } from '@definations/APIs/address.req';
-import { getCountryList, getStatesList } from '@services/address.service';
+import { FetchCountriesList, FetchStatesList } from '@services/general.service';
 import { Formik } from 'formik';
 import React, { useEffect, useState } from 'react';
 import * as Yup from 'yup';
@@ -77,11 +77,8 @@ const AddressForm: React.FC<Props> = ({
       (res) => res.name.toLowerCase() === countryName.toLowerCase(),
     );
     if (id) {
-      const state = await getStatesList(id.id);
-      setState(state);
-      return state;
+      FetchStatesList(id.id).then((res) => res && setState(res));
     }
-    return null;
   };
 
   useEffect(() => {
@@ -112,9 +109,7 @@ const AddressForm: React.FC<Props> = ({
   }, [editData, country]);
 
   useEffect(() => {
-    getCountryList().then((res) => {
-      setCountry(res);
-    });
+    FetchCountriesList().then((res) => res && setCountry(res));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

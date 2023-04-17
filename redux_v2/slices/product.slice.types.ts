@@ -129,11 +129,7 @@ export interface _LogoDetail {
     url: string;
     name: string;
   };
-  location: {
-    label: string;
-    value: string;
-    imageUrl: string;
-  };
+  location: _AvailableLocationDetailsOtherStores;
 }
 
 export interface _Product_SizeQtys {
@@ -145,6 +141,17 @@ export interface _Product_SizeQtys {
   color?: string | undefined;
 }
 
+export interface _AvailableLocationDetailsOtherStores {
+  logoLocationDetailId: number;
+  name: string;
+  image: string;
+  threeDImage: string;
+  threeDLogoLocationClass: string;
+  price: number;
+  cost: number;
+  brandGuideLines: boolean;
+}
+
 export interface _state_productToCheckout {
   allowAddToCart: boolean;
   minQty: number;
@@ -153,9 +160,7 @@ export interface _state_productToCheckout {
   totalPrice: number;
   additionalLogoCharge: number;
   additionalSewOutCharges: number;
-  availableOptions:
-    | { value: string; label: string; logo: { url: string } }[]
-    | null;
+  availableOptions: _AvailableLocationDetailsOtherStores[] | null;
   sizeQtys: _Product_SizeQtys[] | null;
   logo: {
     price: Array<number | 'FREE'> | null;

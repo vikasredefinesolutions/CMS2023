@@ -1,4 +1,3 @@
-import { __StaticImg } from '@constants/assets';
 import Home from '@templates/Home';
 import React from 'react';
 
@@ -56,7 +55,7 @@ const SD_FaqSection: React.FC<_Props> = ({ page }) => {
                   </div>
                 </div>
               </div>
-              <div className='w-full pt-10'>
+              {/* <div className='w-full pt-10'>
                 <div
                   className='embed-responsive embed-responsive-16by9'
                   data-acsb-overflower='true'
@@ -85,7 +84,7 @@ const SD_FaqSection: React.FC<_Props> = ({ page }) => {
                     </span>
                   </iframe>
                 </div>
-              </div>
+              </div> */}
               <div className='w-full pt-10'>
                 <div className='text-medium-text bg-light-gray'>
                   <div className='mt-[8px] p-[16px]'>

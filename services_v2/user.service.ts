@@ -13,12 +13,12 @@ import {
   _UpdatePasswordForGuestEmail,
   _Valid,
 } from '@definations/APIs/user.res';
+import { _SignIn } from '@definations/user.type';
 import { CallAPI_v2 } from '@helpers/api.helper';
 import { conditionalLog_V2 } from '@helpers/console.helper';
 import { _CreateNewAccount_Payload } from '@payloads/createNewAccount.payload';
 import { _AccCreated } from '@responses/createNewAccount';
 import { SendAsync } from '@utils/axios.util';
-import { _SignIn } from 'types/API/user.req';
 
 export type _UserAPIs_V2 =
   | 'SignInUser'
@@ -135,9 +135,9 @@ export const FetchOrderDetails = async ({
 }: {
   orderId: number;
 }): Promise<{
-  billing: _MyAcc_OrderBillingDetails | null;
-  product: _MyAcc_OrderProductDetails[] | null;
-}> => {
+  billing: _MyAcc_OrderBillingDetails;
+  product: _MyAcc_OrderProductDetails[];
+} | null> => {
   let billingDetails: null | _MyAcc_OrderBillingDetails = null;
   let productDetails: null | _MyAcc_OrderProductDetails[] = null;
 
@@ -149,13 +149,20 @@ export const FetchOrderDetails = async ({
     productDetails = values[1].status === 'fulfilled' ? values[1].value : null;
   });
 
+  if (!billingDetails || !productDetails) {
+    return null;
+  }
+
   return {
     product: productDetails,
     billing: billingDetails,
   };
 };
+/////////////////////////////////////////
+// NOTE:
+///// A Customer (by default is admin) can add others as users by email invitation
 
-export const FetchOrderIds = async (payload: {
+export const FetchOrdersIdByCustomerId = async (payload: {
   storeId: number;
   userId: number;
 }): Promise<number[] | null> => {
@@ -174,7 +181,7 @@ export const FetchOrderIds = async (payload: {
 
   return response;
 };
-export const FetchUserOrderIds = async (payload: {
+export const FetchOrdersIdByCustomerUserId = async (payload: {
   storeId: number;
   userId: number;
 }): Promise<number[] | null> => {

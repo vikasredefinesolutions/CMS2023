@@ -57,14 +57,15 @@ export const __console_v2: __Console = {
       FetchDiscountTablePrices: false,
       FetchLogoLocationByProductId: false,
       SumbitRequestConsultationDetails: false,
+      SendCompareLinkByEmail: false,
     },
   },
   general: {
     service: {
       UploadImage: false,
-      GetStatesList: false,
-      GetCountriesList: false,
-      GetIndustriesList: false,
+      FetchStatesList: false,
+      FetchCountriesList: false,
+      FetchIndustriesList: false,
     },
   },
   slug: {
@@ -99,6 +100,7 @@ export const __console_v2: __Console = {
       FetchLogoLocationByProductId: false,
       SumbitRequestConsultationDetails: false,
       FetchFeaturedProducts: false,
+      SendCompareLinkByEmail: false,
     },
   },
   home: {

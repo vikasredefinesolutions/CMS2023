@@ -4,7 +4,6 @@ export interface _Config {
     klaviyo2: string;
     googleFonts: string;
   };
-  imageFolderPath: string;
 }
 
 export const cssApis = {
@@ -26,7 +25,6 @@ const dev: _Config = {
     klaviyo2: 'https://a.klaviyo.com/',
     googleFonts: 'https://fonts.googleapis.com/',
   },
-  imageFolderPath: '/rdc/1/store/4/images/',
 };
 
 const stage: _Config = {
@@ -35,7 +33,6 @@ const stage: _Config = {
     klaviyo2: 'https://a.klaviyo.com/',
     googleFonts: 'https://fonts.googleapis.com/',
   },
-  imageFolderPath: '/rdc/1/store/4/images/',
 };
 
 const prod: _Config = {
@@ -44,7 +41,6 @@ const prod: _Config = {
     klaviyo2: 'https://a.klaviyo.com/',
     googleFonts: 'https://fonts.googleapis.com/',
   },
-  imageFolderPath: '/rdc/1/store/4/images/',
 };
 
 let config: _Config;

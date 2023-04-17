@@ -3,8 +3,8 @@ import ProductDetails_Type1 from './ProductDetailsType1';
 import { _ProductDetailsTemplates } from '@templates/ProductDetails/productDetails';
 import { NextPage } from 'next';
 import { _StoreCache } from '../../pages/[slug]/slug';
-import ProductDetails_Type2 from './productDetailType2';
 import { _ProductDetailsProps } from './productDetailsTypes/productDetail.res';
+import ProductDetails_Type2 from './productDetailType2';
 
 const ProductDetailTemplates: _ProductDetailsTemplates = {
   type1: ProductDetails_Type1,
@@ -14,7 +14,7 @@ const ProductDetailTemplates: _ProductDetailsTemplates = {
 const ProductDetails: NextPage<_ProductDetailsProps & _StoreCache> = (
   props,
 ) => {
-  const ProductDetails = ProductDetailTemplates['type2'];
+  const ProductDetails = ProductDetailTemplates['type1'];
   return <ProductDetails {...props} />;
 };
 

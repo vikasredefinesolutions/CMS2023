@@ -1,10 +1,10 @@
+import MyAccountTabType1 from '@appComponents/common/MyAccountTabsType1';
 import AccountSetting from '../accountTemplate_Type1/components/MyAccountSetting';
-import MyAccountTabs from '../accountTemplate_Type1/components/MyAccountTab';
 
 const AccountTemplates_Type2 = () => {
   return (
     <>
-      <MyAccountTabs />
+      <MyAccountTabType1 />
       <AccountSetting />
     </>
   );

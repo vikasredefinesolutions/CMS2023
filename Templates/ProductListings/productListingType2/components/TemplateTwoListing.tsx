@@ -105,7 +105,7 @@ const TemplateTwoListing = ({
                     {skuList.length &&
                     skuList.includes(product?.sku ? product.sku : '') ? (
                       <Link href={getCompareLink()}>
-                        <a>Compare {skuList.length}</a>
+                        <span>Compare {skuList.length}</span>
                       </Link>
                     ) : (
                       <>Add to Compare</>

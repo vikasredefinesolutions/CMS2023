@@ -34,8 +34,11 @@ const SD_ShopNowSection: React.FC<_Props> = () => {
     <section className='relative pt-[40px] bg-light-gray'>
       <div className='container px-[16px] mx-auto'>
         <div className='flex flex-wrap -mx-[12px] -mt-[24px]'>
-          {mockData.map((ele) => (
-            <div className='w-full lg:w-1/4 px-[12px] md:w-1/3 mt-[24px]'>
+          {mockData.map((ele, index) => (
+            <div
+              key={index}
+              className='w-full lg:w-1/4 px-[12px] md:w-1/3 mt-[24px]'
+            >
               <div className='border border-gray-50 px-[24px] py-[24px] bg-[#ffffff] relative'>
                 <div className='flex justify-center'>
                   <a className='' href={ele.slug}>

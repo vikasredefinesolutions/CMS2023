@@ -1,10 +1,11 @@
+import { _Country, _Industry, _State } from '@definations/app.type';
 import { CallAPI_v2 } from 'helpers_v2/api.helper';
 
 export type _GeneralAPIs =
   | 'UploadImage'
-  | 'GetStatesList'
-  | 'GetCountriesList'
-  | 'GetIndustriesList';
+  | 'FetchStatesList'
+  | 'FetchCountriesList'
+  | 'FetchIndustriesList';
 
 export interface _GeneralService {
   service: 'general';
@@ -35,13 +36,13 @@ export const UploadImage = async ({
   return response;
 };
 
-export const GetStatesList = async (id: number): Promise<_State[] | null> => {
+export const FetchStatesList = async (id: number): Promise<_State[] | null> => {
   const url = `StoreCustomer/getcustomerstatebycountryid/${id}.json`;
 
   const response = await CallAPI_v2<_State[]>({
     name: {
       service: 'general',
-      api: 'GetStatesList',
+      api: 'FetchStatesList',
     },
     request: {
       url: url,
@@ -52,13 +53,13 @@ export const GetStatesList = async (id: number): Promise<_State[] | null> => {
   return response;
 };
 
-export const GetCountriesList = async (): Promise<_Country[] | null> => {
+export const FetchCountriesList = async (): Promise<_Country[] | null> => {
   const url = `StoreCustomer/getcustomercountry.json`;
 
   const response = await CallAPI_v2<_Country[]>({
     name: {
       service: 'general',
-      api: 'GetCountriesList',
+      api: 'FetchCountriesList',
     },
     request: {
       url: url,
@@ -69,13 +70,13 @@ export const GetCountriesList = async (): Promise<_Country[] | null> => {
   return response;
 };
 
-export const GetIndustriesList = async (): Promise<_Industry[] | null> => {
+export const FetchIndustriesList = async (): Promise<_Industry[] | null> => {
   const url = `StoreCustomer/getcustomerindustry.json`;
 
   const response = await CallAPI_v2<_Industry[]>({
     name: {
       service: 'general',
-      api: 'GetCountriesList',
+      api: 'FetchCountriesList',
     },
     request: {
       url: url,

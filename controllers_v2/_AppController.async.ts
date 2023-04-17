@@ -175,6 +175,7 @@ export const fetchStoreDetails = async (
     pageType: '',
     pathName: '',
     code: '',
+    imageFolderPath: '',
     storeTypeId: null,
     storeName: '',
     isAttributeSaparateProduct: false,

@@ -104,8 +104,8 @@ const ProductsInfoTabs: React.FC<_props> = ({ dataArr }) => {
       <Box sx={{ marginTop: 0 }}>
         {dataArr?.featuredproducts_selected_brands.value.map((brand, index) => {
           return (
-            <>
-              <TabPanel sx={{ p: 0 }} value={brand.value} key={index}>
+            <React.Fragment key={index}>
+              <TabPanel sx={{ p: 0 }} value={brand.value}>
                 <BrandProductListing
                   brandId={+brand.value}
                   brandsData={brandsData}
@@ -114,7 +114,7 @@ const ProductsInfoTabs: React.FC<_props> = ({ dataArr }) => {
                   totalBrands={dataArr?.featuredproducts_selected_brands.value}
                 />
               </TabPanel>
-            </>
+            </React.Fragment>
           );
         })}
       </Box>

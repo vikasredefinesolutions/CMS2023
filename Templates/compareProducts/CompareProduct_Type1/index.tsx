@@ -1,9 +1,14 @@
 import Price from '@appComponents/Price';
 import { __LocalStorage } from '@constants/global.constant';
+import { __ValidationText } from '@constants/validation.text';
 import { _CompareProducts } from '@definations/compare';
+import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
+import { SendCompareLinkByEmail } from '@services/product.service';
+import { ErrorMessage, Form, Formik } from 'formik';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
+import * as Yup from 'yup';
 import { _CompareProductprops } from '../CompareProduct';
 import AllColors from './Components/AllColors';
 import AllSizes from './Components/AllSizes';
@@ -14,7 +19,11 @@ const CompareProduct_Type1: React.FC<_CompareProductprops> = (props) => {
   const [products, setProducts] = useState<_CompareProducts | null>(
     props.products,
   );
-
+  const { showModal, setShowLoader } = useActions_v2();
+  const storeId = useTypedSelector_v2((state) => state.store.id);
+  const validationSchema = Yup.object().shape({
+    email: Yup.string().email().required(__ValidationText.email.required),
+  });
   const removeSkuFromQueryParams = (skuToKeep: string[] | 'REMOVE ALL') => {
     if (skuToKeep === 'REMOVE ALL') {
       router.replace({ pathname: router.pathname, query: '' }, undefined, {
@@ -96,6 +105,35 @@ const CompareProduct_Type1: React.FC<_CompareProductprops> = (props) => {
         }
       }
     }
+  };
+  const sendEmailHandler = async (values: { email: string }) => {
+    const obj = {
+      storeId: storeId,
+      Email: values.email,
+      Link: window.location.href,
+    };
+    setShowLoader(true);
+    SendCompareLinkByEmail(obj)
+      .then((res) => {
+        if (res == true) {
+          showModal({
+            message: `Email Send Successfully `,
+            title: ``,
+          });
+        } else {
+          showModal({
+            message: `${res}`,
+            title: ``,
+          });
+        }
+      })
+      .catch((err) => {
+        showModal({
+          message: `${err} `,
+          title: ``,
+        });
+      })
+      .finally(() => setShowLoader(false));
   };
 
   return (
@@ -220,14 +258,33 @@ const CompareProduct_Type1: React.FC<_CompareProductprops> = (props) => {
           </table>
         </div>
         <div className='text-center mt-[30px] mb-[30px] flex gap-2 justify-center'>
-          <input
-            className='form-input sm:max-w-xs max-w-[200px]'
-            placeholder='Enter Email to get this link'
-            value=''
-          />
-          <button type='button' className='btn btn-primary'>
-            SEND LINK
-          </button>
+          <Formik
+            initialValues={{ email: '' }}
+            onSubmit={sendEmailHandler}
+            validationSchema={validationSchema}
+          >
+            {({ values, handleChange }) => {
+              return (
+                <Form className='flex flex-wrap mt-[2px]'>
+                  <input
+                    className='form-input sm:max-w-xs max-w-[200px]'
+                    placeholder='Enter Email to get this link'
+                    type='text'
+                    name='email'
+                    autoComplete='off'
+                    value={values.email}
+                    onChange={handleChange}
+                  />
+
+                  <button type='submit' className='btn btn-primary'>
+                    SEND LINK
+                  </button>
+
+                  <ErrorMessage name={'email'} className='text-rose-500' />
+                </Form>
+              );
+            }}
+          </Formik>
         </div>
       </div>
     </section>

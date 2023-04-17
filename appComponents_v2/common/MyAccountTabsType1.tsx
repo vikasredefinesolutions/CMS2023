@@ -14,7 +14,7 @@ const _TABS = [
   { label: 'Logout', path: null },
 ];
 
-const MyAccountTabs: React.FC = () => {
+const MyAccountTabsType1: React.FC = () => {
   const { logInUser, logoutClearCart, setWishListEmpty } = useActions_v2();
   const { pathname: currentPath } = useRouter();
 
@@ -80,4 +80,4 @@ const MyAccountTabs: React.FC = () => {
   );
 };
 
-export default MyAccountTabs;
+export default MyAccountTabsType1;

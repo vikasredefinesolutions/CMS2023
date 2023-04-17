@@ -18,10 +18,10 @@ import getLocation from 'helpers_v2/getLocation';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
 
 import { __UserMessages } from '@constants/global.constant';
-import SU_EmailInput from './Components/SU_EmailInput';
-import SU_Input from './Components/SU_Input';
-import SU_PasswordInput from './Components/SU_PasswordInput';
-import SU_StateNcountries from './Components/SU_StateNcountries';
+import SU_EmailInput from './Components/SU1_EmailInput';
+import SU1_Input from './Components/SU1_Input';
+import SU_PasswordInput from './Components/SU1_PasswordInput';
+import SU_StateNcountries from './Components/SU1_StateNcountries';
 
 const _SignupSchema = Yup.object().shape({
   firstname: Yup.string()
@@ -166,7 +166,7 @@ const SignUp_type1: React.FC = () => {
                       Personal Information
                     </div>
                     <div className='flex flex-wrap mx-[-15px] gap-y-6'>
-                      <SU_Input
+                      <SU1_Input
                         name={'firstname'}
                         value={values.firstname}
                         label={'First Name'}
@@ -177,7 +177,7 @@ const SignUp_type1: React.FC = () => {
                         touched={!!touched.firstname}
                         error={errors?.firstname ? errors.firstname : null}
                       />
-                      <SU_Input
+                      <SU1_Input
                         name={'lastName'}
                         value={values.lastName}
                         label={'Last Name'}
@@ -188,7 +188,7 @@ const SignUp_type1: React.FC = () => {
                         touched={!!touched.lastName}
                         error={errors?.lastName ? errors.lastName : null}
                       />
-                      <SU_Input
+                      <SU1_Input
                         name={'companyName'}
                         value={values?.companyName ? values.companyName : ''}
                         label={'Company Name'}
@@ -199,7 +199,7 @@ const SignUp_type1: React.FC = () => {
                         touched={!!touched.companyName}
                         error={errors?.companyName ? errors.companyName : null}
                       />
-                      <SU_Input
+                      <SU1_Input
                         type={'number'}
                         name={'storeCustomerAddress[0].phone'}
                         value={values.storeCustomerAddress[0].phone}
@@ -234,7 +234,7 @@ const SignUp_type1: React.FC = () => {
                         error={errors?.email ? errors.email : null}
                         setError={setFieldError}
                       />
-                      <SU_Input
+                      <SU1_Input
                         name={'jobTitle'}
                         value={values.jobTitle}
                         label={'Job Title'}
@@ -268,7 +268,7 @@ const SignUp_type1: React.FC = () => {
                             : null
                         }
                       />
-                      <SU_Input
+                      <SU1_Input
                         name={'storeCustomerAddress[0].address1'}
                         value={values.storeCustomerAddress[0].address1}
                         label={'Address 1'}
@@ -289,7 +289,7 @@ const SignUp_type1: React.FC = () => {
                             : null
                         }
                       />
-                      <SU_Input
+                      <SU1_Input
                         name={'storeCustomerAddress[0].address2'}
                         value={values.storeCustomerAddress[0].address2}
                         label={'Address 2'}
@@ -310,7 +310,7 @@ const SignUp_type1: React.FC = () => {
                             : null
                         }
                       />
-                      <SU_Input
+                      <SU1_Input
                         name={'storeCustomerAddress[0].postalCode'}
                         value={values.storeCustomerAddress[0].postalCode}
                         label={'Zip Code'}
@@ -331,7 +331,7 @@ const SignUp_type1: React.FC = () => {
                             : null
                         }
                       />
-                      <SU_Input
+                      <SU1_Input
                         name={'storeCustomerAddress[0].city'}
                         value={values.storeCustomerAddress[0].city}
                         label={'City'}

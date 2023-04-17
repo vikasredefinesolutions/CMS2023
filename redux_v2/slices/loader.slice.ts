@@ -14,12 +14,6 @@ export const loaderSlice = createSlice({
   name: 'modals',
   initialState,
   reducers: {
-    showLoader: (state) => {
-      state.showLoader = true;
-    },
-    hideLoader: (state) => {
-      state.showLoader = false;
-    },
     setShowLoader: (
       state,
       action: {

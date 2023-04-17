@@ -1,10 +1,10 @@
-import MyAccountTabs from './components/MyAccountTab';
+import MyAccountTabType1 from '@appComponents/common/MyAccountTabsType1';
 import UserManagement from './components/UserManagement';
 
 const UserManagementAccountTemplates_Type1 = () => {
   return (
     <>
-      <MyAccountTabs />
+      <MyAccountTabType1 />
       <UserManagement />
     </>
   );

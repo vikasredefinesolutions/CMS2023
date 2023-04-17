@@ -15,7 +15,7 @@ interface _props {
   required?: boolean;
 }
 
-const SU_Select: React.FC<_props> = ({
+const SU1_Select: React.FC<_props> = ({
   label,
   name,
   options,
@@ -37,7 +37,11 @@ const SU_Select: React.FC<_props> = ({
             value={value}
           >
             <>
-              {options.length === 0 ? <option>No State found</option> : ''}
+              {options.length === 0 ? (
+                <option selected>No State found</option>
+              ) : (
+                ''
+              )}
               {options?.map((opt) => (
                 <option
                   key={opt.id}
@@ -57,4 +61,4 @@ const SU_Select: React.FC<_props> = ({
   );
 };
 
-export default SU_Select;
+export default SU1_Select;

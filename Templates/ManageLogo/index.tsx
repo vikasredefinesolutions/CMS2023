@@ -1,8 +1,8 @@
 /* eslint-disable no-unused-vars */
+import MyAccountTabs from '@appComponents/common/MyAccountTabsType1';
 import { LogoList } from '@definations/APIs/logo.res';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import { getLogoDetailsList } from '@services/logo.service';
-import MyAccountTabs from '@templates/account/accountTemplate_Type1/components/MyAccountTab';
 import React, { useEffect, useState } from 'react';
 import ManageLogoType1 from './ManageLogoType1';
 import ManageLogoType2 from './ManageLogoType2';
@@ -59,6 +59,7 @@ const ManageLogo: React.FC<{ id: string }> = ({ id }) => {
   const ManagelogoDeatils = ManageLogoTemplates[`type${id}` as 'type1'];
 
   // console.log('managelogo' , logoList);
+
   return (
     <>
       <MyAccountTabs />

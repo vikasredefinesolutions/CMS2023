@@ -1,7 +1,13 @@
 //import React, { useState, useEffect, useRef } from "react";
+import ElementAccordionDisplay from '@templates/Home/components/ElementAccordionDisplay';
+import ElementCarouselDisplay from '@templates/Home/components/ElementCarouselDisplay';
+import FeaturedProducts from '@templates/Home/components/FeaturedProducts';
+import SocialShare from '@templates/Home/components/SocialShare';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
 import { useEffect, useState } from 'react';
 
+import DIHomePage from '@templates/Home/components/DIHomePage';
+import * as helper from '@templates/Home/components/Helper';
 
 const Home = (props) => {
   const pageData = props.props?.pageData;
@@ -194,13 +200,205 @@ const Home = (props) => {
     componentHtml?.map((element, index) => {
       //let x = ReactDOM.findDOMNode(refArray.current[element.uid]);
       //  x.querySelectorAll('#div'+element.no)[0].innerHTML = element.uid;
-     // helper.updateSetProperties(element, index);
+      helper.updateSetProperties(element, index);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [componentHtml]);
 
   const storeTypeId = useTypedSelector_v2((state) => state.store.storeTypeId);
-  return (<><div>Hello</div></>);
+  return (
+    <>
+      {storeId === 22 &&
+      (props.props.slug === '/' || props.props.slug === '') ? (
+        <>
+          <DIHomePage storeId={storeId}></DIHomePage>
+        </>
+      ) : (
+        <>
+          <div className=''>
+            {/* {featuredItems?.products && (
+          <FeaturedItems
+            brands={__constant._Home.featuredItems.brands}
+            products={featuredItems.products}
+          />          
+        )}*/}
+            <main>
+              {pageData?.components && pageData?.components.length > 0 ? (
+                pageData.components.map((componentValue, index) => {
+                  if (typeof componentValue.selectedVal == 'string') {
+                    componentValue.selectedVal = JSON.parse(
+                      componentValue.selectedVal,
+                    );
+                  }
+                  if (typeof componentValue.properties == 'string') {
+                    componentValue.properties = JSON.parse(
+                      componentValue.properties,
+                    );
+                  }
+                  
+                  const backgroundDefault = loadBackgroundDefault(componentValue);
+                  const backgroundStyle = loadBackgroundDefaultStyle(componentValue);
+                  const backgroundImageClass = loadBackgroundImageClass(componentValue);
+                  let additionalclass = '';
+                  let innerDivClass = '';
+                  if(componentValue.selectedVal && 'additionalclass' in componentValue.selectedVal)
+                  {
+                      additionalclass = componentValue.selectedVal.additionalclass.value;                                                          
+                  }
+                  if(componentValue.selectedVal && 'container' in componentValue.selectedVal)
+                  {
+                    if(componentValue.selectedVal.container.value == 'w-full')
+                      additionalclass += ' container-fluid'; 
+                    else
+                      additionalclass += ' ' + componentValue.selectedVal.container.value + ' mx-auto ';                                                          
+                  }
+                  else
+                  {
+                    additionalclass += ' container mx-auto ';
+                  }
+                  if(componentValue.selectedVal && 'container_left_padding' in componentValue.selectedVal)
+                  {
+                      innerDivClass += ' ' + 'pl-['+componentValue.selectedVal.container_left_padding.value+'px]';                                                          
+                  }
+                  if(componentValue.selectedVal && 'container_top_padding' in componentValue.selectedVal)
+                  {
+                      innerDivClass += ' ' + 'pt-['+componentValue.selectedVal.container_top_padding.value+'px]';                                                          
+                  }
+                  if(componentValue.selectedVal && 'container_right_padding' in componentValue.selectedVal)
+                  {
+                      innerDivClass += ' ' + 'pr-['+componentValue.selectedVal.container_right_padding.value+'px]';                                                            
+                  }
+                  if(componentValue.selectedVal && 'container_bottom_padding' in componentValue.selectedVal)
+                  {
+                      innerDivClass += ' ' + 'pb-['+componentValue.selectedVal.container_bottom_padding.value+'px]';                                                            
+                  }
+                  if(componentValue.selectedVal && 'container_left_margin' in componentValue.selectedVal)
+                  {
+                      innerDivClass += ' ' + 'ml-['+componentValue.selectedVal.container_left_margin.value+'px]';                                                            
+                  }
+                  if(componentValue.selectedVal && 'container_top_margin' in componentValue.selectedVal)
+                  {
+                      innerDivClass += ' ' + 'mt-['+componentValue.selectedVal.container_top_margin.value+'px]';                                                            
+                  }
+                  if(componentValue.selectedVal && 'container_right_margin' in componentValue.selectedVal)
+                  {
+                      innerDivClass += ' ' + 'mr-['+componentValue.selectedVal.container_right_margin.value+'px]';                                                            
+                  }
+                  if(componentValue.selectedVal && 'container_bottom_margin' in componentValue.selectedVal)
+                  {
+                      innerDivClass += ' ' + 'mb-['+componentValue.selectedVal.container_bottom_margin.value+'px]';                                                          
+                  }
+
+                 
+                  return (
+                    <div
+                      key={index}
+                      className={`w-full mx-auto ${componentValue.visibility === 'off' ? 'hidden' : ''} ${backgroundStyle === 'outer' ? backgroundImageClass : ''}`} 
+                      
+                      style={ loadBackgroundType(componentValue) == 'image' ? { backgroundImage: backgroundStyle === 'outer' ? backgroundDefault : 'none' } : { background: backgroundStyle === 'outer' ? backgroundDefault : 'none' }}
+                      id={`div${componentValue.no}`}
+                      // ref={ref => {
+                      //     refArray.current[componentValue.uid] = ref; // took this from your guide's example.
+                      // }}
+                    >
+                    <section className={`${additionalclass}`} >
+                     <div className={`${innerDivClass} ${backgroundStyle === 'inner' ? backgroundImageClass : ''}`} style={ loadBackgroundType(componentValue) == 'image' ? { backgroundImage: backgroundStyle === 'inner' ? backgroundDefault : 'none' } : { background: backgroundStyle === 'inner' ? backgroundDefault : 'none' }} >     
+                     {Object.keys(componentValue.properties).includes('PlainText') ? (<>
+                      <div dangerouslySetInnerHTML={{ __html: componentValue.selectedVal?.PlainText.value }} />
+                     </>) : ( <>
+                        {Object.keys(componentValue.properties).includes(
+                            'socialshare',
+                          ) ? (<><SocialShare /> </>) : ( <>
+                          
+                          {Object.keys(componentValue.selectedVal).includes(
+                            'featuredproducts_section_title',
+                          ) ||
+                          Object.keys(componentValue.selectedVal).includes(
+                            'featuredproducts_product_count',
+                          ) ? (
+                            <>
+                            <FeaturedProducts
+                                dataArr={componentValue.selectedVal}
+                              />
+                            </>
+                          ) : (
+                            <>
+                              {Object.keys(componentValue.selectedVal).includes(
+                                'carousel',
+                              ) ? (
+                                <>
+                                  <ElementCarouselDisplay
+                                    bannerArr={
+                                      componentValue.selectedVal.carousel.value
+                                    }
+                                  />
+                                </>
+                              ) : (
+                                <>
+                                  {Object.keys(componentValue.selectedVal).includes(
+                                    'FullAccordion',
+                                  ) ? (
+                                    <>
+                                      
+                                        {componentValue?.selectedVal?.Title && (
+                                          <div class='text-box-h2 mb-4' id='Title'>
+                                            {componentValue.selectedVal.Title.value ?? ''}
+                                          </div>
+                                        )}
+                                        <ul className='w-full'>
+                                          <ElementAccordionDisplay
+                                          selected_Values={componentValue.selectedVal} 
+                                            acValues={
+                                              componentValue.selectedVal
+                                                .FullAccordion.value
+                                            }
+                                          
+                                          />
+                                        </ul>
+                                    
+                                    </>
+                                  ) : (
+                                    <>
+                                      <div
+                                        className={componentValue.uuid}
+                                        dangerouslySetInnerHTML={{
+                                          __html: componentValue.html,
+                                        }}
+                                      ></div>
+                                    </>
+                                  )}
+                                </>
+                              )}
+                            </>
+                          )} </>)
+                        }
+                        </>
+                        )
+                      }
+                    </div>  
+                    </section>
+                    </div>
+                  );
+
+                  // return <div key={index} className="text-center p-5 border my-2" dangerouslySetInnerHTML={{ __html: comphtml }}></div>
+                })
+              ) : (
+                <>
+                  <section className='mainsection taillwind_content_block_22'></section>
+                </>
+              )}
+            </main>
+          </div>
+          <div
+            id='wrapperloading'
+            style={{ position: 'fixed', zIndex: '10000000' }}
+          >
+            <div id='loading'></div>
+          </div>
+        </>
+      )}
+    </>
+  );
 };
 
 export default Home;

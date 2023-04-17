@@ -2,7 +2,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import LoginModal from '@appComponents/modals/loginModal';
-import config from '@configs/api.config';
 import { __pagesText } from '@constants/pages.text';
 import { ApprovedLogoItem } from '@definations/APIs/logo.res';
 import { UploadImage } from '@services/file.service';
@@ -33,7 +32,9 @@ const SomLogoOption: React.FC<_SOMLogoOptionProps> = ({
   );
   const [setmodal, setShowModal] = useState<string | null>(null);
   const customerId = useTypedSelector_v2((state) => state.user.id);
-  const storeId = useTypedSelector_v2((state) => state.store.id);
+  const { id: storeId, imageFolderPath } = useTypedSelector_v2(
+    (state) => state.store,
+  );
 
   const {
     setShowLoader,
@@ -182,7 +183,7 @@ const SomLogoOption: React.FC<_SOMLogoOptionProps> = ({
       };
 
       const logoFileURL: string | null = await UploadImage({
-        folderPath: config.imageFolderPath,
+        folderPath: imageFolderPath,
         files: event.currentTarget?.files[0],
       });
 

@@ -19,24 +19,6 @@ export const CreateUserAddress = async (request: AddressAPIRequest) => {
   return res;
 };
 
-export const getCountryList = async () => {
-  const url = '/StoreCustomer/getcustomercountry.json';
-  const res = await SendAsync<Array<{ id: number; name: string }>>({
-    url: url,
-    method: 'POST',
-  });
-  return res;
-};
-
-export const getStatesList = async (id: number) => {
-  const url = `/StoreCustomer/getcustomerstatebycountryid/${id}.json`;
-  const res = await SendAsync<Array<{ id: number; name: string }>>({
-    url: url,
-    method: 'GET',
-  });
-  return res;
-};
-
 export const udpateIsDefaultAddress = async (payload: {
   isDefault: boolean;
   addressId: number;

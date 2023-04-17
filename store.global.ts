@@ -7,6 +7,7 @@ interface _Store {
   blobRootDirectory: string;
   storeTypeId: null | number;
   isAttributeSaparateProduct: boolean;
+  companyId: number;
   set: (
     pair:
       | _StoreId
@@ -16,7 +17,8 @@ interface _Store {
       | _StoreFavicon
       | _StoreLogoUrl
       | _StoreBlobRootDirectory
-      | _isAttributeSaparateProduct,
+      | _isAttributeSaparateProduct
+      | _CompanyId,
   ) => void;
 }
 
@@ -26,9 +28,10 @@ export let _globalStore: _Store = {
   favicon: '',
   blobUrl: 'https://redefinecommerce.blob.core.windows.net',
   logoUrl: '',
-  storeTypeId: null,  
+  storeTypeId: null,
   blobRootDirectory: 'rdcbeta',
   isAttributeSaparateProduct: false,
+  companyId: 0,
   set: (pair) => {
     _globalStore = { ..._globalStore, [pair.key]: pair.value };
   },
@@ -42,6 +45,11 @@ interface _StoreId {
 interface _StoreCode {
   key: 'code';
   value: string;
+}
+
+interface _CompanyId {
+  key: 'companyId';
+  value: number;
 }
 
 interface _StoreType {

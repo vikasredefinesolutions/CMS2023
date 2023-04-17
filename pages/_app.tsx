@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { __domain } from '@configs/page.config';
 import * as _AppController from '@controllers/_AppController.async';
+import { TrackFile } from '@services/tracking.service';
 import App, { AppContext, AppInitialProps, AppProps } from 'next/app';
 import { useRouter } from 'next/router';
 // import 'public/assets/css/main.css';
@@ -15,7 +16,7 @@ import {
   extractCookies,
   Logout,
   nextJsSetCookie,
-  setCookie
+  setCookie,
 } from 'helpers_v2/common.helper';
 import { useActions_v2 } from 'hooks_v2';
 
@@ -28,13 +29,13 @@ import { conditionalLog_V2 } from '@helpers/console.helper';
 import {
   _Expected_AppProps,
   _MenuItems,
-  _TransformedHeaderConfig
+  _TransformedHeaderConfig,
 } from '@templates/Header/header.type';
 
 import Metatags from '@appComponents/MetaTags';
-import SuccessErrorModal from '@appComponents/modals/successErrorModal';
 import Spinner from '@appComponents/ui/spinner';
 import { PageResponseType } from '@definations/app.type';
+import { FetchCompanyConfiguration } from '@services/app.service';
 import { fetchFooter } from '@services/footer.service';
 import { GetStoreCustomer } from '@services/user.service';
 import Redefine_Layout from '@templates//TemplateComponents/Redefine_Layout';
@@ -71,7 +72,7 @@ const RedefineCustomApp = ({
   const refreshHandler = () => {
     return setCookie(__Cookie.storeInfo, '', 'EPOCH');
   };
-  const { updatePageType, setShowLoader, hideLoader } = useActions_v2();
+  const { updatePageType, setShowLoader } = useActions_v2();
   const trackingFile = async () => {
     let data = {
       trackingModel: {
@@ -98,7 +99,7 @@ const RedefineCustomApp = ({
         ipAddress: '192.168.1.1',
       },
     };
-   // await TrackFile(data);
+    await TrackFile(data);
   };
 
   const getUserDetails = async (
@@ -157,6 +158,7 @@ const RedefineCustomApp = ({
     }
 
     trackingFile();
+    setShowLoader(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -164,7 +166,7 @@ const RedefineCustomApp = ({
     window.addEventListener('beforeunload', refreshHandler);
     return () => {
       window.removeEventListener('beforeunload', refreshHandler);
-      hideLoader();
+      setShowLoader(false);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -181,7 +183,6 @@ const RedefineCustomApp = ({
           pageMetaData={pageProps?.pageMetaData}
           routepath={router.asPath}
         />
-        <SuccessErrorModal />
         <Redefine_Layout
           logoUrl={store.urls.logo}
           storeCode={store.code}
@@ -206,6 +207,7 @@ RedefineCustomApp.getInitialProps = async (
 
   const expectedProps: _Expected_AppProps = {
     store: {
+      imageFolderPath: '',
       storeId: null,
       layout: null,
       pageType: '',
@@ -229,6 +231,7 @@ RedefineCustomApp.getInitialProps = async (
       footer: null,
     },
     blobUrlRootDirectory: '',
+    companyId: 0,
   };
 
   //------------------------------------
@@ -274,6 +277,8 @@ RedefineCustomApp.getInitialProps = async (
         pathName,
       );
 
+      expectedProps.companyId = (await FetchCompanyConfiguration()).companyId;
+      expectedProps.store.imageFolderPath = '/';
       if (storeDetails) {
         expectedProps.store = storeDetails.store;
         expectedProps.blobUrlRootDirectory = storeDetails.blobUrlRootDirectory;
@@ -354,6 +359,10 @@ RedefineCustomApp.getInitialProps = async (
     _globalStore.set({
       key: 'blobUrlRootDirectory',
       value: expectedProps.blobUrlRootDirectory,
+    });
+    _globalStore.set({
+      key: 'companyId',
+      value: expectedProps.companyId,
     });
   }
 

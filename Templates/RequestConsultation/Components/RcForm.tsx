@@ -1,4 +1,3 @@
-import config from '@configs/api.config';
 import { __pagesConstant } from '@constants/pages.constant';
 import { __ValidationText } from '@constants/validation.text';
 import getLocation from '@helpers/getLocation';
@@ -86,7 +85,9 @@ const RcForm: React.FC<{ productId: number; attriubteOptionId: number }> = ({
   const [fileUploded, setFileUploded] = useState<boolean>(false);
   const { setShowLoader, showModal } = useActions_v2();
   const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
-  const storeId = useTypedSelector_v2((state) => state.store.id);
+  const { id: storeId, imageFolderPath } = useTypedSelector_v2(
+    (state) => state.store,
+  );
 
   const store = useTypedSelector_v2((state) => state.store);
   mediaBaseUrl = mediaBaseUrl || store.mediaBaseUrl;
@@ -107,7 +108,7 @@ const RcForm: React.FC<{ productId: number; attriubteOptionId: number }> = ({
 
     try {
       const logoFileURL = await UploadImage({
-        folderPath: config.imageFolderPath,
+        folderPath: imageFolderPath,
         files: event?.target?.files[0],
       });
       const file = {

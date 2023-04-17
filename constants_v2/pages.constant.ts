@@ -1,6 +1,7 @@
 export const __pagesConstant = {
   _document: {
     klaviyoKey: 'SNtzPN',
+    klaviyoKey2: 'Tr8sxw',
   },
   _productDetails: {
     imagesInRow: 7,

@@ -161,4 +161,5 @@ export type _Expected_AppProps = {
     footer: _Footer | null;
   };
   blobUrlRootDirectory: string;
+  companyId: number;
 };

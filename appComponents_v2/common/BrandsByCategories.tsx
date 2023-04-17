@@ -18,7 +18,7 @@ const categories: { label: _Category; classes: string }[] = [
   {
     label: 'Featured',
     classes:
-      'hover:text-[#000000]  block pt-[16px] pb-[16px] pl-[40px] pr-[40px] text-center font-[600]',
+      'bg-secondary hover:text-[#000000]  block pt-[16px] pb-[16px] pl-[40px] pr-[40px] text-center font-[600]',
   },
   {
     label: 'Outerwear',
@@ -343,7 +343,7 @@ const Br_CategoryBrands: React.FC<_Props> = ({ brands }) => {
                 <div className='w-full text-center mx-auto max-w-6xl pt-[40px] pb-[40px]'>
                   <div className='panel-01 tab-content pb-[16px]'>
                     <div className='w-full'>
-                      <div className='flex flex-wrap ml-[-12px] mr-[-12px] mt-[-12px]'>
+                      <div className='flex flex-wrap ml-[-12px] mr-[-12px] mt-[-12px] '>
                         {categoriesWithBrands.map((element, index) => {
                           if (element.category !== activeTab) {
                             return null;
@@ -371,12 +371,12 @@ const Br_CategoryBrands: React.FC<_Props> = ({ brands }) => {
                             return (
                               <div
                                 key={index}
-                                className='w-full lg:w-1/4 pl-[12px] pr-[12px] mt-[12px] mb-[12px]'
+                                className='w-full lg:w-1/4 pl-[12px] pr-[12px] mt-[12px] mb-[12px] flex'
                               >
                                 <div
-                                  className={`border border-gray-border ${activeTabColor()} hover:${activeTabColor()}-hover relative font-light`}
+                                  className={`border border-gray-border ${activeTabColor()} hover:${activeTabColor()}-hover relative font-light w-full h-full flex items-center justify-center`}
                                 >
-                                  <div className='flex justify-center items-center'>
+                                  <div className='flex justify-center items-center brand-listing-logo'>
                                     <Link
                                       title={brand.name}
                                       href={brand.seName}
@@ -414,7 +414,7 @@ const Br_CategoryBrands: React.FC<_Props> = ({ brands }) => {
                   return (
                     <li key={index} className='lg:w-1/5 w-full'>
                       <button
-                        className={cate.classes}
+                        className={`${cate.classes} w-full`}
                         onClick={() => setActiveTab(cate.label)}
                       >
                         {cate.label}

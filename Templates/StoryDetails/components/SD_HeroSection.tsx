@@ -1,3 +1,4 @@
+import { __StaticImg } from '@constants/assets';
 import Link from 'next/link';
 import React from 'react';
 import SD_FaqSection from './SD_FaqSection';
@@ -32,16 +33,11 @@ const SD_HeroSection: React.FC<_Props> = ({ banner, story, page }) => {
       <div>
         <section
           className='bg-cover bg-no-repeat relative py-[128px]'
-          // style={{
-          //   backgroundImage:
-          //     "url('https://media.corporategear.com/resources/assets/library/pettern-banner.png')",
-          // }}
+          style={{
+            backgroundImage: `url(${__StaticImg.petternBanner})`,
+          }}
         >
-          <div
-            className='container px-[16px] mx-auto text-center'
-            data-acsb-main='true'
-            role='main'
-          >
+          <div className='container px-[16px] mx-auto text-center' role='main'>
             <div className='mb-[16px]'>
               <Link href={story.category.url}>
                 <span className='btn btn-secondary py-[8px] px-10 text-title-text btn-md'>

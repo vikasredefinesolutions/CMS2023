@@ -23,4 +23,5 @@ export interface _StoreReturnType {
   isSewOutEnable: boolean;
   sewOutCharges: number;
   mediaBaseUrl: string;
+  imageFolderPath: string;
 }

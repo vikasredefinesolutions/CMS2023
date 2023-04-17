@@ -15,7 +15,7 @@ export const __pagesText = {
     },
     loadMoreButton: 'LOAD MORE',
     clearAllButton: 'Clear All',
-    noProductsFound:'no products found'
+    noProductsFound: 'No Products found',
   },
   home: {},
   ContactUs: {
@@ -278,10 +278,10 @@ export const __pagesText = {
     FirstLogoFree: 'First Logo Free',
     CreatePassword: 'Create Password',
     CreateAccount: 'Create Account',
-    Billing : {
+    Billing: {
       BillTo: 'Bill to:',
-      ShipTo: 'Ship to:'
-    }
+      ShipTo: 'Ship to:',
+    },
   },
   BreadCrumbs: {
     back: 'Back',
@@ -302,7 +302,7 @@ export const __pagesText = {
     LogoPosition: 'Logo Position',
     Status: 'Status',
     Heading: 'MANAGE LOGO',
-    LogoUploadedOn: 'Logo uploaded on : '
+    LogoUploadedOn: 'Logo uploaded on : ',
   },
   CheckoutPage: {
     cardInstruction:
@@ -342,5 +342,11 @@ export const __pagesText = {
     LogoUploadedOn: 'Logo uploaded on:',
     jpegLogo: 'JPEG LOGO',
     dstLogo: 'DST LOGO',
+  },
+  logoPrint: {
+    Note: '*Please Note: The above logo may not reflect the actual selected colors.',
+  },
+  cart: {
+    successMessage: 'Added to cart Successfully',
   },
 };

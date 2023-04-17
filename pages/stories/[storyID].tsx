@@ -125,6 +125,10 @@ export const getServerSideProps: GetServerSideProps = async (
     };
   }
 
+  if (pageMetaData.type === '404') {
+    return { notFound: true };
+  }
+
   // -----------------------Props Initialization--------------------------
   const categoryProps: _StoryCategoryProps = {
     id: '1',
@@ -149,12 +153,12 @@ export const getServerSideProps: GetServerSideProps = async (
     page: {
       accordionContent: '',
       type: __pageTypeConstant.blog,
-      slug: '/',
+      slug: pageMetaData.slug,
     },
   };
 
   // ------------------------Page check --------------------------------------
-  if (pageMetaData.type === 'stories') {
+  if (pageMetaData.type === __pageTypeConstant.stories) {
     // stories ===>  category Page
     categoryProps.list = await GetStoriesByCategoryURL({
       storeId: _globalStore.storeId!,

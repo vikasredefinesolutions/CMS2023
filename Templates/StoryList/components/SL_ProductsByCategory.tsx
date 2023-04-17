@@ -16,7 +16,7 @@ const SL_ProductsByCategory: React.FC = () => {
             <div className='xl:w-2/3 lg:w-1/2 flex flex-wrap justify-center items-center w-full'>
               <div className='bg-white w-full lg:p-20 mx-auto py-10 px-5 lg:px-20 lg:py-20'>
                 <div className='mb-[10px]'>
-                  <a href='javascript:void(0);' title=''>
+                  <a href='/' title=''>
                     <span className='btn btn-primary pl-[20px] pr-[20px] pt-[10px] pb-[10px] !uppercase text-default-text'>
                       Shop Products by category
                     </span>
@@ -88,7 +88,7 @@ const SL_ProductsByCategory: React.FC = () => {
                 return (
                   <li className='lg:h-1/3 lg:w-10 btn-quaternary flex flex-wrap items-center justify-center w-full p-3'>
                     <span className='lg:-rotate-90'>
-                      <a href='javascript:void(0);'>Men</a>
+                      <a href='/'>Men</a>
                     </span>
                   </li>
                 );

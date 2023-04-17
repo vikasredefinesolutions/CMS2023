@@ -35,7 +35,7 @@ const SL_HeroSection: React.FC<_Props> = ({ firstTwo }) => {
                     />
                   </div>
                   <div className='mb-[10px] text-default-text'>
-                    <Link href='javascript:void(0);' title='' className=''>
+                    <Link href='/' title='' className=''>
                       <span className='btn btn-primary pl-[20px] pr-[20px] pt-[10px] pb-[10px] !uppercase text-default-text'>
                         {firstStory.categoryName}
                       </span>

@@ -27,7 +27,7 @@ interface _props {
   product: _MyAcc_OrderProductDetails[];
 }
 
-const OL_UserOrderSummary: React.FC<_props> = (order) => {
+const OL_OtherUsersOrderSummary: React.FC<_props> = (order) => {
   const router = useRouter();
   const viewDetailsHandler = (orderId: number | undefined) => {
     if (!orderId) {
@@ -146,4 +146,4 @@ const OL_UserOrderSummary: React.FC<_props> = (order) => {
   );
 };
 
-export default OL_UserOrderSummary;
+export default OL_OtherUsersOrderSummary;

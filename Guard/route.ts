@@ -1,14 +1,14 @@
 export const defaultRoute = '/';
 
 export const routesToProtect = [
-  {
-    private: '/Orders',
-    redirectTo: defaultRoute,
-  },
-  {
-    private: '/Orders/Orderdetails',
-    redirectTo: defaultRoute,
-  },
+  // {
+  //   private: '/Orders',
+  //   redirectTo: defaultRoute,
+  // },
+  // {
+  //   private: '/Orders/Orderdetails',
+  //   redirectTo: defaultRoute,
+  // },
   {
     private: '/myaccount/accountsettings',
     redirectTo: defaultRoute,

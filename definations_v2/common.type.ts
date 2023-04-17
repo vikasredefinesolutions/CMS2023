@@ -53,7 +53,8 @@ export type _ProducDetailAPIs =
   | 'FetchInventoryById'
   | 'FetchBrandProductList'
   | 'FetchProductsTagsName'
-  | 'FetchLogoLocationByProductId';
+  | 'FetchLogoLocationByProductId'
+  | 'SendCompareLinkByEmail';
 
 export type _ProductDetailService = {
   service: 'productDetails';

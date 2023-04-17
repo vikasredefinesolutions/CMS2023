@@ -1,4 +1,3 @@
-import config from '@configs/api.config';
 import { __pagesText } from '@constants/pages.text';
 import { OTFItemValidation } from '@constants/validationMessages';
 import { OTFItemNoList } from '@definations/otfItem.res';
@@ -20,15 +19,15 @@ import { useEffect, useState } from 'react';
 import * as Yup from 'yup';
 
 const AddOTFItemNo = ({ closeModal }: { closeModal: () => void }) => {
-  // const {} = useActions();
-
   const [otfItemNo, setOtfItemNo] = useState<OTFItemNoList | null>(null);
   const [otfItemVariant, setOtfItemVariant] = useState<OTFItemNoList | null>(
     null,
   );
   const [fileUrl, setFileUrl] = useState('');
 
-  const storeId = useTypedSelector_v2((state) => state.store.id);
+  const { id: storeId, imageFolderPath } = useTypedSelector_v2(
+    (state) => state.store,
+  );
   const userId = GetCustomerId();
   const { fetchCartDetails, setShowLoader } = useActions_v2();
   useEffect(() => {
@@ -52,7 +51,7 @@ const AddOTFItemNo = ({ closeModal }: { closeModal: () => void }) => {
       // };
 
       const logoFileURL: string | null = await UploadImage({
-        folderPath: config.imageFolderPath,
+        folderPath: imageFolderPath,
         files: event.currentTarget?.files[0],
       });
       if (logoFileURL) {

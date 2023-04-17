@@ -9,9 +9,11 @@ import {
   _siteMapTemplates,
 } from './siteMapTypes';
 import SiteMap_Type1 from './siteMap_Type1';
+import { SiteMap_Type2 } from './siteMap_Type2';
 
 const siteMapTemplates: _siteMapTemplates = {
   type1: SiteMap_Type1,
+  type2: SiteMap_Type2,
 };
 const SiteMap: NextPage<_siteMapProps> = ({ id, store }) => {
   const { setShowLoader } = useActions_v2();

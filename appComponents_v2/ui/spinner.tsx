@@ -17,7 +17,7 @@ const Spinner: React.FC<_props> = ({ children }) => {
 
   return (
     <>
-      {showLoader && <SpinnerComponent />}
+      {showLoader ? <SpinnerComponent /> : null}
       {children}
     </>
   );

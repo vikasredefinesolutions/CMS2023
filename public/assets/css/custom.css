@@ -1,0 +1,22 @@
+.carousel .slide img {
+  width: auto !important;
+  max-width: 100% !important;
+}
+
+.brand-listing-logo {
+  width: 100%;
+}
+
+.brand-listing-logo span span {
+  display: none !important;
+}
+
+.brand-listing-logo span span + img {
+  width: 100% !important;
+  height: auto !important;
+  position: relative !important;
+  min-width: auto !important;
+  min-height: auto !important;
+}
+
+/* @import url('https://www.ystore.us/HTML/RedefineCommerce/Ecom-front/corporategear/main.css'); */

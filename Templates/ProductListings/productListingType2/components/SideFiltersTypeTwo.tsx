@@ -71,13 +71,15 @@ const SideFiltersTypeTwo = ({
                                     className='flex items-center !text-black font-bold !no-underline'
                                     href={`/${val.sename}.html`}
                                   >
-                                    <span className='material-icons-outlined'>
-                                      {val.subrows
-                                        ? 'chevron_right'
-                                        : 'expand_more'}
-                                    </span>
-                                    {capitalizeFirstLetter(val.name)}(
-                                    {val.productCount})
+                                    <div className='flex items-center cursor-pointer'>
+                                      <span className='material-icons-outlined'>
+                                        {val.subrows
+                                          ? 'chevron_right'
+                                          : 'expand_more'}
+                                      </span>
+                                      {capitalizeFirstLetter(val.name)}(
+                                      {val.productCount})
+                                    </div>
                                   </Link>
                                   {val.subrows && (
                                     <ul className='ml-3'>
@@ -92,14 +94,16 @@ const SideFiltersTypeTwo = ({
                                             href={`/${subrow.sename}.html`}
                                             className='!text-black !no-underline'
                                           >
-                                            <span className='material-icons-outlined'>
-                                              {' '}
-                                              chevron_right
-                                            </span>
-                                            {capitalizeFirstLetter(
-                                              subrow.name,
-                                            )}{' '}
-                                            ({subrow.productCount})
+                                            <div className='flex items-center cursor-pointer'>
+                                              <span className='material-icons-outlined'>
+                                                {' '}
+                                                chevron_right
+                                              </span>
+                                              {capitalizeFirstLetter(
+                                                subrow.name,
+                                              )}{' '}
+                                              ({subrow.productCount})
+                                            </div>
                                           </Link>
                                         </li>
                                       ))}

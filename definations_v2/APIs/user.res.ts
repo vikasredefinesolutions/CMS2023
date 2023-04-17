@@ -292,7 +292,7 @@ export interface ShoppingCartLogoPersonViewModel {
   logoPositionImage: string;
   sku: null;
   size: null;
-  name: null;
+  name: string;
   qty: number;
   isSewOut: boolean;
   sewOutAmount: number;

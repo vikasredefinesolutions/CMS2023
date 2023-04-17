@@ -15,7 +15,7 @@ interface _props {
   error: string | null;
 }
 
-const SU_PasswordInput: React.FC<_props> = ({
+const SU1_PasswordInput: React.FC<_props> = ({
   name,
   value,
   label,
@@ -78,4 +78,4 @@ const SU_PasswordInput: React.FC<_props> = ({
   );
 };
 
-export default SU_PasswordInput;
+export default SU1_PasswordInput;

@@ -31,6 +31,7 @@ export const getServerSideProps: GetServerSideProps = async (
       code: '',
       storeName: '',
       isAttributeSaparateProduct: false,
+      imageFolderPath: '',
       cartCharges: null,
       urls: {
         favicon: '',

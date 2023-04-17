@@ -1,8 +1,8 @@
 import { fetchCartDetails } from '@redux/asyncActions/cart.async';
 import { createSlice } from '@reduxjs/toolkit';
 import { CartList } from '@services/cart';
-import { AvailableLocationDetails, LogoDetails } from './cart';
 import { _Cart_userUpdate_Action } from './_slices';
+import { AvailableLocationDetails, LogoDetails } from './cart';
 
 export interface _Cart_Initials {
   email: string;

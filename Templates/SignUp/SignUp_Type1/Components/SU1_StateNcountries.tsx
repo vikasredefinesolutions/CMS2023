@@ -1,8 +1,8 @@
 /* eslint-disable no-unused-vars */
-import { GetCountriesList, GetStatesList } from '@services/general.service';
+import { _Country, _State } from '@definations/app.type';
+import { FetchCountriesList, FetchStatesList } from '@services/general.service';
 import React, { useEffect, useState } from 'react';
-import { _Country, _State } from '../signUp';
-import SU_Select from './SU_Select';
+import SU_Select from './SU1_Select';
 
 interface _props {
   countryValue: string;
@@ -16,7 +16,7 @@ interface _props {
   ) => void;
 }
 
-const SU_StateNcountries: React.FC<_props> = ({
+const SU1_StateNcountries: React.FC<_props> = ({
   countryName,
   countryValue,
   stateName,
@@ -31,8 +31,8 @@ const SU_StateNcountries: React.FC<_props> = ({
     country: null,
   });
 
-  const getStatesList = (id: number) => {
-    GetStatesList(id).then((state) => {
+  const callStatesAPI = (id: number) => {
+    FetchStatesList(id).then((state) => {
       if (!state) return;
 
       setStateNcountries((country) => ({
@@ -44,11 +44,11 @@ const SU_StateNcountries: React.FC<_props> = ({
   };
 
   useEffect(() => {
-    GetCountriesList().then((countries) => {
+    FetchCountriesList().then((countries) => {
       if (!countries) return;
 
       setStateNcountries({ state: null, country: countries });
-      getStatesList(countries[0].id);
+      callStatesAPI(countries[0].id);
       setFieldValue(countryName, countries[0].id);
     });
   }, []);
@@ -64,7 +64,7 @@ const SU_StateNcountries: React.FC<_props> = ({
           options={stateContries.country}
           onChange={(event) => {
             setFieldValue(countryName, event.target.value);
-            getStatesList(+event?.target.value);
+            FetchStatesList(+event?.target.value);
           }}
         />
       )}
@@ -84,4 +84,4 @@ const SU_StateNcountries: React.FC<_props> = ({
   );
 };
 
-export default SU_StateNcountries;
+export default SU1_StateNcountries;

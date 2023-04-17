@@ -31,14 +31,17 @@ const SD_ProductsSlider: React.FC<_Props> = () => {
     <section className='relative pt-10 bg-light-gray'>
       <div className='container px-4 mx-auto'>
         <div className='flex flex-wrap -mx-3 -mt-[24px]'>
-          {json.map((ele) => {
+          {json.map((ele, index) => {
             return (
-              <div className='w-full lg:w-1/4 px-3 md:w-1/3 mt-[24px]'>
+              <div
+                key={index}
+                className='w-full lg:w-1/4 px-3 md:w-1/3 mt-[24px]'
+              >
                 <div className='border border-gray-50 px-[24px] py-[24px] bg-white relative'>
                   <div className='flex justify-center'>
                     <a
                       className=''
-                      href='javascript:void(0)'
+                      href='/'
                       target=''
                       data-acsb-clickable='true'
                       data-acsb-navigable='true'

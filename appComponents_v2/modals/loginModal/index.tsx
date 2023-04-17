@@ -9,9 +9,9 @@ import { getWishlist } from '@services/wishlist.service';
 import { paths } from 'constants_v2/paths.constant';
 import { Form, Formik } from 'formik';
 import {
+  KlaviyoScriptTag,
   deleteCookie,
   extractCookies,
-  KlaviyoScriptTag,
   setCookie,
 } from 'helpers_v2/common.helper';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
@@ -125,9 +125,9 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
                     xmlns='http://www.w3.org/2000/svg'
                   >
                     <path
-                      fill-rule='evenodd'
+                      fillRule='evenodd'
                       d='M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z'
-                      clip-rule='evenodd'
+                      clipRule='evenodd'
                     ></path>
                   </svg>
                 </button>
@@ -260,16 +260,23 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
                             {__pagesText.productInfo.loginModal.clickMessage}{' '}
                             <a className='text-anchor'>
                               <Link href={'terms-and-conditions.html'}>
-                                {__pagesText.productInfo.loginModal.termsOfUse}
+                                <>
+                                  {
+                                    __pagesText.productInfo.loginModal
+                                      .termsOfUse
+                                  }
+                                </>
                               </Link>
                             </a>{' '}
                             {__pagesText.productInfo.loginModal.and}{' '}
                             <a className='text-anchor'>
                               <Link href={'policy.html'}>
-                                {
-                                  __pagesText.productInfo.loginModal
-                                    .privacyPolicy
-                                }
+                                <>
+                                  {
+                                    __pagesText.productInfo.loginModal
+                                      .privacyPolicy
+                                  }
+                                </>
                               </Link>
                             </a>
                             .

@@ -71,15 +71,17 @@ export const GetNextStoryByStoryID = async (payload: {
 }): Promise<_t_GetNextStoryByStoryID> => {
   const url = `/CmsTopicsPublish/geturl/${payload.storiesId}.json`;
 
-  const response = await CallAPI_v2<{
-    next: string;
-    previous: string;
-    getStoriesBannerModels: {
-      name: string;
-      urlType: string;
-      url: string;
-    }[];
-  }>({
+  const response = await CallAPI_v2<
+    {
+      next: string;
+      previous: string;
+      getStoriesBannerModels: {
+        name: string;
+        urlType: string;
+        url: string;
+      }[];
+    }[]
+  >({
     name: {
       service: 'story',
       api: 'GetNextStoryByStoryID',
@@ -92,10 +94,10 @@ export const GetNextStoryByStoryID = async (payload: {
 
   const transformedData: _t_GetNextStoryByStoryID = {
     prevNext: {
-      prev: response?.previous || '',
-      next: response?.next || '',
+      prev: (response && response[0]?.previous) || '',
+      next: (response && response[0]?.next) || '',
     },
-    banner: response?.getStoriesBannerModels || [],
+    banner: (response && response[0]?.getStoriesBannerModels) || [],
   };
 
   return transformedData;

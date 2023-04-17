@@ -4,7 +4,6 @@ import { __SuccessErrorText } from '@constants/successError.text';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import { UploadImage } from '@services/file.service';
 import { UploadLogoWithDetails } from '@services/logo.service';
-import config from 'configs_v2/api.config';
 import { Form, Formik } from 'formik';
 import React, { useState } from 'react';
 
@@ -31,6 +30,9 @@ const OrD_UploadImagePopup: React.FC<_props> = ({
   const [choosedFile, setFileDetails] = useState<_FileType | null>(null);
   const { showModal, setShowLoader } = useActions_v2();
   const loggedIn_userId = useTypedSelector_v2((state) => state.user.id);
+  const imageFolderPath = useTypedSelector_v2(
+    (state) => state.store.imageFolderPath,
+  );
 
   const fileReader = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.currentTarget?.files === null) return;
@@ -45,7 +47,7 @@ const OrD_UploadImagePopup: React.FC<_props> = ({
       };
 
       file.logoPathName = await UploadImage({
-        folderPath: config.imageFolderPath,
+        folderPath: imageFolderPath,
         files: event.currentTarget?.files[0],
       });
 

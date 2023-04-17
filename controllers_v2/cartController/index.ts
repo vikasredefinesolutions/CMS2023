@@ -24,8 +24,7 @@ const CartController = () => {
   const {
     fetchCartDetails,
     showModal,
-    showLoader,
-    hideLoader,
+
     updateSomLogo,
     setShowLoader,
     updateCheckoutObject,
@@ -81,7 +80,7 @@ const CartController = () => {
   const removeCartItem = async (itemId: number) => {
     const confirmRes = confirm(cartRemoveConfirmMessage);
     if (confirmRes) {
-      showLoader();
+      setShowLoader(true);
       const response = await deleteItemCart(itemId);
       if (response) {
         await fetchCartData();
@@ -91,7 +90,7 @@ const CartController = () => {
           title: commonMessage.failed,
         });
       }
-      hideLoader();
+      setShowLoader(false);
     }
   };
 

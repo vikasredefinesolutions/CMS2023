@@ -1,36 +1,9 @@
-SL_ProductsByCategory,
-Task
-Testing
+PK:
+**\_\_\_**SignUp - API issue ( )
+**\_\_\_**Reset Password - Need confirmation about flow
+**\_\_\_**Order Details -
+**\_\_\_**Order Details -
+**\_\_\_**Brand page -
+**\_\_\_**Request Consultation -
 
-- Reset Password - API not working ( @karan )
-  - Signup
-    - Make fields unrequiered (@karan)
-    - Password Valdiation ( @self ) get confirmation with @vikas
-    - Zip Code must not be some text
-  - Manage Order
-    - test
-    - Dual Logo issue. ( @rahul )
-    - Order orders
-  - Brand Page
-    - Main CSS issue ( )
-    - Images not visible ( )
-  - Request Consultation
-    - API not getting called.
-      - GCLID (blank)
-      - Field names changed
-      - contact method - 1 for phone 2 for email
-  - Login
-    - Not redirecting to home page
-  - Stories
-    -
-  - Checkout Page
-    - Logo price $.00
-    - loader comes late
-
-# Globally:
-
-    - Password valdiations ( missing )
-        - Signup
-    - Phone number validations ( missing)
-        - signup
-    -
+---

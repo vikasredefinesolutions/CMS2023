@@ -33,6 +33,7 @@ export interface _siteMapstore {
 }
 export interface _siteMapTemplates {
   type1: React.FC<_Sitemap_ExpectedProps>;
+  type2: React.FC<_Sitemap_ExpectedProps>;
 }
 
 export interface _Sitemap_ExpectedProps {

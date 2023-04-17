@@ -21,7 +21,7 @@ interface _props {
   setError: (field: string, message: string | undefined) => void;
 }
 
-const SU_EmailInput: React.FC<_props> = ({
+const SU1_EmailInput: React.FC<_props> = ({
   name,
   value,
   label,
@@ -103,4 +103,4 @@ const SU_EmailInput: React.FC<_props> = ({
   );
 };
 
-export default SU_EmailInput;
+export default SU1_EmailInput;

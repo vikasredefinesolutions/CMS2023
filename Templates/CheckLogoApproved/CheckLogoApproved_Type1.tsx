@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
+import MyAccountTabs from '@appComponents/common/MyAccountTabsType1';
 import NxtImage from '@appComponents/reUsable/Image';
 import { logoFeedbackConst } from '@constants/logo.constant';
 import { __pagesText } from '@constants/pages.text';
@@ -10,7 +11,6 @@ import {
   getLogoDetailsById,
   submitLogoFeedback,
 } from '@services/logo.service';
-import MyAccountTabs from '@templates/account/accountTemplate_Type1/components/MyAccountTab';
 import { Form, Formik } from 'formik';
 import getLocation from 'helpers_v2/getLocation';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
