@@ -216,7 +216,12 @@ const Home = (props) => {
       ) : (
         <>
           <div className=''>
-            
+            {/* {featuredItems?.products && (
+          <FeaturedItems
+            brands={__constant._Home.featuredItems.brands}
+            products={featuredItems.products}
+          />          
+        )}*/}
             <main>
               {pageData?.components && pageData?.components.length > 0 ? (
                 pageData.components.map((componentValue, index) => {
@@ -284,11 +289,11 @@ const Home = (props) => {
                       innerDivClass += ' ' + 'mb-['+componentValue.selectedVal.container_bottom_margin.value+'px]';                                                          
                   }
 
-                   
+                 
                   return (
-<>                    {componentValue.visibility === 'on' && <div
+                    <div
                       key={index}
-                      className={`w-full mx-auto ${componentValue.visibility == 'off' ? 'hidden' : ''} ${backgroundStyle === 'outer' ? backgroundImageClass : ''}`} 
+                      className={`w-full mx-auto ${componentValue.visibility === 'off' ? 'hidden' : ''} ${backgroundStyle === 'outer' ? backgroundImageClass : ''}`} 
                       
                       style={ loadBackgroundType(componentValue) == 'image' ? { backgroundImage: backgroundStyle === 'outer' ? backgroundDefault : 'none' } : { background: backgroundStyle === 'outer' ? backgroundDefault : 'none' }}
                       id={`div${componentValue.no}`}
@@ -372,7 +377,7 @@ const Home = (props) => {
                       }
                     </div>  
                     </section>
-                    </div> }</>
+                    </div>
                   );
 
                   // return <div key={index} className="text-center p-5 border my-2" dangerouslySetInnerHTML={{ __html: comphtml }}></div>

@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { __domain } from '@configs/page.config';
 import * as _AppController from '@controllers/_AppController.async';
+import { TrackFile } from '@services/tracking.service';
 import App, { AppContext, AppInitialProps, AppProps } from 'next/app';
 import { useRouter } from 'next/router';
 // import 'public/assets/css/main.css';
@@ -15,7 +16,7 @@ import {
   extractCookies,
   Logout,
   nextJsSetCookie,
-  setCookie
+  setCookie,
 } from 'helpers_v2/common.helper';
 import { useActions_v2 } from 'hooks_v2';
 
@@ -28,7 +29,7 @@ import { conditionalLog_V2 } from '@helpers/console.helper';
 import {
   _Expected_AppProps,
   _MenuItems,
-  _TransformedHeaderConfig
+  _TransformedHeaderConfig,
 } from '@templates/Header/header.type';
 
 import Metatags from '@appComponents/MetaTags';
@@ -98,7 +99,7 @@ const RedefineCustomApp = ({
         ipAddress: '192.168.1.1',
       },
     };
-   // await TrackFile(data);
+    await TrackFile(data);
   };
 
   const getUserDetails = async (

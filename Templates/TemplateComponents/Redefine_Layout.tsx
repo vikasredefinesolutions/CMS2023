@@ -1,4 +1,5 @@
 import SuccessErrorModal from '@appComponents/modals/successErrorModal';
+import { paths } from '@constants/paths.constant';
 import { _Footer } from '@definations/APIs/footer.res';
 import { addCustomEvents } from '@helpers/common.helper';
 import BreadCrumb from '@templates/breadCrumb';
@@ -6,6 +7,7 @@ import Footer from '@templates/Footer';
 import { _MenuItems } from '@templates/Header/header.type';
 import * as _AppController from 'controllers_v2/_AppController.async';
 import { useTypedSelector_v2 } from 'hooks_v2';
+import { useRouter } from 'next/router';
 import { _StoreCache } from 'pages/[slug]/slug';
 import React, { useEffect, useMemo, useState } from 'react';
 import Header from 'Templates/Header';
@@ -55,6 +57,7 @@ const Layout: React.FC<_props & _StoreCache> = ({
       logoUrl: logoUrl || last.logoUrl,
     }));
   }, [storeCode, logoUrl, storeId]);
+  const router = useRouter();
 
   return (
     <>
@@ -66,7 +69,9 @@ const Layout: React.FC<_props & _StoreCache> = ({
         menuItems={useMemo(() => header.menuItems, [header.menuItems])}
       />
 
-      <BreadCrumb breadCrumbid={0} />
+      {router.pathname !== paths.PRODUCT_COMPARE && (
+        <BreadCrumb breadCrumbid={0} />
+      )}
       <SuccessErrorModal />
       <div style={{ flexGrow: 1 }}>{children}</div>
       <Footer data={configs.footer} />

@@ -13,9 +13,7 @@ const SideFiltersTypeTwo = ({
   handleChange: FilterChangeHandler;
   checkedFilters: Array<_CheckedFilter>;
 }) => {
-  {
-    console.log(filters, 'filters');
-  }
+
   return (
     <div className='pb-[16px]'>
       <form className='filter-box filter-type'>

@@ -29,7 +29,7 @@ export const __pagesConstant = {
   _header: {
     mobileBreakPoint: 1024,
     imagesToShowInBrandDropdown: 5,
-    brandImage: [49, 9, 28, 10], //[198, 11, 187, 27],
+    brandImage: [515, 512, 506, , 501], // [49, 9, 28, 10], //[198, 11, 187, 27],
   },
   _productAlike: {
     carouselCounter: 5,

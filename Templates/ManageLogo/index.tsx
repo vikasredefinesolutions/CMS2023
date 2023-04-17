@@ -58,10 +58,7 @@ const ManageLogo: React.FC<{ id: string }> = ({ id }) => {
 
   const ManagelogoDeatils = ManageLogoTemplates[`type${id}` as 'type1'];
 
-
   // console.log('managelogo' , logoList);
-  
-
   return (
     <>
       <MyAccountTabs />

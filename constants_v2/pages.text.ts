@@ -15,6 +15,7 @@ export const __pagesText = {
     },
     loadMoreButton: 'LOAD MORE',
     clearAllButton: 'Clear All',
+    noProductsFound:'no products found'
   },
   home: {},
   ContactUs: {
@@ -300,7 +301,8 @@ export const __pagesText = {
     ProductType: 'Product Type',
     LogoPosition: 'Logo Position',
     Status: 'Status',
-    Heading: 'MANAGE LOGO'
+    Heading: 'MANAGE LOGO',
+    LogoUploadedOn: 'Logo uploaded on : '
   },
   CheckoutPage: {
     cardInstruction:

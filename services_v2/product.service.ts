@@ -9,10 +9,11 @@ import {
 import {
   _FetchProductsRecentlyViewedPayload,
   _LogoLocation,
+  _ProductBySku,
   _ProductDetails,
   _ProductDoNotExist,
-  _ProductSEO,
   _ProductsAlike,
+  _ProductSEO,
   _ProductsRecentlyViewed,
   _ProductsRecentlyViewedPayload,
   _ProductsRecentlyViewedResponse,
@@ -49,7 +50,8 @@ export type _ProducDetailAPIs_V2 =
   | 'FetchDiscountTablePrices'
   | 'FetchLogoLocationByProductId'
   | 'SumbitRequestConsultationDetails'
-  | 'FetchFeaturedProducts';
+  | 'FetchFeaturedProducts'
+  | 'FetchProductsBySKUs';
 
 export type _ProductDetailService_V2 = {
   service: 'productDetails';
@@ -469,6 +471,27 @@ export const FetchDiscountTablePrices = async (payload: {
     name: {
       service: 'productDetails',
       api: 'FetchDiscountTablePrices',
+    },
+    request: {
+      url: url,
+      method: 'POST',
+      data: payload,
+    },
+  });
+
+  return response;
+};
+
+export const FetchProductsBySKUs = async (payload: {
+  SKUs: string;
+  storeId: number;
+}): Promise<_ProductBySku[] | null> => {
+  const url = `StoreProduct/getstoreproductbyskus/${payload.SKUs}/${payload.storeId}.json`;
+
+  const response = await CallAPI_v2<_ProductBySku[]>({
+    name: {
+      service: 'productDetails',
+      api: 'FetchProductsBySKUs',
     },
     request: {
       url: url,

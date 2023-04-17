@@ -47,7 +47,7 @@ export const paths = {
   WRITE_A_REVIEW: '/writereview/writereview',
   REQUEST_CONSULTATION: '/Itempage/RequestConsultationProof',
   CUSTOMIZE_LOGO: '/customize',
-  PRODUCT_COMPARE: '/Itempage/Productcomapre',
+  PRODUCT_COMPARE: '/Itempage/ProductComapre',
   Contact: '/Contact',
   ThankYou: '/Thankyou',
   STORIES: '/stories',

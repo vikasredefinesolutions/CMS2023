@@ -166,11 +166,11 @@ const handleTransition= ()=>{
             animationHandler="fade"
             transitionTime="700"
           >
-            
             {bannerArr.images.map((image) => {
+              
               return (
               
-                              <div key={image} className='relative'>
+                <div key={image} className='relative'>
                   <div className='overflow-hidden'>
                     {image.image_or_video == 'Image' ? (
                       <img src={image.image_url} alt='corousel' />
