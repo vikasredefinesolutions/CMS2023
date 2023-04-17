@@ -200,8 +200,7 @@ const Home = (props) => {
   }, [componentHtml]);
 
   const storeTypeId = useTypedSelector_v2((state) => state.store.storeTypeId);
-  return ("HELLO"
-  );
+  return (<><div>Hello</div></>);
 };
 
 export default Home;
