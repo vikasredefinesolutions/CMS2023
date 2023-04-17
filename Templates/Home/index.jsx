@@ -289,7 +289,7 @@ const Home = (props) => {
                       innerDivClass += ' ' + 'mb-['+componentValue.selectedVal.container_bottom_margin.value+'px]';                                                          
                   }
 
-                {componentValue.visibility === 'on' && <>
+                {componentValue.visibility === 'on' && 
                    return (
                     <div
                       key={index}
@@ -379,7 +379,7 @@ const Home = (props) => {
                     </section>
                     </div>
                   );
-                </>}
+                }
                  
 
                   // return <div key={index} className="text-center p-5 border my-2" dangerouslySetInnerHTML={{ __html: comphtml }}></div>
