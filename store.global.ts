@@ -31,7 +31,7 @@ export let _globalStore: _Store = {
   storeTypeId: null,
   blobRootDirectory: 'rdcbeta',
   isAttributeSaparateProduct: false,
-  companyId: 0,
+  companyId: 1,
   set: (pair) => {
     _globalStore = { ..._globalStore, [pair.key]: pair.value };
   },
