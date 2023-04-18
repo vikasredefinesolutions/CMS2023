@@ -1,4 +1,4 @@
-import { NextPage } from 'next';
+import React from 'react';
 import {
   _RecentlyViewedProps,
   _RecentlyViewedTemplates,
@@ -10,7 +10,7 @@ const ProductRecetlyViewedTemplates: _RecentlyViewedTemplates = {
   type1: ProductRecetlyViewed_Type1,
   type2: ProductRecetlyViewed_Type2,
 };
-const ProductRecentlyViewed: NextPage<_RecentlyViewedProps> = ({ product }) => {
+const ProductRecentlyViewed: React.FC<_RecentlyViewedProps> = ({ product }) => {
   const ProductRecetlyViewedTemplate = ProductRecetlyViewedTemplates['type1'];
   return <ProductRecetlyViewedTemplate product={product} />;
 };

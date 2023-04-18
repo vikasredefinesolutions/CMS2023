@@ -26,6 +26,7 @@ export interface _ProductInventory {
 }
 
 export interface _ProductInventoryTransfomed {
+  // filter(): import('react').ReactNode;
   sizes: {
     colorAttributeOptionId: number;
     sizeArr: string[];

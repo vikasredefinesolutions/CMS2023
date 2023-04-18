@@ -7,6 +7,6 @@ export interface _RecentlyViewedProps {
 }
 
 export interface _RecentlyViewedTemplates {
-  type1: NextPage<_RecentlyViewedProps, _RecentlyViewedProps>;
-  type2: NextPage<_RecentlyViewedProps, _RecentlyViewedProps>;
+  type1: NextPage<_RecentlyViewedProps>;
+  type2: NextPage<_RecentlyViewedProps>;
 }

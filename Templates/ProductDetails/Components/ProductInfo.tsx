@@ -16,7 +16,6 @@ import React, { useState } from 'react';
 import AvailableColors from './AvailableColors';
 import DiscountPricing from './DiscountPricing';
 import ProductFeatures from './ProductFeatures';
-import TopRatedProducts from './TopRatedProducts';
 import { _ProductInfoProps } from './productDetailsComponents';
 
 const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
@@ -89,7 +88,6 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
       </div>
 
       <AvailableColors />
-
       <DiscountPricing
         storeCode={storeCode}
         showMsrpLine={true}
@@ -193,12 +191,12 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
           </button>
         </div>
 
-        {product.isDiscontinue && (
+        {/* {product.isDiscontinue && (
           <TopRatedProducts
             title={'Top Rated Alternatives'}
             suggestedProducts={product.suggestedProducts}
           />
-        )}
+        )} */}
 
         <div className='mt-[20px] text-center'>
           <button

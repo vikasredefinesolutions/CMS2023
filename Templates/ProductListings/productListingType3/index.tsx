@@ -1,8 +1,139 @@
-import React from 'react';
+import { __pagesText } from '@constants/pages.text';
+import React, { Fragment } from 'react';
 import { _ListingProps } from '../ProductListingType';
+import FilterBarTypeThree from './components/FilterBarTypeThree';
+import FilterChipsTypeThree from './components/FilterChipsTypeThree';
+import SideFiltersTypeThree from './components/SideFiltersTypeThree';
+import TemplateThreeListing from './components/TemplateThreeListing';
 
-const ProductListingType3: React.FC<_ListingProps> = () => {
-  return <></>;
+const ProductListingType3: React.FC<_ListingProps> = ({
+  slug,
+  filters,
+  products,
+  checkedFilters,
+  totalCount,
+  showFilter,
+  showSortMenu,
+  productView,
+  skuList,
+  setShowSortMenu,
+  setShowFilter,
+  setProductView,
+  colorChangeHandler,
+  handleChange,
+  loadMore,
+  sortProductJson,
+  clearFilters,
+  compareCheckBoxHandler,
+  seType,
+  brandId,
+  sortingType,
+}) => {
+  return (
+    <>
+      {/* <FreeBanner /> */}
+      <section id='layout3' className=''>
+        <div className='bg-[#ffffff]'>
+          <div className='container mx-auto'>
+            <div aria-labelledby='products-heading' className='mt-[20px]'>
+              <h2 id='products-heading' className='sr-only'>
+                {__pagesText.productListing.products}
+              </h2>
+              <div className='flex flex-wrap lg:ml-[-16px] lg:mr-[-16px]'>
+                <div className='w-full xl:w-2/12 lg:w-3/12 lg:pl-[16px] lg:pr-[16px]'>
+                  <div
+                    onClick={() => {}}
+                    className='lg:hidden border-b border-b-neutral-300 p-2 sticky top-0 left-0 bg-primary flex items-center justify-between text-[#ffffff] z-1'
+                  >
+                    <div className='text-lg font-semibold text-[#ffffff]'>
+                      {__pagesText.productListing.Filters}
+                    </div>
+                    <a href='javascript:void(0);'>
+                      <span
+                        className='material-symbols-outlined flex text-white'
+                        // x-html="open == true ? 'remove' : 'add'"
+                        onClick={() => setShowFilter(!showFilter)}
+                      >
+                        {showFilter ? 'remove' : 'add'}
+                      </span>
+                    </a>
+                  </div>
+                  <div className='relative lg:block'>
+                    {showFilter && (
+                      <SideFiltersTypeThree
+                        filters={filters}
+                        handleChange={handleChange}
+                        checkedFilters={checkedFilters}
+                      />
+                    )}
+                  </div>
+                </div>
+                <div className='w-full xl:w-10/12 lg:w-9/12 lg:pl-[16px] lg:pr-[16px]'>
+                  <FilterBarTypeThree
+                    {...{
+                      totalCount,
+                      showSortMenu,
+                      sortProductJson,
+                      sortOpenHandler: setShowSortMenu,
+                      setProductView,
+                      productView,
+                      setShowFilter,
+                      sortingType,
+                    }}
+                  />
+                  <div className=''>
+                    <FilterChipsTypeThree
+                      {...{ clearFilters, checkedFilters, handleChange }}
+                    />
+                  </div>
+                  <div className='mt-8 relative'>
+                    <div className='relative w-full pb-6 -mb-6'>
+                      <ul
+                        role='list'
+                        className={
+                          productView === 'grid'
+                            ? 'grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 lg:gap-8 mb-8'
+                            : 'grid grid-cols-1 gap-6 lg:gap-8 mb-8'
+                        }
+                      >
+                        {products.map((product, index) => (
+                          <Fragment key={index}>
+                            <TemplateThreeListing
+                              productView={productView}
+                              skuList={skuList}
+                              compareCheckBoxHandler={compareCheckBoxHandler}
+                              product={product}
+                              colorChangeHandler={colorChangeHandler}
+                            />
+                          </Fragment>
+                        ))}
+                      </ul>
+                    </div>
+                    <div className='py-20 border-t border-t-gray-300 text-center'>
+                      <div className='mb-8'>
+                        You've seen {products.length} Products out of{' '}
+                        {totalCount}
+                      </div>
+                      {totalCount > products.length && (
+                        <button
+                          type='submit'
+                          onClick={loadMore}
+                          className='btn btn-lg btn-secondary'
+                        >
+                          {__pagesText.productListing.loadMoreButton}
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      {/* <ContactUs /> */}
+    </>
+  );
 };
 
 export default ProductListingType3;

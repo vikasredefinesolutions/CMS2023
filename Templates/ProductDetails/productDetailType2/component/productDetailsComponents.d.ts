@@ -133,3 +133,17 @@ export interface _TopRatedProductsProps {
   title: string;
   suggestedProducts: _SuggestedProduct[];
 }
+
+export interface _ProductCompanion {
+  product: _ProductDetails | null;
+}
+export type _modals =
+  | 'requiredQty'
+  | 'sizeChart'
+  | 'availableInventory'
+  | 'login'
+  | 'forgot'
+  | 'personalizationFonts'
+  | 'qouteRequest'
+  | 'startOrder'
+  | 'InventoryLimit';

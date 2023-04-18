@@ -1,6 +1,6 @@
 import { _BrandProps, _BrandsTemplates } from '@definations/brand';
 import React from 'react';
-import BrandsType1 from './BrandsType1';
+import BrandsType1 from './Brands_type1';
 
 const brandsTemplates: _BrandsTemplates = {
   type1: BrandsType1,

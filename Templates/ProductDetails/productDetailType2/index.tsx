@@ -1,13 +1,20 @@
+import { templateID } from '@constants/global.constant';
+import { CategoriesByPid } from '@definations/APIs/category.res';
 import { _StoreCache } from '@definations/slug.type';
+import { KlaviyoScriptTag } from '@helpers/common.helper';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
+import {
+  FetchCategoryByproductId,
+  FetchInventoryById,
+} from '@services/product.service';
+import Reviews from '@templates/Review';
+import ProductRecentlyViewed from '@templates/recentlyViewedProducts';
+import YouMayAlsoLike from '@templates/youMayAlsoLike';
 import { NextPage } from 'next';
+import Head from 'next/head';
+import { useEffect } from 'react';
 import { _ProductDetailsProps } from '../productDetailsTypes/productDetail.res';
 import ProductDetail from './component/ProductDetail';
-import Head from 'next/head';
-import { FetchCategoryByproductId, FetchInventoryById } from '@services/product.service';
-import { useEffect } from 'react';
-import { KlaviyoScriptTag } from '@helpers/common.helper';
-import { CategoriesByPid } from '@definations/APIs/category.res';
 
 const ProductDetails_Type2: NextPage<_ProductDetailsProps & _StoreCache> = (
   product,
@@ -140,13 +147,36 @@ const ProductDetails_Type2: NextPage<_ProductDetailsProps & _StoreCache> = (
     </Head>
   );
 
-
   // console.log('product layout page 2 ');
-  
+
   return (
     <>
       {HeadTag}
       <ProductDetail product={product?.details} storeCode={product.storeCode} />
+      {product.sectionView.map((val: string, index: number) => {
+        if (val === 'youmayalsolike') {
+          return (
+            <div key={val + index}>
+              <YouMayAlsoLike product={product.alike} id={templateID} />;
+            </div>
+          );
+        } else if (val === 'writereview') {
+          return (
+            <div key={val + index}>
+              <Reviews
+                storeCode={product.storeCode}
+                productId={product?.details?.id ? product.details.id : 0}
+              />
+            </div>
+          );
+        } else {
+          return (
+            <div key={val + index}>
+              <ProductRecentlyViewed product={product} />
+            </div>
+          );
+        }
+      })}
     </>
   );
 };

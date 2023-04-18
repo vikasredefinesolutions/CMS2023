@@ -52,18 +52,21 @@ const ProductListingType2: React.FC<_ListingProps> = ({
                     <a href='javascript:void(0);'>
                       <span
                         className='material-symbols-outlined flex text-white'
-                        x-html="open == true ? 'remove' : 'add'"
+                        // x-html="open == true ? 'remove' : 'add'"
+                        onClick={() => setShowFilter(!showFilter)}
                       >
-                        remove
+                        {showFilter ? 'remove' : 'add'}
                       </span>
                     </a>
                   </div>
                   <div className='relative lg:block'>
-                    <SideFiltersTypeTwo
-                      filters={filters}
-                      handleChange={handleChange}
-                      checkedFilters={checkedFilters}
-                    />
+                    {showFilter && (
+                      <SideFiltersTypeTwo
+                        filters={filters}
+                        handleChange={handleChange}
+                        checkedFilters={checkedFilters}
+                      />
+                    )}
                   </div>
                 </div>
                 <div className='w-full xl:w-10/12 lg:w-9/12 lg:pl-[16px] lg:pr-[16px]'>

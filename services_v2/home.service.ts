@@ -26,7 +26,7 @@ export const FetchFeaturedProducts = async (payload: {
       data: payload,
     },
   });
-console.log(payload);
+
   return response;
 };
 
@@ -48,6 +48,6 @@ export const getPageComponents = async (payload: {
       data: payload,
     },
   });
-console.log(payload);
+
   return response;
 };

@@ -1,26 +1,39 @@
 import WishlistButton from '@appComponents/ui/Wishlist';
-import { _OtherImage } from '@definations/APIs/colors.res';
+import { _OtherImage, _ProductColor } from '@definations/APIs/colors.res';
 import { _ProductImgProps } from '@templates/ProductDetails/Components/productDetailsComponents';
-import Image from 'appComponents_v2/reUsable/Image';
+import NxtImage from 'appComponents_v2/reUsable/Image';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
+import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import InnerImageZoom from 'react-inner-image-zoom';
 import 'react-inner-image-zoom/lib/InnerImageZoom/styles.min.css';
 import { _globalStore } from 'store.global';
+import ColorImage from './ColorImage';
+import ProductCompanion from './ProductCompanion';
 
 let mediaBaseUrl = _globalStore.blobUrl; // for server side rendering
 
 const ProductImg: React.FC<_ProductImgProps> = ({ product }) => {
-  const { setImage } = useActions_v2();
+  const router = useRouter();
+  const { setImage, setImage_2 } = useActions_v2();
   const [wishlistId, setWishlistId] = useState<number>(0);
   const [wishlistPresent, setWishlistPresent] = useState<boolean>(false);
-
+  const colors = useTypedSelector_v2((state) => state.product?.product.colors);
+  const handleChooseColor = (product: _ProductColor) => {
+    if (!product.productSEName || product.productSEName === '') {
+      setColor(product);
+      return;
+    }
+    router.push(product.productSEName);
+  };
   const brandId = useTypedSelector_v2((state) => state.wishlist.brandId);
   const selectedColor = useTypedSelector_v2(
-    (state) => state.product.selected.color,
+    (state) => state.product?.selected.color,
   );
+
+  const { setColor } = useActions_v2();
   const selectedImage = useTypedSelector_v2(
-    (state) => state.product.selected.image,
+    (state) => state.product?.selected.image,
   );
   const wishlist = useTypedSelector_v2((state) => state.wishlist.wishListData);
   const customerId = useTypedSelector_v2((state) => state.user.id);
@@ -29,7 +42,7 @@ const ProductImg: React.FC<_ProductImgProps> = ({ product }) => {
   );
   mediaBaseUrl = mediaBaseUrl || clientSideMediaUrl;
   const selectImgHandler = (img: _OtherImage) => {
-    setImage(img);
+    setImage_2(img);
   };
 
   useEffect(() => {
@@ -38,7 +51,7 @@ const ProductImg: React.FC<_ProductImgProps> = ({ product }) => {
       imageUrl: mediaBaseUrl + selectedColor.moreImages[0].imageUrl,
       altTag: selectedColor.moreImages[0].altTag,
     });
-  }, [selectedColor.attributeOptionId, product?.id]);
+  }, [selectedColor?.attributeOptionId, product?.id]);
 
   useEffect(() => {
     wishlist.forEach((item) => {
@@ -48,7 +61,6 @@ const ProductImg: React.FC<_ProductImgProps> = ({ product }) => {
       }
     });
   }, [customerId, wishlist]);
-
 
   return (
     <div className='col-span-1 grid grid-cols-12 gap-[24px] pr-[15px] pt-[8px]'>
@@ -61,7 +73,7 @@ const ProductImg: React.FC<_ProductImgProps> = ({ product }) => {
             className='w-full object-center object-cover sm:rounded-lg main_image max-h'
           />
         </div>
-
+        {/* https://redefinecommerce.blob.core.windows.net/rdcbeta/1/product/attributeimages/attribute_10887_10887_1.jpg */}
         <div className='hidden md:block sub-image absolute left-[10px] top-[15px] w-[70px]'>
           {selectedColor?.moreImages
             ?.map((img, index) => ({ ...img, id: index }))
@@ -73,10 +85,10 @@ const ProductImg: React.FC<_ProductImgProps> = ({ product }) => {
               return (
                 <div
                   key={img.id + img.imageUrl}
-                  className={`md:border hover:border-secondary p-[3px] mt-[5px] mb-[5px] last:mb-0 ${highlight}`}
+                  className={`md:border hover:border-secondary p-[3px] mt-[5px] mb-[5px] last:mb-0 ${highlight} testingclassnametest`}
                   onClick={() => selectImgHandler(img)}
                 >
-                  <Image
+                  <NxtImage
                     src={img.imageUrl}
                     alt={img.altTag}
                     className='w-full object-center object-cover'
@@ -103,6 +115,24 @@ const ProductImg: React.FC<_ProductImgProps> = ({ product }) => {
           </button>
         </div>
       </div>
+      <div className='col-span-12 flex flex-wrap justify-center'>
+        {colors &&
+          colors.map((product, index) => {
+            return (
+              <div
+                className='border border-gray-border hover:border-secondary mx-[5px] mb-[10px] p-[1px] w-[70px] max-h-[70px] cursor-pointer'
+                key={product.attributeOptionId}
+                onClick={() => handleChooseColor(product)}
+              >
+                <ColorImage product={product} />
+              </div>
+            );
+          })}
+      </div>
+
+      {product?.companionProductName !== null ? (
+        <ProductCompanion product={product} />
+      ) : null}
     </div>
   );
 };

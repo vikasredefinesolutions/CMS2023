@@ -1,4 +1,4 @@
-import { useActions_v2 } from '@hooks_v2/index';
+import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import { UploadImage } from '@services/general.service';
 import React, { useState } from 'react';
 
@@ -26,13 +26,16 @@ const UploadLogoPopup: React.FC<_props> = ({
     previewURL: string;
   } | null>(null);
   const { showModal } = useActions_v2();
+  const { id: storeId, imageFolderPath } = useTypedSelector_v2(
+    (state) => state.store,
+  );
 
   const fileReader = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target?.files === null) return;
 
     try {
       const logoFileURL = await UploadImage({
-        folderPath: '/',
+        folderPath: imageFolderPath,
         files: event?.target?.files[0],
       });
 

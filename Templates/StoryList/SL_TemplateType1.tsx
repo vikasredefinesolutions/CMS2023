@@ -1,4 +1,4 @@
-import BrandsByCategories from '@appComponents/common/BrandsByCategories';
+import BrandsByCategories from '@appComponents/common/BrandsByCategoriesType1';
 import SL_Story from '@appComponents/common/StoriesList';
 import { _Brand } from '@definations/brand';
 import { _Story } from '@definations/story';

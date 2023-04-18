@@ -1,8 +1,12 @@
+import { _globalStore } from 'store.global';
+
+let mediaBaseUrl = _globalStore.blobUrl;
 export interface _Config {
   baseUrl: {
     klaviyo: string;
     klaviyo2: string;
     googleFonts: string;
+    media: string;
   };
 }
 
@@ -24,6 +28,7 @@ const dev: _Config = {
     klaviyo: `https://static.klaviyo.com/onsite/js/klaviyo.js`,
     klaviyo2: 'https://a.klaviyo.com/',
     googleFonts: 'https://fonts.googleapis.com/',
+    media: mediaBaseUrl,
   },
 };
 
@@ -32,6 +37,7 @@ const stage: _Config = {
     klaviyo: `https://static.klaviyo.com/onsite/js/klaviyo.js`,
     klaviyo2: 'https://a.klaviyo.com/',
     googleFonts: 'https://fonts.googleapis.com/',
+    media: mediaBaseUrl,
   },
 };
 
@@ -40,6 +46,7 @@ const prod: _Config = {
     klaviyo: `https://static.klaviyo.com/onsite/js/klaviyo.js`,
     klaviyo2: 'https://a.klaviyo.com/',
     googleFonts: 'https://fonts.googleapis.com/',
+    media: mediaBaseUrl,
   },
 };
 

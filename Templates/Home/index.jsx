@@ -289,11 +289,11 @@ const Home = (props) => {
                       innerDivClass += ' ' + 'mb-['+componentValue.selectedVal.container_bottom_margin.value+'px]';                                                          
                   }
 
-                 
+                  
                   return (
                     <div
                       key={index}
-                      className={`w-full mx-auto ${componentValue.visibility === 'off' ? 'hidden' : ''} ${backgroundStyle === 'outer' ? backgroundImageClass : ''}`} 
+                      className={`w-full mx-auto ${componentValue.visibility == 'off' ? 'hidden' : ''} ${backgroundStyle === 'outer' ? backgroundImageClass : ''}`} 
                       
                       style={ loadBackgroundType(componentValue) == 'image' ? { backgroundImage: backgroundStyle === 'outer' ? backgroundDefault : 'none' } : { background: backgroundStyle === 'outer' ? backgroundDefault : 'none' }}
                       id={`div${componentValue.no}`}

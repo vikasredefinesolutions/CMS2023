@@ -3,7 +3,7 @@ import { StaticImageData } from 'next/image';
 export interface _Imageprops {
   isStatic?: boolean;
   src: null | string | StaticImageData;
-  alt: string;
+  alt: string | null;
   className: string;
   width?: number | string;
   height?: number | string;

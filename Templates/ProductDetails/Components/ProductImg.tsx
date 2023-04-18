@@ -11,7 +11,7 @@ import { _globalStore } from 'store.global';
 let mediaBaseUrl = _globalStore.blobUrl; // for server side rendering
 
 const ProductImg: React.FC<_ProductImgProps> = ({ product }) => {
-  const { setImage } = useActions_v2();
+  const { setImage, setImage_2 } = useActions_v2();
   const [wishlistId, setWishlistId] = useState<number>(0);
   const [wishlistPresent, setWishlistPresent] = useState<boolean>(false);
 
@@ -29,7 +29,7 @@ const ProductImg: React.FC<_ProductImgProps> = ({ product }) => {
   );
   mediaBaseUrl = mediaBaseUrl || clientSideMediaUrl;
   const selectImgHandler = (img: _OtherImage) => {
-    setImage(img);
+    setImage_2(img);
   };
 
   useEffect(() => {

@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+import config from '@configs/api.config';
 import { _ProductColor } from '@definations/APIs/colors.res';
 import { _SizeChartTransformed } from '@definations/APIs/sizeChart.res';
 import { createSlice } from '@reduxjs/toolkit';
@@ -341,6 +342,22 @@ export const productSlice = createSlice({
       state.selected.image = {
         ...action.payload,
         imageUrl: action.payload.imageUrl,
+      };
+    },
+
+    setImage_2: (
+      state,
+      action: {
+        payload: {
+          id: number;
+          imageUrl: string;
+          altTag: string;
+        };
+      },
+    ) => {
+      state.selected.image = {
+        ...action.payload,
+        imageUrl: `${config.baseUrl.media}${action.payload.imageUrl}`,
       };
     },
 
