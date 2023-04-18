@@ -22,7 +22,7 @@ const Banner: React.FC<_BannerProps & { id: string }> = ({
   seType,
   slug,
 }) => {
-  const Component = bannerTemplates[`type5` as 'type5'];
+  const Component = bannerTemplates[`type1` as 'type1'];
   const isbrand: boolean = seType === 'brand' ? true : false;
   const [banner, setBanner] = useState<_BannerRes[] | null>(null);
   const [showModal, setShowModal] = useState<string | null>(null);
