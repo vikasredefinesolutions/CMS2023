@@ -51,7 +51,7 @@ class MyDocument extends Document {
           {storeId == 3 && (
             <link rel='stylesheet' type='text/css' href={cssApis[3]} />
           )}
-          {storeId == 10 && (
+          {/* {storeId == 10 && (
             <link rel='stylesheet' type='text/css' href={cssApis[10]} />
           )}
           {storeId == 23 && (
@@ -75,7 +75,7 @@ class MyDocument extends Document {
           )}
           {storeId == 22 && (
             <link rel='stylesheet' type='text/css' href={cssApis[22]} />
-          )}
+          )} */}
 
           {/* ---------------------CUSTOM CSS STYLESHEETS------------------------ */}
 
