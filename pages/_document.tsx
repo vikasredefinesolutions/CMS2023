@@ -144,9 +144,7 @@ class MyDocument extends Document {
             }}
           ></script>
 
-          <script
-            dangerouslySetInnerHTML={{ __html: _globalStore.customScript }}
-          ></script>
+        
 
        
         </Head>
@@ -163,11 +161,7 @@ class MyDocument extends Document {
 
          
 
-          <script
-            dangerouslySetInnerHTML={{
-              __html: _globalStore.customHomeScript,
-            }}
-          ></script>
+         
 
           {/* -----------------------KLEVU------------------------- */}
           <script
