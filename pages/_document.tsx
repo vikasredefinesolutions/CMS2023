@@ -169,11 +169,11 @@ class MyDocument extends Document {
             }}
           ></script> */}
 
-          <script
+          {/* <script
             dangerouslySetInnerHTML={{
               __html: _globalStore.customHomeScript,
             }}
-          ></script>
+          ></script> */}
 
           {/* -----------------------KLEVU------------------------- */}
           <script
