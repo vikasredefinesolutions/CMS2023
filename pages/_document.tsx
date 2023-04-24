@@ -112,9 +112,9 @@ class MyDocument extends Document {
             }}
           ></script>
 
-          <script
+<!--           <script
             dangerouslySetInnerHTML={{ __html: _globalStore.customScript }}
-          ></script>
+          ></script> -->
 
 
           {/* -----------------------CSS STYLESHEETS------------------------- */}
@@ -128,18 +128,18 @@ class MyDocument extends Document {
           <Main />
           <NextScript />
 
-          <script
+<!--           <script
             dangerouslySetInnerHTML={{
               __html: _globalStore.customGlobalBodyScript,
             }}
-          ></script>
+          ></script> -->
 
-          <script
+<!--           <script
             dangerouslySetInnerHTML={{
               __html: _globalStore.customHomeScript,
             }}
           ></script>
-
+ -->
           {/* -----------------------KLEVU------------------------- */}
           <script
             type='text/javascript'
