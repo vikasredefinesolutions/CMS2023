@@ -101,6 +101,28 @@ class MyDocument extends Document {
             href={`${config.baseUrl.googleFonts}css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0`}
           />
           
+          
+
+          {/* -----------------------KLEVU------------------------- */}
+          <script
+            type='text/javascript'
+            dangerouslySetInnerHTML={{
+              __html:
+                'var klevu_addPageNumberToUrl = true,klevu_addSelectedFiltersToUrl = true; ',
+            }}
+          ></script>
+
+          {/* <script
+            dangerouslySetInnerHTML={{ __html: _globalStore.customScript }}
+          ></script> */}
+
+        <script
+            type='text/javascript'
+            dangerouslySetInnerHTML={{
+              __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-WH227F7');`,
+            }}
+          ></script>
+          
                     {/* -----------------------CSS STYLESHEETS------------------------- */}
           {storeId == 1 && (
             <link rel='stylesheet' type='text/css' href={cssApis[1]} />
@@ -136,26 +158,6 @@ class MyDocument extends Document {
           {storeId == 22 && (
             <link rel='stylesheet' type='text/css' href={cssApis[22]} />
           )} */}
-
-          {/* -----------------------KLEVU------------------------- */}
-          <script
-            type='text/javascript'
-            dangerouslySetInnerHTML={{
-              __html:
-                'var klevu_addPageNumberToUrl = true,klevu_addSelectedFiltersToUrl = true; ',
-            }}
-          ></script>
-
-          {/* <script
-            dangerouslySetInnerHTML={{ __html: _globalStore.customScript }}
-          ></script> */}
-
-        <script
-            type='text/javascript'
-            dangerouslySetInnerHTML={{
-              __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-WH227F7');`,
-            }}
-          ></script>
         </Head>
         <body className='font-Outfit bg-white'>
        
