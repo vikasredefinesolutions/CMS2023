@@ -249,8 +249,8 @@ export const updateSetProperties = (element) => {
             let iconType;
             let bgPropertyName = key;
 
-            if (Object.keys(element.selected_Values).includes(key)) {
-              Object.entries(element.selected_Values).map(([keyq, valueq]) => {
+            if (Object.keys(element.selectedVal).includes(key)) {
+              Object.entries(element.selectedVal).map(([keyq, valueq]) => {
                 
                 if (keyq == bgPropertyName) {
                         icon = valueq.value;
