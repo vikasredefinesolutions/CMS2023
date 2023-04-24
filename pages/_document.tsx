@@ -122,7 +122,7 @@ class MyDocument extends Document {
           {cssApis[storeId] && (
             <link rel='stylesheet' type='text/css' href={cssApis[storeId]} />
           )}
-          
+           <script type="text/javascript" src='https://platform-api.sharethis.com/js/sharethis.js#property=622863e42e0ffb001379992c&product=sop'></script>
         </Head>
         <body className='font-Outfit bg-white'>
           <Main />
