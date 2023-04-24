@@ -8,7 +8,6 @@ import Document, {
 } from 'next/document';
 import { _globalStore } from 'store.global';
 import config, { cssApis } from '../configs_v2/api.config';
-
 let storeId: null | number = null;
 let faviconURL: string = '';
 
@@ -33,7 +32,11 @@ class MyDocument extends Document {
     return initialProps;
   }
 
+
   render() {
+    
+  
+    
     return (
       <Html lang='en'>
         <link
@@ -41,8 +44,7 @@ class MyDocument extends Document {
           href={`${_globalStore.blobUrl}${faviconURL}`}
         />
         <Head>
-
-
+          
           {/* ---------------------CUSTOM CSS STYLESHEETS------------------------ */}
 
           <link
@@ -53,7 +55,7 @@ class MyDocument extends Document {
           <link
             rel='stylesheet'
             type='text/css'
-            href={`https://www.ystore.us/HTML/RedefineCommerce/Ecom-front/corporategear/tailwin-css-29.css`}
+            href={`https://www.ystore.us/HTML/RedefineCommerce/Ecom-front/corporategear/tailwin-css-29.css?${Math.random()}`}
           />
 
           <link
@@ -100,8 +102,6 @@ class MyDocument extends Document {
             rel='stylesheet'
             href={`${config.baseUrl.googleFonts}css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0`}
           />
-          
-          
 
           {/* -----------------------KLEVU------------------------- */}
           <script
@@ -112,72 +112,33 @@ class MyDocument extends Document {
             }}
           ></script>
 
-          {/* <script
+          <script
             dangerouslySetInnerHTML={{ __html: _globalStore.customScript }}
-          ></script> */}
-
-        <script
-            type='text/javascript'
-            dangerouslySetInnerHTML={{
-              __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-WH227F7');`,
-            }}
           ></script>
-          
-                    {/* -----------------------CSS STYLESHEETS------------------------- */}
-          {storeId == 1 && (
-            <link rel='stylesheet' type='text/css' href={cssApis[1]} />
-          )}
-          {storeId == 21 && (
-            <link rel='stylesheet' type='text/css' href={cssApis[21]} />
-          )}
-          {storeId == 3 && (
-            <link rel='stylesheet' type='text/css' href={cssApis[3]} />
-          )}
-          {/* {storeId == 10 && (
-            <link rel='stylesheet' type='text/css' href={cssApis[10]} />
-          )}
-          {storeId == 23 && (
-            <link rel='stylesheet' type='text/css' href={cssApis[23]} />
-          )}
 
-          {storeId == 108 && (
-            <link rel='stylesheet' type='text/css' href={cssApis[108]} />
+
+          {/* -----------------------CSS STYLESHEETS------------------------- */}
+
+          {cssApis[storeId] && (
+            <link rel='stylesheet' type='text/css' href={cssApis[storeId]} />
           )}
-          {storeId == 134 && (
-            <link rel='stylesheet' type='text/css' href={cssApis[134]} />
-          )}
-          {storeId == 135 && (
-            <link rel='stylesheet' type='text/css' href={cssApis[135]} />
-          )}
-          {storeId == 139 && (
-            <link rel='stylesheet' type='text/css' href={cssApis[139]} />
-          )}
-          {storeId == 27 && (
-            <link rel='stylesheet' type='text/css' href={cssApis[27]} />
-          )}
-          {storeId == 22 && (
-            <link rel='stylesheet' type='text/css' href={cssApis[22]} />
-          )} */}
+          
         </Head>
         <body className='font-Outfit bg-white'>
-       
-        <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WH227F7"
-        height="0" width="0" style={{ display: "none", visibility: "hidden" }}></iframe></noscript>
-          
           <Main />
           <NextScript />
 
-          {/* <script
+          <script
             dangerouslySetInnerHTML={{
               __html: _globalStore.customGlobalBodyScript,
             }}
-          ></script> */}
+          ></script>
 
-          {/* <script
+          <script
             dangerouslySetInnerHTML={{
               __html: _globalStore.customHomeScript,
             }}
-          ></script> */}
+          ></script>
 
           {/* -----------------------KLEVU------------------------- */}
           <script
@@ -193,8 +154,6 @@ class MyDocument extends Document {
         (function () { var ws = document.createElement('script'), kl_protocol = ("https:" === document.location.protocol ? "https://" : "http://"); ws.type = 'text/javascript'; ws.async = true; ws.src = kl_protocol + 'js.klevu.com/klevu-js-v1/js/klevu-webstore.js'; ws.charset = "UTF-8"; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ws, s); })();`,
             }}
           ></script>
-
-      
         </body>
       </Html>
     );
