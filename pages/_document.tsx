@@ -41,41 +41,7 @@ class MyDocument extends Document {
           href={`${_globalStore.blobUrl}${faviconURL}`}
         />
         <Head>
-          {/* -----------------------CSS STYLESHEETS------------------------- */}
-          {storeId == 1 && (
-            <link rel='stylesheet' type='text/css' href={cssApis[1]} />
-          )}
-          {storeId == 21 && (
-            <link rel='stylesheet' type='text/css' href={cssApis[21]} />
-          )}
-          {storeId == 3 && (
-            <link rel='stylesheet' type='text/css' href={cssApis[3]} />
-          )}
-          {/* {storeId == 10 && (
-            <link rel='stylesheet' type='text/css' href={cssApis[10]} />
-          )}
-          {storeId == 23 && (
-            <link rel='stylesheet' type='text/css' href={cssApis[23]} />
-          )}
 
-          {storeId == 108 && (
-            <link rel='stylesheet' type='text/css' href={cssApis[108]} />
-          )}
-          {storeId == 134 && (
-            <link rel='stylesheet' type='text/css' href={cssApis[134]} />
-          )}
-          {storeId == 135 && (
-            <link rel='stylesheet' type='text/css' href={cssApis[135]} />
-          )}
-          {storeId == 139 && (
-            <link rel='stylesheet' type='text/css' href={cssApis[139]} />
-          )}
-          {storeId == 27 && (
-            <link rel='stylesheet' type='text/css' href={cssApis[27]} />
-          )}
-          {storeId == 22 && (
-            <link rel='stylesheet' type='text/css' href={cssApis[22]} />
-          )} */}
 
           {/* ---------------------CUSTOM CSS STYLESHEETS------------------------ */}
 
@@ -134,6 +100,42 @@ class MyDocument extends Document {
             rel='stylesheet'
             href={`${config.baseUrl.googleFonts}css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0`}
           />
+          
+                    {/* -----------------------CSS STYLESHEETS------------------------- */}
+          {storeId == 1 && (
+            <link rel='stylesheet' type='text/css' href={cssApis[1]} />
+          )}
+          {storeId == 21 && (
+            <link rel='stylesheet' type='text/css' href={cssApis[21]} />
+          )}
+          {storeId == 3 && (
+            <link rel='stylesheet' type='text/css' href={cssApis[3]} />
+          )}
+          {/* {storeId == 10 && (
+            <link rel='stylesheet' type='text/css' href={cssApis[10]} />
+          )}
+          {storeId == 23 && (
+            <link rel='stylesheet' type='text/css' href={cssApis[23]} />
+          )}
+
+          {storeId == 108 && (
+            <link rel='stylesheet' type='text/css' href={cssApis[108]} />
+          )}
+          {storeId == 134 && (
+            <link rel='stylesheet' type='text/css' href={cssApis[134]} />
+          )}
+          {storeId == 135 && (
+            <link rel='stylesheet' type='text/css' href={cssApis[135]} />
+          )}
+          {storeId == 139 && (
+            <link rel='stylesheet' type='text/css' href={cssApis[139]} />
+          )}
+          {storeId == 27 && (
+            <link rel='stylesheet' type='text/css' href={cssApis[27]} />
+          )}
+          {storeId == 22 && (
+            <link rel='stylesheet' type='text/css' href={cssApis[22]} />
+          )} */}
 
           {/* -----------------------KLEVU------------------------- */}
           <script
