@@ -229,7 +229,27 @@ export const updateSetProperties = (element) => {
           x.querySelectorAll('#' + key)[0].innerHTML = value.value;
         }
       }
+       if(value.type === 'iconclass')
+          {
+            let propName = key;
+            let className = '';
+            let icon;
+            let iconFontSize;
+            let iconFontWeight;
+            let iconTextAlignment;
+            let iconFontColor;
+            let iconLeftMargin;
+            let iconRightMargin;
+            let iconTopMargin;
+            let iconBottomMargin;
+            let iconLeftPadding;
+            let iconRightPadding;
+            let iconTopPadding;
+            let iconBottomPadding;
+            let iconType;
+            let bgPropertyName = key;
 
+<<<<<<< HEAD
       if(value.type === 'colcount')
       {
           if(value.value == '3')
@@ -272,6 +292,8 @@ export const updateSetProperties = (element) => {
             let iconType;
             let bgPropertyName = key;
 
+=======
+>>>>>>> 4783f31fc2ceb4798d705f6cdde1dbc48ed3776d
             if (Object.keys(element.selectedVal).includes(key)) {
               Object.entries(element.selectedVal).map(([keyq, valueq]) => {
                 
@@ -326,9 +348,12 @@ export const updateSetProperties = (element) => {
               else if (iconType == 'googlematerial') {
                   className += 'material-icons-outlined';
               }
+<<<<<<< HEAD
               else if (iconType == 'googlesymbol') {
                 className += 'material-symbol-outlined';
             }
+=======
+>>>>>>> 4783f31fc2ceb4798d705f6cdde1dbc48ed3776d
               if (iconFontSize) {
                   className += ' ' + iconFontSize;
               }
@@ -375,7 +400,10 @@ export const updateSetProperties = (element) => {
             }
            
           }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 4783f31fc2ceb4798d705f6cdde1dbc48ed3776d
       if (value.type === 'finalclass') {
         let propName = key.replace('_final_class', '');
 

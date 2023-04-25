@@ -21,8 +21,12 @@ const ProductDetailTemplates: _ProductDetailsTemplates = {
 const ProductDetails: NextPage<_ProductDetailsProps & _StoreCache> = (
   props,
 ) => {
+<<<<<<< HEAD
   const ProductDetails =
     ProductDetailTemplates[_defaultTemplates.productDetails];
+=======
+  const ProductDetails = ProductDetailTemplates['type1'];
+>>>>>>> 4783f31fc2ceb4798d705f6cdde1dbc48ed3776d
   return <ProductDetails {...props} />;
 };
 

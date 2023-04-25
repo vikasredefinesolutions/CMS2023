@@ -112,6 +112,7 @@ class MyDocument extends Document {
             }}
           ></script>
 
+<<<<<<< HEAD
           <script
             dangerouslySetInnerHTML={{ __html: _globalStore.customScript }}
           ></script>
@@ -156,6 +157,17 @@ class MyDocument extends Document {
           <script type="text/javascript" src='https://platform-api.sharethis.com/js/sharethis.js#property=622863e42e0ffb001379992c&product=sop'></script>
 
           
+=======
+  
+
+          {/* -----------------------CSS STYLESHEETS------------------------- */}
+
+          
+          {(storeId && typeof  cssApis[storeId] !== undefined) && (
+            <link rel='stylesheet' type='text/css' href={cssApis[storeId]} />
+          )}
+           <script type="text/javascript" src='https://platform-api.sharethis.com/js/sharethis.js#property=622863e42e0ffb001379992c&product=sop'></script>
+>>>>>>> 4783f31fc2ceb4798d705f6cdde1dbc48ed3776d
         </Head>
         <body className='font-Outfit bg-white'>
           <Main />
