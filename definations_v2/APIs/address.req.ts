@@ -64,3 +64,16 @@ export interface _DeleteCustomerAddressReq {
     macAddress: string;
   };
 }
+
+export interface _GetShippingmethod {
+  shippingMethodModel: {
+    city: string;
+    state: string;
+    country: string;
+    zipCode: string;
+    customerID: null | number;
+    storeId: string | number;
+    ordertotalwithoutshipppingcharge: number | string;
+    shippingType: number;
+  };
+}

@@ -1,8 +1,7 @@
 import { __domain, layoutToShow_fn } from '@configs/page.config';
 import { StoreLayout } from '@constants/enum';
-import { showComponents } from '@constants/store.mock';
-import { PageResponseType, _Show } from '@definations/app.type';
-import { CartCharges, _StoreReturnType } from '@definations/store.type';
+import { PageResponseType } from '@definations/app.type';
+import { _StoreReturnType } from '@definations/store.type';
 import { createSlice } from '@reduxjs/toolkit';
 import { SetPageType } from '../asyncActions/redefineStore.async';
 
@@ -13,19 +12,25 @@ export interface _RedesignStore {
   layout: null | string;
   storeTypeId: number | null;
   storeName: string | null;
-  display: _Show;
   pathName: string;
   companyName: string;
   pageType: PageResponseType;
   view: 'DESKTOP' | 'MOBILE';
   isAttributeSaparateProduct: boolean;
-  cartCharges: null | CartCharges;
+  cartCharges: null | {
+    isSmallRun: boolean;
+    smallRunLimit: number;
+    smallRunFeesCharges: number;
+    isLogoSetupCharges: boolean;
+    logoSetupCharges: number;
+  };
   logoAlt: string | null;
   logoUrl: string | null;
   isSewOutEnable: boolean;
   sewOutCharges: number;
   mediaBaseUrl: string;
   imageFolderPath: string;
+  shippingChargeType: number;
 }
 
 // Define the initial state using that type
@@ -36,7 +41,6 @@ const initialState: _RedesignStore = {
   layout: null,
   storeTypeId: StoreLayout.StoreBuilderStore,
   storeName: '',
-  display: showComponents,
   pathName: '',
   companyName: '',
   pageType: {} as PageResponseType,
@@ -48,6 +52,7 @@ const initialState: _RedesignStore = {
   sewOutCharges: 0,
   mediaBaseUrl: '',
   imageFolderPath: '',
+  shippingChargeType: 0,
 };
 
 export const storeSlice = createSlice({

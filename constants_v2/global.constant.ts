@@ -60,8 +60,6 @@ export const CustomizeLater =
 
 export const cartRemoveConfirmMessage = 'Are you sure want to remove?';
 
-export const templateID = '1';
-
 export enum __pageTypeConstant {
   blog = 'blog',
   stories = 'stories',

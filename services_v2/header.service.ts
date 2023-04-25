@@ -1,10 +1,10 @@
+import { _Brand } from '@definations/brand';
 import {
-  _Brands,
   _MenuCategory,
   _StoreMenu,
   _t_Brands,
   _t_MenuCategory,
-} from '@definations/APIs/header.res';
+} from '@definations/header.type';
 import { CallAPI_v2 } from '@helpers/api.helper';
 import { _BannerRes } from '@templates/banner/Banner';
 
@@ -27,7 +27,7 @@ export const FetchBrands = async ({
 }): Promise<_t_Brands | null> => {
   const url = `Brand/getbrandbystoreid/${storeId}.json`;
 
-  const response = await CallAPI_v2<_Brands[]>({
+  const response = await CallAPI_v2<_Brand[]>({
     name: {
       api: 'FetchBrands',
       service: 'header',

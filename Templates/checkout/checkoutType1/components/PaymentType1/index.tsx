@@ -48,7 +48,7 @@ const PaymentType1: FC<{
       );
 
     default:
-      return <></>;
+      return <>test</>;
   }
 };
 

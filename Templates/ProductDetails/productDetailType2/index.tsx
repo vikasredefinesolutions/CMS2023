@@ -1,4 +1,4 @@
-import { templateID } from '@constants/global.constant';
+import { _defaultTemplates } from '@configs/template.config';
 import { CategoriesByPid } from '@definations/APIs/category.res';
 import { _StoreCache } from '@definations/slug.type';
 import { KlaviyoScriptTag } from '@helpers/common.helper';
@@ -157,7 +157,11 @@ const ProductDetails_Type2: NextPage<_ProductDetailsProps & _StoreCache> = (
         if (val === 'youmayalsolike') {
           return (
             <div key={val + index}>
-              <YouMayAlsoLike product={product.alike} id={templateID} />;
+              <YouMayAlsoLike
+                product={product.alike}
+                id={_defaultTemplates.youMayAlsoLike}
+              />
+              ;
             </div>
           );
         } else if (val === 'writereview') {

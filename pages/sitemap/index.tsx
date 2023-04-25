@@ -1,3 +1,4 @@
+import { _defaultTemplates } from '@configs/template.config';
 import SiteMap from '@templates/siteMap';
 import { _siteMapProps, _siteMapstore } from '@templates/siteMap/siteMapTypes';
 import { GetServerSideProps, GetServerSidePropsResult } from 'next';
@@ -6,7 +7,7 @@ import { _globalStore } from 'store.global';
 const index = ({ store }: _siteMapProps) => {
   return (
     <>
-      <SiteMap id='1' store={store} />
+      <SiteMap id={_defaultTemplates.siteMap} store={store} />
     </>
   );
 };

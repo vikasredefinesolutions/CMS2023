@@ -1,6 +1,5 @@
-import { CartReq } from '@definations/APIs/cart.req';
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { addToCart, getCartDetails } from '@services/cart.service';
+import { getCartDetails } from '@services/cart.service';
 
 export const fetchCartDetails = createAsyncThunk(
   'cart/details',
@@ -19,12 +18,3 @@ export const fetchCartDetails = createAsyncThunk(
     }
   },
 );
-
-export const AddToCart = async (payload: CartReq) => {
-  try {
-    const cart = await addToCart(payload);
-    return cart;
-  } catch (error) {
-    throw new Error('Try Again!!!');
-  }
-};

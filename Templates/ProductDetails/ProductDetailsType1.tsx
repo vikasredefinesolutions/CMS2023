@@ -19,7 +19,7 @@ import ProductRecentlyViewed from '@templates/recentlyViewedProducts';
 import Reviews from '@templates/Review';
 import { NextPage } from 'next';
 // import { _StoreCache } from 'pages/[slug]/slug';
-import { templateID } from '@constants/global.constant';
+import { _defaultTemplates } from '@configs/template.config';
 import YouMayAlsoLike from '@templates/youMayAlsoLike';
 import ProductDetails from './Components/ProductDetails';
 import { _ProductDetailsProps } from './productDetailsTypes/productDetail.res';
@@ -170,7 +170,11 @@ const Ecommerce_ProductDetails_View: NextPage<
             if (val === 'youmayalsolike') {
               return (
                 <div key={val + index}>
-                  <YouMayAlsoLike product={product.alike} id={templateID} />;
+                  <YouMayAlsoLike
+                    product={product.alike}
+                    id={_defaultTemplates.youMayAlsoLike}
+                  />
+                  ;
                 </div>
               );
             } else if (val === 'writereview') {

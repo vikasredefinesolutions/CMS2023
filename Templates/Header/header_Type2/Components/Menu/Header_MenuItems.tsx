@@ -1,5 +1,5 @@
+import { _MenuItems } from '@definations/header.type';
 import MenuItem from '@header/header_Type2/Components/Menu//Header_MenuItem';
-import { _MenuItems } from '@templates/Header/header.type';
 import Backdrop from '@templates/Header/header_Type2/Components/Backdrop';
 import React, { useEffect, useState } from 'react';
 import { CloseIcon } from '../Icons';

@@ -1,3 +1,4 @@
+import { _defaultTemplates } from '@configs/template.config';
 import { __Error, __pageTypeConstant } from '@constants/global.constant';
 import { __SuccessErrorText } from '@constants/successError.text';
 import { _GetPageType } from '@definations/slug.type';
@@ -63,7 +64,10 @@ const Story: React.FC<
 
   if (props.pageType === 'stories') {
     return (
-      <StoryCategoryTemplate list={props.list || []} id={props.id || '1'} />
+      <StoryCategoryTemplate
+        list={props.list || []}
+        id={_defaultTemplates.storyCategory}
+      />
     );
   }
 
@@ -71,7 +75,7 @@ const Story: React.FC<
     return (
       <StoryDetailsTemplate
         list={props.list || []}
-        id={props.id || '1'}
+        id={_defaultTemplates.storyDetails}
         banner={props.banner || []}
         story={props.story}
         page={props.page}

@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import SD_TemplateType1 from './SD_TemplateType1';
 
 interface _Props {
-  id: string;
+  id: 'type1';
   list: _Story[];
   banner: {
     name: string;
@@ -41,7 +41,7 @@ const SD_Templates: _StoryTemplates = {
 };
 
 const StoryDetailsTemplate: React.FC<_Props> = ({ id, ...rest }) => {
-  const Template = SD_Templates[`type${id}` as 'type1' | 'type2'];
+  const Template = SD_Templates[id];
 
   const [tillSecondRefresh, setTillSecondRefresh] = useState<string | null>(
     null,

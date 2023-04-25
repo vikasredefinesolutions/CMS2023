@@ -1,11 +1,12 @@
-import { _Footer } from '@definations/APIs/footer.res';
+import { _FetchStoreConfigurations } from '@definations/store.type';
 import React, { useEffect, useState } from 'react';
 interface _props {
-  data: _Footer | null;
+  data: _FetchStoreConfigurations | null;
 }
 
 const Footer: React.FC<_props> = ({ data: dataFromRoot }) => {
-  const [footerHTML, setFooterHTML] = useState<_Footer | null>(null);
+  const [footerHTML, setFooterHTML] =
+    useState<_FetchStoreConfigurations | null>(null);
 
   useEffect(() => {
     if (dataFromRoot) {

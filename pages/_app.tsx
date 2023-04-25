@@ -5,6 +5,7 @@ import { TrackFile } from '@services/tracking.service';
 import App, { AppContext, AppInitialProps, AppProps } from 'next/app';
 import { useRouter } from 'next/router';
 // import 'public/assets/css/main.css';
+import 'public/assets/css/custom.css';
 import 'public/assets/css/spinner.css';
 import { useEffect } from 'react';
 import { _globalStore } from 'store.global';
@@ -23,20 +24,20 @@ import { useActions_v2 } from 'hooks_v2';
 import { __console_v2 } from '@configs/console.config';
 import { __Cookie } from '@constants/global.constant';
 import EmployeeController from '@controllers/EmployeeController';
-import { _Footer } from '@definations/APIs/footer.res';
-import { _StoreReturnType } from '@definations/store.type';
-import { conditionalLog_V2 } from '@helpers/console.helper';
 import {
-  _Expected_AppProps,
-  _MenuItems,
-  _TransformedHeaderConfig,
-} from '@templates/Header/header.type';
+  _FetchStoreConfigurations,
+  _StoreReturnType,
+} from '@definations/store.type';
+import { conditionalLog_V2 } from '@helpers/console.helper';
 
 import Metatags from '@appComponents/MetaTags';
 import Spinner from '@appComponents/ui/spinner';
-import { PageResponseType } from '@definations/app.type';
-import { FetchCompanyConfiguration } from '@services/app.service';
-import { fetchFooter } from '@services/footer.service';
+import { PageResponseType, _Expected_AppProps } from '@definations/app.type';
+import { _MenuItems } from '@definations/header.type';
+import {
+  FetchCompanyConfiguration,
+  getAllConfigurations,
+} from '@services/app.service';
 import { GetStoreCustomer } from '@services/user.service';
 import Redefine_Layout from '@templates//TemplateComponents/Redefine_Layout';
 import AuthGuard from 'Guard/AuthGuard';
@@ -44,10 +45,7 @@ import AuthGuard from 'Guard/AuthGuard';
 type AppOwnProps = {
   store: _StoreReturnType | null;
   menuItems: _MenuItems | null;
-  configs: {
-    header: _TransformedHeaderConfig | null;
-    footer: _Footer | null;
-  };
+  configs: _FetchStoreConfigurations | null;
   // Husain - added any for now - 20-3-23
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   pageProps: any | null;
@@ -187,7 +185,7 @@ const RedefineCustomApp = ({
           logoUrl={store.urls.logo}
           storeCode={store.code}
           storeTypeId={store.storeTypeId}
-          configs={configs}
+          configs={{ footer: configs }}
           menuItems={menuItems}
         >
           <Component {...pageProps} />
@@ -224,12 +222,10 @@ RedefineCustomApp.getInitialProps = async (
       isSewOutEnable: false,
       sewOutCharges: 0,
       mediaBaseUrl: '',
+      shippingChargeType: 0,
     },
     menuItems: null,
-    configs: {
-      header: null,
-      footer: null,
-    },
+    configs: [],
     blobUrlRootDirectory: '',
     companyId: 0,
   };
@@ -278,16 +274,21 @@ RedefineCustomApp.getInitialProps = async (
       );
 
       expectedProps.companyId = (await FetchCompanyConfiguration()).companyId;
-      expectedProps.store.imageFolderPath = '/';
       if (storeDetails) {
         expectedProps.store = storeDetails.store;
+        expectedProps.store.imageFolderPath = `/${storeDetails.blobUrlRootDirectory}/${expectedProps.companyId}/store/${storeDetails.store.storeId}/images/`;
         expectedProps.blobUrlRootDirectory = storeDetails.blobUrlRootDirectory;
       }
 
       if (expectedProps.store?.storeId) {
-        expectedProps.configs.footer = await fetchFooter({
+        expectedProps.configs = await getAllConfigurations({
           storeId: expectedProps.store?.storeId,
-          configname: 'footer',
+          configNames: [
+            'footer',
+            'customScript',
+            'customHomeScript',
+            'customGlobalBodyScript',
+          ],
         });
 
         expectedProps.menuItems = await _AppController.fetchMenuItems(
@@ -370,7 +371,7 @@ RedefineCustomApp.getInitialProps = async (
     ...ctx,
     store: expectedProps.store,
     menuItems: expectedProps.menuItems,
-    configs: expectedProps.configs,
+    configs: expectedProps.configs[0],
   };
 };
 

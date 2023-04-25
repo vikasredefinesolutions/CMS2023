@@ -1,12 +1,16 @@
 import MyAccountTabsType2 from '@appComponents/common/MyAccountTabsType2';
+import { __pagesConstant } from '@constants/pages.constant';
+import { paths } from '@constants/paths.constant';
+import { _MyAcc_OrderBillingDetails } from '@definations/APIs/user.res';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import {
-  FetchOrderDetails,
   FetchOrdersIdByCustomerId,
   FetchOrdersIdByCustomerUserId,
+  OrderedBillingDetails,
 } from '@services/user.service';
+import moment from 'moment';
+import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
-import { _OrderDetails } from '../Orders_Type1';
 
 const Orders_Type2: React.FC = () => {
   const storeId = useTypedSelector_v2((state) => state.store.id);
@@ -14,34 +18,46 @@ const Orders_Type2: React.FC = () => {
   const customerRoleId = useTypedSelector_v2(
     (state) => state.user.customer?.customerRoleId,
   );
-  const [orderDetails, setOrderDetails] = useState<_OrderDetails | null | []>(
-    null,
-  );
+  const [orderDetails, setOrderDetails] =
+    useState<Array<_MyAcc_OrderBillingDetails | null> | null>(null);
   const isAdmin = customerRoleId == 0 || customerRoleId == 2 ? true : false;
 
   const [showTab, setShowTab] = useState<'MyOwnOrders' | 'OtherUsersOrders'>(
     'MyOwnOrders',
   );
 
+  const [itemsOrder, setItemsOrder] = useState<{
+    order: 'orderDate' | 'orderNumber' | 'orderStatus';
+    ascDesc: 'asc' | 'desc';
+  } | null>(null);
+
   const [listMetaInfo, setListMetaInfo] = useState<{
     pageNumber: number;
     totalCounts: number;
     itemsCountToShow: number;
+    startIndex: number;
+    endIndex: number;
     totalPages: number;
   }>({
     pageNumber: 1,
     totalCounts: 0,
-    itemsCountToShow: 0,
+    startIndex: 0,
+    endIndex: 0,
+    itemsCountToShow: 10,
     totalPages: 1,
   });
 
-  const handleItemsQtyChange = () => {
-    const newQty: number = 5;
+  const handleItemsQtyChange = (
+    event: React.ChangeEvent<HTMLSelectElement>,
+  ) => {
+    const newQty: number = +event.target.value;
     setListMetaInfo((prev) => ({
       ...prev,
       pageNumber: 1,
       itemsCountToShow: newQty,
       totalPages: Math.ceil(prev.totalCounts / newQty),
+      startIndex: prev.totalCounts > 1 ? 1 : 0,
+      endIndex: prev.totalCounts > newQty ? newQty : prev.totalCounts,
     }));
   };
 
@@ -50,32 +66,38 @@ const Orders_Type2: React.FC = () => {
       setListMetaInfo((prev) => ({
         ...prev,
         pageNumber: pageNumber,
+        startIndex: prev.itemsCountToShow * (pageNumber - 1) + 1,
+        endIndex:
+          prev.itemsCountToShow * (pageNumber - 1) + prev.itemsCountToShow,
       }));
     }
   };
 
   const PageNumbersHTML = () => {
-    const pageNumbers = [];
+    const pageNumbers: JSX.Element[] = [];
     for (let index = 1; index <= listMetaInfo.totalPages; index++) {
       pageNumbers.push(
         <div
-          onClick={() => handlePageChange(listMetaInfo.pageNumber)}
-          className='w-[30px] h-[30px] flex items-center justify-center bg-light-gray'
+          onClick={() => handlePageChange(index)}
+          className={`w-[30px] h-[30px] flex items-center justify-center ${
+            listMetaInfo.pageNumber === index ? 'bg-light-gray' : ''
+          }`}
         >
-          index
+          {index}
         </div>,
       );
     }
     return pageNumbers;
   };
 
-  const fetchMultipleOrderDetails = async (ids: number[] | null) => {
+  const fetchMultipleBillingDetails = async (ids: number[] | null) => {
     if (ids === null) {
       setOrderDetails([]);
       return;
     }
-    let orders: _OrderDetails = [];
-    const ordersToFetch = ids.map((id) => FetchOrderDetails({ orderId: id }));
+
+    let orders: Array<_MyAcc_OrderBillingDetails | null> = [];
+    const ordersToFetch = ids.map((id) => OrderedBillingDetails(id));
 
     await Promise.allSettled(ordersToFetch).then((values) => {
       values.map((value, index) => {
@@ -84,6 +106,68 @@ const Orders_Type2: React.FC = () => {
     });
 
     setOrderDetails(orders);
+    const defaultItemsToShowCount =
+      __pagesConstant._myAccount.ordersSection.table.select
+        .defaultSelectedOption;
+    setListMetaInfo({
+      pageNumber: 1,
+      totalCounts: orders.length,
+      itemsCountToShow: defaultItemsToShowCount,
+      startIndex: orders?.length > 1 ? 1 : 0,
+      endIndex:
+        orders.length > defaultItemsToShowCount
+          ? defaultItemsToShowCount
+          : orders.length,
+      totalPages: Math.ceil(orders.length / defaultItemsToShowCount),
+    });
+  };
+
+  const handleOrder = (action: 'orderDate' | 'orderNumber' | 'orderStatus') => {
+    const itemOrd = action;
+    const itemAscDesc = itemsOrder?.order === action ? 'desc' : 'asc';
+
+    setOrderDetails((orders) => {
+      if (!orders) return [];
+
+      if (itemOrd === 'orderDate') {
+        return orders.sort((orderA, orderB) => {
+          if (orderA!.orderDate > orderB!.orderDate) return -1;
+          if (orderA!.orderDate < orderB!.orderDate) return 1;
+          return 0;
+        });
+      }
+
+      if (itemOrd === 'orderNumber') {
+        return orders.sort((orderA, orderB) => {
+          if (orderA!.id > orderB!.id) return -1;
+          if (orderA!.id < orderB!.id) return 1;
+          return 0;
+        });
+      }
+      if (itemOrd === 'orderStatus') {
+        return orders.sort((orderA, orderB) => {
+          if (orderA!.orderStatus > orderB!.orderStatus) return -1;
+          if (orderA!.orderStatus < orderB!.orderStatus) return 1;
+          return 0;
+        });
+      }
+
+      return orders;
+    });
+
+    setItemsOrder((prev) => {
+      if (!prev) {
+        return {
+          order: action,
+          ascDesc: 'asc',
+        };
+      }
+
+      return {
+        order: action,
+        ascDesc: itemAscDesc,
+      };
+    });
   };
 
   useEffect(() => {
@@ -94,7 +178,7 @@ const Orders_Type2: React.FC = () => {
           storeId,
           userId,
         })
-          .then((ids) => fetchMultipleOrderDetails(ids))
+          .then((ids) => fetchMultipleBillingDetails(ids))
           .catch(() => setOrderDetails([]));
         return;
       }
@@ -104,7 +188,7 @@ const Orders_Type2: React.FC = () => {
           storeId,
           userId,
         })
-          .then((ids) => fetchMultipleOrderDetails(ids))
+          .then((ids) => fetchMultipleBillingDetails(ids))
           .catch(() => setOrderDetails([]));
       }
     }
@@ -131,57 +215,116 @@ const Orders_Type2: React.FC = () => {
                     className='form-input'
                     onChange={handleItemsQtyChange}
                   >
-                    {[10, 25, 50, 100].map((num) => (
-                      <option key={num} value=''>
-                        {num}
-                      </option>
-                    ))}
+                    {__pagesConstant._myAccount.ordersSection.table.select.options.map(
+                      (num) => (
+                        <option key={num} value={num}>
+                          {num}
+                        </option>
+                      ),
+                    )}
                   </select>
                 </div>
                 <div className=''>entries</div>
               </div>
-              <div className=''>
-                <input placeholder='Search' className='form-input' value='' />
-              </div>
+              {/* <div className=''>
+                <input
+                  placeholder='Search'
+                  readOnly
+                  className='form-input'
+                  value=''
+                />
+              </div> */}
             </div>
             <div className='overflow-auto max-h-screen border border-gray-border'>
               <table className='table table-auto border-collapse border-gray-border w-full text-default-text text-left'>
                 <thead className='bg-light-gray'>
                   <tr>
-                    <th className='p-[10px] border-r last:border-r-0 border-gray-border'>
+                    <th
+                      className='p-[10px] border-r last:border-r-0 border-gray-border'
+                      onClick={() => handleOrder('orderDate')}
+                    >
                       <div className='font-semibold text-left w-48 flex items-center'>
                         <span>Order Date</span>
                         <div className='flex flex-col pl-2'>
-                          <span className='material-icons-outlined text-sm h-2 leading-[10px]'>
+                          <span
+                            className={`material-icons-outlined text-sm h-2 leading-[10px] ${
+                              itemsOrder?.order === 'orderDate' &&
+                              itemsOrder?.ascDesc !== 'asc'
+                                ? 'visible'
+                                : 'invisible'
+                            }`}
+                          >
                             keyboard_arrow_up
                           </span>
-                          <span className='material-icons-outlined text-sm h-2 leading-[10px]'>
+                          <span
+                            className={`material-icons-outlined text-sm h-2 leading-[10px] ${
+                              itemsOrder?.order === 'orderDate' &&
+                              itemsOrder?.ascDesc !== 'asc'
+                                ? 'visible'
+                                : 'invisible'
+                            }`}
+                          >
                             keyboard_arrow_down
                           </span>
                         </div>
                       </div>
                     </th>
-                    <th className='p-[10px] border-r last:border-r-0 border-gray-border'>
+                    <th
+                      className='p-[10px] border-r last:border-r-0 border-gray-border'
+                      onClick={() => handleOrder('orderNumber')}
+                    >
                       <div className='font-semibold text-left w-48 flex items-center'>
                         <span>Order #</span>
                         <div className='flex flex-col pl-2'>
-                          <span className='material-icons-outlined text-sm h-2 leading-[10px]'>
+                          <span
+                            className={`material-icons-outlined text-sm h-2 leading-[10px] ${
+                              itemsOrder?.order === 'orderNumber' &&
+                              itemsOrder?.ascDesc !== 'asc'
+                                ? 'visible'
+                                : 'invisible'
+                            }`}
+                          >
                             keyboard_arrow_up
                           </span>
-                          <span className='material-icons-outlined text-sm h-2 leading-[10px]'>
+
+                          <span
+                            className={`material-icons-outlined text-sm h-2 leading-[10px] ${
+                              itemsOrder?.order === 'orderNumber' &&
+                              itemsOrder?.ascDesc !== 'asc'
+                                ? 'visible'
+                                : 'invisible'
+                            }`}
+                          >
                             keyboard_arrow_down
                           </span>
                         </div>
                       </div>
                     </th>
-                    <th className='p-[10px] border-r last:border-r-0 border-gray-border'>
+                    <th
+                      className='p-[10px] border-r last:border-r-0 border-gray-border'
+                      onClick={() => handleOrder('orderStatus')}
+                    >
                       <div className='font-semibold text-left w-48 flex items-center'>
                         <span>Order Status</span>
                         <div className='flex flex-col pl-2'>
-                          <span className='material-icons-outlined text-sm h-2 leading-[10px]'>
+                          <span
+                            className={`material-icons-outlined text-sm h-2 leading-[10px] ${
+                              itemsOrder?.order === 'orderStatus' &&
+                              itemsOrder?.ascDesc !== 'asc'
+                                ? 'visible'
+                                : 'invisible'
+                            }`}
+                          >
                             keyboard_arrow_up
                           </span>
-                          <span className='material-icons-outlined text-sm h-2 leading-[10px]'>
+                          <span
+                            className={`material-icons-outlined text-sm h-2 leading-[10px] ${
+                              itemsOrder?.order === 'orderStatus' &&
+                              itemsOrder?.ascDesc !== 'asc'
+                                ? 'visible'
+                                : 'invisible'
+                            }`}
+                          >
                             keyboard_arrow_down
                           </span>
                         </div>
@@ -190,58 +333,64 @@ const Orders_Type2: React.FC = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td className='border-t border-r last:border-r-0 border-gray-border p-[10px]'>
-                      08/14/2018
-                    </td>
-                    <td className='border-t border-r last:border-r-0 border-gray-border p-[10px]'>
-                      <a href='order-details.html'>145546</a>
-                    </td>
-                    <td className='border-t border-r last:border-r-0 border-gray-border p-[10px]'>
-                      Canceled
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className='border-t border-r last:border-r-0 border-gray-border p-[10px]'>
-                      08/18/2019
-                    </td>
-                    <td className='border-t border-r last:border-r-0 border-gray-border p-[10px]'>
-                      <a href='order-details.html'>222554</a>
-                    </td>
-                    <td className='border-t border-r last:border-r-0 border-gray-border p-[10px]'>
-                      Canceled
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className='border-t border-r last:border-r-0 border-gray-border p-[10px]'>
-                      05/22/2022
-                    </td>
-                    <td className='border-t border-r last:border-r-0 border-gray-border p-[10px]'>
-                      <a href='order-details.html'>255412</a>
-                    </td>
-                    <td className='border-t border-r last:border-r-0 border-gray-border p-[10px]'>
-                      Canceled
-                    </td>
-                  </tr>
+                  {orderDetails
+                    .slice(listMetaInfo.startIndex, listMetaInfo.endIndex)
+                    .map((order, index) => {
+                      if (!order) {
+                        return null;
+                      }
+                      return (
+                        <tr key={index}>
+                          <td className='border-t border-r last:border-r-0 border-gray-border p-[10px]'>
+                            <time>
+                              {moment(order.orderDate).format(
+                                __pagesConstant._myAccount.ordersSection
+                                  .dateFormat,
+                              )}
+                            </time>
+                          </td>
+                          <td className='border-t border-r last:border-r-0 border-gray-border p-[10px]'>
+                            <Link
+                              href={`${paths.myAccount.order_details}?ordernumber=${order.id}`}
+                            >
+                              {order.id}
+                            </Link>
+                          </td>
+                          <td className='border-t border-r last:border-r-0 border-gray-border p-[10px]'>
+                            {order.orderStatus}
+                          </td>
+                        </tr>
+                      );
+                    })}
                 </tbody>
               </table>
             </div>
             <div className='flex flex-wrap items-center justify-between mt-[10px] gap-[10px] text-default-text'>
-              <div className=''>Showing 1 to 4 of 4 entries</div>
+              <div className=''>{`Showing ${listMetaInfo.startIndex} to ${listMetaInfo.endIndex} of ${listMetaInfo.totalCounts} entries`}</div>
               <div className='flex flex-wrap items-center gap-[5px]'>
                 <div className='flex flex-wrap border border-gray-border divide-x divide-gray-border'>
                   <div
-                    onClick={() => handlePageChange(listMetaInfo.pageNumber)}
-                    className='px-[10px] flex items-center justify-center opacity-[0.5]'
+                    onClick={() =>
+                      handlePageChange(listMetaInfo.pageNumber - 1)
+                    }
+                    className={`px-[10px] flex items-center justify-center ${
+                      listMetaInfo.pageNumber === 1 ? `opacity-[0.5]` : ''
+                    }`}
                   >
                     Previous
                   </div>
                   {PageNumbersHTML()}
                   <div
-                    onClick={() => handlePageChange(listMetaInfo.pageNumber)}
-                    className='px-[10px] flex items-center justify-center'
+                    onClick={() =>
+                      handlePageChange(listMetaInfo.pageNumber + 1)
+                    }
+                    className={`px-[10px] flex items-center justify-center ${
+                      listMetaInfo.pageNumber === listMetaInfo.totalPages
+                        ? `opacity-[0.5]`
+                        : ''
+                    }`}
                   >
-                    <a href='javascript:void(0);'>Next</a>
+                    Next
                   </div>
                 </div>
               </div>

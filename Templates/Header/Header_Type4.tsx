@@ -1,4 +1,4 @@
-import { _HeaderProps } from '@templates/Header/header.type';
+import { _HeaderProps } from '@definations/header.type';
 import { NextPage } from 'next';
 
 const Header_Type4: NextPage<_HeaderProps> = () => {

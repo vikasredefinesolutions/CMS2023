@@ -1,8 +1,8 @@
-import { type2 } from '@constants/dummy.constant';
+import { _defaultTemplates } from '@configs/template.config';
 import CheckLogoApproved from '@templates/CheckLogoApproved';
 
 const index = () => {
-  return <CheckLogoApproved id={type2} />;
+  return <CheckLogoApproved id={_defaultTemplates.checkLogoApproved} />;
 };
 
 export default index;

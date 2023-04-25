@@ -52,7 +52,7 @@ const ProductListing: React.FC<_ProductListingProps & { id: string }> = ({
   } = ProductListController(pageData, slug, checkedFilters, pageData?.brandId);
   const Component =
     productListingTemplates[
-      `type${id}` as 'type1' | 'type2' | 'type3' | 'type4'
+      (`type${id}` as 'type1') || 'type2' || 'type3' || 'type4'
     ];
   if (product.length === 0) {
     return <> {__pagesText.productListing.noProductsFound}</>;

@@ -52,13 +52,13 @@ const BrandProductListing: React.FC<_props> = ({
 
   return (
     <>
-      <div aria-labelledby='products-heading' className='mt-8'>
-        <div className='mt-8 relative gridlistview' id='gridview'>
-          <div className='relative w-full pb-6 -mb-6'>
+      <div aria-labelledby='products-heading' className=''>
+        <div className='relative gridlistview' id='gridview'>
+          <div className='relative w-full'>
             <ul
               role='list'
               className={
-                'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-8'
+                'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-[30px] pt-[60px]'
               }
             >
               {cacheData[recentBrand] && !loading

@@ -72,7 +72,7 @@ const CustomizeLogo: NextPage = () => {
                 </div>
                 {sizeQtys !== null && (
                   <div className='mb-[10px]'>
-                    Size:
+                    Size:{' '}
                     <span className='font-semibold'>{`${sizeQtys[0].size} - ${sizeQtys[0].qty}`}</span>
                   </div>
                 )}
@@ -82,7 +82,7 @@ const CustomizeLogo: NextPage = () => {
                     if (index === 0) return <></>;
                     return (
                       <div key={index} className='mb-[10px]'>
-                        <span className='font-semibold'>{`${sizeQty.size} - ${sizeQty.qty}`}</span>
+                        <span className='font-semibold ml-10'>{`${sizeQty.size} - ${sizeQty.qty}`}</span>
                       </div>
                     );
                   })}

@@ -62,13 +62,13 @@ const SlugSearch: NextPage<_SlugServerSideProps | _SlugServerSide_WentWrong> = (
           storeId={pageMetaData.storeId}
           slug={pageMetaData.slug}
           seType={pageMetaData.type}
-          id={page.productListing.bannerType}
+          id={page.productListing.bannerType as 'type1'}
         />
         <ProductListing
           pageData={page?.productListing}
           slug={pageMetaData?.slug}
           seType={pageMetaData?.type}
-          id={page.productListing.templateId}
+          id={page.productListing.templateId as 'type1'}
         />
       </>
     );

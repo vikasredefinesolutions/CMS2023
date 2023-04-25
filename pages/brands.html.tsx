@@ -1,7 +1,7 @@
 import BrandsListing from '@templates/Brands';
 import { NextPage } from 'next';
 
-import { _Brands } from '@definations/APIs/header.res';
+import { _defaultTemplates } from '@configs/template.config';
 import { _Brand } from '@definations/brand';
 import { removeDuplicates } from '@helpers/common.helper';
 import { FetchBrands } from '@services/header.service';
@@ -14,7 +14,7 @@ interface _Props {
 }
 
 const Brands: NextPage<_Props> = (props) => {
-  return <BrandsListing id={'1'} {...props} />;
+  return <BrandsListing id={_defaultTemplates.brands} {...props} />;
 };
 
 export default Brands;
@@ -23,7 +23,7 @@ export const getServerSideProps: GetServerSideProps = async (): Promise<
   GetServerSidePropsResult<_Props>
 > => {
   const { storeId } = _globalStore;
-  let brands: _Brands[] | null = null;
+  let brands: _Brand[] | null = null;
   let alphabets: string[] = [];
 
   if (storeId) {
@@ -44,7 +44,10 @@ export const getServerSideProps: GetServerSideProps = async (): Promise<
         },
       );
 
-      brands = removeDuplicates(brands);
+      if (brands) {
+        brands = removeDuplicates(brands);
+      }
+
       alphabets = alphabets.filter(
         (item, index) => alphabets.indexOf(item) === index,
       );

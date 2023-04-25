@@ -92,7 +92,7 @@ export const CreateNewAccount = async (
   }
 };
 
-const OrderedBillingDetails = async (
+export const OrderedBillingDetails = async (
   orderId: number,
 ): Promise<_MyAcc_OrderBillingDetails | null> => {
   const url = `Order/GetById/${orderId}.json`;
@@ -328,6 +328,7 @@ export const UpdateUserData = async (payload: {
   gender: string;
   companyName: string;
   password: string;
+  birthDate?: string | null;
 }): Promise<any | null> => {
   try {
     const url = '/StoreCustomer/updateaccountsettingsinfo.json';

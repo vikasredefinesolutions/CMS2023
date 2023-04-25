@@ -40,7 +40,7 @@ const AvailableColors: React.FC = () => {
             index < __pagesConstant._productDetails.imagesInRow;
           const highlight =
             product.attributeOptionId === selectedColor?.attributeOptionId
-              ? 'border-secondary'
+              ? 'border-primary'
               : 'border-slate-200';
           return (
             <div
@@ -48,7 +48,9 @@ const AvailableColors: React.FC = () => {
               key={product.attributeOptionId}
               onClick={() => handleChooseColor(product)}
             >
-              <div className='w-[32px] h-[32px] p-[1px] border-2  hover:border-primary cursor-pointer'>
+              <div
+                className={`w-[32px] h-[32px] p-[1px] border-2  hover:border-primary cursor-pointer ${highlight}`}
+              >
                 {/* <NxtImage
                   title={`${product.name}`}
                   src={product.imageUrl}

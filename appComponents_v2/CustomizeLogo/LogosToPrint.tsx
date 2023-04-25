@@ -17,6 +17,11 @@ const LogosToPrint: React.FC<_props> = ({ setShowOrSelect }) => {
   const selectedLogos = useTypedSelector_v2(
     (state) => state.product.toCheckout.logos,
   );
+  const { isSewOutEnable, sewOutCharges } = useTypedSelector_v2(
+    (state) => state.store,
+  );
+  const cartData = useTypedSelector_v2((state) => state.cart.cart);
+
   const { availableOptions } = useTypedSelector_v2(
     (state) => state.product.toCheckout,
   );
@@ -42,14 +47,28 @@ const LogosToPrint: React.FC<_props> = ({ setShowOrSelect }) => {
 
   const addToCartHandler = async () => {
     setShowLoader(true);
-    const { sizeQtys, totalPrice, totalQty } = toCheckout;
+    const { sizeQtys, totalPrice, totalQty, logos } = toCheckout;
+
     const cartObject = await getAddToCartObject({
       userId: customerId || 0,
       storeId: storeId || 0,
       isEmployeeLoggedIn,
       note: '',
       sizeQtys: sizeQtys,
-      productDetails: selectedProduct,
+      productDetails: {
+        productId: selectedProduct.productId,
+        color: {
+          altTag: selectedProduct.color.altTag,
+          imageUrl: selectedProduct.color.imageUrl,
+          name: selectedProduct.color.name,
+          attributeOptionId: selectedProduct.color.attributeOptionId,
+        },
+        inventory: selectedProduct.inventory,
+      },
+      shoppingCartItemId: 0,
+      logos: logos,
+      isSewOutEnable: isSewOutEnable,
+      sewOutCharges: sewOutCharges,
       total: {
         totalPrice,
         totalQty,
@@ -94,10 +113,6 @@ const LogosToPrint: React.FC<_props> = ({ setShowOrSelect }) => {
             customerId: c_id,
             isEmployeeLoggedIn,
           });
-        // showModal({
-        //   message: 'Added to cart Successfully',
-        //   title: 'Success',
-        // });
       } catch (error) {
         highLightError({ error, component: 'StartOrderModal' });
       }

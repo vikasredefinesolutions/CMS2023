@@ -1,6 +1,6 @@
 import { __pagesConstant } from '@constants/pages.constant';
 import { __pagesText } from '@constants/pages.text';
-import { _Brands } from '@definations/APIs/header.res';
+import { _Brand } from '@definations/brand';
 import BrandImage from '@header/header_Type1/Components/Menu/Header_BrandImage';
 import SubMenuItem from '@header/header_Type1/Components/Menu/Header_SubMenuItem';
 
@@ -12,7 +12,7 @@ import React, { useState } from 'react';
 interface _props {
   url: string;
   title: string;
-  content: _Brands[] | null;
+  content: _Brand[] | null;
 }
 
 const Brand: React.FC<_props> = ({ url, title, content }) => {
@@ -125,13 +125,15 @@ const Brand: React.FC<_props> = ({ url, title, content }) => {
                           (brand) =>
                             brand.brandColorImageUrl &&
                             __pagesConstant._header.brandImage.includes(
-                              brand.id,
+                              brand.seName,
                             ),
                         )
                         .sort(function (a, b) {
                           return (
-                            __pagesConstant._header.brandImage.indexOf(a.id) -
-                            __pagesConstant._header.brandImage.indexOf(b.id)
+                            __pagesConstant._header.brandImage.indexOf(
+                              a.seName,
+                            ) -
+                            __pagesConstant._header.brandImage.indexOf(b.seName)
                           );
                         })
                         ?.map((brand) => (

@@ -12,8 +12,8 @@ const signUpTempaltes: _SignUpTemplates = {
   type2: SignUp_type2,
 };
 
-const SignUp: React.FC<{ id: string }> = ({ id }) => {
-  const Component = signUpTempaltes[`type${id}` as 'type1' | 'type2'];
+const SignUp: React.FC<{ id: 'type1' }> = ({ id }) => {
+  const Component = signUpTempaltes[id];
   return <Component />;
 };
 

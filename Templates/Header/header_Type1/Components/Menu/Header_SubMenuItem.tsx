@@ -1,5 +1,5 @@
 import { __pagesText } from '@constants/pages.text';
-import { _MenuCategory } from '@definations/APIs/header.res';
+import { _MenuCategory } from '@definations/header.type';
 import { FetchMenuCategories } from '@services/header.service';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
 import Link from 'next/link';

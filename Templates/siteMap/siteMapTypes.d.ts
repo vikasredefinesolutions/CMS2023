@@ -17,7 +17,7 @@ import { _Brand } from '@definations/brand';
 import React from 'react';
 
 export interface _siteMapProps {
-  id: string;
+  id: 'type1' | 'type2';
   store: {
     storeId: null | number;
     storeCode: null | string;

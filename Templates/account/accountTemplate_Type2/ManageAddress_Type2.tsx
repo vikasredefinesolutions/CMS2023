@@ -1,12 +1,9 @@
-import MyAccountTabType1 from '@appComponents/common/MyAccountTabsType1';
-
-import ManageAddress from '../accountTemplate_Type1/components/ManageAddress';
+import ManageAddress_Type2 from './components/ManageAddress_Type2';
 
 const ManageAddressTemplate_Type2 = () => {
   return (
     <>
-      <MyAccountTabType1 />
-      <ManageAddress />
+      <ManageAddress_Type2 />
     </>
   );
 };

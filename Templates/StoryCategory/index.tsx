@@ -4,7 +4,7 @@ import React from 'react';
 import SC_TemplateType1 from './SC_TemplateType1';
 
 interface _Props {
-  id: string;
+  id: 'type1' | 'type2';
   list: _Story[];
 }
 
@@ -14,7 +14,7 @@ const SC_Templates = {
 };
 
 const StoryCategoryTemplate: React.FC<_Props> = ({ id, list }) => {
-  const Template = SC_Templates[`type${id}` as 'type1' | 'type2'];
+  const Template = SC_Templates[id];
 
   if (list.length === 0) {
     return <>{__SuccessErrorText.noStoriesFound}</>;

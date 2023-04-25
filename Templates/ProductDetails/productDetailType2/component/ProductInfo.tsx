@@ -2,19 +2,29 @@ import Price from '@appComponents/Price';
 import LoginModal from '@appComponents/modals/loginModal';
 import { _modals } from '@appComponents/modals/modal';
 import { __pagesText } from '@constants/pages.text';
-import { useTypedSelector_v2 } from '@hooks_v2/index';
+import { paths } from '@constants/paths.constant';
+import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import AvailableColors from './AvailableColors';
+import DiscountPrice from './DiscountPrice';
 import DiscountPricing from './DiscountPricing';
 import Inventory from './ProductInventory';
 import { _ProductInfoProps } from './productDetailsComponents';
 
 const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
   const [openModal, setOpenModal] = useState<null | _modals>(null);
+  const {
+    totalQty,
+    minQty,
+    sizeQtys,
+    price: pricePerItem,
+  } = useTypedSelector_v2((state) => state.product.toCheckout);
   const selectedColor = useTypedSelector_v2(
     (state) => state.product.selected.color,
   );
+  const { id: userId } = useTypedSelector_v2((state) => state.user);
+  const { showModal } = useActions_v2();
   const router = useRouter();
   const modalHandler = (param: null | _modals) => {
     if (param) {
@@ -24,6 +34,30 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
     setOpenModal(null);
   };
 
+  const buyNowHandler = (e: any, isLoggedIn: boolean) => {
+    e.preventDefault();
+    if (isLoggedIn === false) {
+      modalHandler('login');
+      return;
+    }
+
+    if (isLoggedIn === true) {
+      console.log(sizeQtys);
+      if (sizeQtys === null || sizeQtys[0]?.qty === 0) {
+        modalHandler('requiredQty');
+        return;
+      }
+      if (totalQty < minQty) {
+        showModal({
+          message: `Please enter quantity greater than or equal to ${minQty}.`,
+          title: 'Required Quantity',
+        });
+
+        return;
+      }
+      router.push(`${paths.CUSTOMIZE_LOGO}/${product?.id}`);
+    }
+  };
   const goToProduct = (seName: string | null) => {
     if (seName === null) return;
     router.push(`${seName}`);
@@ -145,18 +179,29 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
           </div>
         </div>
         <div className='pt-[15px] text-default-text flex flex-wrap items-center gap-[10px]'>
-          <div className=''>Price Per Item</div>
-          <div className='text-title-text'>${product?.salePrice}</div>
-          <div className='line-through'>${product?.msrp}</div>
+          <DiscountPrice
+            storeCode={storeCode}
+            ourCost={product?.ourCost || 0}
+            msrp={product?.msrp || 0}
+            imap={product?.imap || 0}
+            salePrice={pricePerItem || 0}
+          />
         </div>
         <form className='mt-[24px]'>
           <div className='m-[12px] mt-[24px]'>
-            <a
-              href='apply-logo.html'
+            <button
+              disabled={product?.isDiscontinue}
+              onClick={(e) => {
+                buyNowHandler(e, !!userId);
+              }}
               className='btn btn-primary text-center btn-lg w-full'
             >
-              CUSTOMIZE NOW AND ADD TO CART
-            </a>
+              {product?.isDiscontinue
+                ? 'Discontinued'
+                : userId
+                ? 'CUSTOMIZE NOW AND ADD TO CART'
+                : 'LOGIN TO SHOP NOW WITH LIVE INVENTORY'}
+            </button>
           </div>
         </form>
         <div className='pt-[15px] text-default-text'>

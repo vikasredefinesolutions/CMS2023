@@ -1,9 +1,9 @@
 import React from 'react';
+import RequestConsultationType1 from './RequestConsultationType1';
 import {
   _RequestConsultationProps,
   _RequestConsultationTemplates,
 } from './requestConsultation';
-import RequestConsultationType1 from './RequestConsultationType1';
 
 const requestConsultationTemplates: _RequestConsultationTemplates = {
   type1: RequestConsultationType1,
@@ -11,10 +11,9 @@ const requestConsultationTemplates: _RequestConsultationTemplates = {
 };
 
 const RequestConsultation: React.FC<
-  _RequestConsultationProps & { id: string }
+  _RequestConsultationProps & { id: 'type1' }
 > = ({ id, ...rest }) => {
-  const Component =
-    requestConsultationTemplates[`type${id}` as 'type1' | `type2`];
+  const Component = requestConsultationTemplates[id];
   return <Component {...rest} />;
 };
 

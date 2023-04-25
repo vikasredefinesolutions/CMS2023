@@ -1,7 +1,7 @@
 import { checkoutPages } from '@constants/enum';
 import { __pagesText } from '@constants/pages.text';
 import CartItem from '@templates/cartItem';
-import CartSummarry from '@templates/cartSummarry/CartSummarry';
+import CartSummarry from '@templates/cartSummarry';
 import { FC } from 'react';
 import { CTProps } from '../checkout';
 import AddAddress from './components/AddAddressType1';

@@ -10,6 +10,7 @@ import { useEffect, useState } from 'react';
 import NotificationBar from 'Templates/NotificationBar';
 
 import { paths } from '@constants/paths.constant';
+import { _HeaderProps } from '@definations/header.type';
 import {
   LoggedInMenu,
   LoginIcon,
@@ -20,7 +21,6 @@ import {
 } from '@header/header_Type1/Components/Icons';
 import MenuItems from '@header/header_Type1/Components/Menu/Header_MenuItems';
 import SearchBar from '@header/header_Type1/Components/Menu/Header_SearchBar';
-import { _HeaderProps } from '@templates/Header/header.type';
 import { useRouter } from 'next/router';
 
 const Header_Type1: NextPage<_HeaderProps> = ({ logoUrl, menuItems }) => {

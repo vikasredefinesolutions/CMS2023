@@ -1,6 +1,7 @@
 import NotificationBar_Type1 from './NotificationBar_Type1';
 import NotificationBar_Type2 from './NotificationBar_Type2';
 
+import { _defaultTemplates } from '@configs/template.config';
 import { NextPage } from 'next';
 import { _NotificationBarTemplates } from './NotificationBar';
 // import NotificationBar_Type3 from './NotificationBar_Type3';
@@ -13,7 +14,8 @@ const NotificationBarTemplates: _NotificationBarTemplates = {
   //   type4: NotificationBar_Type4,
 };
 const NotificationBar: NextPage = () => {
-  const NotificationBarTemplate = NotificationBarTemplates['type1'];
+  const NotificationBarTemplate =
+    NotificationBarTemplates[_defaultTemplates.notificationBar];
   return <NotificationBarTemplate />;
 };
 

@@ -7,8 +7,8 @@ const orderDetailsTemplates: _OrderDetailsTemplates = {
   type2: OrderDetails_type2,
 };
 
-const OrderDetails: React.FC<{ id: number }> = ({ id }) => {
-  const Component = orderDetailsTemplates[`type${id}` as 'type1' | 'type2'];
+const OrderDetails: React.FC<{ id: 'type1' | 'type2' }> = ({ id }) => {
+  const Component = orderDetailsTemplates[id];
   return <Component />;
 };
 

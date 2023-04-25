@@ -5,10 +5,6 @@ export const queryParam = {
 
 export const defaultRoute = '/';
 
-export const pageNotFoundText = {
-  defaultId: '1',
-};
-
 export const paths = {
   HOME: defaultRoute,
   PRODUCT: '/product',
@@ -30,11 +26,15 @@ export const paths = {
     user_management: '/myaccount/UserManagement',
     manage_logo: '/myaccount/ManageLogo',
     orders: '/orders',
-    order_details: 'Orders/Orderdetails',
+    order_details: 'orders/Orderdetails',
     address: '/myaccount/Address',
+    edit_shipping_address: '/myaccount/edit-shipping-address',
+    edit_billing_address: '/myaccount/edit-billing-address',
+    editShippingAddress: 'edit-shipping-address',
+    editBillingAddress: 'edit-billing-address',
   },
   SIGN_UP: '/CreateAccount/SignUp',
-  THANK_YOU: '/Orders/Thankyou',
+  THANK_YOU: '/orders/Thankyou',
   thankYou: {
     notAuthorized: defaultRoute,
   },

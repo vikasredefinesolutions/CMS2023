@@ -1,4 +1,4 @@
-import { type2 } from '@constants/dummy.constant';
+import { _defaultTemplates } from '@configs/template.config';
 import { paths } from '@constants/paths.constant';
 import {
   _MyAcc_OrderBillingDetails,
@@ -60,7 +60,7 @@ const ThankYou: React.FC = () => {
 
   return (
     <>
-      <ThankYouTemplate order={order} id={type2} />
+      <ThankYouTemplate order={order} id={_defaultTemplates.thankYou} />
     </>
   );
 };

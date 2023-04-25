@@ -175,3 +175,8 @@ export const cardType = [
     url: '/assets/images/card-discover.webp',
   },
 ];
+
+export const companyInfo = {
+  email: 'customerservice@parsonskellogg.com',
+  phoneNumber: '(866) 602-8398',
+};

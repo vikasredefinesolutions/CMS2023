@@ -1,3 +1,4 @@
+import { _defaultTemplates } from '@configs/template.config';
 import { _Brand } from '@definations/brand';
 import { _Story } from '@definations/story';
 import React from 'react';
@@ -20,7 +21,7 @@ const SL_Templates: _SL_Templates = {
 };
 
 const SL_Template: React.FC<_Props> = ({ id, ...rest }) => {
-  const Template = SL_Templates[`type${id}` as 'type1' | 'type2'];
+  const Template = SL_Templates[_defaultTemplates.storyList];
   return <Template {...rest} />;
 };
 

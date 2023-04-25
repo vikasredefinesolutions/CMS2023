@@ -2,6 +2,7 @@ import SeoHead from '@appComponents/reUsable/SeoHead';
 import { getServerSideProps } from '@controllers/getServerSideProps';
 import { cLog } from '@helpers/console.helper';
 
+import { _defaultTemplates } from '@configs/template.config';
 import PageNotFound from '@templates/404';
 import Home from '@templates/Home';
 import { NextPage } from 'next';
@@ -23,7 +24,7 @@ const TopicHome: NextPage<_SlugServerSideProps | _SlugServerSide_WentWrong> = (
 
   if (!_store || !pageMetaData || !page) {
     cLog('No page data found', '404');
-    return <PageNotFound id={'1'} />;
+    return <PageNotFound id={_defaultTemplates[404]} />;
   }
 
   if (pageMetaData?.type === '404') {
@@ -35,7 +36,7 @@ const TopicHome: NextPage<_SlugServerSideProps | _SlugServerSide_WentWrong> = (
           description={pageMetaData?.meta_Description || ''}
           keywords={pageMetaData?.meta_Keywords || 'Branded Promotional'}
         />
-        <PageNotFound id={'1'} />
+        <PageNotFound id={_defaultTemplates[404]} />
       </>
     );
   }
@@ -73,7 +74,7 @@ const TopicHome: NextPage<_SlugServerSideProps | _SlugServerSide_WentWrong> = (
         keywords={'Branded Promotional'}
       />
       {cLog('No match found', '404')}
-      <PageNotFound id={'1'} />
+      <PageNotFound id={_defaultTemplates[404]} />
     </>
   );
 };
@@ -81,4 +82,3 @@ const TopicHome: NextPage<_SlugServerSideProps | _SlugServerSide_WentWrong> = (
 export default TopicHome;
 
 export { getServerSideProps };
-

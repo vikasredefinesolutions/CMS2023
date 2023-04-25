@@ -46,6 +46,7 @@ export interface CustomerAddress {
 }
 
 export interface UserType {
+  birthDate: string;
   name: string;
   storeName: string;
   gender: string;

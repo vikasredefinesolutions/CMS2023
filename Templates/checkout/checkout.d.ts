@@ -38,8 +38,17 @@ export type CTProps = {
   shippingAdress: AddressType | null;
   billingAdress: AddressType | null;
   setAddressType: (arg: null | 'S' | 'B') => void;
+  setShippingMethod: (arg: _shippingMethod[] | []) => void;
+  shippingMethod: _shippingMethod[] | [];
 };
+
+export interface _shippingMethod {
+  name: string;
+  price: number;
+}
+[];
 
 export interface CTTemplates {
   type1: FC<CTProps>;
+  type2: FC<CTProps>;
 }

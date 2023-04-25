@@ -1,10 +1,11 @@
 import CartType1 from './Cart_Type1';
-import CartType2 from './Cart_Type2';
 import CartType3 from './Cart_Type3';
 import CartType4 from './Cart_Type4';
 
+import { _defaultTemplates } from '@configs/template.config';
 import { FC } from 'react';
 import { _CartProps, _CartTemplates } from './Cart';
+import CartType2 from './cartType2';
 
 const CartTemplates: _CartTemplates = {
   type1: CartType1,
@@ -14,7 +15,7 @@ const CartTemplates: _CartTemplates = {
 };
 
 const CartTemplate: FC<_CartProps> = (props) => {
-  const Cart = CartTemplates['type1'];
+  const Cart = CartTemplates[_defaultTemplates.cart];
   return <Cart {...props} />;
 };
 

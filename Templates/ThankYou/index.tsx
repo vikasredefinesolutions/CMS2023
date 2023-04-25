@@ -14,7 +14,7 @@ interface _props {
     billing: _MyAcc_OrderBillingDetails | null;
     product: _MyAcc_OrderProductDetails[] | null;
   };
-  id: string;
+  id: 'type1' | 'type2';
 }
 
 const ThankYouTemplates: _ThankYouTemplates = {
@@ -27,7 +27,7 @@ const ThankYouTemplates: _ThankYouTemplates = {
 const ThankYouTemplate: React.FC<_props> = ({ order, id }) => {
   // console.log('id is ', id);
 
-  const ThankYouSelected = ThankYouTemplates[`type${id}` as 'type1'];
+  const ThankYouSelected = ThankYouTemplates[id];
   return (
     <>
       <ThankYouSelected order={order} />

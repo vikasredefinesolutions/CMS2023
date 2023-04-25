@@ -1,3 +1,4 @@
+import { _defaultTemplates } from '@configs/template.config';
 import React from 'react';
 import {
   _RecentlyViewedProps,
@@ -11,7 +12,8 @@ const ProductRecetlyViewedTemplates: _RecentlyViewedTemplates = {
   type2: ProductRecetlyViewed_Type2,
 };
 const ProductRecentlyViewed: React.FC<_RecentlyViewedProps> = ({ product }) => {
-  const ProductRecetlyViewedTemplate = ProductRecetlyViewedTemplates['type1'];
+  const ProductRecetlyViewedTemplate =
+    ProductRecetlyViewedTemplates[_defaultTemplates.recentlyViewedProducts];
   return <ProductRecetlyViewedTemplate product={product} />;
 };
 

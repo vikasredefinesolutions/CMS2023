@@ -2,6 +2,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+import { logoLocation } from '@constants/enum';
 import {
   _Product_SizeQtys,
   _SOM_LogoDetails,
@@ -195,7 +196,7 @@ export const logoCartItems_Generator = (
 
     if (som_logos) {
       logos = som_logos.map((logo) => {
-        if (logo.status === 'LOGO SUBMITTED') {
+        if (logo.status === logoLocation.submitted) {
           return {
             positionImage: {
               path: logo.location.imageUrl,

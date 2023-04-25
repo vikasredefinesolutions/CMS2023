@@ -1,11 +1,11 @@
 import { __pagesConstant } from '@constants/pages.constant';
 import { paths } from '@constants/paths.constant';
+import { _HeaderProps } from '@definations/header.type';
 import {
   useActions_v2,
   useTypedSelector_v2,
   useWindowDimensions_v2,
 } from '@hooks_v2/index';
-import { _HeaderProps } from '@templates/Header/header.type';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';

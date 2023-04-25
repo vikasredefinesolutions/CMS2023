@@ -4,11 +4,10 @@ import Document, {
   Head,
   Html,
   Main,
-  NextScript,
+  NextScript
 } from 'next/document';
 import { _globalStore } from 'store.global';
 import config, { cssApis } from '../configs_v2/api.config';
-
 let storeId: null | number = null;
 let faviconURL: string = '';
 
@@ -33,7 +32,11 @@ class MyDocument extends Document {
     return initialProps;
   }
 
+
   render() {
+    
+  
+    
     return (
       <Html lang='en'>
         <link
@@ -41,39 +44,7 @@ class MyDocument extends Document {
           href={`${_globalStore.blobUrl}${faviconURL}`}
         />
         <Head>
-          {/* -----------------------CSS STYLESHEETS------------------------- */}
-          {storeId == 1 && (
-            <link rel='stylesheet' type='text/css' href={cssApis[1]} />
-          )}
-          {storeId == 21 && (
-            <link rel='stylesheet' type='text/css' href={cssApis[21]} />
-          )}
-          {storeId == 3 && (
-            <link rel='stylesheet' type='text/css' href={cssApis[3]} />
-          )}
-          {storeId == 23 && (
-            <link rel='stylesheet' type='text/css' href={cssApis[23]} />
-          )}
-
-          {storeId == 108 && (
-            <link rel='stylesheet' type='text/css' href={cssApis[108]} />
-          )}
-          {storeId == 134 && (
-            <link rel='stylesheet' type='text/css' href={cssApis[134]} />
-          )}
-          {storeId == 135 && (
-            <link rel='stylesheet' type='text/css' href={cssApis[135]} />
-          )}
-          {storeId == 139 && (
-            <link rel='stylesheet' type='text/css' href={cssApis[139]} />
-          )}
-          {storeId == 27 && (
-            <link rel='stylesheet' type='text/css' href={cssApis[27]} />
-          )}
-          {storeId == 22 && (
-            <link rel='stylesheet' type='text/css' href={cssApis[22]} />
-          )}
-
+          
           {/* ---------------------CUSTOM CSS STYLESHEETS------------------------ */}
 
           <link
@@ -84,7 +55,7 @@ class MyDocument extends Document {
           <link
             rel='stylesheet'
             type='text/css'
-            href={`https://www.ystore.us/HTML/RedefineCommerce/Ecom-front/corporategear/tailwin-css-29.css`}
+            href={`https://www.ystore.us/HTML/RedefineCommerce/Ecom-front/corporategear/tailwin-css-29.css?${Math.random()}`}
           />
 
           <link
@@ -140,10 +111,67 @@ class MyDocument extends Document {
                 'var klevu_addPageNumberToUrl = true,klevu_addSelectedFiltersToUrl = true; ',
             }}
           ></script>
+
+          <script
+            dangerouslySetInnerHTML={{ __html: _globalStore.customScript }}
+          ></script>
+
+
+          {/* -----------------------CSS STYLESHEETS------------------------- */}
+
+          {storeId == 1 && (
+            <link rel='stylesheet' type='text/css' href={cssApis[1]} />
+          )}
+          {storeId == 21 && (
+            <link rel='stylesheet' type='text/css' href={cssApis[21]} />
+          )}
+          {storeId == 3 && (
+            <link rel='stylesheet' type='text/css' href={cssApis[3]} />
+          )}
+          {storeId == 10 && (
+            <link rel='stylesheet' type='text/css' href={cssApis[10]} />
+          )}
+          {storeId == 23 && (
+            <link rel='stylesheet' type='text/css' href={cssApis[23]} />
+          )}
+
+          {storeId == 108 && (
+            <link rel='stylesheet' type='text/css' href={cssApis[108]} />
+          )}
+          {storeId == 134 && (
+            <link rel='stylesheet' type='text/css' href={cssApis[134]} />
+          )}
+          {storeId == 135 && (
+            <link rel='stylesheet' type='text/css' href={cssApis[135]} />
+          )}
+          {storeId == 139 && (
+            <link rel='stylesheet' type='text/css' href={cssApis[139]} />
+          )}
+          {storeId == 27 && (
+            <link rel='stylesheet' type='text/css' href={cssApis[27]} />
+          )}
+          {storeId == 22 && (
+            <link rel='stylesheet' type='text/css' href={cssApis[22]} />
+          )}
+          <script type="text/javascript" src='https://platform-api.sharethis.com/js/sharethis.js#property=622863e42e0ffb001379992c&product=sop'></script>
+
+          
         </Head>
         <body className='font-Outfit bg-white'>
           <Main />
           <NextScript />
+
+          <script
+            dangerouslySetInnerHTML={{
+              __html: _globalStore.customGlobalBodyScript,
+            }}
+          ></script>
+
+          <script
+            dangerouslySetInnerHTML={{
+              __html: _globalStore.customHomeScript,
+            }}
+          ></script>
 
           {/* -----------------------KLEVU------------------------- */}
           <script

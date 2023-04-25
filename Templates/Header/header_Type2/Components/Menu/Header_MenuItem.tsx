@@ -3,7 +3,7 @@ import {
   _t_Brands,
   _t_MenuCategory,
   _t_MenuTopic,
-} from '@definations/APIs/header.res';
+} from '@definations/header.type';
 import Brand from '@header/header_Type2/Components/Menu//Header_BrandItem';
 import Category from '@header/header_Type2/Components/Menu//Header_CategoryItem';
 import Custom from '@header/header_Type2/Components/Menu//Header_CustomItem';

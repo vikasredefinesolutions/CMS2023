@@ -1,10 +1,10 @@
 import SuccessErrorModal from '@appComponents/modals/successErrorModal';
 import { paths } from '@constants/paths.constant';
-import { _Footer } from '@definations/APIs/footer.res';
+import { _MenuItems } from '@definations/header.type';
+import { _FetchStoreConfigurations } from '@definations/store.type';
 import { addCustomEvents } from '@helpers/common.helper';
 import BreadCrumb from '@templates/breadCrumb';
 import Footer from '@templates/Footer';
-import { _MenuItems } from '@templates/Header/header.type';
 import * as _AppController from 'controllers_v2/_AppController.async';
 import { useTypedSelector_v2 } from 'hooks_v2';
 import { useRouter } from 'next/router';
@@ -16,7 +16,7 @@ interface _props {
   children: React.ReactNode;
   logoUrl: string;
   configs: {
-    footer: _Footer | null;
+    footer: _FetchStoreConfigurations | null;
   };
   menuItems: _MenuItems | null;
 }

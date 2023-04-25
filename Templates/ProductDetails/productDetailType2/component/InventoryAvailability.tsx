@@ -1,16 +1,42 @@
-import { _ProductInventory } from '@definations/APIs/inventory.res';
+import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import { useState } from 'react';
 interface _props {
-  elem: _ProductInventory;
+  size: string;
+  qty: number;
+  price: number;
+  color?: string;
+  attributeOptionId: number;
 }
-const InventoryAvailability: React.FC<_props> = ({ elem }: any) => {
-  const [productQuantity, setProductQuantity] = useState(false);
-  const [productValue, setProductValue] = useState(0);
+const InventoryAvailability: React.FC<_props> = ({
+  size,
+  qty,
+  price,
+  color,
+  attributeOptionId,
+}) => {
+  const { updateQuantities, updateQuantities2 } = useActions_v2();
+  const [value, setValue] = useState<number | string>(0);
+  const { id: userId } = useTypedSelector_v2((state) => state.user);
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setValue(+event.target.value);
+    if (+event.target.value > qty) {
+      setValue(qty);
+    }
+    updateQuantities2({
+      size: size,
+      qty: qty > +event.target.value ? +event.target.value : qty,
+      price: price,
+      attributeOptionId: attributeOptionId,
+      color: color || '',
+    });
+  };
+
   return (
     <div className='flex flex-wrap items-center border-b border-b-gray-border pl-[10px]'>
-      <div className='w-1/3 pt-[10px] pb-[10px]'>{elem.name}</div>
+      <div className='w-1/3 pt-[10px] pb-[10px]'>{size}</div>
       <div className='w-1/3 pt-[10px] pb-[10px] text-center text-green-700'>
-        {elem.inventory}
+        {userId ? qty : 'Login to See Inventory'}
       </div>
       <div className='w-1/3 pt-[10px] pb-[10px] text-right'>
         <input
@@ -18,18 +44,12 @@ const InventoryAvailability: React.FC<_props> = ({ elem }: any) => {
           className='form-input !px-[10px] !inline-block !w-[65px]'
           placeholder='0'
           min={0}
-          max={elem.inventory}
+          value={value}
+          max={qty}
           style={{
-            border: productQuantity ? '1px solid red' : '',
+            border: value ? '1px solid red' : '',
           }}
-          onChange={(e) => {
-            if (+e.target.value > +e.target.max) {
-              setProductQuantity(true);
-              e.target.value = e.target.max;
-            } else {
-              setProductQuantity(false);
-            }
-          }}
+          onChange={handleChange}
         />
       </div>
     </div>

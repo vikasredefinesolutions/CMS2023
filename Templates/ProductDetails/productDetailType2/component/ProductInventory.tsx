@@ -1,4 +1,5 @@
-import { useTypedSelector_v2 } from '@hooks_v2/index';
+import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
+import { useEffect } from 'react';
 import InventoryAvailability from './InventoryAvailability';
 import OutOfStockComponent from './OutOfStockComponent';
 
@@ -9,7 +10,13 @@ const Inventory: React.FC<{
   const { price, inventory } = useTypedSelector_v2(
     (state) => state.product.product,
   );
-  console.log(inventory?.inventory);
+
+  const { updatePrice } = useActions_v2();
+
+  useEffect(() => {
+    updatePrice({ price: price?.msrp || 0 });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [price?.msrp]);
 
   return (
     <div className='pt-[15px] text-default-text'>
@@ -22,7 +29,12 @@ const Inventory: React.FC<{
         .filter((el) => el.colorAttributeOptionId == +attributeOptionId)
         .map((elem) => {
           return elem.inventory ? (
-            <InventoryAvailability elem={elem} />
+            <InventoryAvailability
+              size={elem.name}
+              qty={elem.inventory}
+              price={price?.msrp || 0}
+              attributeOptionId={elem.attributeOptionId}
+            />
           ) : (
             <OutOfStockComponent elem={elem} />
           );

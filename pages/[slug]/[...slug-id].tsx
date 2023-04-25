@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import SeoHead from '@appComponents/reUsable/SeoHead';
 import Spinner from '@appComponents/ui/spinner';
-import { pageNotFoundText } from '@constants/paths.constant';
+import { _defaultTemplates } from '@configs/template.config';
 import { getServerSideProps } from '@controllers/getServerSideProps';
 import { cLog } from '@helpers/console.helper';
 import { useActions_v2 } from '@hooks_v2/index';
@@ -34,7 +34,7 @@ const SlugPage: NextPage<_SlugServerSideProps | _SlugServerSide_WentWrong> = (
 
   if (!_store || !pageMetaData || !page) {
     cLog('No page data found', '404');
-    return <PageNotFound id={pageNotFoundText.defaultId} />;
+    return <PageNotFound id={_defaultTemplates[404]} />;
   }
 
   if (pageMetaData?.type === '404') {
@@ -46,7 +46,7 @@ const SlugPage: NextPage<_SlugServerSideProps | _SlugServerSide_WentWrong> = (
           description={pageMetaData?.meta_Description || ''}
           keywords={pageMetaData?.meta_Keywords || 'Branded Promotional'}
         />
-        <PageNotFound id={pageNotFoundText.defaultId} />
+        <PageNotFound id={_defaultTemplates[404]} />
       </>
     );
   }
@@ -94,13 +94,13 @@ const SlugPage: NextPage<_SlugServerSideProps | _SlugServerSide_WentWrong> = (
             storeId={pageMetaData.storeId}
             slug={pageMetaData.slug}
             seType={pageMetaData.type}
-            id={page.productListing.bannerType}
+            id={`type${page.productListing.bannerType}` as 'type1'}
           />
           <ProductListing
             pageData={page?.productListing}
             slug={pageMetaData?.slug}
             seType={pageMetaData?.type}
-            id={page.productListing.templateId}
+            id={`type${page.productListing.templateId}` as 'type1'}
           />
         </Spinner>
       </>
@@ -115,7 +115,7 @@ const SlugPage: NextPage<_SlugServerSideProps | _SlugServerSide_WentWrong> = (
         keywords={pageMetaData?.meta_Keywords || 'Branded Promotional'}
       />
       {cLog('No match found', '404')}
-      <PageNotFound id={pageNotFoundText.defaultId} />
+      <PageNotFound id={_defaultTemplates[404]} />
     </>
   );
 };

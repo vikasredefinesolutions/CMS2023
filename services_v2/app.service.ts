@@ -1,3 +1,7 @@
+import {
+  StoreConfigurationConfigs,
+  _FetchStoreConfigurations,
+} from '@definations/store.type';
 import { CallAPI_v2 } from '@helpers/api.helper';
 import { _StoreDetails } from '@templates/ProductDetails/productDetailsTypes/storeDetails.res';
 import { SendAsync } from '@utils/axios.util';
@@ -5,6 +9,7 @@ import { SendAsync } from '@utils/axios.util';
 export type _RedefineAppAPIs =
   | 'GetStoreID'
   | 'FetchThemeConfigs'
+  | 'FetchStoreConfigurations'
   | 'FetchCompanyConfiguration';
 
 export const GetStoreID = async (
@@ -18,6 +23,7 @@ export const GetStoreID = async (
       method: 'POST',
       data: { url: domain },
     });
+
     return response;
   } catch (error) {
     return null;
@@ -134,4 +140,50 @@ export const FetchCompanyConfiguration = async (): Promise<{
   };
 
   return transformedData;
+};
+
+export const FetchStoreConfigurations = async (payload: {
+  storeId: number;
+  configname: StoreConfigurationConfigs;
+}): Promise<_FetchStoreConfigurations | null> => {
+  const url = `CmsStoreThemeConfigs/getstorethemeconfigs/${payload.storeId}/${payload.configname}.json`;
+
+  const response = await CallAPI_v2<_FetchStoreConfigurations>({
+    name: {
+      api: 'FetchStoreConfigurations',
+      service: 'app',
+    },
+    request: {
+      url: url,
+      method: 'GET',
+    },
+  });
+  return response;
+};
+
+export const getAllConfigurations = async (payload: {
+  storeId: number;
+  configNames: StoreConfigurationConfigs[];
+}): Promise<Array<_FetchStoreConfigurations | null>> => {
+  const configurations: Array<_FetchStoreConfigurations | null> = [];
+
+  const configsToFetch = payload.configNames.map((configName) => {
+    return FetchStoreConfigurations({
+      storeId: payload.storeId,
+      configname: configName,
+    });
+  });
+
+  Promise.allSettled(configsToFetch)
+    .then((values) => {
+      values.forEach((value, index) => {
+        configurations[index] =
+          value.status === 'fulfilled' ? value.value : null;
+      });
+    })
+    .catch(() => {
+      throw new Error(`Error while fetching Store Configurations`);
+    });
+
+  return configurations;
 };

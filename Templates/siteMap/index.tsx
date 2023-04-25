@@ -36,7 +36,7 @@ const SiteMap: NextPage<_siteMapProps> = ({ id, store }) => {
     return <>No data found</>;
   }
 
-  const SiteMapTemplate = siteMapTemplates[`type${id}` as 'type1'];
+  const SiteMapTemplate = siteMapTemplates[id];
   return <SiteMapTemplate brandItems={brandItems} categories={categories} />;
 };
 

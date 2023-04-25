@@ -1,6 +1,6 @@
 import { paths } from '@constants/paths.constant';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
-import CartSummarry from '@templates/cartSummarry/CartSummarry';
+import CartSummarry from '@templates/cartSummarry';
 import CartItem from 'Templates/cartItem';
 import Link from 'next/link';
 import React from 'react';

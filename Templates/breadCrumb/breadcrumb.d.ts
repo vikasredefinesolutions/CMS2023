@@ -14,6 +14,6 @@ export interface __BreadCrumbTemplatesProps {
 export interface _BreadCrumbTemplates {
   type1: NextPage<_BreadCrumbProps>;
   type2: NextPage<_BreadCrumbProps>;
-  //   type3: NextPage<_BreadCrumbProps>;
+  type3: NextPage<_BreadCrumbProps>;
   //   type4: NextPage<_BreadCrumbProps>;
 }

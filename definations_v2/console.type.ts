@@ -2,7 +2,6 @@ import { _RedefineAppAPIs } from '@services/app.service';
 import { _CacheAPIs } from '@services/cache.service';
 import { _ShoppingCartAPIs } from '@services/cart.service';
 import { _FileUploadAPIs } from '@services/file.service';
-import { _FooterAPIs } from '@services/footer.service';
 import { _GiftCardAPIs } from '@services/gift.service';
 import { _HeaderAPIs } from '@services/header.service';
 import { _HomeAPIs } from '@services/home.service';
@@ -41,9 +40,6 @@ export interface __Console {
   };
   header: {
     service: Record<_HeaderAPIs, boolean>;
-  };
-  footer: {
-    service: Record<_FooterAPIs, boolean>;
   };
   productDetails: {
     service: Record<_ProducDetailAPIs_V2, boolean>;

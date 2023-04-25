@@ -8,8 +8,8 @@ const AccountTemplates: _AccountTemplates = {
   type2: UserManagementAccountTemplates_Type2,
 };
 
-const UserManagementAccountSetting: React.FC<{ id: string }> = ({ id }) => {
-  const Component = AccountTemplates[`type${id}` as 'type1'];
+const UserManagementAccountSetting: React.FC<{ id: 'type1' }> = ({ id }) => {
+  const Component = AccountTemplates[id];
   return <Component />;
 };
 

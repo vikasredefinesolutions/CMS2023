@@ -2,6 +2,7 @@ import { NextPage } from 'next';
 import RC_Template from 'Templates/RequestConsultation';
 
 import { __console_v2 } from '@configs/console.config';
+import { _defaultTemplates } from '@configs/template.config';
 import { paths } from '@constants/paths.constant';
 import { _ExpectedRequestConsultationProps } from '@controllers/request';
 import * as ConsultationController from '@controllers/requestConsultationController.async';
@@ -13,7 +14,7 @@ import { _globalStore } from 'store.global';
 const RequestConsultationProof: NextPage<_RequestConsultationProps> = (
   props,
 ) => {
-  return <RC_Template {...props} id={'1'} />;
+  return <RC_Template {...props} id={_defaultTemplates.requestConsultation} />;
 };
 
 export default RequestConsultationProof;
@@ -40,6 +41,7 @@ export const getServerSideProps: GetServerSideProps = async (
       mediaBaseUrl: '',
       sewOutCharges: 0,
       isSewOutEnable: false,
+      shippingChargeType: 0,
     },
     product: null,
     color: null,

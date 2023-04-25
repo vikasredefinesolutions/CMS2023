@@ -221,7 +221,7 @@ export const __MockMenuItem = {
   },
 };
 
-export const layoutToShow = 'type1';
+export const layoutToShow = 'type2';
 export const defaultCountry = 1;
 export function layoutToShow_fn(payload: {
   layout: string | undefined;

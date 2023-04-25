@@ -1,5 +1,4 @@
 import { __domain } from '@configs/page.config';
-import { logoLocation } from '@constants/enum';
 import { __Cookie, __Params } from '@constants/global.constant';
 import { EmployeeDataObject } from '@controllers/EmployeeController';
 import { _ProductInventoryTransfomed } from '@definations/APIs/inventory.res';
@@ -15,8 +14,13 @@ import { StaticImageData } from 'next/image';
 import router from 'next/router';
 import { __StaticImg } from 'public/assets/images.asset';
 import { ParsedUrlQuery } from 'querystring';
-import { LogoDetails } from '../redux_v2/slices/cart';
 
+import { logoLocation } from '@constants/enum';
+import { CartReq } from '@definations/APIs/cart.req';
+import {
+  _LogoDetail,
+  _Product_SizeQtys,
+} from '@redux/slices/product.slice.types';
 import { conditionalLog_V2 } from './console.helper';
 
 //////////////////////////////////////////////////////////////////////
@@ -393,38 +397,28 @@ type _Props = {
   note: string;
   storeId: number;
   isEmployeeLoggedIn: boolean;
-  sizeQtys: Array<{
-    id?: number;
-    attributeOptionId: number;
-    price: number;
-    qty: number;
-    size: string;
-    color?: string | undefined;
-  } | null> | null;
+  sizeQtys: Array<_Product_SizeQtys | null> | null;
   productDetails: {
     productId: number;
-    image?: {
-      id: number;
-      imageUrl: string;
-      altTag: string;
-    };
     color: {
       altTag: string;
       imageUrl: string;
       name: string;
-      attributeOptionId: number | string;
+      attributeOptionId: number;
     };
-    inventory?: null | _ProductInventoryTransfomed;
+    inventory: null | _ProductInventoryTransfomed;
   };
   total: {
     totalPrice: number;
     totalQty: number;
   };
-  shoppingCartItemId?: number;
-  logos?: LogoDetails[];
+  shoppingCartItemId: number;
+  logos: _LogoDetail[] | null;
+  isSewOutEnable: boolean;
+  sewOutCharges: number;
 };
 
-export const getAddToCartObject = async (product: _Props) => {
+export const getAddToCartObject = async (product: _Props): Promise<CartReq> => {
   const {
     userId,
     note,
@@ -433,19 +427,17 @@ export const getAddToCartObject = async (product: _Props) => {
     total,
     shoppingCartItemId,
     storeId,
-    isEmployeeLoggedIn,
     logos,
+    isSewOutEnable,
+    sewOutCharges,
+    isEmployeeLoggedIn,
   } = product;
   const { totalPrice, totalQty } = total;
   let cartLogoPersonModel: CartLogoPersonModel[] = [];
   let cartLogoPersonDetailModels: CartLogoPersonDetailModel[] = [];
 
   // if (logos.length > 0) {
-  if (
-    !logos ||
-    logos.length === 0 ||
-    (logos[0].status as string) === logoLocation.customizeLogo
-  ) {
+  if (!logos || logos.length === 0) {
     cartLogoPersonDetailModels = [
       {
         ...personalization.defaultLogoDetail,
@@ -457,20 +449,26 @@ export const getAddToCartObject = async (product: _Props) => {
     cartLogoPersonDetailModels = logos.map((logo) => {
       return {
         ...personalization.defaultLogoDetail,
-        logoPrice: logo.price,
+        logoUniqueId: '',
+        logoColors: '',
+        logoNotes: '',
+        digitalPrice: 0,
+        oldFilePath: '',
+        isSewOut: isSewOutEnable,
+        sewOutAmount: sewOutCharges,
+        reUsableCustomerLogo: 0,
+        logoPrice: logo.location.cost,
         logoQty: totalQty,
-        logoFile: logo.filePath || '',
-        logoTotal: totalQty * logo.price,
+        logoFile: logo.logo.url || '',
+        logoTotal: totalQty * logo.location.cost,
         logoLocation: logo.location.name,
         colorImagePath: productDetails.color.imageUrl,
         logoNames:
-          logo.filePath === ''
-            ? logoLocation.addLogoLater
-            : logo.filePath || '',
-        price: logo.price,
-        logoDate: new Date(logo.date),
-        logoPositionImage: logo.location.imageUrl,
-        originalLogoFilePath: logo.filePath || '',
+          logo.logo.url === '' ? logoLocation.addLogoLater : logo.logo.name,
+        price: logo.location.cost,
+        logoDate: new Date(),
+        logoPositionImage: logo.location.image,
+        originalLogoFilePath: logo.logo.url || '',
       };
     });
   }
@@ -482,14 +480,14 @@ export const getAddToCartObject = async (product: _Props) => {
         attributeOptionId: res.attributeOptionId,
         attributeOptionValue: res.size,
         code: '',
-        price: res.price / res.qty,
+        price: res.price * res.qty,
         quantity: res.qty,
         estimateDate: new Date(),
         isEmployeeLoginPrice: 0,
       });
   });
 
-  const cartObject = {
+  const cartObject: CartReq = {
     addToCartModel: {
       customerId: userId,
       productId: productDetails.productId,
@@ -517,7 +515,7 @@ export const getAddToCartObject = async (product: _Props) => {
         {
           attributeOptionName: 'Color',
           attributeOptionValue: productDetails.color.name,
-          attributeOptionId: productDetails.color.attributeOptionId,
+          attributeOptionId: +productDetails.color.attributeOptionId,
         },
       ],
       cartLogoPersonModel: cartLogoPersonModel,

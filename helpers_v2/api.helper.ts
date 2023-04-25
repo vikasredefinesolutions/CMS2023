@@ -1,6 +1,5 @@
 import { _RedefineAppServices } from '@services/app.service';
 import { _CacheApiServices } from '@services/cache.service';
-import { _FooterServices_v2 } from '@services/footer.service';
 import { _GeneralService } from '@services/general.service';
 import { _GiftCardService } from '@services/gift.service';
 import { _HeaderServices } from '@services/header.service';
@@ -30,7 +29,6 @@ export const CallAPI_v2 = async <T>({
     | _UserServices_V2
     | _GeneralService
     | _SlugService_V2
-    | _FooterServices_v2
     | _HeaderServices
     | _RedefineAppServices
     | _GiftCardService

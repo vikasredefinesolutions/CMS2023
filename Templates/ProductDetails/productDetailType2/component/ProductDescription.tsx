@@ -6,8 +6,6 @@ interface _props {
 }
 
 const ProductDescription: React.FC<_props> = ({ product }) => {
-  console.log('product function is ', product);
-
   return (
     <div className='mt-[30px]'>
       <div className='text-center text-2xl-text pb-[20px]'>INFORMATION</div>

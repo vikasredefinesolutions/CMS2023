@@ -30,7 +30,7 @@ export const __pagesConstant = {
   _header: {
     mobileBreakPoint: 1024,
     imagesToShowInBrandDropdown: 5,
-    brandImage: [515, 512, 506, , 501], // [49, 9, 28, 10], //[198, 11, 187, 27],
+    brandImage: ['patagonia', 'nike', 'peter-millar', 'yeti'], // [49, 9, 28, 10], //[198, 11, 187, 27],
   },
   _productAlike: {
     carouselCounter: 5,
@@ -50,9 +50,19 @@ export const __pagesConstant = {
   _myAccount: {
     ordersSection: {
       dateFormat: 'MM/DD/YYYY',
+      table: {
+        select: {
+          options: [10, 25, 50, 100],
+          defaultSelectedOption: 10,
+        },
+      },
     },
     orderDetails: {
       dateFormat: 'DD-MM-YYYY',
     },
+  },
+  checkoutPage: {
+    orderStatus: 'E',
+    transactionStatus: 'P',
   },
 };

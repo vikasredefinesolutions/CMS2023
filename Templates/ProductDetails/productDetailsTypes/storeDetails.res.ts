@@ -6,6 +6,7 @@ export interface Welcome {
 }
 
 export interface _StoreDetails {
+  shippingChargeType: number;
   storeXPaymetnOptionListViewModels: unknown[];
   id: number;
   storeTypeId: number;

@@ -10,8 +10,8 @@ const CheckLogoTemplates: _CheckLogoTemplates = {
   type3: CheckLogoApproved3,
   type4: CheckLogoApproved4,
 };
-const CheckLogoApproved: React.FC<{ id: string }> = ({ id }) => {
-  const CheckLogoTemplate = CheckLogoTemplates[`type${id}` as 'type1'];
+const CheckLogoApproved: React.FC<{ id: 'type1' }> = ({ id }) => {
+  const CheckLogoTemplate = CheckLogoTemplates[id];
   return (
     <>
       <CheckLogoTemplate />

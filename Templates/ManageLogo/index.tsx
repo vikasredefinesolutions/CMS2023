@@ -1,5 +1,4 @@
 /* eslint-disable no-unused-vars */
-import MyAccountTabs from '@appComponents/common/MyAccountTabsType1';
 import { LogoList } from '@definations/APIs/logo.res';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import { getLogoDetailsList } from '@services/logo.service';
@@ -12,7 +11,7 @@ const ManageLogoTemplates: _ManageLogoTemplates = {
   type1: ManageLogoType1,
   type2: ManageLogoType2,
 };
-const ManageLogo: React.FC<{ id: string }> = ({ id }) => {
+const ManageLogo: React.FC<{ id: 'type1' }> = ({ id }) => {
   const storeId = useTypedSelector_v2((state) => state.store.id);
   const customerId = useTypedSelector_v2((state) => state.user.id);
   const [logoList, setLogoList] = useState<LogoList | null>(null);
@@ -56,13 +55,13 @@ const ManageLogo: React.FC<{ id: string }> = ({ id }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [storeId, customerId, currentPage]);
 
-  const ManagelogoDeatils = ManageLogoTemplates[`type${id}` as 'type1'];
+  const ManagelogoDeatils = ManageLogoTemplates[id];
 
-  // console.log('managelogo' , logoList);
+  // const stateAll = useTypedSelector_v2((state) => state);
+  // console.log('managelogo', stateAll);
 
   return (
     <>
-      <MyAccountTabs />
       {logoList && logoList.items.length > 0 ? (
         <ManagelogoDeatils logoList={logoList} />
       ) : (

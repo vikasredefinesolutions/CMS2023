@@ -10,8 +10,8 @@ const ordersTemplates: {
   type2: Orders_Type2,
 };
 
-const OrdersTemplate: React.FC<{ id: string }> = ({ id }) => {
-  const Template = ordersTemplates[`type2` as 'type1' | `type2`];
+const OrdersTemplate: React.FC<{ id: 'type1' }> = ({ id }) => {
+  const Template = ordersTemplates[id];
   return <Template />;
 };
 

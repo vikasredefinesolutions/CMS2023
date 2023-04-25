@@ -29,7 +29,6 @@ const UploadLogoPopup: React.FC<_props> = ({
   const { id: storeId, imageFolderPath } = useTypedSelector_v2(
     (state) => state.store,
   );
-
   const fileReader = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target?.files === null) return;
 

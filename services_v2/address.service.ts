@@ -1,11 +1,13 @@
 import {
   AddressAPIRequest,
   _DeleteCustomerAddressReq,
+  _GetShippingmethod,
 } from '@definations/APIs/address.req';
 import {
   _CreateUserAddressRes,
   _CustomerAddressDefaultRes,
 } from '@definations/APIs/address.res';
+import getLocation from '@helpers/getLocation';
 import { SendAsync } from '@utils/axios.util';
 
 export const CreateUserAddress = async (request: AddressAPIRequest) => {
@@ -54,6 +56,17 @@ export const deleteCustomerAddress = async (
     url: url,
     method: 'POST',
     data: request,
+  });
+  return res;
+};
+
+export const GetShippingmethod = async (payload: _GetShippingmethod) => {
+  const url = 'Store/GetShippingmethod';
+
+  const res = await SendAsync<any>({
+    url: url,
+    method: 'POST',
+    data: payload,
   });
   return res;
 };

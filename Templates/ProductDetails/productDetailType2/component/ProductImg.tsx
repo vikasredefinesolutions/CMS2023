@@ -80,12 +80,12 @@ const ProductImg: React.FC<_ProductImgProps> = ({ product }) => {
             .map((img) => {
               const highlight =
                 img.id === selectedImage.id
-                  ? 'border-secondary'
+                  ? 'border-primary'
                   : 'border-slate-200';
               return (
                 <div
                   key={img.id + img.imageUrl}
-                  className={`md:border hover:border-secondary p-[3px] mt-[5px] mb-[5px] last:mb-0 ${highlight} testingclassnametest`}
+                  className={`md:border hover:border-primary p-[3px] mt-[5px] mb-[5px] last:mb-0 ${highlight} testingclassnametest cursor-pointer`}
                   onClick={() => selectImgHandler(img)}
                 >
                   <NxtImage

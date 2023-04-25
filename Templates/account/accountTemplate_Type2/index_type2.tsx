@@ -1,13 +1,11 @@
-import MyAccountTabType1 from '@appComponents/common/MyAccountTabsType1';
-import AccountSetting from '../accountTemplate_Type1/components/MyAccountSetting';
+import MyAccountSetting_Type2 from './components/MyAccountSetting_Type2';
 
-const AccountTemplates_Type2 = () => {
+const AccountTemplatesType2 = () => {
   return (
     <>
-      <MyAccountTabType1 />
-      <AccountSetting />
+      <MyAccountSetting_Type2 />
     </>
   );
 };
 
-export default AccountTemplates_Type2;
+export default AccountTemplatesType2;

@@ -82,7 +82,7 @@ export const __console_v2: __Console = {
 
   footer: {
     service: {
-      FetchFooter: false,
+      GetStoreConfigurations: false,
     },
   },
   productDetails: {

@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import LoginModal from '@appComponents/modals/loginModal';
+import { logoLocation } from '@constants/enum';
 import { __pagesText } from '@constants/pages.text';
 import { ApprovedLogoItem } from '@definations/APIs/logo.res';
 import { UploadImage } from '@services/file.service';
@@ -151,7 +152,7 @@ const SomLogoOption: React.FC<_SOMLogoOptionProps> = ({
     product_updateLogoDetails({
       type: 'Upload_Logo',
       logo: {
-        status: 'LOGO SUBMITTED',
+        status: logoLocation.submitted,
         location: {
           imageUrl: selectedLocation?.image.url ?? '',
           name: selectedLocation?.label ?? '',
@@ -190,7 +191,7 @@ const SomLogoOption: React.FC<_SOMLogoOptionProps> = ({
       product_updateLogoDetails({
         type: 'Upload_Logo',
         logo: {
-          status: 'LOGO SUBMITTED',
+          status: logoLocation.submitted,
           location: {
             imageUrl: selectedLocation?.image.url ?? '',
             name: selectedLocation?.label ?? '',
@@ -229,7 +230,7 @@ const SomLogoOption: React.FC<_SOMLogoOptionProps> = ({
         product_updateLogoDetails({
           type: 'Upload_Logo',
           logo: {
-            status: 'WILL SUBMIT LATER',
+            status: logoLocation.submitLater,
             location: {
               imageUrl: selectedLocation?.image.url ?? '',
               name: selectedLocation?.label ?? '',

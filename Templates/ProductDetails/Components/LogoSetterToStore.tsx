@@ -1,3 +1,4 @@
+import { logoLocation as LOGOlocation } from '@constants/enum';
 import { _CI_ShoppingCartLogoPersonViewModel } from '@definations/APIs/cart.res';
 import { _LogoLocationDetail } from '@definations/APIs/productDetail.res';
 import {
@@ -39,8 +40,8 @@ const LogoSetterToStore = () => {
             value: res.logoLocation || '',
           },
           price: res.logoPrice,
-          quantity: 5,
-          status: 'WILL SUBMIT LATER',
+          quantity: totalQty,
+          status: LOGOlocation.submitLater,
           isSewOut: res.isSewOut,
           sewOutAmount: res.sewOutAmount,
           reUsableCustomerLogo: res.reUsableCustomerLogo,
@@ -56,7 +57,7 @@ const LogoSetterToStore = () => {
           },
           price: res.logoPrice / totalQty,
           quantity: totalQty,
-          status: 'LOGO SUBMITTED',
+          status: LOGOlocation.submitted,
           title: res.name,
           isSewOut: res.isSewOut,
           sewOutAmount: res.sewOutAmount,

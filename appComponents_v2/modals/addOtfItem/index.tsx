@@ -25,9 +25,12 @@ const AddOTFItemNo = ({ closeModal }: { closeModal: () => void }) => {
   );
   const [fileUrl, setFileUrl] = useState('');
 
-  const { id: storeId, imageFolderPath } = useTypedSelector_v2(
-    (state) => state.store,
-  );
+  const {
+    id: storeId,
+    imageFolderPath,
+    isSewOutEnable,
+    sewOutCharges,
+  } = useTypedSelector_v2((state) => state.store);
   const userId = GetCustomerId();
   const { fetchCartDetails, setShowLoader } = useActions_v2();
   useEffect(() => {
@@ -127,6 +130,7 @@ const AddOTFItemNo = ({ closeModal }: { closeModal: () => void }) => {
       const totalQty = ~~qty.reduce((prev: string, newQty: string) =>
         (~~prev + ~~newQty).toString(),
       );
+
       const price = res.price * totalQty;
       const cartModel = await getAddToCartObject({
         userId: +userId,
@@ -152,6 +156,9 @@ const AddOTFItemNo = ({ closeModal }: { closeModal: () => void }) => {
 
         storeId: storeId,
         isEmployeeLoggedIn: true,
+        shoppingCartItemId: 0,
+        isSewOutEnable: isSewOutEnable,
+        sewOutCharges: sewOutCharges,
         logos: [],
       });
       setFileUrl('');

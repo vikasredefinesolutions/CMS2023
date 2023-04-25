@@ -1,9 +1,10 @@
+import { _defaultTemplates } from '@configs/template.config';
 import { paths } from '@constants/paths.constant';
 import RP_Template from '@templates/ResetPassword';
 import { GetServerSideProps, NextPage } from 'next';
 
 const ResetPassword: NextPage<{ token: string }> = ({ token }) => {
-  return <RP_Template id={'1'} token={token} />;
+  return <RP_Template id={_defaultTemplates.resetPassword} token={token} />;
 };
 
 export default ResetPassword;

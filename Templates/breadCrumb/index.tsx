@@ -1,3 +1,4 @@
+import { _defaultTemplates } from '@configs/template.config';
 import { paths, __SpecialBreadCrumbsPaths } from '@constants/paths.constant';
 import { capitalizeFirstLetter } from '@helpers/common.helper';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
@@ -16,14 +17,16 @@ import {
 } from './breadcrumb';
 import BreadCrumb_Type1 from './breadCrumb_Type1';
 import BreadCrumb_Type2 from './breadCrumb_Type2';
+import BreadCrumb_Type3 from './breadCrumb_Type3';
 
 const BreadCrumbTemplates: _BreadCrumbTemplates = {
   type1: BreadCrumb_Type1,
   type2: BreadCrumb_Type2,
+  type3: BreadCrumb_Type3,
 };
 
 const BreadCrumb: NextPage<__BreadCrumbTemplatesProps> = () => {
-  const BreadCrumbTemplate = BreadCrumbTemplates['type1'];
+  const BreadCrumbTemplate = BreadCrumbTemplates[_defaultTemplates.breadCrumb];
   //   const storeLayout = useTypedSelector_v2((state) => state.store.layout);
   const storeId = useTypedSelector_v2((state) => state.store.id);
   const router = useRouter();

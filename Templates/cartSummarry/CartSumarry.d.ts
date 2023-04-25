@@ -5,3 +5,8 @@ export type CartSummarryProps = {
   showApplyButton: boolean;
   coupon: string;
 };
+
+export interface CS_Templates {
+  type1: FC<CartSummarryProps>;
+  type2: FC<CartSummarryProps>;
+}

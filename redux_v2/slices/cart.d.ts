@@ -1,5 +1,10 @@
+import { logoLocation } from '@constants/enum';
+
 export interface LogoDetails {
-  status: 'LOGO SUBMITTED' | 'WILL SUBMIT LATER' | string;
+  status:
+    | logoLocation.submitted
+    | logoLocation.submitLater
+    | logoLocation.logoSubmitted;
   location: {
     imageUrl: string;
     name: string;

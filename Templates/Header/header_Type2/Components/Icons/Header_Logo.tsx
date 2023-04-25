@@ -35,7 +35,7 @@ const CompanyLogo: React.FC<_props> = ({ logo }) => {
             className='brand-logo w-full'
             src={logo?.mobile}
             useNextImage={false}
-            alt={storeName ? storeName : '455555555555555555'}
+            alt={storeName ? storeName : ''}
           />
         </a>
       </Link>

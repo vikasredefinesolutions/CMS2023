@@ -18,8 +18,8 @@ const WishlistTemplates: _WishlistTemplates = {
   type4: WishlistType4,
 };
 
-const Wishlist: React.FC<{ id: string }> = ({ id }) => {
-  const Component = WishlistTemplates[`type${id}` as 'type1'];
+const Wishlist: React.FC<{ id: 'type1' }> = ({ id }) => {
+  const Component = WishlistTemplates[id];
 
   const [wishlist, setWishlist] = useState<WishlistType[]>([]);
   const { removeWishListById } = useActions_v2();

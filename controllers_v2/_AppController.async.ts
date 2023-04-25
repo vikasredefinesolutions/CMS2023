@@ -1,15 +1,15 @@
 import { __console_v2 } from '@configs/console.config';
-import { _StoreReturnType } from '@definations/store.type';
-import { conditionalLog_V2 } from '@helpers/console.helper';
-import { GetAdminAppConfigs, GetStoreID } from '@services/app.service';
-import * as HeaderService from '@services/header.service';
 import {
   _CustomContent,
   _DynamicContent,
   _MenuItems,
   _NoneContent,
   _StoreMenu,
-} from '@templates/Header/header.type';
+} from '@definations/header.type';
+import { _StoreReturnType } from '@definations/store.type';
+import { conditionalLog_V2 } from '@helpers/console.helper';
+import { GetAdminAppConfigs, GetStoreID } from '@services/app.service';
+import * as HeaderService from '@services/header.service';
 
 //////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////
@@ -187,6 +187,7 @@ export const fetchStoreDetails = async (
     sewOutCharges: 0,
     isSewOutEnable: false,
     mediaBaseUrl: '',
+    shippingChargeType: 0,
   };
   let blobUrlRootDirectory: string = '';
 
@@ -216,6 +217,7 @@ export const fetchStoreDetails = async (
           };
           store.isSewOutEnable = res.isSewOutEnable;
           store.sewOutCharges = res.sewOutCharges;
+          store.shippingChargeType = res.shippingChargeType;
         }
         if (response[1].status === 'fulfilled' && response[1].value) {
           store.mediaBaseUrl = response[1].value['azure:BlobUrl'];

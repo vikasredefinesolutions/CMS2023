@@ -1,6 +1,13 @@
-import { showComponents } from '@constants/store.mock';
+import { _MenuItems } from './header.type';
+import { _FetchStoreConfigurations, _StoreReturnType } from './store.type';
 
-export type _Show = typeof showComponents;
+export type _Expected_AppProps = {
+  store: _StoreReturnType;
+  menuItems: _MenuItems | null;
+  configs: Array<_FetchStoreConfigurations | null>;
+  blobUrlRootDirectory: string;
+  companyId: number;
+};
 
 export type PageResponseType = {
   id: string | number;

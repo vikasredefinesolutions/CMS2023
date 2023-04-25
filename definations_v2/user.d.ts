@@ -16,7 +16,7 @@ export interface _UpdateUserType {
   isTaxableuser: boolean;
   industryId: number;
   customerRoleId: number;
-  birthDate: null;
+  birthDate: null | string;
   gender: string;
   isForceAdminForResetPassword: boolean;
   resetPasswordRequestDate: null;

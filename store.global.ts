@@ -3,22 +3,28 @@ interface _Store {
   favicon: string;
   logoUrl: string;
   blobUrl: string;
+  companyId: number;
+  customScript: string;
   storeId: null | number;
+  customHomeScript: string;
   blobRootDirectory: string;
   storeTypeId: null | number;
+  customGlobalBodyScript: string;
   isAttributeSaparateProduct: boolean;
-  companyId: number;
   set: (
     pair:
       | _StoreId
+      | _CompanyId
       | _StoreCode
       | _StoreType
       | _StoreBlobUrl
       | _StoreFavicon
       | _StoreLogoUrl
+      | _CustomScript
+      | _CustomHomeScript
+      | _CustomGlobalBodyScript
       | _StoreBlobRootDirectory
-      | _isAttributeSaparateProduct
-      | _CompanyId,
+      | _isAttributeSaparateProduct,
   ) => void;
 }
 
@@ -35,6 +41,9 @@ export let _globalStore: _Store = {
   set: (pair) => {
     _globalStore = { ..._globalStore, [pair.key]: pair.value };
   },
+  customScript: '',
+  customGlobalBodyScript: '',
+  customHomeScript: '',
 };
 
 interface _StoreId {
@@ -68,6 +77,20 @@ interface _StoreLogoUrl {
 interface _StoreBlobUrl {
   key: 'blobUrl';
   value: string;
+}
+
+interface _CustomScript {
+  key: 'customScript';
+  value: boolean;
+}
+
+interface _CustomHomeScript {
+  key: 'customHomeScript';
+  value: boolean;
+}
+interface _CustomGlobalBodyScript {
+  key: 'customGlobalBodyScript';
+  value: boolean;
 }
 
 interface _StoreBlobRootDirectory {

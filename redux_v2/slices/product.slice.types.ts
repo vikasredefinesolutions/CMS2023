@@ -1,10 +1,11 @@
+import { logoLocation } from '@constants/enum';
 import { _ProductColor } from '@definations/APIs/colors.res';
 import { _ProductDiscountTable } from '@definations/APIs/discountTable.res';
 import { _ProductInventoryTransfomed } from '@definations/APIs/inventory.res';
 import { _SizeChartTransformed } from '@definations/APIs/sizeChart.res';
 
 export interface _LogoDetails_IfSubmitted {
-  status: 'LOGO SUBMITTED';
+  status: logoLocation.submitted;
   location: {
     imageUrl: string;
     name: string;
@@ -21,7 +22,7 @@ export interface _LogoDetails_IfSubmitted {
 }
 
 export interface _LogoDetails_WillSubmitLater {
-  status: 'WILL SUBMIT LATER';
+  status: logoLocation.submitLater;
   location: {
     imageUrl: string;
     name: string;

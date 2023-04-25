@@ -7,8 +7,8 @@ const pageNotFoundTemplates: _PageNotFoundTemplates = {
   type2: PageNotFoundType1,
 };
 
-const PageNotFound: React.FC<{ id: string }> = ({ id }) => {
-  const Template = pageNotFoundTemplates[`type${id}` as 'type1' | 'type2'];
+const PageNotFound: React.FC<{ id: 'type1' }> = ({ id }) => {
+  const Template = pageNotFoundTemplates[id];
   return <Template />;
 };
 

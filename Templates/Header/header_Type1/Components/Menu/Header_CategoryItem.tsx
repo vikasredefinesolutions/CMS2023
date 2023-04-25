@@ -1,7 +1,7 @@
 import { __pagesText } from '@constants/pages.text';
+import { _MenuCategory } from '@definations/header.type';
 import SubMenuItem from '@header/header_Type1/Components/Menu/Header_SubMenuItem';
 import { capitalizeFirstLetter } from '@helpers/common.helper';
-import { _MenuCategory } from '@templates/Header/header.type';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
 import Link from 'next/link';
 import React, { useState } from 'react';

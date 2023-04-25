@@ -162,7 +162,7 @@ const handleTransition= ()=>{
             autoPlay={autoPlay}
             showArrows={showArrow}
             showIndicators={showIndicators}
-            showThumbs={true}
+            showThumbs={false}
             animationHandler="fade"
             transitionTime="700"
           >

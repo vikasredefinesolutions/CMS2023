@@ -40,7 +40,9 @@ import _ from 'lodash';
 import router from 'next/router';
 import { ChangeEvent, useEffect, useState } from 'react';
 
+import { __pagesConstant } from '@constants/pages.constant';
 import { CustomerAddress } from '@definations/APIs/user.res';
+import { _shippingMethod } from '@templates/checkout/checkout';
 import CheckoutAddressForm, {
   AddressFormRefType,
   AddressType,
@@ -72,6 +74,13 @@ const CheckoutController = () => {
   const [showAddAddressModal, setShowAddAddressModal] = useState(false);
   const [addressEditData, setAddressEditData] =
     useState<CustomerAddress | null>(null);
+
+  const [shippingMethod, setShippingMethod] = useState<_shippingMethod[] | []>([
+    {
+      name: '',
+      price: 0,
+    },
+  ]);
 
   const storeId = useTypedSelector_v2((state) => state.store.id);
   const {
@@ -376,8 +385,9 @@ const CheckoutController = () => {
         orderTax: salesTax,
         orderTotal: totalPrice,
         couponDiscountAmount: discount,
-        orderStatus: 'E',
-        transactionStatus: 'P',
+        orderStatus: __pagesConstant.checkoutPage.orderStatus,
+        transactionStatus: __pagesConstant.checkoutPage.transactionStatus,
+        shippingMethod: shippingMethod[0].name,
       };
       const order = {
         orderModel,
@@ -517,6 +527,8 @@ const CheckoutController = () => {
     AddUpdateAddressSubmitHandler,
     addressEditData,
     setAddressEditData,
+    setShippingMethod,
+    shippingMethod,
   };
 };
 

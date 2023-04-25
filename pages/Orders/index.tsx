@@ -1,3 +1,4 @@
+import { _defaultTemplates } from '@configs/template.config';
 import { getServerSideProps } from '@controllers/getServerSideProps';
 import OrdersTemplate from '@templates/Orders';
 import { NextPage } from 'next';
@@ -5,7 +6,7 @@ import { NextPage } from 'next';
 const Orders: NextPage = () => {
   return (
     <>
-      <OrdersTemplate id='2' />
+      <OrdersTemplate id={_defaultTemplates.order} />
     </>
   );
 };

@@ -5,7 +5,6 @@ const SizeChart: React.FC = () => {
   const sizeChart = useTypedSelector_v2(
     (state) => state.product.product.sizeChart,
   );
-  console.log(sizeChart, 'this is size chart');
 
   return (
     <div className='mt-[30px]'>

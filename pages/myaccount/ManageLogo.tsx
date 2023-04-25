@@ -1,11 +1,11 @@
-import { type2 } from '@constants/dummy.constant';
+import { _defaultTemplates } from '@configs/template.config';
 import { getServerSideProps } from '@controllers/getServerSideProps';
 import ManageLogo from '@templates/ManageLogo';
 
 const index = () => {
   return (
     <>
-      <ManageLogo id={type2} />
+      <ManageLogo id={_defaultTemplates.manageLogo} />
     </>
   );
 };

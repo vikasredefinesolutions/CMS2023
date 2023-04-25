@@ -1,3 +1,4 @@
+import { _defaultTemplates } from '@configs/template.config';
 import React from 'react';
 import { _WriteReviewTemplates } from './WriteReview';
 import WriteReviewTemplate_1 from './WriteReviewTemplate_1';
@@ -16,7 +17,7 @@ const ReviewTemplate: _WriteReviewTemplates = {
 };
 
 const WriteReview: React.FC<_props> = ({ id }) => {
-  const ReviewTemplateSelected = ReviewTemplate[`type${id}` as 'type1'];
+  const ReviewTemplateSelected = ReviewTemplate[_defaultTemplates.writeReview];
 
   return <ReviewTemplateSelected />;
 };

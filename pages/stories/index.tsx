@@ -1,3 +1,4 @@
+import { _defaultTemplates } from '@configs/template.config';
 import { __pageTypeConstant } from '@constants/global.constant';
 import { __SuccessErrorText } from '@constants/successError.text';
 import { _Brand } from '@definations/brand';
@@ -28,7 +29,7 @@ const Stories: React.FC<_Props> = (props) => {
     <StoryList_Template
       list={props.list}
       brands={props.brands || []}
-      id={props.id}
+      id={_defaultTemplates.storyList}
     />
   );
 };

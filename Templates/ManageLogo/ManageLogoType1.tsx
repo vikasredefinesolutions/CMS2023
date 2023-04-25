@@ -1,16 +1,16 @@
+import MyAccountTabs from '@appComponents/common/MyAccountTabsType1';
 import NxtImage from '@appComponents/reUsable/Image';
 import { __pagesText } from '@constants/pages.text';
-import { LogoList } from '@definations/APIs/logo.res';
 import _ from 'lodash';
 import moment from 'moment';
 import { NextPage } from 'next';
 import Link from 'next/link';
 import { _ManageLogoProps } from './managelogo';
 
-
 const ManageLogoType1: NextPage<_ManageLogoProps> = ({ logoList }) => {
   return (
     <>
+      <MyAccountTabs />
       <section className='container mx-auto mt-[50px] mb-[50px]'>
         <div className='bg-[#ffffff]'>
           <div className='overflow-auto max-h-screen border border-[#ddd]'>

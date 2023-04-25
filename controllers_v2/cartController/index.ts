@@ -8,7 +8,7 @@ import { addToCart, deleteItemCart } from '@services/cart.service';
 import {
   FetchColors,
   FetchInventoryById,
-  FetchProductById,
+  FetchProductById
 } from '@services/product.service';
 import { generateImageUrl, getAddToCartObject } from 'helpers_v2/common.helper';
 import { GetCustomerId, useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
@@ -17,7 +17,7 @@ import {
   EmpCustomQtyPriceType,
   FileToUpload,
   LogoLocationDetail,
-  ShoppingCartLogoPersonViewModel,
+  ShoppingCartLogoPersonViewModel
 } from './cartController.type';
 
 const CartController = () => {
@@ -37,7 +37,11 @@ const CartController = () => {
 
   const { loggedIn: isEmployeeLoggedIn, isLoadingComplete } =
     useTypedSelector_v2((state) => state.employee);
-  const storeId = useTypedSelector_v2((state) => state.store.id);
+  const {
+    id: storeId,
+    sewOutCharges,
+    isSewOutEnable,
+  } = useTypedSelector_v2((state) => state.store);
   const customerId = GetCustomerId();
   const [empCustomQtyPrice, setEmpCustomQtyPrice] =
     useState<EmpCustomQtyPriceType>([]);
@@ -151,20 +155,23 @@ const CartController = () => {
             isEmployeeLoggedIn,
             sizeQtys,
             productDetails: {
+              productId: cartProduct.productId,
               color: {
                 altTag: cartProduct.colorImage,
                 imageUrl: cartProduct.colorImage,
                 name: cartProduct.attributeOptionValue,
                 attributeOptionId: +cartProduct.attributeOptionId,
               },
-              productId: cartProduct.productId,
+              inventory: null,
             },
             total: {
               totalPrice,
               totalQty,
             },
             shoppingCartItemId: cartProduct.shoppingCartItemsId,
-            logos: logoDetails,
+            logos: null,
+            isSewOutEnable: isSewOutEnable,
+            sewOutCharges: sewOutCharges,
           });
 
           try {

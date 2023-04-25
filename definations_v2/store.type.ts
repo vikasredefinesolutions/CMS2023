@@ -1,11 +1,3 @@
-export type CartCharges = {
-  isSmallRun: boolean;
-  smallRunLimit: number;
-  smallRunFeesCharges: number;
-  isLogoSetupCharges: boolean;
-  logoSetupCharges: number;
-};
-
 export interface _StoreReturnType {
   storeId: null | number;
   layout: null | string;
@@ -15,13 +7,35 @@ export interface _StoreReturnType {
   code: string;
   storeName: string | null;
   isAttributeSaparateProduct: boolean;
-  cartCharges: null | CartCharges;
+  cartCharges: null | {
+    isSmallRun: boolean;
+    smallRunLimit: number;
+    smallRunFeesCharges: number;
+    isLogoSetupCharges: boolean;
+    logoSetupCharges: number;
+  };
   urls: {
     logo: string;
     favicon: string;
   };
-  isSewOutEnable: boolean;
-  sewOutCharges: number;
   mediaBaseUrl: string;
+  sewOutCharges: number;
   imageFolderPath: string;
+  isSewOutEnable: boolean;
+  shippingChargeType: number;
 }
+
+export interface _FetchStoreConfigurations {
+  id: number;
+  status: string;
+  store_id: number;
+  config_name: string;
+  created_at: null | string;
+  updated_at: null | string;
+  config_value: null | string;
+}
+export type StoreConfigurationConfigs =
+  | 'footer'
+  | 'customScript'
+  | 'customHomeScript'
+  | 'customGlobalBodyScript';

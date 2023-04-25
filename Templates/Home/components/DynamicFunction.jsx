@@ -1,25 +1,110 @@
+export const dynamicHalfSizeBoxes = (dataArr, selectedObj) => {
+  let strHTML = "";
+  if(dataArr.length > 0) {
+      let cnt = 1;
+      dataArr.forEach(function (item) {
+
+
+          strHTML += '<div class="w-full md:w-1/2 p-px">';
+          strHTML += '<div class="text-center h-full bg-gray-50 p-6 lg:py-12 lg:px-16 md:rounded-tl-lg '+(item.ImageNumber === 'Number' ? ' relative' : '')+' '+ (item.HOverColor ? item.HOverColor : '')+'" style="'+ (item.BlockBg ? "background: "+item.BlockBg+";" : "") + '">';
+
+          if(item.ImageNumber === 'Number')
+          {
+              strHTML += '<div class="inset-x-0 flex justify-center items-center w-12 h-12 mx-auto rounded-full bg-gray-500 text-gray-50 font-bold font-heading -top-6 absolute">';
+              strHTML += cnt;
+              strHTML += '</div>';
+          }
+          else if(item.ImageNumber === 'Image')
+          {
+              strHTML += '<span class="inline-block mx-auto mb-6 flex items-center justify-center bg-gray-400 rounded-full w-16 h-16">';
+              strHTML += '<img src="'+item.ImageNumber_image+'" />';
+              strHTML += '</span>';
+
+          }
+          else
+          {
+              strHTML += '<div class="text-center h-full bg-gray-50 p-6 lg:py-12 lg:px-16 md:rounded-tl-lg">';
+              if(item.ImageNumber_icon_type === 'googlematerial')
+              {
+                  strHTML += '<span class="material-icons-outlined">'+item.ImageNumber_icon_symbol+'</span>';
+              }
+              else if (item.ImageNumber_icon_type === "googlesymbol") {
+                  strHTML += '<span class="material-symbols-outlined">'+item.ImageNumber_icon_symbol+'</span>';
+              }
+      
+              strHTML += '</div>';
+
+          }
+          // strHTML += '<div class="inset-x-0 -mt-6 flex justify-center items-center w-12 h-12 mx-auto rounded-full bg-gray-500 text-gray-50 font-bold font-heading">';
+          // if(item.ImageNumber === "Number")
+          //     strHTML += cnt;
+          // else
+          //     strHTML += "<img src='"+item.ImageNumber_image+"' />";
+          cnt++;
+          
+          strHTML += '<div class="mb-4 text-box-h2 font-heading">'+item.Headline+'</div>'
+          strHTML += '<div class="text-box-p mt-4 leading-loose">';
+          strHTML += item.Description
+          strHTML += '</div>';
+          strHTML += '</div>';
+          strHTML += '</div>';
+          strHTML += '</div>';
+
+      });
+  }
+
+  
+  return strHTML;
+
+}
 export const numberdescriptionblock = (dataArr, selectedObj) => {
   let strHTML = '';
   if (dataArr.length > 0) {
     let count = 1;
     dataArr.forEach(function (item) {
-      strHTML += '<div class="w-full lg:w-1/3 px-4 mb-8">';
-      strHTML +=
-        '<div class="g-gray-50 text-center p-6 rounded" style="' +
-        (item.BlockBg ? 'background: ' + item.BlockBg + ';' : '') +
-        '">';
-      strHTML +=
-        '<div class="inset-x-0 -mt-6 flex justify-center items-center w-12 h-12 mx-auto rounded-full bg-gray-500 text-gray-50 font-bold font-heading">';
-      if (item.ImageNumber === 'Number') strHTML += count;
-      else strHTML += '<img src="' + item.ImageNumber_image + '" />';
-      count++;
-      strHTML += '</div>';
-      strHTML += '<div class="text-box-h4 mt-4">' + item.Headline + '</div>';
-      strHTML += '<div class="text-box-h4 mt-4">';
-      strHTML += item.Description;
-      strHTML += '</div>';
-      strHTML += '</div>';
-      strHTML += '</div>';
+        strHTML += '<div class="w-full lg:w-1/3 px-4 mb-8">';
+        strHTML += '<div class="g-gray-50 text-center p-6 rounded'+(item.ImageNumber === 'Number' ? ' relative' : '')+' '+ (item.HOverColor ? item.HOverColor : '')+'" style="'+ (item.BlockBg ? "background: "+item.BlockBg+";" : "") + '">';
+
+        if(item.ImageNumber === 'Number')
+        {
+            strHTML += '<div class="inset-x-0 flex justify-center items-center w-12 h-12 mx-auto rounded-full bg-gray-500 text-gray-50 font-bold font-heading -top-6 absolute">';
+            strHTML += count;
+            strHTML += '</div>';
+        }
+        else if(item.ImageNumber === 'Image')
+        {
+            strHTML += '<div class="inset-x-0 -mt-6 flex justify-center items-center w-12 h-12 mx-auto rounded-full bg-gray-500 text-gray-50 font-bold font-heading">';
+            strHTML += '<img src="'+item.ImageNumber_image+'" />';
+            strHTML += '</div>';
+
+        }
+        else
+        {
+            strHTML += '<div class="inset-x-0 -mt-6 flex justify-center items-center w-12 h-12 mx-auto font-bold font-heading">';
+            if(item.ImageNumber_icon_type === 'googlematerial')
+            {
+                strHTML += '<span class="material-icons-outlined">'+item.ImageNumber_icon_symbol+'</span>';
+            }
+            else if (item.ImageNumber_icon_type === 'googlesymbol') {
+              strHTML += '<span class="material-symbols-outlined">'+item.ImageNumber_icon_symbol+'</span>';
+           }
+            strHTML += '</div>';
+
+        }
+        // strHTML += '<div class="inset-x-0 -mt-6 flex justify-center items-center w-12 h-12 mx-auto rounded-full bg-gray-500 text-gray-50 font-bold font-heading">';
+        // if(item.ImageNumber === "Number")
+        //     strHTML += cnt;
+        // else
+        //     strHTML += "<img src='"+item.ImageNumber_image+"' />";
+        count++;
+        
+        strHTML += '<div class="text-box-h4 mt-4">'+item.Headline+'</div>'
+        strHTML += '<div class="text-box-h4 mt-4">';
+        strHTML += item.Description
+        strHTML += '</div>';
+        strHTML += '</div>';
+        strHTML += '</div>';
+        strHTML += '</div>';
     });
   }
 
@@ -238,15 +323,14 @@ export const multipleImages = (dataArr, selectedObj) => {
         
         if(selectedObj.selectedVal.TextAppearance != undefined)
             {
-                aprData = selectedObj.selectedVal.TextAppearance.value;
-                if(aprData.text_pos != undefined)
-                {
-                    textPos  = aprData.text_pos;
-                    fontSize = aprData?.font_size ?? 'text-base';
-                    bgOpacity = aprData.bg_opacity;
-                    bgColor = aprData.text_bg_color;
-                    
-                }
+              aprData = selectedObj.selectedVal.TextAppearance.value;
+              textPos  = aprData.text_pos ?? '';
+              fontSize = aprData.font_size ?? '';
+              bgOpacity = aprData.bg_opacity ?? '';
+              bgColor = aprData.text_bg_color ?? '';
+              textHPos = aprData.text_hpos ?? '';
+              textVPos = aprData.text_vpos ?? '';
+              sectionWidth = aprData.sectionWidth ?? ''; 
 
             }
             //fontSize = item.Headline_font_size ?? '';
@@ -265,10 +349,10 @@ export const multipleImages = (dataArr, selectedObj) => {
           if(item.Headline != undefined && item.Headline != '' && item.Headline != null)
           {
 
-                if(textPos != 'top' && textPos != 'bottom' && textPos != '')
-                {
-                  clName = 'flex relative w-full text-white';
-                  headLine += '<div class="flex items-center absolute  inset-0 p-1 lg:p-4 text-white justify-center">';
+                // if(textPos != 'top' && textPos != 'bottom' && textPos != '')
+                // {
+                //   clName = 'flex relative w-full text-white';
+                  headLine += '<div class="flex absolute inset-0 p-1 lg:p-4 text-white '+textHPos +' '+textVPos+'">';
                   headLine += '<div class="" style="background: rgba('+bgColor+','+bgOpacity+'); padding: 20px;">';
                   headLine += '<div class="pb-2 '+ themeClass+ '" style="color:'+fontColor+'">'+item.Headline+'</div>';
                   headLine += '<div>';
@@ -276,13 +360,13 @@ export const multipleImages = (dataArr, selectedObj) => {
                   headLine += '</div>';
                   headLine += '</div>';
                   headLine += '</div>';
-                }
-                else
-                {
-                    headLine += '<div class="text-center bg-white w-full">';
-                    headLine += '<div class="p-4 '+fontSize+'">'+item.Headline+'</div>';
-                    headLine += '</div>';
-                }
+                // }
+                // else
+                // {
+                //     headLine += '<div class="text-center bg-white w-full">';
+                //     headLine += '<div class="p-4 '+fontSize+'">'+item.Headline+'</div>';
+                //     headLine += '</div>';
+                // }
         }
                 
 

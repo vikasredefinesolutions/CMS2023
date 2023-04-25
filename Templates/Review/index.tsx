@@ -1,6 +1,7 @@
 import ForgotModal from '@appComponents/modals/forgotModal';
 import LoginModal from '@appComponents/modals/loginModal';
 import { _modals } from '@appComponents/modals/modal';
+import { _defaultTemplates } from '@configs/template.config';
 import { ProductReviewCounts } from '@services/review';
 import { FetchProductReview } from '@services/review.service';
 import { useTypedSelector_v2 } from 'hooks_v2';
@@ -42,7 +43,7 @@ const Reviews: React.FC<_props> = ({ storeCode, productId }) => {
     setOpenModal(null);
   };
 
-  const ReviewDetails = ProductDetailTemplates['type1'];
+  const ReviewDetails = ProductDetailTemplates[_defaultTemplates.review];
   return (
     <>
       <ReviewDetails
