@@ -97,8 +97,19 @@ export const numberdescriptionblock = (dataArr, selectedObj) => {
         // else
         //     strHTML += "<img src='"+item.ImageNumber_image+"' />";
         count++;
+
+        let hClassName = '';
+
+            if(selectedObj.selected_Values.Headline_final_class != undefined)
+            {
+                hClassName = selectedObj.selected_Values.Headline_final_class.value;
+            }
+            else
+            {
+                hClassName = 'text-box-h4 mt-4';
+            }
         
-        strHTML += '<div class="text-box-h4 mt-4">'+item.Headline+'</div>'
+        strHTML += '<div class="'+hClassName+'">'+item.Headline+'</div>'
         strHTML += '<div class="text-box-h4 mt-4">';
         strHTML += item.Description
         strHTML += '</div>';
