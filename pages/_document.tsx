@@ -55,8 +55,10 @@ class MyDocument extends Document {
           <link
             rel='stylesheet'
             type='text/css'
-            href={`https://www.ystore.us/HTML/RedefineCommerce/Ecom-front/corporategear/tailwin-css-29.css?${Math.random()}`}
+            href={`${_globalStore.blobUrl}/${_globalStore.blobRootDirectory}/${_globalStore.companyId}/store/tailwin-css.css`}
           />
+
+        
 
           <link
             rel='stylesheet'
@@ -122,9 +124,9 @@ class MyDocument extends Document {
           {storeId == 1 && (
             <link rel='stylesheet' type='text/css' href={cssApis[1]} />
           )}
-          {storeId == 21 && (
+          {/* {storeId == 21 && (
             <link rel='stylesheet' type='text/css' href={cssApis[21]} />
-          )}
+          )} */}
           {storeId == 3 && (
             <link rel='stylesheet' type='text/css' href={cssApis[3]} />
           )}
@@ -154,24 +156,41 @@ class MyDocument extends Document {
             <link rel='stylesheet' type='text/css' href={cssApis[22]} />
           )}
           <script type="text/javascript" src='https://platform-api.sharethis.com/js/sharethis.js#property=622863e42e0ffb001379992c&product=sop'></script>
+          
+          {storeId === 21 && <>
+            <link
+            rel='stylesheet'
+            type='text/css'
+            href={`${_globalStore.blobUrl}/${_globalStore.blobRootDirectory}/${_globalStore.companyId}/store/${storeId}/css/main-${storeId}.css`}
+          />
+          
+          </>}
 
+          {storeId === 25 && <>
+            <link
+            rel='stylesheet'
+            type='text/css'
+            href={`${_globalStore.blobUrl}/${_globalStore.blobRootDirectory}/${_globalStore.companyId}/store/${21}/css/main-${21}.css`}
+          />
+          
+          </>}
           
         </Head>
         <body className='font-Outfit bg-white'>
           <Main />
           <NextScript />
 
-          <script
+          <div
             dangerouslySetInnerHTML={{
               __html: _globalStore.customGlobalBodyScript,
             }}
-          ></script>
+          ></div>
 
-          <script
+          <div
             dangerouslySetInnerHTML={{
               __html: _globalStore.customHomeScript,
             }}
-          ></script>
+          ></div>
 
           {/* -----------------------KLEVU------------------------- */}
           <script
