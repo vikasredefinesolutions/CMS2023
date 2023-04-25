@@ -229,25 +229,6 @@ export const updateSetProperties = (element) => {
           x.querySelectorAll('#' + key)[0].innerHTML = value.value;
         }
       }
-       if(value.type === 'iconclass')
-          {
-            let propName = key;
-            let className = '';
-            let icon;
-            let iconFontSize;
-            let iconFontWeight;
-            let iconTextAlignment;
-            let iconFontColor;
-            let iconLeftMargin;
-            let iconRightMargin;
-            let iconTopMargin;
-            let iconBottomMargin;
-            let iconLeftPadding;
-            let iconRightPadding;
-            let iconTopPadding;
-            let iconBottomPadding;
-            let iconType;
-            let bgPropertyName = key;
 
       if(value.type === 'colcount')
       {
@@ -394,6 +375,7 @@ export const updateSetProperties = (element) => {
             }
            
           }
+
       if (value.type === 'finalclass') {
         let propName = key.replace('_final_class', '');
 
