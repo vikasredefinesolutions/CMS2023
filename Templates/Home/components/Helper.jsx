@@ -318,7 +318,6 @@ export const updateSetProperties = (element) => {
                         iconBottomMargin = valueq.value;
                     }
               });
-              console.log(element.selected_Values, "KE", iconType);
               let className = '';
               if (iconType == 'fontawesome') {
                   className += '';
@@ -883,7 +882,7 @@ export const updateSetProperties = (element) => {
         // loop for accordion ittem
         let ourComponetiNString = ReactDOMServer.renderToStaticMarkup(
           <ElementAccordionDisplay
-            selected_Values={element.selected_Values}
+            selectedVal={element.selectedVal}
             acValues={value.value}
           />,
         );

@@ -100,9 +100,9 @@ export const numberdescriptionblock = (dataArr, selectedObj) => {
 
         let hClassName = '';
 
-            if(selectedObj.selected_Values.Headline_final_class != undefined)
+            if(selectedObj.selectedVal.Headline_final_class != undefined)
             {
-                hClassName = selectedObj.selected_Values.Headline_final_class.value;
+                hClassName = selectedObj.selectedVal.Headline_final_class.value;
             }
             else
             {
