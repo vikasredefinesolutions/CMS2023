@@ -23,7 +23,7 @@ export const dynamicHalfSizeBoxes = (dataArr, selectedObj) => {
           }
           else
           {
-              strHTML += '<div class="text-center h-full bg-gray-50 p-6 lg:py-12 lg:px-16 md:rounded-tl-lg">';
+            strHTML += '<div class="inset-x-0 -mt-6 flex justify-center items-center w-12 h-12 mx-auto font-bold font-heading">';
               if(item.ImageNumber_icon_type === 'googlematerial')
               {
                   strHTML += '<span class="material-icons-outlined">'+item.ImageNumber_icon_symbol+'</span>';
