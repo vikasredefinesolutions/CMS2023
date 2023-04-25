@@ -368,7 +368,8 @@ export const updateSetProperties = (element) => {
                   iconStr += ' style="color: '+iconFontColor+';"';
               iconStr += '>'+icon+'</span>';
               //let x = ReactDOM.findDOMNode(props.refArray.current[props.currentComponent]);
-              x.querySelectorAll("#" + key)[0].innerHTML = iconStr;
+              if(x && x.querySelectorAll("#" + key).length > 0)
+                x.querySelectorAll("#" + key)[0].innerHTML = iconStr;
               if (iconTextAlignment) {
                   x.querySelectorAll("#" + propName)[0].className = iconTextAlignment;
               }
