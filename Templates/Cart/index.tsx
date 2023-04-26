@@ -1,5 +1,5 @@
+import CartType3 from './cartType3';
 import CartType1 from './Cart_Type1';
-import CartType3 from './Cart_Type3';
 import CartType4 from './Cart_Type4';
 
 import { _defaultTemplates } from '@configs/template.config';

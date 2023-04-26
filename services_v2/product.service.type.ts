@@ -11,7 +11,6 @@ export interface AddToCartModel {
   shoppingCartItemsDetailModels: _ShoppingCartItemsDetailModel[];
   cartLogoPersonDetailModels: _CartLogoPersonDetailModel[];
   cartLogoPersonModel: _CartLogoPersonModel[];
-  cartLinePersonModels: _CartLinePersonModel[];
 }
 
 export interface _ProductListingConfig {
@@ -34,14 +33,10 @@ export interface _ProductDetailsConfig {
   updated_at: null | string;
 }
 
-export interface _CartLinePersonModel {
-  attributeOptionId: number;
-  attributeOptionValue: string;
-  code: string;
-  cartLinePersonDetailModel: _CartLinePersonDetailModel[];
-}
-
 export interface _CartLinePersonDetailModel {
+  id: number;
+  cartLinePersonId: number;
+  shoppingCartItemsId: number;
   linePrice: number;
   lineQty: number;
   lineAboveLogo: number;
@@ -54,6 +49,7 @@ export interface _CartLinePersonDetailModel {
   linePriceDouble: number;
   logoCartId: number;
   personalizeLocation: string;
+  parentId: number;
 }
 
 export interface _CartLogoPersonModel {

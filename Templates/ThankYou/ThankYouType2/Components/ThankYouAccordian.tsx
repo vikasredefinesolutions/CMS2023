@@ -1,9 +1,9 @@
 import { __pagesText } from '@constants/pages.text';
+import ThankYouBilling from '@templates/ThankYou/CommonComponents/ThankYouBilling';
+import ThankYouSubTotal from '@templates/ThankYou/CommonComponents/ThankYouSubTotal';
 import { _ThankYouProps } from '@templates/ThankYou/ThankYou';
 import React, { Fragment } from 'react';
 import ThankYouProduct from './ThankYouProduct';
-import ThankYouSubTotal from './ThankYouSubTotal';
-import ThankYouBilling from './ThankYouBilling';
 
 const ThankYouAccordian: React.FC<_ThankYouProps> = ({ order }) => {
   return (

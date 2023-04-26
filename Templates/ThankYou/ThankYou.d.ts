@@ -1,4 +1,4 @@
-import React from 'react';
+import { NextPage } from 'next';
 import {
   _MyAcc_OrderBillingDetails,
   _MyAcc_OrderProductDetails,
@@ -12,8 +12,8 @@ export interface _ThankYouProps {
 }
 
 export interface _ThankYouTemplates {
-  type1: React.FC<_ThankYouProps>;
-  type2: React.FC<_ThankYouProps>;
-  type3: React.FC<_ThankYouProps>;
-  type4: React.FC<_ThankYouProps>;
+  type1: NextPage<_ThankYouProps>;
+  type2: NextPage<_ThankYouProps>;
+  type3: NextPage<_ThankYouProps>;
+  type4: NextPage<_ThankYouProps>;
 }

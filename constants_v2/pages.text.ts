@@ -554,5 +554,16 @@ export const __pagesText = {
     removeItem: 'Remove Item',
     remove: 'Remove',
     personalizeItem: 'Personalize Your Item',
+    emptyCart: 'Your Cart is Empty.',
+    emptyCartMessage1: `There's nothing in your cart.`,
+    emptyCartMessage2: '  Not to worry: we have lots of other great finds.',
+    startShopping: 'START SHOPPING',
+    checkOutNow: 'CHECKOUT NOW',
+    continueShopping: 'CONTINUE SHOPPING',
+    shoppingCart: 'Shopping Cart',
+    chestLineLimit:
+      'Limit 26 characters (including spaces) for Chest personalization.',
+    sleeveLineLimit:
+      'Limit 20 characters (including spaces) for Sleeve personalization.',
   },
 };

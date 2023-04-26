@@ -41,6 +41,7 @@ import router from 'next/router';
 import { ChangeEvent, useEffect, useState } from 'react';
 
 import { __pagesConstant } from '@constants/pages.constant';
+import CartController from '@controllers/cartController';
 import { CustomerAddress } from '@definations/APIs/user.res';
 import { _shippingMethod } from '@templates/checkout/checkout';
 import CheckoutAddressForm, {
@@ -105,6 +106,7 @@ const CheckoutController = () => {
   const customerId = GetCustomerId();
   const { totalPrice, subTotal, salesTax, discount, creditBalance } =
     GetCartTotals();
+  const { endUserName } = CartController();
 
   const billingForm = CheckoutAddressForm({});
   const shippingForm = CheckoutAddressForm({});
@@ -388,6 +390,7 @@ const CheckoutController = () => {
         orderStatus: __pagesConstant.checkoutPage.orderStatus,
         transactionStatus: __pagesConstant.checkoutPage.transactionStatus,
         shippingMethod: shippingMethod[0].name,
+        endUserName: endUserName,
       };
       const order = {
         orderModel,

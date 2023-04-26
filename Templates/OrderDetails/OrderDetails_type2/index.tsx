@@ -108,7 +108,7 @@ const OrderDetails_type2: React.FC = () => {
           </div>
         </div>
       ) : (
-        <section className='container mx-auto mt-[50px] mb-[50px]'>
+        <section className='container mx-auto  mb-[50px]'>
           <div className='block lg:flex lg:space-x-10'>
             <div className='w-4/4 lg:w-4/5'>
               <div className='bg-[#ffffff]'>

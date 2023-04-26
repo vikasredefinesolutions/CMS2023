@@ -5,7 +5,6 @@ import { _ProductInventoryTransfomed } from '@definations/APIs/inventory.res';
 import { ActionCreatorWithPayload } from '@reduxjs/toolkit/dist/createAction';
 import { CartLogoPersonDetailModel, CartLogoPersonModel } from '@services/cart';
 import {
-  _CartLinePersonModel,
   _CartLogoPersonDetailModel,
   _CartLogoPersonModel,
 } from '@services/product.service.type';
@@ -161,7 +160,6 @@ export const extractCookies = (
 const personalization: {
   defaultLogo: _CartLogoPersonModel;
   defaultLogoDetail: _CartLogoPersonDetailModel;
-  defaultLine: _CartLinePersonModel;
 } = {
   defaultLogo: {
     id: 0,
@@ -193,27 +191,6 @@ const personalization: {
     isSewOut: false,
     sewOutAmount: 0,
     reUsableCustomerLogo: 0,
-  },
-  defaultLine: {
-    attributeOptionId: 0,
-    attributeOptionValue: '',
-    code: '',
-    cartLinePersonDetailModel: [
-      {
-        linePrice: 0,
-        lineQty: 0,
-        lineAboveLogo: 0,
-        lineIndividually: 0,
-        lineNumber: 0,
-        lineText: '',
-        lineTotal: 0,
-        lineFont: '',
-        lineColor: '',
-        linePriceDouble: 0,
-        logoCartId: 0,
-        personalizeLocation: '',
-      },
-    ],
   },
 };
 export function setCookie(
@@ -520,7 +497,6 @@ export const getAddToCartObject = async (product: _Props): Promise<CartReq> => {
       ],
       cartLogoPersonModel: cartLogoPersonModel,
       cartLogoPersonDetailModels: cartLogoPersonDetailModels, // for corporate it will be []
-      cartLinePersonModels: [],
     },
   };
 

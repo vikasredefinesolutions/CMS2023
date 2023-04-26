@@ -1,9 +1,9 @@
 import NxtImage from '@appComponents/reUsable/Image';
 import { __pagesText } from '@constants/pages.text';
 import { _MyAcc_OrderProductDetails } from '@definations/APIs/user.res';
+import ThankYouProductTable from '@templates/ThankYou/CommonComponents/ThankYouProductTable';
 import Link from 'next/link';
 import React from 'react';
-import ThankYouProductTable from './ThankYouProductTable';
 
 interface _props {
   product: _MyAcc_OrderProductDetails;

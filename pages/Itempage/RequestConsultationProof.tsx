@@ -42,6 +42,8 @@ export const getServerSideProps: GetServerSideProps = async (
       sewOutCharges: 0,
       isSewOutEnable: false,
       shippingChargeType: 0,
+      firstLineCharges: 0,
+      secondLineCharges: 0,
     },
     product: null,
     color: null,

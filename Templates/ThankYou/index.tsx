@@ -6,7 +6,7 @@ import React from 'react';
 import { _ThankYouTemplates } from './ThankYou';
 import ThankYouType1 from './ThankYouType1/ThankYou_Type1';
 import ThankYouType2 from './ThankYouType2/ThankYou_Type2';
-import ThankYouType3 from './ThankYou_Type3';
+import ThankYouType3 from './ThankYouType3/ThankYou_Type3';
 import ThankYouType4 from './ThankYou_Type4';
 
 interface _props {
@@ -14,7 +14,7 @@ interface _props {
     billing: _MyAcc_OrderBillingDetails | null;
     product: _MyAcc_OrderProductDetails[] | null;
   };
-  id: 'type1' | 'type2';
+  id: 'type1' | 'type2' | 'type3';
 }
 
 const ThankYouTemplates: _ThankYouTemplates = {

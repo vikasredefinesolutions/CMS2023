@@ -4,8 +4,8 @@ import {
   _MyAcc_OrderBillingDetails,
   _MyAcc_OrderProductDetails,
 } from '@definations/APIs/user.res';
+import ThankYouHeader from '../CommonComponents/ThankYouHeader';
 import ThankYouAccordian from './Components/ThankYouAccordian';
-import ThankYouHeader from './Components/ThankYouHeader';
 
 interface _props {
   order: {

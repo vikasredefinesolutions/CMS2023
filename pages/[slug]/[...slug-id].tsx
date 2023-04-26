@@ -72,6 +72,7 @@ const SlugPage: NextPage<_SlugServerSideProps | _SlugServerSide_WentWrong> = (
         {...page?.productDetails}
         storeCode={storeCode}
         storeTypeId={_store.storeTypeId}
+        productDetailsTemplateId={page.productDetails.productDetailsTemplateId}
       />
     );
   }
@@ -94,13 +95,13 @@ const SlugPage: NextPage<_SlugServerSideProps | _SlugServerSide_WentWrong> = (
             storeId={pageMetaData.storeId}
             slug={pageMetaData.slug}
             seType={pageMetaData.type}
-            id={`type${page.productListing.bannerType}` as 'type1'}
+            id={page.productListing.bannerType}
           />
           <ProductListing
             pageData={page?.productListing}
             slug={pageMetaData?.slug}
             seType={pageMetaData?.type}
-            id={`type${page.productListing.templateId}` as 'type1'}
+            id={page.productListing.templateId}
           />
         </Spinner>
       </>

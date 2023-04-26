@@ -110,6 +110,14 @@ export interface _HeaderProps {
   };
   menuItems: _MenuItems | null;
 }
+export interface _HeaderPropsWithTemplateid {
+  storeCode: string;
+  logoUrl: {
+    desktop: string;
+  };
+  menuItems: _MenuItems | null;
+  headerTemplateId: string;
+}
 
 export interface _HeaderTemplates {
   type1: NextPage<_HeaderProps, _HeaderProps>;

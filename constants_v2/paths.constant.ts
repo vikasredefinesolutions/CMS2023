@@ -16,7 +16,7 @@ export const paths = {
   GIFT_CARD_DETAILS: '/giftcards/:giftId',
   loggedInMenu: {
     title: '/myaccount/accountsettings',
-    order: '/orders',
+    order: '/Orders',
     settings: '/myaccount/accountsettings',
     help: '/help',
     manageLogo: '/ManageLogo/ManageLogo',
@@ -25,8 +25,8 @@ export const paths = {
     account_settings: '/myaccount/accountsettings',
     user_management: '/myaccount/UserManagement',
     manage_logo: '/myaccount/ManageLogo',
-    orders: '/orders',
-    order_details: 'orders/Orderdetails',
+    orders: '/Orders',
+    order_details: 'Orders/Orderdetails',
     address: '/myaccount/Address',
     edit_shipping_address: '/myaccount/edit-shipping-address',
     edit_billing_address: '/myaccount/edit-billing-address',
@@ -34,7 +34,7 @@ export const paths = {
     editBillingAddress: 'edit-billing-address',
   },
   SIGN_UP: '/CreateAccount/SignUp',
-  THANK_YOU: '/orders/Thankyou',
+  THANK_YOU: '/Orders/Thankyou',
   thankYou: {
     notAuthorized: defaultRoute,
   },

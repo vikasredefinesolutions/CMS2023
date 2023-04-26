@@ -6,6 +6,18 @@ export type _CategorySiteMap = {
   storeId: number;
   subRows: [];
 };
+export type _pagesSiteMap = {
+  id: number;
+  name: string;
+  type: string;
+  meta_Title: string;
+  meta_Description: string;
+  meta_Keywords: string;
+  storeId: number;
+  slug: string;
+  description: null;
+};
+
 export type _BrandsSiteMap = {
   items: { dataType: string; brands: [] };
   seName: string;
@@ -39,4 +51,5 @@ export interface _siteMapTemplates {
 export interface _Sitemap_ExpectedProps {
   brandItems: _Brand[] | null | undefined;
   categories: _CategorySiteMap[] | null | undefined;
+  pageSiteMap: _pagesSiteMap[] | null;
 }

@@ -126,6 +126,9 @@ export enum __Error {
   noPageTypeFound = 'PageType is missing',
 }
 
+export const maximumWordsUnderChestLogo = 26;
+export const maximumWordsUnderSleeveLogo = 20;
+
 export const __LocalStorage = {
   recetlyViewedProducts: '_rcvwp',
   compareProducts: '_cmpPdts',

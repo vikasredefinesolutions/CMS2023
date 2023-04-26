@@ -1,9 +1,31 @@
+import { _CartLinePersonDetailModel } from './product.service.type';
+
 export interface ShoppingCartItemDetailsViewModel {
   id: number;
   attributeOptionId: number;
   attributeOptionValue: string;
   qty: number;
   price: number;
+  shoppingCartLineOnePersonViewModel: ShoppingCartLinePersonViewModel[];
+  shoppingCartLineTwoPersonViewModel: ShoppingCartLinePersonViewModel[];
+}
+
+export interface ShoppingCartLinePersonViewModel {
+  id: number;
+  cartLinePersonId: number;
+  linePrice: number;
+  lineqty: string;
+  lineabovelogo: number;
+  lineindividually: number;
+  lineNumber: number;
+  linetext: string;
+  linetotal: number;
+  linefont: string;
+  linecolor: string;
+  sku: null;
+  size: null;
+  name: null;
+  parentId: number;
 }
 
 export interface ShoppingCartLogoPersonViewModel {
@@ -36,7 +58,6 @@ export interface CartObject {
   txtcode: unknown;
   seName: string;
   cartLinePersonModels?: unknown[];
-  shoppingcartLinePersonModels: unknown[];
 }
 
 export type CartList = CartObject[];
@@ -145,13 +166,6 @@ export interface CartLinePersonDetailModel {
   personalizeLocation: string;
 }
 
-export interface CartLinePersonModel {
-  attributeOptionId: number | string;
-  attributeOptionValue: string;
-  code: string;
-  cartLinePersonDetailModel: CartLinePersonDetailModel[];
-}
-
 export interface AddToCartModel {
   customerId: number;
   productId: number;
@@ -161,8 +175,84 @@ export interface AddToCartModel {
   shoppingCartItemsDetailModels: ShoppingCartItemsDetailModel[];
   cartLogoPersonModel: CartLogoPersonModel[];
   cartLogoPersonDetailModels: CartLogoPersonDetailModel[];
-  cartLinePersonModels: CartLinePersonModel[];
 }
 export interface CartReq {
   addToCartModel: AddToCartModel;
+}
+
+export interface CartPersonalizationReq {
+  cartLinePersonDetailModel: _CartLinePersonDetailModel[];
+}
+
+export interface PersonalizationFont {
+  id: number;
+  name: string;
+  image: string;
+  storeId: number;
+  displayOrder: number;
+  recStatus: string;
+  createdBy: number;
+  modifiedBy: number;
+  createdDate: string;
+  modifiedDate: string;
+  rowVersion: string;
+  location: string;
+  ipAddress: string;
+  macAddress: string;
+}
+
+export interface PersonalizationLocation {
+  id: number;
+  name: string;
+  storeId: number;
+  displayOrder: number;
+  recStatus: string;
+  createdBy: number;
+  modifiedBy: null;
+  createdDate: string;
+  modifiedDate: null;
+  rowVersion: string;
+  location: string;
+  ipAddress: string;
+  macAddress: string;
+}
+
+export interface PersonalizationColor {
+  id: number;
+  name: string;
+  storeId: number;
+  displayOrder: number;
+  recStatus: string;
+  createdBy: number;
+  modifiedBy: null;
+  createdDate: string;
+  modifiedDate: null;
+  rowVersion: string;
+  location: string;
+  ipAddress: string;
+  macAddress: string;
+}
+export interface updateCartQuantity {
+  cartLogoPersonId: number;
+  quantity: number | undefined;
+  attributeOptionId: number | string;
+}
+
+export interface updateCartQuantityRes {
+  updateCartLinePersonModel: updateCartQuantity;
+}
+
+export interface removeParticularSizeProduct {
+  cartLogoPersonId: number;
+  attributeOptionId: number | string;
+}
+export interface removeParticularSizeProductRes {
+  deletecartlogopersonmodel: deletecartlogopersonmodel;
+}
+
+export interface removeLogoRes {
+  deletecartlogopersondetailmodel: {
+    cartLogoPersonDetailId: number;
+    shoppingCartItemsId: number;
+  };
 }

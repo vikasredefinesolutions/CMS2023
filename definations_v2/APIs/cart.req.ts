@@ -93,7 +93,6 @@ export interface AddToCartModel {
   shoppingCartItemsDetailModels: ShoppingCartItemsDetailModel[];
   cartLogoPersonModel: CartLogoPersonModel[];
   cartLogoPersonDetailModels: CartLogoPersonDetailModel[];
-  cartLinePersonModels: CartLinePersonModel[];
 }
 export interface CartReq {
   addToCartModel: AddToCartModel;

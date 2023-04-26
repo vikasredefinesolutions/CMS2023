@@ -185,6 +185,8 @@ export const fetchStoreDetails = async (
       favicon: '',
     },
     sewOutCharges: 0,
+    firstLineCharges: 0,
+    secondLineCharges: 0,
     isSewOutEnable: false,
     mediaBaseUrl: '',
     shippingChargeType: 0,
@@ -217,6 +219,8 @@ export const fetchStoreDetails = async (
           };
           store.isSewOutEnable = res.isSewOutEnable;
           store.sewOutCharges = res.sewOutCharges;
+          store.firstLineCharges = res.firstLineCharges;
+          store.secondLineCharges = res.secondLineCharges;
           store.shippingChargeType = res.shippingChargeType;
         }
         if (response[1].status === 'fulfilled' && response[1].value) {

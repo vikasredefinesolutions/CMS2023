@@ -8,6 +8,7 @@ export interface _ProductDetailsProps {
   SEO: null | _ProductSEO;
   alike: null | _ProductsAlike[];
   sectionView: string[] | [];
+  productDetailsTemplateId: string;
 }
 
 export interface _ProductDoNotExist {

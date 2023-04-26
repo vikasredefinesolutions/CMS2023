@@ -1,6 +1,6 @@
 import ProductDetails_Type1 from './ProductDetailsType1';
 
-import { _defaultTemplates } from '@configs/template.config';
+import { useTypedSelector_v2 } from '@hooks_v2/index';
 import { NextPage } from 'next';
 import { _StoreCache } from '../../pages/[slug]/slug';
 import ProductDetails_Type2 from './productDetailType2';
@@ -21,8 +21,11 @@ const ProductDetailTemplates: _ProductDetailsTemplates = {
 const ProductDetails: NextPage<_ProductDetailsProps & _StoreCache> = (
   props,
 ) => {
+  const store = useTypedSelector_v2((state) => state);
   const ProductDetails =
-    ProductDetailTemplates[_defaultTemplates.productDetails];
+    ProductDetailTemplates[
+      `type${props.productDetailsTemplateId}` as 'type1' | 'type2'
+    ];
   return <ProductDetails {...props} />;
 };
 

@@ -46,9 +46,6 @@ const InventoryAvailability: React.FC<_props> = ({
           min={0}
           value={value}
           max={qty}
-          style={{
-            border: value ? '1px solid red' : '',
-          }}
           onChange={handleChange}
         />
       </div>

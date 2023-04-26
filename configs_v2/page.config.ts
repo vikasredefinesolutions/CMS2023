@@ -3,11 +3,11 @@
 export const _Store = {
   type1: 'CG',
   type2: 'GG',
-  type3: 'PKHG',
+  type3: 'pkhealth',
   type4: 'DI',
   type5: 'BG-GG',
   type6: 'BCTOGO',
-  type7: 'BSTBEER',
+  type7: 'BBCPROD',
   type8: 'bcorp',
   type9: 'betahumana',
   type10: 'cyxtera',

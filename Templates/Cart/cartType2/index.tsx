@@ -1,6 +1,19 @@
+import { paths } from '@constants/paths.constant';
+import { useTypedSelector_v2 } from '@hooks_v2/index';
+import {
+  PersonalizationColor,
+  PersonalizationFont,
+  PersonalizationLocation,
+} from '@services/cart';
+import {
+  getPersonalizationColor,
+  getPersonalizationFont,
+  getPersonalizationLocation,
+} from '@services/cart.service';
 import CartSummarry from '@templates/cartSummarry';
 import CartItem from 'Templates/cartItem';
-import React from 'react';
+import Link from 'next/link';
+import React, { useEffect, useState } from 'react';
 import { _CartProps } from '../Cart';
 import EmptyCart from './components/emptyCart';
 
@@ -17,6 +30,32 @@ const CartType2: React.FC<_CartProps> = ({
   loadProduct,
   setShowAddOtf,
 }) => {
+  const storeId = useTypedSelector_v2((state) => state.store.id);
+  const [availableFont, setAvailableFont] = useState<
+    PersonalizationFont[] | []
+  >([]);
+  const [availableLocation, setAvailableLocation] = useState<
+    PersonalizationLocation[] | []
+  >([]);
+  const [availableColor, setAvailableColor] = useState<
+    PersonalizationColor[] | []
+  >([]);
+  useEffect(() => {
+    if (storeId) {
+      getPersonalizationFont(storeId).then((res) => {
+        setAvailableFont(res);
+      });
+      getPersonalizationColor(storeId).then((res) => {
+        setAvailableColor(res);
+      });
+      getPersonalizationLocation(storeId).then((res) => {
+        setAvailableLocation(res);
+      });
+    }
+  }, [storeId]);
+  const isEmployeeLoggedIn = useTypedSelector_v2(
+    (state) => state.employee.loggedIn,
+  );
   if (!cartData || cartData.length === 0) {
     return <EmptyCart />;
   }
@@ -25,7 +64,7 @@ const CartType2: React.FC<_CartProps> = ({
     <section id='' className='mt-[20px]'>
       <div className='bg-white'>
         <div className='container mx-auto'>
-          <form className='flex flex-wrap -mx-3 -mt-3 cart-box'>
+          <div className='flex flex-wrap -mx-3 -mt-3 cart-box'>
             <section
               aria-labelledby='cart-heading'
               className='w-full lg:w-8/12 md:w-7/12 pl-[15px] pr-[15px] mt-[15px]'
@@ -43,12 +82,16 @@ const CartType2: React.FC<_CartProps> = ({
                   employeeAmtChangeHandler,
                   amtQtyBlurHandler,
                   loadProduct,
+                  setAvailableColor,
+                  availableFont,
+                  availableLocation,
+                  availableColor,
                 }}
               />
               <div className='mt-[16px] mb-[16px]'>
-                <button className='btn btn-lg btn-secondary'>
-                  KEEP SHOPPING
-                </button>
+                <Link href={paths.HOME}>
+                  <a className='btn btn-lg btn-secondary'>KEEP SHOPPING</a>
+                </Link>
               </div>
             </section>
             <section
@@ -62,7 +105,7 @@ const CartType2: React.FC<_CartProps> = ({
                 coupon={coupon}
               />
             </section>
-          </form>
+          </div>
         </div>
       </div>
     </section>

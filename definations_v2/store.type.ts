@@ -20,6 +20,8 @@ export interface _StoreReturnType {
   };
   mediaBaseUrl: string;
   sewOutCharges: number;
+  firstLineCharges: number;
+  secondLineCharges: number;
   imageFolderPath: string;
   isSewOutEnable: boolean;
   shippingChargeType: number;
@@ -38,4 +40,5 @@ export type StoreConfigurationConfigs =
   | 'footer'
   | 'customScript'
   | 'customHomeScript'
-  | 'customGlobalBodyScript';
+  | 'customGlobalBodyScript'
+  | 'header_config';

@@ -1,5 +1,7 @@
-import { _defaultTemplates } from '@configs/template.config';
-import { _HeaderProps, _HeaderTemplates } from '@definations/header.type';
+import {
+  _HeaderPropsWithTemplateid,
+  _HeaderTemplates,
+} from '@definations/header.type';
 import { NextPage } from 'next';
 import Header_Type1 from './header_Type1';
 import Header_Type2 from './header_Type2';
@@ -12,8 +14,15 @@ const HeaderTemplates: _HeaderTemplates = {
   type3: Header_Type3,
   type4: Header_Type4,
 };
-const Header: NextPage<_HeaderProps> = ({ storeCode, logoUrl, menuItems }) => {
-  const HeaderTemplate = HeaderTemplates[_defaultTemplates.header];
+const Header: NextPage<_HeaderPropsWithTemplateid> = ({
+  storeCode,
+  logoUrl,
+  menuItems,
+  headerTemplateId,
+}) => {
+  const template_Id: string = `type${headerTemplateId}`;
+  const HeaderTemplate =
+    HeaderTemplates[(template_Id as 'type1') || 'type2'] || 'type3' || 'type4';
   return (
     <HeaderTemplate
       storeCode={storeCode}

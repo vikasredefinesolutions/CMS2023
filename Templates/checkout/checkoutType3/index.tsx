@@ -1,0 +1,206 @@
+import { checkoutPages } from '@constants/enum';
+import CartController from '@controllers/cartController';
+import { useTypedSelector_v2 } from '@hooks_v2/index';
+import CartItem from '@templates/cartItem';
+import CartSummarry from '@templates/cartSummarry';
+import { FC } from 'react';
+import { CTProps } from '../checkout';
+import AddAddress from './components/AddAddressType1';
+import CheckoutAddress from './components/AddressType1';
+import CreatePassword from './components/CreatePasswprdType1';
+import LoginEmail from './components/LoginEmailType1';
+import LoginPassword from './components/LoginPasswordType1';
+import PaymentType1 from './components/PaymentType1';
+import PurchaseOrderType3 from './components/PaymentType1/components/PurchaseOrderType1';
+
+const ChekoutType3: FC<CTProps> = ({
+  couponInputChangeHandler,
+  couponSubmitHandler,
+  showApplyButton,
+  coupon,
+  currentPage,
+  checkEmail,
+  continueAsGuest,
+  createAccountHandler,
+  allowGuest,
+  loginCustomer,
+  showAddAddress,
+  reviewOrder,
+  setShippingAddress,
+  useShippingAddress,
+  billingForm,
+  shippingForm,
+  cartData,
+  paymentFieldUpdateHandler,
+  paymentMethod,
+  updatePaymentMethod,
+  placeOrder,
+  detectCardType,
+  shippingAdress,
+  billingAdress,
+  setAddressType,
+}) => {
+  const { endUserDisplay, setEndUserName } = CartController();
+
+  const userid = useTypedSelector_v2((state) => state);
+  console.log('userid ', userid);
+
+  return (
+    <div className='container mx-auto pl-[15px] pr-[15px] mt-[20px] mb-[50px]'>
+      <div className='flex flex-wrap justify-between -mx-[15px]'>
+        <div className='w-full md:w-8/12 lg:w-[72%] pl-[15px] pr-[15px]'>
+          {currentPage === checkoutPages.reviewOrder ? (
+            <div id='OrderReview'>
+              <div className='mb-[12px] mt-[16px]'>
+                <hr />
+              </div>
+              <CartItem
+                {...{
+                  isRemovable: false,
+                  cartData: cartData,
+                }}
+              />
+            </div>
+          ) : (
+            <>
+              <div className='flex justify-between items-center bg-light-gray w-full pl-[15px] pr-[15px] pt-[17px] pb-[17px] mb-[20px]'>
+                <div className='text-title-text mr-[15px] font-semibold'>
+                  Checkout
+                </div>
+                <div className='text-[#8b0520] text-medium-text tracking-normal'>
+                  All fields marked * are required.
+                </div>
+              </div>
+              <div id='LoginMain'>
+                {currentPage === checkoutPages.login && (
+                  <LoginEmail checkEmail={checkEmail} />
+                )}
+                {currentPage === checkoutPages.createAccount && (
+                  <CreatePassword
+                    continueAsGuest={continueAsGuest}
+                    createAccountHandler={createAccountHandler}
+                    allowGuest={allowGuest}
+                  />
+                )}
+                {currentPage === checkoutPages.password && (
+                  <LoginPassword loginCustomer={loginCustomer} />
+                )}
+              </div>
+              {currentPage === checkoutPages.address && (
+                <div id='ShippingPaymentMain'>
+                  <div className='flex flex-wrap -mx-[15px] -mt-[21px]'>
+                    <div className='w-full lg:w-1/2 pl-[15px] pr-[15px] pt-[15px] pb-[15px]'>
+                      {showAddAddress ? (
+                        <AddAddress
+                          refrence={shippingForm}
+                          title={'Shipping Address'}
+                          isBillingForm={false}
+                        />
+                      ) : (
+                        <CheckoutAddress
+                          address={shippingAdress}
+                          addressType={1}
+                          changeClickHandler={() => setAddressType('S')}
+                        />
+                      )}
+                    </div>
+                    <div className='w-full lg:w-1/2 pl-[15px] pr-[15px] pt-[15px] pb-[15px]'>
+                      <PurchaseOrderType3
+                        updatePaymentMethod={updatePaymentMethod}
+                        changeHandler={paymentFieldUpdateHandler}
+                      />
+                      <PaymentType1
+                        changeHandler={paymentFieldUpdateHandler}
+                        paymentMethod={paymentMethod}
+                        updatePaymentMethod={updatePaymentMethod}
+                        detectCardType={detectCardType}
+                      />
+                      {showAddAddress ? (
+                        <AddAddress
+                          refrence={billingForm}
+                          title={'Billing Address'}
+                          setShippingAddress={setShippingAddress}
+                          useShippingAddress={useShippingAddress}
+                          isBillingForm={true}
+                        />
+                      ) : (
+                        <CheckoutAddress
+                          address={billingAdress}
+                          addressType={2}
+                          setShippingAddress={setShippingAddress}
+                          useShippingAddress={useShippingAddress}
+                          changeClickHandler={() => setAddressType('B')}
+                        />
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </>
+          )}
+        </div>
+        <div className='w-full md:w-4/12 lg:w-[27%] pl-[15px] pr-[15px]'>
+          <CartSummarry
+            {...{
+              couponInputChangeHandler,
+              couponSubmitHandler,
+              showApplyButton,
+              coupon,
+            }}
+          />
+          <div id='OrderNoteDiv mt-[20px]'>
+            <div className='mt-[20px] text-medium-text font-[600]'>
+              Patagonia end users are approved on a per project basis.
+            </div>
+            <div className='text-sub-text font-bold &nbsp;trsacking-normal mb-[5px]'>
+              <label>End User Name (your customer) :*</label>
+            </div>
+            <div className='form-group mb-[10px]'>
+              {endUserDisplay && (
+                <div className='text-lg font-semibold mt-4'>
+                  {' '}
+                  End User Name (your customer) :
+                  <span className='text-red-600'>*</span>
+                  <input
+                    type='text'
+                    id='enduserstio'
+                    className='p-2 w-full'
+                    onChange={(event) => setEndUserName(event.target.value)}
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+          <div className='text-medium-text text-[#ff0000] font-semibold mb-[20px]'>
+            If a valid resale certificate is not provided prior to shipment, the
+            applicable sales tax will be calculated and charged.
+          </div>
+          {currentPage === checkoutPages.address && (
+            <div className=''>
+              <button
+                className='btn btn-lg !w-full text-center btn-secondary mb-[8px]'
+                id='btn-review-order'
+                onClick={reviewOrder}
+              >
+                REVIEW ORDER
+              </button>{' '}
+            </div>
+          )}
+          {currentPage === checkoutPages.reviewOrder && (
+            <div className=''>
+              <button
+                className='btn btn-lg !w-full text-center btn-secondary mb-[8px]'
+                id='btn-review-order'
+                onClick={placeOrder}
+              >
+                PLACE ORDER
+              </button>{' '}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ChekoutType3;

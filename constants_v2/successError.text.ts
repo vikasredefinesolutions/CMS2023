@@ -12,4 +12,6 @@ export const __SuccessErrorText = {
 export const commonMessage = {
   somethingWentWrong: 'Something went wrong. Try again later!!!',
   failed: 'Failed',
+  updated: 'Updated Successfully',
+  removed: 'Removed Succesfully',
 };

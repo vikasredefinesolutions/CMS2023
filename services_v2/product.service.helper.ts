@@ -12,7 +12,6 @@ import {
   _AddToCart_LogoCartItems,
   _AddToCart_Payload,
   _AddToCart_PayloadGenerator_Attributes,
-  _CartLinePersonModel,
   _CartLogoPersonDetailModel,
   _CartLogoPersonModel,
   _LogoCartItems_LogoDetails,
@@ -41,7 +40,6 @@ const _default_shoppingCartItemModel: _ShoppingCartItemModel = {
 export const personalization: {
   defaultLogo: _CartLogoPersonModel;
   defaultLogoDetail: _CartLogoPersonDetailModel;
-  defaultLine: _CartLinePersonModel;
 } = {
   defaultLogo: {
     id: 0,
@@ -74,27 +72,6 @@ export const personalization: {
     sewOutAmount: 0,
     reUsableCustomerLogo: 0,
   },
-  defaultLine: {
-    attributeOptionId: 0,
-    attributeOptionValue: '',
-    code: '',
-    cartLinePersonDetailModel: [
-      {
-        linePrice: 0,
-        lineQty: 0,
-        lineAboveLogo: 0,
-        lineIndividually: 0,
-        lineNumber: 0,
-        lineText: '',
-        lineTotal: 0,
-        lineFont: '',
-        lineColor: '',
-        linePriceDouble: 0,
-        logoCartId: 0,
-        personalizeLocation: '',
-      },
-    ],
-  },
 };
 
 export const singleColor_addToCart_PayloadGenerator = async (
@@ -103,7 +80,6 @@ export const singleColor_addToCart_PayloadGenerator = async (
   let shoppingCartItemsDetailModel: _ShoppingCartItemsDetailModel[] = [];
   let cartLogoPersonModel: _CartLogoPersonModel[] = [];
   let cartLogoPersonDetailModels: _CartLogoPersonDetailModel[] = [];
-  let cartLinePersonModel: _CartLinePersonModel[] = [];
   if (cart.cartItems) {
     shoppingCartItemsDetailModel = cart.cartItems.map((item) => item);
   }
@@ -154,14 +130,6 @@ export const singleColor_addToCart_PayloadGenerator = async (
     });
   }
 
-  if (cart.personalization.lineCartItems) {
-    cartLinePersonModel = cart.personalization.lineCartItems.map((line: []) => {
-      return {
-        ...personalization.defaultLine,
-      };
-    });
-  }
-
   return {
     addToCartModel: {
       customerId: cart.userId,
@@ -181,7 +149,6 @@ export const singleColor_addToCart_PayloadGenerator = async (
       shoppingCartItemsDetailModels: shoppingCartItemsDetailModel,
       cartLogoPersonModel: cartLogoPersonModel,
       cartLogoPersonDetailModels: cartLogoPersonDetailModels,
-      cartLinePersonModels: cartLinePersonModel,
     },
   };
 };

@@ -27,4 +27,5 @@ export type CI_Props = cartProps | checkoutProps;
 export interface CI_Templates {
   type1: FC<CI_Props>;
   type2: FC<CI_Props>;
+  type3: FC<CI_Props>;
 }

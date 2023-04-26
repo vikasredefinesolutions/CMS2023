@@ -111,3 +111,13 @@ export interface _startOrderModalProps {
   modalHandler: (val: null | _modals) => void;
   editDetails?: _CartItem;
 }
+
+export interface _ProductPolicy {
+  storeId: number;
+  brandID: number | null;
+  brandName: string | null;
+  isBrandOnline: boolean;
+  isPolicywithcheckbox: boolean;
+  policyMessage: string;
+  isEnduserDisplay: boolean;
+}

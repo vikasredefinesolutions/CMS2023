@@ -3,10 +3,11 @@ import { paths } from '@constants/paths.constant';
 import { _MenuItems } from '@definations/header.type';
 import { _FetchStoreConfigurations } from '@definations/store.type';
 import { addCustomEvents } from '@helpers/common.helper';
+import { FetchStoreConfigurations } from '@services/app.service';
 import BreadCrumb from '@templates/breadCrumb';
 import Footer from '@templates/Footer';
 import * as _AppController from 'controllers_v2/_AppController.async';
-import { useTypedSelector_v2 } from 'hooks_v2';
+import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
 import { useRouter } from 'next/router';
 import { _StoreCache } from 'pages/[slug]/slug';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -39,6 +40,8 @@ const Layout: React.FC<_props & _StoreCache> = ({
     logoUrl: string;
     menuItems: _MenuItems | null;
   }>({ storeCode: storeCode, logoUrl: logoUrl, menuItems: menuItems });
+  const { setShowLoader } = useActions_v2();
+  const [headerTemplateId, setHeaderTeamplateId] = useState<string>();
   const storeId = useTypedSelector_v2((state) => state.store?.id);
 
   useEffect(() => {
@@ -58,6 +61,16 @@ const Layout: React.FC<_props & _StoreCache> = ({
     }));
   }, [storeCode, logoUrl, storeId]);
   const router = useRouter();
+  useEffect(() => {
+    FetchStoreConfigurations({ storeId, configname: 'header_config' }).then(
+      (res) => {
+        if (res?.config_value) {
+          const headerInfo = JSON.parse(res.config_value);
+          setHeaderTeamplateId(headerInfo.template_Id);
+        }
+      },
+    );
+  }, [storeId]);
 
   return (
     <>
@@ -67,6 +80,7 @@ const Layout: React.FC<_props & _StoreCache> = ({
           desktop: header.logoUrl,
         }}
         menuItems={useMemo(() => header.menuItems, [header.menuItems])}
+        headerTemplateId={headerTemplateId!}
       />
 
       {router.pathname !== paths.PRODUCT_COMPARE && (

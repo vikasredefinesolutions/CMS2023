@@ -31,6 +31,8 @@ export interface _RedesignStore {
   mediaBaseUrl: string;
   imageFolderPath: string;
   shippingChargeType: number;
+  firstLineCharges: number;
+  secondLineCharges: number;
 }
 
 // Define the initial state using that type
@@ -53,6 +55,8 @@ const initialState: _RedesignStore = {
   mediaBaseUrl: '',
   imageFolderPath: '',
   shippingChargeType: 0,
+  firstLineCharges: 0,
+  secondLineCharges: 0,
 };
 
 export const storeSlice = createSlice({
@@ -85,6 +89,8 @@ export const storeSlice = createSlice({
       state.isSewOutEnable = store.isSewOutEnable;
       state.mediaBaseUrl = store.mediaBaseUrl;
       state.imageFolderPath = store.imageFolderPath;
+      state.firstLineCharges = store.firstLineCharges;
+      state.secondLineCharges = store.secondLineCharges;
     },
 
     change_Layout: (

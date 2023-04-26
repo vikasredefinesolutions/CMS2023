@@ -510,7 +510,7 @@ export const SendCompareLinkByEmail = async (payload: {
   Link: string;
 }) => {
   const url = `StoreCustomer/SendLinkCompare/${payload.Email}/${payload.storeId}/${payload.Link}.json`;
-  console.log(url, 'ur;');
+
   const response = await CallAPI_v2({
     name: {
       service: 'productDetails',

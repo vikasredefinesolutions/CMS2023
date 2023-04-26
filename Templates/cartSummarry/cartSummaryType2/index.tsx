@@ -9,8 +9,7 @@ const CartSummarryType2: FC<CartSummarryProps> = ({
   showApplyButton,
   coupon,
 }) => {
-  const { totalPrice, subTotal, logoSetupCharges, smallRunFee, salesTax } =
-    GetCartTotals();
+  const { totalPrice, subTotal, smallRunFee } = GetCartTotals();
   const couponDetails = useTypedSelector_v2((state) => state.cart.discount);
   return (
     <>
@@ -22,12 +21,26 @@ const CartSummarryType2: FC<CartSummarryProps> = ({
         <dl className='text-default-text'>
           <div className='flex items-center justify-between pt-[15px]'>
             <dt className=''>Merchandise</dt>
-            <dd className=''>$870.00</dd>
+            <dd className=''>
+              <Price value={subTotal} />
+            </dd>
           </div>
-          <div className='flex items-center justify-between pt-[15px]'>
-            <dt className=''>Discount</dt>
-            <dd className=''>-$90.00</dd>
-          </div>
+          {couponDetails?.coupon ? (
+            <div className='flex items-center justify-between pt-[15px]'>
+              <dt className=''>Discount</dt>
+              <dd className=''>
+                - <Price value={couponDetails.amount || 0} />
+              </dd>
+            </div>
+          ) : (
+            <div className='flex items-center justify-between pt-[15px]'>
+              <dt className=''>Discount</dt>
+              <dd className=''>
+                - <Price value={0} />
+              </dd>
+            </div>
+          )}
+
           <div className='w-full pl-[15px] pr-[15px] border-b border-gray-border mt-[10px]'></div>
           <div className='flex items-center justify-between pt-[15px]'>
             <dt className=''>
@@ -35,7 +48,11 @@ const CartSummarryType2: FC<CartSummarryProps> = ({
             </dt>
             <dd className=''>
               {' '}
-              <Price value={subTotal} />
+              <Price
+                value={
+                  subTotal - (couponDetails?.amount ? couponDetails.amount : 0)
+                }
+              />
             </dd>
           </div>
           <div className='flex items-center justify-between pt-[15px]'>

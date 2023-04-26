@@ -62,7 +62,7 @@ export const __pagesConstant = {
     },
   },
   checkoutPage: {
-    orderStatus: 'E',
-    transactionStatus: 'P',
+    orderStatus: 'new',
+    transactionStatus: 'pending',
   },
 };

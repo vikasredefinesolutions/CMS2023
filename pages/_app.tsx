@@ -4,8 +4,8 @@ import * as _AppController from '@controllers/_AppController.async';
 import { TrackFile } from '@services/tracking.service';
 import App, { AppContext, AppInitialProps, AppProps } from 'next/app';
 import { useRouter } from 'next/router';
-// import 'public/assets/css/main.css';
 import 'public/assets/css/custom.css';
+// import 'public/assets/css/main.css';
 import 'public/assets/css/spinner.css';
 import { useEffect } from 'react';
 import { _globalStore } from 'store.global';
@@ -17,7 +17,7 @@ import {
   extractCookies,
   Logout,
   nextJsSetCookie,
-  setCookie,
+  setCookie
 } from 'helpers_v2/common.helper';
 import { useActions_v2 } from 'hooks_v2';
 
@@ -26,17 +26,17 @@ import { __Cookie } from '@constants/global.constant';
 import EmployeeController from '@controllers/EmployeeController';
 import {
   _FetchStoreConfigurations,
-  _StoreReturnType,
+  _StoreReturnType
 } from '@definations/store.type';
 import { conditionalLog_V2 } from '@helpers/console.helper';
 
 import Metatags from '@appComponents/MetaTags';
 import Spinner from '@appComponents/ui/spinner';
-import { PageResponseType, _Expected_AppProps } from '@definations/app.type';
+import { _Expected_AppProps, PageResponseType } from '@definations/app.type';
 import { _MenuItems } from '@definations/header.type';
 import {
   FetchCompanyConfiguration,
-  getAllConfigurations,
+  getAllConfigurations
 } from '@services/app.service';
 import { GetStoreCustomer } from '@services/user.service';
 import Redefine_Layout from '@templates//TemplateComponents/Redefine_Layout';
@@ -223,6 +223,8 @@ RedefineCustomApp.getInitialProps = async (
       sewOutCharges: 0,
       mediaBaseUrl: '',
       shippingChargeType: 0,
+      firstLineCharges: 0,
+      secondLineCharges: 0,
     },
     menuItems: null,
     configs: [],
@@ -275,6 +277,7 @@ RedefineCustomApp.getInitialProps = async (
 
       expectedProps.companyId = (await FetchCompanyConfiguration()).companyId;
       if (storeDetails) {
+        expectedProps.store.imageFolderPath = `/rdc/${expectedProps.companyId}/store/${storeDetails.store.storeId}/images/`;
         expectedProps.store = storeDetails.store;
         expectedProps.store.imageFolderPath = `/${storeDetails.blobUrlRootDirectory}/${expectedProps.companyId}/store/${storeDetails.store.storeId}/images/`;
         expectedProps.blobUrlRootDirectory = storeDetails.blobUrlRootDirectory;

@@ -51,4 +51,5 @@ export interface _shippingMethod {
 export interface CTTemplates {
   type1: FC<CTProps>;
   type2: FC<CTProps>;
+  type3: FC<CTProps>;
 }

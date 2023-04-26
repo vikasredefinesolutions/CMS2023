@@ -7,7 +7,7 @@ import Document, {
   NextScript
 } from 'next/document';
 import { _globalStore } from 'store.global';
-import config, { cssApis } from '../configs_v2/api.config';
+import config from '../configs_v2/api.config';
 let storeId: null | number = null;
 let faviconURL: string = '';
 
@@ -52,13 +52,12 @@ class MyDocument extends Document {
             type='text/css'
             href={`${_globalStore.blobUrl}/${_globalStore.blobRootDirectory}/${_globalStore.companyId}/store/${storeId}/css/${storeId}.css`}
           />
+          
           <link
             rel='stylesheet'
             type='text/css'
-            href={`${_globalStore.blobUrl}/${_globalStore.blobRootDirectory}/${_globalStore.companyId}/store/tailwin-css.css`}
+            href={`${_globalStore.blobUrl}/${_globalStore.blobRootDirectory}/${_globalStore.companyId}/store/tailwin-css.css?${Math.random()}`}
           />
-
-        
 
           <link
             rel='stylesheet'
@@ -121,12 +120,12 @@ class MyDocument extends Document {
 
           {/* -----------------------CSS STYLESHEETS------------------------- */}
 
-          {storeId == 1 && (
+          {/* {storeId == 1 && (
             <link rel='stylesheet' type='text/css' href={cssApis[1]} />
           )}
-          {/* {storeId == 21 && (
+          {storeId == 21 && (
             <link rel='stylesheet' type='text/css' href={cssApis[21]} />
-          )} */}
+          )}
           {storeId == 3 && (
             <link rel='stylesheet' type='text/css' href={cssApis[3]} />
           )}
@@ -154,43 +153,30 @@ class MyDocument extends Document {
           )}
           {storeId == 22 && (
             <link rel='stylesheet' type='text/css' href={cssApis[22]} />
-          )}
+          )} */}
           <script type="text/javascript" src='https://platform-api.sharethis.com/js/sharethis.js#property=622863e42e0ffb001379992c&product=sop'></script>
-          
-          {storeId === 21 && <>
-            <link
+          <link
             rel='stylesheet'
             type='text/css'
-            href={`${_globalStore.blobUrl}/${_globalStore.blobRootDirectory}/${_globalStore.companyId}/store/${storeId}/css/main-${storeId}.css`}
+            href={`${_globalStore.blobUrl}/${_globalStore.blobRootDirectory}/${_globalStore.companyId}/store/main.css`}
           />
-          
-          </>}
-
-          {storeId === 25 && <>
-            <link
-            rel='stylesheet'
-            type='text/css'
-            href={`${_globalStore.blobUrl}/${_globalStore.blobRootDirectory}/${_globalStore.companyId}/store/${21}/css/main-${21}.css`}
-          />
-          
-          </>}
           
         </Head>
         <body className='font-Outfit bg-white'>
           <Main />
           <NextScript />
 
-          <div
+          <script
             dangerouslySetInnerHTML={{
               __html: _globalStore.customGlobalBodyScript,
             }}
-          ></div>
+          ></script>
 
-          <div
+          <script
             dangerouslySetInnerHTML={{
               __html: _globalStore.customHomeScript,
             }}
-          ></div>
+          ></script>
 
           {/* -----------------------KLEVU------------------------- */}
           <script

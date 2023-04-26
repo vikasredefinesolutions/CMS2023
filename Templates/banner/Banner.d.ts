@@ -20,6 +20,7 @@ export interface _BannerProps {
   storeId: number;
   slug: string;
   seType: string;
+  id: string;
 }
 
 export interface Welcome {
