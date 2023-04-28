@@ -109,6 +109,8 @@ export interface _HeaderProps {
     desktop: string;
   };
   menuItems: _MenuItems | null;
+  headerBgColor: string;
+  headerTextColor: string;
 }
 export interface _HeaderPropsWithTemplateid {
   storeCode: string;
@@ -117,6 +119,8 @@ export interface _HeaderPropsWithTemplateid {
   };
   menuItems: _MenuItems | null;
   headerTemplateId: string;
+  headerBgColor: string;
+  headerTextColor: string;
 }
 
 export interface _HeaderTemplates {

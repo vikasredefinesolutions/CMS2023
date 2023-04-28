@@ -41,4 +41,5 @@ export type StoreConfigurationConfigs =
   | 'customScript'
   | 'customHomeScript'
   | 'customGlobalBodyScript'
-  | 'header_config';
+  | 'header_config'
+  | 'googleTags';

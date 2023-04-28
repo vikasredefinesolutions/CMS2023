@@ -92,6 +92,9 @@ export const cartSlice = createSlice({
       state.discount = null;
       state.cartQty = 0;
     },
+    customerCreditBalanceUpdate: (state, { payload }) => {
+      state.userCreditBalance = payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchCartDetails.fulfilled, (state, { payload }) => {

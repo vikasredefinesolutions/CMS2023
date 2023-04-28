@@ -19,14 +19,21 @@ const ProductBoxController = ({
     product.getProductImageOptionList && product.getProductImageOptionList[0],
   );
   useEffect(() => {
-    colorChangeHandler(
-      product.id,
-      product.sename || '',
-      product.getProductImageOptionList &&
-        product.getProductImageOptionList[0].colorName,
-    );
-    if (window !== undefined) {
-      setOrigin(window.location.origin);
+    if (
+      product &&
+      product?.getProductImageOptionList &&
+      product?.getProductImageOptionList?.length > 0
+    ) {
+      console.log(product.getProductImageOptionList, 'opooooooo');
+      colorChangeHandler(
+        product.id,
+        product.sename || '',
+        product.getProductImageOptionList &&
+          product.getProductImageOptionList[0].colorName,
+      );
+      if (window !== undefined) {
+        setOrigin(window.location.origin);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

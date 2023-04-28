@@ -45,7 +45,11 @@ const TemplateThreeListing = ({
 
   return productView === 'grid' ? (
     <li className='text-center'>
-      <div className='flex justify-center w-full border border-gray-border hover:border-gray-border hover:shadow-md'>
+      <div
+        className={`flex justify-center w-full hover:border-gray-300  hover:shadow-md ${
+          store.id !== 11 ? 'border border-gray-border' : ''
+        }`}
+      >
         <div className='relative w-full mb-[20px]'>
           <div className='w-full px-[30px] pt-[10px] cursor-pointer'>
             <Link

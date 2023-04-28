@@ -11,7 +11,7 @@ const ManageLogoTemplates: _ManageLogoTemplates = {
   type1: ManageLogoType1,
   type2: ManageLogoType2,
 };
-const ManageLogo: React.FC<{ id: 'type1' }> = ({ id }) => {
+const ManageLogo: React.FC<{ id: string }> = ({ id }) => {
   const storeId = useTypedSelector_v2((state) => state.store.id);
   const customerId = useTypedSelector_v2((state) => state.user.id);
   const [logoList, setLogoList] = useState<LogoList | null>(null);
@@ -55,7 +55,10 @@ const ManageLogo: React.FC<{ id: 'type1' }> = ({ id }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [storeId, customerId, currentPage]);
 
-  const ManagelogoDeatils = ManageLogoTemplates[id];
+  const ManagelogoDeatils =
+    ManageLogoTemplates[
+      (`type${id}` as 'type1') || 'type2' || 'type3' || 'type4'
+    ];
 
   // const stateAll = useTypedSelector_v2((state) => state);
   // console.log('managelogo', stateAll);

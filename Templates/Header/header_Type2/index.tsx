@@ -19,7 +19,12 @@ import {
 import Header_MenuItems from '../header_Type2/Components/Menu/Header_MenuItems';
 import SearchBar from '../header_Type2/Components/Menu/Header_SearchBar';
 
-const Header_Type2: NextPage<_HeaderProps> = ({ logoUrl, menuItems }) => {
+const Header_Type2: NextPage<_HeaderProps> = ({
+  logoUrl,
+  menuItems,
+  headerBgColor,
+  headerTextColor,
+}) => {
   const { store_setAppView } = useActions_v2();
   const { width } = useWindowDimensions_v2();
   const router = useRouter();
@@ -44,12 +49,12 @@ const Header_Type2: NextPage<_HeaderProps> = ({ logoUrl, menuItems }) => {
 
   return (
     <div
-      className='bg-[#ffffff] sticky top-0 z-40  shadow-[0_0px_5px_rgba(0,0,0,0.12)]  '
+      className={`bg-[${headerBgColor}] sticky top-0 z-40  shadow-[0_0px_5px_rgba(0,0,0,0.12)]`}
       id='mobile_menu_box'
     >
       {/* <NotificationBar /> */}
 
-      <div className='bg-[#ffffff]'>
+      <div className={`bg-[${headerBgColor}]`}>
         {isMobileView && router.asPath != paths.CHECKOUT && (
           <Header_MenuItems
             showSideMenu={showSideMenu}
@@ -62,7 +67,7 @@ const Header_Type2: NextPage<_HeaderProps> = ({ logoUrl, menuItems }) => {
         <div className='fixed z-40 lg:hidden'></div>
         <header className='relative trancking-[1px]'>
           <nav aria-label='Top'>
-            <div className='bg-[#ffffff]'>
+            <div className={`bg-[${headerBgColor}]`}>
               <div className='container  mx-auto'>
                 <div className=''>
                   <div className='flex items-center justify-between'>

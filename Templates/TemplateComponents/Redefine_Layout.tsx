@@ -41,7 +41,9 @@ const Layout: React.FC<_props & _StoreCache> = ({
     menuItems: _MenuItems | null;
   }>({ storeCode: storeCode, logoUrl: logoUrl, menuItems: menuItems });
   const { setShowLoader } = useActions_v2();
-  const [headerTemplateId, setHeaderTeamplateId] = useState<string>();
+  const [headerTemplateId, setHeaderTeamplateId] = useState<string>('');
+  const [headerBgColor, setHeaderBgColor] = useState<string>('');
+  const [headerTextColor, setHeaderTextColor] = useState<string>('');
   const storeId = useTypedSelector_v2((state) => state.store?.id);
 
   useEffect(() => {
@@ -67,6 +69,8 @@ const Layout: React.FC<_props & _StoreCache> = ({
         if (res?.config_value) {
           const headerInfo = JSON.parse(res.config_value);
           setHeaderTeamplateId(headerInfo.template_Id);
+          setHeaderBgColor(headerInfo?.header_bg_color);
+          setHeaderTextColor(headerInfo?.header_text_color);
         }
       },
     );
@@ -80,7 +84,9 @@ const Layout: React.FC<_props & _StoreCache> = ({
           desktop: header.logoUrl,
         }}
         menuItems={useMemo(() => header.menuItems, [header.menuItems])}
-        headerTemplateId={headerTemplateId!}
+        headerTemplateId={headerTemplateId}
+        headerBgColor={headerBgColor}
+        headerTextColor={headerTextColor}
       />
 
       {router.pathname !== paths.PRODUCT_COMPARE && (

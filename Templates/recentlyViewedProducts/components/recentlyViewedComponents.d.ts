@@ -3,5 +3,4 @@ import { _ProductDetailsProps } from '@templates/ProductDetails/productDetailsTy
 export interface _ProductRecentlyViewedProps {
   title: string;
   product: _ProductDetailsProps | null;
-  storeCode: string;
 }

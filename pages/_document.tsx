@@ -7,7 +7,10 @@ import Document, {
   NextScript
 } from 'next/document';
 import { _globalStore } from 'store.global';
+import DcTags from 'tags/DcTags';
+import TwitterTags from 'tags/TwitterTags';
 import config from '../configs_v2/api.config';
+
 let storeId: null | number = null;
 let faviconURL: string = '';
 
@@ -32,11 +35,7 @@ class MyDocument extends Document {
     return initialProps;
   }
 
-
   render() {
-    
-  
-    
     return (
       <Html lang='en'>
         <link
@@ -45,18 +44,38 @@ class MyDocument extends Document {
         />
         <Head>
           
-          {/* ---------------------CUSTOM CSS STYLESHEETS------------------------ */}
+          {_globalStore.googleFonts &&
+            <code
+              dangerouslySetInnerHTML={{ __html: _globalStore.googleFonts }}
+            ></code>
+            }
+            {_globalStore.customHeadScript && 
+            <code
+              dangerouslySetInnerHTML={{ __html: _globalStore.customHeadScript }}
+            ></code>
+          }
+          {_globalStore.customGoogleVerification &&
+            <code
+              dangerouslySetInnerHTML={{
+                __html: _globalStore.customGoogleVerification,
+              }}
+            ></code>
+            }
+          <DcTags />
+          <TwitterTags />
 
           <link
             rel='stylesheet'
             type='text/css'
             href={`${_globalStore.blobUrl}/${_globalStore.blobRootDirectory}/${_globalStore.companyId}/store/${storeId}/css/${storeId}.css`}
           />
-          
+
           <link
             rel='stylesheet'
             type='text/css'
-            href={`${_globalStore.blobUrl}/${_globalStore.blobRootDirectory}/${_globalStore.companyId}/store/tailwin-css.css?${Math.random()}`}
+            href={`${_globalStore.blobUrl}/${_globalStore.blobRootDirectory}/${
+              _globalStore.companyId
+            }/store/tailwin-css.css?${Math.random()}`}
           />
 
           <link
@@ -65,6 +84,13 @@ class MyDocument extends Document {
             href={`${_globalStore.blobUrl}/${_globalStore.blobRootDirectory}/${_globalStore.companyId}/store/${storeId}/css/custom.css`}
           />
 
+          <link
+            rel='stylesheet'
+            type='text/css'
+            href={`${_globalStore.blobUrl}/${_globalStore.blobRootDirectory}/${
+              _globalStore.companyId
+            }/store/main.css?${Math.random()}`}
+          />
           {/* -----------------------SLIDER STYLESHEETS------------------------- */}
 
           <link
@@ -113,85 +139,36 @@ class MyDocument extends Document {
             }}
           ></script>
 
-          <script
+          {/* <script
             dangerouslySetInnerHTML={{ __html: _globalStore.customScript }}
-          ></script>
-
+          ></script> */}
 
           {/* -----------------------CSS STYLESHEETS------------------------- */}
 
-          {/* {storeId == 1 && (
-            <link rel='stylesheet' type='text/css' href={cssApis[1]} />
-          )}
-          {storeId == 21 && (
-            <link rel='stylesheet' type='text/css' href={cssApis[21]} />
-          )}
-          {storeId == 3 && (
-            <link rel='stylesheet' type='text/css' href={cssApis[3]} />
-          )}
-          {storeId == 10 && (
-            <link rel='stylesheet' type='text/css' href={cssApis[10]} />
-          )}
-          {storeId == 23 && (
-            <link rel='stylesheet' type='text/css' href={cssApis[23]} />
-          )}
-
-          {storeId == 108 && (
-            <link rel='stylesheet' type='text/css' href={cssApis[108]} />
-          )}
-          {storeId == 134 && (
-            <link rel='stylesheet' type='text/css' href={cssApis[134]} />
-          )}
-          {storeId == 135 && (
-            <link rel='stylesheet' type='text/css' href={cssApis[135]} />
-          )}
-          {storeId == 139 && (
-            <link rel='stylesheet' type='text/css' href={cssApis[139]} />
-          )}
-          {storeId == 27 && (
-            <link rel='stylesheet' type='text/css' href={cssApis[27]} />
-          )}
-          {storeId == 22 && (
-            <link rel='stylesheet' type='text/css' href={cssApis[22]} />
-          )} */}
-          <script type="text/javascript" src='https://platform-api.sharethis.com/js/sharethis.js#property=622863e42e0ffb001379992c&product=sop'></script>
-          <link
-            rel='stylesheet'
-            type='text/css'
-            href={`${_globalStore.blobUrl}/${_globalStore.blobRootDirectory}/${_globalStore.companyId}/store/main.css`}
-          />
-          
+          <script
+            type='text/javascript'
+            src='https://platform-api.sharethis.com/js/sharethis.js#property=622863e42e0ffb001379992c&product=sop'
+          ></script>
         </Head>
         <body className='font-Outfit bg-white'>
-          <Main />
-          <NextScript />
-
-          <script
+          <code
             dangerouslySetInnerHTML={{
               __html: _globalStore.customGlobalBodyScript,
             }}
-          ></script>
+          ></code>
+          <Main />
+          <NextScript />
 
-          <script
-            dangerouslySetInnerHTML={{
-              __html: _globalStore.customHomeScript,
-            }}
-          ></script>
-
-          {/* -----------------------KLEVU------------------------- */}
-          <script
-            type='text/javascript'
-            dangerouslySetInnerHTML={{
-              __html: `var klevu_cms_module_enabled = true, klevu_cmsSearchEnabled = true, klevu_current_version = '20.0.1';
-        var klevu_storeLandingPageUrl = 'https://www.corporategear.com/home/Search', klevu_showQuickSearchOnEnter = false, klevu_searchQueryParam = 'q';
-        var klevu_apiKey = 'klevu-14936563081965977',
-            searchTextBoxName = 'txtSearch',
-            klevu_lang = 'en',
-            klevu_result_top_margin = '',
-            klevu_result_left_margin = '';
-        (function () { var ws = document.createElement('script'), kl_protocol = ("https:" === document.location.protocol ? "https://" : "http://"); ws.type = 'text/javascript'; ws.async = true; ws.src = kl_protocol + 'js.klevu.com/klevu-js-v1/js/klevu-webstore.js'; ws.charset = "UTF-8"; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ws, s); })();`,
-            }}
-          ></script>
+          
+         
+          {_globalStore.customFooterScript && <>
+            <code
+                dangerouslySetInnerHTML={{
+                  __html: _globalStore.customFooterScript,
+                }}
+              ></code>
+          </>}
+          
         </body>
       </Html>
     );

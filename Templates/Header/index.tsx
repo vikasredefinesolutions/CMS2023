@@ -6,7 +6,7 @@ import { NextPage } from 'next';
 import Header_Type1 from './header_Type1';
 import Header_Type2 from './header_Type2';
 import Header_Type3 from './header_Type3';
-import Header_Type4 from './Header_Type4';
+import Header_Type4 from './header_Type4';
 
 const HeaderTemplates: _HeaderTemplates = {
   type1: Header_Type1,
@@ -19,8 +19,11 @@ const Header: NextPage<_HeaderPropsWithTemplateid> = ({
   logoUrl,
   menuItems,
   headerTemplateId,
+  headerBgColor,
+  headerTextColor,
 }) => {
   const template_Id: string = `type${headerTemplateId}`;
+  // const template_Id = 'type4';
   const HeaderTemplate =
     HeaderTemplates[(template_Id as 'type1') || 'type2'] || 'type3' || 'type4';
   return (
@@ -28,6 +31,8 @@ const Header: NextPage<_HeaderPropsWithTemplateid> = ({
       storeCode={storeCode}
       logoUrl={logoUrl}
       menuItems={menuItems}
+      headerBgColor={headerBgColor}
+      headerTextColor={headerTextColor}
     />
   );
 };

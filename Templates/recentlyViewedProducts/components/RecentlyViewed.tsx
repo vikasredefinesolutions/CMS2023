@@ -1,6 +1,5 @@
 import NxtImage from '@appComponents/reUsable/Image';
 import Price from '@appComponents/reUsable/Price';
-import { _Store } from '@configs/page.config';
 import { __pagesConstant } from '@constants/pages.constant';
 import getLocation from '@helpers/getLocation';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
@@ -18,7 +17,6 @@ import Slider from 'react-slick';
 const RecentlyViewed: React.FC<_ProductRecentlyViewedProps> = ({
   title,
   product,
-  storeCode,
 }) => {
   const [recentlyViewedProduct, setRecentlyViewedProduct] = useState<
     Array<_ProductsRecentlyViewedResponse>
@@ -28,6 +26,7 @@ const RecentlyViewed: React.FC<_ProductRecentlyViewedProps> = ({
 
   const customerId = useTypedSelector_v2((state) => state.user.id);
   const { id: storeId } = useTypedSelector_v2((state) => state.store);
+  const { productId } = useTypedSelector_v2((state) => state.product.selected);
 
   const [products] = useState(
     Array.isArray(recentlyViewedProduct)
@@ -51,14 +50,18 @@ const RecentlyViewed: React.FC<_ProductRecentlyViewedProps> = ({
     addRecentlyViewedProduct().then((res) => {
       setRecentlyViewedProduct(res);
     });
-  }, [product?.details]);
+  }, [productId, storeId]);
 
   const addRecentlyViewedProduct = async () => {
     const location = await getLocation();
     const pageUrl = router.query;
     let payloadObj = {
       recentViewModel: {
-        productId: product?.SEO?.productId || 0,
+        productId: productId
+          ? productId
+          : product?.details?.id
+          ? product.details.id
+          : 0,
         customerId: customerId || 0,
         pageName: 'descriptionPage',
         pageUrl: `${pageUrl.slug}`,
@@ -70,8 +73,12 @@ const RecentlyViewed: React.FC<_ProductRecentlyViewedProps> = ({
 
     if (storeId) {
       let fetchRecentlyViewedPayload = {
-        productId: product?.SEO?.productId || 0,
-        storeId: 4,
+        productId: productId
+          ? productId
+          : product?.details?.id
+          ? product.details.id
+          : 0,
+        storeId: storeId,
         ipAddress: `${location.ip_address}`,
         customerId: customerId || 0,
         maximumItemsForFetch: 10,
@@ -156,19 +163,11 @@ const RecentlyViewed: React.FC<_ProductRecentlyViewedProps> = ({
 
                                 <div
                                   className={
-                                    storeCode === _Store.type23
-                                      ? 'text-anchor'
-                                      : 'mt-3 text-black text-base tracking-wider'
+                                    'mt-3 text-black text-base tracking-wider'
                                   }
                                 >
-                                  <span
-                                    className={
-                                      storeCode === _Store.type23
-                                        ? ''
-                                        : 'mt-2 text-primary'
-                                    }
-                                  >
-                                    {storeCode === _Store.type27 ? '' : 'MSRP'}
+                                  <span className={'mt-2 text-primary'}>
+                                    MSRP
                                     <Price value={product.msrp} />
                                   </span>
                                 </div>

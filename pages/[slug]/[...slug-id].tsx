@@ -65,12 +65,10 @@ const SlugPage: NextPage<_SlugServerSideProps | _SlugServerSide_WentWrong> = (
   }
 
   if (pageMetaData?.type === 'product' && page?.productDetails && _store) {
-    let storeCode = _store.storeCode;
-
     return (
       <ProductDetails
         {...page?.productDetails}
-        storeCode={storeCode}
+        storeCode={_store.storeCode}
         storeTypeId={_store.storeTypeId}
         productDetailsTemplateId={page.productDetails.productDetailsTemplateId}
       />

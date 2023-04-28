@@ -1,8 +1,26 @@
+import { paymentMethodCustom } from '@constants/enum';
 import { paymentProps } from '..';
 
-const PurchaseOrderType3: paymentProps = ({ changeHandler }) => {
+const PurchaseOrderType1: paymentProps = ({
+  changeHandler,
+  updatePaymentMethod,
+}) => {
   return (
     <div id='PurchaseOrder'>
+      <div className='flex justify-between items-center mt-[12px] mb-[12px] pb-[18px] border-b border-gray-border'>
+        <div className='text-title-text font-semibold tracking-normal'>
+          Payment
+        </div>
+        <div>
+          <button
+            className='!text-anchor hover:!text-anchor-hover underline'
+            id='btn-use-credit-card'
+            onClick={() => updatePaymentMethod(paymentMethodCustom.creditCard)}
+          >
+            Use Credit Card
+          </button>
+        </div>
+      </div>
       <div className='relative z-0 w-full mb-[20px] border border-gray-border rounded'>
         <input
           onChange={changeHandler}
@@ -15,11 +33,15 @@ const PurchaseOrderType3: paymentProps = ({ changeHandler }) => {
           htmlFor='EnterPONumber'
           className='left-[8px] absolute duration-300 top-[11px] -z-1 origin-0 text-[#000000] text-[18px]'
         >
-          PO Number
+          PO Number *
         </label>
+      </div>
+      <div className='text-base'>
+        Please enter your PO Number. We will contact you to confirm details of
+        your payment.
       </div>
     </div>
   );
 };
 
-export default PurchaseOrderType3;
+export default PurchaseOrderType1;

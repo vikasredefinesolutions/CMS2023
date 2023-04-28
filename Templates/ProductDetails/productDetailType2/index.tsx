@@ -1,6 +1,5 @@
 import { _defaultTemplates } from '@configs/template.config';
 import { CategoriesByPid } from '@definations/APIs/category.res';
-import { _StoreCache } from '@definations/slug.type';
 import { KlaviyoScriptTag } from '@helpers/common.helper';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import {
@@ -10,15 +9,12 @@ import {
 import Reviews from '@templates/Review';
 import ProductRecentlyViewed from '@templates/recentlyViewedProducts';
 import YouMayAlsoLike from '@templates/youMayAlsoLike';
-import { NextPage } from 'next';
 import Head from 'next/head';
 import { useEffect } from 'react';
-import { _ProductDetailsProps } from '../productDetailsTypes/productDetail.res';
+import { _Props } from '../productDetails';
 import ProductDetail from './component/ProductDetail';
 
-const ProductDetails_Type2: NextPage<_ProductDetailsProps & _StoreCache> = (
-  product,
-) => {
+const ProductDetails_Type2: React.FC<_Props> = (product) => {
   const {
     store_productDetails,
     setColor,

@@ -158,6 +158,8 @@ export interface _AddToCart_CartItems {
   attributeOptionName: 'Color';
   attributeOptionValue: string;
   attributeOptionId: number;
+  sizeAttributionId?: number;
+  sizeAttributionValue?: string;
 }
 
 export interface _AddToCart_PayloadGenerator_Attributes {

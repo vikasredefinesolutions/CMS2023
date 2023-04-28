@@ -8,8 +8,9 @@ const AccountTemplates: _AccountTemplates = {
   type2: ManageAddressTemplate_Type2,
 };
 
-const ManageAddressSetting: React.FC<{ id: 'type1' | 'type2' }> = ({ id }) => {
-  const Component = AccountTemplates[id];
+const ManageAddressSetting: React.FC<{ id: string }> = ({ id }) => {
+  const Component =
+    AccountTemplates[(`type${id}` as 'type1') || 'type2' || 'type3' || 'type4'];
   return <Component />;
 };
 

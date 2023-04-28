@@ -9,24 +9,17 @@ import {
 } from '@services/product.service';
 import { KlaviyoScriptTag } from 'helpers_v2/common.helper';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
-// import { CategoriesByPid } from '../../definations_v2/APIs/category.res';
-// import { _ProductDetailsProps } from '../../definations_v2/APIs/productDetail.res';
-
 // Componennts
 import { CategoriesByPid } from '@definations/APIs/category.res';
-import { _StoreCache } from '@definations/slug.type';
 import ProductRecentlyViewed from '@templates/recentlyViewedProducts';
 import Reviews from '@templates/Review';
-import { NextPage } from 'next';
 // import { _StoreCache } from 'pages/[slug]/slug';
 import { _defaultTemplates } from '@configs/template.config';
 import YouMayAlsoLike from '@templates/youMayAlsoLike';
 import ProductDetails from './Components/ProductDetails';
-import { _ProductDetailsProps } from './productDetailsTypes/productDetail.res';
+import { _Props } from './productDetails';
 
-const Ecommerce_ProductDetails_View: NextPage<
-  _ProductDetailsProps & _StoreCache
-> = (product) => {
+const Ecommerce_ProductDetails_View: React.FC<_Props> = (product) => {
   const {
     store_productDetails,
     setColor,

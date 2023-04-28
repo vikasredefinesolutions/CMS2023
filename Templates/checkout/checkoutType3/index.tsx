@@ -1,9 +1,10 @@
+import Price from '@appComponents/Price';
 import { checkoutPages } from '@constants/enum';
-import CartController from '@controllers/cartController';
+import CheckoutController from '@controllers/checkoutController';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import CartItem from '@templates/cartItem';
 import CartSummarry from '@templates/cartSummarry';
-import { FC } from 'react';
+import { ChangeEvent, FC } from 'react';
 import { CTProps } from '../checkout';
 import AddAddress from './components/AddAddressType1';
 import CheckoutAddress from './components/AddressType1';
@@ -11,7 +12,6 @@ import CreatePassword from './components/CreatePasswprdType1';
 import LoginEmail from './components/LoginEmailType1';
 import LoginPassword from './components/LoginPasswordType1';
 import PaymentType1 from './components/PaymentType1';
-import PurchaseOrderType3 from './components/PaymentType1/components/PurchaseOrderType1';
 
 const ChekoutType3: FC<CTProps> = ({
   couponInputChangeHandler,
@@ -39,12 +39,32 @@ const ChekoutType3: FC<CTProps> = ({
   shippingAdress,
   billingAdress,
   setAddressType,
+  endUserDisplay,
+  setEndUserName,
 }) => {
-  const { endUserDisplay, setEndUserName } = CartController();
+  const { paymentOptions, allowedBalance, checkHandler } = CheckoutController();
 
   const userid = useTypedSelector_v2((state) => state);
-  console.log('userid ', userid);
+  // console.log('userid ', userid);
+  // console.log('payment option', paymentMethod);
 
+  const CreditWallet = ({
+    checkHandler,
+    allowedBalance,
+  }: {
+    checkHandler: (e: ChangeEvent<HTMLInputElement>) => void;
+    allowedBalance: number;
+  }) => {
+    return (
+      <div className='mb-2'>
+        <p>
+          <input id={'useWallet'} onChange={checkHandler} type={'checkbox'} />{' '}
+          <span>Use Wallet Balance</span> (
+          <Price value={allowedBalance} />)
+        </p>
+      </div>
+    );
+  };
   return (
     <div className='container mx-auto pl-[15px] pr-[15px] mt-[20px] mb-[50px]'>
       <div className='flex flex-wrap justify-between -mx-[15px]'>
@@ -105,10 +125,19 @@ const ChekoutType3: FC<CTProps> = ({
                       )}
                     </div>
                     <div className='w-full lg:w-1/2 pl-[15px] pr-[15px] pt-[15px] pb-[15px]'>
-                      <PurchaseOrderType3
+                      {/* <PurchaseOrderType3
                         updatePaymentMethod={updatePaymentMethod}
                         changeHandler={paymentFieldUpdateHandler}
-                      />
+                      /> */}
+                      {paymentOptions &&
+                        paymentOptions.findIndex(
+                          (res) => res.paymentOptionName === paymentMethod,
+                        ) > -1 && (
+                          <CreditWallet
+                            checkHandler={checkHandler}
+                            allowedBalance={allowedBalance}
+                          />
+                        )}
                       <PaymentType1
                         changeHandler={paymentFieldUpdateHandler}
                         paymentMethod={paymentMethod}
@@ -149,29 +178,28 @@ const ChekoutType3: FC<CTProps> = ({
             }}
           />
           <div id='OrderNoteDiv mt-[20px]'>
-            <div className='mt-[20px] text-medium-text font-[600]'>
+            <div className='mt-[20px] font-[600] '>
               Patagonia end users are approved on a per project basis.
             </div>
-            <div className='text-sub-text font-bold &nbsp;trsacking-normal mb-[5px]'>
-              <label>End User Name (your customer) :*</label>
-            </div>
-            <div className='form-group mb-[10px]'>
-              {endUserDisplay && (
-                <div className='text-lg font-semibold mt-4'>
-                  {' '}
-                  End User Name (your customer) :
-                  <span className='text-red-600'>*</span>
-                  <input
-                    type='text'
-                    id='enduserstio'
-                    className='p-2 w-full'
-                    onChange={(event) => setEndUserName(event.target.value)}
-                  />
+            {endUserDisplay && (
+              <>
+                <div className=' mb-[5px] mt-[20px]'>
+                  <label>End User Name (your customer) :*</label>
                 </div>
-              )}
-            </div>
+                <div className='form-group mb-[10px]'>
+                  <div className='text-lg font-semibold'>
+                    <input
+                      type='text'
+                      id='enduserstio'
+                      className='form-input'
+                      onChange={(event) => setEndUserName(event.target.value)}
+                    />
+                  </div>
+                </div>
+              </>
+            )}
           </div>
-          <div className='text-medium-text text-[#ff0000] font-semibold mb-[20px]'>
+          <div className='text-medium-text text-[#ff0000] font-semibold mb-[20px] mt-[20px]'>
             If a valid resale certificate is not provided prior to shipment, the
             applicable sales tax will be calculated and charged.
           </div>

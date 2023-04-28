@@ -4,13 +4,16 @@ interface _Store {
   logoUrl: string;
   blobUrl: string;
   companyId: number;
-  customScript: string;
+  customGoogleVerification: string;
+  customFooterScript: string;
+  googleFonts: string;
   storeId: null | number;
-  customHomeScript: string;
+  customHeadScript: string;
   blobRootDirectory: string;
   storeTypeId: null | number;
   customGlobalBodyScript: string;
   isAttributeSaparateProduct: boolean;
+  googleTags: _GoogleTags;
   set: (
     pair:
       | _StoreId
@@ -20,12 +23,26 @@ interface _Store {
       | _StoreBlobUrl
       | _StoreFavicon
       | _StoreLogoUrl
-      | _CustomScript
-      | _CustomHomeScript
+      | _CustomGoogleVerification
+      | _CustomFooterScript
+      | _GoogleFonts
+      | _CustomHeadScript
       | _CustomGlobalBodyScript
       | _StoreBlobRootDirectory
-      | _isAttributeSaparateProduct,
+      | _isAttributeSaparateProduct
+      | _GoogleTag
   ) => void;
+}
+
+interface _GoogleTags {
+  twitterTags: {
+    twitterTagRadio: boolean;
+    twitterTagTextArea: string;
+  };
+  dcTags: {
+    dcTagRadio: boolean;
+    dcTagTextArea: string;
+  };
 }
 
 export let _globalStore: _Store = {
@@ -37,13 +54,25 @@ export let _globalStore: _Store = {
   storeTypeId: null,
   blobRootDirectory: 'rdcbeta',
   isAttributeSaparateProduct: false,
-  companyId: 1,
+  companyId: 0,
   set: (pair) => {
     _globalStore = { ..._globalStore, [pair.key]: pair.value };
   },
-  customScript: '',
   customGlobalBodyScript: '',
-  customHomeScript: '',
+  customHeadScript: '',
+  googleFonts: '',
+  customGoogleVerification: '',
+  customFooterScript: '',
+  googleTags: {
+    twitterTags: {
+      twitterTagRadio: false,
+      twitterTagTextArea: '',
+    },
+    dcTags: {
+      dcTagRadio: false,
+      dcTagTextArea: '',
+    },
+  },
 };
 
 interface _StoreId {
@@ -79,14 +108,28 @@ interface _StoreBlobUrl {
   value: string;
 }
 
-interface _CustomScript {
-  key: 'customScript';
+interface _GoogleFonts {
+  key: 'googleFonts';
+  value: string;
+}
+interface _GoogleTag {
+  key: 'googleTags';
+  value: _GoogleTag;
+}
+
+interface _CustomHeadScript {
+  key: 'customHeadScript';
   value: boolean;
 }
 
-interface _CustomHomeScript {
-  key: 'customHomeScript';
-  value: boolean;
+interface _CustomGoogleVerification {
+  key: 'customGoogleVerification';
+  value: string;
+}
+
+interface _CustomFooterScript {
+  key: 'customFooterScript';
+  value: string;
 }
 interface _CustomGlobalBodyScript {
   key: 'customGlobalBodyScript';

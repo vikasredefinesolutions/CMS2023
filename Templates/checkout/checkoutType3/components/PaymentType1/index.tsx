@@ -1,7 +1,7 @@
 import { paymentMethodCustom } from '@constants/enum';
 import { ChangeEvent, FC } from 'react';
-import CardPaymentType3 from './components/CardPaymentType1';
-import NetPaymentType1 from './components/NetPaymentType1';
+import CardPaymentType1 from './components/CardPaymentType1';
+import PurchaseOrderType1 from './components/PurchaseOrderType1';
 
 export type paymentProps = FC<{
   /* eslint-disable no-unused-vars */
@@ -29,7 +29,7 @@ const PaymentType1: FC<{
   switch (paymentMethod) {
     case paymentMethodCustom.creditCard:
       return (
-        <CardPaymentType3
+        <CardPaymentType1
           {...{
             changeHandler,
             updatePaymentMethod,
@@ -37,9 +37,9 @@ const PaymentType1: FC<{
           }}
         />
       );
-    case paymentMethodCustom.creditWallet:
+    case paymentMethodCustom.purchaseOrder:
       return (
-        <NetPaymentType1
+        <PurchaseOrderType1
           {...{
             updatePaymentMethod,
             changeHandler,

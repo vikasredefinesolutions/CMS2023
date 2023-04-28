@@ -21,12 +21,18 @@ import {
 import Header_MenuItems from './Components/Menu/Header_MenuItems';
 import SearchBar from './Components/Menu/Header_SearchBar';
 
-const Header_Type3: NextPage<_HeaderProps> = ({ logoUrl, menuItems }) => {
+const Header_Type3: NextPage<_HeaderProps> = ({
+  logoUrl,
+  menuItems,
+  headerBgColor,
+  headerTextColor,
+}) => {
   const { store_setAppView } = useActions_v2();
   const { width } = useWindowDimensions_v2();
   const router = useRouter();
 
   const showSideMenu = useTypedSelector_v2((state) => state.modals.sideMenu);
+  const store = useTypedSelector_v2((state) => state.store);
 
   const [isMobileView, setIsMobileView] = useState<boolean>(
     width <= __pagesConstant._header.mobileBreakPoint,
@@ -41,12 +47,12 @@ const Header_Type3: NextPage<_HeaderProps> = ({ logoUrl, menuItems }) => {
 
   return (
     <div
-      className='bg-[#ffffff] sticky top-0 z-40  shadow-[0_0px_5px_rgba(0,0,0,0.12)]'
+      className={`bg-[${headerBgColor}] sticky top-0 z-40  shadow-[0_0px_5px_rgba(0,0,0,0.12)]`}
       id='mobile_menu_box'
     >
       {/* <NotificationBar /> */}
 
-      <div className='bg-[#ffffff]'>
+      <div className={`bg-[${headerBgColor}]`}>
         {isMobileView && router.asPath != paths.CHECKOUT && (
           <Header_MenuItems
             showSideMenu={showSideMenu}
@@ -59,7 +65,7 @@ const Header_Type3: NextPage<_HeaderProps> = ({ logoUrl, menuItems }) => {
         <div className='fixed z-40 lg:hidden'></div>
         <header className='relative trancking-[1px]'>
           <nav aria-label='container mx-auto'>
-            <div className='bg-[#ffffff]'>
+            <div className={`bg-[${headerBgColor}]`}>
               <div className='p-[10px]'>
                 {isMobileView ? (
                   <CompanyInfo

@@ -150,6 +150,49 @@ const Home = (props) => {
       }
       return 'outer';
   }
+  
+  const checkFixedBG = (element) => {
+    if (element.selected_Values != undefined) {
+      if (Object.keys(element.selected_Values).length > 0) {
+        const bgPropertyName = Object.keys(element.properties).find(
+          (key) => key === 'bg',
+        );
+
+        let attributes;
+        let fixedBg;
+        Object.entries(element.selected_Values).map(
+          ([key, value]) => {
+
+            if (key == bgPropertyName) {
+              attributes = value;
+            }
+            if (key == bgPropertyName+"_fixed_bg") {
+              fixedBg = value;
+            }
+          }
+        );
+
+
+        if (attributes != undefined && Object.keys(attributes).length > 0) {
+          if (attributes.type == 'color') {
+            return false;
+          } else if (attributes.type == 'image') {
+            if(fixedBg && fixedBg.value)
+            {
+              return true;
+            }
+          } else if (attributes.type == 'none') {
+            return false;
+          }
+        }
+      }
+
+      return false;
+    }
+    return false;
+
+
+  }
 
   const loadBackgroundImageClass = (element) => {
       
@@ -239,6 +282,7 @@ const Home = (props) => {
                   const backgroundDefault = loadBackgroundDefault(componentValue);
                   const backgroundStyle = loadBackgroundDefaultStyle(componentValue);
                   const backgroundImageClass = loadBackgroundImageClass(componentValue);
+                  const fixedBgDisplay = checkFixedBG(componentValue);
                   let additionalclass = '';
                   let innerDivClass = '';
                   if(componentValue.selectedVal && 'additionalclass' in componentValue.selectedVal)
@@ -295,14 +339,14 @@ const Home = (props) => {
                       key={index}
                       className={`w-full mx-auto ${componentValue.visibility == 'off' ? 'hidden' : ''} ${backgroundStyle === 'outer' ? backgroundImageClass : ''}`} 
                       
-                      style={ loadBackgroundType(componentValue) == 'image' ? { backgroundImage: backgroundStyle === 'outer' ? backgroundDefault : 'none' } : { background: backgroundStyle === 'outer' ? backgroundDefault : 'none' }}
+                      style={ loadBackgroundType(componentValue) == 'image' ? { backgroundImage: backgroundStyle === 'outer' ? backgroundDefault : 'none', backgroundAttachment: backgroundStyle === 'outer' ? (fixedBgDisplay ? 'fixed' : 'inherit') : 'inherit' } : { background: backgroundStyle === 'outer' ? backgroundDefault : 'none' }}
                       id={`div${componentValue.no}`}
                       // ref={ref => {
                       //     refArray.current[componentValue.uid] = ref; // took this from your guide's example.
                       // }}
                     >
                     <section className={`${additionalclass}`} >
-                     <div className={`${innerDivClass} ${backgroundStyle === 'inner' ? backgroundImageClass : ''}`} style={ loadBackgroundType(componentValue) == 'image' ? { backgroundImage: backgroundStyle === 'inner' ? backgroundDefault : 'none' } : { background: backgroundStyle === 'inner' ? backgroundDefault : 'none' }} >     
+                     <div className={`${innerDivClass} ${backgroundStyle === 'inner' ? backgroundImageClass : ''}`} style={ loadBackgroundType(componentValue) == 'image' ? { backgroundImage: backgroundStyle === 'inner' ? backgroundDefault : 'none', backgroundAttachment: backgroundStyle === 'inner' ? (fixedBgDisplay ? 'fixed' : 'inherit') : 'inherit'  } : { background: backgroundStyle === 'inner' ? backgroundDefault : 'none' }} >     
                      {Object.keys(componentValue.properties).includes('PlainText') ? (<>
                       <div dangerouslySetInnerHTML={{ __html: componentValue.selectedVal?.PlainText.value }} />
                      </>) : ( <>

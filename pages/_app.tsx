@@ -17,7 +17,7 @@ import {
   extractCookies,
   Logout,
   nextJsSetCookie,
-  setCookie
+  setCookie,
 } from 'helpers_v2/common.helper';
 import { useActions_v2 } from 'hooks_v2';
 
@@ -26,7 +26,7 @@ import { __Cookie } from '@constants/global.constant';
 import EmployeeController from '@controllers/EmployeeController';
 import {
   _FetchStoreConfigurations,
-  _StoreReturnType
+  _StoreReturnType,
 } from '@definations/store.type';
 import { conditionalLog_V2 } from '@helpers/console.helper';
 
@@ -36,7 +36,7 @@ import { _Expected_AppProps, PageResponseType } from '@definations/app.type';
 import { _MenuItems } from '@definations/header.type';
 import {
   FetchCompanyConfiguration,
-  getAllConfigurations
+  getAllConfigurations,
 } from '@services/app.service';
 import { GetStoreCustomer } from '@services/user.service';
 import Redefine_Layout from '@templates//TemplateComponents/Redefine_Layout';
@@ -45,7 +45,7 @@ import AuthGuard from 'Guard/AuthGuard';
 type AppOwnProps = {
   store: _StoreReturnType | null;
   menuItems: _MenuItems | null;
-  configs: _FetchStoreConfigurations | null;
+  configs: (_FetchStoreConfigurations | null)[];
   // Husain - added any for now - 20-3-23
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   pageProps: any | null;
@@ -185,7 +185,7 @@ const RedefineCustomApp = ({
           logoUrl={store.urls.logo}
           storeCode={store.code}
           storeTypeId={store.storeTypeId}
-          configs={{ footer: configs }}
+          configs={{ footer: configs[0] }}
           menuItems={menuItems}
         >
           <Component {...pageProps} />
@@ -291,6 +291,7 @@ RedefineCustomApp.getInitialProps = async (
             'customScript',
             'customHomeScript',
             'customGlobalBodyScript',
+            'googleTags',
           ],
         });
 
@@ -335,6 +336,14 @@ RedefineCustomApp.getInitialProps = async (
   }
 
   if (expectedProps.store.storeId) {
+    let customScript = expectedProps.configs[1]?.config_value
+      ? expectedProps.configs[1]?.config_value
+      : JSON.stringify({ googleFonts: '' });
+
+    let googleTags = expectedProps?.configs[4]?.config_value
+      ? expectedProps?.configs[4]?.config_value
+      : JSON.stringify(_globalStore.googleTags);
+
     _globalStore.set({ key: 'storeId', value: expectedProps.store.storeId });
     _globalStore.set({
       key: 'isAttributeSaparateProduct',
@@ -368,13 +377,41 @@ RedefineCustomApp.getInitialProps = async (
       key: 'companyId',
       value: expectedProps.companyId,
     });
+    _globalStore.set({
+      key: 'customGlobalBodyScript',
+      value: JSON.parse(customScript)?.customGlobalBodyScript,
+    });
+    _globalStore.set({
+      key: 'customGlobalBodyScript',
+      value: JSON.parse(customScript)?.customGlobalBodyScript,
+    });
+    _globalStore.set({
+      key: 'googleFonts',
+      value: JSON.parse(customScript)?.googleFonts,
+    });
+    _globalStore.set({
+      key: 'customHeadScript',
+      value: JSON.parse(customScript)?.customHeadScript,
+    });
+    _globalStore.set({
+      key: 'customGoogleVerification',
+      value: JSON.parse(customScript)?.customGoogleVerification,
+    });
+    _globalStore.set({
+      key: 'customFooterScript',
+      value: JSON.parse(customScript)?.customFooterScript,
+    });
+    _globalStore.set({
+      key: 'googleTags',
+      value: JSON.parse(googleTags),
+    });
   }
 
   return {
     ...ctx,
     store: expectedProps.store,
     menuItems: expectedProps.menuItems,
-    configs: expectedProps.configs[0],
+    configs: expectedProps.configs,
   };
 };
 

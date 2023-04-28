@@ -2,11 +2,7 @@ import { logoLocation as logoLocationEnum } from '@constants/enum';
 import { cartRemoveConfirmMessage } from '@constants/global.constant';
 import { commonMessage } from '@constants/successError.text';
 import { CommanMessage } from '@constants/successErrorMessages.constant';
-import {
-  _CartItem,
-  _ProductDetails,
-  _ProductPolicy,
-} from '@definations/startOrderModal';
+import { _CartItem, _ProductDetails } from '@definations/startOrderModal';
 import { LogoDetails as SOMLogoDetails } from '@redux/slices/cart';
 import { addToCart, deleteItemCart } from '@services/cart.service';
 import {
@@ -38,7 +34,6 @@ const CartController = () => {
     product_storeData,
   } = useActions_v2();
   const cartData = useTypedSelector_v2((state) => state.cart.cart);
-  const [endUserName, setEndUserName] = useState<string>('');
 
   const { loggedIn: isEmployeeLoggedIn, isLoadingComplete } =
     useTypedSelector_v2((state) => state.employee);
@@ -54,8 +49,6 @@ const CartController = () => {
   const [product, setProduct] = useState<_ProductDetails>();
   const [currentCartProduct, setCurrentCartProduct] = useState<_CartItem>();
   const [showAddOtf, setShowAddOtf] = useState(false);
-  const [productPolicy, setproductPolicy] = useState<_ProductPolicy[]>();
-  const [endUserDisplay, setEndUserDisplay] = useState<boolean>(false);
 
   const getNewOptionAr = () =>
     cartData
@@ -393,44 +386,6 @@ const CartController = () => {
     }
   };
 
-  const getPolicyDetails = (cartProducts: _CartItem[]) => {
-    let flag = false;
-    let policydetailsArray: _ProductPolicy[] = [];
-    cartProducts?.map((product) => {
-      if (storeId) {
-        FetchProductById({
-          seName: product.seName,
-          storeId: storeId,
-          productId: 0,
-        }).then((resp) => {
-          if (resp) {
-            const res = resp as _ProductDetails;
-            const PolicyDetails: _ProductPolicy = {
-              storeId: res.storeId,
-              brandID: res.brandID,
-              brandName: res.brandName,
-              isBrandOnline: res.isBrandOnline,
-              isPolicywithcheckbox: res.isPolicywithcheckbox,
-              policyMessage: res.policyMessage,
-              isEnduserDisplay: res.isEnduserDisplay,
-            };
-            policydetailsArray.push(PolicyDetails);
-            const policybrandarray = policydetailsArray.map((item) =>
-              JSON.stringify(item),
-            );
-            const uniquePolicyProduct = new Set(policybrandarray);
-            const PolicyProduct = Array.from(uniquePolicyProduct).map((item) =>
-              JSON.parse(item),
-            );
-            if (res.isEnduserDisplay) {
-              setEndUserDisplay(true);
-            }
-            setproductPolicy([...PolicyProduct]);
-          }
-        });
-      }
-    });
-  };
   return {
     cartData,
     removeCartItem,
@@ -444,11 +399,6 @@ const CartController = () => {
     loadProduct,
     showAddOtf,
     setShowAddOtf,
-    getPolicyDetails,
-    productPolicy,
-    endUserDisplay,
-    setEndUserName,
-    endUserName,
   };
 };
 

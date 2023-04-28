@@ -40,6 +40,8 @@ export type CTProps = {
   setAddressType: (arg: null | 'S' | 'B') => void;
   setShippingMethod: (arg: _shippingMethod[] | []) => void;
   shippingMethod: _shippingMethod[] | [];
+  endUserDisplay: boolean;
+  setEndUserName: (arg: string) => void;
 };
 
 export interface _shippingMethod {

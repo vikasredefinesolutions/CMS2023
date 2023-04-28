@@ -23,15 +23,19 @@ const CompanyInfo: React.FC<_props> = ({ phoneNumber, email }) => {
 
   if (view == 'DESKTOP')
     return (
-      <div className='break-words w-full text-right hidden sm:block pb-[10px] text-default-text'>
-        {__pagesText.Headers.companyPhoneQuestion}{' '}
-        <a href={`'tel:${phoneNumber}`} className='break-words'>
-          {phoneNumber}
-        </a>{' '}
-        {__pagesText.Headers.companyEmailQuestion}{' '}
-        <a href={`mailto:${email}`} className='break-words'>
-          {email}
-        </a>
+      <div className='break-words w-full text-right hidden sm:block pb-[10px] text-default-text flex text-white'>
+        <div>
+          {__pagesText.Headers.companyPhoneQuestion}{' '}
+          <a href={`'tel:${phoneNumber}`} className='break-words'>
+            {phoneNumber}
+          </a>{' '}
+        </div>
+        <div>
+          {__pagesText.Headers.companyEmailQuestion}{' '}
+          <a href={`mailto:${email}`} className='break-words'>
+            {email}
+          </a>
+        </div>
       </div>
     );
   return <></>;

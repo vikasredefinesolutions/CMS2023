@@ -118,7 +118,7 @@ const LogosToPrint: React.FC<_props> = ({ setShowOrSelect }) => {
       }
     }
     // modalHandler(null);
-    router.push('/cart.html');
+    router.push('/cart');
   };
 
   const actionHandler = (action: 'CONTINUE' | 'CANCEL') => {

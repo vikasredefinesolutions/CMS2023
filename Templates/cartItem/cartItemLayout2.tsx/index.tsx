@@ -122,7 +122,6 @@ const CIlayout2: FC<any> = ({
       setShowLoader(true);
       updateCartQuantity(payload)
         .then((res) => {
-          // console.log('RESSSSS', res);
           if (res) {
             let size = sizeId;
             fetchCartDetails({ customerId: id ? id : 0, isEmployeeLoggedIn });
@@ -156,7 +155,6 @@ const CIlayout2: FC<any> = ({
         shoppingCartItemsId: shoppingCartId,
       },
     };
-    console.log(payload, 'payload');
     const confirmRes = confirm(cartQuantityUpdateConfirmMessage);
     if (confirmRes) {
       removeLogo(payload)
@@ -261,33 +259,6 @@ const CIlayout2: FC<any> = ({
                                   </div>
                                   <div className='w-full md:w-1/3 flex flex-wrap items-center gap-1 pl-[5px] pr-[5px] mb-[10px]'>
                                     <div className='text-default-text'>Qty</div>
-                                    <div className='text-default-text'>
-                                      <input
-                                        className='text-default-text pl-[5px] pr-[5px] pt-[5px] pb-[5px] w-[60px] mr-2 rounded border-[#000000]'
-                                        value={view.qty}
-                                      />
-                                      <button
-                                        onClick={() => {}}
-                                        className='btn btn-sm btn-primary'
-                                      >
-                                        UPDATE
-                                      </button>
-                                    </div>
-                                  </div>
-                                  <div className='w-full md:w-1/3 flex flex-wrap items-center justify-between gap-2 pl-[5px] pr-[5px] mb-[10px]'>
-                                    <div className='text-default-text'>
-                                      <Price value={view.price} />
-                                    </div>
-                                    <div className='text-default-text'>
-                                      <span className='!text-anchor hover:!text-anchor-hover cursor-pointer'>
-                                        {__pagesText.cart.remove}
-                                      </span>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div className='w-full md:w-1/3 flex flex-wrap items-center gap-1 pl-[5px] pr-[5px] mb-[10px]'>
-                                  <div className='text-default-text'>Qty</div>
-                                  <div className='text-default-text'>
                                     <form>
                                       <input
                                         className='text-default-text pl-[5px] pr-[5px] pt-[5px] pb-[5px] w-[60px] mr-2 rounded border-[#000000]'
@@ -326,20 +297,20 @@ const CIlayout2: FC<any> = ({
                                       )}
                                     </form>
                                   </div>
-                                </div>
-                                <div className='w-full md:w-1/3 flex flex-wrap items-center justify-between gap-2 pl-[5px] pr-[5px] mb-[10px]'>
-                                  <div className='text-default-text'>
-                                    <Price value={view.price} />
-                                  </div>
-                                  <div className='text-default-text'>
-                                    <span
-                                      className='!text-anchor hover:!text-anchor-hover cursor-pointer'
-                                      onClick={() => {
-                                        handleSizeRemove(view, item);
-                                      }}
-                                    >
-                                      {__pagesText.cart.remove}
-                                    </span>
+                                  <div className='w-full md:w-1/3 flex flex-wrap items-center justify-between gap-2 pl-[5px] pr-[5px] mb-[10px]'>
+                                    <div className='text-default-text'>
+                                      <Price value={view.price} />
+                                    </div>
+                                    <div className='text-default-text'>
+                                      <span
+                                        className='!text-anchor hover:!text-anchor-hover cursor-pointer'
+                                        onClick={() => {
+                                          handleSizeRemove(view, item);
+                                        }}
+                                      >
+                                        {__pagesText.cart.remove}
+                                      </span>
+                                    </div>
                                   </div>
                                 </div>
                               </>

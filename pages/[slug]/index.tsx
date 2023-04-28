@@ -35,12 +35,10 @@ const SlugSearch: NextPage<_SlugServerSideProps | _SlugServerSide_WentWrong> = (
   }
 
   if (pageMetaData?.type === 'product' && page?.productDetails && _store) {
-    let storeCode = _store.storeCode;
-
     return (
       <ProductDetails
         {...page?.productDetails}
-        storeCode={storeCode}
+        storeCode={_store.storeCode}
         storeTypeId={_store.storeTypeId}
         productDetailsTemplateId={page.productDetails.productDetailsTemplateId}
       />
@@ -59,12 +57,15 @@ const SlugSearch: NextPage<_SlugServerSideProps | _SlugServerSide_WentWrong> = (
             keywords={listing.brandSEO.seKeyWords}
           />
         )}
-        <Banner
-          storeId={pageMetaData.storeId}
-          slug={pageMetaData.slug}
-          seType={pageMetaData.type}
-          id={page.productListing.bannerType}
-        />
+        {page.productListing.bannerType !== 'none' && (
+          <Banner
+            storeId={pageMetaData.storeId}
+            slug={pageMetaData.slug}
+            seType={pageMetaData.type}
+            id={page.productListing.bannerType}
+          />
+        )}
+
         <ProductListing
           pageData={page?.productListing}
           slug={pageMetaData?.slug}

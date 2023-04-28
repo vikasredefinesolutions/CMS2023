@@ -41,14 +41,28 @@ import router from 'next/router';
 import { ChangeEvent, useEffect, useState } from 'react';
 
 import { __pagesConstant } from '@constants/pages.constant';
-import CartController from '@controllers/cartController';
+import { PaymentOptions } from '@definations/APIs/cart.req';
 import { CustomerAddress } from '@definations/APIs/user.res';
+import {
+  _CartItem,
+  _ProductDetails,
+  _ProductPolicy,
+} from '@definations/startOrderModal';
+import {
+  getCustomerAllowBalance,
+  getPaymentOption,
+} from '@services/payment.service';
+import { FetchProductById } from '@services/product.service';
 import { _shippingMethod } from '@templates/checkout/checkout';
 import CheckoutAddressForm, {
   AddressFormRefType,
   AddressType,
 } from './CheckoutAddressForm';
 const CheckoutController = () => {
+  const [endUserNameS, setEndUserName] = useState<string>('');
+  const [endUserDisplay, setEndUserDisplay] = useState<boolean>(false);
+  const [productPolicy, setproductPolicy] = useState<_ProductPolicy[]>();
+
   const [currentPage, setCurrentPage] = useState(checkoutPages.login);
   const [allowGuest, setAllowGuest] = useState(true);
   const [customerEmail, setCustomerEmail] = useState('');
@@ -65,9 +79,13 @@ const CheckoutController = () => {
     cardExpirationMonth: '',
     cardExpirationYear: '',
   });
-  // const [allowedBalance, setAllowedBalance] = useState(0);
+  const [allowedBalance, setAllowedBalance] = useState(0);
   const [purchaseOrder, setPurchaseOrder] = useState('');
   const [shippingAdress, setShippingAdress] = useState<AddressType | null>(
+    null,
+  );
+
+  const [paymentOptions, setPaymentOption] = useState<PaymentOptions | null>(
     null,
   );
   const [billingAdress, setBillingAdress] = useState<AddressType | null>(null);
@@ -93,6 +111,7 @@ const CheckoutController = () => {
     updateCustomer,
     updateWishListData,
     getStoreCustomer,
+    customerCreditBalanceUpdate,
   } = useActions_v2();
   const user = useTypedSelector_v2((state) => state.user);
   const cartData = useTypedSelector_v2((state) => state.cart.cart);
@@ -106,7 +125,6 @@ const CheckoutController = () => {
   const customerId = GetCustomerId();
   const { totalPrice, subTotal, salesTax, discount, creditBalance } =
     GetCartTotals();
-  const { endUserName } = CartController();
 
   const billingForm = CheckoutAddressForm({});
   const shippingForm = CheckoutAddressForm({});
@@ -130,6 +148,13 @@ const CheckoutController = () => {
   }, [cartData, isLoadingComplete]);
 
   useEffect(() => {
+    if (storeId) {
+      getPaymentOption({ storeId }).then((payment) =>
+        setPaymentOption(payment),
+      );
+    }
+  }, [storeId]);
+  useEffect(() => {
     if (isLoggedIn && user.customer) {
       if (user.customer.customerAddress.length > 0) {
         if (customer && customer.customerAddress) {
@@ -141,6 +166,18 @@ const CheckoutController = () => {
     }
   }, [user]);
 
+  useEffect(() => {
+    let c_id: string | null | number;
+
+    if (customer?.id) {
+      c_id = customer?.id;
+      getCustomerAllowBalance(+customer?.id).then((res) => {
+        if (res && typeof res === 'number') {
+          setAllowedBalance(res);
+        }
+      });
+    }
+  }, [customer]);
   const checkEmail = async (values: { email: string }) => {
     const response = await checkCustomerAlreadyExist(values.email, storeId);
     if (response) {
@@ -154,6 +191,52 @@ const CheckoutController = () => {
         setAllowGuest(false);
       }
     }
+  };
+
+  const getPolicyDetails = (cartProducts: _CartItem[]) => {
+    let flag = false;
+    let policydetailsArray: _ProductPolicy[] = [];
+    cartProducts?.map((product) => {
+      if (storeId) {
+        FetchProductById({
+          seName: product.seName,
+          storeId: storeId,
+          productId: 0,
+        }).then((resp) => {
+          if (resp) {
+            const res = resp as _ProductDetails;
+            const PolicyDetails: _ProductPolicy = {
+              storeId: res.storeId,
+              brandID: res.brandID,
+              brandName: res.brandName,
+              isBrandOnline: res.isBrandOnline,
+              isPolicywithcheckbox: res.isPolicywithcheckbox,
+              policyMessage: res.policyMessage,
+              isEnduserDisplay: res.isEnduserDisplay,
+            };
+            policydetailsArray.push(PolicyDetails);
+            const policybrandarray = policydetailsArray.map((item) =>
+              JSON.stringify(item),
+            );
+            const uniquePolicyProduct = new Set(policybrandarray);
+            const PolicyProduct = Array.from(uniquePolicyProduct).map((item) =>
+              JSON.parse(item),
+            );
+            if (res.isEnduserDisplay) {
+              setEndUserDisplay(true);
+            }
+            setproductPolicy([...PolicyProduct]);
+          }
+        });
+      }
+    });
+  };
+  const checkHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    const useBalance = e.target.checked;
+    customerCreditBalanceUpdate({
+      useBalance,
+      allowedBalance,
+    });
   };
 
   const continueAsGuest = () => {
@@ -390,7 +473,8 @@ const CheckoutController = () => {
         orderStatus: __pagesConstant.checkoutPage.orderStatus,
         transactionStatus: __pagesConstant.checkoutPage.transactionStatus,
         shippingMethod: shippingMethod[0].name,
-        endUserName: endUserName,
+        endUserName: endUserNameS,
+        orderShippingCosts: shippingMethod[0].price,
       };
       const order = {
         orderModel,
@@ -398,6 +482,9 @@ const CheckoutController = () => {
       try {
         logoutClearCart();
         deleteCookie(__Cookie.tempCustomerId);
+
+        console.log('endTestvalue', endUserNameS);
+
         const res = await placeOrderService(order);
         setShowLoader(false);
         if (res) {
@@ -532,6 +619,13 @@ const CheckoutController = () => {
     setAddressEditData,
     setShippingMethod,
     shippingMethod,
+    paymentOptions,
+    allowedBalance,
+    checkHandler,
+    setEndUserName,
+    endUserDisplay,
+    productPolicy,
+    endUserNameS,
   };
 };
 

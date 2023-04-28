@@ -5,7 +5,7 @@ import { __pagesText } from '@constants/pages.text';
 import { useState } from 'react';
 import { paymentProps } from '..';
 
-const CardPaymentType3: paymentProps = ({
+const CardPaymentType1: paymentProps = ({
   updatePaymentMethod,
   changeHandler,
   detectCardType,
@@ -23,10 +23,10 @@ const CardPaymentType3: paymentProps = ({
             className='!text-anchor hover:!text-anchor-hover underline'
             id='btn-use-purchase-order'
             onClick={() =>
-              updatePaymentMethod(paymentMethodCustom.creditWallet)
+              updatePaymentMethod(paymentMethodCustom.purchaseOrder)
             }
           >
-            Use Net
+            Use Purchase Order
           </button>
         </div>
       </div>
@@ -71,7 +71,7 @@ const CardPaymentType3: paymentProps = ({
                   {index + 1}
                 </option>
               ))}
-            </select>
+            </select>{' '}
             <label
               htmlFor='Month'
               className='left-[8px] absolute duration-300 top-[11px] -z-1 origin-0 text-[#000000] text-[18px]'
@@ -150,4 +150,4 @@ const CardPaymentType3: paymentProps = ({
   );
 };
 
-export default CardPaymentType3;
+export default CardPaymentType1;

@@ -11,7 +11,7 @@ export const _Store = {
   type8: 'bcorp',
   type9: 'betahumana',
   type10: 'cyxtera',
-  type11: 'gilbaneco',
+  type11: 'cyxtera',
   type12: 'healthyPoints',
   type13: 'bacardi',
   type14: 'humanaheroes',
@@ -36,14 +36,14 @@ export const _StoreDomains = {
   domain1: 'cg.redefinecommerce.info',
   domain2: 'gg.headlessmart.com',
   domain3: 'pkhealth.redefinecommerce.info',
-  domain4: 'di.headlessmart.com',
+  domain4: 'https://di.redefinecommerce.info',
   domain5: 'https://bacardi.headlessmart.com',
   domain6: 'bacarditogo.headlessmart.com', // CLOSED
   domain7: 'bbcprod.headlessmart.com',
   domain8: 'bcorp',
   domain9: 'betahumana', // CLOSED
   domain10: 'cyxtera',
-  domain11: 'gilbaneco', // CLOSED
+  domain11: 'https://cyxtera.redefinecommerce.info',
   domain12: 'healthyPoints', // DUPLICATE
   domain13: 'bacardi',
   domain14: 'humanaheroes', // CLOSED

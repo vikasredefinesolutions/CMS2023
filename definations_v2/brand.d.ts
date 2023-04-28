@@ -18,4 +18,5 @@ export interface _BrandProps {
 export interface _BrandsTemplates {
   type1: React.FC<_BrandProps>;
   type2: React.FC<_BrandProps>;
+  type3: React.FC<_BrandProps>;
 }
