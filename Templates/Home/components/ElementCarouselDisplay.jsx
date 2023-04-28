@@ -16,7 +16,7 @@ const ElementCarouselDisplay = ({ bannerArr }) => {
       ? bannerArr.showArrow == 'On'
         ? true
         : false
-      : true;
+      : false;
 
   const arrowType =
     bannerArr.arrowType != undefined ? bannerArr.arrowType : 'Arrow1';
@@ -25,38 +25,37 @@ const ElementCarouselDisplay = ({ bannerArr }) => {
       ? bannerArr.showIndicators == 'On'
         ? true
         : false
-      : true;
+      : false;
   const showThumb =
     bannerArr.showThumb != undefined
       ? bannerArr.showThumb == 'On'
         ? true
         : false
-      : true;
+      : false;
   const autoPlay =
     bannerArr.autoPlay != undefined
       ? bannerArr.autoPlay == 'On'
         ? true
         : false
-      : true;
+      : false;
   const infiniteLoop =
     bannerArr.infiniteLoop != undefined
       ? bannerArr.infiniteLoop == 'On'
         ? true
         : false
-      : true;
+      : false;
   const stopOnHover =
     bannerArr.stopOnHover != undefined
       ? bannerArr.stopOnHover == 'On'
         ? true
         : false
-      : true;
+      : false;
   const showStatus =
     bannerArr.showStatus != undefined
       ? bannerArr.showStatus == 'On'
         ? true
         : false
-      : true;
-
+      : false
       
 
 const handleTransition= ()=>{
