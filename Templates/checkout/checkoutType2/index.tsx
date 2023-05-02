@@ -39,6 +39,7 @@ const ChekoutType2: FC<CTProps> = ({
   setAddressType,
   setShippingMethod,
   shippingMethod,
+  cartType,
 }) => {
   const [showPayment, setshowPayment] = useState<boolean>(false);
 
@@ -168,6 +169,7 @@ const ChekoutType2: FC<CTProps> = ({
                   {...{
                     isRemovable: false,
                     cartData: cartData,
+                    cartType: cartType,
                   }}
                 />
               ) : (

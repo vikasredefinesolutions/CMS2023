@@ -3,7 +3,8 @@ import Price from '@appComponents/reUsable/Price';
 import WishlistButton from '@appComponents/ui/Wishlist';
 import { showcolors, zeroValue } from '@constants/global.constant';
 import {
-  GetlAllProductList, GetProductImageOptionList
+  newFetauredItemResponse,
+  splitproductList,
 } from '@definations/productList.type';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import Link from 'next/link';
@@ -13,7 +14,7 @@ import ProductBoxController from './ProductBox.controller';
 
 interface _props {
   brandId: number;
-  product: GetlAllProductList;
+  product: newFetauredItemResponse;
   colorChangeHandler: (
     productId: number | undefined,
     seName: string | undefined,
@@ -54,7 +55,7 @@ const BrandProduct: React.FC<_props> = (props) => {
         className={`w-full ${
           style === 'Flex' ? '' : 'lg:w-3/12'
         } relative  text-center`}
-        data-id={product.id}
+        data-id={product.productId}
       >
         <div className='border border-gray-200 bg-white border-solid p-5'>
           <Link
@@ -86,8 +87,8 @@ const BrandProduct: React.FC<_props> = (props) => {
                       ? product?.productId
                       : zeroValue,
                   name: product?.productName ? product.productName : '',
-                  color: currentProduct?.colorName
-                    ? currentProduct?.colorName
+                  color: currentProduct?.attributeOptionName
+                    ? currentProduct?.attributeOptionName
                     : '',
                   price: product.salePrice,
                   wishlistId: wishListId,
@@ -118,41 +119,41 @@ const BrandProduct: React.FC<_props> = (props) => {
               </span>
             </div>
             <ul role='list' className='flex items-center justify-center mt-2'>
-              {product?.moreImages &&
-                product?.moreImages.map(
-                  (option: GetProductImageOptionList, index: number) =>
+              {product?.splitproductList &&
+                product?.splitproductList.map(
+                  (option: splitproductList, index: number) =>
                     index < showcolors ? (
-                      <li
-                        key={index}
-                        className={`border-2  w-7 h-7 text-center overflow-hidden ${
-                          option.attributeOptionID ==
-                          currentProduct?.attributeOptionID
-                            ? 'border-secondary'
-                            : ''
-                        } hover:border-secondary ml-1`}
-                        onClick={() => {
-                          colorChangeHandler(
-                            product.productId,
-                            product.productSEName || '',
-                            option.attributeOptionName,
-                          );
-                          setCurrentProduct(option);
-                        }}
+                      <Link
+                        key={option.prodcutId}
+                        href={`/${option.seName}.html`}
                       >
-                        <img
-                          src={`${mediaBaseUrl}${option.imageUrl}`}
-                          alt=''
-                          title=''
-                          className='max-h-full m-auto'
-                          data-option={JSON.stringify(option)}
-                        />
-                      </li>
+                        <li
+                          key={index}
+                          className={`border-2  w-7 h-7 text-center overflow-hidden ${
+                            option.colorName ==
+                            currentProduct?.attributeOptionName
+                              ? 'border-secondary'
+                              : ''
+                          } hover:border-secondary ml-1`}
+                        >
+                          <img
+                            src={`${mediaBaseUrl}${option.imageurl}`}
+                            alt=''
+                            title=''
+                            className='max-h-full m-auto'
+                            data-option={JSON.stringify(option)}
+                          />
+                        </li>
+                      </Link>
                     ) : (
                       <>{(flag = true)}</>
                     ),
                 )}
               {flag ? (
-                <Link key={product.id} href={`/${product.productSEName}.html`}>
+                <Link
+                  key={product.productId}
+                  href={`/${product.productSEName}.html`}
+                >
                   <li className='extra w-7 h-7 text-center border-2 hover:border-secondary inset-0 bg-primary text-xs font-semibold flex items-center justify-center text-white cursor-pointer'>
                     <span> +</span>
                     {product &&

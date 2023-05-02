@@ -15,7 +15,7 @@ import CartItem from 'Templates/cartItem';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import { _CartProps } from '../Cart';
-import EmptyCart from './components/emptyCart';
+import EmptyCart from '../components/emptyCart';
 
 const CartType2: React.FC<_CartProps> = ({
   cartData,
@@ -29,6 +29,7 @@ const CartType2: React.FC<_CartProps> = ({
   amtQtyBlurHandler,
   loadProduct,
   setShowAddOtf,
+  cartType,
 }) => {
   const storeId = useTypedSelector_v2((state) => state.store.id);
   const [availableFont, setAvailableFont] = useState<
@@ -53,9 +54,7 @@ const CartType2: React.FC<_CartProps> = ({
       });
     }
   }, [storeId]);
-  const isEmployeeLoggedIn = useTypedSelector_v2(
-    (state) => state.employee.loggedIn,
-  );
+
   if (!cartData || cartData.length === 0) {
     return <EmptyCart />;
   }
@@ -86,6 +85,7 @@ const CartType2: React.FC<_CartProps> = ({
                   availableFont,
                   availableLocation,
                   availableColor,
+                  cartType,
                 }}
               />
               <div className='mt-[16px] mb-[16px]'>

@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 
-import { GetlAllProductList } from '@definations/productList.type';
+import { GetlAllProductList } from '@templates/ProductListings/ProductListingType';
 import { useEffect, useState } from 'react';
 
 const ProductBoxController = ({
@@ -24,7 +24,6 @@ const ProductBoxController = ({
       product?.getProductImageOptionList &&
       product?.getProductImageOptionList?.length > 0
     ) {
-      console.log(product.getProductImageOptionList, 'opooooooo');
       colorChangeHandler(
         product.id,
         product.sename || '',

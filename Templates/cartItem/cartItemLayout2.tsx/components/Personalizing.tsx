@@ -168,7 +168,6 @@ const Personalizing: FC<any> = ({
       },
     ]);
   };
-  console.log(maximumWordsUnderChestLogo);
   return (
     <>
       <div className='w-full pl-[12px] pr-[12px]'>

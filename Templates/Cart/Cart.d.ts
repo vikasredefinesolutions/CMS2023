@@ -21,6 +21,7 @@ export interface _CartProps {
   amtQtyBlurHandler: (arg: number, mediaBaseUrl: string) => void;
   loadProduct: (product: _CartItem) => void;
   setShowAddOtf: (arg: boolean) => void;
+  cartType: number;
 }
 
 export interface _CartTemplates {

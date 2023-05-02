@@ -13,7 +13,7 @@ export interface AddToCartModel {
   cartLogoPersonModel: _CartLogoPersonModel[];
 }
 
-export interface _ProductListingConfig {
+export interface _ConfigType {
   id: number;
   store_id: number;
   config_name: string;

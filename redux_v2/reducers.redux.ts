@@ -9,6 +9,7 @@ import loaderReducer from './slices/loader.slice';
 import modalsReducer from './slices/modals.slice';
 import productReducer from './slices/product.slice';
 import redefineStoreReducer from './slices/redefineStore.slice';
+import sbStore from './slices/sbStore';
 import successReducer from './slices/success.slice';
 import userReducer from './slices/user.slice';
 import wishlistReducer from './slices/wishlist.slice';
@@ -27,6 +28,7 @@ const rootReducer = combineReducers({
   modals: modalsReducer,
   home: homeReducer,
   compare: compareReducer,
+  sbStore: sbStore,
 });
 
 // const rootReducer = combineReducers({

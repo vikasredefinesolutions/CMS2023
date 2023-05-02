@@ -13,12 +13,8 @@ const index = () => {
       let pageType = res.config_value ? JSON.parse(res.config_value) : {};
       setSeType(pageType.myAccountTemplateId);
     });
-  }, []);
-  return (
-    <>
-      <ManageLogo id={seType} />
-    </>
-  );
+  }, [storeId]);
+  return <>{seType && <ManageLogo id={seType} />}</>;
 };
 export { getServerSideProps };
 export default index;

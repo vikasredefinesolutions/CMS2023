@@ -12,8 +12,8 @@ import {
   _ProductBySku,
   _ProductDetails,
   _ProductDoNotExist,
-  _ProductsAlike,
   _ProductSEO,
+  _ProductsAlike,
   _ProductsRecentlyViewed,
   _ProductsRecentlyViewedPayload,
   _ProductsRecentlyViewedResponse,
@@ -32,10 +32,7 @@ import { conditionalLog_V2 } from '@helpers/console.helper';
 import { _FeaturedProduct } from '@templates/ProductDetails/productDetailsTypes/storeDetails.res';
 import { SendAsync } from '@utils/axios.util';
 import { _SubmitRequestConsultationPayload } from './product';
-import {
-  _ProductDetailsConfig,
-  _ProductListingConfig,
-} from './product.service.type';
+import { _ConfigType } from './product.service.type';
 
 export type _ProducDetailAPIs_V2 =
   | 'FetchColors'
@@ -192,29 +189,15 @@ export const FetchFiltersJsonByBrand = async (
 
   return res;
 };
-export const FetchProductListingConfig = async (
-  storeId: string,
-  configName: string,
-) => {
+export const FetchConfig = async (storeId: string, configName: string) => {
   const url = `CmsStoreThemeConfigs/getstorethemeconfigs/${storeId}/${configName}.json`;
-  const res = await SendAsync<_ProductListingConfig>({
+  const res = await SendAsync<_ConfigType>({
     url: url,
     method: 'GET',
   });
   return res;
 };
 
-export const FetchProductDetailsConfig = async (
-  storeId: string,
-  configName: string,
-) => {
-  const url = `CmsStoreThemeConfigs/getstorethemeconfigs/${storeId}/${configName}.json`;
-  const res = await SendAsync<_ProductDetailsConfig>({
-    url: url,
-    method: 'GET',
-  });
-  return res;
-};
 export const FetchFiltersJsonByCategory = async (
   filterRequest: FilterApiRequest,
 ) => {

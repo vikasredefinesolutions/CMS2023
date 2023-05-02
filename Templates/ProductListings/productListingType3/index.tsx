@@ -1,5 +1,6 @@
 import { __pagesText } from '@constants/pages.text';
-import React, { Fragment } from 'react';
+import { useTypedSelector_v2 } from '@hooks_v2/index';
+import React, { Fragment, useEffect } from 'react';
 import { _ListingProps } from '../ProductListingType';
 import FilterBarTypeThree from './components/FilterBarTypeThree';
 import FilterChipsTypeThree from './components/FilterChipsTypeThree';
@@ -29,6 +30,15 @@ const ProductListingType3: React.FC<_ListingProps> = ({
   brandId,
   sortingType,
 }) => {
+  const view = useTypedSelector_v2((state) => state.store.view);
+  useEffect(() => {
+    if (view == 'DESKTOP') {
+      setShowFilter(true);
+    } else {
+      setShowFilter(false);
+    }
+  }, [view]);
+
   return (
     <>
       {/* <FreeBanner /> */}

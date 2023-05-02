@@ -1,9 +1,15 @@
 import { default as Image } from '@appComponents/reUsable/Image';
 import Price from '@appComponents/reUsable/Price';
-import { useTypedSelector_v2 } from '@hooks_v2/index';
+import { cartQuantityUpdateConfirmMessage } from '@constants/global.constant';
+import {
+  commonMessage,
+  __SuccessErrorText,
+} from '@constants/successError.text';
+import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import { CartObject } from '@services/cart';
+import { updateCartQuantity } from '@services/cart.service';
 import Link from 'next/link';
-import { FC } from 'react';
+import { FC, useRef, useState } from 'react';
 import { _globalStore } from 'store.global';
 // import { CI_Props } from './cartItem';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -19,7 +25,66 @@ const CIlayout3: FC<any> = ({
   const { loggedIn: empLoggedIn } = useTypedSelector_v2(
     (state) => state.employee,
   );
+  const { setShowLoader, showModal, fetchCartDetails } = useActions_v2();
+  const valueRef = useRef<Record<string, undefined | number>>({});
+  const isEmployeeLoggedIn = useTypedSelector_v2(
+    (state) => state.employee.loggedIn,
+  );
+  const { id } = useTypedSelector_v2((state) => state.user);
+  const [sizeId, setSizeId] = useState<number[]>([]);
+  const handleUpdate = (e: string, qty: any, itemId: any) => {
+    if (+e !== qty) {
+      setSizeId((prev) => [...prev, itemId]);
+    } else {
+      let size = sizeId;
+      setSizeId(size.filter((id) => id !== itemId));
+    }
+  };
+  const handleUpdateQuantity = (
+    e: any,
+    attributeOptionId: string | number,
+    cartLogoPersonId: number,
+    cQuantity: number | undefined,
+  ) => {
+    e.preventDefault();
+    const payload = {
+      updateCartLinePersonModel: {
+        cartLogoPersonId: cartLogoPersonId,
+        quantity: cQuantity,
+        attributeOptionId: attributeOptionId,
+      },
+    };
 
+    const confirmRes = confirm(cartQuantityUpdateConfirmMessage);
+    if (confirmRes) {
+      setShowLoader(true);
+      updateCartQuantity(payload)
+        .then((res) => {
+          if (res) {
+            let size = sizeId;
+            fetchCartDetails({ customerId: id ? id : 0, isEmployeeLoggedIn });
+            setSizeId(
+              size.filter(
+                (id) =>
+                  id !== payload.updateCartLinePersonModel?.cartLogoPersonId,
+              ),
+            );
+            setShowLoader(false);
+            showModal({
+              message: commonMessage.updated,
+              title: __SuccessErrorText.Success,
+            });
+          }
+        })
+        .catch((el) => {
+          setShowLoader(false);
+          showModal({
+            message: el[''],
+            title: commonMessage.failed,
+          });
+        });
+    }
+  };
   let mediaBaseUrl = _globalStore.blobUrl; // for server side
   const clientSideMediaBaseUrl = useTypedSelector_v2(
     (state) => state.store.mediaBaseUrl,
@@ -125,6 +190,46 @@ const CIlayout3: FC<any> = ({
                                     )
                                   }
                                 />
+                              ) : isEditable ? (
+                                <form>
+                                  <div className='flex'>
+                                    <input
+                                      className='text-default-text pl-[5px] pr-[5px] pt-[5px] pb-[5px] w-[60px] mr-2 rounded border-[#000000]'
+                                      defaultValue={view.qty}
+                                      data-valueofinput={view.qty}
+                                      onChange={(e) => {
+                                        valueRef.current = {
+                                          ...valueRef.current,
+                                          [`${view.id}`]: +e.target.value,
+                                        };
+                                      }}
+                                      onBlur={(e) => {
+                                        handleUpdate(
+                                          e.target.value,
+                                          view.qty,
+                                          view.id,
+                                        );
+                                      }}
+                                    />
+                                    {sizeId.find((el) => el === view.id) && (
+                                      <button
+                                        onClick={(e) => {
+                                          handleUpdateQuantity(
+                                            e,
+                                            +item.attributeOptionId,
+                                            view.id,
+                                            valueRef.current[
+                                              view.id.toString()
+                                            ],
+                                          );
+                                        }}
+                                        className='btn btn-sm btn-primary'
+                                      >
+                                        UPDATE
+                                      </button>
+                                    )}
+                                  </div>
+                                </form>
                               ) : (
                                 view.qty
                               )}

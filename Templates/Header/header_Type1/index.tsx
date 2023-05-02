@@ -3,12 +3,13 @@ import { __pagesConstant } from '@constants/pages.constant';
 import {
   useActions_v2,
   useTypedSelector_v2,
-  useWindowDimensions_v2,
+  useWindowDimensions_v2
 } from 'hooks_v2';
 import { NextPage } from 'next';
 import { useEffect, useState } from 'react';
 import NotificationBar from 'Templates/NotificationBar';
 
+import { storeBuilderTypeId } from '@configs/page.config';
 import { paths } from '@constants/paths.constant';
 import { _HeaderProps } from '@definations/header.type';
 import {
@@ -17,7 +18,7 @@ import {
   Logo,
   MenuIcon,
   MyCartIcon,
-  WishListIcon,
+  WishListIcon
 } from '@header/header_Type1/Components/Icons';
 import MenuItems from '@header/header_Type1/Components/Menu/Header_MenuItems';
 import SearchBar from '@header/header_Type1/Components/Menu/Header_SearchBar';
@@ -38,6 +39,8 @@ const Header_Type1: NextPage<_HeaderProps> = ({
   // const userId = useTypedSelector_v2((state) => state.user.id);
   // const storeName = useTypedSelector_v2((state) => state.store.storeName);
   const showSideMenu = useTypedSelector_v2((state) => state.modals.sideMenu);
+  const storeTypeId = useTypedSelector_v2((state) => state.store.storeTypeId);
+  const islogo = useTypedSelector_v2((state) => state.sbStore.isLogo);
 
   // ------------------------------------------------------------------------
   const [isMobileView, setIsMobileView] = useState<boolean>(
@@ -70,11 +73,22 @@ const Header_Type1: NextPage<_HeaderProps> = ({
         <div className='fixed z-40 lg:hidden'></div>
         <header className='relative trancking-[1px]'>
           <nav aria-label='Top'>
-            <div className={`bg-[${headerBgColor}]`}>
+            <div className={`${headerBgColor ? '' : 'bg-[#ffffff]'}]`} style={{backgroundColor: headerBgColor}}>
               <div className='container pl-[15px] pr-[15px] mx-auto'>
                 <div className='pt-[10px] pb-[10px]'>
                   <div className='flex items-center justify-between'>
-                    {isMobileView ? null : (
+                    {storeTypeId == storeBuilderTypeId ? (
+                      islogo &&
+                      (isMobileView ? null : (
+                        <Logo
+                          // screen='DESKTOP'
+                          logo={{
+                            desktop: logoUrl.desktop,
+                            mobile: logoUrl.desktop,
+                          }}
+                        />
+                      ))
+                    ) : isMobileView ? null : (
                       <Logo
                         // screen='DESKTOP'
                         logo={{
@@ -94,15 +108,16 @@ const Header_Type1: NextPage<_HeaderProps> = ({
                           />
                         )}
 
-                    {isMobileView ? (
-                      <Logo
-                        // screen='MOBILE'
-                        logo={{
-                          desktop: logoUrl.desktop,
-                          mobile: logoUrl.desktop,
-                        }}
-                      />
-                    ) : null}
+                    {islogo &&
+                      (isMobileView ? (
+                        <Logo
+                          // screen='MOBILE'
+                          logo={{
+                            desktop: logoUrl.desktop,
+                            mobile: logoUrl.desktop,
+                          }}
+                        />
+                      ) : null)}
                     <div className='flex items-center justify-end'>
                       <div className='flex items-center '>
                         <div className='flex items-center '>

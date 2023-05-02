@@ -41,6 +41,7 @@ const ChekoutType3: FC<CTProps> = ({
   setAddressType,
   endUserDisplay,
   setEndUserName,
+  cartType,
 }) => {
   const { paymentOptions, allowedBalance, checkHandler } = CheckoutController();
 
@@ -78,6 +79,7 @@ const ChekoutType3: FC<CTProps> = ({
                 {...{
                   isRemovable: false,
                   cartData: cartData,
+                  cartType: cartType,
                 }}
               />
             </div>

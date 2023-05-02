@@ -8,10 +8,10 @@ import * as Yup from 'yup';
 import { paths } from '@constants/paths.constant';
 import { __ValidationText } from '@constants/validation.text';
 import {
+  createNewAccount_payload,
   _CNA_StoreCustomerAddress,
   _CNA_StoreCustomerModel,
   _CreateNewAccount_Payload,
-  createNewAccount_payload,
 } from '@payloads/createNewAccount.payload';
 import { CreateNewAccount } from '@services/user.service';
 import getLocation from 'helpers_v2/getLocation';
@@ -87,6 +87,16 @@ const SignUp_type1: React.FC = () => {
         storeId: storeId,
         customerType: 'corporate',
         industryId: 0,
+        gender: 'string',
+        memberFrom: 0,
+        memberTo: 0,
+        organizationId: 0,
+        primaryColor: '',
+        mascotId: '',
+        teamGender: '',
+        timeOfYearPurchase: '',
+        position: '',
+        navCustomerId: '',
         storeCustomerAddress: [
           {
             ...enteredInputs.storeCustomerAddress[0],

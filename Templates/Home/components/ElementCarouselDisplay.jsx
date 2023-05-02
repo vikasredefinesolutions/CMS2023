@@ -16,7 +16,7 @@ const ElementCarouselDisplay = ({ bannerArr }) => {
       ? bannerArr.showArrow == 'On'
         ? true
         : false
-      : false;
+      : true;
 
   const arrowType =
     bannerArr.arrowType != undefined ? bannerArr.arrowType : 'Arrow1';
@@ -55,7 +55,8 @@ const ElementCarouselDisplay = ({ bannerArr }) => {
       ? bannerArr.showStatus == 'On'
         ? true
         : false
-      : false
+      : false;
+
       
 
 const handleTransition= ()=>{
@@ -216,6 +217,11 @@ const handleTransition= ()=>{
                   {image.headline2_display && <div className={image.headline2_class ?? ''} style={{ color: image.font_color1 ?? '', textShadow: image.headline2_box_shadow ?? '' }} dangerouslySetInnerHTML={{
                     __html:
                         image.headline1
+                    }}></div> 
+                  }
+                  {image.description_display && <div className={image.description_class ?? ''} style={{ color: image.font_color2 ?? '' }} dangerouslySetInnerHTML={{
+                    __html:
+                        image.description
                     }}></div> 
                   }
                         {image.button_display == 'Yes' && (

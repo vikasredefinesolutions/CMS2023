@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+import { splitproductList } from '@definations/productList.type';
 import React from 'react';
 
 export interface _ProductListingProps {
@@ -251,7 +252,7 @@ export interface GetlAllProductList {
   sku?: string;
   imageUrl?: string;
   imap?: string;
-  moreImages?: GetProductImageOptionList[];
+  splitProductList: splitproductList[] | null;
   productId?: number;
   productName?: string;
   productSEName?: string;

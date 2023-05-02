@@ -4,8 +4,8 @@ import NxtImage from '@appComponents/reUsable/Image';
 import Price from '@appComponents/reUsable/Price';
 import WishlistButton from '@appComponents/ui/Wishlist';
 import { listing_max_showcolors, zeroValue } from '@constants/common.constant';
-import { GetlAllProductList } from '@definations/productList.type';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
+import { GetlAllProductList } from '@templates/ProductListings/ProductListingType';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { _globalStore } from 'store.global';
@@ -35,6 +35,9 @@ const TemplateOneListing = ({
   const customerId = useTypedSelector_v2((state) => state.user.id);
   const wishListData = useTypedSelector_v2(
     (state) => state.wishlist.wishListData,
+  );
+  const { isAttributeSaparateProduct } = useTypedSelector_v2(
+    (state) => state.store,
   );
 
   const store = useTypedSelector_v2((state) => state.store);
@@ -141,35 +144,59 @@ const TemplateOneListing = ({
                     role='list'
                     className='flex flex-wrap items-center mt-[12px] justify-center space-x-1'
                   >
-                    {product.getProductImageOptionList.map((subRow, index) =>
-                      index < listing_max_showcolors ? (
-                        <li
-                          className={`w-7 h-7 border-2 hover:border-secondary cursor-pointer ${
-                            subRow.id === currentProduct.id
-                              ? ' border-secondary'
-                              : 'border-light-gray'
-                          }`}
-                          onClick={() => {
-                            colorChangeHandler(
-                              product.id,
-                              product.sename || '',
-                              subRow.colorName,
-                            );
-                            setCurrentProduct(subRow);
-                          }}
-                          key={subRow.id}
-                        >
-                          <NxtImage
-                            src={`${mediaBaseUrl}${subRow.imageName}`}
-                            alt=''
-                            className=''
-                            title={subRow.colorName}
-                          />
-                        </li>
-                      ) : (
-                        <>{(flag = true)}</>
-                      ),
-                    )}
+                    {isAttributeSaparateProduct
+                      ? product.splitProductList &&
+                        product?.splitProductList.map((subRow, index) =>
+                          index < listing_max_showcolors ? (
+                            <Link
+                              key={product.id}
+                              href={`/${subRow.seName}.html`}
+                            >
+                              <li
+                                className={`w-7 h-7 border-2 hover:border-secondary cursor-pointer`}
+                                key={subRow.prodcutId}
+                              >
+                                <NxtImage
+                                  src={`${mediaBaseUrl}${subRow.imageurl}`}
+                                  alt=''
+                                  className=''
+                                  title={subRow.colorName}
+                                />
+                              </li>
+                            </Link>
+                          ) : (
+                            <>{(flag = true)}</>
+                          ),
+                        )
+                      : product.getProductImageOptionList.map((subRow, index) =>
+                          index < listing_max_showcolors ? (
+                            <li
+                              className={`w-7 h-7 border-2 hover:border-secondary cursor-pointer ${
+                                subRow.id === currentProduct.id
+                                  ? ' border-secondary'
+                                  : 'border-light-gray'
+                              }`}
+                              onClick={() => {
+                                colorChangeHandler(
+                                  product.id,
+                                  product.sename || '',
+                                  subRow.colorName,
+                                );
+                                setCurrentProduct(subRow);
+                              }}
+                              key={subRow.id}
+                            >
+                              <NxtImage
+                                src={`${mediaBaseUrl}${subRow.imageName}`}
+                                alt=''
+                                className=''
+                                title={subRow.colorName}
+                              />
+                            </li>
+                          ) : (
+                            <>{(flag = true)}</>
+                          ),
+                        )}
                     {flag ? (
                       <Link key={product.id} href={`/${product.sename}.html`}>
                         <li className='w-[28px] h-[28px] border-2 border-light-gray hover:border-secondary relative cursor-pointer'>

@@ -13,7 +13,7 @@ import MuiTab from '@mui/material/Tab';
 import { FetchDataByBrand } from '@services/brand.service';
 import { _SelectedBrands } from '@templates/ProductDetails/productDetailsTypes/storeDetails.res';
 
-import { GetlAllProductList } from '@definations/productList.type';
+import { newFetauredItemResponse } from '@definations/productList.type';
 import BrandProductListing from './BrandProducsListing';
 // import BrandProductListing from './BrandProducsListing';
 
@@ -37,7 +37,9 @@ const ProductsInfoTabs: React.FC<_props> = ({ dataArr }) => {
   const [value, setValue] = useState(
     dataArr?.featuredproducts_selected_brands?.value[0]?.value,
   );
-  const [brandsData, setBrandsData] = useState<GetlAllProductList[] | []>([]);
+  const [brandsData, setBrandsData] = useState<newFetauredItemResponse[] | []>(
+    [],
+  );
 
   // ** redux
   const { storeData } = useActions_v2();
@@ -51,7 +53,7 @@ const ProductsInfoTabs: React.FC<_props> = ({ dataArr }) => {
       maximumItemsForFetch: dataArr.featuredproducts_product_count.value,
       tagName: 'featured',
     };
-    const data: GetlAllProductList[] = await FetchDataByBrand(body);
+    const data: newFetauredItemResponse[] = await FetchDataByBrand(body);
     storeData({
       [value]: data,
     });

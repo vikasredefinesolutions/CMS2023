@@ -10,7 +10,7 @@ export const _Store = {
   type7: 'BBCPROD',
   type8: 'bcorp',
   type9: 'betahumana',
-  type10: 'cyxtera',
+  type10: 'gilbaneco',
   type11: 'cyxtera',
   type12: 'healthyPoints',
   type13: 'bacardi',
@@ -28,6 +28,7 @@ export const _Store = {
   type25: 'wayFair',
   type26: 'healthypoints',
   type27: 'bainCapital',
+  type28: 'sports23',
 };
 
 export const _StoreDomains = {
@@ -39,10 +40,10 @@ export const _StoreDomains = {
   domain4: 'https://di.redefinecommerce.info',
   domain5: 'https://bacardi.headlessmart.com',
   domain6: 'bacarditogo.headlessmart.com', // CLOSED
-  domain7: 'bbcprod.headlessmart.com',
+  domain7: 'bbcprod.parsonskellogg.com',
   domain8: 'bcorp',
   domain9: 'betahumana', // CLOSED
-  domain10: 'cyxtera',
+  domain10: 'gilbaneco',
   domain11: 'https://cyxtera.redefinecommerce.info',
   domain12: 'healthyPoints', // DUPLICATE
   domain13: 'bacardi',
@@ -60,9 +61,10 @@ export const _StoreDomains = {
   domain25: 'wayFair', // CLOSED
   domain26: 'healthypoints',
   domain27: 'bainCapital',
+  domain28: 'sports2023.redefinecommerce.info',
 };
 
-//////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////// bb
 //////////////////////////////////////////////////////////////////////
 /*                  DEV ENVIORNMENT SETTINGS                        */
 //////////////////////////////////////////////////////////////////////
@@ -128,12 +130,12 @@ export const __MockMenuItem = {
       {
         layoutType: _Store.type10,
         domain: _StoreDomains.domain10,
-        layoutName: 'cyxtera',
+        layoutName: 'gilbaneco',
       },
       {
         layoutType: _Store.type11,
         domain: _StoreDomains.domain11,
-        layoutName: 'gilbaneco',
+        layoutName: 'cyxtera',
       },
       {
         layoutType: _Store.type12,
@@ -235,3 +237,4 @@ export function layoutToShow_fn(payload: {
 
   return layout;
 }
+export const storeBuilderTypeId = 4;

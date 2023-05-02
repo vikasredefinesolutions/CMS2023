@@ -1,4 +1,6 @@
 import SuccessErrorModal from '@appComponents/modals/successErrorModal';
+import CloseStore from '@appComponents/reUsable/CloseStore';
+import { storeBuilderTypeId } from '@configs/page.config';
 import { paths } from '@constants/paths.constant';
 import { _MenuItems } from '@definations/header.type';
 import { _FetchStoreConfigurations } from '@definations/store.type';
@@ -20,15 +22,17 @@ interface _props {
     footer: _FetchStoreConfigurations | null;
   };
   menuItems: _MenuItems | null;
+  sbStore: any;
 }
 
 const Layout: React.FC<_props & _StoreCache> = ({
   children,
-  // storeTypeId,
+  storeTypeId,
   logoUrl,
   storeCode,
   menuItems,
   configs,
+  sbStore,
 }) => {
   useEffect(() => {
     if (localStorage) {
@@ -45,7 +49,21 @@ const Layout: React.FC<_props & _StoreCache> = ({
   const [headerBgColor, setHeaderBgColor] = useState<string>('');
   const [headerTextColor, setHeaderTextColor] = useState<string>('');
   const storeId = useTypedSelector_v2((state) => state.store?.id);
+  // const islogo = useTypedSelector_v2((state) => state.sbStore.isLogo);
+  const [isStoreOpend, setIsStoreOpen] = useState<boolean>(true);
 
+  const StoreOpen = (openStoreOn: string, closedStoreOn: string) => {
+    const openFrom = Date.parse(openStoreOn);
+    const closeOn = Date.parse(closedStoreOn);
+    const newDate = new Date();
+
+    const todayDate = Date.parse(`${newDate}`);
+    if (todayDate <= closeOn && todayDate >= openFrom) {
+      return setIsStoreOpen(true);
+    } else {
+      return setIsStoreOpen(false);
+    }
+  };
   useEffect(() => {
     if (!header.menuItems && storeId) {
       _AppController.fetchMenuItems(storeId).then((res) => {
@@ -61,6 +79,9 @@ const Layout: React.FC<_props & _StoreCache> = ({
       storeCode: storeCode || last.storeCode,
       logoUrl: logoUrl || last.logoUrl,
     }));
+    if (storeTypeId == storeBuilderTypeId) {
+      sbStore && StoreOpen(sbStore.openStoreOn, sbStore.closeStoreOn);
+    }
   }, [storeCode, logoUrl, storeId]);
   const router = useRouter();
   useEffect(() => {
@@ -93,7 +114,18 @@ const Layout: React.FC<_props & _StoreCache> = ({
         <BreadCrumb breadCrumbid={0} />
       )}
       <SuccessErrorModal />
-      <div style={{ flexGrow: 1 }}>{children}</div>
+      {storeTypeId == storeBuilderTypeId ? (
+        <>
+          {isStoreOpend ? (
+            <div style={{ flexGrow: 1 }}>{children}</div>
+          ) : (
+            <CloseStore />
+          )}
+        </>
+      ) : (
+        <div style={{ flexGrow: 1 }}>{children}</div>
+      )}
+
       <Footer data={configs.footer} />
     </>
   );

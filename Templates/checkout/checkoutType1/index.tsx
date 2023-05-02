@@ -37,6 +37,7 @@ const ChekoutType1: FC<CTProps> = ({
   shippingAdress,
   billingAdress,
   setAddressType,
+  cartType,
 }) => {
   return (
     <div className='container mx-auto pl-[15px] pr-[15px] mt-[20px] mb-[50px]'>
@@ -51,6 +52,7 @@ const ChekoutType1: FC<CTProps> = ({
                 {...{
                   isRemovable: false,
                   cartData: cartData,
+                  cartType: cartType,
                 }}
               />
             </div>

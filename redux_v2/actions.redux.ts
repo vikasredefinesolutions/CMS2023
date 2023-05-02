@@ -11,6 +11,7 @@ import { wishlistActions } from './slices/wishlist.slice';
 import { modalActions } from './slices/modals.slice';
 import { productActions } from './slices/product.slice';
 import { redefineStoreActions } from './slices/redefineStore.slice';
+import { sbStoreActions } from './slices/sbStore';
 import { userActions } from './slices/user.slice';
 
 const actions = {
@@ -27,6 +28,7 @@ const actions = {
   ...loaderActions,
   ...wishlistActions,
   ...modalActions,
+  ...sbStoreActions,
 };
 
 export default actions;

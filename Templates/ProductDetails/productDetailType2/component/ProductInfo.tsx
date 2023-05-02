@@ -42,7 +42,6 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
     }
 
     if (isLoggedIn === true) {
-      console.log(sizeQtys);
       if (sizeQtys === null || sizeQtys[0]?.qty === 0) {
         modalHandler('requiredQty');
         return;

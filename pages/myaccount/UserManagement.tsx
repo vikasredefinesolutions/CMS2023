@@ -13,12 +13,8 @@ const index = () => {
       let pageType = res.config_value ? JSON.parse(res.config_value) : {};
       setSeType(pageType.myAccountTemplateId);
     });
-  }, []);
-  return (
-    <>
-      <UserManagementAccountSetting id={seType} />
-    </>
-  );
+  }, [storeId]);
+  return <>{seType && <UserManagementAccountSetting id={seType} />}</>;
 };
 export { getServerSideProps };
 

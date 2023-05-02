@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { __domain } from '@configs/page.config';
+import { storeBuilderTypeId, __domain } from '@configs/page.config';
 import * as _AppController from '@controllers/_AppController.async';
 import { TrackFile } from '@services/tracking.service';
 import App, { AppContext, AppInitialProps, AppProps } from 'next/app';
@@ -26,16 +26,18 @@ import { __Cookie } from '@constants/global.constant';
 import EmployeeController from '@controllers/EmployeeController';
 import {
   _FetchStoreConfigurations,
+  _SbStoreConfiguration,
   _StoreReturnType,
 } from '@definations/store.type';
 import { conditionalLog_V2 } from '@helpers/console.helper';
 
 import Metatags from '@appComponents/MetaTags';
 import Spinner from '@appComponents/ui/spinner';
-import { _Expected_AppProps, PageResponseType } from '@definations/app.type';
+import { PageResponseType, _Expected_AppProps } from '@definations/app.type';
 import { _MenuItems } from '@definations/header.type';
 import {
   FetchCompanyConfiguration,
+  fetchSbStoreConfiguration,
   getAllConfigurations,
 } from '@services/app.service';
 import { GetStoreCustomer } from '@services/user.service';
@@ -49,6 +51,7 @@ type AppOwnProps = {
   // Husain - added any for now - 20-3-23
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   pageProps: any | null;
+  sbStore: _SbStoreConfiguration | null;
 };
 
 const RedefineCustomApp = ({
@@ -57,6 +60,7 @@ const RedefineCustomApp = ({
   store,
   menuItems,
   configs,
+  sbStore,
 }: AppProps & AppOwnProps) => {
   EmployeeController();
   const router = useRouter();
@@ -65,6 +69,7 @@ const RedefineCustomApp = ({
     logInUser,
     updateWishListData,
     store_storeDetails,
+    sbStore_sbStoreDetails,
   } = useActions_v2();
 
   const refreshHandler = () => {
@@ -151,6 +156,12 @@ const RedefineCustomApp = ({
       });
     }
 
+    if (sbStore && store?.storeTypeId == storeBuilderTypeId) {
+      sbStore_sbStoreDetails({
+        sbStore: sbStore,
+      });
+    }
+
     if (cookies && cookies.userId) {
       getUserDetails(cookies.userId, tempCustomerId);
     }
@@ -187,6 +198,7 @@ const RedefineCustomApp = ({
           storeTypeId={store.storeTypeId}
           configs={{ footer: configs[0] }}
           menuItems={menuItems}
+          sbStore={sbStore}
         >
           <Component {...pageProps} />
         </Redefine_Layout>
@@ -230,6 +242,36 @@ RedefineCustomApp.getInitialProps = async (
     configs: [],
     blobUrlRootDirectory: '',
     companyId: 0,
+    sbStore: {
+      id: null,
+      storeId: null,
+      organizationId: null,
+      sportId: null,
+      salesPersonId: 0,
+      salesCode: '',
+      directAccessURL: '',
+      estimateShipDate: '',
+      workOrder: null,
+      message: null,
+      isLogo: true,
+      messageTypeId: 0,
+      openStoreOn: '',
+      closeStoreOn: '',
+      serviceEmailId: 0,
+      serviceEmailSalesPersonId: 0,
+      servicePhoneId: 0,
+      servicePhoneSalesPersonId: 0,
+      logoUrl: '',
+      recStatus: null,
+      createdDate: null,
+      createdBy: null,
+      modifiedDate: null,
+      modifiedBy: null,
+      rowVersion: null,
+      location: null,
+      ipAddress: null,
+      macAddress: null,
+    },
   };
 
   //------------------------------------
@@ -335,6 +377,14 @@ RedefineCustomApp.getInitialProps = async (
     });
   }
 
+  if (
+    expectedProps.store.storeTypeId === storeBuilderTypeId &&
+    expectedProps.store.storeId
+  ) {
+    expectedProps.sbStore = await fetchSbStoreConfiguration({
+      storeId: expectedProps.store.storeId,
+    });
+  }
   if (expectedProps.store.storeId) {
     let customScript = expectedProps.configs[1]?.config_value
       ? expectedProps.configs[1]?.config_value
@@ -412,6 +462,7 @@ RedefineCustomApp.getInitialProps = async (
     store: expectedProps.store,
     menuItems: expectedProps.menuItems,
     configs: expectedProps.configs,
+    sbStore: expectedProps.sbStore,
   };
 };
 

@@ -1,8 +1,8 @@
-import { GetlAllProductList } from '@definations/productList.type';
+import { newFetauredItemResponse } from '@definations/productList.type';
 import { createSlice } from '@reduxjs/toolkit';
 
 export interface _CacheDataState {
-  cacheData: { [x: string]: GetlAllProductList[] | [] };
+  cacheData: { [x: string]: newFetauredItemResponse[] | [] };
 }
 
 const initialState: _CacheDataState = {
@@ -16,7 +16,7 @@ const cacheSlice = createSlice({
     storeData: (
       state,
       action: {
-        payload: { [x: string]: GetlAllProductList[] };
+        payload: { [x: string]: newFetauredItemResponse[] };
       },
     ) => {
       state.cacheData = { ...state.cacheData, ...action.payload };

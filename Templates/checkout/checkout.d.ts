@@ -42,6 +42,7 @@ export type CTProps = {
   shippingMethod: _shippingMethod[] | [];
   endUserDisplay: boolean;
   setEndUserName: (arg: string) => void;
+  cartType: number;
 };
 
 export interface _shippingMethod {

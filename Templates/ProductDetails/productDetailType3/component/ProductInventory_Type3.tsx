@@ -38,7 +38,6 @@ const Inventory_Type3: React.FC<{
                   <button
                     type='button'
                     onClick={() => {
-                      console.log('Here');
                       setSelectSize(elem.name);
                     }}
                     className={`border border-gray-border h-[32px] w-[32px] flex items-center justify-center cursor-pointers ${

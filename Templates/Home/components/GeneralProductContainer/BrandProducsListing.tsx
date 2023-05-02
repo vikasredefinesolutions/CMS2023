@@ -1,5 +1,5 @@
 import FeaturedSkeleton from '@appComponents/Loading/Skeleton';
-import { GetlAllProductList } from '@definations/productList.type';
+import { newFetauredItemResponse } from '@definations/productList.type';
 import { useTypedSelector_v2 } from 'hooks_v2';
 import React from 'react';
 import 'react-loading-skeleton/dist/skeleton.css';
@@ -7,7 +7,7 @@ import BrandProduct from './BrandProduct';
 
 interface _props {
   brandId: number;
-  brandsData: GetlAllProductList[];
+  brandsData: newFetauredItemResponse[];
   loading: boolean;
   recentBrand: string;
   totalBrands: { value: number | string; label: string }[];
@@ -63,7 +63,7 @@ const BrandProductListing: React.FC<_props> = ({
             >
               {cacheData[recentBrand] && !loading
                 ? cacheData[recentBrand].map(
-                    (product: GetlAllProductList, index: number) => (
+                    (product: newFetauredItemResponse, index: number) => (
                       <BrandProduct
                         brandId={brandId}
                         key={index}

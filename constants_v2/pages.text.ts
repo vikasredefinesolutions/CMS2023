@@ -566,4 +566,8 @@ export const __pagesText = {
     sleeveLineLimit:
       'Limit 20 characters (including spaces) for Sleeve personalization.',
   },
+  closedStore: {
+    closedStoreMessage: ` This store is no longer active. Please check with your coach or
+    director to see if/when a new store will be opened. Thank You!`,
+  },
 };

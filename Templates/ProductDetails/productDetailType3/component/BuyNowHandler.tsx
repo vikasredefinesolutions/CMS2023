@@ -1,5 +1,6 @@
+import { __Cookie } from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
-import { getAddToCartObject } from '@helpers/common.helper';
+import { getAddToCartObject, setCookie } from '@helpers/common.helper';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import { addToCart } from '@services/cart.service';
 
@@ -58,6 +59,7 @@ const BuyNowHandler: React.FC<_Props> = (size) => {
       await addToCart(cartObject)
         .then((res) => {
           if (res) {
+            setCookie(__Cookie.tempCustomerId, '' + res, 'Session');
             setShowLoader(false);
             showModal({
               message: __pagesText.cart.successMessage,

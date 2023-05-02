@@ -1,7 +1,12 @@
 import { _MenuItems } from './header.type';
-import { _FetchStoreConfigurations, _StoreReturnType } from './store.type';
+import {
+  _FetchStoreConfigurations,
+  _SbStoreConfiguration,
+  _StoreReturnType,
+} from './store.type';
 
 export type _Expected_AppProps = {
+  sbStore: _SbStoreConfiguration | null;
   store: _StoreReturnType;
   menuItems: _MenuItems | null;
   configs: Array<_FetchStoreConfigurations | null>;

@@ -1,3 +1,5 @@
+import { GetlAllProductList } from '@templates/ProductListings/ProductListingType';
+
 export interface LoginBar {
   text: string;
   color: string;
@@ -158,38 +160,44 @@ export interface GetProductImageOptionList {
   altTag?: string;
 }
 
-export interface GetlAllProductList {
-  brandUrl: string;
-  getProductImageOptionList?: GetProductImageOptionList[];
-  id?: number;
-  name?: string;
-  productTagViewModel?: Array<{
-    productId: number;
-    imagename: string;
-    productTagName: string;
-    tagPosition: string;
-  }>;
-  sename?: string;
+export interface newFetauredItemResponse {
+  productId: number;
+  productName: string;
+  productSEName: string;
+  ourCost: number;
   msrp: number;
+  imap: number;
   salePrice: number;
-  brandlogo?: string;
-  iswishlist?: boolean;
-  label?: string;
-  wishListId?: number;
-  sku?: string;
-  imageUrl?: string;
-  imap?: string;
-  moreImages?: GetProductImageOptionList[];
-  productId?: number;
-  productName?: string;
-  productSEName?: string;
-  productDisplayOrder?: number;
-  attributeOptionName?: string;
-  blackBrandlogo: string;
-  ourCost?: number;
+  productDisplayOrder: number;
+  imageUrl: string;
+  brandLogoUrl: string;
+  blackAndWhiteLogoUrl: string;
   brandName: string;
+  brandSename: string;
+  discountPercentage: number;
+  isCallUsForPriceManufacture: boolean;
+  isShowavailability: boolean;
+  moreImages: moreImages[];
+  isSpecialBrand: boolean;
+  lowPrice: number;
+  splitproductList: splitproductList[] | null;
+}
+export interface moreImages {
+  id: number;
+  attributeOptionID: number;
+  attributeOptionName: string;
+  imageUrl: string;
+  displayOrder: number;
+  altTag: string;
 }
 
+export interface splitproductList {
+  name: string;
+  seName: string;
+  imageurl: string;
+  colorName: string;
+  prodcutId: number;
+}
 export interface BrandFilter {
   storeBrandProductColorViewModels: StoreBrandProductColorViewModel[];
   storeBrandProductSizeViewModels: StoreBrandProductSizeViewModel[];

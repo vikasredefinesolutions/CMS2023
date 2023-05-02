@@ -1,9 +1,9 @@
-import { GetlAllProductList } from '@definations/productList.type';
+import { newFetauredItemResponse } from '@definations/productList.type';
 import React from 'react';
 import BrandProduct from './BrandProduct';
 
 interface _props {
-  brandsData: GetlAllProductList[];
+  brandsData: newFetauredItemResponse[];
   brandId: number;
 }
 
@@ -48,14 +48,16 @@ const ProductListing: React.FC<_props> = ({ brandsData, brandId }) => {
             >
               {brandsData &&
                 brandsData?.length > 0 &&
-                brandsData.map((product: GetlAllProductList, index: number) => (
-                  <BrandProduct
-                    brandId={brandId}
-                    key={index}
-                    product={product}
-                    colorChangeHandler={colorChangeHandler}
-                  />
-                ))}
+                brandsData.map(
+                  (product: newFetauredItemResponse, index: number) => (
+                    <BrandProduct
+                      brandId={brandId}
+                      key={index}
+                      product={product}
+                      colorChangeHandler={colorChangeHandler}
+                    />
+                  ),
+                )}
             </ul>
           </div>
         </div>

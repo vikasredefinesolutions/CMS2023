@@ -14,12 +14,8 @@ const index = () => {
         setSeType(pageType.myAccountTemplateId);
       });
     }
-  }, []);
-  return (
-    <>
-      <ManageAddressSetting id={seType} />
-    </>
-  );
+  }, [storeId]);
+  return <>{seType && <ManageAddressSetting id={seType} />}</>;
 };
 export { getServerSideProps };
 export default index;

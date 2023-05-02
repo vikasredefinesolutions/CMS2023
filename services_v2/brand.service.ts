@@ -1,5 +1,5 @@
 import { _Brand } from '@definations/brand';
-import { GetlAllProductList } from '@definations/productList.type';
+import { newFetauredItemResponse } from '@definations/productList.type';
 import {
   _CategorySiteMap,
   _pagesSiteMap,
@@ -19,7 +19,7 @@ export const FetchBrands = async (storeId: string) => {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const FetchDataByBrand = async (body: any) => {
   const url = '/StoreProduct/getfeaturedproductitemsbytagname.json';
-  const res: GetlAllProductList[] = await SendAsync({
+  const res: newFetauredItemResponse[] = await SendAsync({
     url: url,
     method: 'POST',
     data: { ...body },

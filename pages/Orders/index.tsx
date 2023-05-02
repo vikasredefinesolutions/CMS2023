@@ -18,11 +18,7 @@ const Orders: NextPage = () => {
     }
   }, [storeId]);
 
-  return (
-    <>
-      <OrdersTemplate id={seType} />
-    </>
-  );
+  return <>{seType && <OrdersTemplate id={seType} />}</>;
 };
 export { getServerSideProps };
 

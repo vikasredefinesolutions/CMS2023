@@ -8,7 +8,7 @@ import {
   maximumItemsForFetch,
 } from '@constants/global.constant';
 import { _SelectedBrands } from '@definations/APIs/storeDetails.res';
-import { GetlAllProductList } from '@definations/productList.type';
+import { newFetauredItemResponse } from '@definations/productList.type';
 import MuiTab from '@mui/material/Tab';
 import { styled } from '@mui/material/styles';
 import { FetchDataByBrand } from '@services/brand.service';
@@ -31,7 +31,9 @@ const Tab = styled(MuiTab)(({ theme }) => ({
 const ProductsInfo: React.FC<_props> = ({ dataArr }) => {
   // ** State
 
-  const [brandsData, setBrandsData] = useState<GetlAllProductList[] | []>([]);
+  const [brandsData, setBrandsData] = useState<newFetauredItemResponse[] | []>(
+    [],
+  );
   const storeId = useTypedSelector_v2((state) => state.store.id);
 
   const fetchBrandData = async () => {

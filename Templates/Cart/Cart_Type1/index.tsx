@@ -5,7 +5,7 @@ import CartItem from 'Templates/cartItem';
 import Link from 'next/link';
 import React from 'react';
 import { _CartProps } from '../Cart';
-import EmptyCart from './components/emptyCart';
+import EmptyCart from '../components/emptyCart';
 
 const CartType1: React.FC<_CartProps> = ({
   cartData,
@@ -19,6 +19,7 @@ const CartType1: React.FC<_CartProps> = ({
   amtQtyBlurHandler,
   loadProduct,
   setShowAddOtf,
+  cartType,
 }) => {
   const isEmployeeLoggedIn = useTypedSelector_v2(
     (state) => state.employee.loggedIn,
@@ -67,6 +68,7 @@ const CartType1: React.FC<_CartProps> = ({
                     employeeAmtChangeHandler,
                     amtQtyBlurHandler,
                     loadProduct,
+                    cartType,
                   }}
                 />
               </div>

@@ -1,11 +1,11 @@
 import { __pagesText } from '@constants/pages.text';
 import { paths } from '@constants/paths.constant';
 import CartSummarry from '@templates/cartSummarry';
+import CartItem from 'Templates/cartItem';
 import Link from 'next/link';
 import React from 'react';
-import CartItem from 'Templates/cartItem';
 import { _CartProps } from '../Cart';
-import EmptyCart from './components/emptyCart';
+import EmptyCart from '../components/emptyCart';
 const CartType3: React.FC<_CartProps> = ({
   cartData,
   removeCartItem,
@@ -18,6 +18,7 @@ const CartType3: React.FC<_CartProps> = ({
   amtQtyBlurHandler,
   loadProduct,
   setShowAddOtf,
+  cartType,
 }) => {
   if (!cartData || cartData.length === 0) {
     return <EmptyCart />;
@@ -54,6 +55,7 @@ const CartType3: React.FC<_CartProps> = ({
                   employeeAmtChangeHandler,
                   amtQtyBlurHandler,
                   loadProduct,
+                  cartType,
                 }}
               />
               <div className='my-[10px]'>

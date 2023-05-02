@@ -24,6 +24,15 @@ export interface _CNA_StoreCustomerModel {
   recStatus: string;
   industryId: number;
   gender: string;
+  memberFrom: number;
+  memberTo: number;
+  organizationId: number;
+  primaryColor: string;
+  mascotId: string;
+  teamGender: string;
+  timeOfYearPurchase: string;
+  position: string;
+  navCustomerId: string;
 }
 
 export interface _CNA_StoreCustomerAddress {
@@ -71,6 +80,15 @@ export const createNewAccount_payload: _CreateNewAccount_Payload = {
     customerType: 'corporate',
     storeId: 0,
     isTaxableuser: false,
+    memberFrom: 0,
+    memberTo: 0,
+    organizationId: 0,
+    primaryColor: '',
+    mascotId: '',
+    teamGender: '',
+    timeOfYearPurchase: '',
+    position: '',
+    navCustomerId: '',
     storeCustomerAddress: [
       {
         id: 0,

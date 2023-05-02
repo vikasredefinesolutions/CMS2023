@@ -391,6 +391,16 @@ const CheckoutController = () => {
           location: `${location.city}, ${location.region}, ${location.country}, ${location.postal_code}`,
           ipAddress: location.ip_address,
           storeId: storeId,
+          memberFrom: 0,
+          memberTo: 0,
+          organizationId: 0,
+          primaryColor: '',
+          mascotId: '',
+          teamGender: '',
+          timeOfYearPurchase: '',
+          position: '',
+          navCustomerId: '',
+
           storeCustomerAddress: [
             { ...addAddress, ...shippingAdress },
             { ...addAddress, ...billingAdress },

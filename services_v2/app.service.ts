@@ -1,5 +1,6 @@
 import {
   StoreConfigurationConfigs,
+  _FetchSbStoreConfiguration,
   _FetchStoreConfigurations,
 } from '@definations/store.type';
 import { CallAPI_v2 } from '@helpers/api.helper';
@@ -10,7 +11,8 @@ export type _RedefineAppAPIs =
   | 'GetStoreID'
   | 'FetchThemeConfigs'
   | 'FetchStoreConfigurations'
-  | 'FetchCompanyConfiguration';
+  | 'FetchCompanyConfiguration'
+  | 'FetchSbStoreConfiguration';
 
 export const GetStoreID = async (
   domain: string,
@@ -186,4 +188,24 @@ export const getAllConfigurations = async (payload: {
     });
 
   return configurations;
+};
+
+export const fetchSbStoreConfiguration = async (payload: {
+  storeId: number;
+}) => {
+  const url = `SbStoreConfiguration/GetSbStoreConfiguration`;
+
+  const response = await CallAPI_v2<_FetchSbStoreConfiguration>({
+    name: {
+      service: 'app',
+      api: 'FetchSbStoreConfiguration',
+    },
+    request: {
+      url: url,
+      method: 'POST',
+      data: payload,
+    },
+  });
+
+  return response;
 };

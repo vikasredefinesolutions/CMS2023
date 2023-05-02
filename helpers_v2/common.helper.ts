@@ -20,7 +20,7 @@ import {
   _LogoDetail,
   _Product_SizeQtys,
 } from '@redux/slices/product.slice.types';
-import { FetchProductListingConfig } from '@services/product.service';
+import { FetchConfig } from '@services/product.service';
 import { conditionalLog_V2 } from './console.helper';
 
 //////////////////////////////////////////////////////////////////////
@@ -629,7 +629,6 @@ export const _Logout = (
 };
 
 export const getPageType = async (storeid: number, configname: string) => {
-  console.log(storeid, configname);
-  let res = await FetchProductListingConfig('' + storeid, configname);
+  let res = await FetchConfig('' + storeid, configname);
   return res;
 };

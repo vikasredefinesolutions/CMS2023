@@ -17,7 +17,7 @@ const index = () => {
       });
     }
   }, [storeId]);
-  return <CheckLogoApproved id={seType} />;
+  return <>{seType && <CheckLogoApproved id={seType} />}</>;
 };
 
 export default index;
