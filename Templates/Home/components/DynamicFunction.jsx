@@ -319,6 +319,7 @@ export const multipleImages = (dataArr, selectedObj) => {
         let buttonHTML = '';
         let textHPos = '';
         let textVPos = '';
+        let sectionWidth = '';
 
 
 
