@@ -54,15 +54,19 @@ const BreadCrumb_Type2: NextPage<_BreadCrumbProps> = ({
           </nav>
           {pageType === 'product' && (
             <div className='text-center w-auto product-brand-logo'>
-              <NxtImage
-                src={product.brand?.url || ''}
-                title={product.brand?.name || ''}
-                className='inline-block'
-                // height={100}
-                // width={100}
-                alt=''
-                useNextImage={false}
-              />
+              <Link href={`/${product.brand?.name}.html`}>
+                <a>
+                  <NxtImage
+                    src={product.brand?.url || ''}
+                    title={product.brand?.name || ''}
+                    className='inline-block'
+                    // height={100}
+                    // width={100}
+                    alt=''
+                    useNextImage={false}
+                  />
+                </a>
+              </Link>
             </div>
           )}
         </div>

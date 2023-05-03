@@ -88,7 +88,7 @@ const SD_TemplateType1: React.FC<_Props> = ({ list, ...rest }) => {
           <div aria-hidden='true' data-acsb-hidden='true'></div>
         </div>
       </section>
-      <Story_Stories stories={list} showByDefault={6} />
+      <Story_Stories stories={list} showByDefault={6} buttonType='PrevNext' />
     </>
   );
 };

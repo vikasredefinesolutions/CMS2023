@@ -1,13 +1,11 @@
 import { __pagesConstant } from '@constants/pages.constant';
 import { __pagesText } from '@constants/pages.text';
 import { _ProductColor } from '@definations/APIs/colors.res';
-import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
+import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
-import ColorImage_Type3 from './ColorImage_Type3';
-
-// import ColorImage from './ColorImage';
-const AvailableColors_Type3: React.FC = () => {
+import React, { useState } from 'react';
+import ColorImage from './ColorImage';
+const AvailableColors: React.FC = () => {
   const router = useRouter();
   const { setColor } = useActions_v2();
   const selectedColor = useTypedSelector_v2(
@@ -28,11 +26,11 @@ const AvailableColors_Type3: React.FC = () => {
     colorsCount > __pagesConstant._productDetails.imagesInRow;
 
   return (
-    <div className='flex flex-wrap items-center pb-[15px]'>
+    <div className='flex flex-wrap items-center pt-[15px]'>
       <div className='text-default-text w-[90px]'>
         <span className=''>
           {' '}
-          {__pagesText.productInfo.availableColors.colors}
+          {__pagesText.productInfo.availableColors.availableColors}
         </span>
       </div>
       <div className='flex flex-wrap text-center available-colors text-default-text ml-[4px] gap-[5px]'>
@@ -59,7 +57,7 @@ const AvailableColors_Type3: React.FC = () => {
                   alt={product.altTag}
                   className='w-full object-center object-cover cursor-pointer'
                 /> */}
-                <ColorImage_Type3 product={product} />
+                <ColorImage product={product} />
               </div>
             </div>
           );
@@ -94,4 +92,4 @@ const AvailableColors_Type3: React.FC = () => {
   );
 };
 
-export default AvailableColors_Type3;
+export default AvailableColors;

@@ -13,10 +13,24 @@ interface _Props {
 let mediaBaseUrl = _globalStore.blobUrl;
 
 const SL_HeroSection: React.FC<_Props> = ({ firstTwo }) => {
-  const firstStory = firstTwo[0];
+  const firstStory = firstTwo.length > 0 ? firstTwo[0] : null;
   const secondStory = firstTwo.length > 1 ? firstTwo[1] : null;
   const store = useTypedSelector_v2((state) => state.store);
   mediaBaseUrl = mediaBaseUrl || store.mediaBaseUrl;
+
+  if (!firstStory) {
+    return (
+      <section className='relative py-20 mt-10 bg-light-gray w-full'>
+        <div className='container mx-auto'>
+          <div className='flex flex-wrap'>
+            <div className='w-full lg:w-1/2 bg-[#ffffff] flex relative z-10'>
+              <div className='w-full p-[15px] lg:p-32'>No Stories found</div>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <>
@@ -66,6 +80,7 @@ const SL_HeroSection: React.FC<_Props> = ({ firstTwo }) => {
           </div>
         </div>
       </section>
+
       {secondStory && (
         <section className='relative py-20 mt-10 bg-light-gray w-full'>
           <div className='container mx-auto'>

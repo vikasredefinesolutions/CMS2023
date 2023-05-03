@@ -117,6 +117,9 @@ export type LogoDetails = {
 };
 
 export type logoDetailsAr = Array<LogoDetails>;
+export interface _ProductCompanion {
+  product: _ProductDetails | null;
+}
 
 export interface _SOMLogoOptionProps {
   index: number;

@@ -1,8 +1,27 @@
 import { __StaticImg } from '@constants/assets';
-import { paths } from '@constants/paths.constant';
-import React from 'react';
+import Link from 'next/link';
+import React, { useState } from 'react';
+import {
+  _StaticCategories,
+  categoriesWithColor,
+  shopProductsByCategory,
+} from './SL_Extras';
 
 const SL_ProductsByCategory: React.FC = () => {
+  const [activeCategory, setActiveCateogory] =
+    useState<_StaticCategories>('Men');
+
+  const activeTabColor = () => {
+    switch (activeCategory) {
+      case 'Men':
+        return 'quaternary';
+      case 'Women':
+        return 'tertiary';
+      case 'Accessories':
+        return 'secondary';
+    }
+  };
+
   return (
     <section
       className='bg-cover relative py-20 h-full'
@@ -31,52 +50,75 @@ const SL_ProductsByCategory: React.FC = () => {
                   <li>&nbsp;</li>
                 </ul>
                 <ul className='w-full flex max-w-4xl flex-wrap'>
-                  {['', '', ''].map(() => {
-                    return (
-                      <li className='mr-0.5 md:mr-0'>
-                        <a
-                        //   :className="activeTab === 011 ? 'border-b-anchor' : 'border-b-transparent'"
-                        //   className="inline-block px-[10px] py-[10px] border-b-2"
-                        //   href="javascript:void(0);" x-on:click="activeTab = 011"
+                  {(['Men', 'Women', 'Accessories'] as _StaticCategories[]).map(
+                    (cate) => {
+                      return (
+                        <li
+                          className='mr-0.5 md:mr-0'
+                          onClick={() => setActiveCateogory(cate)}
                         >
-                          Men
-                        </a>
-                      </li>
-                    );
-                  })}
+                          <button
+                            className={
+                              'inline-block px-[10px] py-[10px] border-b-2 ' +
+                                activeCategory ===
+                              cate
+                                ? 'border-b-anchor'
+                                : 'border-b-transparent'
+                            }
+                          >
+                            {cate}
+                          </button>
+                        </li>
+                      );
+                    },
+                  )}
                 </ul>
               </div>
             </div>
             <div className='xl:w-1/3 lg:w-1/2 flex flex-wrap justify-center items-center w-full'>
               <div className='w-full py-10 px-5 lg:px-10'>
                 <div className=''>
-                  <div
-                    className='panel-01 tab-content'
-                    x-show='activeTab === 011'
-                    // style='display: none;'
-                  >
+                  <div className='panel-01 tab-content'>
                     <div className='w-full'>
                       <div className='flex flex-wrap -mx-[15px] mt-[-15px] mb-[-15px]'>
-                        <div className='w-full sm:w-1/2 lg:w-1/2 px-[15px] mt-[15px] mb-[15px]'>
-                          <div className='border border-gray-50 bg-quaternary relative h-full'>
-                            <div className='flex items-center py-10 px-4'>
-                              <div className='flex flex-wrap'>
-                                <a href={paths.BRAND} target='' title=''>
-                                  <span className='font-bold text-black text-left text-sm lg:p-6 flex flex-wrap'>
-                                    All Men`s Clothing
-                                  </span>{' '}
-                                  <img
-                                    alt=''
-                                    className='w-10 absolute right-3 top-5'
-                                    //   inpname="image2"
-                                    src={__StaticImg.labelIcon}
-                                    title=''
-                                  />
-                                </a>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
+                        {shopProductsByCategory.map((category) => {
+                          if (category.title === activeCategory) {
+                            return category.categories.map((subCategories) => {
+                              return (
+                                <div className='w-full sm:w-1/2 lg:w-1/2 px-[15px] mt-[15px] mb-[15px]'>
+                                  <div
+                                    className={`border border-gray-50 bg-${activeTabColor()} relative h-full`}
+                                  >
+                                    <div className='flex items-center py-10 px-4'>
+                                      <div className='flex flex-wrap'>
+                                        <Link
+                                          href={subCategories.slug}
+                                          target=''
+                                          title=''
+                                        >
+                                          <a>
+                                            {' '}
+                                            <span className='font-bold text-black text-left text-sm lg:p-6 flex flex-wrap'>
+                                              {subCategories.name}
+                                            </span>{' '}
+                                            <img
+                                              alt=''
+                                              className='w-10 absolute right-3 top-5'
+                                              //   inpname="image2"
+                                              src={__StaticImg.labelIcon}
+                                              title=''
+                                            />
+                                          </a>
+                                        </Link>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              );
+                            });
+                          }
+                          return null;
+                        })}
                       </div>
                     </div>
                   </div>
@@ -84,11 +126,14 @@ const SL_ProductsByCategory: React.FC = () => {
               </div>
             </div>
             <ul className='lg:w-10 lg:absolute lg:left-0 lg:top-0 lg:h-full w-full'>
-              {['', '', ''].map(() => {
+              {categoriesWithColor.map((cate) => {
                 return (
-                  <li className='lg:h-1/3 lg:w-10 btn-quaternary flex flex-wrap items-center justify-center w-full p-3'>
+                  <li
+                    onClick={() => setActiveCateogory(cate.title)}
+                    className={`lg:h-1/3 lg:w-10 btn-${cate.color} flex flex-wrap items-center justify-center w-full p-3`}
+                  >
                     <span className='lg:-rotate-90'>
-                      <a href='/'>Men</a>
+                      <button>{cate.title}</button>
                     </span>
                   </li>
                 );

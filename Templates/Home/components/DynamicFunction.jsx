@@ -321,8 +321,6 @@ export const multipleImages = (dataArr, selectedObj) => {
         let textVPos = '';
         let sectionWidth = '';
 
-
-
         if(item.Button_display != undefined && item.Button_display == 'Yes' && item.Button_text !== '' && item.Button_text !== null)
         {
           

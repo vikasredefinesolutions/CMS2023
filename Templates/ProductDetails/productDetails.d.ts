@@ -14,4 +14,5 @@ export interface _ProductDetailsTemplates {
   type1: React.FC<_Props>;
   type2: React.FC<_Props>;
   type3: React.FC<_Props>;
+  type4: React.FC<_Props>;
 }

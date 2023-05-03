@@ -1,6 +1,9 @@
 import Price from '@appComponents/reUsable/Price';
+import { __pagesText } from '@constants/pages.text';
+import { paths } from '@constants/paths.constant';
 import CheckoutController from '@controllers/checkoutController';
 import { GetCartTotals, useTypedSelector_v2 } from 'hooks_v2';
+import Link from 'next/link';
 import { FC } from 'react';
 import { CartSummarryProps } from '../CartSumarry';
 
@@ -15,6 +18,7 @@ const CartSummarryType4: FC<CartSummarryProps> = ({
   const { shippingMethod } = CheckoutController();
   const couponDetails = useTypedSelector_v2((state) => state.cart.discount);
   const storeId = useTypedSelector_v2((state) => state.store.id);
+  // console.log('store id from cart summary ', storeId);
 
   return (
     <div className='border border-gray-border bg-white'>
@@ -106,6 +110,18 @@ const CartSummarryType4: FC<CartSummarryProps> = ({
         <div>
           <Price value={totalPrice} />
         </div>
+      </div>
+
+      <div className='p-2'>
+        <Link className='' href={paths.CHECKOUT}>
+          <a className='btn btn-lg btn-secondary !flex items-center justify-center w-full'>
+            {/* <i
+                      className='fa fa-shopping-cart mr-[10px]'
+                      aria-hidden='true'
+                    ></i> */}
+            {__pagesText.cart.checkOutNow}
+          </a>
+        </Link>
       </div>
     </div>
   );

@@ -135,13 +135,13 @@ export const getServerSideProps: GetServerSideProps = async (
 
   // -----------------------Props Initialization--------------------------
   const categoryProps: _StoryCategoryProps = {
-    id: '1',
+    id: _defaultTemplates.storyCategory,
     pageType: 'stories',
     list: null,
   };
 
   const detailsProps: _StoryDetailsProps = {
-    id: '1',
+    id: _defaultTemplates.storyDetails,
     pageType: 'blog',
     list: null,
     story: {

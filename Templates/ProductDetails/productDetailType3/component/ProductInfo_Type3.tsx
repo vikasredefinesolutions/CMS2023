@@ -4,12 +4,13 @@ import { paths } from '@constants/paths.constant';
 import { _modals } from '@definations/startOrderModal';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import AvailableColors_Type3 from './AvailableColors_Type3';
 // import SizeChart_Type3 from './ProductSizeChart_Type3';
 import SizeChartModal from '@appComponents/modals/sizeChartModal/SizeChartModal';
 import BuyNowHandler from './BuyNowHandler';
 import Inventory_Type3 from './ProductInventory_Type3';
+import SizeQtyInput from './SizeQtyInput';
 import { _ProductInfoProps } from './productDetailsComponents';
 
 const ProductInfo_Type3: React.FC<_ProductInfoProps> = ({
@@ -64,6 +65,16 @@ const ProductInfo_Type3: React.FC<_ProductInfoProps> = ({
       router.push(`${paths.CUSTOMIZE_LOGO}/${product?.id}`);
     }
   };
+  const [selectSize, setSelectSize] = useState('');
+  const { price, inventory } = useTypedSelector_v2(
+    (state) => state.product.product,
+  );
+
+  const { updatePrice } = useActions_v2();
+
+  useEffect(() => {
+    updatePrice({ price: price?.msrp || 0 });
+  }, [price?.msrp]);
 
   return (
     <>
@@ -73,47 +84,7 @@ const ProductInfo_Type3: React.FC<_ProductInfoProps> = ({
             {product?.name}
           </div>
         </div>
-        {/* <div className='mainsection text-center text-sm leading-none mt-[20px]'>
-          <div className='md:pt-[20px] md:pb-[20px] text-center bg-quaternary'>
-            <div className='md:flex justify-center'>
-              <div className='w-full md:w-auto inline-block p-[20px] md:pt-0 md:pb-0 border-b md:border-b-0 md:border-r last:border-r-0 last:border-b-0 border-white'>
-                <div className='w-full md:w-auto flex flex-wrap justify-center items-center'>
-                  <span className='material-icons text-2xl-text leading-[15px] text-tertiary'>
-                    {__pagesText.productListing.Banner.shippingIcon}
-                  </span>
-                  <div className='ml-[8px] text-left text-extra-small-text leading-[15px] tracking-[1px] text-white'>
-                    <div>{__pagesText.productListing.Banner.shiping}</div>
-                    <div> {__pagesText.productListing.Banner.location}</div>
-                  </div>
-                </div>
-              </div>
-              <div className='w-full md:w-auto inline-block p-[20px] md:pt-0 md:pb-0 border-b md:border-b-0 md:border-r last:border-r-0 last:border-b-0 border-white'>
-                <div className='w-full md:w-auto flex flex-wrap justify-center items-center'>
-                  <span className='material-icons text-2xl-text leading-[15px] text-secondary'>
-                    {__pagesText.productListing.Banner.drawIcon}
-                  </span>
-                  <div className='ml-[8px] text-left text-extra-small-text leading-[15px] tracking-[1px] text-white'>
-                    <div>{__pagesText.productListing.Banner.firstLogoFree}</div>
-                    <div>
-                      {__pagesText.productListing.Banner.uptoTenThousandStiches}
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className='w-full md:w-auto inline-block p-[20px] md:pt-0 md:pb-0 border-b md:border-b-0 md:border-r last:border-r-0 last:border-b-0 border-white'>
-                <div className='w-full md:w-auto flex flex-wrap justify-center items-center'>
-                  <span className='material-icons text-2xl-text leading-[15px] text-primary'>
-                    {__pagesText.productListing.Banner.verifyIcon}
-                  </span>
-                  <div className='ml-[8px] text-left text-extra-small-text leading-[15px] tracking-[1px] text-white'>
-                    <div>{__pagesText.productListing.Banner.freeProof}</div>
-                    <div>{__pagesText.productListing.Banner.onAllOrders}</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div> */}
+
         <div className=''>
           <div className='mb-[15px]'>
             <div className='text-sm'>
@@ -124,84 +95,30 @@ const ProductInfo_Type3: React.FC<_ProductInfoProps> = ({
               <span>:</span> <span>{product?.sku}</span>
             </div>
           </div>
-          {/* <div className='pt-[15px] text-default-text'>
-            <span className='inline-block w-[90px]'>
-              {' '}
-              {__pagesText.productInfo.msrp}
-            </span>
-
-            <span className='ml-[4px]'>
-              <Price
-                value={undefined}
-                prices={{
-                  msrp: product ? product.msrp : 0,
-                  salePrice: product ? product.salePrice : 0,
-                }}
-                addColon={true}
-              />{' '}
-            </span>
-          </div> */}
         </div>
-        {/* <DiscountPricing_Type3
-          storeCode={storeCode}
-          showMsrpLine={true}
-          price={{
-            msrp: product ? product.msrp : 0,
-            salePrice: product ? product.salePrice : 0,
-          }}
-          showLogin={product ? !product.isDiscontinue : false}
-          modalHandler={modalHandler}
-        /> */}
+
         <AvailableColors_Type3 />
-        {/* <div className='pt-[15px] text-default-text'>
-          <span className='inline-block w-[90px]'>Color Name</span>
-          <span>:</span> <span className='ml-[4px]'>Stonewash</span>
-        </div> */}
 
-        <div className='pb-[0px]'>
-          {' '}
-          <button
-            type='button'
-            className='text-anchor hover:text-anchor-hover font-[600] underline text-default-text'
-            onClick={() => modalHandler('sizeChart')}
-          >
-            {__pagesText.productInfo.sizeChart}{' '}
-          </button>{' '}
-        </div>
-        {/* <div className='pt-[15px] text-default-text text-right'>
-          <a
-            href='javascript:void(0);'
-            className='text-anchor hover:text-anchor-hover underline'
-            data-modal-toggle='FitandSize'
-          >
-            Fit and Size
-          </a>{' '}
-          <a
-            href='javascript:void(0);'
-            className='text-anchor hover:text-anchor-hover underline'
-            data-modal-toggle='Personalize'
-          >
-            Personalize
-          </a>
-        </div> */}
-        <Inventory_Type3
-          attributeOptionId={selectedColor.attributeOptionId}
-          storeCode={''}
-        />
-        {/* <div className='pt-[15px] text-default-text'>
-          <div className='text-red-700'>
-            {__pagesText.productInfo.notesPk.minimumPiecePerColor}
-          </div>
-        </div> */}
-        {/* <div className='pt-[15px] text-default-text flex flex-wrap items-center gap-[10px]'>
-          <DiscountPrice_Type3
-            storeCode={storeCode}
-            ourCost={product?.ourCost || 0}
-            msrp={product?.msrp || 0}
-            imap={product?.imap || 0}
-            salePrice={pricePerItem || 0}
+        <div className='text-sm flex flex-wrap items-center gap-1'>
+          <Inventory_Type3
+            attributeOptionId={selectedColor.attributeOptionId}
+            storeCode={''}
+            selectSize={selectSize}
+            setSelectSize={setSelectSize}
           />
-        </div> */}
+          <div className='pb-[0px]'>
+            {' '}
+            <button
+              type='button'
+              className='text-anchor hover:text-anchor-hover font-[600] underline text-default-text'
+              onClick={() => modalHandler('sizeChart')}
+            >
+              {__pagesText.productInfo.sizeChart}{' '}
+            </button>{' '}
+          </div>
+        </div>
+        <SizeQtyInput price={price?.msrp} size={selectSize} />
+
         <div className='mt-[15px] bg-light-gray p-[20px]'>
           <div className='text-sm flex flex-wrap items-center'>
             <div className='w-[112px]'>

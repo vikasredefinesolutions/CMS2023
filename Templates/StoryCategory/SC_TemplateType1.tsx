@@ -16,7 +16,7 @@ const SC_TemplateType1: React.FC<_Props> = ({ list }) => {
           </h1>
         </div>
       </section>
-      <SL_Stories stories={list} showByDefault={12} />
+      <SL_Stories stories={list} showByDefault={12} buttonType='LoadMore' />
     </>
   );
 };

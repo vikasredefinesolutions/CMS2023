@@ -147,13 +147,11 @@ export const getServerSideProps: GetServerSideProps = async (
 
       let view: string[] = [];
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      Object.entries(productDetailTypes.sectionDisplay).forEach(
-        (val: any, index: number) => {
-          if (val[1].isVisible) {
-            view[view.length] = val[0];
-          }
-        },
-      );
+      Object.entries(productDetailTypes.sectionDisplay).forEach((val: any) => {
+        if (val[1].isVisible) {
+          view[view.length] = val[0];
+        }
+      });
       const productDetails = await getProductDetailProps({
         storeId: store.storeId,
         seName: slug,

@@ -32,12 +32,10 @@ type templateType1 = Omit<_Props, 'id'>;
 
 interface _StoryTemplates {
   type1: React.FC<templateType1>;
-  type2: React.FC<templateType1>;
 }
 
 const SD_Templates: _StoryTemplates = {
   type1: SD_TemplateType1,
-  type2: SD_TemplateType1,
 };
 
 const StoryDetailsTemplate: React.FC<_Props> = ({ id, ...rest }) => {

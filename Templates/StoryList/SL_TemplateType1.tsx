@@ -16,7 +16,11 @@ const SL_TemplateType1: React.FC<_Props> = ({ list, brands }) => {
     <>
       <SL_HeroSection firstTwo={list} />
       {list.length > 2 ? (
-        <SL_Story stories={list.slice(2)} showByDefault={6} />
+        <SL_Story
+          stories={list.slice(2)}
+          showByDefault={6}
+          buttonType='LoadMore'
+        />
       ) : null}
       <BrandsByCategories brands={brands} />
       <SL_ProductsByCategory />

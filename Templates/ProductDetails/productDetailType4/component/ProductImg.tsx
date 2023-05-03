@@ -1,15 +1,13 @@
-import WishlistButton from '@appComponents/ui/Wishlist';
+import NxtImage from '@appComponents/reUsable/Image';
 import { _OtherImage, _ProductColor } from '@definations/APIs/colors.res';
 import { _ProductImgProps } from '@templates/ProductDetails/Components/productDetailsComponents';
-import NxtImage from 'appComponents_v2/reUsable/Image';
+import ColorImage from '@templates/ProductDetails/productDetailType2/component/ColorImage';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import InnerImageZoom from 'react-inner-image-zoom';
 import 'react-inner-image-zoom/lib/InnerImageZoom/styles.min.css';
 import { _globalStore } from 'store.global';
-import ColorImage from './ColorImage';
-import ProductCompanion from './ProductCompanion';
 
 let mediaBaseUrl = _globalStore.blobUrl; // for server side rendering
 
@@ -20,6 +18,7 @@ const ProductImg: React.FC<_ProductImgProps> = ({ product }) => {
   const [wishlistPresent, setWishlistPresent] = useState<boolean>(false);
   const colors = useTypedSelector_v2((state) => state.product?.product.colors);
   const handleChooseColor = (product: _ProductColor) => {
+    console.log(product, 'COLOR');
     if (!product.productSEName || product.productSEName === '') {
       setColor(product);
       return;
@@ -35,7 +34,7 @@ const ProductImg: React.FC<_ProductImgProps> = ({ product }) => {
   const selectedImage = useTypedSelector_v2(
     (state) => state.product?.selected.image,
   );
-  const wishlist = useTypedSelector_v2((state) => state.wishlist.wishListData);
+  // const wishlist = useTypedSelector_v2((state) => state.wishlist.wishListData);
   const customerId = useTypedSelector_v2((state) => state.user.id);
   const clientSideMediaUrl = useTypedSelector_v2(
     (state) => state.store.mediaBaseUrl,
@@ -53,17 +52,17 @@ const ProductImg: React.FC<_ProductImgProps> = ({ product }) => {
     });
   }, [selectedColor?.attributeOptionId, product?.id]);
 
-  useEffect(() => {
-    wishlist.forEach((item) => {
-      if (item.productId === product?.id) {
-        setWishlistPresent(true);
-        setWishlistId(item.id);
-      }
-    });
-  }, [customerId, wishlist]);
+  // useEffect(() => {
+  //   wishlist.forEach((item) => {
+  //     if (item.productId === product?.id) {
+  //       setWishlistPresent(true);
+  //       setWishlistId(item.id);
+  //     }
+  //   });
+  // }, [customerId, wishlist]);
 
   return (
-    <div className='col-span-1 grid grid-cols-12 gap-[24px] pr-[15px] pt-[8px]'>
+    <div className='col-span-1 grid grid-cols-12 gap-[10px] lg:pr-[15px] pt-[8px]'>
       <div className='col-span-12 border border-gray-border relative'>
         <div className='main-image max-w-lg mx-auto'>
           <InnerImageZoom
@@ -83,22 +82,21 @@ const ProductImg: React.FC<_ProductImgProps> = ({ product }) => {
                   : 'border-slate-200';
               return (
                 <div
+                  className='md:border hover:border-secondary p-[3px] mt-[5px] mb-[5px] last:mb-0 cursor-pointer'
                   key={img.id + img.imageUrl}
-                  className={`md:border hover:border-primary p-[3px] mt-[5px] mb-[5px] last:mb-0 ${highlight} testingclassnametest cursor-pointer`}
                   onClick={() => selectImgHandler(img)}
                 >
                   <NxtImage
                     src={img.imageUrl}
                     alt={img.altTag}
-                    className='w-full object-center object-cover'
+                    className={`w-full ${highlight} object-center object-cover`}
                     title={img.altTag}
                   />
                 </div>
               );
             })}
         </div>
-
-        <div className='absolute right-[10px] top-[25px] w-6 h-6'>
+        {/* <div className='absolute right-[10px] top-[25px] w-6 h-6'>
           <button className=''>
             <WishlistButton
               {...{
@@ -112,26 +110,25 @@ const ProductImg: React.FC<_ProductImgProps> = ({ product }) => {
               brandId={brandId ? brandId : 0}
             />
           </button>
-        </div>
+        </div> */}
+      </div>
+      <div className='col-span-12 text-center pt-[20px]'>
+        <div className='text-title-text'>Available Colors:</div>
       </div>
       <div className='col-span-12 flex flex-wrap justify-center'>
         {colors &&
           colors.map((product, index) => {
             return (
               <div
-                className='border border-gray-border hover:border-secondary mx-[5px] mb-[10px] p-[1px] w-[70px] max-h-[70px] cursor-pointer'
+                className='border border-gray-border hover:border-secondary mx-[5px] mb-[10px] p-[1px] w-[70px] max-h-[70px]'
+                onClick={() => setColor(product)}
                 key={product.attributeOptionId}
-                onClick={() => handleChooseColor(product)}
               >
                 <ColorImage product={product} />
               </div>
             );
           })}
       </div>
-
-      {product?.companionProductName !== null ? (
-        <ProductCompanion product={product} />
-      ) : null}
     </div>
   );
 };

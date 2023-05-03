@@ -52,7 +52,7 @@ export const getServerSideProps: GetServerSideProps = async (): Promise<
 
   return {
     props: {
-      id: '1',
+      id: _defaultTemplates.storyList,
       list: list,
       brands: brands,
     },

@@ -128,7 +128,7 @@ export const __pagesText = {
       availableColors: 'Available Colors:',
       showless: 'Show Less',
       seeAll: 'See All',
-      colors: 'Colors',
+      colors: 'Colors:',
     },
     forgotModal: {
       forgotPassword: 'Forget Password',
@@ -506,6 +506,7 @@ export const __pagesText = {
       SecondLogo: 'Second Logo',
       ShippingHandling: 'Shipping & Handling',
       SmallRunFee: 'Small Run Fee',
+      InternalCredit: 'Internal Credit',
       Tax: 'Tax',
       EstimatedTotal: 'Estimated Total',
       CartSummarryInstruction: `We request that all orders include a minimum of 4 pieces per color of a style, which can be split across men's and women's companion items. We may reject or require modification to any orders not meeting these requirements without prior approval. \n Please note that the tax amount on this order is subject to change based on the final invoice, and in accordance with local and state laws \n Your credit card will be authorized at checkout and you will see a pending charge on your bank statement. A sales representative will review the order details once received. Your card will then be charged in 5-7 days after submitted unless confirmed as finalized or otherwise cancelled prior to then.`,

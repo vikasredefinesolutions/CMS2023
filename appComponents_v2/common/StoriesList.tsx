@@ -8,11 +8,13 @@ import React, { useState } from 'react';
 interface _Props {
   stories: _Story[];
   showByDefault: number;
+  buttonType: 'LoadMore' | 'PrevNext';
 }
 
 const StoriesList: React.FC<_Props> = ({
   stories: leftStories,
   showByDefault,
+  buttonType,
 }) => {
   const [stories, setStories] = useState<{
     currentPage: number;
@@ -29,33 +31,74 @@ const StoriesList: React.FC<_Props> = ({
     allStories: leftStories,
   });
 
-  const handleLoadMore = (showMore: number) => {
-    setStories((prev) => {
-      if (!prev.showLoadMore) {
-        // To reset show more
+  const handleLoadStories = (
+    action: 'prev' | 'next' | 'loadMore',
+    showMore: number,
+  ) => {
+    if (action === 'loadMore') {
+      setStories((prev) => {
+        if (!prev.showLoadMore) {
+          // To reset show more
+          return {
+            ...prev,
+            currentPage: 1,
+            showLoadMore: true,
+            toShow: prev.allStories.slice(0, showByDefault),
+          };
+        }
+
+        // To show more
+        const nextPage = prev.currentPage + 1;
+        const showTill = nextPage * showMore;
+        const toShow = prev.allStories.slice(0, showTill);
+
+        const remainingStoriesToShow =
+          prev.totalElements - prev.currentPage * toShow.length;
+
         return {
           ...prev,
-          currentPage: 1,
-          showLoadMore: true,
-          toShow: prev.allStories.slice(0, showByDefault),
+          currentPage: nextPage,
+          showLoadMore: remainingStoriesToShow > 0,
+          toShow: toShow,
         };
-      }
+      });
+    }
 
-      // To show more
-      const nextPage = prev.currentPage + 1;
-      const showTill = nextPage * showMore;
-      const toShow = prev.allStories.slice(0, showTill);
+    if (action === 'prev') {
+      setStories((prev) => {
+        const previousPage = prev.currentPage - 1;
+        const showTill = previousPage * showMore;
+        const toShow = prev.allStories.slice(0, showTill);
 
-      const remainingStoriesToShow =
-        prev.totalElements - prev.currentPage * toShow.length;
+        const remainingStoriesToShow =
+          prev.totalElements - prev.currentPage * toShow.length;
 
-      return {
-        ...prev,
-        currentPage: nextPage,
-        showLoadMore: remainingStoriesToShow > 0,
-        toShow: toShow,
-      };
-    });
+        return {
+          ...prev,
+          currentPage: previousPage,
+          showLoadMore: remainingStoriesToShow > 0,
+          toShow: toShow,
+        };
+      });
+    }
+
+    if (action === 'next') {
+      setStories((prev) => {
+        const nextPage = prev.currentPage + 1;
+        const showTill = nextPage * showMore;
+        const toShow = prev.allStories.slice(0, showTill);
+
+        const remainingStoriesToShow =
+          prev.totalElements - prev.currentPage * toShow.length;
+
+        return {
+          ...prev,
+          currentPage: nextPage,
+          showLoadMore: remainingStoriesToShow > 0,
+          toShow: toShow,
+        };
+      });
+    }
   };
 
   return (
@@ -110,26 +153,52 @@ const StoriesList: React.FC<_Props> = ({
               </div>
             );
           })}
-          <div className='w-full lg:w-4/4 px-3 md:w-3/3 mt-6 load_more_btn'>
-            <div className='w-full'>
-              <div className='p-2 text-center text-large-text'>
-                <button
-                  id='load_btn'
-                  className='text-primary font-[600] inline-flex items-center load_more no-underline'
-                  onClick={() => handleLoadMore(showByDefault)}
-                >
-                  <>
-                    <span className='mr-3 load_more_text'>
-                      {stories.showLoadMore ? `Load More` : `Hide More`}
-                    </span>
-                    <span className='material-icons-outlined font-[600]'>
-                      {`arrow_${stories.showLoadMore ? `downward` : 'upward'}`}
-                    </span>
-                  </>
-                </button>
+          {buttonType === 'LoadMore' && (
+            <div className='w-full lg:w-4/4 px-3 md:w-3/3 mt-6 load_more_btn'>
+              <div className='w-full'>
+                <div className='p-2 text-center text-large-text'>
+                  <button
+                    id='load_btn'
+                    className='text-primary font-[600] inline-flex items-center load_more no-underline'
+                    onClick={() => handleLoadStories('loadMore', showByDefault)}
+                  >
+                    <>
+                      <span className='mr-3 load_more_text'>
+                        {stories.showLoadMore ? `Load More` : `Hide More`}
+                      </span>
+                      <span className='material-icons-outlined font-[600]'>
+                        {`arrow_${
+                          stories.showLoadMore ? `downward` : 'upward'
+                        }`}
+                      </span>
+                    </>
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
+          )}
+
+          {buttonType === 'PrevNext' && (
+            <div className='flex flex-wrap justify-center'>
+              {stories.currentPage > 1 && (
+                <button
+                  className='uppercase btn btn-tertiary text-default-text mr-[10px]'
+                  onClick={() => handleLoadStories('prev', showByDefault)}
+                >
+                  Previous
+                </button>
+              )}
+              {!stories.showLoadMore && (
+                <button
+                  className='uppercase btn btn-tertiary text-default-text mr-[10px]'
+                  onClick={() => handleLoadStories('next', showByDefault)}
+                  disabled={!stories.showLoadMore}
+                >
+                  Next
+                </button>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </section>

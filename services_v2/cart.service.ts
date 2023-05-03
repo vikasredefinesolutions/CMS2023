@@ -50,9 +50,9 @@ export const addPromoCode = async (
   return res;
 };
 
-export const addToCart = async (req: CartReq): Promise<number> => {
+export const addToCart = async (req: CartReq): Promise<number | string> => {
   const url = `/Store/addtocart.json`;
-  const res = await SendAsync<number>({
+  const res = await SendAsync<number | string>({
     url: url,
     method: 'POST',
     data: req,

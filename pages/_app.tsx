@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { storeBuilderTypeId, __domain } from '@configs/page.config';
+import { __domain, storeBuilderTypeId } from '@configs/page.config';
 import * as _AppController from '@controllers/_AppController.async';
 import { TrackFile } from '@services/tracking.service';
 import App, { AppContext, AppInitialProps, AppProps } from 'next/app';
@@ -33,7 +33,7 @@ import { conditionalLog_V2 } from '@helpers/console.helper';
 
 import Metatags from '@appComponents/MetaTags';
 import Spinner from '@appComponents/ui/spinner';
-import { PageResponseType, _Expected_AppProps } from '@definations/app.type';
+import { _Expected_AppProps, PageResponseType } from '@definations/app.type';
 import { _MenuItems } from '@definations/header.type';
 import {
   FetchCompanyConfiguration,
