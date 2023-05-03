@@ -25,9 +25,7 @@ const Header: NextPage<_HeaderPropsWithTemplateid> = ({
   const template_Id: string = `type${headerTemplateId}`;
   // const template_Id = 'type4';
   const HeaderTemplate =
-   HeaderTemplates[
-    `type${headerTemplateId}` as 'type1' | 'type2' | 'type3' | 'type4'
-  ];
+    HeaderTemplates[(template_Id as 'type1') || 'type2'] || 'type3' || 'type4';
   return (
     <HeaderTemplate
       storeCode={storeCode}
