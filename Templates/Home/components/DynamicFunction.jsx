@@ -317,6 +317,9 @@ export const multipleImages = (dataArr, selectedObj) => {
         let clName = '';
         let aprData = {};
         let buttonHTML = '';
+        let textHPos = '';
+        let textVPos = '';
+
 
 
         if(item.Button_display != undefined && item.Button_display == 'Yes' && item.Button_text !== '' && item.Button_text !== null)
