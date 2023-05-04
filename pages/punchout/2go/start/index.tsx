@@ -1,4 +1,5 @@
 const Puchout = ({ req, res }: any) => {
+  console.log(req, res, 'ooooooo');
   //   if (res) {
   //     let resxmlDoc = res.toLocaleString();
 
