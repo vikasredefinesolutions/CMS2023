@@ -1,12 +1,21 @@
+import { DOMParser, XMLSerializer } from '@xmldom/xmldom';
+
 const Puchout = (props: any) => {
-  return <> THis page exists and getting {JSON.stringify(props)}</>;
+  return <> THis page exists and getting {JSON.stringify(props.response)}</>;
 };
 
 export default Puchout;
 
 export const getServerSideProps = async (context: any) => {
+  let xmlDoc = context.res.toLocaleString();
+
+  const parser = new DOMParser();
+  var doc = parser.parseFromString(xmlDoc, 'text/xml');
+  const serialized = new XMLSerializer().serializeToString(doc);
   return {
-    props: context,
+    props: {
+      response: serialized,
+    },
   };
 
   //   const filePath = path.join(process.cwd(), '/public/success.xml');
