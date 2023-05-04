@@ -112,7 +112,7 @@ export const updateSetProperties = (element) => {
       let btn1Padding = false;
       let btn2Padding = false;
 
-      Object.entries(element.selected_Values).map(([key, value]) => {
+      Object.entries(element.selectedVal).map(([key, value]) => {
         
         if(value.type == 'btn_size')
         {
