@@ -1,5 +1,5 @@
 const Puchout = (props: any) => {
-  return <> THis page exists and getting {props}</>;
+  return <> THis page exists and getting {JSON.stringify(props)}</>;
 };
 
 export default Puchout;
