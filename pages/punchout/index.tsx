@@ -20,6 +20,7 @@ export default Puchout;
 
 export const getServerSideProps = async (context: any) => {
   const req = context.req;
+  console.log(context,'context is')
 
   const filePath = path.join(process.cwd(), '/public/success.xml');
   const xmlData = await fsPrmoises.readFile(filePath);
@@ -38,7 +39,6 @@ export const getServerSideProps = async (context: any) => {
   }
 
   const res = await PunchoutPostApi(serialized);
-  console.log(res, 'this si ');
   return {
     props: {
       req: {
