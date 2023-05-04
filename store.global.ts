@@ -52,7 +52,7 @@ export let _globalStore: _Store = {
   blobUrl: 'https://redefinecommerce.blob.core.windows.net',
   logoUrl: '',
   storeTypeId: null,
-  blobRootDirectory: 'rdcbeta',
+  blobRootDirectory: 'rdcstaging',
   isAttributeSaparateProduct: false,
   companyId: 0,
   set: (pair) => {
