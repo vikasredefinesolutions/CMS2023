@@ -1,6 +1,7 @@
 import { DOMParser, XMLSerializer } from '@xmldom/xmldom';
 
 const Puchout = (props: any) => {
+  console.log(props.response, 'response');
   return <> THis page exists and getting {props.response}</>;
 };
 
