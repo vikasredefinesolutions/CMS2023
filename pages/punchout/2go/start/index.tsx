@@ -2,13 +2,13 @@ import { DOMParser, XMLSerializer } from '@xmldom/xmldom';
 
 const Puchout = (props: any) => {
   console.log(props.response, 'response');
-  return <> THis page exists and getting {props.response}</>;
+  return <> THis page exists and getting response {props.response}</>;
 };
 
 export default Puchout;
 
 export const getServerSideProps = async (context: any) => {
-  let xmlDoc = context.req.toLocaleString();
+  let xmlDoc = context.res.body.toLocaleString();
 
   const parser = new DOMParser();
   var doc = parser.parseFromString(xmlDoc, 'text/xml');
