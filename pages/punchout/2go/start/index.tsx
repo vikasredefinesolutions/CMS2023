@@ -1,9 +1,13 @@
 const Puchout = ({ req, res }: any) => {
-  let resxmlDoc = res.body.toLocaleString();
+  if (res.body) {
+    let resxmlDoc = res.body.toLocaleString();
 
-  const parser = new DOMParser();
-  var resdoc = parser.parseFromString(resxmlDoc, 'text/xml');
-  const serializedResponse = new XMLSerializer().serializeToString(resdoc);
+    const parser = new DOMParser();
+    var resdoc = parser.parseFromString(resxmlDoc, 'text/xml');
+    const serializedResponse = new XMLSerializer().serializeToString(resdoc);
+    console.log(serializedResponse, 'serialized Response');
+  }
+
   if (req.body) {
     let reqxmlDoc = req.body.toLocaleString();
 
@@ -13,8 +17,7 @@ const Puchout = ({ req, res }: any) => {
     console.log(serializedRequest, 'serializeReqest');
   }
 
-  console.log(serializedResponse, 'serialized Response');
-  return <>His page exists and getting response {serializedResponse} </>;
+  return <>His page exists and getting response</>;
 };
 
 export default Puchout;
