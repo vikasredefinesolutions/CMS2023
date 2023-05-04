@@ -4,20 +4,17 @@ const Puchout = ({ req, res }: any) => {
   const parser = new DOMParser();
   var resdoc = parser.parseFromString(resxmlDoc, 'text/xml');
   const serializedResponse = new XMLSerializer().serializeToString(resdoc);
-  let reqxmlDoc = req.body.toLocaleString();
+  if (req.body) {
+    let reqxmlDoc = req.body.toLocaleString();
 
-  const reqparser = new DOMParser();
-  var reqdoc = reqparser.parseFromString(reqxmlDoc, 'text/xml');
-  const serializedRequest = new XMLSerializer().serializeToString(reqdoc);
+    const reqparser = new DOMParser();
+    var reqdoc = reqparser.parseFromString(reqxmlDoc, 'text/xml');
+    const serializedRequest = new XMLSerializer().serializeToString(reqdoc);
+    console.log(serializedRequest, 'serializeReqest');
+  }
 
-  console.log(serializedRequest, 'serializeReqest');
   console.log(serializedResponse, 'serialized Response');
-  return (
-    <>
-      His page exists and getting response {serializedResponse}{' '}
-      {serializedRequest}
-    </>
-  );
+  return <>His page exists and getting response {serializedResponse} </>;
 };
 
 export default Puchout;
