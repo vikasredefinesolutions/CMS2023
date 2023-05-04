@@ -8,7 +8,7 @@ const Puchout = (props: any) => {
 export default Puchout;
 
 export const getServerSideProps = async (context: any) => {
-  let xmlDoc = context.res.toLocaleString();
+  let xmlDoc = context.req.toLocaleString();
 
   const parser = new DOMParser();
   var doc = parser.parseFromString(xmlDoc, 'text/xml');
