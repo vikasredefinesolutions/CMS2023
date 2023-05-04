@@ -1,6 +1,6 @@
 const Puchout = ({ req, res }: any) => {
-  if (res.body) {
-    let resxmlDoc = res.body.toLocaleString();
+  if (res) {
+    let resxmlDoc = res.toLocaleString();
 
     const parser = new DOMParser();
     var resdoc = parser.parseFromString(resxmlDoc, 'text/xml');
@@ -8,8 +8,8 @@ const Puchout = ({ req, res }: any) => {
     console.log(serializedResponse, 'serialized Response');
   }
 
-  if (req.body) {
-    let reqxmlDoc = req.body.toLocaleString();
+  if (req) {
+    let reqxmlDoc = req.toLocaleString();
 
     const reqparser = new DOMParser();
     var reqdoc = reqparser.parseFromString(reqxmlDoc, 'text/xml');
