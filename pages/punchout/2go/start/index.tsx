@@ -1,7 +1,7 @@
 import { DOMParser, XMLSerializer } from '@xmldom/xmldom';
 
 const Puchout = (props: any) => {
-  return <> THis page exists and getting {JSON.stringify(props.response)}</>;
+  return <> THis page exists and getting {props.response}</>;
 };
 
 export default Puchout;
