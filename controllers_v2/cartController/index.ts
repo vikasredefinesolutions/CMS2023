@@ -305,6 +305,7 @@ const CartController = () => {
       const obj = {
         totalQty: product.totalQty,
         sizeQtys: product.shoppingCartItemDetailsViewModels.map((res) => ({
+          attributeOptionId: res.attributeOptionId,
           size: res.attributeOptionValue,
           qty: res.qty,
           price: res.price,

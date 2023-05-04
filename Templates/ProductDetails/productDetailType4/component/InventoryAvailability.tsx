@@ -6,6 +6,7 @@ interface _props {
   price: number;
   color?: string;
   attributeOptionId: number;
+  val: number;
 }
 const InventoryAvailability: React.FC<_props> = ({
   size,
@@ -13,9 +14,10 @@ const InventoryAvailability: React.FC<_props> = ({
   price,
   color,
   attributeOptionId,
+  val,
 }) => {
-  const { updateQuantities, updateQuantities2 } = useActions_v2();
-  const [value, setValue] = useState<number | string>(0);
+  const { updateQuantities } = useActions_v2();
+  const [value, setValue] = useState<number | string>(val);
   const { id: userId } = useTypedSelector_v2((state) => state.user);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -23,12 +25,11 @@ const InventoryAvailability: React.FC<_props> = ({
     if (+event.target.value > qty) {
       setValue(qty);
     }
-    updateQuantities2({
+    updateQuantities({
       size: size,
       qty: qty > +event.target.value ? +event.target.value : qty,
       price: price,
       attributeOptionId: attributeOptionId,
-      color: color || '',
     });
   };
 

@@ -8,6 +8,7 @@ import SizePriceQtyTable from '@templates/ProductDetails/Components/SizePriceQty
 import SomActionsHandler from '@templates/ProductDetails/Components/SomActionsHandler';
 import SomCustomizeLogoOptions from '@templates/ProductDetails/Components/SomCustomizeLogoOptions';
 import StartOrderAvailableColors from '@templates/ProductDetails/Components/StartOrderAvailableColors';
+import Inventory from '@templates/ProductDetails/productDetailType4/component/ProductInventory';
 import Price from 'appComponents_v2/reUsable/Price';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
 import React, { useEffect, useRef, useState } from 'react';
@@ -53,9 +54,9 @@ const StartOrderModal: React.FC<_startOrderModalProps> = (props) => {
       });
     }
 
-    return () => {
-      clearToCheckout();
-    };
+    // return () => {
+    //   clearToCheckout();
+    // };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedProduct.productId]);
 
@@ -141,17 +142,19 @@ const StartOrderModal: React.FC<_startOrderModalProps> = (props) => {
                 </div>
 
                 <div className='mb-[25px]'>
-                  <div className=''>
-                    <button
-                      type='button'
-                      onClick={() => showAllColors((show) => !show)}
-                      className='text-anchor hover:text-anchor-hover font-[600] underline text-medium-text'
-                    >
-                      {allColors
-                        ? 'Show less'
-                        : `See All ${colors?.length} Colors`}
-                    </button>
-                  </div>
+                  {storeLayout !== 'DI' && (
+                    <div className=''>
+                      <button
+                        type='button'
+                        onClick={() => showAllColors((show) => !show)}
+                        className='text-anchor hover:text-anchor-hover font-[600] underline text-medium-text'
+                      >
+                        {allColors
+                          ? 'Show less'
+                          : `See All ${colors?.length} Colors`}
+                      </button>
+                    </div>
+                  )}
 
                   {allColors && <StartOrderAvailableColors />}
                   <div className='mt-3'>
@@ -175,10 +178,17 @@ const StartOrderModal: React.FC<_startOrderModalProps> = (props) => {
                     <AskToLogin modalHandler={modalHandler} />
                   </div>
                 </div>
+                {storeLayout !== 'DI' ? (
+                  <SizePriceQtyTable editDetails={getEditDetails()} />
+                ) : (
+                  <Inventory
+                    storeCode={storeLayout}
+                    productId={editDetails?.productId}
+                    editDetails={editDetails}
+                  />
+                )}
 
-                <SizePriceQtyTable editDetails={getEditDetails()} />
-
-                {customizationEnable && (
+                {storeLayout !== 'DI' && customizationEnable && (
                   <SomCustomizeLogoOptions
                     editDetails={editDetails?.shoppingCartLogoPersonViewModels}
                     totalQty={editDetails?.totalQty || 0}
@@ -197,7 +207,6 @@ const StartOrderModal: React.FC<_startOrderModalProps> = (props) => {
                   ></textarea>
                 </div>
               </div>
-
               <SomActionsHandler
                 closeStartOrderModal={() => modalHandler(null)}
                 note={textRef.current?.value || ''}

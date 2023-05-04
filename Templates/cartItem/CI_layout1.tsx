@@ -28,6 +28,8 @@ const CIlayout1: FC<any> = ({
   const clientSideMediaBaseUrl = useTypedSelector_v2(
     (state) => state.store.mediaBaseUrl,
   );
+
+  const storeCode = useTypedSelector_v2((state) => state.store.layout);
   mediaBaseUrl = mediaBaseUrl || clientSideMediaBaseUrl;
 
   return (
@@ -187,83 +189,84 @@ const CIlayout1: FC<any> = ({
                         <Price value={item.totalPrice} />
                       </div>
                     </div>
-                    {item.shoppingCartLogoPersonViewModels.map(
-                      (_item, _index) => {
-                        return _item.logoName === 'Customize Later' ? (
-                          <div className='flex justify-start items-center mt-3'>
-                            <div>
-                              <span className='material-icons text-[60px] mr-3'>
-                                support_agent
-                              </span>
-                            </div>
-                            <div>
-                              <div className='text-lg font-semibold'>
-                                Customize Later
-                              </div>
-                              <div className='text-base'>
-                                {__pagesText.CustomizeLater}
-                              </div>
-                            </div>
-                          </div>
-                        ) : (
-                          <div
-                            key={`${_item}-${_index}`}
-                            className='flex justify-between py-3'
-                          >
-                            <div className='text-base'>
-                              <div className='mb-3 flex'>
-                                {_item.logoImagePath === '' ? (
-                                  <NxtImage
-                                    className='w-14 h-12'
-                                    src='/assets/images/logo-to-be-submitted.webp'
-                                    title=''
-                                    alt={_item.logoImagePath}
-                                    isStatic={true}
-                                  />
-                                ) : (
-                                  <NxtImage
-                                    className='w-14 h-12'
-                                    src={_item.logoImagePath}
-                                    title=''
-                                    alt={_item.logoImagePath}
-                                  />
-                                )}
-
-                                {_item.logoName === 'Add Logo Later' ? (
-                                  <span className='font-semibold ml-3'>
-                                    Logo to be
-                                    <br />
-                                    submitted
-                                  </span>
-                                ) : (
-                                  <span className='font-semibold ml-3'>
-                                    Logo
-                                    <br />
-                                    submitted
-                                  </span>
-                                )}
-                              </div>
+                    {storeCode !== 'DI' &&
+                      item.shoppingCartLogoPersonViewModels.map(
+                        (_item, _index) => {
+                          return _item.logoName === 'Customize Later' ? (
+                            <div className='flex justify-start items-center mt-3'>
                               <div>
-                                <span className='font-semibold mr-1'>
-                                  Location:
+                                <span className='material-icons text-[60px] mr-3'>
+                                  support_agent
                                 </span>
-                                <span>{_item.logoLocation}</span>
                               </div>
-                            </div>
-                            <div className='text-base text-right'>
-                              <div className='font-semibold'>Logo Price</div>
                               <div>
-                                {_index === 0 && _item.logoPrice === 0 ? (
-                                  'First Logo Free'
-                                ) : (
-                                  <Price value={_item.logoPrice} />
-                                )}
+                                <div className='text-lg font-semibold'>
+                                  Customize Later
+                                </div>
+                                <div className='text-base'>
+                                  {__pagesText.CustomizeLater}
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        );
-                      },
-                    )}
+                          ) : (
+                            <div
+                              key={`${_item}-${_index}`}
+                              className='flex justify-between py-3'
+                            >
+                              <div className='text-base'>
+                                <div className='mb-3 flex'>
+                                  {_item.logoImagePath === '' ? (
+                                    <NxtImage
+                                      className='w-14 h-12'
+                                      src='/assets/images/logo-to-be-submitted.webp'
+                                      title=''
+                                      alt={_item.logoImagePath}
+                                      isStatic={true}
+                                    />
+                                  ) : (
+                                    <NxtImage
+                                      className='w-14 h-12'
+                                      src={_item.logoImagePath}
+                                      title=''
+                                      alt={_item.logoImagePath}
+                                    />
+                                  )}
+
+                                  {_item.logoName === 'Add Logo Later' ? (
+                                    <span className='font-semibold ml-3'>
+                                      Logo to be
+                                      <br />
+                                      submitted
+                                    </span>
+                                  ) : (
+                                    <span className='font-semibold ml-3'>
+                                      Logo
+                                      <br />
+                                      submitted
+                                    </span>
+                                  )}
+                                </div>
+                                <div>
+                                  <span className='font-semibold mr-1'>
+                                    Location:
+                                  </span>
+                                  <span>{_item.logoLocation}</span>
+                                </div>
+                              </div>
+                              <div className='text-base text-right'>
+                                <div className='font-semibold'>Logo Price</div>
+                                <div>
+                                  {_index === 0 && _item.logoPrice === 0 ? (
+                                    'First Logo Free'
+                                  ) : (
+                                    <Price value={_item.logoPrice} />
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        },
+                      )}
                   </div>
                 </div>
                 {isEditable && (

@@ -1,3 +1,4 @@
+import NxtImage from '@appComponents/reUsable/Image';
 import { paths } from '@constants/paths.constant';
 import Link from 'next/link';
 import React from 'react';
@@ -7,8 +8,13 @@ const PageNotFoundType1: React.FC = () => {
     <div className=''>
       <section className='container mx-auto text-center'>
         <div className='pt-[60px] pb-[30px] flex flex-col justify-center items-center'>
-          <div className='text-center mb-[40px]'>
-            <img src='images/404.png' alt='' />
+          <div className='text-center mb-[40px] w-full h-full'>
+            <NxtImage
+              className=''
+              src='/assets/images/404.png'
+              alt=''
+              isStatic
+            />
           </div>
           <div className='mb-[30px] mt-[15px]'>
             <div className='text-2xl-text mb-[20px] font-bold'>

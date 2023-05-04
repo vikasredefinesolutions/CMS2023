@@ -294,6 +294,7 @@ RedefineCustomApp.getInitialProps = async (
       logo: cookies.storeInfo.logoUrl,
       favicon: cookies.storeInfo.favicon,
     };
+    expectedProps.companyId = cookies.storeInfo.companyId;
   }
 
   if (res && currentPath) {
@@ -318,6 +319,7 @@ RedefineCustomApp.getInitialProps = async (
       );
 
       expectedProps.companyId = (await FetchCompanyConfiguration()).companyId;
+
       if (storeDetails) {
         expectedProps.store.imageFolderPath = `/rdc/${expectedProps.companyId}/store/${storeDetails.store.storeId}/images/`;
         expectedProps.store = storeDetails.store;
@@ -355,6 +357,7 @@ RedefineCustomApp.getInitialProps = async (
                   expectedProps.store.isAttributeSaparateProduct,
                 favicon: expectedProps.store.urls.favicon,
                 logoUrl: expectedProps.store.urls.logo,
+                companyId: expectedProps.companyId,
               },
             },
           });
@@ -385,6 +388,7 @@ RedefineCustomApp.getInitialProps = async (
       storeId: expectedProps.store.storeId,
     });
   }
+
   if (expectedProps.store.storeId) {
     let customScript = expectedProps.configs[1]?.config_value
       ? expectedProps.configs[1]?.config_value

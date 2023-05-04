@@ -40,6 +40,7 @@ interface _ExtractCookies {
     storeTypeId: number;
     favicon: string;
     logoUrl: string;
+    companyId: number;
   };
   tempCustomerId: string | null;
   empData: EmployeeDataObject | null;
@@ -73,6 +74,7 @@ interface _cStoreInfo {
     storeTypeId: number;
     favicon: string;
     logoUrl: string;
+    companyId: number;
   };
 }
 

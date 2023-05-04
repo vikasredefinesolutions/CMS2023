@@ -1,6 +1,6 @@
 import {
   _HeaderPropsWithTemplateid,
-  _HeaderTemplates
+  _HeaderTemplates,
 } from '@definations/header.type';
 import { NextPage } from 'next';
 import Header_Type1 from './header_Type1';
@@ -17,15 +17,16 @@ const HeaderTemplates: _HeaderTemplates = {
 const Header: NextPage<_HeaderPropsWithTemplateid> = ({
   storeCode,
   logoUrl,
-  menuItems,
   headerTemplateId,
   headerBgColor,
   headerTextColor,
+  menuItems,
 }) => {
-  const template_Id: string = `type${headerTemplateId}`;
-  // const template_Id = 'type4';
-  const HeaderTemplate =
-    HeaderTemplates[(template_Id as 'type1') || 'type2'] || 'type3' || 'type4';
+  const templateTypeToShow = headerTemplateId
+    ? (('type' + headerTemplateId) as 'type1' | 'type2' | 'type3' | 'type4')
+    : 'type1';
+
+  const HeaderTemplate = HeaderTemplates[templateTypeToShow];
   return (
     <HeaderTemplate
       storeCode={storeCode}

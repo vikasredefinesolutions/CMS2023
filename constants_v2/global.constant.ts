@@ -11,6 +11,7 @@ export enum __Cookie {
   storeInfo = 'storeInfo',
   tempCustomerId = 'tempCustomerId',
   empData = 'emp_data',
+  companyId = 'companyId',
 }
 
 // cookie_expiry in days

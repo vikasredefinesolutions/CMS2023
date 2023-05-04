@@ -14,209 +14,411 @@ export const assignMultipleClass = (classArr, obj) => {
 export const updateSetProperties = (element) => {
   let x = document.getElementById('div' + element.no);
   if (element.selectedVal != undefined && element.selectedVal != '') {
+    if(element.properties.leftBoxBg)
+    {
+        
+        let cArr = ['leftBoxBg', 'centerBoxBg', 'rightBoxBg'];
+        cArr.map(cvalue => {
+          let bgValue = '';
+          let imageOrColor = '';
+          let hBgValue = '';
+          let hImageOrColor = '';
+          let bLink = '';
+
+          Object.entries(element.selectedVal).map(([key, value]) => {
+            
+            
+            if (key == cvalue)
+            {
+              bgValue =  value.value;
+            }
+            if (key == cvalue +"_bg_type")
+            {
+              imageOrColor =  value.value;
+            }
+            if (key == cvalue+"_hover_option")
+            {
+              hBgValue =  value.value;
+            }
+            if (key == cvalue +"_bg_type_hover")
+            {
+              hImageOrColor =  value;
+            }
+            // if (key == cvalue+"_text_color")
+            // {
+            //     tmpTextColor =  value;
+            // }
+            // if (key == cvalue +"_text_color_hover")
+            // {
+            //     tmpHoverTextColor =  value;
+            // }
+            if (key == cvalue +"_link")
+            {
+                bLink =  value.value;
+            }
+    
+          });
+
+          if(imageOrColor)
+          {
+              if(x && x.querySelectorAll('#'+cvalue).length > 0)
+              {
+                if(imageOrColor === 'Color')
+                    x.querySelectorAll('#'+cvalue)[0].style="background: " + bgValue;
+                else
+                    x.querySelectorAll('#'+cvalue)[0].style="background-image: url('" + bgValue + "')";
+              }
+          }
+
+          if(hImageOrColor)
+          {
+              if(x && x.querySelectorAll('#'+cvalue).length > 0)
+              {
+              if(hImageOrColor === 'Color')
+                    x.querySelectorAll('#'+cvalue+"Hover")[0].style="background: " + hBgValue;
+                else
+                    x.querySelectorAll('#'+cvalue+"Hover")[0].style="background-image: url('" + hBgValue + "')";
+              }
+          }
+          
+          // if(bLink)
+          // {
+          //   x.querySelectorAll('#'+cvalue+"Link")[0].href = bLink;
+          // }
+
+        });
+
+        
+
+    }
     let elProperties;
-    let buttonId = '';
-    let className = '';
-    let pmClassName = '';
-    let count = 0;
-    let Button_className = '';
-    let Button1_className = '';
-    let Button2_className = '';
+      let buttonId = '';
+      let className = '';
+      let pmClassName = '';
+      let count = 0;
+      let Button_className = '';
+      let Button1_className = '';
+      let Button2_className = '';
 
-    let Button_parent;
-    let Button1_parent;
-    let Button2_parent;
 
-    Object.entries(element.selectedVal).map(([key, value]) => {
-      if (value.type == 'btn_size') {
-        buttonId = key.replace('_size', '');
+      let Button_parent;
+      let Button1_parent;
+      let Button2_parent;
+      let btnStyle = '';
+      let btn1Style = '';
+      let btn2Style = '';
 
-        if (buttonId === 'Button') Button_className += ' ' + value.value;
-        else if (buttonId === 'Button1') Button1_className += ' ' + value.value;
-        else if (buttonId === 'Button2') Button2_className += ' ' + value.value;
-      }
+      let btnPadding = false;
+      let btn1Padding = false;
+      let btn2Padding = false;
 
-      if (value.type == 'btn_alignment') {
-        buttonId = key.replace('_alignment', '');
-        if (buttonId === 'Button') Button_parent += ' ' + value.value;
-        else if (buttonId === 'Button1') Button1_parent += ' ' + value.value;
-        else if (buttonId === 'Button2') Button2_parent += ' ' + value.value;
-      }
+      bject.entries(element.selected_Values).map(([key, value]) => {
+        
+        if(value.type == 'btn_size')
+        {
+          buttonId = key.replace('_size', '');
 
-      if (value.type == 'btn_transform') {
-        buttonId = key.replace('_text_transform', '');
-        if (buttonId === 'Button') Button_className += ' ' + value.value;
-        else if (buttonId === 'Button1') Button1_className += ' ' + value.value;
-        else if (buttonId === 'Button2') Button2_className += ' ' + value.value;
-      }
-
-      if (value.type == 'btn_link') {
-        buttonId = key.replace('_link', '');
-        if (x.querySelectorAll('#' + buttonId).length > 0) {
-          x.querySelectorAll('#' + buttonId)[0].href = value.value;
+          if(buttonId === 'Button')
+            Button_className += ' '+value.value;
+          else if(buttonId === 'Button1')
+            Button1_className += ' '+value.value;
+          else if(buttonId === 'Button2')
+            Button2_className += ' '+value.value;
         }
-      }
 
-      if (value.type == 'btn_style') {
-        buttonId = key.replace('_style', '');
-        if (buttonId === 'Button') Button_className += ' ' + value.value;
-        else if (buttonId === 'Button1') Button1_className += ' ' + value.value;
-        else if (buttonId === 'Button2') Button2_className += ' ' + value.value;
-      }
-
-      // if(value.type == 'btn_size')
-      // {
-      //   buttonId = key.replace('_size', '');
-      //   if(buttonId === 'Button')
-      //     Button_className += ' '+value.value;
-      //   else if(buttonId === 'Button1')
-      //     Button1_className += ' '+value.value;
-      //   else if(buttonId === 'Button2')
-      //     Button2_className += ' '+value.value;
-      // }
-
-      if (value.type == 'btn_link_target') {
-        buttonId = key.replace('_window', '');
-        if (x.querySelectorAll('#' + buttonId).length > 0) {
-          x.querySelectorAll('#' + buttonId)[0].target = value.value;
+        if(value.type == 'btn_alignment')
+        {
+          buttonId = key.replace('_alignment', '');
+          if(buttonId === 'Button')
+            Button_parent += ' '+value.value;
+          else if(buttonId === 'Button1')
+            Button1_parent += ' '+value.value;
+          else if(buttonId === 'Button2')
+            Button2_parent += ' '+value.value;
+          
         }
-      }
 
-      if (value.type == 'btn_display') {
-        if (value.value == 'No') {
-          buttonId = key.replace('_display', '');
-          if (x.querySelectorAll('#' + buttonId).length > 0) {
-            x.querySelectorAll('#' + buttonId)[0].remove();
+
+        if(value.type == 'btn_transform')
+        {
+          buttonId = key.replace('_text_transform', '');
+          if(buttonId === 'Button')
+            Button_className += ' '+value.value;
+          else if(buttonId === 'Button1')
+            Button1_className += ' '+value.value;
+          else if(buttonId === 'Button2')
+            Button2_className += ' '+value.value;
+        }
+
+        if(value.type == 'btn_link')
+        {
+          buttonId = key.replace('_link', '');
+          if(x.querySelectorAll('#'+buttonId).length > 0)
+          {
+            x.querySelectorAll('#'+buttonId)[0].href = value.value;
           }
         }
-      }
 
-      /* Padding & Margin Code for Button Text */
-      if (value.type == 'btn_left_padding') {
-        buttonId = key.replace('_left_padding', '');
-        if (buttonId === 'Button')
-          Button_className += ' pl-[' + value.value + 'px]';
-        else if (buttonId === 'Button1')
-          Button1_className += ' pl-[' + value.value + 'px]';
-        else if (buttonId === 'Button2')
-          Button2_className += ' pl-[' + value.value + 'px]';
-      }
-      if (value.type == 'btn_top_padding') {
-        buttonId = key.replace('_top_padding', '');
-        if (buttonId === 'Button')
-          Button_className += ' pt-[' + value.value + 'px]';
-        else if (buttonId === 'Button1')
-          Button1_className += ' pt-[' + value.value + 'px]';
-        else if (buttonId === 'Button2')
-          Button2_className += ' pt-[' + value.value + 'px]';
-      }
-      if (value.type == 'btn_right_padding') {
-        buttonId = key.replace('_right_padding', '');
-        if (buttonId === 'Button')
-          Button_className += ' pr-[' + value.value + 'px]';
-        else if (buttonId === 'Button1')
-          Button1_className += ' pr-[' + value.value + 'px]';
-        else if (buttonId === 'Button2')
-          Button2_className += ' pr-[' + value.value + 'px]';
-      }
-      if (value.type == 'btn_bottom_padding') {
-        buttonId = key.replace('_bottom_padding', '');
-        if (buttonId === 'Button')
-          Button_className += ' pb-[' + value.value + 'px]';
-        else if (buttonId === 'Button1')
-          Button1_className += ' pb-[' + value.value + 'px]';
-        else if (buttonId === 'Button2')
-          Button2_className += ' pb-[' + value.value + 'px]';
-      }
-      if (value.type == 'btn_left_margin') {
-        buttonId = key.replace('_left_margin', '');
-        if (buttonId === 'Button')
-          Button_className += ' ml-[' + value.value + 'px]';
-        else if (buttonId === 'Button1')
-          Button1_className += ' ml-[' + value.value + 'px]';
-        else if (buttonId === 'Button2')
-          Button2_className += ' ml-[' + value.value + 'px]';
-      }
-      if (value.type == 'btn_top_margin') {
-        buttonId = key.replace('_top_margin', '');
-        if (buttonId === 'Button')
-          Button_className += ' mt-[' + value.value + 'px]';
-        else if (buttonId === 'Button1')
-          Button1_className += ' mt-[' + value.value + 'px]';
-        else if (buttonId === 'Button2')
-          Button2_className += ' mt-[' + value.value + 'px]';
-      }
-      if (value.type == 'btn_right_margin') {
-        buttonId = key.replace('_right_margin', '');
-        if (buttonId === 'Button')
-          Button_className += ' mr-[' + value.value + 'px]';
-        else if (buttonId === 'Button1')
-          Button1_className += ' mr-[' + value.value + 'px]';
-        else if (buttonId === 'Button2')
-          Button2_className += ' mr-[' + value.value + 'px]';
-      }
-      if (value.type == 'btn_bottom_margin') {
-        buttonId = key.replace('_bottom_margin', '');
-        if (buttonId === 'Button')
-          Button_className += ' mb-[' + value.value + 'px]';
-        else if (buttonId === 'Button1')
-          Button1_className += ' mb-[' + value.value + 'px]';
-        else if (buttonId === 'Button2')
-          Button2_className += ' mb-[' + value.value + 'px]';
-      }
+        if(value.type == 'btn_style')
+        {
+          buttonId = key.replace('_style', '');
 
-      if (value.type == 'btn_font_family') {
-        buttonId = key.replace('_font_family', '');
-        if (buttonId === 'Button') Button_className += ' ' + value.value;
-        else if (buttonId === 'Button1') Button1_className += ' ' + value.value;
-        else if (buttonId === 'Button2') Button2_className += ' ' + value.value;
-      }
+          if(buttonId === 'Button')
+          {
+            Button_className += ' '+value.value;
+            btnStyle = value.value;
+          }
+          else if(buttonId === 'Button1')
+          {
+            Button1_className += ' '+value.value;
+            btn1Style = value.value;
+          }
+          else if(buttonId === 'Button2')
+          {
+            Button2_className += ' '+value.value;
+            btn2Style = value.value;
+          }
+        }
 
-      if (value.type == 'btn_font_size') {
-        buttonId = key.replace('_font_size', '');
-        if (buttonId === 'Button') Button_className += ' ' + value.value;
-        else if (buttonId === 'Button1') Button1_className += ' ' + value.value;
-        else if (buttonId === 'Button2') Button2_className += ' ' + value.value;
-      }
+       if(value.type == 'btn_link_target')
+        {
+          buttonId = key.replace('_window', '');
+          if(x.querySelectorAll('#'+buttonId).length > 0)
+          {
+            x.querySelectorAll('#'+buttonId)[0].target = value.value;
+          }
+        }                  
 
-      if (value.type == 'btn_font_weight') {
-        buttonId = key.replace('_font_weight', '');
-        if (buttonId === 'Button') Button_className += ' ' + value.value;
-        else if (buttonId === 'Button1') Button1_className += ' ' + value.value;
-        else if (buttonId === 'Button2') Button2_className += ' ' + value.value;
-      }
 
-      if (value.type == 'btn_line_height') {
-        buttonId = key.replace('_line_height', '');
-        if (buttonId === 'Button')
-          Button_className += ' leading-[' + value.value + 'px]';
-        else if (buttonId === 'Button1')
-          Button1_className += ' leading-[' + value.value + 'px]';
-        else if (buttonId === 'Button2')
-          Button2_className += ' leading-[' + value.value + 'px]';
-      }
-    });
+        if(value.type == 'btn_display')
+        {
+          if(value.value == 'No')
+          {
+            buttonId = key.replace('_display', '');
+            if(x.querySelectorAll('#'+buttonId).length > 0)
+            {
+              x.querySelectorAll('#'+buttonId)[0].remove();
+            }
+              
+          }
+        }
 
-    if (x.querySelectorAll('#Button').length > 0) {
-      x.querySelectorAll('#Button')[0].className = Button_className;
-      if (x.querySelectorAll('#ButtonParent').length > 0) {
-        x.querySelectorAll('#ButtonParent')[0].className = Button_parent;
-      }
-    }
+        /* Padding & Margin Code for Button Text */
+        if(value.type == 'btn_left_padding')
+        {
+          
+          buttonId = key.replace('_left_padding', '');
+          if(buttonId === 'Button')
+          {
+            btnPadding = true;
+            Button_className += ' pl-[' + value.value +'px]';
+          }
+          else if(buttonId === 'Button1')
+          {
+            Button1_className += ' pl-[' + value.value +'px]';
+            btn1Padding = true;
+          }
+          else if(buttonId === 'Button2')
+          {
+            btn2Padding = true;
+            Button2_className += ' pl-[' + value.value +'px]';
+          }
+        }
+        if(value.type == 'btn_top_padding')
+        {
+          buttonId = key.replace('_top_padding', '');
+          if(buttonId === 'Button')
+          {
+            btnPadding = true;
+            Button_className += ' pt-[' + value.value +'px]';
+          }
+          else if(buttonId === 'Button1')
+          {
+            Button1_className += ' pt-[' + value.value +'px]';
+            btn1Padding = true;
+          }
+          else if(buttonId === 'Button2')
+          {
+            Button2_className += ' pt-[' + value.value +'px]';
+            btn2Padding = true;
+          }
+        }
+        if(value.type == 'btn_right_padding')
+        {
+          buttonId = key.replace('_right_padding', '');
+          if(buttonId === 'Button')
+          {
+            btnPadding = true;
+            Button_className += ' pr-[' + value.value +'px]';
+          }
+          else if(buttonId === 'Button1')
+          {
+            Button1_className += ' pr-[' + value.value +'px]';
+            btn1Padding = true;  
+          }
+          else if(buttonId === 'Button2')
+          {
+            Button2_className += ' pr-[' + value.value +'px]';
+            btn2Padding = true;
+          }
+        }
+        if(value.type == 'btn_bottom_padding')
+        {
+          buttonId = key.replace('_bottom_padding', '');
+          if(buttonId === 'Button')
+          {
+            Button_className += ' pb-[' + value.value +'px]';
+            btnPadding = true;
+          }
+          else if(buttonId === 'Button1')
+          {
+            Button1_className += ' pb-[' + value.value +'px]';
+            btn1Padding = true;
+          }
+          else if(buttonId === 'Button2')
+          {
+            Button2_className += ' pb-[' + value.value +'px]';
+            btn2Padding = true;
+          }
+        }
+        if(value.type == 'btn_left_margin')
+        {
+          buttonId = key.replace('_left_margin', '');
+          if(buttonId === 'Button')
+            Button_className += ' ml-[' + value.value +'px]';
+          else if(buttonId === 'Button1')
+            Button1_className += ' ml-[' + value.value +'px]';
+          else if(buttonId === 'Button2')
+            Button2_className += ' ml-[' + value.value +'px]';
+        }
+        if(value.type == 'btn_top_margin')
+        {
+          buttonId = key.replace('_top_margin', '');
+          if(buttonId === 'Button')
+            Button_className += ' mt-[' + value.value +'px]';
+          else if(buttonId === 'Button1')
+            Button1_className += ' mt-[' + value.value +'px]';
+          else if(buttonId === 'Button2')
+            Button2_className += ' mt-[' + value.value +'px]';
+        }
+        if(value.type == 'btn_right_margin')
+        {
+          buttonId = key.replace('_right_margin', '');
+          if(buttonId === 'Button')
+            Button_className += ' mr-[' + value.value +'px]';
+          else if(buttonId === 'Button1')
+            Button1_className += ' mr-[' + value.value +'px]';
+          else if(buttonId === 'Button2')
+            Button2_className += ' mr-[' + value.value +'px]';
 
-    if (x.querySelectorAll('#Button1').length > 0) {
-      x.querySelectorAll('#Button1')[0].className = Button1_className;
-      if (x.querySelectorAll('#Button1Parent').length > 0) {
-        x.querySelectorAll('#Button1Parent')[0].className = Button1_parent;
-      }
-    }
+        }
+        if(value.type == 'btn_bottom_margin')
+        {
+          buttonId = key.replace('_bottom_margin', '');
+          if(buttonId === 'Button')
+            Button_className += ' mb-[' + value.value +'px]';
+          else if(buttonId === 'Button1')
+            Button1_className += ' mb-[' + value.value +'px]';
+          else if(buttonId === 'Button2')
+            Button2_className += ' mb-[' + value.value +'px]';
 
-    if (x.querySelectorAll('#Button2').length > 0) {
-      x.querySelectorAll('#Button2')[0].className = Button2_className;
-      if (x.querySelectorAll('#Button2Parent').length > 0) {
-        x.querySelectorAll('#Button2Parent')[0].className = Button2_parent;
-      }
-    }
+        }
+
+        
+        if(value.type == 'btn_font_family')
+        {
+          buttonId = key.replace('_font_family', '');
+          if(buttonId === 'Button')
+            Button_className += ' ' + value.value;
+          else if(buttonId === 'Button1')
+            Button1_className += ' ' + value.value;
+          else if(buttonId === 'Button2')
+            Button2_className += ' ' + value.value;
+        }
+
+        if(value.type == 'btn_font_size')
+        {
+          buttonId = key.replace('_font_size', '');
+          if(buttonId === 'Button')
+            Button_className += ' ' + value.value;
+          else if(buttonId === 'Button1')
+            Button1_className += ' ' + value.value;
+          else if(buttonId === 'Button2')
+            Button2_className += ' ' + value.value;
+
+
+        }
+
+        if(value.type == 'btn_font_weight')
+        {
+          buttonId = key.replace('_font_weight', '');
+          if(buttonId === 'Button')
+            Button_className += ' ' + value.value;
+          else if(buttonId === 'Button1')
+            Button1_className += ' ' + value.value;
+          else if(buttonId === 'Button2')
+            Button2_className += ' ' + value.value;
+        }
+        
+        if(value.type == 'btn_line_height')
+        {
+          buttonId = key.replace('_line_height', '');
+          if(buttonId === 'Button')
+            Button_className += ' leading-[' + value.value+'px]';
+          else if(buttonId === 'Button1')
+            Button1_className += ' leading-[' + value.value+'px]';
+          else if(buttonId === 'Button2')
+            Button2_className += ' leading-[' + value.value+'px]';
+        }
+
+      });
+      
+     if(x.querySelectorAll('#Button').length > 0)
+     {
+        if(btnStyle === '')
+          Button_className += ' inline-block custbtn-primary';
+        if(!btnPadding)
+        {
+          Button_className += ' pt-[10px] pb-[10px] pl-[20px] pr-[20px]';
+        }
+        x.querySelectorAll('#Button')[0].className = Button_className;
+        if(x.querySelectorAll('#ButtonParent').length > 0)
+        {
+            x.querySelectorAll('#ButtonParent')[0].className = Button_parent;
+        }
+     }
+
+     if(x.querySelectorAll('#Button1').length > 0)
+     {
+        if(btn1Style === '')
+          Button1_className += ' inline-block custbtn-primary';
+
+          if(!btn1Padding)
+          {
+            Button1_className += ' pt-[10px] pb-[10px] pl-[20px] pr-[20px]';
+          }
+
+        x.querySelectorAll('#Button1')[0].className = Button1_className;
+        if(x.querySelectorAll('#Button1Parent').length > 0)
+        {
+            x.querySelectorAll('#Button1Parent')[0].className = Button1_parent;
+        }
+     }
+
+     if(x.querySelectorAll('#Button2').length > 0)
+     {
+        if(btn2Style === '')
+          Button2_className += ' inline-block custbtn-primary';
+        if(!btn2Padding)
+        {
+          Button2_className += ' pt-[10px] pb-[10px] pl-[20px] pr-[20px]';
+        }
+        x.querySelectorAll('#Button2')[0].className = Button2_className;
+        if(x.querySelectorAll('#Button2Parent').length > 0)
+        {
+            x.querySelectorAll('#Button2Parent')[0].className = Button2_parent;
+        }
+     }
 
     //      let elProperties;
     Object.entries(element.selectedVal).map(([key, value]) => {

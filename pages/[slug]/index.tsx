@@ -1,9 +1,11 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/rules-of-hooks */
 import SeoHead from '@appComponents/reUsable/SeoHead';
+import { _defaultTemplates } from '@configs/template.config';
 import { getServerSideProps } from '@controllers/getServerSideProps';
 import { _TopicHomeProps } from '@definations/slug.type';
 import { useActions_v2 } from '@hooks_v2/index';
+import PageNotFound from '@templates/404';
 import Home from '@templates/Home';
 import ProductDetails from '@templates/ProductDetails';
 import ProductListing from '@templates/ProductListings';
@@ -30,8 +32,17 @@ const SlugSearch: NextPage<_SlugServerSideProps | _SlugServerSide_WentWrong> = (
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageMetaData]);
 
-  if (!pageMetaData) {
-    return <>No Page found</>;
+  if (!pageMetaData || pageMetaData?.type === '404') {
+    return (
+      <>
+        <SeoHead
+          title={pageMetaData?.meta_Title || '404: No Page found'}
+          description={pageMetaData?.meta_Description || ''}
+          keywords={pageMetaData?.meta_Keywords || 'Branded Promotional'}
+        />
+        <PageNotFound id={_defaultTemplates[404]} />
+      </>
+    );
   }
 
   if (pageMetaData?.type === 'product' && page?.productDetails && _store) {
