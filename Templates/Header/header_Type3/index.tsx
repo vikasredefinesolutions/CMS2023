@@ -67,7 +67,7 @@ const Header_Type3: NextPage<_HeaderProps> = ({
 
         <div className='fixed z-40 lg:hidden'></div>
         <header className='relative trancking-[1px]'>
-          <nav aria-label='container mx-auto'>
+          <nav className='container mx-auto'>
           <div className={`${headerBgColor ? '' : 'bg-[#ffffff]'}]`} style={{backgroundColor: headerBgColor}}>
               <div className='p-[10px]'>
                 {isMobileView ? (
