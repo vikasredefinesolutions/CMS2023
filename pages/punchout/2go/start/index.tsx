@@ -1,12 +1,13 @@
-const Puchout = () => {
-  return <> THis page exists and getting</>;
+const Puchout = (props: any) => {
+  return <> THis page exists and getting {props}</>;
 };
 
 export default Puchout;
 
 export const getServerSideProps = async (context: any) => {
-  const req = context.req;
-  console.log(context, 'this is context');
+  return {
+    props: context,
+  };
 
   //   const filePath = path.join(process.cwd(), '/public/success.xml');
   //   const xmlData = await fsPrmoises.readFile(filePath);
