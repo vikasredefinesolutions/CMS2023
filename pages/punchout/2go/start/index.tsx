@@ -1,8 +1,9 @@
-// import { parseBody } from 'next/dist/server/api-utils'
 import getRawBody from 'raw-body';
 
 const Puchout = (props: any) => {
-  console.log(props.body);
+  const params = new URLSearchParams(props.body);
+  const data = JSON.parse(params.get('params') || '');
+  console.log(data);
   //   console.log(req, res, 'ooooooo');
   //   if (res) {
   //     let resxmlDoc = res.toLocaleString();
@@ -29,7 +30,7 @@ export default Puchout;
 
 export const getServerSideProps = async (context: any) => {
   const body = await getRawBody(context?.req);
-  return { props: { body: body.toString('utf-8') } };
+  return { props: { body: body.toString() } };
 };
 
 // export const getServerSideProps = async (context: any) => {
