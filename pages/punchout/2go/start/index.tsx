@@ -1,4 +1,8 @@
-const Puchout = () => {
+// import { parseBody } from 'next/dist/server/api-utils'
+import getRawBody from 'raw-body';
+
+const Puchout = (props: any) => {
+  console.log(props.body);
   //   console.log(req, res, 'ooooooo');
   //   if (res) {
   //     let resxmlDoc = res.toLocaleString();
@@ -23,13 +27,10 @@ const Puchout = () => {
 
 export default Puchout;
 
-// export const getServerSideProps = async (context: any) => {
-//   return {
-//     props: {
-//      context
-//     },
-//   };
-// };
+export const getServerSideProps = async (context: any) => {
+  const body = await getRawBody(context?.req);
+  return { props: { body: body.toString('utf-8') } };
+};
 
 // export const getServerSideProps = async (context: any) => {
 //   let xmlDoc = context.res.body.toLocaleString();
