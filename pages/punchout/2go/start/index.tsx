@@ -2,8 +2,12 @@ import getRawBody from 'raw-body';
 
 const Puchout = (props: any) => {
   const params = new URLSearchParams(props.body);
-  const data = JSON.parse(params.get('params') || '');
-  console.log(data);
+  let obj = {};
+  obj = { ...obj, ...JSON.parse(params.get('pos') || '') };
+  obj = { ...obj, ...JSON.parse(params.get('return_url') || '') };
+  obj = { ...obj, ...JSON.parse(params.get('params') || '') };
+
+  console.log(obj);
   //   console.log(req, res, 'ooooooo');
   //   if (res) {
   //     let resxmlDoc = res.toLocaleString();
