@@ -1,5 +1,5 @@
-const Puchout = ({ req, res }: any) => {
-  console.log(req, res, 'ooooooo');
+const Puchout = () => {
+  //   console.log(req, res, 'ooooooo');
   //   if (res) {
   //     let resxmlDoc = res.toLocaleString();
 
@@ -23,14 +23,13 @@ const Puchout = ({ req, res }: any) => {
 
 export default Puchout;
 
-export const getServerSideProps = async (context: any) => {
-  return {
-    props: {
-      req: context.req,
-      res: context.res,
-    },
-  };
-};
+// export const getServerSideProps = async (context: any) => {
+//   return {
+//     props: {
+//      context
+//     },
+//   };
+// };
 
 // export const getServerSideProps = async (context: any) => {
 //   let xmlDoc = context.res.body.toLocaleString();
