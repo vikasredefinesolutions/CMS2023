@@ -116,10 +116,10 @@ class MyDocument extends Document {
             src='https://platform-api.sharethis.com/js/sharethis.js#property=622863e42e0ffb001379992c&product=sop'
           ></script>
           {/* ---------------------Google Tag Manager--------------------- */}
-          <script
+          {/* <script
             async
             src={`https://www.googletagmanager.com/gtm.js?id=${process.env.NEXT_PUBLIC_GTM_ID}`}
-          />
+          /> */}
           <script
             dangerouslySetInnerHTML={{
               __html: `
