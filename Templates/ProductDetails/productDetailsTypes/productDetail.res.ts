@@ -88,6 +88,7 @@ export interface _ProductDetails {
   isPolicywithcheckbox: boolean;
   policyMessage: string;
   isEnduserDisplay: boolean;
+  categoryName?: string;
 }
 export interface _ProductPolicy {
   storeId: number;

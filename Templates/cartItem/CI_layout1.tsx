@@ -3,6 +3,7 @@ import {
   default as NxtImage,
 } from '@appComponents/reUsable/Image';
 import Price from '@appComponents/reUsable/Price';
+import { _Store } from '@configs/page.config';
 import { __pagesText } from '@constants/pages.text';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import { CartObject } from '@services/cart';
@@ -29,7 +30,7 @@ const CIlayout1: FC<any> = ({
     (state) => state.store.mediaBaseUrl,
   );
 
-  const storeCode = useTypedSelector_v2((state) => state.store.layout);
+  const storeCode = useTypedSelector_v2((state) => state.store.code);
   mediaBaseUrl = mediaBaseUrl || clientSideMediaBaseUrl;
 
   return (
@@ -189,7 +190,7 @@ const CIlayout1: FC<any> = ({
                         <Price value={item.totalPrice} />
                       </div>
                     </div>
-                    {storeCode !== 'DI' &&
+                    {storeCode !== _Store.type4 &&
                       item.shoppingCartLogoPersonViewModels.map(
                         (_item, _index) => {
                           return _item.logoName === 'Customize Later' ? (

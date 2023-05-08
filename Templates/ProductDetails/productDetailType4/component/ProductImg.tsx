@@ -18,7 +18,6 @@ const ProductImg: React.FC<_ProductImgProps> = ({ product }) => {
   const [wishlistPresent, setWishlistPresent] = useState<boolean>(false);
   const colors = useTypedSelector_v2((state) => state.product?.product.colors);
   const handleChooseColor = (product: _ProductColor) => {
-    console.log(product, 'COLOR');
     if (!product.productSEName || product.productSEName === '') {
       setColor(product);
       return;

@@ -1,5 +1,5 @@
 import { newFetauredItemResponse } from '@definations/productList.type';
-import React from 'react';
+import React, { Fragment } from 'react';
 import BrandProduct from './BrandProduct';
 
 interface _props {
@@ -50,12 +50,14 @@ const ProductListing: React.FC<_props> = ({ brandsData, brandId }) => {
                 brandsData?.length > 0 &&
                 brandsData.map(
                   (product: newFetauredItemResponse, index: number) => (
-                    <BrandProduct
-                      brandId={brandId}
-                      key={index}
-                      product={product}
-                      colorChangeHandler={colorChangeHandler}
-                    />
+                    <Fragment key={index}>
+                      <BrandProduct
+                        brandId={brandId}
+                        key={index}
+                        product={product}
+                        colorChangeHandler={colorChangeHandler}
+                      />
+                    </Fragment>
                   ),
                 )}
             </ul>

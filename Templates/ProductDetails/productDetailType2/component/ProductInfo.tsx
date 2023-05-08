@@ -1,16 +1,19 @@
-import Price from '@appComponents/Price';
 import LoginModal from '@appComponents/modals/loginModal';
 import { _modals } from '@appComponents/modals/modal';
+import Price from '@appComponents/Price';
+import { storeBuilderTypeId } from '@configs/page.config';
 import { __pagesText } from '@constants/pages.text';
 import { paths } from '@constants/paths.constant';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
+import { SbStore_fn } from '@services/product.service';
+import { _sbsStore_props } from '@templates/ProductDetails/productDetails';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import AvailableColors from './AvailableColors';
 import DiscountPrice from './DiscountPrice';
 import DiscountPricing from './DiscountPricing';
-import Inventory from './ProductInventory';
 import { _ProductInfoProps } from './productDetailsComponents';
+import Inventory from './ProductInventory';
 
 const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
   const [openModal, setOpenModal] = useState<null | _modals>(null);
@@ -24,8 +27,30 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
     (state) => state.product.selected.color,
   );
   const { id: userId } = useTypedSelector_v2((state) => state.user);
-  const { showModal } = useActions_v2();
+  const { showModal, updateSbsStore } = useActions_v2();
   const router = useRouter();
+  const [sbstoreList, setSbstoreList] = useState<_sbsStore_props[] | any>([]);
+  const [sbs_state, setSbs_state] = useState<
+    { [key: string]: string | number }[]
+  >([]);
+  const { storeTypeId } = useTypedSelector_v2((state) => state.store);
+
+  const fetch_SbStore = async () => {
+    try {
+      await SbStore_fn({ productId: product?.id }).then((res) => {
+        setSbstoreList(res);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (storeTypeId == storeBuilderTypeId) {
+      fetch_SbStore();
+    }
+  }, [storeTypeId]);
+
   const modalHandler = (param: null | _modals) => {
     if (param) {
       setOpenModal(param);
@@ -46,6 +71,13 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
         modalHandler('requiredQty');
         return;
       }
+      // if (sbstoreList.length !== sbs_state.length) {
+      //   showModal({
+      //     message: `Please enter additional custom field.`,
+      //     title: 'Required field',
+      //   });
+      //   return;
+      // }
       if (totalQty < minQty) {
         showModal({
           message: `Please enter quantity greater than or equal to ${minQty}.`,
@@ -57,10 +89,21 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
       router.push(`${paths.CUSTOMIZE_LOGO}/${product?.id}`);
     }
   };
+
+  const blurHandler = (e: any, charge: number) => {
+    updateSbsStore({
+      name: e.target.name,
+      value: e.target.value,
+      charge: charge,
+    });
+  };
+
   const goToProduct = (seName: string | null) => {
     if (seName === null) return;
     router.push(`${seName}`);
   };
+
+  const selected = useTypedSelector_v2((state) => state.product.selected);
 
   return (
     <>
@@ -148,30 +191,58 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
           modalHandler={modalHandler}
         />
         <AvailableColors />
-        {/* <div className='pt-[15px] text-default-text'>
-          <span className='inline-block w-[90px]'>Color Name</span>
-          <span>:</span> <span className='ml-[4px]'>Stonewash</span>
-        </div> */}
+
         <div className='pt-[15px] text-default-text text-right'>
-          <a
-            href='javascript:void(0);'
+          <div
             className='text-anchor hover:text-anchor-hover underline'
             data-modal-toggle='FitandSize'
           >
             Fit and Size
-          </a>{' '}
-          <a
-            href='javascript:void(0);'
+          </div>{' '}
+          <div
             className='text-anchor hover:text-anchor-hover underline'
             data-modal-toggle='Personalize'
           >
             Personalize
-          </a>
+          </div>
         </div>
         <Inventory
           attributeOptionId={selectedColor.attributeOptionId}
           storeCode={''}
         />
+
+        {/* only for substore */}
+
+        <>
+          {sbstoreList &&
+            sbstoreList?.map((el: _sbsStore_props, index: number) => {
+              return (
+                <div
+                  className='flex flex-wrap justify-between items-center mt-[18px] pb-[8px] text-default-text border-b border-b-gray-border'
+                  key={index}
+                >
+                  <div className='flex items-center justify-center my-[10]'>
+                    <span className='mr-[3px] text-sub-text w-52'>
+                      {el.name}
+                    </span>
+                    <span className='text-large-text mr-5'>
+                      <input
+                        type='text'
+                        name={el.name}
+                        className='form-input !px-[10px] !inline-block !w-[100px]'
+                        onBlur={(e) => blurHandler(e, el.customizationCharges)}
+                      />
+                    </span>
+                    <span>
+                      ${el.customizationCharges.toFixed(2)} extra charge per
+                      character
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
+        </>
+
         <div className='pt-[15px] text-default-text'>
           <div className='text-red-700'>
             {__pagesText.productInfo.notesPk.minimumPiecePerColor}

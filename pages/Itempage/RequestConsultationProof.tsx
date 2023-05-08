@@ -23,28 +23,6 @@ export const getServerSideProps: GetServerSideProps = async (
   context,
 ): Promise<GetServerSidePropsResult<_RequestConsultationProps>> => {
   let expectedProps: _ExpectedRequestConsultationProps = {
-    store: {
-      storeId: null,
-      layout: null,
-      storeTypeId: null,
-      pageType: '',
-      pathName: '',
-      code: '',
-      storeName: '',
-      isAttributeSaparateProduct: false,
-      imageFolderPath: '',
-      cartCharges: null,
-      urls: {
-        favicon: '',
-        logo: '',
-      },
-      mediaBaseUrl: '',
-      sewOutCharges: 0,
-      isSewOutEnable: false,
-      shippingChargeType: 0,
-      firstLineCharges: 0,
-      secondLineCharges: 0,
-    },
     product: null,
     color: null,
     alike: null,
@@ -64,20 +42,10 @@ export const getServerSideProps: GetServerSideProps = async (
       query.productId = +query.productId; // to number;
 
       if (_globalStore.storeId) {
-        expectedProps.store = {
-          ...expectedProps.store,
-          storeId: _globalStore.storeId,
-          isAttributeSaparateProduct: _globalStore.isAttributeSaparateProduct,
-          code: _globalStore.code,
-        };
-      }
-
-      if (expectedProps.store) {
         const product = await ConsultationController.FetchProductDetails({
-          storeId: expectedProps.store.storeId,
+          storeId: _globalStore.storeId,
           productId: query.productId,
-          isAttributeSaparateProduct:
-            expectedProps.store.isAttributeSaparateProduct,
+          isAttributeSaparateProduct: _globalStore.isAttributeSaparateProduct,
         });
         if (product.details === null || product.details.id === null) {
           return {
@@ -104,10 +72,10 @@ export const getServerSideProps: GetServerSideProps = async (
 
     conditionalLog_V2({
       data: {
-        store: expectedProps.store,
         details: expectedProps?.product?.details,
         color: expectedProps.color,
         alike: expectedProps.alike,
+        seo: expectedProps.seo,
       },
       show: __console_v2.serverMethod.requestConsultation,
       type: 'SERVER_METHOD',

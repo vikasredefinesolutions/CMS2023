@@ -1,7 +1,7 @@
 import FeaturedSkeleton from '@appComponents/Loading/Skeleton';
 import { newFetauredItemResponse } from '@definations/productList.type';
 import { useTypedSelector_v2 } from 'hooks_v2';
-import React from 'react';
+import React, { Fragment } from 'react';
 import 'react-loading-skeleton/dist/skeleton.css';
 import BrandProduct from './BrandProduct';
 
@@ -64,22 +64,23 @@ const BrandProductListing: React.FC<_props> = ({
               {cacheData[recentBrand] && !loading
                 ? cacheData[recentBrand].map(
                     (product: newFetauredItemResponse, index: number) => (
-                      <BrandProduct
-                        brandId={brandId}
-                        key={index}
-                        product={product}
-                        colorChangeHandler={colorChangeHandler}
-                        style='Flex'
-                      />
+                      <Fragment key={product.productId}>
+                        <BrandProduct
+                          brandId={brandId}
+                          product={product}
+                          colorChangeHandler={colorChangeHandler}
+                          style='Flex'
+                        />
+                      </Fragment>
                     ),
                   )
                 : totalBrands.map((_, index) => {
                     return (
-                      <React.Fragment key={index}>
+                      <Fragment key={index}>
                         <li className='text-center relative border border-gray-200 border-solid'>
                           <FeaturedSkeleton />
                         </li>
-                      </React.Fragment>
+                      </Fragment>
                     );
                   })}
             </ul>

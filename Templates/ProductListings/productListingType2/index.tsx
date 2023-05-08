@@ -59,7 +59,7 @@ const ProductListingType2: React.FC<_ListingProps> = ({
                     <div className='text-lg font-semibold text-[#ffffff]'>
                       Filters
                     </div>
-                    <a href='javascript:void(0);'>
+                    <div>
                       <span
                         className='material-symbols-outlined flex text-white'
                         // x-html="open == true ? 'remove' : 'add'"
@@ -67,7 +67,7 @@ const ProductListingType2: React.FC<_ListingProps> = ({
                       >
                         {showFilter ? 'remove' : 'add'}
                       </span>
-                    </a>
+                    </div>
                   </div>
                   <div className='relative lg:block'>
                     {showFilter && (

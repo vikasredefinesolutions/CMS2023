@@ -1,68 +1,83 @@
 interface _Store {
+  // Store
   code: string;
   favicon: string;
   logoUrl: string;
+  storeId: number;
+  storeTypeId: number;
+  isAttributeSaparateProduct: boolean;
+
+  // Admin Configs
   blobUrl: string;
   companyId: number;
-  customGoogleVerification: string;
-  customFooterScript: string;
+  blobUrlRootDirectory: string;
+
+  // Custom Scripts
   googleFonts: string;
-  storeId: null | number;
   customHeadScript: string;
-  blobRootDirectory: string;
-  storeTypeId: null | number;
+  customFooterScript: string;
   customGlobalBodyScript: string;
-  isAttributeSaparateProduct: boolean;
-  googleTags: _GoogleTags;
+  customGoogleVerification: string;
+
+  // Google Tags
+  googleTags: {
+    twitterTags: {
+      twitterTagRadio: boolean;
+      twitterTagTextArea: string;
+    };
+    dcTags: {
+      dcTagRadio: boolean;
+      dcTagTextArea: string;
+    };
+  };
   set: (
-    pair:
-      | _StoreId
-      | _CompanyId
+    pair: // Store
+    | _StoreId
       | _StoreCode
-      | _StoreType
-      | _StoreBlobUrl
+      | _StoreTypeId
       | _StoreFavicon
       | _StoreLogoUrl
-      | _CustomGoogleVerification
-      | _CustomFooterScript
+
+      // Admin Configs
+      | _CompanyId
+      | _StoreBlobUrl
+      | _StoreBlobRootDirectory
+
+      // Custom Scripts
       | _GoogleFonts
       | _CustomHeadScript
+      | _CustomFooterScript
       | _CustomGlobalBodyScript
-      | _StoreBlobRootDirectory
+      | _CustomGoogleVerification
       | _isAttributeSaparateProduct
-      | _GoogleTag
+
+      // Google Tags
+      | _GoogleTags,
   ) => void;
 }
 
-interface _GoogleTags {
-  twitterTags: {
-    twitterTagRadio: boolean;
-    twitterTagTextArea: string;
-  };
-  dcTags: {
-    dcTagRadio: boolean;
-    dcTagTextArea: string;
-  };
-}
-
 export let _globalStore: _Store = {
-  storeId: null,
+  // Store
   code: '',
+  storeId: 0,
   favicon: '',
-  blobUrl: 'https://redefinecommerce.blob.core.windows.net',
   logoUrl: '',
-  storeTypeId: null,
-  blobRootDirectory: 'rdcstaging',
+  storeTypeId: 0,
   isAttributeSaparateProduct: false,
+
+  // Admin Configs
+  blobUrl: '',
   companyId: 0,
-  set: (pair) => {
-    _globalStore = { ..._globalStore, [pair.key]: pair.value };
-  },
-  customGlobalBodyScript: '',
-  customHeadScript: '',
+  blobUrlRootDirectory: '',
+
+  // Custom Scripts
   googleFonts: '',
-  customGoogleVerification: '',
+  customHeadScript: '',
   customFooterScript: '',
+  customGlobalBodyScript: '',
+  customGoogleVerification: '',
+
+  // Google Tags
   googleTags: {
     twitterTags: {
       twitterTagRadio: false,
@@ -73,8 +88,12 @@ export let _globalStore: _Store = {
       dcTagTextArea: '',
     },
   },
+  set: (pair) => {
+    _globalStore = { ..._globalStore, [pair.key]: pair.value };
+  },
 };
 
+// -----------------------------------Store
 interface _StoreId {
   key: 'storeId';
   value: number;
@@ -85,55 +104,35 @@ interface _StoreCode {
   value: string;
 }
 
-interface _CompanyId {
-  key: 'companyId';
-  value: number;
-}
-
-interface _StoreType {
+interface _StoreTypeId {
   key: 'storeTypeId';
-  value: number | null;
+  value: number;
 }
 
 interface _StoreFavicon {
   key: 'favicon';
   value: string;
 }
+
 interface _StoreLogoUrl {
   key: 'logoUrl';
   value: string;
 }
+
+interface _isAttributeSaparateProduct {
+  key: 'isAttributeSaparateProduct';
+  value: boolean;
+}
+
+// --------------------------------Admin Configs
+interface _CompanyId {
+  key: 'companyId';
+  value: number;
+}
+
 interface _StoreBlobUrl {
   key: 'blobUrl';
   value: string;
-}
-
-interface _GoogleFonts {
-  key: 'googleFonts';
-  value: string;
-}
-interface _GoogleTag {
-  key: 'googleTags';
-  value: _GoogleTag;
-}
-
-interface _CustomHeadScript {
-  key: 'customHeadScript';
-  value: boolean;
-}
-
-interface _CustomGoogleVerification {
-  key: 'customGoogleVerification';
-  value: string;
-}
-
-interface _CustomFooterScript {
-  key: 'customFooterScript';
-  value: string;
-}
-interface _CustomGlobalBodyScript {
-  key: 'customGlobalBodyScript';
-  value: boolean;
 }
 
 interface _StoreBlobRootDirectory {
@@ -141,7 +140,44 @@ interface _StoreBlobRootDirectory {
   value: string;
 }
 
-interface _isAttributeSaparateProduct {
-  key: 'isAttributeSaparateProduct';
-  value: boolean;
+// --------------------------------Custom Scripts
+
+interface _GoogleFonts {
+  key: 'googleFonts';
+  value: string;
+}
+
+interface _CustomHeadScript {
+  key: 'customHeadScript';
+  value: string;
+}
+
+interface _CustomFooterScript {
+  key: 'customFooterScript';
+  value: string;
+}
+
+interface _CustomGoogleVerification {
+  key: 'customGoogleVerification';
+  value: string;
+}
+
+interface _CustomGlobalBodyScript {
+  key: 'customGlobalBodyScript';
+  value: string;
+}
+
+// --------------------------------Google Tags
+interface _GoogleTags {
+  key: 'googleTags';
+  value: {
+    twitterTags: {
+      twitterTagRadio: boolean;
+      twitterTagTextArea: string;
+    };
+    dcTags: {
+      dcTagRadio: boolean;
+      dcTagTextArea: string;
+    };
+  };
 }

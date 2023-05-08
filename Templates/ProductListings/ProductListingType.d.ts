@@ -74,6 +74,7 @@ export interface _ProductListingTemplates {
   type2: React.FC<_ListingProps>;
   type3: React.FC<_ListingProps>;
   type4: React.FC<_ListingProps>;
+  type5: React.FC<_ListingProps>;
 }
 
 export interface LoginBar {
@@ -232,16 +233,18 @@ export interface GetProductImageOptionList {
 }
 
 export interface GetlAllProductList {
+  isBrandOnline: boolean;
   brandUrl: string;
   getProductImageOptionList?: GetProductImageOptionList[];
   id?: number;
   name?: string;
-  productTagViewModel?: Array<{
+  productTagViewModel: Array<{
     productId: number;
     imagename: string;
     productTagName: string;
     tagPosition: string;
   }>;
+
   sename?: string;
   msrp: number;
   salePrice: number;
@@ -261,6 +264,7 @@ export interface GetlAllProductList {
   blackBrandlogo: string;
   ourCost?: number;
   brandName: string;
+  index: number | string;
 }
 
 export interface BrandFilter {

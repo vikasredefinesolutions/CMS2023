@@ -40,6 +40,7 @@ const selected_initiaState = {
     minQuantity: 1,
     multipleQuantity: 0,
   },
+  sbState: [],
 };
 
 // Define the initial state using that type
@@ -57,6 +58,7 @@ const initialState: _ProductStore = {
     discounts: null,
     name: null,
     customization: false,
+    categoryName: '',
   },
   toCheckout: {
     minQty: 1,
@@ -382,6 +384,8 @@ export const productSlice = createSlice({
             colors: _ProductColor[] | null;
             sizeChart: null | _SizeChartTransformed;
             sizes: string;
+            categoryName?: string;
+            sku?: string;
           };
         };
       },
@@ -394,6 +398,10 @@ export const productSlice = createSlice({
       state.product.sizeChart = action.payload.product.sizeChart;
       state.product.colors = action.payload.product.colors;
       state.product.customization = action.payload.product.customization;
+      state.product.sku = action?.payload?.product?.sku || state.product.sku;
+      state.product.categoryName = action?.payload?.product?.categoryName
+        ? action?.payload?.product?.categoryName
+        : state.product.categoryName;
     },
     setOfflineProductSelected: (
       state,
@@ -703,6 +711,35 @@ export const productSlice = createSlice({
       state.toCheckout.totalQty = totalQty;
       state.toCheckout.totalPrice = totalPrice;
     },
+    updateSbsStore: (
+      state,
+      actions: {
+        payload: {
+          name: string;
+          value: string | number;
+          charge: number;
+        };
+      },
+    ) => {
+      let sbState = state.selected.sbState;
+      const doesItemExist = state.selected.sbState.findIndex(
+        (el: any) => el.storeProductCustomFieldName === actions.payload.name,
+      );
+
+      if (doesItemExist < 0) {
+        sbState.push({
+          storeProductCustomFieldName: actions.payload.name,
+          storeProductCustomFieldValue: actions.payload.value,
+          customizationCharges: actions.payload.charge,
+        });
+      } else {
+        sbState.splice(doesItemExist, 1, {
+          storeProductCustomFieldName: actions.payload.name,
+          storeProductCustomFieldValue: actions.payload.value,
+          customizationCharges: actions.payload.charge,
+        });
+      }
+    },
     updateQuantities: (
       state,
       action: {
@@ -800,7 +837,11 @@ export const productSlice = createSlice({
       state.toCheckout.totalQty = totalQty;
       state.toCheckout.totalPrice = totalPrice;
     },
+    // updateSbsState: (state, action:{
+    //   payload: {
 
+    //   }
+    // }),
     updateQuantities2: (
       state,
       action: {
@@ -844,11 +885,9 @@ export const productSlice = createSlice({
           totalQty += product.qty;
           return product;
         });
-
         const doesItemExist = state.toCheckout.sizeQtys.find(
           (product) => product.size === productName && product.color === color,
         );
-
         if (!doesItemExist) {
           updatedSizeQtys.push({
             attributeOptionId: sizeAttributeOptionid,
@@ -859,26 +898,15 @@ export const productSlice = createSlice({
           });
           totalQty += productQty;
         }
-      }
-      // LOGO CHARGE
+      } // LOGO CHARGE
       let updateAdditionalLogoCharge = 0;
-      // state.toCheckout.logo?.price?.forEach((price) => {
-      //   if (price === 'FREE') return (updateAdditionalLogoCharge += 0);
-      //   return (updateAdditionalLogoCharge += price * totalQty);
-      // });
-
-      // if (totalQty >= state.toCheckout.minQty) {
-      //   state.toCheckout.allowAddToCart = true;
-      // }
-
-      // if (totalQty < state.toCheckout.minQty) {
-      //   state.toCheckout.allowAddToCart = false;
-      // }
+      // state.toCheckout.logo?.price?.forEach((price) => { // if (price === 'FREE') return (updateAdditionalLogoCharge += 0);
+      // return (updateAdditionalLogoCharge += price * totalQty); // });
+      // if (totalQty >= state.toCheckout.minQty) { // state.toCheckout.allowAddToCart = true; // }
+      // if (totalQty < state.toCheckout.minQty) { // state.toCheckout.allowAddToCart = false; // }
       // TOTAL PRICE
-
       const allDiscounts = state.product.discounts;
       let foundThePrice = false;
-
       allDiscounts?.subRows.forEach((discount) => {
         if (foundThePrice) return;
         const bulkQtyDiscount = +discount.displayQuantity.split('+')[0];
@@ -888,15 +916,139 @@ export const productSlice = createSlice({
           foundThePrice = true;
         }
       });
-
       let totalPrice =
         totalQty * state.toCheckout.price + updateAdditionalLogoCharge;
-
       // STATE UPDATES
       state.toCheckout.additionalLogoCharge = updateAdditionalLogoCharge;
       state.toCheckout.sizeQtys = updatedSizeQtys || null;
       state.toCheckout.price = productPrice;
       state.toCheckout.totalQty = totalQty;
+      state.toCheckout.totalPrice = totalPrice;
+    },
+
+    updateQuantities3: (
+      state,
+      action: {
+        payload: {
+          attributeOptionId: number;
+          size: string;
+          qty: number;
+          price: number;
+          color: string;
+        };
+      },
+    ) => {
+      let productName = action.payload.size;
+
+      let productPrice = action.payload.price;
+
+      let sizeAttributeOptionid = action.payload.attributeOptionId;
+
+      let productQty = action.payload.qty;
+
+      let color = action.payload.color;
+
+      let totalQty = 0;
+
+      let updatedSizeQtys;
+
+      if (state.toCheckout.sizeQtys === null) {
+        // IT CHECKOUT ARRAY DO NOT EXIST
+
+        updatedSizeQtys = [
+          {
+            attributeOptionId: sizeAttributeOptionid,
+
+            size: productName,
+
+            qty: productQty,
+
+            price: productPrice,
+
+            color: color,
+          },
+        ];
+
+        totalQty = productQty;
+      } else {
+        updatedSizeQtys = state.toCheckout.sizeQtys?.map((product) => {
+          product.price = productPrice;
+
+          if (product.size === productName && product.color === color) {
+            totalQty += productQty;
+
+            return {
+              ...product,
+
+              qty: productQty,
+
+              price: productPrice,
+            };
+          }
+
+          totalQty += product.qty;
+
+          return product;
+        });
+
+        const doesItemExist = state.toCheckout.sizeQtys.find(
+          (product) => product.size === productName && product.color === color,
+        );
+
+        if (!doesItemExist) {
+          updatedSizeQtys.push({
+            attributeOptionId: sizeAttributeOptionid,
+
+            size: productName,
+
+            qty: productQty,
+
+            price: productPrice,
+
+            color: color,
+          });
+
+          totalQty += productQty;
+        }
+      }
+
+      // LOGO CHARGE
+
+      let updateAdditionalLogoCharge = 0;
+
+      const allDiscounts = state.product.discounts;
+
+      let foundThePrice = false;
+
+      allDiscounts?.subRows.forEach((discount) => {
+        if (foundThePrice) return;
+
+        const bulkQtyDiscount = +discount.displayQuantity.split('+')[0];
+
+        if (totalQty >= bulkQtyDiscount) {
+          productPrice = +discount.discountPrice;
+        } else {
+          productPrice = state.product.price?.msrp
+            ? state.product.price.msrp
+            : 0;
+
+          foundThePrice = true;
+        }
+      });
+
+      let totalPrice =
+        totalQty * state.toCheckout.price + updateAdditionalLogoCharge;
+
+      // STATE UPDATES
+
+      state.toCheckout.additionalLogoCharge = updateAdditionalLogoCharge;
+
+      state.toCheckout.sizeQtys = updatedSizeQtys || null;
+
+      state.toCheckout.price = productPrice;
+
+      state.toCheckout.totalQty = totalQty;
+
       state.toCheckout.totalPrice = totalPrice;
     },
     updateLogoDetails: (

@@ -8,10 +8,10 @@ import * as Yup from 'yup';
 import { paths } from '@constants/paths.constant';
 import { __ValidationText } from '@constants/validation.text';
 import {
-  createNewAccount_payload,
   _CNA_StoreCustomerAddress,
   _CNA_StoreCustomerModel,
   _CreateNewAccount_Payload,
+  createNewAccount_payload,
 } from '@payloads/createNewAccount.payload';
 import { CreateNewAccount } from '@services/user.service';
 import getLocation from 'helpers_v2/getLocation';
@@ -75,6 +75,8 @@ const SignUp_type1: React.FC = () => {
   const { showModal } = useActions_v2();
   const storeId = useTypedSelector_v2((state) => state.store.id);
   const userId = useTypedSelector_v2((state) => state.user.id);
+  // const state = useTypedSelector_v2((state) => state);
+  // console.log('state', state);
 
   const loginSubmitHandler = async (enteredInputs: _CNA_StoreCustomerModel) => {
     const location = await getLocation();

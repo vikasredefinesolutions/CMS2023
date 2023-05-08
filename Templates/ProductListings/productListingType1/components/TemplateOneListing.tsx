@@ -7,7 +7,7 @@ import { listing_max_showcolors, zeroValue } from '@constants/common.constant';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import { GetlAllProductList } from '@templates/ProductListings/ProductListingType';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { _globalStore } from 'store.global';
 import ProductBoxController from './productBoxController';
 
@@ -104,6 +104,16 @@ const TemplateOneListing = ({
                   brandId={brandId ? brandId : 0}
                 />
               </div>
+              {product.productTagViewModel &&
+                product.productTagViewModel.length > 0 && (
+                  <div className='absolute top-1 left-1 text-gray-800 p-1 z-5"'>
+                    <img
+                      src={`${mediaBaseUrl}${product?.productTagViewModel[0].imagename}`}
+                      width='80px'
+                      height='80px'
+                    />
+                  </div>
+                )}
             </div>
             <div className='mt-[24px] pl-[8px] pr-[8px]'>
               <div className='mt-[4px] text-center h-[35px]'>
@@ -144,9 +154,10 @@ const TemplateOneListing = ({
                     role='list'
                     className='flex flex-wrap items-center mt-[12px] justify-center space-x-1'
                   >
-                    {isAttributeSaparateProduct
-                      ? product.splitProductList &&
-                        product?.splitProductList.map((subRow, index) =>
+                    {isAttributeSaparateProduct &&
+                    product.splitProductList &&
+                    product.splitProductList?.length > 0
+                      ? product?.splitProductList.map((subRow, index) =>
                           index < listing_max_showcolors ? (
                             <Link
                               key={product.id}
@@ -165,7 +176,7 @@ const TemplateOneListing = ({
                               </li>
                             </Link>
                           ) : (
-                            <>{(flag = true)}</>
+                            <Fragment key={index}>{(flag = true)}</Fragment>
                           ),
                         )
                       : product.getProductImageOptionList.map((subRow, index) =>
@@ -194,7 +205,7 @@ const TemplateOneListing = ({
                               />
                             </li>
                           ) : (
-                            <>{(flag = true)}</>
+                            <Fragment key={index}>null</Fragment>
                           ),
                         )}
                     {flag ? (

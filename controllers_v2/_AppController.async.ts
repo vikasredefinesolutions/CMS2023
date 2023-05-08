@@ -167,13 +167,14 @@ export const fetchStoreDetails = async (
   pathName: string,
 ): Promise<{
   store: _StoreReturnType;
-  blobUrlRootDirectory: string;
+  adminConfig: {
+    blobUrlRootDirectory: string;
+    blorUrl: string;
+  };
 } | null> => {
   const store: _StoreReturnType = {
     storeId: null,
-    layout: null,
     pageType: '',
-    pathName: '',
     code: '',
     imageFolderPath: '',
     storeTypeId: null,
@@ -187,21 +188,29 @@ export const fetchStoreDetails = async (
     sewOutCharges: 0,
     firstLineCharges: 0,
     secondLineCharges: 0,
-    isSewOutEnable: false,
     mediaBaseUrl: '',
+    isSewOutEnable: false,
     shippingChargeType: 0,
+    email_address: '',
+    phone_number: '',
+    company_address: '',
+    thirdPartyLogin: false,
+    bothLogin: false,
   };
-  let blobUrlRootDirectory: string = '';
+  const adminConfigs: {
+    blobUrlRootDirectory: string;
+    blorUrl: string;
+  } = {
+    blobUrlRootDirectory: '',
+    blorUrl: '',
+  };
 
   try {
     await Promise.allSettled([GetStoreID(domain), GetAdminAppConfigs()]).then(
       (response) => {
         if (response[0].status === 'fulfilled' && response[0].value) {
           const res = response[0].value;
-
           store.storeId = res.id;
-          store.layout = res.code;
-          store.pathName = pathName;
           store.code = res.code;
           store.isAttributeSaparateProduct = res.isAttributeSaparateProduct;
           store.cartCharges = {
@@ -222,17 +231,20 @@ export const fetchStoreDetails = async (
           store.firstLineCharges = res.firstLineCharges;
           store.secondLineCharges = res.secondLineCharges;
           store.shippingChargeType = res.shippingChargeType;
+          store.thirdPartyLogin = res.thirdPartyLogin;
+          store.bothLogin = res.bothLogin;
         }
         if (response[1].status === 'fulfilled' && response[1].value) {
-          store.mediaBaseUrl = response[1].value['azure:BlobUrl'];
-          blobUrlRootDirectory = response[1].value['cdn:RootDirectory'];
+          adminConfigs.blorUrl = response[1].value['azure:BlobUrl'];
+          adminConfigs.blobUrlRootDirectory =
+            response[1].value['cdn:RootDirectory'];
         }
       },
     );
 
     return {
       store: store,
-      blobUrlRootDirectory,
+      adminConfig: adminConfigs,
     };
   } catch (error) {
     conditionalLog_V2({

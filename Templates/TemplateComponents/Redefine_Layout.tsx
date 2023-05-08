@@ -2,10 +2,10 @@ import SuccessErrorModal from '@appComponents/modals/successErrorModal';
 import CloseStore from '@appComponents/reUsable/CloseStore';
 import { storeBuilderTypeId } from '@configs/page.config';
 import { paths } from '@constants/paths.constant';
-import { _MenuItems } from '@definations/header.type';
+import { _AnnouncementRow, _MenuItems } from '@definations/header.type';
 import { _FetchStoreConfigurations } from '@definations/store.type';
+import { _templateIds } from '@helpers/app.extras';
 import { addCustomEvents } from '@helpers/common.helper';
-import { FetchStoreConfigurations } from '@services/app.service';
 import BreadCrumb from '@templates/breadCrumb';
 import Footer from '@templates/Footer';
 import * as _AppController from 'controllers_v2/_AppController.async';
@@ -18,11 +18,11 @@ import Header from 'Templates/Header';
 interface _props {
   children: React.ReactNode;
   logoUrl: string;
-  configs: {
-    footer: _FetchStoreConfigurations | null;
-  };
+  configs: { footer: _FetchStoreConfigurations | null };
   menuItems: _MenuItems | null;
   sbStore: any;
+  headerConfig: _FetchStoreConfigurations | null;
+  templateIDs: _templateIds;
 }
 
 const Layout: React.FC<_props & _StoreCache> = ({
@@ -33,6 +33,8 @@ const Layout: React.FC<_props & _StoreCache> = ({
   menuItems,
   configs,
   sbStore,
+  templateIDs,
+  headerConfig,
 }) => {
   useEffect(() => {
     if (localStorage) {
@@ -45,9 +47,17 @@ const Layout: React.FC<_props & _StoreCache> = ({
     menuItems: _MenuItems | null;
   }>({ storeCode: storeCode, logoUrl: logoUrl, menuItems: menuItems });
   const { setShowLoader } = useActions_v2();
-  const [headerTemplateId, setHeaderTeamplateId] = useState<string>('');
+  const [headerTemplateId, setHeaderTeamplateId] = useState<string>(
+    templateIDs.headerTemplateId,
+  );
+  const [breadCrumbTemplateId, setBreadCrumbTemplateId] = useState<string>(
+    templateIDs.breadCrumbsTemplateId,
+  );
   const [headerBgColor, setHeaderBgColor] = useState<string>('');
   const [headerTextColor, setHeaderTextColor] = useState<string>('');
+  const [announcementRow, setAnnouncementRow] = useState<_AnnouncementRow[]>(
+    [],
+  );
   const storeId = useTypedSelector_v2((state) => state.store?.id);
   // const islogo = useTypedSelector_v2((state) => state.sbStore.isLogo);
   const [isStoreOpend, setIsStoreOpen] = useState<boolean>(true);
@@ -82,20 +92,42 @@ const Layout: React.FC<_props & _StoreCache> = ({
     if (storeTypeId == storeBuilderTypeId) {
       sbStore && StoreOpen(sbStore.openStoreOn, sbStore.closeStoreOn);
     }
+    if (headerConfig?.config_value) {
+      const headerInfo = JSON.parse(headerConfig.config_value);
+      setHeaderBgColor(headerInfo?.header_bg_color);
+      setHeaderTextColor(headerInfo?.header_text_color);
+
+      headerInfo?.announcementRow &&
+        setAnnouncementRow(headerInfo?.announcementRow);
+    }
   }, [storeCode, logoUrl, storeId]);
   const router = useRouter();
-  useEffect(() => {
-    FetchStoreConfigurations({ storeId, configname: 'header_config' }).then(
-      (res) => {
-        if (res?.config_value) {
-          const headerInfo = JSON.parse(res.config_value);
-          setHeaderTeamplateId(headerInfo.template_Id);
-          setHeaderBgColor(headerInfo?.header_bg_color);
-          setHeaderTextColor(headerInfo?.header_text_color);
-        }
-      },
-    );
-  }, [storeId]);
+  // useEffect(() => {
+  //   FetchStoreConfigurations({ storeId, configname: 'header_config' }).then(
+  //     (res) => {
+  //       if (res?.config_value) {
+  //         const headerInfo = JSON.parse(res.config_value);
+  //         setHeaderTeamplateId(headerInfo.template_Id);
+  //         setHeaderBgColor(headerInfo?.header_bg_color);
+  //         setHeaderTextColor(headerInfo?.header_text_color);
+
+  //         headerInfo?.announcementRow &&
+  //           setAnnouncementRow(headerInfo?.announcementRow);
+  //       }
+  //     },
+  //   );
+
+  //   // const productListdata = configs.filter((config) => {
+  //   //   if (
+  //   //     config?.config_name &&
+  //   //     config?.config_name == 'productListing' &&
+  //   //     config?.config_value
+  //   //   ) {
+  //   //     const breadCrumbsInfo = JSON.parse(config?.config_value);
+  //   //     setBreadCrumbTemplateId(breadCrumbsInfo.breadCrumbTemplateId);
+  //   //   }
+  //   // });
+  // }, [storeId]);
 
   return (
     <>
@@ -108,10 +140,11 @@ const Layout: React.FC<_props & _StoreCache> = ({
         headerTemplateId={headerTemplateId}
         headerBgColor={headerBgColor}
         headerTextColor={headerTextColor}
+        announcementRow={announcementRow}
       />
 
       {router.pathname !== paths.PRODUCT_COMPARE && (
-        <BreadCrumb breadCrumbid={0} />
+        <BreadCrumb breadCrumbid={breadCrumbTemplateId} />
       )}
       <SuccessErrorModal />
       {storeTypeId == storeBuilderTypeId ? (

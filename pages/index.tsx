@@ -23,12 +23,12 @@ const TopicHome: NextPage<_SlugServerSideProps | _SlugServerSide_WentWrong> = (
   const { pageMetaData, page, _store } = props;
 
   if (!_store || !pageMetaData || !page) {
-    cLog('No page data found', '404');
+    cLog('THome: No page data found', '404');
     return <PageNotFound id={_defaultTemplates[404]} />;
   }
 
   if (pageMetaData?.type === '404') {
-    cLog('404', '404');
+    cLog('THome: 404', '404');
     return (
       <>
         <SeoHead

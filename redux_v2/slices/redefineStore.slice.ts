@@ -1,4 +1,3 @@
-import { __domain, layoutToShow_fn } from '@configs/page.config';
 import { StoreLayout } from '@constants/enum';
 import { PageResponseType } from '@definations/app.type';
 import { _StoreReturnType } from '@definations/store.type';
@@ -9,11 +8,10 @@ import { SetPageType } from '../asyncActions/redefineStore.async';
 export interface _RedesignStore {
   id: number;
   currency: '$';
-  layout: null | string;
   storeTypeId: number | null;
   storeName: string | null;
-  pathName: string;
   companyName: string;
+  code: string;
   pageType: PageResponseType;
   view: 'DESKTOP' | 'MOBILE';
   isAttributeSaparateProduct: boolean;
@@ -33,6 +31,11 @@ export interface _RedesignStore {
   shippingChargeType: number;
   firstLineCharges: number;
   secondLineCharges: number;
+  email_address: string;
+  phone_number: string;
+  company_address: string;
+  thirdPartyLogin: boolean;
+  bothLogin: boolean;
 }
 
 // Define the initial state using that type
@@ -40,10 +43,9 @@ const initialState: _RedesignStore = {
   id: 0,
   currency: '$',
   isAttributeSaparateProduct: false,
-  layout: null,
   storeTypeId: StoreLayout.StoreBuilderStore,
   storeName: '',
-  pathName: '',
+  code: '',
   companyName: '',
   pageType: {} as PageResponseType,
   view: 'DESKTOP',
@@ -57,6 +59,11 @@ const initialState: _RedesignStore = {
   shippingChargeType: 0,
   firstLineCharges: 0,
   secondLineCharges: 0,
+  email_address: '',
+  phone_number: '',
+  company_address: '',
+  thirdPartyLogin: false,
+  bothLogin: false,
 };
 
 export const storeSlice = createSlice({
@@ -75,15 +82,11 @@ export const storeSlice = createSlice({
 
       //--------------------------------------------------------
       state.id = store.storeId || 0;
-      state.pathName = store.pathName;
       state.isAttributeSaparateProduct =
         action.payload.store.isAttributeSaparateProduct;
-      state.layout = layoutToShow_fn({
-        layout: action.payload.store.code,
-        showProd: __domain.isSiteLive,
-      });
       state.cartCharges = store.cartCharges;
       state.storeTypeId = store.storeTypeId;
+      state.code = store.code;
       state.storeName = store.storeName;
       state.sewOutCharges = store.sewOutCharges;
       state.isSewOutEnable = store.isSewOutEnable;
@@ -91,15 +94,11 @@ export const storeSlice = createSlice({
       state.imageFolderPath = store.imageFolderPath;
       state.firstLineCharges = store.firstLineCharges;
       state.secondLineCharges = store.secondLineCharges;
-    },
-
-    change_Layout: (
-      state,
-      action: {
-        payload: string;
-      },
-    ) => {
-      state.layout = action.payload;
+      state.email_address = store.email_address;
+      state.phone_number = store.phone_number;
+      state.company_address = store.company_address;
+      state.bothLogin = store.bothLogin;
+      state.thirdPartyLogin = store.thirdPartyLogin;
     },
 
     store_setAppView: (

@@ -3,11 +3,10 @@ import { __pagesConstant } from '@constants/pages.constant';
 import {
   useActions_v2,
   useTypedSelector_v2,
-  useWindowDimensions_v2
+  useWindowDimensions_v2,
 } from 'hooks_v2';
 import { NextPage } from 'next';
 import { useEffect, useState } from 'react';
-import NotificationBar from 'Templates/NotificationBar';
 
 import { storeBuilderTypeId } from '@configs/page.config';
 import { paths } from '@constants/paths.constant';
@@ -18,7 +17,7 @@ import {
   Logo,
   MenuIcon,
   MyCartIcon,
-  WishListIcon
+  WishListIcon,
 } from '@header/header_Type1/Components/Icons';
 import MenuItems from '@header/header_Type1/Components/Menu/Header_MenuItems';
 import SearchBar from '@header/header_Type1/Components/Menu/Header_SearchBar';
@@ -59,7 +58,7 @@ const Header_Type1: NextPage<_HeaderProps> = ({
       className={`bg-[${headerBgColor}] sticky top-0 z-40 shadow-[0_0px_5px_rgba(0,0,0,0.12)] `}
       id={'header_with_navBar'}
     >
-      <NotificationBar />
+      {/* <NotificationBar /> */}
       <div className={`bg-[${headerBgColor}]`}>
         {isMobileView && router.asPath != paths.CHECKOUT && (
           <MenuItems
@@ -73,7 +72,7 @@ const Header_Type1: NextPage<_HeaderProps> = ({
         <div className='fixed z-40 lg:hidden'></div>
         <header className='relative trancking-[1px]'>
           <nav aria-label='Top'>
-            <div className={`${headerBgColor ? '' : 'bg-[#ffffff]'}]`} style={{backgroundColor: headerBgColor}}>
+            <div className={`bg-[${headerBgColor}]`}>
               <div className='container pl-[15px] pr-[15px] mx-auto'>
                 <div className='pt-[10px] pb-[10px]'>
                   <div className='flex items-center justify-between'>

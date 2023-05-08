@@ -33,6 +33,7 @@ export interface _CNA_StoreCustomerModel {
   timeOfYearPurchase: string;
   position: string;
   navCustomerId: string;
+  organizationName: string;
 }
 
 export interface _CNA_StoreCustomerAddress {
@@ -83,6 +84,7 @@ export const createNewAccount_payload: _CreateNewAccount_Payload = {
     memberFrom: 0,
     memberTo: 0,
     organizationId: 0,
+    organizationName: '',
     primaryColor: '',
     mascotId: '',
     teamGender: '',

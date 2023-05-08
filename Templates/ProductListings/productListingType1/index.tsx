@@ -1,6 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable no-unused-vars */
-import ContactUs from '@appComponents/reUsable/ContactUs';
 import { __pagesText } from '@constants/pages.text';
 import React, { Fragment } from 'react';
 // import { GetlAllProductList, _ListingProps } from '../productListing';
@@ -84,7 +83,7 @@ const ProductListingType1: React.FC<_ListingProps> = ({
                       >
                         {products.map(
                           (product: GetlAllProductList, index: number) => (
-                            <Fragment key={index}>
+                            <Fragment key={product.id}>
                               <TemplateOneListing
                                 brandId={brandId}
                                 skuList={skuList}
@@ -146,7 +145,6 @@ const ProductListingType1: React.FC<_ListingProps> = ({
           </div>
         </div>
       </section>
-      <ContactUs />
     </>
   );
 };

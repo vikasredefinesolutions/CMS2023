@@ -16,3 +16,23 @@ export interface _ProductDetailsTemplates {
   type3: React.FC<_Props>;
   type4: React.FC<_Props>;
 }
+export interface _sbsStore_props {
+  id: number;
+  productId: number;
+  storeId: number;
+  name: string;
+  customizationCharges: number;
+  type: null | any;
+  isRequired: boolean;
+  recStatus: string;
+  isExclusive: boolean;
+  isChargePerCharacter: boolean;
+  createdDate: string;
+  createdBy: number;
+  modifiedDate: null;
+  modifiedBy: null;
+  rowVersion: string;
+  location: string;
+  ipAddress: number | string;
+  macAddress: string;
+}

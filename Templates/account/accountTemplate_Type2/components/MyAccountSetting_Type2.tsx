@@ -97,7 +97,6 @@ const MyAccountSetting_Type2 = () => {
         gender: genderId ? genderId : 'Male',
         birthDate: `${day}/${month}/${year}`,
       });
-      console.log(res);
 
       if (res) {
         showModal({

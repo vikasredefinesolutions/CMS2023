@@ -11,6 +11,7 @@ import {
   getCartListResponse,
   removeLogoRes,
   removeParticularSizeProductRes,
+  sbsStore,
   updateCartQuantityRes,
 } from './cart';
 import { _AddToCart_Payload } from './product.service.type';
@@ -52,6 +53,16 @@ export const addPromoCode = async (
 
 export const addToCart = async (req: CartReq): Promise<number | string> => {
   const url = `/Store/addtocart.json`;
+  const res = await SendAsync<number | string>({
+    url: url,
+    method: 'POST',
+    data: req,
+  });
+  return res;
+};
+
+export const addSubStore = async (req: sbsStore): Promise<number | string> => {
+  const url = `/ShoppingCartItemsCustomField/addcustomfiledvalues.json`;
   const res = await SendAsync<number | string>({
     url: url,
     method: 'POST',

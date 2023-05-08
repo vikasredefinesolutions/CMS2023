@@ -188,6 +188,7 @@ export interface _state_SelectedProduct {
   };
   color: _ProductColor;
   inventory: null | _ProductInventoryTransfomed;
+  sbState: any;
 }
 
 export interface _state_SOM_Logos_Container {
@@ -220,6 +221,7 @@ export interface _ProductStore {
       name: string | null;
       url: string | null;
     } | null;
+    categoryName?: string;
   };
   toCheckout: _state_productToCheckout;
   som_logos: _state_SOM_Logos_Container;

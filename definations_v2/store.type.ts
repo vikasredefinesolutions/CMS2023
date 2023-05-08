@@ -1,9 +1,7 @@
 export interface _StoreReturnType {
   storeId: null | number;
-  layout: null | string;
   pageType: string;
   storeTypeId: null | number;
-  pathName: string;
   code: string;
   storeName: string | null;
   isAttributeSaparateProduct: boolean;
@@ -25,6 +23,11 @@ export interface _StoreReturnType {
   imageFolderPath: string;
   isSewOutEnable: boolean;
   shippingChargeType: number;
+  email_address: string;
+  phone_number: string;
+  company_address: string;
+  thirdPartyLogin: boolean;
+  bothLogin: boolean;
 }
 
 export interface _FetchStoreConfigurations {
@@ -42,7 +45,9 @@ export type StoreConfigurationConfigs =
   | 'customHomeScript'
   | 'customGlobalBodyScript'
   | 'header_config'
-  | 'googleTags';
+  | 'googleTags'
+  | 'productListing'
+  | 'contactInfo';
 
 export interface _FetchSbStoreConfiguration {
   id: number | null;

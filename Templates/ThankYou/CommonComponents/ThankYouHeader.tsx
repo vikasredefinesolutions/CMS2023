@@ -8,6 +8,10 @@ import React from 'react';
 import ThankYouCreatePassword from './ThankYouCreatePassword';
 
 const ThankYouHeader: React.FC<_ThankYouProps> = ({ order }) => {
+  const storeEmail = useTypedSelector_v2((state) => state.store.email_address);
+  const storePhoneNumber = useTypedSelector_v2(
+    (state) => state.store.phone_number,
+  );
   const isLoggedIn = useTypedSelector_v2((state) => state.user.id);
   const isGuestCustomer = useTypedSelector_v2(
     (state) => state.cart.isGuestCustomer,
@@ -64,11 +68,11 @@ const ThankYouHeader: React.FC<_ThankYouProps> = ({ order }) => {
                       {__pagesText.ThankYouPage.Questions}
                     </span>
                     <span className='pb-[8px] text-default-text text-[#ffffff] block'>
-                      {__pagesText.ThankYouPage.CallUs}
+                      {__pagesText.ThankYouPage.CallUs} {storePhoneNumber}
                     </span>
                     <Link href={''}>
                       <a className='text-[#ffffff] underline hover:no-underline'>
-                        {__pagesText.ThankYouPage.Email}
+                        {__pagesText.ThankYouPage.Email} {storeEmail}
                       </a>
                     </Link>
                   </div>

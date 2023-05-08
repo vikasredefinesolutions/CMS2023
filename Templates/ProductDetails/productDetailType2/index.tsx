@@ -96,6 +96,8 @@ const ProductDetails_Type2: React.FC<_Props> = (product) => {
               ourCost: product?.details?.ourCost,
               salePrice: product?.details?.salePrice,
             } || null,
+          categoryName: product?.details?.categoryName,
+          sku: product?.details?.sku,
         },
       });
       if (product.colors) {
@@ -142,8 +144,6 @@ const ProductDetails_Type2: React.FC<_Props> = (product) => {
       <meta name='keywords' content={_SEO.keywords} />
     </Head>
   );
-
-  // console.log('product layout page 2 ');
 
   return (
     <>

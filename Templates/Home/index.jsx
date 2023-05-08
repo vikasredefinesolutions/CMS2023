@@ -152,15 +152,15 @@ const Home = (props) => {
   }
   
   const checkFixedBG = (element) => {
-    if (element.selected_Values != undefined) {
-      if (Object.keys(element.selected_Values).length > 0) {
+    if (element.selectedVal != undefined) {
+      if (Object.keys(element.selectedVal).length > 0) {
         const bgPropertyName = Object.keys(element.properties).find(
           (key) => key === 'bg',
         );
 
         let attributes;
-        let fixedBg;
-        Object.entries(element.selected_Values).map(
+        let fixedBg;  
+        Object.entries(element.selectedVal).map(
           ([key, value]) => {
 
             if (key == bgPropertyName) {
@@ -283,6 +283,7 @@ const Home = (props) => {
                   const backgroundStyle = loadBackgroundDefaultStyle(componentValue);
                   const backgroundImageClass = loadBackgroundImageClass(componentValue);
                   const fixedBgDisplay = checkFixedBG(componentValue);
+                  console.log("CHED", componentValue.selectedVal);
                   let additionalclass = '';
                   let innerDivClass = '';
                   if(componentValue.selectedVal && 'additionalclass' in componentValue.selectedVal)

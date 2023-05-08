@@ -4,14 +4,15 @@ import { __length, __messages } from '@constants/form.config';
 import { __Cookie, __Cookie_Expiry } from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
 import { updateCartByNewUserId } from '@services/cart.service';
+import { fetchThirdpartyservice } from '@services/thirdparty.service';
 import { GetStoreCustomer, signInUser } from '@services/user.service';
 import { getWishlist } from '@services/wishlist.service';
 import { paths } from 'constants_v2/paths.constant';
-import { Form, Formik } from 'formik';
+import { Formik } from 'formik';
 import {
-  KlaviyoScriptTag,
   deleteCookie,
   extractCookies,
+  KlaviyoScriptTag,
   setCookie,
 } from 'helpers_v2/common.helper';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
@@ -34,8 +35,14 @@ const validationSchema = Yup.object().shape({
 
 const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
   const router = useRouter();
-  const { logInUser, setShowLoader, updateCustomer, updateWishListData } =
-    useActions_v2();
+  const {
+    logInUser,
+    setShowLoader,
+    updateCustomer,
+    updateWishListData,
+    showModal,
+  } = useActions_v2();
+  const bothLogin = useTypedSelector_v2((state) => state.store.bothLogin);
   const [showErroMsg, setErrorMsg] = useState<null | string>(null);
   const { id: storeId } = useTypedSelector_v2((state) => state.store);
 
@@ -99,7 +106,14 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
         // CartController();
       });
   };
-
+  const SamlloginHandler = () => {
+    fetchThirdpartyservice({ storeId }).then((ThirdpartyServices) => {
+      ThirdpartyServices.map((service) => {
+        if (service.thirdPartyServiceName == 'Okta')
+          router.push(ThirdpartyServices[0].url);
+      });
+    });
+  };
   return (
     <>
       <div
@@ -149,7 +163,7 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
                 >
                   {({ values, handleChange, handleSubmit }) => {
                     return (
-                      <Form>
+                      <>
                         {showErroMsg && (
                           <span className='mb-1 text-rose-500'>
                             {showErroMsg}
@@ -242,6 +256,17 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
                             </div>
                           </div>
 
+                          {bothLogin && (
+                            <div className='mb-4'>
+                              <button
+                                onClick={SamlloginHandler}
+                                className='btn btn-xl btn-secondary w-full'
+                                type='button'
+                              >
+                                {__pagesText.productInfo.loginModal.samllogin}
+                              </button>
+                            </div>
+                          )}
                           <div className='mb-4'>
                             <button
                               onClick={() => {
@@ -279,10 +304,9 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
                                 </>
                               </Link>
                             </a>
-                            .
                           </div>
                         </div>
-                      </Form>
+                      </>
                     );
                   }}
                 </Formik>

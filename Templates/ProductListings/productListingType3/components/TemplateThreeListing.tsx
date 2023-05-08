@@ -126,7 +126,9 @@ const TemplateThreeListing = ({
               role='list'
               className='flex flex-wrap items-center mt-[8px] justify-center space-x-1'
             >
-              {isAttributeSaparateProduct
+              {isAttributeSaparateProduct &&
+              product.splitProductList &&
+              product.splitProductList?.length > 0
                 ? product.splitProductList &&
                   product?.splitProductList.map(
                     (subRow: splitproductList, index: number) =>

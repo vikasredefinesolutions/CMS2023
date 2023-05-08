@@ -37,11 +37,7 @@ const SU1_Select: React.FC<_props> = ({
             value={value}
           >
             <>
-              {options.length === 0 ? (
-                <option selected>No State found</option>
-              ) : (
-                ''
-              )}
+              {options.length === 0 ? <option>No State found</option> : ''}
               {options?.map((opt) => (
                 <option
                   key={opt.id}

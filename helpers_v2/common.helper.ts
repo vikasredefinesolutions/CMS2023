@@ -29,42 +29,29 @@ import { conditionalLog_V2 } from './console.helper';
 //////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////
 
+declare global {
+  interface Window {
+    dataLayer: any;
+  }
+}
+
 interface _ExtractCookies {
   userId: null | number;
   loggedIN: boolean;
-  storeInfo: null | {
-    storeId: number;
-    isAttributeSaparateProduct: boolean;
-    domain: string;
-    storeCode: string;
-    storeTypeId: number;
-    favicon: string;
-    logoUrl: string;
-    companyId: number;
-  };
+  storeInfo: null | _StoreInfoCookies['value'];
   tempCustomerId: string | null;
   empData: EmployeeDataObject | null;
+  customScripts: null | _CustomScriptsCookies['value'];
+  googleTags: null | _GoogleTagsCookies['value'];
+  adminConfigs: null | {
+    imageFolderPath: string;
+    blobUrl: string;
+    blobUrlDirectory: string;
+    companyId: number;
+  };
 }
 
-// interface _GET {
-//   url: string;
-//   method: 'GET';
-// }
-
-// interface _POST {
-//   url: string;
-//   method: 'POST';
-//   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-//   data?: any;
-// }
-
-// interface _cAxiosResponse<T> {
-//   success: boolean;
-//   data: T;
-//   errors: Object;
-// }
-
-interface _cStoreInfo {
+interface _StoreInfoCookies {
   name: 'storeInfo';
   value: {
     storeId: number;
@@ -75,12 +62,30 @@ interface _cStoreInfo {
     favicon: string;
     logoUrl: string;
     companyId: number;
+    blobUrl: string;
+    blobUrlRootDirectory: string;
+    imageFolderPath: string;
   };
+}
+
+export interface _CustomScriptsCookies {
+  name: 'customScripts';
+  value: {
+    googleFonts: string;
+    customHeadScript: string;
+    customFooterScript: string;
+    customGlobalBodyScript: string;
+    customGoogleVerification: string;
+  };
+}
+export interface _GoogleTagsCookies {
+  name: 'googleTags';
+  value: string;
 }
 
 interface _NextJsSetCookie {
   res: ServerResponse<IncomingMessage>;
-  cookie: _cStoreInfo;
+  cookie: _StoreInfoCookies | _CustomScriptsCookies | _GoogleTagsCookies;
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -122,6 +127,9 @@ export const extractCookies = (
     storeInfo: null,
     tempCustomerId: null,
     empData: null,
+    customScripts: null,
+    googleTags: null,
+    adminConfigs: null,
   };
 
   const server = isItServer();
@@ -149,12 +157,34 @@ export const extractCookies = (
       .find((cookie) => cookie.split('=')[0] === __Cookie.empData)
       ?.split('=')[1];
 
+    const customScripts = _cookiesArr
+      .find((cookie) => cookie.split('=')[0] === __Cookie.customScripts)
+      ?.split('=')[1];
+
+    const googleTags = _cookiesArr
+      .find((cookie) => cookie.split('=')[0] === __Cookie.googleTags)
+      ?.split('=')[1];
+
+    const parsedStoreInfo: null | _StoreInfoCookies['value'] =
+      (storeInfo && JSON.parse(storeInfo)) || null;
+
+    const parsedCustomScripts: null | _CustomScriptsCookies['value'] =
+      (customScripts && JSON.parse(customScripts)) || null;
+
     return {
       userId: userId ? +userId : null,
       loggedIN: Boolean(userId),
-      storeInfo: (storeInfo && JSON.parse(storeInfo)) || null,
+      storeInfo: parsedStoreInfo,
       tempCustomerId: tempCustomerId || null,
       empData: (empData && JSON.parse(empData)) || null,
+      customScripts: parsedCustomScripts || null,
+      googleTags: googleTags || '',
+      adminConfigs: {
+        companyId: parsedStoreInfo?.companyId || 0,
+        blobUrl: parsedStoreInfo?.blobUrl || '',
+        blobUrlDirectory: parsedStoreInfo?.blobUrlRootDirectory || '',
+        imageFolderPath: parsedStoreInfo?.imageFolderPath || '',
+      },
     };
   }
   return expectedCookies;
@@ -220,15 +250,19 @@ export function deleteCookie(cookieName: string) {
     cookieName + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;');
 }
 
-export function nextJsSetCookie({ res, cookie }: _NextJsSetCookie) {
+export const nextJsSetCookie = async ({ res, cookie }: _NextJsSetCookie) => {
   let cValue: unknown = cookie.value;
 
   if (cookie.name === 'storeInfo') {
     cValue = JSON.stringify(cookie.value);
   }
 
+  if (cookie.name === 'customScripts') {
+    cValue = JSON.stringify(cookie.value);
+  }
+
   res.setHeader('set-cookie', `${cookie.name}=${cValue}; `);
-}
+};
 
 //////////////////////////////////////////////////////////////////////
 //////// Functionalities Realted  ------------------------////////////
@@ -261,36 +295,6 @@ export function addCustomEvents(name: 'localStorage') {
 
 //////////////////////////////////////////////////////////////////////
 //////// Store Related  ----------------------------------////////////
-
-export const changeDomainForLocalHost = (queries: ParsedUrlQuery) => {
-  if (
-    __domain.isSiteLive === false &&
-    queries?._DOMAIN &&
-    typeof queries._DOMAIN === 'string'
-  ) {
-    __domain.localDomain = queries._DOMAIN;
-  }
-};
-
-export function layoutToShow(payload: {
-  layout: string | undefined;
-  showProd: boolean;
-}): string {
-  let layout = __domain.layoutToDisplay;
-
-  if (payload.showProd && payload.layout) {
-    layout = payload.layout;
-  }
-
-  conditionalLog_V2({
-    show: payload.layout ? false : true,
-    type: 'SPECIAL_FUNCTION',
-    name: 'layoutToShow',
-    data: payload.layout,
-  });
-
-  return layout;
-}
 
 export function domainToShow(payload: {
   domain: string | undefined;
@@ -454,13 +458,14 @@ export const getAddToCartObject = async (product: _Props): Promise<CartReq> => {
   }
 
   sizeQtys?.map((res) => {
+    console.log(res, 'resssss');
     if (res !== null)
       cartLogoPersonModel.push({
         id: res.id || 0,
         attributeOptionId: res.attributeOptionId,
         attributeOptionValue: res.size,
         code: '',
-        price: res.price * res.qty,
+        price: res.price,
         quantity: res.qty,
         estimateDate: new Date(),
         isEmployeeLoginPrice: 0,
@@ -633,4 +638,12 @@ export const _Logout = (
 export const getPageType = async (storeid: number, configname: string) => {
   let res = await FetchConfig('' + storeid, configname);
   return res;
+};
+
+export const CaptureGTMEvent = (payload: any) => {
+  const dataLayer = window?.dataLayer || null;
+  if (dataLayer) {
+    dataLayer.push({ ecommerce: null });
+    dataLayer.push({ ...payload });
+  }
 };

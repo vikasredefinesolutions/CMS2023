@@ -256,3 +256,22 @@ export interface removeLogoRes {
     shoppingCartItemsId: number;
   };
 }
+
+export interface _sbsStore {
+  id: number;
+  rowVersion: string;
+  location: string;
+  ipAddress: string;
+  macAddress: string;
+  shoppingCartItemsId: number | string;
+  isRequired: boolean;
+  isExclusive: boolean;
+  isChargePerCharacter: boolean;
+  storeProductCustomFieldName: string;
+  storeProductCustomFieldValue: string | number;
+  customizationCharges: number;
+}
+
+export interface sbsStore {
+  shoppingCartItemsCustomFieldModel: _sbsStore[];
+}

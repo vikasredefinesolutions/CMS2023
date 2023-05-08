@@ -4,6 +4,7 @@
 // import OutOfStockComponent from './OutOfStockComponent_Type3';
 
 import { useTypedSelector_v2 } from '@hooks_v2/index';
+import { Fragment } from 'react';
 
 const Inventory_Type3: React.FC<{
   storeCode: string;
@@ -22,9 +23,9 @@ const Inventory_Type3: React.FC<{
         <div className='text-sm flex flex-wrap items-center gap-1'>
           {inventory?.inventory
             .filter((el) => el.colorAttributeOptionId == +attributeOptionId)
-            .map((elem) => {
+            .map((elem, index) => {
               return (
-                <>
+                <Fragment key={`${elem.inventoryId}${index}`}>
                   <button
                     type='button'
                     onClick={() => {
@@ -39,7 +40,7 @@ const Inventory_Type3: React.FC<{
                   >
                     {elem.name}
                   </button>
-                </>
+                </Fragment>
               );
             })}
         </div>

@@ -1,18 +1,18 @@
 import {
-  PaymentMethod,
   checkoutPages,
+  PaymentMethod,
   paymentMethodCustom as paymentEnum,
 } from '@constants/enum';
 import { __Cookie, __Cookie_Expiry } from '@constants/global.constant';
 import { paths } from '@constants/paths.constant';
-import { AddOrderDefault, addAddress } from '@constants/payloads/checkout';
+import { addAddress, AddOrderDefault } from '@constants/payloads/checkout';
 import { signup_payload } from '@constants/payloads/signup';
 import { commonMessage } from '@constants/successError.text';
 import { CreditCardDetailsType } from '@definations/checkout';
 import {
-  KlaviyoScriptTag,
   deleteCookie,
   extractCookies,
+  KlaviyoScriptTag,
   setCookie,
 } from '@helpers/common.helper';
 import getLocation from '@helpers/getLocation';
@@ -400,6 +400,7 @@ const CheckoutController = () => {
           timeOfYearPurchase: '',
           position: '',
           navCustomerId: '',
+          organizationName: '',
 
           storeCustomerAddress: [
             { ...addAddress, ...shippingAdress },
@@ -493,7 +494,6 @@ const CheckoutController = () => {
         logoutClearCart();
         deleteCookie(__Cookie.tempCustomerId);
 
-        console.log('endTestvalue', endUserNameS);
 
         const res = await placeOrderService(order);
         setShowLoader(false);
@@ -586,6 +586,7 @@ const CheckoutController = () => {
         isDefault: values.isDefault,
         recStatus: 'A',
         companyName: values.companyName || ' ',
+        organizationName: '',
       },
     };
     if (addressEditData) {
