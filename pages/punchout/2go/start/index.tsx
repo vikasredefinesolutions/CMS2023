@@ -9,6 +9,7 @@ const Punchout = (props: any) => {
 
   useEffect(() => {
     fetch(props.returnUrl, {
+      mode: 'cors',
       method: 'POST',
       body: props.body,
       headers: headersList,
