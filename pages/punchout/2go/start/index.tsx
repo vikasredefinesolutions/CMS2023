@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 
 const Punchout = (props: any) => {
   const headersList = {
-    'Content-Type': 'application/xml',
+    'Content-Type': 'multipart/form-data',
   };
 
   useEffect(() => {
