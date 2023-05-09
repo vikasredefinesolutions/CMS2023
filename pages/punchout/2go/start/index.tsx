@@ -12,7 +12,7 @@ export default Punchout;
 export const getServerSideProps = async (context: any) => {
   const body = await getRawBody(context?.req);
   const params = new URLSearchParams(body.toString());
-  let obj = {};
+  let obj: Record<string, any> = {};
   obj = {
     pos: params.get('pos'),
     return_url: params.get('return_url'),
@@ -108,6 +108,16 @@ export const getServerSideProps = async (context: any) => {
   let returnxml = b
     .toString()
     .replace('###StoreUrl###', context.req.headers.host);
+
+  let headersList = {
+    'Content-Type': 'application/xml',
+  };
+
+  await fetch(obj.return_url, {
+    method: 'POST',
+    body: returnxml,
+    headers: headersList,
+  });
 
   return { props: { body: returnxml } };
 };
