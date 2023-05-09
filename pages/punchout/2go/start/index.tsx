@@ -105,7 +105,7 @@ export const getServerSideProps = async (context: any) => {
   let a = `${JSON.stringify(obj)}`;
   let b = '';
   b = await PunchoutPostApi(a);
-  b.toString().replace('###StoreUrl###', 'lalit');
+  b.toString().replace('###StoreUrl###', 'http://cg.redefineecommerce.com');
 
   return { props: { body: b } };
 };
