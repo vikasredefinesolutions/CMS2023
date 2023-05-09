@@ -13,9 +13,12 @@ const Punchout = (props: any) => {
     data: props.body,
   };
 
-  axios.request(config).then((response) => {
-    console.log(JSON.stringify(response.data));
-  });
+  axios
+    .request(config)
+    .then((response) => {
+      console.log(JSON.stringify(response.data));
+    })
+    .catch((err) => console.log(err));
   // const myHeaders = new Headers();
   // myHeaders.append('Content-Type', 'application/xml');
   // myHeaders.append('Access-Control-Allow-Origin', ' no-cors');
