@@ -5,7 +5,6 @@ const Punchout = (props: any) => {
   const myHeaders = new Headers();
   myHeaders.append('Content-Type', 'application/xml');
   myHeaders.append('Access-Control-Allow-Origin', ' no-cors');
-  console.log(props.body, 'props');
 
   // if (props.body) {
   //   const requestOptions = {
@@ -23,7 +22,7 @@ const Punchout = (props: any) => {
   //     .catch((error) => console.log('error', error));
   // }
 
-  return <>This page exists and getting response</>;
+  return <>{...props.body}This page exists and getting response{myHeaders} </>;
 };
 
 export default Punchout;
