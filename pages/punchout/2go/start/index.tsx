@@ -5,11 +5,11 @@ import { useEffect } from 'react';
 const Punchout = (props: any) => {
   const headersList = {
     'Content-Type': 'multipart/form-data',
+    'Access-Control-Allow-Origin': 'no-cors',
   };
 
   useEffect(() => {
     fetch(props.returnUrl, {
-      mode: 'cors',
       method: 'POST',
       body: props.body,
       headers: headersList,
