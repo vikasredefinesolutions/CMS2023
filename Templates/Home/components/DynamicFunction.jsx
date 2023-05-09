@@ -226,7 +226,9 @@ export const boximage = (dataArr, selectedObj) => {
         bgColor = aprData.text_bg_color ?? '';
         textHPos = aprData.text_hpos ?? '';
         textVPos = aprData.text_vpos ?? '';
-        sectionWidth = aprData.sectionWidth ?? ''; 
+        sectionWidth = aprData.section_width ?? ''; 
+        if(sectionWidth === '')
+                    sectionWidth = 'max-w-3xl';
       }
       let themeClass = '';
       let fontColor = '';
@@ -246,8 +248,8 @@ export const boximage = (dataArr, selectedObj) => {
       ) {
         clName = 'flex relative w-full text-white';
           headLine +=
-            '<div class="flex absolute ' + textHPos + ' ' + textVPos + ' inset-0 p-1 lg:p-4 text-white">';
-          headLine += '<div class="'+sectionWidth + '" style="background: rgba(' + bgColor + ',' + bgOpacity + '); padding: 20px;">';
+            '<div class="flex absolute '+sectionWidth + ' ' + textHPos + ' ' + textVPos + ' inset-0 p-1 lg:p-4 text-white">';
+          headLine += '<div class="" style="background: rgba(' + bgColor + ',' + bgOpacity + '); padding: 20px;">';
           headLine += '<div class="'+themeClass+'" style="color:'+fontColor+'">'+item.Headline+'</div>';
           headLine += '<div>';
           headLine += buttonHTML;
@@ -259,8 +261,8 @@ export const boximage = (dataArr, selectedObj) => {
       {
         clName = 'flex relative w-full text-white';
         headLine +=
-          '<div class="flex absolute ' + textHPos + ' ' + textVPos + ' inset-0 p-1 lg:p-4 text-white">';
-        headLine += '<div class="'+sectionWidth + '" style="background: rgba(' + bgColor + ',' + bgOpacity + '); padding: 20px;">';
+          '<div class="flex absolute '+sectionWidth + ' ' + textHPos + ' ' + textVPos + ' inset-0 p-1 lg:p-4 text-white">';
+        headLine += '<div class="" style="background: rgba(' + bgColor + ',' + bgOpacity + '); padding: 20px;">';
         headLine += '<div>';
         headLine += buttonHTML;
         headLine += '</div>';
@@ -352,7 +354,7 @@ export const multipleImages = (dataArr, selectedObj) => {
               bgColor = aprData.text_bg_color ?? '';
               textHPos = aprData.text_hpos ?? '';
               textVPos = aprData.text_vpos ?? '';
-              sectionWidth = aprData.sectionWidth ?? ''; 
+              sectionWidth = aprData.section_width ?? ''; 
 
             }
             //fontSize = item.Headline_font_size ?? '';
@@ -389,6 +391,17 @@ export const multipleImages = (dataArr, selectedObj) => {
                 //     headLine += '<div class="p-4 '+fontSize+'">'+item.Headline+'</div>';
                 //     headLine += '</div>';
                 // }
+        }
+        else
+        {
+            clName = "flex relative w-full text-white";
+                    headLine += '<div class="flex absolute inset-0 p-1 lg:p-4 text-white '+textHPos +' '+textVPos+'">';
+                    headLine += '<div class="" style="background: rgba('+bgColor+','+bgOpacity+'); padding: 20px;">';
+                    headLine += '<div>';
+                    headLine += buttonHTML;
+                    headLine += '</div>';
+                    headLine += '</div>';
+                    headLine += '</div>';
         }
                 
 

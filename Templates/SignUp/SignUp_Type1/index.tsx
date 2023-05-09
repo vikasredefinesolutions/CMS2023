@@ -51,6 +51,7 @@ const _SignupSchema = Yup.object().shape({
     .max(__ValidationText.signUp.password.maxLength),
   confirmPassword: Yup.string()
     .trim()
+    .required(__ValidationText.signUp.confirmPassword.required)
     .test(
       'passwords-match',
       __ValidationText.signUp.confirmPassword.mustMatch,

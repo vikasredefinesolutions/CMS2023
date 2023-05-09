@@ -164,7 +164,6 @@ export const fetchMenuItems = async (
 
 export const fetchStoreDetails = async (
   domain: string,
-  pathName: string,
 ): Promise<{
   store: _StoreReturnType;
   adminConfig: {

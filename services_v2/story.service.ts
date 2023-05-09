@@ -1,3 +1,4 @@
+import { __pageTypeConstant } from '@constants/global.constant';
 import { _Story } from '@definations/story';
 import { CallAPI_v2 } from '@helpers/api.helper';
 
@@ -12,7 +13,7 @@ export type _StoryService_V2 = {
 };
 
 export const GetStoryList = async (payload: {
-  pageType: string;
+  pageType: __pageTypeConstant.blog;
   storeId: number;
 }) => {
   const url = '/CmsTopicsPublish/getstories.json';
@@ -34,7 +35,7 @@ export const GetStoryList = async (payload: {
 
 export const GetStoriesByCategoryURL = async (payload: {
   storeId: number;
-  pageType: string;
+  pageType: __pageTypeConstant.stories;
   categoryurl: string;
 }) => {
   const url = '/CmsTopicsPublish/getstoriesbycategory.json';

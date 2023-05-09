@@ -27,13 +27,17 @@ const SD_FaqSection: React.FC<_Props> = ({ page }) => {
     <section className='relative pt-[40px] pb-[40px] bg-light-gray'>
       <div className='container mx-auto px-[16px]'>
         <div className='flex flex-wrap -mx-[12px] -mt-[24px] justify-center'>
-          <Home
-            props={{
-              pageData: page.accordionContent,
-              pageType: page.type,
-              slug: page.slug,
-            }}
-          />
+          <div className='w-full lg:w-2/3 md:w-3/6 order-1 mt-[24px] flex px-[12px]'>
+            <div className='w-full flex h-full bg-[#ffffff] p-[40px]'>
+              <Home
+                props={{
+                  pageData: { components: page.accordionContent },
+                  pageType: page.type,
+                  slug: page.slug,
+                }}
+              />
+            </div>
+          </div>
           <div className='w-full mt-[24px] px-[12px] lg:w-1/3 md:w-3/6 order-2'>
             <div className='w-full bg-white p-10'>
               <div className='w-full'>

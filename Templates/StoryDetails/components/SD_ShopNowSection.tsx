@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React from 'react';
 
 interface _Props {}
@@ -5,25 +6,25 @@ interface _Props {}
 const mockData = [
   {
     title: 'Custom Nike (Everything)',
-    slug: 'https://www.corporategear.com/nike.html?v=brand-product-list',
+    seName: '/adidas.html',
     imgSrc:
       'https://blog.corporategear.com/wp-content/uploads/2021/02/Nike-Custom-Sports-Apparel.png',
   },
   {
     title: 'Custom Nike (Everything)',
-    slug: 'https://www.corporategear.com/nike.html?v=brand-product-list',
+    seName: '/under-armour.html',
     imgSrc:
       'https://blog.corporategear.com/wp-content/uploads/2021/02/Nike-Custom-Sports-Apparel.png',
   },
   {
     title: 'Custom Nike (Everything)',
-    slug: 'https://www.corporategear.com/nike.html?v=brand-product-list',
+    seName: '/peter-millar.html',
     imgSrc:
       'https://blog.corporategear.com/wp-content/uploads/2021/02/Nike-Custom-Sports-Apparel.png',
   },
   {
     title: 'Custom Nike (Everything)',
-    slug: 'https://www.corporategear.com/nike.html?v=brand-product-list',
+    seName: '/nike.html',
     imgSrc:
       'https://blog.corporategear.com/wp-content/uploads/2021/02/Nike-Custom-Sports-Apparel.png',
   },
@@ -41,16 +42,18 @@ const SD_ShopNowSection: React.FC<_Props> = () => {
             >
               <div className='border border-gray-50 px-[24px] py-[24px] bg-[#ffffff] relative'>
                 <div className='flex justify-center'>
-                  <a className='' href={ele.slug}>
-                    <span className='sr-only'>{ele.title} </span>
-                    <img
-                      className='w-full mx-auto'
-                      src={ele.imgSrc}
-                      alt={ele.title}
-                      data-aos='none'
-                      role='presentation'
-                    />
-                  </a>
+                  <Link className='' href={ele.seName}>
+                    <a>
+                      <span className='sr-only'>{ele.title} </span>
+                      <img
+                        className='w-full mx-auto'
+                        src={ele.imgSrc}
+                        alt={ele.title}
+                        data-aos='none'
+                        role='presentation'
+                      />
+                    </a>
+                  </Link>
                 </div>
                 <div className='text-center w-full'>
                   <div className='text-medium-text p-[8px] text-anchor tetx-center'>
@@ -59,13 +62,11 @@ const SD_ShopNowSection: React.FC<_Props> = () => {
                   <div className='mb-[8px] text-medium-text'>
                     <strong></strong>
                   </div>
-                  <a
-                    target=''
-                    href={ele.slug}
-                    className='btn btn-tertiary btn-md'
-                  >
-                    <span className='sr-only'>{ele.title}</span> SHOP NOW
-                  </a>
+                  <Link href={ele.seName} className='btn btn-tertiary btn-md'>
+                    <a>
+                      <span className='sr-only'>{ele.title}</span> SHOP NOW
+                    </a>
+                  </Link>
                 </div>
               </div>
             </div>

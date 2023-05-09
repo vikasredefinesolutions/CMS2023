@@ -242,26 +242,26 @@ export function setCookie(
   if (expDays === 'Session') {
     expires = expDays;
   }
-  document.cookie = cName + '=' + cValue + '; ' + expires;
+  document.cookie = cName + '=' + cValue + '; ' + expires + `Path=/; `;
 }
 
 export function deleteCookie(cookieName: string) {
   return (document.cookie =
-    cookieName + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;');
+    cookieName + '=; Expires=Thu, 01 Jan 1970 00:00:01 GMT; ');
 }
 
-export const nextJsSetCookie = async ({ res, cookie }: _NextJsSetCookie) => {
+export const nextJsSetCookie = ({ res, cookie }: _NextJsSetCookie) => {
   let cValue: unknown = cookie.value;
 
-  if (cookie.name === 'storeInfo') {
+  if (cookie.name === __Cookie.storeInfo) {
     cValue = JSON.stringify(cookie.value);
   }
 
-  if (cookie.name === 'customScripts') {
+  if (cookie.name === __Cookie.customScripts) {
     cValue = JSON.stringify(cookie.value);
   }
 
-  res.setHeader('set-cookie', `${cookie.name}=${cValue}; `);
+  res.setHeader('set-cookie', `${cookie.name}=${cValue}; Path=/;`);
 };
 
 //////////////////////////////////////////////////////////////////////

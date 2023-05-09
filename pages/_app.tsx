@@ -11,7 +11,12 @@ import { useEffect } from 'react';
 
 import { reduxWrapper } from '@redux/store.redux';
 import { getWishlist } from '@services/wishlist.service';
-import { domainToShow, extractCookies, Logout } from 'helpers_v2/common.helper';
+import {
+  deleteCookie,
+  domainToShow,
+  extractCookies,
+  Logout,
+} from 'helpers_v2/common.helper';
 import { useActions_v2 } from 'hooks_v2';
 
 import { __console_v2 } from '@configs/console.config';
@@ -104,6 +109,15 @@ const RedefineCustomApp = ({
     await TrackFile(data);
   };
 
+  const refreshHandler = () => {
+    return () => {
+      deleteCookie(__Cookie.empData);
+      deleteCookie(__Cookie.storeInfo);
+      deleteCookie(__Cookie.googleTags);
+      deleteCookie(__Cookie.customScripts);
+    };
+  };
+
   const getUserDetails = async (
     userId: number,
     tempCustomerId: string | null,
@@ -181,6 +195,15 @@ const RedefineCustomApp = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    window.addEventListener('beforeunload', refreshHandler);
+    return () => {
+      window.removeEventListener('beforeunload', refreshHandler);
+      setShowLoader(false);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   if (!store || !store.storeTypeId) {
     return <>Store Details not found</>;
   }
@@ -216,6 +239,8 @@ RedefineCustomApp.getInitialProps = async (
   let APIsCalledOnce = false;
   let oldTab = false;
   const res = context.ctx.res;
+  const req = context.ctx.req;
+  let domain: null | string = null;
   const pathName = context.ctx.pathname;
   const currentPath = context.ctx.asPath;
 
@@ -244,23 +269,23 @@ RedefineCustomApp.getInitialProps = async (
   //------------------------------------
   const ctx = await App.getInitialProps(context);
 
-  if (context.ctx.req) {
-    if (context.ctx.req.rawHeaders && context.ctx.req.rawHeaders.length > 7) {
-      if (context.ctx.req.rawHeaders[6] === 'x-nextjs-data') {
+  if (req) {
+    if (req.headers) {
+      if ('x-nextjs-data' in req.headers) {
         // Checking if old tab has made the request If yes then we won't call StoreDetails APIs
         oldTab = true;
       }
     }
+
+    domain = domainToShow({
+      domain: req.headers.host,
+      showProd: __domain.isSiteLive,
+    });
+
+    propsToStoreAndGetFromCookies = extractAndfillCookiesIntoProps(
+      req.headers.cookie,
+    );
   }
-
-  const domain = domainToShow({
-    domain: context.ctx.req?.rawHeaders[1],
-    showProd: __domain.isSiteLive,
-  });
-
-  propsToStoreAndGetFromCookies = extractAndfillCookiesIntoProps(
-    context.ctx.req?.headers.cookie,
-  );
 
   if (propsToStoreAndGetFromCookies.store.id) {
     // If Store APIs are already called
@@ -296,8 +321,8 @@ RedefineCustomApp.getInitialProps = async (
 
   try {
     // APIs to call only once if not already called
-    if (APIsCalledOnce === false) {
-      const details = await _AppController.fetchStoreDetails(domain, pathName);
+    if (APIsCalledOnce === false && domain) {
+      const details = await _AppController.fetchStoreDetails(domain);
 
       if (details?.store.storeId) {
         const { store: storeDetails, adminConfig } = details;

@@ -66,7 +66,8 @@ export const __ValidationText = {
       maxLength: 40,
     },
     confirmPassword: {
-      mustMatch: 'Enter your confirm password.',
+      mustMatch: 'Confirm password does not match',
+      required: 'Enter your confirm password.',
     },
     storeCustomerAddress: {
       address1: { required: 'Enter your address.' },

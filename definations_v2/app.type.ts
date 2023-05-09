@@ -24,6 +24,7 @@ export type PageResponseType = {
 };
 
 export interface _Country {
+  countryCode: string;
   id: number;
   name: string;
 }

@@ -13,10 +13,10 @@ import {
 import { IncomingMessage, ServerResponse } from 'http';
 import { _globalStore } from 'store.global';
 import {
-  extractCookies,
-  nextJsSetCookie,
   _CustomScriptsCookies,
   _GoogleTagsCookies,
+  extractCookies,
+  nextJsSetCookie,
 } from './common.helper';
 
 export const expectedProps: _Expected_AppProps = {
@@ -116,6 +116,14 @@ export interface _PropsToStoreAndGetFromCookies {
   userLoggedIn: boolean;
 }
 
+const parseJson = <T>(arg: string | undefined | null): T | null => {
+  const temp = arg || '';
+  if (temp.length > 0) {
+    return JSON.parse(temp) as T;
+  }
+  return null;
+};
+
 export const callConfigsAndRemainingStoreAPIsAndSetURls = async (
   storeDetails: _StoreReturnType,
 ): Promise<{
@@ -164,8 +172,9 @@ export const callConfigsAndRemainingStoreAPIsAndSetURls = async (
         footerHTML = configs[0];
         headerConfig = configs[4];
 
-        const temp_customScripts = configs[1]?.config_value || '';
-        customScripts = JSON.parse(temp_customScripts);
+        customScripts = parseJson<_CustomScriptsCookies['value']>(
+          configs[1]?.config_value,
+        );
 
         googleTags = configs[2]?.config_value || '';
         const temp_contactInfo = configs[3]?.config_value || '';
@@ -265,7 +274,7 @@ export const storeCookiesToDecreaseNoOfAPIRecalls = async (
   domain: string,
 ) => {
   if (props.customScripts) {
-    await nextJsSetCookie({
+    nextJsSetCookie({
       res,
       cookie: {
         name: __Cookie.customScripts,
@@ -274,7 +283,7 @@ export const storeCookiesToDecreaseNoOfAPIRecalls = async (
     });
   }
 
-  await nextJsSetCookie({
+  nextJsSetCookie({
     res,
     cookie: {
       name: __Cookie.googleTags,
@@ -282,7 +291,7 @@ export const storeCookiesToDecreaseNoOfAPIRecalls = async (
     },
   });
 
-  await nextJsSetCookie({
+  nextJsSetCookie({
     res,
     cookie: {
       name: __Cookie.storeInfo,
