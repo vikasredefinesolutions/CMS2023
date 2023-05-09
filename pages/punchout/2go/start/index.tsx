@@ -6,21 +6,21 @@ const Punchout = (props: any) => {
   myHeaders.append('Content-Type', 'application/xml');
   myHeaders.append('Access-Control-Allow-Origin', ' no-cors');
 
-  // if (props.body) {
-  //   const requestOptions = {
-  //     method: 'POST',
-  //     headers: myHeaders,
-  //     body: props.body,
-  //   };
+  if (props.body) {
+    const requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: props.body,
+    };
 
-  //   fetch(
-  //     'https://connect.punchout2go.com/gateway/link/return/id/ZH645a10448cef6',
-  //     requestOptions,
-  //   )
-  //     .then((response) => response.text())
-  //     .then((result) => console.log(result))
-  //     .catch((error) => console.log('error', error));
-  // }
+    fetch(
+      'https://connect.punchout2go.com/gateway/link/return/id/ZH645a10448cef6',
+      requestOptions,
+    )
+      .then((response) => response.text())
+      .then((result) => console.log(result))
+      .catch((error) => console.log('error', error));
+  }
 
   return <>This page exists and getting response</>;
 };
