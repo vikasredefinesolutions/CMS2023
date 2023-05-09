@@ -1,26 +1,40 @@
 import { PunchoutPostApi } from '@services/punchout.service';
+import axios from 'axios';
 import getRawBody from 'raw-body';
 
 const Punchout = (props: any) => {
-  const myHeaders = new Headers();
-  myHeaders.append('Content-Type', 'application/xml');
-  myHeaders.append('Access-Control-Allow-Origin', ' no-cors');
+  let config = {
+    method: 'post',
+    maxBodyLength: Infinity,
+    url: props.return_url,
+    headers: {
+      'Content-Type': 'application/xml',
+    },
+    data: props.body,
+  };
 
-  if (props.body) {
-    const requestOptions = {
-      method: 'POST',
-      headers: myHeaders,
-      body: props.body,
-    };
+  axios.request(config).then((response) => {
+    console.log(JSON.stringify(response.data));
+  });
+  // const myHeaders = new Headers();
+  // myHeaders.append('Content-Type', 'application/xml');
+  // myHeaders.append('Access-Control-Allow-Origin', ' no-cors');
 
-    fetch(
-      'https://connect.punchout2go.com/gateway/link/return/id/ZH645a10448cef6',
-      requestOptions,
-    )
-      .then((response) => response.text())
-      .then((result) => console.log(result))
-      .catch((error) => console.log('error', error));
-  }
+  // if (props.body) {
+  //   const requestOptions = {
+  //     method: 'POST',
+  //     headers: myHeaders,
+  //     body: props.body,
+  //   };
+
+  //   fetch(
+  //     'https://connect.punchout2go.com/gateway/link/return/id/ZH645a10448cef6',
+  //     requestOptions,
+  //   )
+  //     .then((response) => response.text())
+  //     .then((result) => console.log(result))
+  //     .catch((error) => console.log('error', error));
+  // }
 
   return <>This page exists and getting response</>;
 };
