@@ -22,6 +22,7 @@ export interface _DiscountPricingProps {
   };
   modalHandler?: (param: null | _modals) => void;
   showLogin?: boolean;
+  isSpecialBrand?: boolean;
 }
 
 export interface _NextLogoButtonProps {

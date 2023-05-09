@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { storeBuilderTypeId, __domain } from '@configs/page.config';
+import { __domain, storeBuilderTypeId } from '@configs/page.config';
 import * as _AppController from '@controllers/_AppController.async';
 import { TrackFile } from '@services/tracking.service';
 import App, { AppContext, AppInitialProps, AppProps } from 'next/app';
 import { useRouter } from 'next/router';
 import 'public/assets/css/custom.css';
+import GoogleTagManager from 'react-gtm-module';
 // import 'public/assets/css/main.css';
 import 'public/assets/css/spinner.css';
 import { useEffect } from 'react';
@@ -34,13 +35,14 @@ import Spinner from '@appComponents/ui/spinner';
 import { PageResponseType } from '@definations/app.type';
 import { _MenuItems } from '@definations/header.type';
 import {
+  _PropsToStoreAndGetFromCookies,
+  _templateIds,
   callConfigsAndRemainingStoreAPIsAndSetURls,
+  configsToCallEveryTime,
   expectedProps,
   extractAndfillCookiesIntoProps,
   passPropsToDocumentFile,
   storeCookiesToDecreaseNoOfAPIRecalls,
-  _PropsToStoreAndGetFromCookies,
-  _templateIds,
 } from '@helpers/app.extras';
 import { FetchSbStoreConfiguration } from '@services/app.service';
 import { GetStoreCustomer } from '@services/user.service';
@@ -113,8 +115,6 @@ const RedefineCustomApp = ({
     return () => {
       deleteCookie(__Cookie.empData);
       deleteCookie(__Cookie.storeInfo);
-      deleteCookie(__Cookie.googleTags);
-      deleteCookie(__Cookie.customScripts);
     };
   };
 
@@ -157,6 +157,11 @@ const RedefineCustomApp = ({
   }, [router]);
 
   useEffect(() => {
+    //Initializing Google Tag Manager
+    GoogleTagManager.initialize({
+      gtmId: process.env.NEXT_PUBLIC_GTM_ID || '',
+    });
+
     const cookies = extractCookies('', 'browserCookie');
     const tempCustomerId = extractCookies(
       __Cookie.tempCustomerId,
@@ -241,7 +246,6 @@ RedefineCustomApp.getInitialProps = async (
   const res = context.ctx.res;
   const req = context.ctx.req;
   let domain: null | string = null;
-  const pathName = context.ctx.pathname;
   const currentPath = context.ctx.asPath;
 
   let propsToStoreAndGetFromCookies: _PropsToStoreAndGetFromCookies = {
@@ -261,20 +265,16 @@ RedefineCustomApp.getInitialProps = async (
       blobUrlDirectory: '',
       companyId: 0,
     },
-    customScripts: null,
-    googleTags: '',
     userLoggedIn: false,
   };
 
   //------------------------------------
   const ctx = await App.getInitialProps(context);
 
-  if (req) {
-    if (req.headers) {
-      if ('x-nextjs-data' in req.headers) {
-        // Checking if old tab has made the request If yes then we won't call StoreDetails APIs
-        oldTab = true;
-      }
+  if (req && req.headers) {
+    if ('x-nextjs-data' in req.headers) {
+      // Checking if old tab has made the request If yes then we won't call StoreDetails APIs
+      oldTab = true;
     }
 
     domain = domainToShow({
@@ -285,24 +285,27 @@ RedefineCustomApp.getInitialProps = async (
     propsToStoreAndGetFromCookies = extractAndfillCookiesIntoProps(
       req.headers.cookie,
     );
-  }
 
-  if (propsToStoreAndGetFromCookies.store.id) {
-    // If Store APIs are already called
-    const storeIdFound = true;
-    APIsCalledOnce = storeIdFound && oldTab;
-    const propsFromCookies = propsToStoreAndGetFromCookies.store;
-    expectedProps.store = {
-      ...expectedProps.store,
-      code: propsFromCookies.code,
-      storeId: propsFromCookies.id,
-      storeTypeId: propsFromCookies.storeTypeId,
-      urls: {
-        logo: propsFromCookies.urls.logo,
-        favicon: propsFromCookies.urls.favicon,
-      },
-      isAttributeSaparateProduct: propsFromCookies.isAttributeSaparateProduct,
-    };
+    if (propsToStoreAndGetFromCookies.store.id) {
+      // If Store APIs are already called
+      const storeIdFound = true;
+      APIsCalledOnce = storeIdFound && oldTab;
+      if (APIsCalledOnce) {
+        const propsFromCookies = propsToStoreAndGetFromCookies.store;
+        expectedProps.store = {
+          ...expectedProps.store,
+          code: propsFromCookies.code,
+          storeId: propsFromCookies.id,
+          storeTypeId: propsFromCookies.storeTypeId,
+          urls: {
+            logo: propsFromCookies.urls.logo,
+            favicon: propsFromCookies.urls.favicon,
+          },
+          isAttributeSaparateProduct:
+            propsFromCookies.isAttributeSaparateProduct,
+        };
+      }
+    }
   }
 
   if (res && currentPath) {
@@ -338,6 +341,9 @@ RedefineCustomApp.getInitialProps = async (
         expectedProps.headerConfig = response.headerConfig;
         expectedProps.templateIDs = response.templateIDs;
 
+        // Customize Here
+        expectedProps.store.imageFolderPath = `/${adminConfig.blobUrlRootDirectory}/${response.companyId}/store/${storeDetails.storeId}/images/`;
+
         // If cookies are empty then store 'Store and other required details' to decrease the number of APIs calls on page transition
         if (res) {
           propsToStoreAndGetFromCookies = {
@@ -358,8 +364,6 @@ RedefineCustomApp.getInitialProps = async (
               blobUrlDirectory: adminConfig.blobUrlRootDirectory,
               imageFolderPath: response.store.imageFolderPath,
             },
-            customScripts: response.customScripts,
-            googleTags: response.googleTags,
             userLoggedIn: propsToStoreAndGetFromCookies.userLoggedIn,
           };
 
@@ -398,11 +402,15 @@ RedefineCustomApp.getInitialProps = async (
 
   //-------------Add Variables to make globally available.------------------------//
   if (propsToStoreAndGetFromCookies.store.id) {
+    const serverConfigs = await configsToCallEveryTime(
+      propsToStoreAndGetFromCookies.store.id,
+    );
+
     passPropsToDocumentFile({
       store: propsToStoreAndGetFromCookies.store,
       adminConfigs: propsToStoreAndGetFromCookies.adminConfig,
-      customScripts: propsToStoreAndGetFromCookies.customScripts,
-      gTags: propsToStoreAndGetFromCookies.googleTags,
+      customScripts: serverConfigs.customScripts,
+      gTags: serverConfigs.gTags,
     });
   }
 

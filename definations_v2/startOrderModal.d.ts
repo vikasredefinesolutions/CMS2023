@@ -42,6 +42,7 @@ export interface _ProductDetails {
   isPolicywithcheckbox: boolean;
   policyMessage: string;
   isEnduserDisplay: boolean;
+  isSpecialBrand?: boolean;
 }
 
 export interface _SuggestedProduct {

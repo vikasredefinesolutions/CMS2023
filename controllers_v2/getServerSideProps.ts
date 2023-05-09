@@ -2,9 +2,9 @@ import { __Error } from '@constants/global.constant';
 import { paths } from '@constants/paths.constant';
 import { getPageComponents } from '@services/home.service';
 import {
-  FetchConfig,
   FetchFiltersJsonByBrand,
   FetchFiltersJsonByCategory,
+  FetchPageThemeConfigs,
 } from '@services/product.service';
 import { FetchPageType } from '@services/slug.service';
 
@@ -140,7 +140,10 @@ export const getServerSideProps: GetServerSideProps = async (
     }
 
     if (pageMetaData.type === 'product') {
-      let res = await FetchConfig('' + store.storeId, 'productDetail');
+      let res = await FetchPageThemeConfigs(
+        '' + store.storeId,
+        'productDetail',
+      );
       let productDetailTypes = res.config_value
         ? JSON.parse(res.config_value)
         : {};
@@ -215,7 +218,10 @@ export const getServerSideProps: GetServerSideProps = async (
           }),
         );
       }
-      let res = await FetchConfig('' + store.storeId, 'productListing');
+      let res = await FetchPageThemeConfigs(
+        '' + store.storeId,
+        'productListing',
+      );
       let productListingTypes = res.config_value
         ? JSON.parse(res.config_value)
         : {};

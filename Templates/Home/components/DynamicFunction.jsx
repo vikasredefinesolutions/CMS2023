@@ -125,13 +125,13 @@ export const numberingdiv = (dataArr, selectedObj) => {
   if (dataArr?.length) {
     let count = 1;
     dataArr.forEach(function (item) {
-      strHTML += '<div className="flex items-start mb-6">';
+      strHTML += '<div class="flex items-start mb-6">';
       strHTML +=
-        '<div className="mr-10 flex-shrink-0 flex justify-center items-center w-12 h-12 rounded-full bg-gray-500 text-gray-50 font-bold font-heading">' +
+        '<div class="mr-10 flex-shrink-0 flex justify-center items-center w-12 h-12 rounded-full bg-gray-500 text-gray-50 font-bold font-heading">' +
         count +
         '</div>';
-      strHTML += '<div className="max-w-xs">';
-      strHTML += '<div className="text-box-p leading-loose">';
+      strHTML += '<div class="max-w-xs">';
+      strHTML += '<div class="text-box-p leading-loose">';
       strHTML += item.Description;
       strHTML += '</div>';
       strHTML += '</div>';
@@ -185,7 +185,7 @@ export const boximage = (dataArr, selectedObj) => {
       // strHTML += '<div className="btn-primary rounded-full w-10 h-10 flex justify-center items-center text-base text-white font-semibold">'+item.index+'</div>';
       // strHTML += '</div>';
 
-      strHTML += '<div className="">';
+      strHTML += '<div class="">';
       let clName = 'flex justify-center';
       let aprData = {};
       let textPos = 'bottom';
@@ -275,7 +275,7 @@ export const boximage = (dataArr, selectedObj) => {
       }
 
       if (item.Image !== undefined) {
-        strHTML += '<div className="' + clName + '">';
+        strHTML += '<div class="' + clName + '">';
         strHTML += '<a title="' + item.Image_link + '">';
         strHTML +=
           '<img class="w-full" alt="'+item?.Image_alt + '" title="' + item?.Image_alt + '"  src="' +

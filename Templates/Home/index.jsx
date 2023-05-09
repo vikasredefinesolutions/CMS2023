@@ -8,6 +8,8 @@ import { useEffect, useState } from 'react';
 
 import DIHomePage from '@templates/Home/components/DIHomePage';
 import * as helper from '@templates/Home/components/Helper';
+import AOS from 'aos';
+import "aos/dist/aos.css";
 
 const Home = (props) => {
   const pageData = props.props?.pageData;
@@ -26,6 +28,11 @@ const Home = (props) => {
     return () => {
       topic_set_isCMS(false);
     };
+  }, []);
+
+  useEffect(() => {
+    AOS.init();
+    AOS.refresh();
   }, []);
 
   useEffect(() => {

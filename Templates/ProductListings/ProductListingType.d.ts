@@ -255,7 +255,7 @@ export interface GetlAllProductList {
   sku?: string;
   imageUrl?: string;
   imap?: string;
-  splitProductList: splitproductList[] | null;
+  splitproductList: splitproductList[] | null;
   productId?: number;
   productName?: string;
   productSEName?: string;

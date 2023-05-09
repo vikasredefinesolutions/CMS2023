@@ -1,11 +1,9 @@
 import Price from '@appComponents/Price';
 import { checkoutPages } from '@constants/enum';
 import CheckoutController from '@controllers/checkoutController';
-import { useTypedSelector_v2 } from '@hooks_v2/index';
 import CartItem from '@templates/cartItem';
 import CartSummarry from '@templates/cartSummarry';
 import { ChangeEvent, FC } from 'react';
-import { CTProps } from '../checkout';
 import AddAddress from './components/AddAddressType1';
 import CheckoutAddress from './components/AddressType1';
 import CreatePassword from './components/CreatePasswprdType1';
@@ -13,39 +11,47 @@ import LoginEmail from './components/LoginEmailType1';
 import LoginPassword from './components/LoginPasswordType1';
 import PaymentType1 from './components/PaymentType1';
 
-const ChekoutType3: FC<CTProps> = ({
-  couponInputChangeHandler,
-  couponSubmitHandler,
-  showApplyButton,
-  coupon,
-  currentPage,
-  checkEmail,
-  continueAsGuest,
-  createAccountHandler,
-  allowGuest,
-  loginCustomer,
-  showAddAddress,
-  reviewOrder,
-  setShippingAddress,
-  useShippingAddress,
-  billingForm,
-  shippingForm,
-  cartData,
-  paymentFieldUpdateHandler,
-  paymentMethod,
-  updatePaymentMethod,
-  placeOrder,
-  detectCardType,
-  shippingAdress,
-  billingAdress,
-  setAddressType,
-  endUserDisplay,
-  setEndUserName,
-  cartType,
-}) => {
-  const { paymentOptions, allowedBalance, checkHandler } = CheckoutController();
+import SummarryController from '@controllers/summarryController';
 
-  const userid = useTypedSelector_v2((state) => state);
+interface _Props {
+  cartTemplateId: number;
+}
+
+const ChekoutType3: FC<_Props> = ({ cartTemplateId }) => {
+  const {
+    couponInputChangeHandler,
+    couponSubmitHandler,
+    showApplyButton,
+    coupon,
+  } = SummarryController();
+
+  const {
+    currentPage,
+    checkEmail,
+    continueAsGuest,
+    createAccountHandler,
+    allowGuest,
+    loginCustomer,
+    placeOrder,
+    showAddAddress,
+    reviewOrder,
+    setShippingAddress,
+    shippingForm,
+    billingForm,
+    useShippingAddress,
+    cartData,
+    paymentFieldUpdateHandler,
+    paymentMethod,
+    updatePaymentMethod,
+    detectCardType,
+    shippingAdress,
+    billingAdress,
+    setAddressType,
+    setEndUserName,
+    endUserDisplay,
+  } = CheckoutController();
+
+  const { paymentOptions, allowedBalance, checkHandler } = CheckoutController();
 
   const CreditWallet = ({
     checkHandler,
@@ -64,6 +70,7 @@ const ChekoutType3: FC<CTProps> = ({
       </div>
     );
   };
+
   return (
     <div className='container mx-auto pl-[15px] pr-[15px] mt-[20px] mb-[50px]'>
       <div className='flex flex-wrap justify-between -mx-[15px]'>
@@ -77,7 +84,7 @@ const ChekoutType3: FC<CTProps> = ({
                 {...{
                   isRemovable: false,
                   cartData: cartData,
-                  cartType: cartType,
+                  cartType: cartTemplateId,
                 }}
               />
             </div>

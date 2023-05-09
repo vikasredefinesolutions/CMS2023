@@ -127,10 +127,10 @@ const TemplateThreeListing = ({
               className='flex flex-wrap items-center mt-[8px] justify-center space-x-1'
             >
               {isAttributeSaparateProduct &&
-              product.splitProductList &&
-              product.splitProductList?.length > 0
-                ? product.splitProductList &&
-                  product?.splitProductList.map(
+              product.splitproductList &&
+              product.splitproductList?.length > 0
+                ? product.splitproductList &&
+                  product?.splitproductList.map(
                     (subRow: splitproductList, index: number) =>
                       index < listing_max_showcolors ? (
                         <Link key={product.id} href={`/${subRow.seName}.html`}>
@@ -287,8 +287,8 @@ const TemplateThreeListing = ({
               className='flex flex-wrap items-center mt-[8px] space-x-1'
             >
               {isAttributeSaparateProduct
-                ? product.splitProductList &&
-                  product?.splitProductList.map(
+                ? product.splitproductList &&
+                  product?.splitproductList.map(
                     (subRow: splitproductList, index: number) =>
                       index < listing_max_showcolors ? (
                         <Link key={product.id} href={`/${subRow.seName}.html`}>

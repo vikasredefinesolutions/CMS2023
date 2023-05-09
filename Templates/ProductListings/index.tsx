@@ -57,7 +57,17 @@ const ProductListing: React.FC<_ProductListingProps & { id: string }> = ({
       (`type${id}` as 'type1') || 'type2' || 'type3' || 'type4'
     ];
   if (product.length === 0) {
-    return <> {__pagesText.productListing.noProductsFound}</>;
+    return (
+      <section id=''>
+        <div className='bg-[#ffffff]'>
+          <div className='h-80 flex items-center justify-center'>
+            <div className='text-2xl-text'>
+              {__pagesText.productListing.noProductsFound}
+            </div>
+          </div>
+        </div>
+      </section>
+    );
   }
   return (
     <Component

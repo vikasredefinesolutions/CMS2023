@@ -143,8 +143,8 @@ const TemplateFourListing = ({
               className='flex flex-wrap items-center mt-2 justify-center space-x-1'
             >
               {isAttributeSaparateProduct
-                ? product.splitProductList &&
-                  product?.splitProductList.map(
+                ? product.splitproductList &&
+                  product?.splitproductList.map(
                     (subRow: splitproductList, index: number) =>
                       index < listing_max_showcolors ? (
                         <Link key={product.id} href={`/${subRow.seName}.html`}>

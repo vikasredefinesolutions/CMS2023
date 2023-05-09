@@ -13,6 +13,7 @@ import { StaticImageData } from 'next/image';
 import router from 'next/router';
 import { __StaticImg } from 'public/assets/images.asset';
 import { ParsedUrlQuery } from 'querystring';
+import GoogleTagManager from 'react-gtm-module';
 
 import { logoLocation } from '@constants/enum';
 import { CartReq } from '@definations/APIs/cart.req';
@@ -20,7 +21,7 @@ import {
   _LogoDetail,
   _Product_SizeQtys,
 } from '@redux/slices/product.slice.types';
-import { FetchConfig } from '@services/product.service';
+import { FetchPageThemeConfigs } from '@services/product.service';
 import { conditionalLog_V2 } from './console.helper';
 
 //////////////////////////////////////////////////////////////////////
@@ -41,8 +42,7 @@ interface _ExtractCookies {
   storeInfo: null | _StoreInfoCookies['value'];
   tempCustomerId: string | null;
   empData: EmployeeDataObject | null;
-  customScripts: null | _CustomScriptsCookies['value'];
-  googleTags: null | _GoogleTagsCookies['value'];
+
   adminConfigs: null | {
     imageFolderPath: string;
     blobUrl: string;
@@ -64,28 +64,13 @@ interface _StoreInfoCookies {
     companyId: number;
     blobUrl: string;
     blobUrlRootDirectory: string;
-    imageFolderPath: string;
+    imageFolderP: string;
   };
-}
-
-export interface _CustomScriptsCookies {
-  name: 'customScripts';
-  value: {
-    googleFonts: string;
-    customHeadScript: string;
-    customFooterScript: string;
-    customGlobalBodyScript: string;
-    customGoogleVerification: string;
-  };
-}
-export interface _GoogleTagsCookies {
-  name: 'googleTags';
-  value: string;
 }
 
 interface _NextJsSetCookie {
   res: ServerResponse<IncomingMessage>;
-  cookie: _StoreInfoCookies | _CustomScriptsCookies | _GoogleTagsCookies;
+  cookie: _StoreInfoCookies;
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -127,8 +112,6 @@ export const extractCookies = (
     storeInfo: null,
     tempCustomerId: null,
     empData: null,
-    customScripts: null,
-    googleTags: null,
     adminConfigs: null,
   };
 
@@ -145,7 +128,7 @@ export const extractCookies = (
       .find((cookie) => cookie.split('=')[0] === __Cookie.userId)
       ?.split('=')[1];
 
-    const storeInfo = _cookiesArr
+    const encodedStoreInfo = _cookiesArr
       .find((cookie) => cookie.split('=')[0] === __Cookie.storeInfo)
       ?.split('=')[1];
 
@@ -157,33 +140,24 @@ export const extractCookies = (
       .find((cookie) => cookie.split('=')[0] === __Cookie.empData)
       ?.split('=')[1];
 
-    const customScripts = _cookiesArr
-      .find((cookie) => cookie.split('=')[0] === __Cookie.customScripts)
-      ?.split('=')[1];
-
-    const googleTags = _cookiesArr
-      .find((cookie) => cookie.split('=')[0] === __Cookie.googleTags)
-      ?.split('=')[1];
-
-    const parsedStoreInfo: null | _StoreInfoCookies['value'] =
-      (storeInfo && JSON.parse(storeInfo)) || null;
-
-    const parsedCustomScripts: null | _CustomScriptsCookies['value'] =
-      (customScripts && JSON.parse(customScripts)) || null;
+    if (encodedStoreInfo) {
+      const decodedStoreInfo = decodeURIComponent(encodedStoreInfo);
+      const parsedStoreInfo: null | _StoreInfoCookies['value'] =
+        (decodedStoreInfo && JSON.parse(decodedStoreInfo)) || null;
+      expectedCookies.storeInfo = parsedStoreInfo;
+    }
 
     return {
       userId: userId ? +userId : null,
       loggedIN: Boolean(userId),
-      storeInfo: parsedStoreInfo,
+      storeInfo: expectedCookies.storeInfo,
       tempCustomerId: tempCustomerId || null,
       empData: (empData && JSON.parse(empData)) || null,
-      customScripts: parsedCustomScripts || null,
-      googleTags: googleTags || '',
       adminConfigs: {
-        companyId: parsedStoreInfo?.companyId || 0,
-        blobUrl: parsedStoreInfo?.blobUrl || '',
-        blobUrlDirectory: parsedStoreInfo?.blobUrlRootDirectory || '',
-        imageFolderPath: parsedStoreInfo?.imageFolderPath || '',
+        companyId: expectedCookies.storeInfo?.companyId || 0,
+        blobUrl: expectedCookies.storeInfo?.blobUrl || '',
+        blobUrlDirectory: expectedCookies.storeInfo?.blobUrlRootDirectory || '',
+        imageFolderPath: expectedCookies.storeInfo?.imageFolderP || '',
       },
     };
   }
@@ -256,12 +230,8 @@ export const nextJsSetCookie = ({ res, cookie }: _NextJsSetCookie) => {
   if (cookie.name === __Cookie.storeInfo) {
     cValue = JSON.stringify(cookie.value);
   }
-
-  if (cookie.name === __Cookie.customScripts) {
-    cValue = JSON.stringify(cookie.value);
-  }
-
-  res.setHeader('set-cookie', `${cookie.name}=${cValue}; Path=/;`);
+  const encodedCValue = encodeURIComponent(cValue as string);
+  res.setHeader('set-cookie', `${cookie.name}=${encodedCValue}; Path=/;`);
 };
 
 //////////////////////////////////////////////////////////////////////
@@ -636,14 +606,25 @@ export const _Logout = (
 };
 
 export const getPageType = async (storeid: number, configname: string) => {
-  let res = await FetchConfig('' + storeid, configname);
+  let res = await FetchPageThemeConfigs('' + storeid, configname);
   return res;
 };
 
+//Track event using google tag manager script
 export const CaptureGTMEvent = (payload: any) => {
   const dataLayer = window?.dataLayer || null;
   if (dataLayer) {
     dataLayer.push({ ecommerce: null });
     dataLayer.push({ ...payload });
   }
+};
+
+//Track event using Google tag manager Library
+export const TrackGTMEvent = (eventname: string, payload: any) => {
+  GoogleTagManager.dataLayer({
+    dataLayer: {
+      event: eventname,
+      eventData: { ...payload },
+    },
+  });
 };

@@ -6,46 +6,39 @@ import { GetShippingmethod } from '@services/address.service';
 import CartItem from '@templates/cartItem';
 import Link from 'next/link';
 import { FC, useEffect, useState } from 'react';
-import { CTProps } from '../checkout';
 import OrderSummary from './components/OrderSummary';
 import PaymentType from './components/Payment';
 // import { GetShippingmethod } from '@services/address.service';
 
-const ChekoutType2: FC<CTProps> = ({
-  couponInputChangeHandler,
-  couponSubmitHandler,
-  showApplyButton,
-  coupon,
-  currentPage,
-  checkEmail,
-  continueAsGuest,
-  createAccountHandler,
-  allowGuest,
-  loginCustomer,
-  showAddAddress,
-  reviewOrder,
-  setShippingAddress,
-  useShippingAddress,
-  billingForm,
-  shippingForm,
-  cartData,
-  paymentFieldUpdateHandler,
-  paymentMethod,
-  updatePaymentMethod,
-  placeOrder,
-  detectCardType,
-  shippingAdress,
-  billingAdress,
-  setAddressType,
-  setShippingMethod,
-  shippingMethod,
-  cartType,
-}) => {
-  const [showPayment, setshowPayment] = useState<boolean>(false);
+import CheckoutController from '@controllers/checkoutController';
 
+interface _Props {
+  cartTemplateId: number;
+}
+
+const ChekoutType2: FC<_Props> = ({ cartTemplateId }) => {
   const { shippingChargeType, id: storeId } = useTypedSelector_v2(
     (state) => state.store,
   );
+
+  const {
+    currentPage,
+    placeOrder,
+    reviewOrder,
+    cartData,
+    paymentFieldUpdateHandler,
+    paymentMethod,
+    updatePaymentMethod,
+    detectCardType,
+    shippingAdress,
+    billingAdress,
+    setAddressType,
+    setShippingMethod,
+    shippingMethod,
+  } = CheckoutController();
+
+  const [showPayment, setshowPayment] = useState<boolean>(false);
+
   const { id } = useTypedSelector_v2((state) => state.user);
   const { subTotal } = GetCartTotals();
 
@@ -169,7 +162,7 @@ const ChekoutType2: FC<CTProps> = ({
                   {...{
                     isRemovable: false,
                     cartData: cartData,
-                    cartType: cartType,
+                    cartType: cartTemplateId,
                   }}
                 />
               ) : (

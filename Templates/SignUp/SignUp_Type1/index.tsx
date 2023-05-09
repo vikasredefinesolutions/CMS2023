@@ -18,10 +18,17 @@ import getLocation from 'helpers_v2/getLocation';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
 
 import { __UserMessages } from '@constants/global.constant';
+import { TrackGTMEvent } from '@helpers/common.helper';
 import SU_EmailInput from './Components/SU1_EmailInput';
 import SU1_Input from './Components/SU1_Input';
 import SU_PasswordInput from './Components/SU1_PasswordInput';
 import SU_StateNcountries from './Components/SU1_StateNcountries';
+
+//Regex for multiple phone number pattern test
+const pattern1 = /^\(?([0-9]{3})\)?[-]([0-9]{3})[-]([0-9]{4})$/; //Matches xxx-xxx-xxxx
+const pattern2 = /^\(?([0-9]{3})\)?[.]([0-9]{3})[.]([0-9]{4})$/; //Matches xxx.xxx.xxxx
+const pattern3 = /^\(?([0-9]{3})\)?[ ]([0-9]{3})[ ]([0-9]{4})$/; //Matches xxx xxx xxxx
+const pattern4 = /^[0-9]{10}$/; //Matches xxxxxxxxxx
 
 const _SignupSchema = Yup.object().shape({
   firstname: Yup.string()
@@ -62,11 +69,21 @@ const _SignupSchema = Yup.object().shape({
   storeCustomerAddress: Yup.array().of(
     Yup.object().shape({
       phone: Yup.string()
-        .length(
-          __ValidationText.signUp.storeCustomerAddress.phone.length,
+        .required(__ValidationText.signUp.storeCustomerAddress.phone.required)
+        .test(
+          'phone-test',
           __ValidationText.signUp.storeCustomerAddress.phone.valid,
-        )
-        .required(__ValidationText.signUp.storeCustomerAddress.phone.required),
+          (value) => {
+            if (
+              pattern1.test(value || '') ||
+              pattern2.test(value || '') ||
+              pattern3.test(value || '') ||
+              pattern4.test(value || '')
+            )
+              return true;
+            return false;
+          },
+        ),
     }),
   ),
 });
@@ -123,6 +140,26 @@ const SignUp_type1: React.FC = () => {
         });
         return;
       }
+      const userRegistrationEventPayload = {
+        user_firstname: payload?.storeCustomerModel?.firstname,
+        user_lastname: payload?.storeCustomerModel?.lastName,
+        user_email: payload?.storeCustomerModel?.email,
+        user_phone: payload?.storeCustomerModel?.storeCustomerAddress[0]?.phone,
+        companyName: payload?.storeCustomerModel?.companyName,
+        jobTitle: payload?.storeCustomerModel?.jobTitle,
+        address1:
+          payload?.storeCustomerModel?.storeCustomerAddress[0]?.address1,
+        address2:
+          payload?.storeCustomerModel?.storeCustomerAddress[0]?.address2,
+        zipcode:
+          payload?.storeCustomerModel?.storeCustomerAddress[0]?.postalCode,
+        city: payload?.storeCustomerModel?.storeCustomerAddress[0]?.city,
+        state: payload?.storeCustomerModel?.storeCustomerAddress[0]?.state,
+        coutry:
+          payload?.storeCustomerModel?.storeCustomerAddress[0]?.countryName,
+        location: `${location?.city}, ${location?.region}, ${location?.country}, ${location?.postal_code}`,
+      };
+      TrackGTMEvent('user_registration', userRegistrationEventPayload);
       showModal({
         message: __UserMessages.signUpPage.SuccessFullyAccountCreated,
         title: 'Success',
@@ -213,7 +250,7 @@ const SignUp_type1: React.FC = () => {
                         error={errors?.companyName ? errors.companyName : null}
                       />
                       <SU1_Input
-                        type={'number'}
+                        type={'text'}
                         name={'storeCustomerAddress[0].phone'}
                         value={values.storeCustomerAddress[0].phone}
                         label={'Phone Number'}

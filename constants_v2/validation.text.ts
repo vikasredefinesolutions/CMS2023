@@ -77,7 +77,8 @@ export const __ValidationText = {
       postalCode: { required: 'Enter your zipcode.' },
       phone: {
         required: 'Enter your phone Number.',
-        valid: 'Phone number is not valid',
+        valid:
+          'Enter Valid Phone Number. Format xxx-xxx-xxxx, xxx xxx xxxx, xxx.xxx.xxxx, xxxxxxxxxx',
         length: 10,
       },
       countryName: { required: 'Required country name' },

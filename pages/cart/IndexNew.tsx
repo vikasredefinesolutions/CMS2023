@@ -3,7 +3,7 @@ import StartOrderModal from '@appComponents/modals/startOrderModal/StartOrderMod
 import CartController from '@controllers/cartController';
 import SummarryController from '@controllers/summarryController';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
-import { FetchConfig } from '@services/product.service';
+import { FetchPageThemeConfigs } from '@services/product.service';
 import CartTemplate from '@templates/Cart';
 import { useEffect, useState } from 'react';
 const Cart = () => {
@@ -33,7 +33,7 @@ const Cart = () => {
 
   useEffect(() => {
     if (id) {
-      FetchConfig('' + id, 'cartPage').then((res) => {
+      FetchPageThemeConfigs('' + id, 'cartPage').then((res) => {
         if (res.config_value) {
           let type: { cartPageTemplateId: number } = JSON.parse(
             res.config_value,

@@ -82,8 +82,7 @@ export const storeSlice = createSlice({
 
       //--------------------------------------------------------
       state.id = store.storeId || 0;
-      state.isAttributeSaparateProduct =
-        action.payload.store.isAttributeSaparateProduct;
+      state.isAttributeSaparateProduct = store.isAttributeSaparateProduct;
       state.cartCharges = store.cartCharges;
       state.storeTypeId = store.storeTypeId;
       state.code = store.code;

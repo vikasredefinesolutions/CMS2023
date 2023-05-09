@@ -13,14 +13,14 @@ export interface AddToCartModel {
   cartLogoPersonModel: _CartLogoPersonModel[];
 }
 
-export interface _ConfigType {
+export interface _FetchPageThemeConfigs {
   id: number;
   store_id: number;
   config_name: string;
-  config_value: null | string;
+  config_value: string;
   status: string;
-  created_at: null | string;
-  updated_at: null | string;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface _ProductDetailsConfig {

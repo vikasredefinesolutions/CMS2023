@@ -182,9 +182,9 @@ const TemplateFiveListing = ({
                 className='flex flex-wrap items-center mt-[5px] justify-center gap-[2px]'
               >
                 {isAttributeSaparateProduct
-                  ? product.splitProductList &&
-                    product.splitProductList?.length > 0 &&
-                    product?.splitProductList.map(
+                  ? product.splitproductList &&
+                    product.splitproductList?.length > 0 &&
+                    product?.splitproductList.map(
                       (subRow: splitproductList, index: number) =>
                         index < listing_max_showcolors ? (
                           <Link

@@ -97,6 +97,7 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
         }}
         showLogin={!product.isDiscontinue}
         modalHandler={modalHandler}
+        isSpecialBrand={product.isSpecialBrand}
       />
 
       <div className='ml-[10px] mr-[10px] mt-[13px]'>

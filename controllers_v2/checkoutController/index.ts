@@ -53,11 +53,17 @@ import {
   getPaymentOption,
 } from '@services/payment.service';
 import { FetchProductById } from '@services/product.service';
-import { _shippingMethod } from '@templates/checkout/checkout';
 import CheckoutAddressForm, {
   AddressFormRefType,
   AddressType,
 } from './CheckoutAddressForm';
+
+export interface _shippingMethod {
+  name: string;
+  price: number;
+}
+[];
+
 const CheckoutController = () => {
   const [endUserNameS, setEndUserName] = useState<string>('');
   const [endUserDisplay, setEndUserDisplay] = useState<boolean>(false);
@@ -154,6 +160,7 @@ const CheckoutController = () => {
       );
     }
   }, [storeId]);
+
   useEffect(() => {
     if (isLoggedIn && user.customer) {
       if (user.customer.customerAddress.length > 0) {

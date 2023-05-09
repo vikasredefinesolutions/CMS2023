@@ -1,6 +1,5 @@
 /* eslint-disable no-unused-vars */
 import { __pagesText } from '@constants/pages.text';
-import Price from 'appComponents_v2/reUsable/Price';
 import { useTypedSelector_v2 } from 'hooks_v2';
 import React, { useState } from 'react';
 import AskToLogin from './AskToLogin';
@@ -9,7 +8,14 @@ import { _DiscountPricingProps } from './productDetailsComponents';
 
 const DiscountPricing: React.FC<
   _DiscountPricingProps & { storeCode: string }
-> = ({ price, showLogin, storeCode, showMsrpLine, modalHandler }) => {
+> = ({
+  price,
+  showLogin,
+  storeCode,
+  showMsrpLine,
+  modalHandler,
+  isSpecialBrand,
+}) => {
   const [showMsg, setShowMsg] = useState(false);
 
   const customerId = useTypedSelector_v2((state) => state.user.id);
@@ -40,7 +46,7 @@ const DiscountPricing: React.FC<
           ) : null}
         </div>
 
-        {!customerId && showMsrpLine && (
+        {/* {!customerId && showMsrpLine && (
           <div className='flex flex-wrap justify-between items-center mt-[18px] text-default-text'>
             <div className='flex items-start'>
               <span className='font-[600] mr-[3px] text-sub-text'>
@@ -69,10 +75,18 @@ const DiscountPricing: React.FC<
               </button>
             ) : null}
           </div>
-        )}
+        )} */}
 
-        <QtyPriceTable storeCode={storeCode} />
-        {showLogin && modalHandler && (
+        {isSpecialBrand ? (
+          customerId !== null ? (
+            <QtyPriceTable storeCode={storeCode} />
+          ) : (
+            <></>
+          )
+        ) : (
+          <QtyPriceTable storeCode={storeCode} />
+        )}
+        {isSpecialBrand && showLogin && modalHandler && (
           <AskToLogin modalHandler={modalHandler} />
         )}
       </div>

@@ -12,12 +12,7 @@ import {
 } from '@services/app.service';
 import { IncomingMessage, ServerResponse } from 'http';
 import { _globalStore } from 'store.global';
-import {
-  _CustomScriptsCookies,
-  _GoogleTagsCookies,
-  extractCookies,
-  nextJsSetCookie,
-} from './common.helper';
+import { extractCookies, nextJsSetCookie } from './common.helper';
 
 export const expectedProps: _Expected_AppProps = {
   store: {
@@ -111,9 +106,26 @@ export interface _PropsToStoreAndGetFromCookies {
     blobUrlDirectory: string;
     companyId: number;
   };
-  customScripts: _CustomScriptsCookies['value'] | null;
-  googleTags: _GoogleTagsCookies['value'];
   userLoggedIn: boolean;
+}
+
+export interface _CustomScriptConfigValue {
+  googleFonts: string;
+  customHeadScript: string;
+  customFooterScript: string;
+  customGlobalBodyScript: string;
+  customGoogleVerification: string;
+}
+
+export interface _GoogleTagsConfigValue {
+  twitterTags: {
+    twitterTagRadio: boolean;
+    twitterTagTextArea: string;
+  };
+  dcTags: {
+    dcTagRadio: boolean;
+    dcTagTextArea: string;
+  };
 }
 
 const parseJson = <T>(arg: string | undefined | null): T | null => {
@@ -130,18 +142,18 @@ export const callConfigsAndRemainingStoreAPIsAndSetURls = async (
   store: _StoreReturnType;
   footerHTML: _FetchStoreConfigurations | null;
   headerConfig: _FetchStoreConfigurations | null;
-  customScripts: null | _CustomScriptsCookies['value'];
-  googleTags: string;
   menuItems: _MenuItems | null;
   companyId: number;
   templateIDs: _templateIds;
 }> => {
   let companyId = 0;
   let footerHTML: _FetchStoreConfigurations | null = null;
-  let customScripts: null | _CustomScriptsCookies['value'] = null;
-  let googleTags: string = '';
   let menuItems: _MenuItems | null = null;
-  let contactInfo: _contactInfo | null = null;
+  let contactInfo: _contactInfo = {
+    email_address: '',
+    phone_number: '',
+    company_address: '',
+  };
   let templateIDs: _templateIds = {
     headerTemplateId: '3',
     breadCrumbsTemplateId: '3',
@@ -152,14 +164,7 @@ export const callConfigsAndRemainingStoreAPIsAndSetURls = async (
     FetchCompanyConfiguration(),
     getAllConfigurations({
       storeId: storeDetails.storeId!,
-      configNames: [
-        'footer',
-        'customScript', // => GoogleFonts
-        'googleTags', // => Basicall twitter tags
-        'contactInfo',
-        'header_config',
-        'productListing',
-      ],
+      configNames: ['footer', 'contactInfo', 'header_config', 'productListing'],
     }),
     _AppController.fetchMenuItems(storeDetails.storeId!),
   ])
@@ -170,70 +175,41 @@ export const callConfigsAndRemainingStoreAPIsAndSetURls = async (
       if (values[1].status === 'fulfilled') {
         const configs = values[1].value;
         footerHTML = configs[0];
-        headerConfig = configs[4];
+        headerConfig = configs[2];
+        contactInfo =
+          parseJson<_contactInfo>(configs[1]?.config_value) || contactInfo;
 
-        customScripts = parseJson<_CustomScriptsCookies['value']>(
-          configs[1]?.config_value,
-        );
+        templateIDs.headerTemplateId =
+          parseJson<{ template_Id: string }>(configs[2]?.config_value)
+            ?.template_Id || '';
 
-        googleTags = configs[2]?.config_value || '';
-        const temp_contactInfo = configs[3]?.config_value || '';
-        contactInfo = JSON.parse(temp_contactInfo);
-        storeDetails.email_address = contactInfo
-          ? contactInfo.email_address
-          : '';
-        storeDetails.phone_number = contactInfo ? contactInfo.phone_number : '';
-        storeDetails.company_address = contactInfo
-          ? contactInfo.company_address
-          : '';
-        const temp_headerTemplateIdinfo = configs[4]?.config_value || '';
-        const headerTemplateIdinfo = JSON.parse(temp_headerTemplateIdinfo);
-
-        templateIDs.headerTemplateId = headerTemplateIdinfo.template_Id;
-        const temp_breadCrumbTemplateIdinfo = configs[5]?.config_value || '';
-        const breadCrumbTemplateIdinfo = JSON.parse(
-          temp_breadCrumbTemplateIdinfo,
-        );
         templateIDs.breadCrumbsTemplateId =
-          breadCrumbTemplateIdinfo.breadCrumbTemplateId;
+          parseJson<{ breadCrumbTemplateId: string }>(configs[3]?.config_value)
+            ?.breadCrumbTemplateId || '';
       }
 
       menuItems = values[2].status === 'fulfilled' ? values[2].value : null;
     })
-    .catch();
+    .catch(() => {
+      throw new Error(
+        'Something went wrong in function: callConfigsAndRemainingStoreAPIsAndSetURls',
+      );
+    });
 
   return {
     companyId,
     footerHTML,
     menuItems,
-    customScripts,
-    googleTags,
     headerConfig,
     templateIDs,
     store: {
-      storeId: storeDetails.storeId,
-      pageType: storeDetails.pageType,
-      storeTypeId: storeDetails.storeTypeId,
-      code: storeDetails.code,
-      storeName: storeDetails.storeName,
-      isAttributeSaparateProduct: storeDetails.isSewOutEnable,
-      cartCharges: storeDetails.cartCharges,
-      urls: {
-        logo: storeDetails.urls.logo,
-        favicon: storeDetails.urls.favicon,
-      },
+      ...storeDetails,
+      //ContactInfo
+      email_address: contactInfo.email_address,
+      phone_number: contactInfo.phone_number,
+      company_address: contactInfo.company_address,
+      // This field will be updated Ahead
       mediaBaseUrl: '',
-      sewOutCharges: storeDetails.sewOutCharges,
-      firstLineCharges: storeDetails.firstLineCharges,
-      secondLineCharges: storeDetails.secondLineCharges,
-      imageFolderPath: `/rdc/${companyId}/store/${storeDetails.storeId}/images/`,
-      isSewOutEnable: storeDetails.isSewOutEnable,
-      shippingChargeType: storeDetails.shippingChargeType,
-      email_address: storeDetails.email_address,
-      phone_number: storeDetails.phone_number,
-      company_address: storeDetails.company_address,
-      thirdPartyLogin: storeDetails.thirdPartyLogin,
-      bothLogin: storeDetails.bothLogin,
     },
   };
 };
@@ -241,8 +217,7 @@ export const callConfigsAndRemainingStoreAPIsAndSetURls = async (
 export const extractAndfillCookiesIntoProps = (
   cookies: string | undefined,
 ): _PropsToStoreAndGetFromCookies => {
-  const { storeInfo, customScripts, googleTags, loggedIN, adminConfigs } =
-    extractCookies(cookies);
+  const { storeInfo, loggedIN, adminConfigs } = extractCookies(cookies);
 
   return {
     store: {
@@ -262,8 +237,6 @@ export const extractAndfillCookiesIntoProps = (
       blobUrlDirectory: adminConfigs?.blobUrlDirectory || '',
       companyId: adminConfigs?.companyId || 0,
     },
-    customScripts: customScripts || null,
-    googleTags: googleTags || '',
     userLoggedIn: loggedIN || false,
   };
 };
@@ -273,24 +246,6 @@ export const storeCookiesToDecreaseNoOfAPIRecalls = async (
   props: _PropsToStoreAndGetFromCookies,
   domain: string,
 ) => {
-  if (props.customScripts) {
-    nextJsSetCookie({
-      res,
-      cookie: {
-        name: __Cookie.customScripts,
-        value: props.customScripts,
-      },
-    });
-  }
-
-  nextJsSetCookie({
-    res,
-    cookie: {
-      name: __Cookie.googleTags,
-      value: props.googleTags,
-    },
-  });
-
   nextJsSetCookie({
     res,
     cookie: {
@@ -307,7 +262,7 @@ export const storeCookiesToDecreaseNoOfAPIRecalls = async (
         companyId: props.adminConfig.companyId,
         blobUrl: props.adminConfig.blobUrl,
         blobUrlRootDirectory: props.adminConfig.blobUrlDirectory,
-        imageFolderPath: props.adminConfig.imageFolderPath,
+        imageFolderP: props.adminConfig.imageFolderPath,
       },
     },
   });
@@ -319,8 +274,8 @@ export const passPropsToDocumentFile = ({
   gTags,
   adminConfigs,
 }: {
-  customScripts: _PropsToStoreAndGetFromCookies['customScripts'];
-  gTags: _PropsToStoreAndGetFromCookies['googleTags'];
+  customScripts: null | _CustomScriptConfigValue;
+  gTags: null | _GoogleTagsConfigValue;
   store: _PropsToStoreAndGetFromCookies['store'];
   adminConfigs: _PropsToStoreAndGetFromCookies['adminConfig'];
 }): void => {
@@ -348,20 +303,9 @@ export const passPropsToDocumentFile = ({
   }
 
   if (gTags) {
-    const tags: {
-      twitterTags: {
-        twitterTagRadio: boolean;
-        twitterTagTextArea: string;
-      };
-      dcTags: {
-        dcTagRadio: boolean;
-        dcTagTextArea: string;
-      };
-    } = JSON.parse(gTags);
-
     _globalStore.set({
       key: 'googleTags',
-      value: tags,
+      value: gTags,
     });
   }
 
@@ -403,5 +347,40 @@ export const passPropsToDocumentFile = ({
       value: adminConfigs.companyId,
     });
   }
+};
+
+export const configsToCallEveryTime = async (
+  storeId: number,
+): Promise<{
+  customScripts: null | _CustomScriptConfigValue;
+  gTags: null | _GoogleTagsConfigValue;
+}> => {
+  let customScripts: null | _CustomScriptConfigValue = null;
+  let gTags: null | _GoogleTagsConfigValue = null;
+
+  await getAllConfigurations({
+    storeId: storeId,
+    configNames: [
+      'customScript', // multipleScripts
+      'googleTags', // => Basically twitter tags
+    ],
+  })
+    .then((values) => {
+      customScripts = parseJson<_CustomScriptConfigValue>(
+        values[0]?.config_value,
+      );
+
+      gTags = parseJson<_GoogleTagsConfigValue>(values[1]?.config_value);
+    })
+    .catch(() => {
+      throw new Error(
+        'Something went wrong in function: callConfigsAndRemainingStoreAPIsAndSetURls',
+      );
+    });
+
+  return {
+    customScripts: customScripts,
+    gTags: gTags,
+  };
 };
 export const getTemplateIDs = () => {};
