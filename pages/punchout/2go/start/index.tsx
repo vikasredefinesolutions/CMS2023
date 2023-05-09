@@ -4,7 +4,7 @@ import { PunchoutPostApi } from '@services/punchout.service';
 import getRawBody from 'raw-body';
 
 const Punchout = (props: any) => {
-  // const params = new URLSearchParams(props.body);
+  console.log(props.body);
 
   return <>This page exists and getting response</>;
 };
@@ -111,9 +111,7 @@ export const getServerSideProps = async (context: any) => {
   let a = `${JSON.stringify(obj)}`;
   let b = '';
   b = await PunchoutPostApi(a);
-  console.log(
-    b.toString().replace('###StoreUrl###', domain),
-    'this is final result',
-  );
+  b.toString().replace('###StoreUrl###', domain);
+
   return { props: { body: b } };
 };
