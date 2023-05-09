@@ -1,5 +1,3 @@
-import { __domain } from '@configs/page.config';
-import { domainToShow } from '@helpers/common.helper';
 import { PunchoutPostApi } from '@services/punchout.service';
 import getRawBody from 'raw-body';
 
@@ -12,10 +10,6 @@ const Punchout = (props: any) => {
 export default Punchout;
 
 export const getServerSideProps = async (context: any) => {
-  const domain = domainToShow({
-    domain: context.ctx.req?.rawHeaders[1],
-    showProd: __domain.isSiteLive,
-  });
   const body = await getRawBody(context?.req);
   const params = new URLSearchParams(body.toString());
   let obj = {};
