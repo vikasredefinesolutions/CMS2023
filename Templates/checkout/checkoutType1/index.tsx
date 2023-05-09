@@ -42,7 +42,7 @@ const ChekoutType1: FC<CTProps> = ({
   return (
     <div className='container mx-auto pl-[15px] pr-[15px] mt-[20px] mb-[50px]'>
       <div className='flex flex-wrap justify-between -mx-[15px]'>
-        <div className='w-full md:w-8/12 lg:w-[72%] pl-[15px] pr-[15px]'>
+        <div className='w-full md:w-8/12 lg:w-[72%] pl-[15px] pr-[15px] checkoutpage'>
           {currentPage === checkoutPages.reviewOrder ? (
             <div id='OrderReview'>
               <div className='mb-[12px] mt-[16px]'>
