@@ -1,92 +1,119 @@
+import { __domain } from '@configs/page.config';
+import { domainToShow } from '@helpers/common.helper';
+import { PunchoutPostApi } from '@services/punchout.service';
 import getRawBody from 'raw-body';
 
-const Puchout = (props: any) => {
-  const params = new URLSearchParams(props.body);
+const Punchout = (props: any) => {
+  // const params = new URLSearchParams(props.body);
+
+  return <>This page exists and getting response</>;
+};
+
+export default Punchout;
+
+export const getServerSideProps = async (context: any) => {
+  const domain = domainToShow({
+    domain: context.ctx.req?.rawHeaders[1],
+    showProd: __domain.isSiteLive,
+  });
+  const body = await getRawBody(context?.req);
+  const params = new URLSearchParams(body.toString());
   let obj = {};
   obj = {
     pos: params.get('pos'),
     return_url: params.get('return_url'),
     params: JSON.parse(params.get('params') || ''),
   };
+  // let obj = {
+  //   pos: 'Ej6458838b114a8',
+  //   return_url:
+  //     'https://connect.punchout2go.com/gateway/link/return/id/Ej6458838b114a8',
+  //   params: {
+  //     header: {
+  //       to: {
+  //         '0': {
+  //           data: [],
+  //           value: '1085',
+  //           domain: 'DUNS',
+  //         },
+  //         data: [],
+  //       },
+  //       from: {
+  //         '0': {
+  //           data: [],
+  //           value: '1085',
+  //           domain: 'NetworkID',
+  //         },
+  //         data: [],
+  //       },
+  //       sender: {
+  //         '0': {
+  //           data: {
+  //             SharedSecret: 'testing',
+  //           },
+  //           value: 'testing@punchout2go.com',
+  //           domain: 'Punchout2goClientId',
+  //         },
+  //         data: {
+  //           UserAgent: 'PunchOut2Go Test Client v1',
+  //         },
+  //       },
+  //     },
+  //     type: 'setuprequest',
+  //     operation: 'create',
+  //     mode: 'test',
+  //     body: {
+  //       data: {
+  //         User: 'Janet Smith',
+  //         UserEmail: 'janet.smith@testuser.com',
+  //         UserPrintableName: 'Janet Anne Smith',
+  //         UserFirstName: '',
+  //         UserLastName: '',
+  //       },
+  //       contact: {
+  //         data: [],
+  //         email: 'janet.smith@testuser.com',
+  //         name: 'Janet Anne Smith',
+  //         unique: 'Janet Smith',
+  //       },
+  //       buyercookie: 'QK6458838abd907',
+  //       postform:
+  //         'https://portal.punchout2go.com/parsonskellogg/console/tools/punchout/session/889713/act/order?buyercookie=QK6458838abd907&i=f7af4b6b541eca3811bd526c0a1f41a3',
+  //       shipping: {
+  //         data: {
+  //           address_name: 'Headquarters MW',
+  //           shipping_id: '05618',
+  //           shipping_business: '',
+  //           shipping_to: 'Accounting',
+  //           shipping_street: '15624 Atlantic Rd',
+  //           shipping_city: 'Milton',
+  //           shipping_state: 'Wisconsin',
+  //           shipping_zip: '64056',
+  //           shipping_country: 'USA',
+  //           country_id: 'US',
+  //         },
+  //       },
+  //       items: [
+  //         {
+  //           primaryId: 'AAA',
+  //           secondaryId: '',
+  //           type: 'in',
+  //         },
+  //       ],
+  //     },
+  //     custom: {
+  //       default_group: 'General',
+  //       default_user: 'user@humana.com',
+  //     },
+  //   },
+  // };
 
-  console.log(obj);
-  //   console.log(req, res, 'ooooooo');
-  //   if (res) {
-  //     let resxmlDoc = res.toLocaleString();
-
-  //     const parser = new DOMParser();
-  //     var resdoc = parser.parseFromString(resxmlDoc, 'text/xml');
-  //     const serializedResponse = new XMLSerializer().serializeToString(resdoc);
-  //     console.log(serializedResponse, 'serialized Response');
-  //   }
-
-  //   if (req) {
-  //     let reqxmlDoc = req.toLocaleString();
-
-  //     const reqparser = new DOMParser();
-  //     var reqdoc = reqparser.parseFromString(reqxmlDoc, 'text/xml');
-  //     const serializedRequest = new XMLSerializer().serializeToString(reqdoc);
-  //     console.log(serializedRequest, 'serializeReqest');
-  //   }
-
-  return <>His page exists and getting response</>;
+  let a = `${JSON.stringify(obj)}`;
+  let b = '';
+  b = await PunchoutPostApi(a);
+  console.log(
+    b.toString().replace('###StoreUrl###', domain),
+    'this is final result',
+  );
+  return { props: { body: b } };
 };
-
-export default Puchout;
-
-export const getServerSideProps = async (context: any) => {
-  const body = await getRawBody(context?.req);
-  return { props: { body: body.toString() } };
-};
-
-// export const getServerSideProps = async (context: any) => {
-//   let xmlDoc = context.res.body.toLocaleString();
-
-//   const parser = new DOMParser();
-//   var doc = parser.parseFromString(xmlDoc, 'text/xml');
-//   const serialized = new XMLSerializer().serializeToString(doc);
-//   return {
-//     props: {
-//       response: serialized,
-//     },
-//   };
-
-//   const filePath = path.join(process.cwd(), '/public/success.xml');
-//   const xmlData = await fsPrmoises.readFile(filePath);
-//   let xmlDoc = xmlData.toLocaleString();
-
-//   const parser = new DOMParser();
-//   var doc = parser.parseFromString(xmlDoc, 'text/xml');
-//   const serialized = new XMLSerializer().serializeToString(doc);
-
-//   let body = '';
-//   if (req.method == 'POST') {
-//     req.on('data', (chunk: any) => {
-//       body += chunk;
-//     });
-//     req.on('end', () => {});
-//   }
-
-//   const res = await PunchoutPostApi(serialized);
-//   console.log(res, 'this si ');
-//   return {
-//     props: {
-//       req: {
-//         data: {
-//           body: serialized,
-//           headers: { ...context.req.headers },
-//           returnUrl: { ...context.req?.return_url },
-//         },
-//       },
-//       res: {
-//         data: {
-//           body: { ...context.res.body },
-//           headers: { ...context.res.headers },
-//           params: { ...context.req?.params },
-//           returnUrl: { ...context.req?.return_url },
-//         },
-//       },
-//       punchout: res,
-//     },
-//   };
-// };

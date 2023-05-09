@@ -1,12 +1,16 @@
-import { SendAsync } from '@utils/axios.util';
-import { AxiosRequestConfig } from 'axios';
-
 export const PunchoutPostApi = async (body: string) => {
-  const url = '/Punchout/index.json';
-  const res = await SendAsync<AxiosRequestConfig>({
-    url: url,
+  const url =
+    'https://redefine-front-staging.redefinecommerce.io/Punchout/index.json';
+  let res = '';
+  const response = await fetch(url, {
     method: 'POST',
-    data: { message: 'success', returnUrl: body },
-  });
+    headers: {
+      'Content-Type': 'application/json-patch+json',
+    },
+    body: JSON.stringify(body),
+  })
+    .then((res) => res.json())
+    .then((data) => (res = data.data));
+
   return res;
 };
