@@ -5,7 +5,7 @@ const Punchout = (props: any) => {
   const myHeaders = new Headers();
   myHeaders.append('Content-Type', 'application/xml');
   myHeaders.append('Access-Control-Allow-Origin', ' no-cors');
-  console.log(props);
+  console.log(props, 'props');
 
   if (props.body) {
     const requestOptions = {
