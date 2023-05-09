@@ -46,8 +46,6 @@ const ChekoutType3: FC<CTProps> = ({
   const { paymentOptions, allowedBalance, checkHandler } = CheckoutController();
 
   const userid = useTypedSelector_v2((state) => state);
-  // console.log('userid ', userid);
-  // console.log('payment option', paymentMethod);
 
   const CreditWallet = ({
     checkHandler,

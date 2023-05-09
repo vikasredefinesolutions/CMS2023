@@ -31,7 +31,7 @@ const Inventory: React.FC<{
           {inventory?.sizes.map((product) => {
             if (product.colorAttributeOptionId === color.attributeOptionId) {
               return product.sizeArr.map((size, index) => (
-                <div key={index} className='p-2 w-full md:w-2/12'>
+                <div key={index} className={` p-2 w-full md:w-2/12`}>
                   <div className='font-semibold'>{size}</div>
                 </div>
               ));
@@ -43,11 +43,11 @@ const Inventory: React.FC<{
       </div>
 
       {editDetails
-        ? colors?.map((color) => {
+        ? colors?.map((color, index) => {
             if (+editDetails.attributeOptionId === color.attributeOptionId) {
               return (
                 <div
-                  key={color.attributeOptionId}
+                  key={color.attributeOptionId + index}
                   className='flex flex-wrap gap-y-5 border-b last:border-b-0 border-b-gray-300 mb-5 md:mb-0'
                 >
                   <div className='p-2 w-full md:w-2/12 text-center md:text-left'>
@@ -56,7 +56,6 @@ const Inventory: React.FC<{
                         title={`${color.name}`}
                         src={color.imageUrl}
                         alt={color.altTag}
-                        // className='w-full object-center object-cover cursor-pointer'
                         className='max-w-[70px] max-h-[70px]  cursor-pointer'
                       />
                     </div>
@@ -66,7 +65,6 @@ const Inventory: React.FC<{
                     className={`flex flex-wrap md:grid md:grid-cols-${inventory?.sizes[0]?.sizeArr.length} justify-evenly text-center gap-y-5 w-full md:w-10/12`}
                   >
                     {' '}
-                    {/*flex flex-wrap justify-evenly text-center gap-y-5 w-full md:w-10/12*/}
                     {inventory?.sizes.map((product) => {
                       if (
                         product.colorAttributeOptionId ===
@@ -88,7 +86,6 @@ const Inventory: React.FC<{
                             editDetails.shoppingCartItemDetailsViewModels.filter(
                               (item) => item.attributeOptionValue === size,
                             );
-                          console.log(curentQty, 'current Qty');
                           return inv > 0 ? (
                             <div key={index} className='p-2 w-1/2 md:w-auto'>
                               <InventoryAvailability
@@ -126,7 +123,7 @@ const Inventory: React.FC<{
         : colors?.map((color) => (
             <div
               key={color.attributeOptionId}
-              className='flex flex-wrap gap-y-5 border-b last:border-b-0 border-b-gray-300 mb-5 md:mb-0'
+              className={` flex flex-wrap gap-y-5 border-b last:border-b-0 border-b-gray-300 mb-5 md:mb-0`}
             >
               <div className='p-2 w-full md:w-2/12 text-center md:text-left'>
                 <div className='mb-1 text-center w-10 h-10 mx-auto md:m-0 border-gray-300 p-1 bg-white'>
@@ -134,7 +131,6 @@ const Inventory: React.FC<{
                     title={`${color.name}`}
                     src={color.imageUrl}
                     alt={color.altTag}
-                    // className='w-full object-center object-cover cursor-pointer'
                     className='max-w-[70px] max-h-[70px]  cursor-pointer'
                   />
                 </div>
@@ -170,6 +166,7 @@ const Inventory: React.FC<{
                             color={color.name}
                             attributeOptionId={foundedSize[0].attributeOptionId}
                             val={0}
+                            editDetails={editDetails}
                           />
                         </div>
                       ) : (

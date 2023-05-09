@@ -33,12 +33,12 @@ const SlugPage: NextPage<_SlugServerSideProps | _SlugServerSide_WentWrong> = (
   }, [pageMetaData]);
 
   if (!_store || !pageMetaData || !page) {
-    cLog('No page data found', '404');
+    cLog('SlugId: No page data found', '404');
     return <PageNotFound id={_defaultTemplates[404]} />;
   }
 
   if (pageMetaData?.type === '404') {
-    cLog('404', '404');
+    cLog('SlugId: 404', '404');
     return (
       <>
         <SeoHead
@@ -89,12 +89,14 @@ const SlugPage: NextPage<_SlugServerSideProps | _SlugServerSide_WentWrong> = (
         )}
         <Spinner>
           {' '}
-          <Banner
-            storeId={pageMetaData.storeId}
-            slug={pageMetaData.slug}
-            seType={pageMetaData.type}
-            id={page.productListing.bannerType}
-          />
+          {page.productListing.bannerType !== 'none' && (
+            <Banner
+              storeId={pageMetaData.storeId}
+              slug={pageMetaData.slug}
+              seType={pageMetaData.type}
+              id={page.productListing.bannerType}
+            />
+          )}
           <ProductListing
             pageData={page?.productListing}
             slug={pageMetaData?.slug}

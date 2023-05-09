@@ -121,6 +121,16 @@ export interface _HeaderPropsWithTemplateid {
   headerTemplateId: string;
   headerBgColor: string;
   headerTextColor: string;
+  announcementRow?: _AnnouncementRow[];
+}
+
+export interface _AnnouncementRow {
+  isVisible: boolean;
+  leftsideText?: string | undefined;
+  rightSideText?: string | undefined;
+  textColor?: string;
+  backgroundColor?: string;
+  leftSideText?: string;
 }
 
 export interface _HeaderTemplates {

@@ -32,12 +32,7 @@ const Br2_Products: React.FC = () => {
                         + YOUR HEALTHCARE LOGO
                       </div>
                       <div className='mt-[10px] text-[14px]'>
-                        <a
-                          href='javascript:void(0);'
-                          className='btn btn-primary'
-                        >
-                          DETAILS
-                        </a>
+                        <div className='btn btn-primary'>DETAILS</div>
                       </div>
                     </div>
                   </div>

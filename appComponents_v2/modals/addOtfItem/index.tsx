@@ -137,7 +137,6 @@ const AddOTFItemNo = ({ closeModal }: { closeModal: () => void }) => {
         note: '',
         sizeQtys: res.size.map((optn, index) => {
           const qtySize = +qty[index].trim();
-          console.log(price, qtySize);
           if (qtySize) {
             return {
               attributeOptionId: optn.attributeOptionId,

@@ -1,3 +1,4 @@
+import NxtImage from '@appComponents/reUsable/Image';
 import { logoFeedbackConst } from '@constants/logo.constant';
 import { __pagesText } from '@constants/pages.text';
 import { LogoDetails } from '@definations/APIs/logo.res';
@@ -8,13 +9,12 @@ import {
   getLogoDetailsById,
   submitLogoFeedback,
 } from '@services/logo.service';
+import { Form, Formik } from 'formik';
+import _ from 'lodash';
+import moment from 'moment';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import * as Yup from 'yup';
-import _ from 'lodash';
-import NxtImage from '@appComponents/reUsable/Image';
-import moment from 'moment';
-import { Form, Formik } from 'formik';
 
 const CheckLogoApproved2 = () => {
   const { showModal } = useActions_v2();
@@ -62,8 +62,6 @@ const CheckLogoApproved2 = () => {
       resetForm: () => void;
     },
   ) => {
-    console.log('submitFeedback_Fn');
-
     const locationDetail = await getLocation();
     const submitFeedback = {
       ...logoFeedbackConst,
@@ -123,8 +121,6 @@ const CheckLogoApproved2 = () => {
       console.log(error);
     }
   };
-
-  //   console.log(logoDetails);
 
   return (
     <>

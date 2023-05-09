@@ -11,7 +11,9 @@ import NxtImage from '@appComponents/reUsable/Image';
 import Price from '@appComponents/reUsable/Price';
 import { __pagesText } from '@constants/pages.text';
 import CartController from '@controllers/cartController';
+import { fetchThirdpartyservice } from '@services/thirdparty.service';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 
 const MyCartIcon: React.FC = () => {
@@ -28,7 +30,12 @@ const MyCartIcon: React.FC = () => {
   const { cartData } = CartController();
   const { totalPrice, totalQty } = GetCartTotals();
   const [Focus, setFocus] = useState(false);
-
+  const { id: loggedIn } = useTypedSelector_v2((state) => state.user);
+  const thirdPartyLogin = useTypedSelector_v2(
+    (state) => state.store.thirdPartyLogin,
+  );
+  const router = useRouter();
+  const storeId = useTypedSelector_v2((state) => state.store.id);
   useEffect(() => {
     if (customerId) {
       fetchCartDetails({
@@ -43,7 +50,14 @@ const MyCartIcon: React.FC = () => {
     setTotalCartQty(totalQty);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [totalQty]);
-
+  const SamlloginHandler = () => {
+    fetchThirdpartyservice({ storeId }).then((ThirdpartyServices) => {
+      ThirdpartyServices.map((service) => {
+        if (service.thirdPartyServiceName == 'Okta')
+          router.push(ThirdpartyServices[0].url);
+      });
+    });
+  };
   return (
     <div
       onMouseOver={() => setFocus(true)}
@@ -131,13 +145,25 @@ const MyCartIcon: React.FC = () => {
                   {__pagesText.Headers.total} <Price value={totalPrice} />
                 </div>
               </div>
-              <div className=''>
-                <Link href={paths.CHECKOUT} className=''>
-                  <a className='btn btn-secondary w-full text-center'>
-                    {__pagesText.Headers.checkoutNow}
-                  </a>
-                </Link>
-              </div>
+              {thirdPartyLogin && !loggedIn ? (
+                <div className=''>
+                  <button
+                    className='btn btn-secondary w-full text-center'
+                    onClick={SamlloginHandler}
+                    type='button'
+                  >
+                    {__pagesText.Headers.samllogin}
+                  </button>
+                </div>
+              ) : (
+                <div className=''>
+                  <Link href={paths.CHECKOUT} className=''>
+                    <a className='btn btn-secondary w-full text-center'>
+                      {__pagesText.Headers.checkoutNow}
+                    </a>
+                  </Link>
+                </div>
+              )}
             </div>
           </div>
         </div>

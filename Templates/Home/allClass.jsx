@@ -491,13 +491,12 @@ const allClass = () => {
                   </p>
                 </div>
                 <div className='bg-gradient-to-b from-[#fffefe00] to-[#ffffff] absolute bottom-0 left-0 right-0 pt-20 text-center'>
-                  <a
-                    href='javascript:void(0);'
+                  <div
                     className='text-indigo-500 underline text-sm font-bold'
                     onclick='more_description(this)'
                   >
                     Read More
-                  </a>
+                  </div>
                 </div>
               </div>
             </div>

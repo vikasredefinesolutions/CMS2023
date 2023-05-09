@@ -1,7 +1,4 @@
-import {
-  default as Image,
-  default as NxtImage,
-} from '@appComponents/reUsable/Image';
+import { default as NxtImage } from '@appComponents/reUsable/Image';
 import Price from '@appComponents/reUsable/Price';
 import { __pagesText } from '@constants/pages.text';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
@@ -29,7 +26,6 @@ const CIlayout2: FC<any> = ({
     (state) => state.store.mediaBaseUrl,
   );
   mediaBaseUrl = mediaBaseUrl || clientSideMediaBaseUrl;
-  console.log('cart ordedr review', cartData);
 
   return (
     <>

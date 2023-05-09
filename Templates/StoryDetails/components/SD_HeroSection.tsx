@@ -2,7 +2,6 @@ import { __StaticImg } from '@constants/assets';
 import Link from 'next/link';
 import React from 'react';
 import SD_FaqSection from './SD_FaqSection';
-import SD_ProductsSlider from './SD_ProductsSlider';
 import SD_ShopNowSection from './SD_ShopNowSection';
 
 interface _Props {
@@ -53,12 +52,12 @@ const SD_HeroSection: React.FC<_Props> = ({ banner, story, page }) => {
                 {story.title}
               </h1>
             </div>
-            <div className='mb-[16px]'>
-              {/* <p className='text-default-text text-[#ffffff]'>
+            {/* <div className='mb-[16px]'>
+              <p className='text-default-text text-[#ffffff]'>
                 <span className='mr-[8px]'>By Super Admin</span> |{' '}
                 <span className='ml-2'>March, 13th, 2022</span>
-              </p> */}
-            </div>
+              </p>
+            </div> */}
             <div className='flex flex-wrap justify-center'>
               <Link
                 className='uppercase btn btn-tertiary text-default-text mr-[10px]'
@@ -93,7 +92,7 @@ const SD_HeroSection: React.FC<_Props> = ({ banner, story, page }) => {
         </section>
         <SD_FaqSection page={page} />
         <SD_ShopNowSection />
-        <SD_ProductsSlider />
+        {/* <SD_ProductsSlider /> */}
       </div>
     </section>
   );

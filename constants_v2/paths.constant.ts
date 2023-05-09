@@ -38,7 +38,7 @@ export const paths = {
   thankYou: {
     notAuthorized: defaultRoute,
   },
-  CART: '/cart/IndexNew?v=cart',
+  CART: '/cart/IndexNew',
   cart: {
     keepShopping: defaultRoute,
   },

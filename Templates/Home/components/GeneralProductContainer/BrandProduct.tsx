@@ -50,123 +50,120 @@ const BrandProduct: React.FC<_props> = (props) => {
     }
   }, [customerId, wishListData]);
   return (
-    <>
-      <li
-        className={`w-full ${
-          style === 'Flex' ? '' : 'lg:w-3/12'
-        } relative  text-center`}
-        data-id={product.productId}
-      >
-        <div className='border border-gray-200 bg-white border-solid p-5'>
-          <Link
-            href={`${origin}/${product.productSEName}.html?v=product-detail&altview=1`}
-            className='relative'
-          >
-            <div className='w-full overflow-hidden aspect-w-1 aspect-h-1'>
-              <ImageComponent
-                src={
-                  store.mediaBaseUrl + currentProduct &&
-                  currentProduct?.imageUrl
-                    ? currentProduct.imageUrl
-                    : ''
-                }
-                alt='no image'
-                className='w-auto h-auto m-auto max-h-[348px]'
-                height={350}
-                width={350}
-                key={currentProduct?.id}
-              />
-            </div>
-          </Link>
-          <div className='absolute top-5 right-5 text-gray-800 p-1 z-25'>
-            <button className=''>
-              <WishlistButton
-                {...{
-                  productId:
-                    product && product?.productId
-                      ? product?.productId
-                      : zeroValue,
-                  name: product?.productName ? product.productName : '',
-                  color: currentProduct?.attributeOptionName
-                    ? currentProduct?.attributeOptionName
-                    : '',
-                  price: product.salePrice,
-                  wishlistId: wishListId,
-                }}
-                iswishlist={wishlistPresent}
-                brandId={props.brandId}
-              />
-            </button>
+    <li
+      className={`w-full ${
+        style === 'Flex' ? '' : 'lg:w-3/12'
+      } relative  text-center`}
+      data-id={product.productId}
+    >
+      <div className='border border-gray-200 bg-white border-solid p-5'>
+        <Link
+          href={`${origin}/${product.productSEName}.html?v=product-detail&altview=1`}
+          className='relative'
+        >
+          <div className='w-full overflow-hidden aspect-w-1 aspect-h-1'>
+            <ImageComponent
+              src={
+                store.mediaBaseUrl + currentProduct && currentProduct?.imageUrl
+                  ? currentProduct.imageUrl
+                  : ''
+              }
+              alt='no image'
+              className='w-auto h-auto m-auto max-h-[348px]'
+              height={350}
+              width={350}
+              key={currentProduct?.id}
+            />
           </div>
-          <div className='mt-2.5'>
-            <div className='hover:text-primary text-lg test'>
-              <Link
-                href={`${origin}/${product.productSEName}.html?v=product-detail&altview=1`}
-              >
-                <a className='relative text-sm h-11'>{product.productName}</a>
-              </Link>
-            </div>
-            <div className='mt-3 text-gray-900'>
-              <span className='font-bold'>
-                MSRP{' '}
-                <Price
-                  value={undefined}
-                  prices={{
-                    msrp: product.msrp,
-                    salePrice: product.salePrice,
-                  }}
-                />
-              </span>
-            </div>
-            <ul role='list' className='flex items-center justify-center mt-2'>
-              {product?.splitproductList &&
-                product?.splitproductList.map(
-                  (option: splitproductList, index: number) =>
-                    index < showcolors ? (
-                      <Link
-                        key={option.prodcutId}
-                        href={`/${option.seName}.html`}
-                      >
-                        <li
-                          key={index}
-                          className={`border-2  w-7 h-7 text-center overflow-hidden ${
-                            option.colorName ==
-                            currentProduct?.attributeOptionName
-                              ? 'border-secondary'
-                              : ''
-                          } hover:border-secondary ml-1`}
-                        >
-                          <img
-                            src={`${mediaBaseUrl}${option.imageurl}`}
-                            alt=''
-                            title=''
-                            className='max-h-full m-auto'
-                            data-option={JSON.stringify(option)}
-                          />
-                        </li>
-                      </Link>
-                    ) : (
-                      <>{(flag = true)}</>
-                    ),
-                )}
-              {flag ? (
-                <Link
-                  key={product.productId}
-                  href={`/${product.productSEName}.html`}
-                >
-                  <li className='extra w-7 h-7 text-center border-2 hover:border-secondary inset-0 bg-primary text-xs font-semibold flex items-center justify-center text-white cursor-pointer'>
-                    <span> +</span>
-                    {product &&
-                      product?.moreImages &&
-                      product.moreImages.length - showcolors}
-                  </li>
-                </Link>
-              ) : null}
-            </ul>
-          </div>
+        </Link>
+        <div className='absolute top-5 right-5 text-gray-800 p-1 z-25'>
+          <button className=''>
+            <WishlistButton
+              {...{
+                productId:
+                  product && product?.productId
+                    ? product?.productId
+                    : zeroValue,
+                name: product?.productName ? product.productName : '',
+                color: currentProduct?.attributeOptionName
+                  ? currentProduct?.attributeOptionName
+                  : '',
+                price: product.salePrice,
+                wishlistId: wishListId,
+              }}
+              iswishlist={wishlistPresent}
+              brandId={props.brandId}
+            />
+          </button>
         </div>
-      </li>
-    </>
+        <div className='mt-2.5'>
+          <div className='hover:text-primary text-lg test'>
+            <Link
+              href={`${origin}/${product.productSEName}.html?v=product-detail&altview=1`}
+            >
+              <a className='relative text-sm h-11'>{product.productName}</a>
+            </Link>
+          </div>
+          <div className='mt-3 text-gray-900'>
+            <span className='font-bold'>
+              MSRP{' '}
+              <Price
+                value={undefined}
+                prices={{
+                  msrp: product.msrp,
+                  salePrice: product.salePrice,
+                }}
+              />
+            </span>
+          </div>
+          <ul role='list' className='flex items-center justify-center mt-2'>
+            {product?.splitproductList &&
+              product?.splitproductList.map(
+                (option: splitproductList, index: number) =>
+                  index < showcolors ? (
+                    <Link
+                      key={option.prodcutId}
+                      href={`/${option.seName}.html`}
+                    >
+                      <li
+                        key={index}
+                        className={`border-2  w-7 h-7 text-center overflow-hidden ${
+                          option.colorName ==
+                          currentProduct?.attributeOptionName
+                            ? 'border-secondary'
+                            : ''
+                        } hover:border-secondary ml-1`}
+                      >
+                        <img
+                          src={`${mediaBaseUrl}${option.imageurl}`}
+                          alt=''
+                          title=''
+                          className='max-h-full m-auto'
+                          data-option={JSON.stringify(option)}
+                        />
+                      </li>
+                    </Link>
+                  ) : (
+                    <>{(flag = true)}</>
+                  ),
+              )}
+            {flag ? (
+              <Link
+                key={product.productId}
+                href={`/${product.productSEName}.html`}
+              >
+                <li className='extra w-7 h-7 text-center border-2 hover:border-secondary inset-0 bg-primary text-xs font-semibold flex items-center justify-center text-white cursor-pointer'>
+                  <span> +</span>
+                  {product &&
+                    product?.moreImages &&
+                    product.moreImages.length - showcolors}
+                </li>
+              </Link>
+            ) : null}
+          </ul>
+        </div>
+      </div>
+    </li>
   );
 };
 

@@ -508,3 +508,15 @@ export const SendCompareLinkByEmail = async (payload: {
 
   return response;
 };
+
+export const SbStore_fn = async (payload: {
+  productId: number | undefined;
+}) => {
+  const url = `/StoreProductCustomField/list.json`;
+  const res = await SendAsync({
+    url: url,
+    method: 'POST',
+    data: payload,
+  });
+  return res;
+};

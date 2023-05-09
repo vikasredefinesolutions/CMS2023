@@ -9,11 +9,11 @@ export interface _BreadCrumbProps {
   breadCrumbs: _breadCrumbs[];
 }
 export interface __BreadCrumbTemplatesProps {
-  breadCrumbid: number;
+  breadCrumbid: string;
 }
 export interface _BreadCrumbTemplates {
   type1: NextPage<_BreadCrumbProps>;
   type2: NextPage<_BreadCrumbProps>;
   type3: NextPage<_BreadCrumbProps>;
-  //   type4: NextPage<_BreadCrumbProps>;
+  type4: NextPage<_BreadCrumbProps>;
 }

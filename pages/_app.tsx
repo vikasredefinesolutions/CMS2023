@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { __domain, storeBuilderTypeId } from '@configs/page.config';
+import { storeBuilderTypeId, __domain } from '@configs/page.config';
 import * as _AppController from '@controllers/_AppController.async';
 import { TrackFile } from '@services/tracking.service';
 import App, { AppContext, AppInitialProps, AppProps } from 'next/app';
@@ -8,16 +8,14 @@ import 'public/assets/css/custom.css';
 // import 'public/assets/css/main.css';
 import 'public/assets/css/spinner.css';
 import { useEffect } from 'react';
-import { _globalStore } from 'store.global';
 
 import { reduxWrapper } from '@redux/store.redux';
 import { getWishlist } from '@services/wishlist.service';
 import {
+  deleteCookie,
   domainToShow,
   extractCookies,
   Logout,
-  nextJsSetCookie,
-  setCookie,
 } from 'helpers_v2/common.helper';
 import { useActions_v2 } from 'hooks_v2';
 
@@ -33,13 +31,18 @@ import { conditionalLog_V2 } from '@helpers/console.helper';
 
 import Metatags from '@appComponents/MetaTags';
 import Spinner from '@appComponents/ui/spinner';
-import { _Expected_AppProps, PageResponseType } from '@definations/app.type';
+import { PageResponseType } from '@definations/app.type';
 import { _MenuItems } from '@definations/header.type';
 import {
-  FetchCompanyConfiguration,
-  fetchSbStoreConfiguration,
-  getAllConfigurations,
-} from '@services/app.service';
+  callConfigsAndRemainingStoreAPIsAndSetURls,
+  expectedProps,
+  extractAndfillCookiesIntoProps,
+  passPropsToDocumentFile,
+  storeCookiesToDecreaseNoOfAPIRecalls,
+  _PropsToStoreAndGetFromCookies,
+  _templateIds,
+} from '@helpers/app.extras';
+import { FetchSbStoreConfiguration } from '@services/app.service';
 import { GetStoreCustomer } from '@services/user.service';
 import Redefine_Layout from '@templates//TemplateComponents/Redefine_Layout';
 import AuthGuard from 'Guard/AuthGuard';
@@ -47,11 +50,13 @@ import AuthGuard from 'Guard/AuthGuard';
 type AppOwnProps = {
   store: _StoreReturnType | null;
   menuItems: _MenuItems | null;
-  configs: (_FetchStoreConfigurations | null)[];
+  footerHTML: _FetchStoreConfigurations | null;
   // Husain - added any for now - 20-3-23
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   pageProps: any | null;
   sbStore: _SbStoreConfiguration | null;
+  headerConfig: _FetchStoreConfigurations | null;
+  templateIDs: _templateIds;
 };
 
 const RedefineCustomApp = ({
@@ -59,8 +64,10 @@ const RedefineCustomApp = ({
   pageProps,
   store,
   menuItems,
-  configs,
+  footerHTML,
   sbStore,
+  headerConfig,
+  templateIDs,
 }: AppProps & AppOwnProps) => {
   EmployeeController();
   const router = useRouter();
@@ -72,9 +79,6 @@ const RedefineCustomApp = ({
     sbStore_sbStoreDetails,
   } = useActions_v2();
 
-  const refreshHandler = () => {
-    return setCookie(__Cookie.storeInfo, '', 'EPOCH');
-  };
   const { updatePageType, setShowLoader } = useActions_v2();
   const trackingFile = async () => {
     let data = {
@@ -103,6 +107,15 @@ const RedefineCustomApp = ({
       },
     };
     await TrackFile(data);
+  };
+
+  const refreshHandler = () => {
+    return () => {
+      deleteCookie(__Cookie.empData);
+      deleteCookie(__Cookie.storeInfo);
+      deleteCookie(__Cookie.googleTags);
+      deleteCookie(__Cookie.customScripts);
+    };
   };
 
   const getUserDetails = async (
@@ -149,7 +162,18 @@ const RedefineCustomApp = ({
       __Cookie.tempCustomerId,
       'browserCookie',
     ).tempCustomerId;
-
+    // configs.map((config) => {
+    //   if (
+    //     config?.config_name == 'contactInfo' &&
+    //     config?.config_value &&
+    //     store
+    //   ) {
+    //     let contactInfo = JSON.parse(config?.config_value);
+    //     store.email_address = contactInfo.email_address;
+    //     store.phone_number = contactInfo.phone_number;
+    //     store.company_address = contactInfo.company_address;
+    //   }
+    // });
     if (store) {
       store_storeDetails({
         store: store,
@@ -166,7 +190,7 @@ const RedefineCustomApp = ({
       getUserDetails(cookies.userId, tempCustomerId);
     }
 
-    trackingFile();
+    // const res = trackingFile();
     setShowLoader(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -196,9 +220,11 @@ const RedefineCustomApp = ({
           logoUrl={store.urls.logo}
           storeCode={store.code}
           storeTypeId={store.storeTypeId}
-          configs={{ footer: configs[0] }}
+          configs={{ footer: footerHTML }}
           menuItems={menuItems}
           sbStore={sbStore}
+          headerConfig={headerConfig}
+          templateIDs={templateIDs}
         >
           <Component {...pageProps} />
         </Redefine_Layout>
@@ -211,96 +237,78 @@ RedefineCustomApp.getInitialProps = async (
   context: AppContext,
 ): Promise<AppOwnProps & AppInitialProps> => {
   let APIsCalledOnce = false;
+  let oldTab = false;
   const res = context.ctx.res;
+  const req = context.ctx.req;
+  let domain: null | string = null;
   const pathName = context.ctx.pathname;
   const currentPath = context.ctx.asPath;
 
-  const expectedProps: _Expected_AppProps = {
+  let propsToStoreAndGetFromCookies: _PropsToStoreAndGetFromCookies = {
     store: {
-      imageFolderPath: '',
-      storeId: null,
-      layout: null,
-      pageType: '',
-      pathName: '',
+      id: null,
+      storeTypeId: 0,
       code: '',
-      storeName: '',
-      storeTypeId: null,
-      isAttributeSaparateProduct: false,
-      cartCharges: null,
       urls: {
         logo: '',
         favicon: '',
       },
-      isSewOutEnable: false,
-      sewOutCharges: 0,
-      mediaBaseUrl: '',
-      shippingChargeType: 0,
-      firstLineCharges: 0,
-      secondLineCharges: 0,
+      isAttributeSaparateProduct: false,
     },
-    menuItems: null,
-    configs: [],
-    blobUrlRootDirectory: '',
-    companyId: 0,
-    sbStore: {
-      id: null,
-      storeId: null,
-      organizationId: null,
-      sportId: null,
-      salesPersonId: 0,
-      salesCode: '',
-      directAccessURL: '',
-      estimateShipDate: '',
-      workOrder: null,
-      message: null,
-      isLogo: true,
-      messageTypeId: 0,
-      openStoreOn: '',
-      closeStoreOn: '',
-      serviceEmailId: 0,
-      serviceEmailSalesPersonId: 0,
-      servicePhoneId: 0,
-      servicePhoneSalesPersonId: 0,
-      logoUrl: '',
-      recStatus: null,
-      createdDate: null,
-      createdBy: null,
-      modifiedDate: null,
-      modifiedBy: null,
-      rowVersion: null,
-      location: null,
-      ipAddress: null,
-      macAddress: null,
+    adminConfig: {
+      imageFolderPath: '',
+      blobUrl: '',
+      blobUrlDirectory: '',
+      companyId: 0,
     },
+    customScripts: null,
+    googleTags: '',
+    userLoggedIn: false,
   };
 
   //------------------------------------
   const ctx = await App.getInitialProps(context);
-  const cookies = extractCookies(context.ctx.req?.headers.cookie);
 
-  const domain = domainToShow({
-    domain: context.ctx.req?.rawHeaders[1],
-    showProd: __domain.isSiteLive,
-  });
+  if (req) {
+    if (req.headers) {
+      if ('x-nextjs-data' in req.headers) {
+        // Checking if old tab has made the request If yes then we won't call StoreDetails APIs
+        oldTab = true;
+      }
+    }
 
-  if (cookies.storeInfo?.storeId && cookies.storeInfo?.domain === domain) {
-    APIsCalledOnce = true;
-    expectedProps.store.storeId = cookies.storeInfo.storeId;
-    expectedProps.store.isAttributeSaparateProduct =
-      cookies.storeInfo.isAttributeSaparateProduct;
-    expectedProps.store.code = cookies.storeInfo.storeCode;
-    expectedProps.store.storeTypeId = cookies.storeInfo.storeTypeId;
-    expectedProps.store.urls = {
-      logo: cookies.storeInfo.logoUrl,
-      favicon: cookies.storeInfo.favicon,
+    domain = domainToShow({
+      domain: req.headers.host,
+      showProd: __domain.isSiteLive,
+    });
+
+    propsToStoreAndGetFromCookies = extractAndfillCookiesIntoProps(
+      req.headers.cookie,
+    );
+  }
+
+  if (propsToStoreAndGetFromCookies.store.id) {
+    // If Store APIs are already called
+    const storeIdFound = true;
+    APIsCalledOnce = storeIdFound && oldTab;
+    const propsFromCookies = propsToStoreAndGetFromCookies.store;
+    expectedProps.store = {
+      ...expectedProps.store,
+      code: propsFromCookies.code,
+      storeId: propsFromCookies.id,
+      storeTypeId: propsFromCookies.storeTypeId,
+      urls: {
+        logo: propsFromCookies.urls.logo,
+        favicon: propsFromCookies.urls.favicon,
+      },
+      isAttributeSaparateProduct: propsFromCookies.isAttributeSaparateProduct,
     };
-    expectedProps.companyId = cookies.storeInfo.companyId;
   }
 
   if (res && currentPath) {
     const currentPage = AuthGuard({
       path: currentPath,
-      loggedIn: cookies.loggedIN,
+      loggedIn: propsToStoreAndGetFromCookies.userLoggedIn,
     });
 
     if (currentPage.access === false) {
@@ -312,61 +320,69 @@ RedefineCustomApp.getInitialProps = async (
   }
 
   try {
-    if (APIsCalledOnce === false) {
-      const storeDetails = await _AppController.fetchStoreDetails(
-        domain,
-        pathName,
-      );
+    // APIs to call only once if not already called
+    if (APIsCalledOnce === false && domain) {
+      const details = await _AppController.fetchStoreDetails(domain);
 
-      expectedProps.companyId = (await FetchCompanyConfiguration()).companyId;
+      if (details?.store.storeId) {
+        const { store: storeDetails, adminConfig } = details;
 
-      if (storeDetails) {
-        expectedProps.store.imageFolderPath = `/rdc/${expectedProps.companyId}/store/${storeDetails.store.storeId}/images/`;
-        expectedProps.store = storeDetails.store;
-        expectedProps.store.imageFolderPath = `/${storeDetails.blobUrlRootDirectory}/${expectedProps.companyId}/store/${storeDetails.store.storeId}/images/`;
-        expectedProps.blobUrlRootDirectory = storeDetails.blobUrlRootDirectory;
-      }
-
-      if (expectedProps.store?.storeId) {
-        expectedProps.configs = await getAllConfigurations({
-          storeId: expectedProps.store?.storeId,
-          configNames: [
-            'footer',
-            'customScript',
-            'customHomeScript',
-            'customGlobalBodyScript',
-            'googleTags',
-          ],
-        });
-
-        expectedProps.menuItems = await _AppController.fetchMenuItems(
-          expectedProps.store.storeId,
+        const response = await callConfigsAndRemainingStoreAPIsAndSetURls(
+          storeDetails,
         );
 
-        if (res && cookies.storeInfo === null) {
-          nextJsSetCookie({
-            res,
-            cookie: {
-              name: __Cookie.storeInfo,
-              value: {
-                storeId: expectedProps.store.storeId,
-                domain: domain,
-                storeCode: expectedProps.store.code,
-                storeTypeId: expectedProps?.store?.storeTypeId!,
-                isAttributeSaparateProduct:
-                  expectedProps.store.isAttributeSaparateProduct,
-                favicon: expectedProps.store.urls.favicon,
-                logoUrl: expectedProps.store.urls.logo,
-                companyId: expectedProps.companyId,
+        expectedProps.store = response.store;
+        expectedProps.footerHTML = response.footerHTML;
+        expectedProps.menuItems = response.menuItems;
+        expectedProps.store.mediaBaseUrl = adminConfig.blorUrl;
+        expectedProps.headerConfig = response.headerConfig;
+        expectedProps.templateIDs = response.templateIDs;
+
+        // If cookies are empty then store 'Store and other required details' to decrease the number of APIs calls on page transition
+        if (res) {
+          propsToStoreAndGetFromCookies = {
+            store: {
+              id: response.store.storeId!,
+              storeTypeId: response.store.storeTypeId!,
+              code: response.store.code,
+              urls: {
+                logo: response.store.urls.logo,
+                favicon: response.store.urls.favicon,
               },
+              isAttributeSaparateProduct:
+                response.store.isAttributeSaparateProduct,
             },
-          });
+            adminConfig: {
+              companyId: response.companyId,
+              blobUrl: adminConfig.blorUrl,
+              blobUrlDirectory: adminConfig.blobUrlRootDirectory,
+              imageFolderPath: response.store.imageFolderPath,
+            },
+            customScripts: response.customScripts,
+            googleTags: response.googleTags,
+            userLoggedIn: propsToStoreAndGetFromCookies.userLoggedIn,
+          };
+
+          storeCookiesToDecreaseNoOfAPIRecalls(
+            res,
+            propsToStoreAndGetFromCookies,
+            domain,
+          );
         }
       }
     }
 
+    if (
+      propsToStoreAndGetFromCookies.store.storeTypeId === storeBuilderTypeId &&
+      propsToStoreAndGetFromCookies.store.id
+    ) {
+      expectedProps.sbStore = await FetchSbStoreConfiguration({
+        storeId: propsToStoreAndGetFromCookies.store.id,
+      });
+    }
+
     conditionalLog_V2({
-      data: expectedProps,
+      data: { expectedProps, propsToStoreAndGetFromCookies },
       type: 'SERVER_METHOD',
       name: ' _app.tsx',
       show: __console_v2.serverMethod.app,
@@ -380,84 +396,13 @@ RedefineCustomApp.getInitialProps = async (
     });
   }
 
-  if (
-    expectedProps.store.storeTypeId === storeBuilderTypeId &&
-    expectedProps.store.storeId
-  ) {
-    expectedProps.sbStore = await fetchSbStoreConfiguration({
-      storeId: expectedProps.store.storeId,
-    });
-  }
-
-  if (expectedProps.store.storeId) {
-    let customScript = expectedProps.configs[1]?.config_value
-      ? expectedProps.configs[1]?.config_value
-      : JSON.stringify({ googleFonts: '' });
-
-    let googleTags = expectedProps?.configs[4]?.config_value
-      ? expectedProps?.configs[4]?.config_value
-      : JSON.stringify(_globalStore.googleTags);
-
-    _globalStore.set({ key: 'storeId', value: expectedProps.store.storeId });
-    _globalStore.set({
-      key: 'isAttributeSaparateProduct',
-      value: expectedProps.store.isAttributeSaparateProduct,
-    });
-    _globalStore.set({
-      key: 'code',
-      value: expectedProps.store.code,
-    });
-    _globalStore.set({
-      key: 'storeTypeId',
-      value: expectedProps.store.storeTypeId,
-    });
-    _globalStore.set({
-      key: 'favicon',
-      value: expectedProps.store.urls.favicon,
-    });
-    _globalStore.set({
-      key: 'logoUrl',
-      value: expectedProps.store.urls.logo,
-    });
-    _globalStore.set({
-      key: 'blobUrl',
-      value: expectedProps.store.mediaBaseUrl,
-    });
-    _globalStore.set({
-      key: 'blobUrlRootDirectory',
-      value: expectedProps.blobUrlRootDirectory,
-    });
-    _globalStore.set({
-      key: 'companyId',
-      value: expectedProps.companyId,
-    });
-    _globalStore.set({
-      key: 'customGlobalBodyScript',
-      value: JSON.parse(customScript)?.customGlobalBodyScript,
-    });
-    _globalStore.set({
-      key: 'customGlobalBodyScript',
-      value: JSON.parse(customScript)?.customGlobalBodyScript,
-    });
-    _globalStore.set({
-      key: 'googleFonts',
-      value: JSON.parse(customScript)?.googleFonts,
-    });
-    _globalStore.set({
-      key: 'customHeadScript',
-      value: JSON.parse(customScript)?.customHeadScript,
-    });
-    _globalStore.set({
-      key: 'customGoogleVerification',
-      value: JSON.parse(customScript)?.customGoogleVerification,
-    });
-    _globalStore.set({
-      key: 'customFooterScript',
-      value: JSON.parse(customScript)?.customFooterScript,
-    });
-    _globalStore.set({
-      key: 'googleTags',
-      value: JSON.parse(googleTags),
+  //-------------Add Variables to make globally available.------------------------//
+  if (propsToStoreAndGetFromCookies.store.id) {
+    passPropsToDocumentFile({
+      store: propsToStoreAndGetFromCookies.store,
+      adminConfigs: propsToStoreAndGetFromCookies.adminConfig,
+      customScripts: propsToStoreAndGetFromCookies.customScripts,
+      gTags: propsToStoreAndGetFromCookies.googleTags,
     });
   }
 
@@ -465,8 +410,10 @@ RedefineCustomApp.getInitialProps = async (
     ...ctx,
     store: expectedProps.store,
     menuItems: expectedProps.menuItems,
-    configs: expectedProps.configs,
+    footerHTML: expectedProps.footerHTML,
     sbStore: expectedProps.sbStore,
+    headerConfig: expectedProps.headerConfig,
+    templateIDs: expectedProps.templateIDs,
   };
 };
 

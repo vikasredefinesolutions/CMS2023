@@ -4,10 +4,8 @@ import {
   _ProductsAlike,
   _ProductSEO,
 } from '@definations/APIs/productDetail.res';
-import { _StoreReturnType } from '@definations/store.type';
 
 export interface _ExpectedRequestConsultationProps {
-  store: _StoreReturnType;
   product: null | {
     details: null | _ProductDetails;
     colors: null | _ProductColor[];

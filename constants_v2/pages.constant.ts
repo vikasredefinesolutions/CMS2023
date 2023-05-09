@@ -65,4 +65,7 @@ export const __pagesConstant = {
     orderStatus: 'new',
     transactionStatus: 'pending',
   },
+  storyDetails: {
+    products: ['adidas', 'under-armour', 'peter-millar', 'nike'],
+  },
 };

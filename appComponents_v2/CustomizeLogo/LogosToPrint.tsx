@@ -1,9 +1,16 @@
+import { storeBuilderTypeId } from '@configs/page.config';
 import { __Cookie } from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
-import { getAddToCartObject, setCookie } from '@helpers/common.helper';
+import { paths } from '@constants/paths.constant';
+import {
+  CaptureGTMEvent,
+  getAddToCartObject,
+  setCookie,
+} from '@helpers/common.helper';
 import { highLightError } from '@helpers/console.helper';
+import getLocation from '@helpers/getLocation';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
-import { addToCart } from '@services/cart.service';
+import { addSubStore, addToCart } from '@services/cart.service';
 
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -25,29 +32,28 @@ const LogosToPrint: React.FC<_props> = ({ setShowOrSelect }) => {
   const { availableOptions } = useTypedSelector_v2(
     (state) => state.product.toCheckout,
   );
-  const { toCheckout } = useTypedSelector_v2((state) => state.product);
+  const { toCheckout, product } = useTypedSelector_v2((state) => state.product);
   const selectedProduct = useTypedSelector_v2(
     (state) => state.product.selected,
   );
   const storeId = useTypedSelector_v2((state) => state.store.id);
+  const storeTypeId = useTypedSelector_v2((state) => state.store.storeTypeId);
   const customerId = useTypedSelector_v2((state) => state.user.id);
   const isEmployeeLoggedIn = useTypedSelector_v2(
     (state) => state.employee.loggedIn,
   );
-
+  const { sbState } = useTypedSelector_v2((state) => state.product.selected);
   const store = useTypedSelector_v2((state) => state.store);
+
+  const loggedIN_userId = useTypedSelector_v2((state) => state.user.id);
+
   mediaBaseURL = store.mediaBaseUrl || mediaBaseURL;
-  const {
-    clearToCheckout,
-    showModal,
-    setShowLoader,
-    product_storeData,
-    fetchCartDetails,
-  } = useActions_v2();
+  const { showModal, setShowLoader, fetchCartDetails } = useActions_v2();
 
   const addToCartHandler = async () => {
     setShowLoader(true);
     const { sizeQtys, totalPrice, totalQty, logos } = toCheckout;
+    const location = await getLocation();
 
     const cartObject = await getAddToCartObject({
       userId: customerId || 0,
@@ -85,7 +91,42 @@ const LogosToPrint: React.FC<_props> = ({ setShowOrSelect }) => {
       return;
     }
 
+    // for substroe only start
+    // for substroe only end
+
     if (cartObject) {
+      //GTM event for add-to-cart
+      const eventPayload = {
+        pageTitle: document ? document?.title : '',
+        pageCategory: 'Add to Cart',
+        visitorType: loggedIN_userId ? 'high-value' : 'low-value',
+        customProperty1: '',
+        event: 'add_to_cart',
+        ecommerce: {
+          value: toCheckout?.totalPrice,
+          currency: 'USD', // USD,
+          coupon: '',
+          items: [
+            {
+              item_name: product?.name,
+              item_id: product?.sku,
+              item_brand: product?.brand,
+              item_category: product?.categoryName,
+              item_variant: product?.colors?.length
+                ? product?.colors?.find((clr) => clr.productId === product.id)
+                    ?.productSEName
+                : '',
+              index: product.id,
+              item_list_name: product?.categoryName,
+              item_list_id: product?.id,
+              quantity: toCheckout?.totalQty,
+              price: toCheckout?.totalPrice,
+            },
+          ],
+        },
+      };
+      CaptureGTMEvent(eventPayload);
+
       try {
         let c_id = customerId;
         let res;
@@ -93,12 +134,33 @@ const LogosToPrint: React.FC<_props> = ({ setShowOrSelect }) => {
           .then((res) => {
             if (res) {
               res = res;
-              setShowLoader(false);
-              showModal({
-                message: __pagesText.cart.successMessage,
-                title: 'Success',
-              });
             }
+            return res;
+          })
+          .then((res) => {
+            if (storeTypeId === storeBuilderTypeId) {
+              const Sbs_constant = {
+                id: 0,
+                rowVersion: '',
+                location: `${location.city}, ${location.region}, ${location.country}, ${location.postal_code}`,
+                ipAddress: location.ip_address,
+                macAddress: '00-00-00-00-00-00',
+                shoppingCartItemsId: res,
+                isRequired: true,
+                isExclusive: true,
+                isChargePerCharacter: true,
+              };
+              const payload_sbs = sbState.map((el: any) => {
+                return { ...el, ...Sbs_constant };
+              });
+
+              addSubStore({ shoppingCartItemsCustomFieldModel: payload_sbs });
+            }
+            setShowLoader(false);
+            showModal({
+              message: __pagesText.cart.successMessage,
+              title: 'Success',
+            });
           })
           .catch((err) => {
             setShowLoader(false);
@@ -117,8 +179,9 @@ const LogosToPrint: React.FC<_props> = ({ setShowOrSelect }) => {
         highLightError({ error, component: 'StartOrderModal' });
       }
     }
+
     // modalHandler(null);
-    router.push('/cart');
+    router.push(paths.CART);
   };
 
   const actionHandler = (action: 'CONTINUE' | 'CANCEL') => {
@@ -137,7 +200,7 @@ const LogosToPrint: React.FC<_props> = ({ setShowOrSelect }) => {
             <div className='mt-2 w-32'>
               <img
                 className='inline-block'
-                src={`${mediaBaseURL}${logo.location.image}`}
+                src={`${mediaBaseURL}/${logo.location.image}`}
                 alt='No Image'
               />
             </div>

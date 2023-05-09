@@ -1,6 +1,4 @@
-import { __domain } from '@configs/page.config';
 import { __Cookie } from '@constants/global.constant';
-import { __pagesText } from '@constants/pages.text';
 import { deleteCookie } from '@helpers/common.helper';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
 import React from 'react';
@@ -14,26 +12,6 @@ const NotificationBar_Type1: React.FC = () => {
     deleteCookie(__Cookie.empData);
     clearEmployeeDetails({});
   };
-  if (__domain.devMode) {
-    return (
-      <div className='bg-primary text-white px-2 sm:px-0 hidden md:block'>
-        <div className='container mx-auto'>
-          <div className='flex flex-wrap justify-end items-center text-sm tracking-wider'>
-            <div className='flex items-center hidden'>
-              <span className='material-icons top-header-icon text-[#00b2e3] text-2xl mr-1'>
-                verified
-              </span>
-              <span>
-                {/* Free Logo & Proof on All Orders + Free Shipping on Orders Over
-                $4K */}
-                {__pagesText.Headers.notificationText}
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <>

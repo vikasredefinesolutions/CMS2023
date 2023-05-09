@@ -1,6 +1,6 @@
 // ** React Imports
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
-import React, { useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 
 // ** MUI Imports
 import TabContext from '@mui/lab/TabContext';
@@ -106,7 +106,7 @@ const ProductsInfoTabs: React.FC<_props> = ({ dataArr }) => {
       <Box sx={{ marginTop: 0 }}>
         {dataArr?.featuredproducts_selected_brands.value.map((brand, index) => {
           return (
-            <React.Fragment key={index}>
+            <Fragment key={`${brand.label}${index}`}>
               <TabPanel sx={{ p: 0 }} value={brand.value}>
                 <BrandProductListing
                   brandId={+brand.value}
@@ -116,7 +116,7 @@ const ProductsInfoTabs: React.FC<_props> = ({ dataArr }) => {
                   totalBrands={dataArr?.featuredproducts_selected_brands.value}
                 />
               </TabPanel>
-            </React.Fragment>
+            </Fragment>
           );
         })}
       </Box>

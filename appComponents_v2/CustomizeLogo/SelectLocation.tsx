@@ -77,7 +77,7 @@ const SelectLocation: React.FC<_props> = ({
               <div className='mb-[10px] flex flex-wrap items-center justify-center h-[120px] px-[10px]'>
                 <NxtImage
                   className='max-h-[120px] w-auto mx-auto'
-                  src={`${mediaBaseUrl}${pos.image}`}
+                  src={`${mediaBaseUrl}/${pos.image}`}
                   alt={pos.name}
                 />
               </div>

@@ -1,3 +1,4 @@
+import { _Store } from '@configs/page.config';
 import { __pagesText } from '@constants/pages.text';
 import { _startOrderModalProps } from '@definations/startOrderModal';
 import { FetchInventoryById } from '@services/product.service';
@@ -20,7 +21,7 @@ const StartOrderModal: React.FC<_startOrderModalProps> = (props) => {
     useActions_v2();
 
   const [allColors, showAllColors] = useState<boolean>(false);
-  const { layout: storeLayout } = useTypedSelector_v2((state) => state.store);
+  const { code: storeCode } = useTypedSelector_v2((state) => state.store);
 
   const { name: colorName } = useTypedSelector_v2(
     (state) => state.product.selected.color,
@@ -142,7 +143,7 @@ const StartOrderModal: React.FC<_startOrderModalProps> = (props) => {
                 </div>
 
                 <div className='mb-[25px]'>
-                  {storeLayout !== 'DI' && (
+                  {storeCode !== _Store.type4 && (
                     <div className=''>
                       <button
                         type='button'
@@ -167,7 +168,7 @@ const StartOrderModal: React.FC<_startOrderModalProps> = (props) => {
                   </div>
                   <div>
                     <DiscountPricing
-                      storeCode={storeLayout ? storeLayout : ''}
+                      storeCode={storeCode ? storeCode : ''}
                       showMsrpLine={false}
                       price={{
                         msrp: product.msrp,
@@ -178,17 +179,17 @@ const StartOrderModal: React.FC<_startOrderModalProps> = (props) => {
                     <AskToLogin modalHandler={modalHandler} />
                   </div>
                 </div>
-                {storeLayout !== 'DI' ? (
+                {storeCode !== _Store.type4 ? (
                   <SizePriceQtyTable editDetails={getEditDetails()} />
                 ) : (
                   <Inventory
-                    storeCode={storeLayout}
+                    storeCode={storeCode}
                     productId={editDetails?.productId}
                     editDetails={editDetails}
                   />
                 )}
 
-                {storeLayout !== 'DI' && customizationEnable && (
+                {storeCode !== _Store.type4 && customizationEnable && (
                   <SomCustomizeLogoOptions
                     editDetails={editDetails?.shoppingCartLogoPersonViewModels}
                     totalQty={editDetails?.totalQty || 0}

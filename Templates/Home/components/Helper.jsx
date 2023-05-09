@@ -11,6 +11,31 @@ export const assignMultipleClass = (classArr, obj) => {
   });
 };
 
+export const getSymbol = (symbol, status) => {
+  let returnSymbol = '';
+  if (symbol === "caret") {
+      if (status === "Yes")
+          returnSymbol = 'keyboard_arrow_down';
+      else
+          returnSymbol = 'keyboard_arrow_up';
+  }
+  else if(symbol === "addcircle")
+  {
+      if (status === "Yes")
+          returnSymbol = 'remove_circle';
+      else
+          returnSymbol = 'add_circle';
+
+  }
+  else {
+      if (status === "Yes")
+          returnSymbol = 'remove_circle_outline';
+      else
+          returnSymbol = 'add_circle_outline';
+  }
+  return returnSymbol;
+}
+
 export const updateSetProperties = (element) => {
   let x = document.getElementById('div' + element.no);
   if (element.selectedVal != undefined && element.selectedVal != '') {
@@ -211,17 +236,17 @@ export const updateSetProperties = (element) => {
           if(buttonId === 'Button')
           {
             btnPadding = true;
-            Button_className += ' pl-[' + value.value +'px]';
+            Button_className += ' ' + value.value;
           }
           else if(buttonId === 'Button1')
           {
-            Button1_className += ' pl-[' + value.value +'px]';
+            Button1_className += ' ' + value.value;
             btn1Padding = true;
           }
           else if(buttonId === 'Button2')
           {
             btn2Padding = true;
-            Button2_className += ' pl-[' + value.value +'px]';
+            Button2_className += ' ' + value.value;
           }
         }
         if(value.type == 'btn_top_padding')
@@ -230,16 +255,16 @@ export const updateSetProperties = (element) => {
           if(buttonId === 'Button')
           {
             btnPadding = true;
-            Button_className += ' pt-[' + value.value +'px]';
+            Button_className += ' ' + value.value;
           }
           else if(buttonId === 'Button1')
           {
-            Button1_className += ' pt-[' + value.value +'px]';
+            Button1_className += ' ' + value.value;
             btn1Padding = true;
           }
           else if(buttonId === 'Button2')
           {
-            Button2_className += ' pt-[' + value.value +'px]';
+            Button2_className += ' ' + value.value;
             btn2Padding = true;
           }
         }
@@ -249,16 +274,16 @@ export const updateSetProperties = (element) => {
           if(buttonId === 'Button')
           {
             btnPadding = true;
-            Button_className += ' pr-[' + value.value +'px]';
+            Button_className += ' ' + value.value;
           }
           else if(buttonId === 'Button1')
           {
-            Button1_className += ' pr-[' + value.value +'px]';
+            Button1_className += ' ' + value.value;
             btn1Padding = true;  
           }
           else if(buttonId === 'Button2')
           {
-            Button2_className += ' pr-[' + value.value +'px]';
+            Button2_className += ' ' + value.value;
             btn2Padding = true;
           }
         }
@@ -267,17 +292,17 @@ export const updateSetProperties = (element) => {
           buttonId = key.replace('_bottom_padding', '');
           if(buttonId === 'Button')
           {
-            Button_className += ' pb-[' + value.value +'px]';
+            Button_className += ' ' + value.value;
             btnPadding = true;
           }
           else if(buttonId === 'Button1')
           {
-            Button1_className += ' pb-[' + value.value +'px]';
+            Button1_className += ' ' + value.value;
             btn1Padding = true;
           }
           else if(buttonId === 'Button2')
           {
-            Button2_className += ' pb-[' + value.value +'px]';
+            Button2_className += ' ' + value.value;
             btn2Padding = true;
           }
         }
@@ -285,42 +310,42 @@ export const updateSetProperties = (element) => {
         {
           buttonId = key.replace('_left_margin', '');
           if(buttonId === 'Button')
-            Button_className += ' ml-[' + value.value +'px]';
+            Button_className += ' ' + value.value;
           else if(buttonId === 'Button1')
-            Button1_className += ' ml-[' + value.value +'px]';
+            Button1_className += ' ' + value.value;
           else if(buttonId === 'Button2')
-            Button2_className += ' ml-[' + value.value +'px]';
+            Button2_className += ' ' + value.value;
         }
         if(value.type == 'btn_top_margin')
         {
           buttonId = key.replace('_top_margin', '');
           if(buttonId === 'Button')
-            Button_className += ' mt-[' + value.value +'px]';
+            Button_className += ' ' + value.value;
           else if(buttonId === 'Button1')
-            Button1_className += ' mt-[' + value.value +'px]';
+            Button1_className += ' ' + value.value;
           else if(buttonId === 'Button2')
-            Button2_className += ' mt-[' + value.value +'px]';
+            Button2_className += ' ' + value.value;
         }
         if(value.type == 'btn_right_margin')
         {
           buttonId = key.replace('_right_margin', '');
           if(buttonId === 'Button')
-            Button_className += ' mr-[' + value.value +'px]';
+            Button_className += ' ' + value.value;
           else if(buttonId === 'Button1')
-            Button1_className += ' mr-[' + value.value +'px]';
+            Button1_className += ' ' + value.value;
           else if(buttonId === 'Button2')
-            Button2_className += ' mr-[' + value.value +'px]';
+            Button2_className += ' ' + value.value;
 
         }
         if(value.type == 'btn_bottom_margin')
         {
           buttonId = key.replace('_bottom_margin', '');
           if(buttonId === 'Button')
-            Button_className += ' mb-[' + value.value +'px]';
+            Button_className += ' ' + value.value;
           else if(buttonId === 'Button1')
-            Button1_className += ' mb-[' + value.value +'px]';
+            Button1_className += ' ' + value.value;
           else if(buttonId === 'Button2')
-            Button2_className += ' mb-[' + value.value +'px]';
+            Button2_className += ' ' + value.value;
 
         }
 
@@ -364,11 +389,11 @@ export const updateSetProperties = (element) => {
         {
           buttonId = key.replace('_line_height', '');
           if(buttonId === 'Button')
-            Button_className += ' leading-[' + value.value+'px]';
+            Button_className += ' ' + value.value;
           else if(buttonId === 'Button1')
-            Button1_className += ' leading-[' + value.value+'px]';
+            Button1_className += ' ' + value.value;
           else if(buttonId === 'Button2')
-            Button2_className += ' leading-[' + value.value+'px]';
+            Button2_className += ' ' + value.value;
         }
 
       });
@@ -433,26 +458,53 @@ export const updateSetProperties = (element) => {
       }
 
       if(value.type === 'colcount')
-      {
-          if(value.value == '3')
           {
-              x.querySelectorAll("#centerContent")[0].classList.remove("hidden");
-              x.querySelectorAll("#leftContent")[0].classList.add("lg:w-1/3");
-              x.querySelectorAll("#rightContent")[0].classList.add("lg:w-1/3");
-  
-              x.querySelectorAll("#leftContent")[0].classList.remove("lg:w-1/2");
-              x.querySelectorAll("#rightContent")[0].classList.remove("lg:w-1/2");
-          }
-          else
-          {
-              x.querySelectorAll("#centerContent")[0].classList.add("hidden");
-              x.querySelectorAll("#leftContent")[0].classList.add("lg:w-1/2");
-              x.querySelectorAll("#rightContent")[0].classList.add("lg:w-1/2");
+              if(value.value == '3')
+              {
 
-              x.querySelectorAll("#leftContent")[0].classList.remove("lg:w-1/3");
-              x.querySelectorAll("#rightContent")[0].classList.remove("lg:w-1/3");
+                if(x && x.querySelectorAll('#centerContent').length > 0)
+                {
+                    x.querySelectorAll('#centerContent')[0].classList.remove('hidden');
+                    x.querySelectorAll('#leftContent')[0].classList.add('lg:w-1/3');
+                    x.querySelectorAll('#rightContent')[0].classList.add('lg:w-1/3');
+        
+                    x.querySelectorAll('#leftContent')[0].classList.remove('lg:w-1/2');
+                    x.querySelectorAll('#rightContent')[0].classList.remove('lg:w-1/2');
+
+               }
+                if(x && x.querySelectorAll('#centerBox').length > 0)
+                {
+                    x.querySelectorAll('#centerBox')[0].classList.remove('hidden');
+                    x.querySelectorAll('#leftBox')[0].classList.add('lg:w-1/3');
+                    x.querySelectorAll('#rightBox')[0].classList.add('lg:w-1/3');
+        
+                    x.querySelectorAll('#leftBox')[0].classList.remove('lg:w-1/2');
+                    x.querySelectorAll('#rightBox')[0].classList.remove('lg:w-1/2');
+        
+                }
+              }
+              else
+              {
+                  if(x && x.querySelectorAll('#centerContent').length > 0)
+                  {
+                    x.querySelectorAll('#centerContent')[0].classList.add('hidden');
+                    x.querySelectorAll('#leftContent')[0].classList.add('lg:w-1/2');
+                    x.querySelectorAll('#rightContent')[0].classList.add('lg:w-1/2');
+
+                    x.querySelectorAll('#leftContent')[0].classList.remove('lg:w-1/3');
+                    x.querySelectorAll('#rightContent')[0].classList.remove('lg:w-1/3');
+                  }
+                  if(x && x.querySelectorAll('#centerBox').length > 0)
+                  {
+                    x.querySelectorAll('#centerBox')[0].classList.add('hidden');
+                    x.querySelectorAll('#leftBox')[0].classList.add('lg:w-1/2');
+                    x.querySelectorAll('#rightBox')[0].classList.add('lg:w-1/2');
+
+                    x.querySelectorAll('#leftBox')[0].classList.remove('lg:w-1/3');
+                    x.querySelectorAll('#rightBox')[0].classList.remove('lg:w-1/3');
+                  }
+              }
           }
-      }
 
       if(value.type === 'iconclass')
           {
@@ -539,28 +591,28 @@ export const updateSetProperties = (element) => {
               }
             
               if (iconLeftPadding) {
-                  className += " pl-[" + iconLeftPadding + "px]";
+                  className += " " + iconLeftPadding;
               }
               if (iconRightPadding) {
-                  className += " pr-[" + iconRightPadding + "px]";
+                  className += " " + iconRightPadding;
               }
               if (iconTopPadding) {
-                  className += " pt-[" + iconTopPadding + "px]";
+                  className += " " + iconTopPadding;
               }
               if (iconBottomPadding) {
-                  className += " pb-[" + iconBottomPadding + "px]";
+                  className += " " + iconBottomPadding;
               }
               if (iconLeftMargin) {
-                  className += " ml-[" + iconLeftMargin + "px]";
+                  className += " " + iconLeftMargin;
               }
               if (iconRightMargin) {
-                  className += " mr-[" + iconRightMargin + "px]";
+                  className += " " + iconRightMargin;
               }
               if (iconTopMargin) {
-                  className += " mt-[" + iconTopMargin + "px]";
+                  className += " " + iconTopMargin;
               }
               if (iconBottomMargin) {
-                  className += " mb-[" + iconBottomMargin + "px]";
+                  className += " " + iconBottomMargin;
               }
 
              

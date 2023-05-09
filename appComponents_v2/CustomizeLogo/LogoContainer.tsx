@@ -50,7 +50,7 @@ const LogoContainer: React.FC<_props> = ({
     >
       <div className='mb-[10px] flex flex-wrap items-center justify-center h-[120px] px-[10px]'>
         <img
-          src={`${mediaBaseUrl}${image}`}
+          src={`${mediaBaseUrl}/${image}`}
           className='max-h-[120px] w-auto mx-auto'
         />
       </div>

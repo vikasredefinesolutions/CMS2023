@@ -1,4 +1,4 @@
-import { __Error } from '@constants/global.constant';
+import { __Error, __pageTypeConstant } from '@constants/global.constant';
 import { _ProductDetailsProps } from './APIs/productDetail.res';
 import { _FeaturedProduct } from './APIs/storeDetails.res';
 
@@ -9,8 +9,8 @@ export type _PageTypesAvailable =
   | 'collection'
   | 'brand'
   | '404'
-  | 'stories' // ===> All story categories
-  | 'blog'; // ===> Individual Story
+  | __pageTypeConstant.stories // ===> All story categories
+  | __pageTypeConstant.blog; // ===> Individual Story
 
 export interface _TopicHomeProps {
   pageData: {

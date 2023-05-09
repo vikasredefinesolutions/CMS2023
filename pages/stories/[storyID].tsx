@@ -18,13 +18,13 @@ import React from 'react';
 import { _globalStore } from 'store.global';
 interface _StoryCategoryProps {
   id: string;
-  pageType: 'stories';
+  pageType: __pageTypeConstant.stories;
   list: _Story[] | null;
 }
 
 interface _StoryDetailsProps {
   id: string;
-  pageType: 'blog';
+  pageType: __pageTypeConstant.blog;
   list: _Story[] | null;
   story: {
     title: string;
@@ -45,7 +45,7 @@ interface _StoryDetailsProps {
   page: {
     // @ts-ignore: Unreachable code error
     accordionContent: any;
-    type: 'blog';
+    type: __pageTypeConstant.blog;
     slug: string;
   };
 }
@@ -62,7 +62,7 @@ const Story: React.FC<
     return <>{error}</>;
   }
 
-  if (props.pageType === 'stories') {
+  if (props.pageType === __pageTypeConstant.stories) {
     return (
       <StoryCategoryTemplate
         list={props.list || []}
@@ -71,7 +71,7 @@ const Story: React.FC<
     );
   }
 
-  if (props.pageType === 'blog') {
+  if (props.pageType === __pageTypeConstant.blog) {
     return (
       <StoryDetailsTemplate
         list={props.list || []}
@@ -115,7 +115,7 @@ export const getServerSideProps: GetServerSideProps = async (
     slug: storySlug,
   });
 
-  // pageMetaData?.type === 'blog'; // For testing purpose
+  // pageMetaData?.type === __pageTypeConstant.blog; // For testing purpose
 
   if (pageMetaData === null) {
     highLightError({
@@ -136,13 +136,13 @@ export const getServerSideProps: GetServerSideProps = async (
   // -----------------------Props Initialization--------------------------
   const categoryProps: _StoryCategoryProps = {
     id: _defaultTemplates.storyCategory,
-    pageType: 'stories',
+    pageType: __pageTypeConstant.stories,
     list: null,
   };
 
   const detailsProps: _StoryDetailsProps = {
     id: _defaultTemplates.storyDetails,
-    pageType: 'blog',
+    pageType: __pageTypeConstant.blog,
     list: null,
     story: {
       category: {
@@ -166,7 +166,7 @@ export const getServerSideProps: GetServerSideProps = async (
     // stories ===>  category Page
     categoryProps.list = await GetStoriesByCategoryURL({
       storeId: _globalStore.storeId!,
-      pageType: __pageTypeConstant.blog,
+      pageType: __pageTypeConstant.stories,
       categoryurl: storySlug,
     });
   }
@@ -180,7 +180,7 @@ export const getServerSideProps: GetServerSideProps = async (
 
     detailsProps.page.accordionContent = await getPageComponents({
       pageId: pageMetaData.id,
-      type: '',
+      type: __pageTypeConstant.blog,
     });
 
     const { banner, prevNext } = await GetNextStoryByStoryID({
@@ -203,7 +203,10 @@ export const getServerSideProps: GetServerSideProps = async (
     };
   }
 
-  const props = pageMetaData.type === 'stories' ? categoryProps : detailsProps;
+  const props =
+    pageMetaData.type === __pageTypeConstant.stories
+      ? categoryProps
+      : detailsProps;
 
   return {
     props: props,

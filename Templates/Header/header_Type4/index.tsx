@@ -1,12 +1,11 @@
 import { storeBuilderTypeId } from '@configs/page.config';
-import { companyInfo } from '@constants/common.constant';
 import { __pagesConstant } from '@constants/pages.constant';
 import { paths } from '@constants/paths.constant';
 import { _HeaderProps } from '@definations/header.type';
 import {
   useActions_v2,
   useTypedSelector_v2,
-  useWindowDimensions_v2
+  useWindowDimensions_v2,
 } from '@hooks_v2/index';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
@@ -16,8 +15,12 @@ import { LoggedInMenu, LoginIcon, Logo, MyCartIcon } from './Components/Icons';
 import Header_MenuItems from './Components/Menu/Header_MenuItems';
 import SearchBar from './Components/Menu/Header_SearchBar';
 
-const Header_Type4: NextPage<_HeaderProps> = ({ logoUrl, menuItems, headerBgColor,
-  headerTextColor }) => {
+const Header_Type4: NextPage<_HeaderProps> = ({
+  logoUrl,
+  menuItems,
+  headerBgColor,
+  headerTextColor,
+}) => {
   const { store_setAppView } = useActions_v2();
   const { width } = useWindowDimensions_v2();
   const router = useRouter();
@@ -25,6 +28,10 @@ const Header_Type4: NextPage<_HeaderProps> = ({ logoUrl, menuItems, headerBgColo
   const showSideMenu = useTypedSelector_v2((state) => state.modals.sideMenu);
   const islogo = useTypedSelector_v2((state) => state.sbStore.isLogo);
   const storeTypeId = useTypedSelector_v2((state) => state.store.storeTypeId);
+  const storeEmail = useTypedSelector_v2((state) => state.store.email_address);
+  const storePhoneNumber = useTypedSelector_v2(
+    (state) => state.store.phone_number,
+  );
   const [isMobileView, setIsMobileView] = useState<boolean>(
     width <= __pagesConstant._header.mobileBreakPoint,
   );
@@ -56,7 +63,10 @@ const Header_Type4: NextPage<_HeaderProps> = ({ logoUrl, menuItems, headerBgColo
         <div className='fixed z-40 lg:hidden'></div>
         <header className='relative trancking-[1px]'>
           <nav aria-label='Top'>
-          <div className={`${headerBgColor ? '' : 'bg-[#ffffff]'}]`} style={{backgroundColor: headerBgColor}}>
+            <div
+              className={`${headerBgColor ? '' : 'bg-[#ffffff]'}]`}
+              style={{ backgroundColor: headerBgColor }}
+            >
               <div className='container pl-[15px] pr-[15px] mx-auto'>
                 <div className='pt-[10px] pb-[10px]'>
                   <div className='flex items-center justify-between'>
@@ -112,8 +122,8 @@ const Header_Type4: NextPage<_HeaderProps> = ({ logoUrl, menuItems, headerBgColo
                     </div>
                   </div>
                   <CompanyInfo
-                    phoneNumber={companyInfo.phoneNumber}
-                    email={companyInfo.email}
+                    phoneNumber={storePhoneNumber}
+                    email={storeEmail}
                   />
                   {isMobileView ? <SearchBar screen={'MOBILE'} /> : null}
                 </div>

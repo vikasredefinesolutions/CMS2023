@@ -13,7 +13,6 @@ import React, { useEffect, useState } from 'react';
 const ThankYou: React.FC = () => {
   const router = useRouter();
   const orderId = router.query.orderNumber;
-  // console.log('orderId', orderId);
 
   const [order, setOrderDetails] = useState<
     | {
@@ -51,8 +50,6 @@ const ThankYou: React.FC = () => {
       </div>
     );
   }
-
-  // console.log('order info', order);
 
   if (order === 'SOMETHING WENT WRONG') {
     return <>Something went wrong!!!</>;

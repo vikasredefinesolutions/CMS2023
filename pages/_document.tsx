@@ -4,25 +4,17 @@ import Document, {
   Head,
   Html,
   Main,
-  NextScript,
+  NextScript
 } from 'next/document';
 import { _globalStore } from 'store.global';
 import DcTags from 'tags/DcTags';
 import TwitterTags from 'tags/TwitterTags';
-
-let storeId: null | number = null;
-let faviconURL: string = '';
 
 class MyDocument extends Document {
   static async getInitialProps(
     ctx: DocumentContext,
   ): Promise<DocumentInitialProps> {
     const originalRenderPage = ctx.renderPage;
-
-    if (_globalStore.storeId) {
-      storeId = _globalStore.storeId;
-      faviconURL = _globalStore.favicon;
-    }
 
     ctx.renderPage = () =>
       originalRenderPage({
@@ -39,62 +31,62 @@ class MyDocument extends Document {
       <Html lang='en'>
         <link
           rel='shortcut icon'
-          href={`${_globalStore.blobUrl}${faviconURL}`}
+          href={`${_globalStore.blobUrl}${_globalStore.favicon}`}
         />
         <Head>
           {_globalStore.googleFonts && (
-            <code
+            <script
               dangerouslySetInnerHTML={{ __html: _globalStore.googleFonts }}
-            ></code>
+            ></script>
           )}
           {_globalStore.customHeadScript && (
-            <code
+            <script
               dangerouslySetInnerHTML={{
                 __html: _globalStore.customHeadScript,
               }}
-            ></code>
+            ></script>
           )}
           {_globalStore.customGoogleVerification && (
-            <code
+            <script
               dangerouslySetInnerHTML={{
                 __html: _globalStore.customGoogleVerification,
               }}
-            ></code>
+            ></script>
           )}
           <DcTags />
           <TwitterTags />
           <link
             rel='stylesheet'
             type='text/css'
-            href={`${_globalStore.blobUrl}/${_globalStore.blobRootDirectory}/${_globalStore.companyId}/store/${storeId}/css/${storeId}.css`}
+            href={`${_globalStore.blobUrl}/${_globalStore.blobUrlRootDirectory}/${_globalStore.companyId}/store/${_globalStore.storeId}/css/${_globalStore.storeId}.css`}
           />
           <link
             rel='stylesheet'
             type='text/css'
-            href={`${_globalStore.blobUrl}/${_globalStore.blobRootDirectory}/${
-              _globalStore.companyId
-            }/store/tailwin-css.css?${Math.random()}`}
+            href={`${_globalStore.blobUrl}/${
+              _globalStore.blobUrlRootDirectory
+            }/${_globalStore.companyId}/store/tailwin-css.css?${Math.random()}`}
           />
-           {' '}
+         
           <link
             rel='stylesheet'
             type='text/css'
-            href={`${_globalStore.blobUrl}/${_globalStore.blobRootDirectory}/${_globalStore.companyId}/store/${storeId}/css/custom.css`}
+            href={`${_globalStore.blobUrl}/${_globalStore.blobUrlRootDirectory}/${_globalStore.companyId}/store/${_globalStore.storeId}/css/custom.css`}
           />
           <link
             rel='stylesheet'
             type='text/css'
-            href={`${_globalStore.blobUrl}/${_globalStore.blobRootDirectory}/${
-              _globalStore.companyId
-            }/store/main.css?${Math.random()}`}
+            href={`${_globalStore.blobUrl}/${
+              _globalStore.blobUrlRootDirectory
+            }/${_globalStore.companyId}/store/main.css?${Math.random()}`}
           />
           {/* -----------------------SLIDER STYLESHEETS------------------------- */}
           <link
             rel='stylesheet'
             type='text/css'
-            href={`${_globalStore.blobUrl}/${_globalStore.blobRootDirectory}/${
-              _globalStore.companyId
-            }/store/main.css?${Math.random()}`}
+            href={`${_globalStore.blobUrl}/${
+              _globalStore.blobUrlRootDirectory
+            }/${_globalStore.companyId}/store/main.css?${Math.random()}`}
           />
           <link
             rel='stylesheet'
@@ -123,23 +115,44 @@ class MyDocument extends Document {
             type='text/javascript'
             src='https://platform-api.sharethis.com/js/sharethis.js#property=622863e42e0ffb001379992c&product=sop'
           ></script>
+          {/* ---------------------Google Tag Manager--------------------- */}
+          {/* <script
+            async
+            src={`https://www.googletagmanager.com/gtm.js?id=${process.env.NEXT_PUBLIC_GTM_ID}`}
+          /> */}
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+          window.dataLayer = window.dataLayer || [];
+              
+        function gtag(){
+          dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+        gtag('config', '${process.env.NEXT_PUBLIC_GA_TRACKING_ID}', {
+          page_path: window.location.pathname
+        });
+        `,
+            }}
+          />
+          {/* ---------------------End Google Tag Manager---------------------  */}
         </Head>
         <body className='font-Outfit bg-white'>
-          <code
+          <noscript
             dangerouslySetInnerHTML={{
               __html: _globalStore.customGlobalBodyScript,
             }}
-          ></code>
+          ></noscript>
           <Main />
           <NextScript />
 
           {_globalStore.customFooterScript && (
             <>
-              <code
+              <script
                 dangerouslySetInnerHTML={{
                   __html: _globalStore.customFooterScript,
                 }}
-              ></code>
+              ></script>
             </>
           )}
         </body>

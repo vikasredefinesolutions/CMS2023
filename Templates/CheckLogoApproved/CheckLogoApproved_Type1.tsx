@@ -66,7 +66,7 @@ const CheckLogoApproved1 = () => {
       resetForm: () => void;
     },
   ) => {
-    console.log('submitFeedback_Fn');
+    // console.log('submitFeedback_Fn');
 
     const locationDetail = await getLocation();
     const submitFeedback = {

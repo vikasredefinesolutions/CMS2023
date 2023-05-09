@@ -13,14 +13,13 @@ const SideFiltersTypeTwo = ({
   handleChange: FilterChangeHandler;
   checkedFilters: Array<_CheckedFilter>;
 }) => {
-
   return (
     <div className='pb-[16px]'>
       <form className='filter-box filter-type'>
         <div>
           {filters &&
             filters.map((filter, index) => (
-              <>
+              <Fragment key={index}>
                 <div className='py-[16px]'>
                   <div className='flex items-center justify-between w-full group relative mb-[12px] pb-[10px] after:border-b after:border-gray-border after:h-[1px] after:w-[50px] after:absolute after:top-full'>
                     <span className='text-sub-text'>{filter.label}</span>
@@ -33,7 +32,7 @@ const SideFiltersTypeTwo = ({
                           : 'space-y-3'
                       }
                     >
-                      {filter.options.map((val, index) => {
+                      {filter.options.map((val, _index) => {
                         const checked =
                           checkedFilters.findIndex(
                             (res: { name: string; value: string }) =>
@@ -41,7 +40,7 @@ const SideFiltersTypeTwo = ({
                               res.value === val.name,
                           ) > -1;
                         return (
-                          <Fragment key={index}>
+                          <Fragment key={`${index}${_index}`}>
                             {val.name || val.colorCode ? (
                               filter.label === 'Color' ? (
                                 <li
@@ -64,7 +63,10 @@ const SideFiltersTypeTwo = ({
                                   ></div>
                                 </li>
                               ) : filter.label === 'Category' ? (
-                                <li key={index} className='w-full py-0'>
+                                <li
+                                  key={`${index}${_index}`}
+                                  className='w-full py-0'
+                                >
                                   <Link
                                     key={val.name}
                                     id={val.name}
@@ -113,7 +115,7 @@ const SideFiltersTypeTwo = ({
                               ) : (
                                 <li
                                   className='flex items-center cursor-pointer'
-                                  key={index}
+                                  key={`${index}${_index}`}
                                 >
                                   <input
                                     id={`${val.name}-${index}`}
@@ -150,7 +152,7 @@ const SideFiltersTypeTwo = ({
                     </ul>
                   </div>
                 </div>
-              </>
+              </Fragment>
             ))}
         </div>
       </form>

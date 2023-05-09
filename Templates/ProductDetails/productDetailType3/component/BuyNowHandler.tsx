@@ -1,6 +1,10 @@
 import { __Cookie } from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
-import { getAddToCartObject, setCookie } from '@helpers/common.helper';
+import {
+  CaptureGTMEvent,
+  getAddToCartObject,
+  setCookie,
+} from '@helpers/common.helper';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import { addToCart } from '@services/cart.service';
 
@@ -56,6 +60,38 @@ const BuyNowHandler: React.FC<_Props> = (size) => {
     }
 
     if (cartObject) {
+      //GTM event for add-to-cart
+      const eventPayload = {
+        pageTitle: document ? document?.title : '',
+        pageCategory: 'Add to Cart',
+        visitorType: loggedIN_userId ? 'high-value' : 'low-value',
+        customProperty1: '',
+        event: 'add_to_cart',
+        ecommerce: {
+          value: toCheckout?.totalPrice,
+          currency: 'USD', // USD,
+          coupon: '',
+          items: [
+            {
+              item_name: product?.name,
+              item_id: product?.sku,
+              item_brand: product?.brand,
+              item_category: product?.categoryName,
+              item_variant: product?.colors?.length
+                ? product?.colors?.find((clr) => clr.productId === product.id)
+                    ?.productSEName
+                : '',
+              index: product.id,
+              item_list_name: product?.categoryName,
+              item_list_id: product?.id,
+              quantity: toCheckout?.totalQty,
+              price: toCheckout?.totalPrice,
+            },
+          ],
+        },
+      };
+      CaptureGTMEvent(eventPayload);
+
       await addToCart(cartObject)
         .then((res) => {
           if (res) {

@@ -9,6 +9,7 @@ import {
 } from '@services/product.service.helper';
 import MsgContainer from 'appComponents_v2/modals/msgContainer/MsgContainer';
 import {
+  CaptureGTMEvent,
   KlaviyoScriptTag,
   extractCookies,
   setCookie,
@@ -162,6 +163,37 @@ const SomActionsHandler: React.FC<_SOMActionHandlerProps> = ({
       },
     });
 
+    //GTM event for add-to-cart
+    const eventPayload = {
+      pageTitle: document ? document?.title : '',
+      pageCategory: 'Add to Cart',
+      visitorType: loggedIN_userId ? 'high-value' : 'low-value',
+      customProperty1: '',
+      event: 'add_to_cart',
+      ecommerce: {
+        value: toCheckout?.totalPrice,
+        currency: 'USD', // USD,
+        coupon: '',
+        items: [
+          {
+            item_name: product?.name,
+            item_id: product?.sku,
+            item_brand: product?.brand,
+            item_category: product?.categoryName,
+            item_variant: product?.colors?.length
+              ? product?.colors?.find((clr) => clr.productId === product.id)
+                  ?.productSEName
+              : '',
+            index: product.id,
+            item_list_name: product?.categoryName,
+            item_list_id: product?.id,
+            quantity: toCheckout?.totalQty,
+            price: toCheckout?.totalPrice,
+          },
+        ],
+      },
+    };
+    CaptureGTMEvent(eventPayload);
     try {
       const guestId: number = await AddItemsToTheCart(cartPayload);
       await addItemToKlaviyo(selected.productId);

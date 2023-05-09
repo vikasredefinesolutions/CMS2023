@@ -102,6 +102,8 @@ const Ecommerce_ProductDetails_View: React.FC<_Props> = (product) => {
               ourCost: product?.details?.ourCost,
               salePrice: product?.details?.salePrice,
             } || null,
+          categoryName: product?.details?.categoryName,
+          sku: product?.details?.sku,
         },
       });
       if (product.colors) {

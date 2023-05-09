@@ -18,7 +18,9 @@ const bannerTemplates: _BannerTemplates = {
 
 const Banner: React.FC<_BannerProps> = ({ id, storeId, seType, slug }) => {
   const Component =
-    bannerTemplates[id as 'type1' | 'type2' | 'type3' | 'type4' | 'type5'];
+    bannerTemplates[
+      (`${id}` as 'type1') || 'type2' || 'type3' || 'type4' || 'type5'
+    ];
   const isbrand: boolean = seType === 'brand' ? true : false;
   const [banner, setBanner] = useState<_BannerRes[] | null>(null);
   const [showModal, setShowModal] = useState<string | null>(null);

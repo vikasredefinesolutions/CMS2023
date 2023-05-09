@@ -1,6 +1,5 @@
 import { __LocalStorage } from '@constants/global.constant';
 import { paths } from '@constants/paths.constant';
-import { useTypedSelector_v2 } from '@hooks_v2/index';
 import { useRouter } from 'next/router';
 
 import React, { useEffect, useState } from 'react';
@@ -8,7 +7,6 @@ import React, { useEffect, useState } from 'react';
 const CompareIcon: React.FC = () => {
   const [skus, setSkus] = useState([]);
   const router = useRouter();
-  const storeLayout = useTypedSelector_v2((state) => state.store.layout);
 
   const comparePageURL = () => {
     if (skus.length > 0) {

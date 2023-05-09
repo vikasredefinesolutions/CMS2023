@@ -11,12 +11,14 @@ import ProductListingType1 from './productListingType1';
 import ProductListingType2 from './productListingType2';
 import ProductListingType3 from './productListingType3';
 import ProductListingType4 from './productListingType4';
+import ProductListingType5 from './productListingType5';
 
 const productListingTemplates: _ProductListingTemplates = {
   type1: ProductListingType1,
   type2: ProductListingType2,
   type3: ProductListingType3,
   type4: ProductListingType4,
+  type5: ProductListingType5,
 };
 
 const ProductListing: React.FC<_ProductListingProps & { id: string }> = ({

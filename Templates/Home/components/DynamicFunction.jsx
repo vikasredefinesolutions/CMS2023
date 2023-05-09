@@ -125,13 +125,13 @@ export const numberingdiv = (dataArr, selectedObj) => {
   if (dataArr?.length) {
     let count = 1;
     dataArr.forEach(function (item) {
-      strHTML += '<div class="flex items-start mb-6">';
+      strHTML += '<div className="flex items-start mb-6">';
       strHTML +=
-        '<div class="mr-10 flex-shrink-0 flex justify-center items-center w-12 h-12 rounded-full bg-gray-500 text-gray-50 font-bold font-heading">' +
+        '<div className="mr-10 flex-shrink-0 flex justify-center items-center w-12 h-12 rounded-full bg-gray-500 text-gray-50 font-bold font-heading">' +
         count +
         '</div>';
-      strHTML += '<div class="max-w-xs">';
-      strHTML += '<div class="text-box-p leading-loose">';
+      strHTML += '<div className="max-w-xs">';
+      strHTML += '<div className="text-box-p leading-loose">';
       strHTML += item.Description;
       strHTML += '</div>';
       strHTML += '</div>';
@@ -144,7 +144,6 @@ export const numberingdiv = (dataArr, selectedObj) => {
 export const multipleBrands = (dataArr, selectedObj) => {
 
   let strHTML = '';
-  console.log(dataArr);
   if(dataArr.length > 0)
   {
           let cnt = 1;
@@ -155,8 +154,8 @@ export const multipleBrands = (dataArr, selectedObj) => {
               strHTML += '<div class="w-full lg:w-1/4 px-3 mt-3 mb-3">';
               strHTML += '<div class="border bg-[] hover:bg-[] relative" style="background-color:'+(item.BgColor ? item.BgColor : '#003a70')+' ">';
               strHTML += '<div class="flex justify-center items-center">';
-              strHTML += '<a href="'+item.Image_link+'">';
-              strHTML += '<img class="w-full mx-auto" src="'+item.Image+'"/>';
+              strHTML += '<a href="'+item?.Image_alt+'">';
+              strHTML += '<img class="w-full mx-auto" alt="'+item?.Image_alt + '" title="' + item?.Image_alt + '" src="'+item.Image+'"/>';
               strHTML += '</a>';
               strHTML += '</div>';
               strHTML += '</div>';
@@ -186,7 +185,7 @@ export const boximage = (dataArr, selectedObj) => {
       // strHTML += '<div className="btn-primary rounded-full w-10 h-10 flex justify-center items-center text-base text-white font-semibold">'+item.index+'</div>';
       // strHTML += '</div>';
 
-      strHTML += '<div class="">';
+      strHTML += '<div className="">';
       let clName = 'flex justify-center';
       let aprData = {};
       let textPos = 'bottom';
@@ -227,7 +226,9 @@ export const boximage = (dataArr, selectedObj) => {
         bgColor = aprData.text_bg_color ?? '';
         textHPos = aprData.text_hpos ?? '';
         textVPos = aprData.text_vpos ?? '';
-        sectionWidth = aprData.sectionWidth ?? ''; 
+        sectionWidth = aprData.section_width ?? ''; 
+        if(sectionWidth === '')
+                    sectionWidth = 'max-w-3xl';
       }
       let themeClass = '';
       let fontColor = '';
@@ -247,8 +248,8 @@ export const boximage = (dataArr, selectedObj) => {
       ) {
         clName = 'flex relative w-full text-white';
           headLine +=
-            '<div class="flex absolute ' + textHPos + ' ' + textVPos + ' inset-0 p-1 lg:p-4 text-white">';
-          headLine += '<div class="'+sectionWidth + '" style="background: rgba(' + bgColor + ',' + bgOpacity + '); padding: 20px;">';
+            '<div class="flex absolute '+sectionWidth + ' ' + textHPos + ' ' + textVPos + ' inset-0 p-1 lg:p-4 text-white">';
+          headLine += '<div class="" style="background: rgba(' + bgColor + ',' + bgOpacity + '); padding: 20px;">';
           headLine += '<div class="'+themeClass+'" style="color:'+fontColor+'">'+item.Headline+'</div>';
           headLine += '<div>';
           headLine += buttonHTML;
@@ -256,16 +257,28 @@ export const boximage = (dataArr, selectedObj) => {
           headLine += '</div>';
           headLine += '</div>';
       }
+      else
+      {
+        clName = 'flex relative w-full text-white';
+        headLine +=
+          '<div class="flex absolute '+sectionWidth + ' ' + textHPos + ' ' + textVPos + ' inset-0 p-1 lg:p-4 text-white">';
+        headLine += '<div class="" style="background: rgba(' + bgColor + ',' + bgOpacity + '); padding: 20px;">';
+        headLine += '<div>';
+        headLine += buttonHTML;
+        headLine += '</div>';
+        headLine += '</div>';
+        headLine += '</div>'; 
+      }
 
       if (textPos == 'top') {
         strHTML += headLine;
       }
 
       if (item.Image !== undefined) {
-        strHTML += '<div class="' + clName + '">';
+        strHTML += '<div className="' + clName + '">';
         strHTML += '<a title="' + item.Image_link + '">';
         strHTML +=
-          '<img class="w-full isinput img-editable alttitle" src="' +
+          '<img class="w-full" alt="'+item?.Image_alt + '" title="' + item?.Image_alt + '"  src="' +
           item.Image +
           '"/>';
         strHTML += '</a>';
@@ -341,7 +354,7 @@ export const multipleImages = (dataArr, selectedObj) => {
               bgColor = aprData.text_bg_color ?? '';
               textHPos = aprData.text_hpos ?? '';
               textVPos = aprData.text_vpos ?? '';
-              sectionWidth = aprData.sectionWidth ?? ''; 
+              sectionWidth = aprData.section_width ?? ''; 
 
             }
             //fontSize = item.Headline_font_size ?? '';
@@ -379,6 +392,17 @@ export const multipleImages = (dataArr, selectedObj) => {
                 //     headLine += '</div>';
                 // }
         }
+        else
+        {
+            clName = "flex relative w-full text-white";
+                    headLine += '<div class="flex absolute inset-0 p-1 lg:p-4 text-white '+textHPos +' '+textVPos+'">';
+                    headLine += '<div class="" style="background: rgba('+bgColor+','+bgOpacity+'); padding: 20px;">';
+                    headLine += '<div>';
+                    headLine += buttonHTML;
+                    headLine += '</div>';
+                    headLine += '</div>';
+                    headLine += '</div>';
+        }
                 
 
           strHTML += '<div class="w-full lg:w-1/3">';
@@ -395,7 +419,7 @@ export const multipleImages = (dataArr, selectedObj) => {
             strHTML += '<div class="'+clName+'">';
             strHTML += '<div class="flex justify-center">';
             strHTML += '<a title="'+item.Image_link+'">';
-            strHTML += '<img class="w-full" src="'+item.Image+'"/>';
+            strHTML += '<img class="w-full" alt="'+item?.Image_alt + '" title="' + item?.Image_alt + '" src="'+item.Image+'"/>';
             strHTML += '</a>';
             strHTML += '</div>';
             if(textPos === 'center')

@@ -37,12 +37,6 @@ const DiscountPrice: React.FC<_props & { storeCode: string }> = ({
         {' '}
         <Price value={salePrice} />
       </span>
-      {/* <div className='text-title-text'>
-        <Price value={salePrice} />
-      </div>
-      <div className='line-through'>
-        <Price value={msrp} />
-      </div> */}
     </>
   );
 };

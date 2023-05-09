@@ -1,9 +1,12 @@
 import { __pagesText } from '@constants/pages.text';
 import { paths } from '@constants/paths.constant';
+import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
+import { fetchThirdpartyservice } from '@services/thirdparty.service';
 import CartSummarry from '@templates/cartSummarry';
-import CartItem from 'Templates/cartItem';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React from 'react';
+import CartItem from 'Templates/cartItem';
 import { _CartProps } from '../Cart';
 import EmptyCart from '../components/emptyCart';
 const CartType3: React.FC<_CartProps> = ({
@@ -23,7 +26,28 @@ const CartType3: React.FC<_CartProps> = ({
   if (!cartData || cartData.length === 0) {
     return <EmptyCart />;
   }
-
+  const router = useRouter();
+  const storeId = useTypedSelector_v2((state) => state.store.id);
+  const thirdPartyLogin = useTypedSelector_v2(
+    (state) => state.store.thirdPartyLogin,
+  );
+  const { showModal } = useActions_v2();
+  const { id: loggedIn, customer } = useTypedSelector_v2((state) => state.user);
+  const SamlloginHandler = () => {
+    fetchThirdpartyservice({ storeId }).then((ThirdpartyServices) => {
+      try {
+        ThirdpartyServices.map((service) => {
+          if (service.thirdPartyServiceName == 'Okta')
+            service.url != '' && router.push(service.url);
+        });
+      } catch (error) {
+        showModal({
+          message: `something wents wrong`,
+          title: 'Error',
+        });
+      }
+    });
+  };
   return (
     <section id='' className=''>
       <div className='"container mx-auto'>
@@ -74,26 +98,27 @@ const CartType3: React.FC<_CartProps> = ({
                 showApplyButton={showApplyButton}
                 coupon={coupon}
               />
-              {/* {isSamllogin ? (
+              {!loggedIn && thirdPartyLogin ? (
                 <div className='mt-[15px]'>
-                  <Link className='' href={paths.CHECKOUT}>
-                    <a className='btn btn-lg btn-secondary !flex items-center justify-center w-full'>
-                    
-                      LOGIN VIA SAML
-                    </a>
-                  </Link>
+                  <button
+                    className='btn btn-lg btn-secondary !flex items-center justify-center w-full'
+                    onClick={SamlloginHandler}
+                    type='button'
+                  >
+                    LOGIN VIA SAML
+                  </button>
                 </div>
-              ) : ( */}
-              <Link className='' href={paths.CHECKOUT}>
-                <a className='btn btn-lg btn-secondary !flex items-center justify-center w-full'>
-                  {/* <i
+              ) : (
+                <Link className='' href={paths.CHECKOUT}>
+                  <a className='btn btn-lg btn-secondary !flex items-center justify-center w-full'>
+                    {/* <i
                       className='fa fa-shopping-cart mr-[10px]'
                       aria-hidden='true'
                     ></i> */}
-                  {__pagesText.cart.checkOutNow}
-                </a>
-              </Link>
-              {/* )} */}
+                    {__pagesText.cart.checkOutNow}
+                  </a>
+                </Link>
+              )}
             </section>
           </form>
         </div>

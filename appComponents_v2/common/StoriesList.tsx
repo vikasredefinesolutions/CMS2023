@@ -17,12 +17,14 @@ const StoriesList: React.FC<_Props> = ({
   buttonType,
 }) => {
   const [stories, setStories] = useState<{
+    showButton: boolean;
     currentPage: number;
     totalElements: number;
     toShow: _Story[];
     showLoadMore: boolean;
     allStories: _Story[];
   }>({
+    showButton: leftStories.length > leftStories.slice(0, showByDefault).length,
     totalElements: leftStories.length,
     currentPage: 1,
     toShow: leftStories.slice(0, showByDefault),
@@ -153,7 +155,7 @@ const StoriesList: React.FC<_Props> = ({
               </div>
             );
           })}
-          {buttonType === 'LoadMore' && (
+          {buttonType === 'LoadMore' && stories.showButton && (
             <div className='w-full lg:w-4/4 px-3 md:w-3/3 mt-6 load_more_btn'>
               <div className='w-full'>
                 <div className='p-2 text-center text-large-text'>
@@ -177,29 +179,28 @@ const StoriesList: React.FC<_Props> = ({
               </div>
             </div>
           )}
-
-          {buttonType === 'PrevNext' && (
-            <div className='flex flex-wrap justify-center'>
-              {stories.currentPage > 1 && (
-                <button
-                  className='uppercase btn btn-tertiary text-default-text mr-[10px]'
-                  onClick={() => handleLoadStories('prev', showByDefault)}
-                >
-                  Previous
-                </button>
-              )}
-              {!stories.showLoadMore && (
-                <button
-                  className='uppercase btn btn-tertiary text-default-text mr-[10px]'
-                  onClick={() => handleLoadStories('next', showByDefault)}
-                  disabled={!stories.showLoadMore}
-                >
-                  Next
-                </button>
-              )}
-            </div>
-          )}
         </div>
+        {buttonType === 'PrevNext' && stories.showButton && (
+          <div className='flex flex-wrap justify-center pt-[40px] pb-[40px]'>
+            {stories.currentPage > 1 && (
+              <button
+                className='mr-4 btn btn-tertiary text-sm'
+                onClick={() => handleLoadStories('prev', showByDefault)}
+              >
+                Previous
+              </button>
+            )}
+            {!stories.showLoadMore && (
+              <button
+                className='mr-4 btn btn-tertiary text-sm'
+                onClick={() => handleLoadStories('next', showByDefault)}
+                disabled={!stories.showLoadMore}
+              >
+                Next
+              </button>
+            )}
+          </div>
+        )}
       </div>
     </section>
   );

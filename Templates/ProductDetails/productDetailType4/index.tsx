@@ -7,8 +7,8 @@ import {
   FetchCategoryByproductId,
   FetchInventoryById,
 } from '@services/product.service';
-import Reviews from '@templates/Review';
 import ProductRecentlyViewed from '@templates/recentlyViewedProducts';
+import Reviews from '@templates/Review';
 import YouMayAlsoLike from '@templates/youMayAlsoLike';
 import Head from 'next/head';
 import { useEffect } from 'react';
@@ -26,7 +26,6 @@ const ProductDetails_Type4: React.FC<_ProductDetailsProps & _StoreCache> = (
     product_UpdateSelectedValues,
   } = useActions_v2();
   const { id: storeId, pageType } = useTypedSelector_v2((state) => state.store);
-  console.log(product, 'PRODYCT INDEX>TSX');
   const getCategoriesArr = (): string[] => {
     let categories: CategoriesByPid = [];
     let categoryArr: string[] = [];
@@ -99,6 +98,8 @@ const ProductDetails_Type4: React.FC<_ProductDetailsProps & _StoreCache> = (
               ourCost: product?.details?.ourCost,
               salePrice: product?.details?.salePrice,
             } || null,
+          categoryName: product?.details?.categoryName,
+          sku: product?.details?.sku,
         },
       });
       if (product.colors) {
@@ -146,14 +147,11 @@ const ProductDetails_Type4: React.FC<_ProductDetailsProps & _StoreCache> = (
     </Head>
   );
 
-  // console.log('product layout page 2 ');
-
   return (
     <>
       {HeadTag}
       <ProductDetail product={product?.details} storeCode={product.storeCode} />
       {product.sectionView.map((val: string, index: number) => {
-        console.log(val, 'VAAL');
         if (val === 'youmayalsolike') {
           return (
             <div key={val + index}>

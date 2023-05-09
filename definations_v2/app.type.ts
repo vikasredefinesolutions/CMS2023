@@ -1,3 +1,4 @@
+import { _templateIds } from '@helpers/app.extras';
 import { _MenuItems } from './header.type';
 import {
   _FetchStoreConfigurations,
@@ -9,9 +10,9 @@ export type _Expected_AppProps = {
   sbStore: _SbStoreConfiguration | null;
   store: _StoreReturnType;
   menuItems: _MenuItems | null;
-  configs: Array<_FetchStoreConfigurations | null>;
-  blobUrlRootDirectory: string;
-  companyId: number;
+  footerHTML: _FetchStoreConfigurations | null;
+  headerConfig: _FetchStoreConfigurations | null;
+  templateIDs: _templateIds;
 };
 
 export type PageResponseType = {
@@ -23,6 +24,7 @@ export type PageResponseType = {
 };
 
 export interface _Country {
+  countryCode: string;
   id: number;
   name: string;
 }

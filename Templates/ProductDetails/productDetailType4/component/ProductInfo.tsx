@@ -1,13 +1,19 @@
 import Price from '@appComponents/Price';
 import LoginModal from '@appComponents/modals/loginModal';
 import { _modals } from '@appComponents/modals/modal';
+import { storeBuilderTypeId } from '@configs/page.config';
 import { __Cookie } from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
 import { _Selectedproduct_v2 } from '@definations/product.type';
-import { getAddToCartObject, setCookie } from '@helpers/common.helper';
+import {
+  CaptureGTMEvent,
+  getAddToCartObject,
+  setCookie,
+} from '@helpers/common.helper';
 import { highLightError } from '@helpers/console.helper';
+import getLocation from '@helpers/getLocation';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
-import { addToCart } from '@services/cart.service';
+import { addSubStore, addToCart } from '@services/cart.service';
 import { _ProductInfoProps } from '@templates/ProductDetails/Components/productDetailsComponents';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
@@ -28,7 +34,8 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
     price: pricePerItem,
   } = useTypedSelector_v2((state) => state.product.toCheckout);
   const { id: userId } = useTypedSelector_v2((state) => state.user);
-  const customerIdd = useTypedSelector_v2((state) => state.user.customer?.id);
+  const storeTypeId = useTypedSelector_v2((state) => state.store.storeTypeId);
+  const { sbState } = useTypedSelector_v2((state) => state.product.selected);
 
   const totalCheckout = useTypedSelector_v2(
     (state) => state?.product?.toCheckout,
@@ -40,7 +47,13 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
     product_storeData,
     fetchCartDetails,
   } = useActions_v2();
-  const { toCheckout } = useTypedSelector_v2((state) => state.product);
+  const { toCheckout, product: storeProduct } = useTypedSelector_v2(
+    (state) => state.product,
+  );
+  console.log(toCheckout, 'CHECK');
+  // const productDis = useTypedSelector_v2((state) =>
+  //   console.log(state, 'discount'),
+  // );
   const storeId = useTypedSelector_v2((state) => state.store.id);
   const customerId = useTypedSelector_v2((state) => state.user.id);
   const { colors } = useTypedSelector_v2((state) => state.product.product);
@@ -48,7 +61,6 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
   const selectedProduct = useTypedSelector_v2(
     (state) => state.product.selected,
   );
-  console.log(selectedProduct, 'add to');
   const isEmployeeLoggedIn = useTypedSelector_v2(
     (state) => state.employee.loggedIn,
   );
@@ -70,8 +82,10 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
     if (isLoggedIn === true) {
       const addToCartHandler = async () => {
         setShowLoader(true);
-        const { sizeQtys, totalPrice, totalQty, logos } = toCheckout;
-        console.log(sizeQtys);
+        const { sizeQtys, totalPrice, totalQty, logos, price } = toCheckout;
+        console.log(sizeQtys, 'SIXEEE');
+        const location = await getLocation();
+
         const selectedProducts: _Selectedproduct_v2[] = [];
 
         colors &&
@@ -90,7 +104,11 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
               });
             }
           });
+
         for (let Product of selectedProducts) {
+          // console.log(totalQty, 'totalPrice');
+
+          // let totalPrice = price;
           const cartObject = await getAddToCartObject({
             userId: customerId || 0,
             storeId: storeId || 0,
@@ -109,19 +127,94 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
           });
 
           if (cartObject) {
+            //GTM event for add-to-cart
+            const eventPayload = {
+              pageTitle: document ? document?.title : '',
+              pageCategory: 'Add to Cart',
+              visitorType: isLoggedIn ? 'high-value' : 'low-value',
+              customProperty1: '',
+              event: 'add_to_cart',
+              ecommerce: {
+                value: toCheckout?.totalPrice,
+                currency: 'USD', // USD,
+                coupon: '',
+                items: [
+                  {
+                    item_name: storeProduct?.name,
+                    item_id: storeProduct?.sku,
+                    item_brand: storeProduct?.brand,
+                    item_category: storeProduct?.categoryName,
+                    item_variant: storeProduct?.colors?.length
+                      ? storeProduct?.colors?.find(
+                          (clr) => clr.productId === storeProduct.id,
+                        )?.productSEName
+                      : '',
+                    index: storeProduct.id,
+                    item_list_name: storeProduct?.categoryName,
+                    item_list_id: storeProduct?.id,
+                    quantity: toCheckout?.totalQty,
+                    price: toCheckout?.totalPrice,
+                  },
+                ],
+              },
+            };
+            CaptureGTMEvent(eventPayload);
             try {
-              const res: number | string = await addToCart(cartObject);
-              if (!customerId) {
-                setCookie(__Cookie.tempCustomerId, `${res}`, 'Session');
+              let c_id = customerId;
+              let res;
+              await addToCart(cartObject)
+                .then((res) => {
+                  if (res) {
+                    res = res;
+                  }
+                  return res;
+                })
+                .then((res) => {
+                  console.log(res, 'promise chaining');
+
+                  if (storeTypeId === storeBuilderTypeId) {
+                    const Sbs_constant = {
+                      id: 0,
+                      rowVersion: '',
+                      location: `${location.city}, ${location.region}, ${location.country}, ${location.postal_code}`,
+                      ipAddress: location.ip_address,
+                      macAddress: '00-00-00-00-00-00',
+                      shoppingCartItemsId: res,
+                      isRequired: true,
+                      isExclusive: true,
+                      isChargePerCharacter: true,
+                    };
+                    console.log('addto cart ', res);
+                    const payload_sbs = sbState.map((el: any) => {
+                      return { ...el, ...Sbs_constant };
+                    });
+
+                    addSubStore({
+                      shoppingCartItemsCustomFieldModel: payload_sbs,
+                    });
+                  }
+                  setShowLoader(false);
+                  showModal({
+                    message: __pagesText.cart.successMessage,
+                    title: 'Success',
+                  });
+                })
+                .catch((err) => {
+                  setShowLoader(false);
+                });
+              if (!customerId && res) {
+                c_id = res;
+                setCookie(__Cookie.tempCustomerId, '' + res, 'Session');
               }
-              showModal({
-                message: 'Added to cart Successfully',
-                title: 'Success',
-              });
-              router.push('/cart');
+              if (c_id)
+                fetchCartDetails({
+                  customerId: c_id,
+                  isEmployeeLoggedIn,
+                });
             } catch (error) {
               highLightError({ error, component: 'StartOrderModal' });
             }
+            router.push('/cart/IndexNew');
           }
         }
       };

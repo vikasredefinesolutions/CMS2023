@@ -5,6 +5,7 @@ Created Date: 16th September 2022
 Modified By: <Modified By Name>
 Modified Date: <Modified Date> */
 //import { useEffect, useState } from 'react';
+import * as helper from '@templates/Home/components/Helper';
 
 const ElementAccordionDisplay = ({ selected_Values, acValues }) => {
   const iconArr = {
@@ -119,20 +120,7 @@ const ElementAccordionDisplay = ({ selected_Values, acValues }) => {
                   {/* <div className='text-defaule-text'> */}
                   <div className="text-defaule-text pointer-events-none">{acValue.title}</div>
                   {/* </div> */}
-                  <span className='material-icons-outlined ml-3 pointer-class pointer-events-none'>
-                    {acValue.openstatus == 'Yes' ? (
-                      <>
-                        {acValue.icon == 'caret'
-                          ? 'keyboard_arrow_down'
-                          : 'remove_circle_outline'}
-                      </>
-                    ) : (
-                      <>
-                        {acValue.icon == 'caret'
-                          ? 'keyboard_arrow_up'
-                          : 'add_circle_outline'}
-                      </>
-                    )}
+                  <span className='material-icons-outlined ml-3 pointer-class pointer-events-none'>{helper.getSymbol(acValue.icon, acValue.openstatus)}
                   </span>
                 </button>
                 <div

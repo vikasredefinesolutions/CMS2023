@@ -27,6 +27,40 @@ const json = [
 ];
 
 const SD_ProductsSlider: React.FC<_Props> = () => {
+  // const [products, setProducts] = useState<Array<_ProductDetails | null>>([]);
+  // const storeId = useTypedSelector_v2((state) => state.store.id);
+
+  // const fetchAllDisplayProducts = () => {
+  //   const productsToFetch = __pagesConstant.storyDetails.products.map(
+  //     (seName) =>
+  //       FetchProductById({
+  //         seName: seName,
+  //         storeId: storeId,
+  //         productId: 0, // Not required when fetching details by seName
+  //       }),
+  //   );
+
+  //   Promise.allSettled(productsToFetch)
+  //     .then((response) => {
+  //       const fetchedProducts: Array<_ProductDetails | null> = [];
+
+  //       response.forEach((value) => {
+  //         if (value.status === 'fulfilled') {
+  //           if (value.value && value.value.id !== null) {
+  //             fetchedProducts.push(value.value);
+  //           }
+  //         }
+  //       });
+
+  //       setProducts(fetchedProducts);
+  //     })
+  //     .catch(() => {});
+  // };
+
+  // useEffect(() => {
+  //   fetchAllDisplayProducts();
+  // }, []);
+
   return (
     <section className='relative pt-10 bg-light-gray'>
       <div className='container px-4 mx-auto'>

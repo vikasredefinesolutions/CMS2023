@@ -150,6 +150,7 @@ export const __pagesText = {
       },
       forgotPassword: 'Forgot Password?',
       createNewAccount: 'CREATE NEW ACCOUNT',
+      samllogin: 'LOGIN VIA SAML',
       emailPlaceHolder: 'Enter the email',
       passwordPlaceHolder: 'Enter the password',
       clickMessage: ` By Clicking "SHOP NOW", you agree to our`,
@@ -406,6 +407,7 @@ export const __pagesText = {
     myAccountTittle: 'My Account',
     companyPhoneQuestion: 'Questions? Call us at',
     companyEmailQuestion: 'or Email',
+    samllogin: 'LOGIN VIA SAML',
   },
   Wishlist: {
     wishlist: 'WISHLIST',
