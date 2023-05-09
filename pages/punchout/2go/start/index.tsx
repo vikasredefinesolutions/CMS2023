@@ -1,20 +1,23 @@
 import { PunchoutPostApi } from '@services/punchout.service';
 import getRawBody from 'raw-body';
-import { useEffect } from 'react';
 
 const Punchout = (props: any) => {
-  const headersList = {
-    'Content-Type': 'multipart/form-data',
-    'Access-Control-Allow-Origin': 'no-cors',
+  const myHeaders = new Headers();
+  myHeaders.append('Content-Type', 'application/xml');
+
+  const requestOptions = {
+    method: 'POST',
+    headers: myHeaders,
+    body: props.body,
   };
 
-  useEffect(() => {
-    fetch(props.returnUrl, {
-      method: 'POST',
-      body: props.body,
-      headers: headersList,
-    });
-  }, []);
+  fetch(
+    'https://connect.punchout2go.com/gateway/link/return/id/ZH645a10448cef6',
+    requestOptions,
+  )
+    .then((response) => response.text())
+    .then((result) => console.log(result))
+    .catch((error) => console.log('error', error));
 
   return <>This page exists and getting response</>;
 };
