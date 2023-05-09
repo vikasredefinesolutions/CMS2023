@@ -22,7 +22,7 @@ const Punchout = (props: any) => {
   //     .catch((error) => console.log('error', error));
   // }
 
-  return <>{...props.body}This page exists and getting response{myHeaders} </>;
+  return <>This page exists and getting response</>;
 };
 
 export default Punchout;
