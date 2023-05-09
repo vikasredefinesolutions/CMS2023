@@ -7,6 +7,7 @@ const Punchout = (props: any) => {
     method: 'post',
     maxBodyLength: Infinity,
     url: props.returnUrl,
+    withCredentials: false,
     headers: {
       'Content-Type': 'application/xml',
     },
