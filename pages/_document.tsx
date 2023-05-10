@@ -120,7 +120,7 @@ class MyDocument extends Document {
             async
             src={`https://www.googletagmanager.com/gtm.js?id=${process.env.NEXT_PUBLIC_GTM_ID}`}
           /> */}
-          <script
+          {/* <script
             dangerouslySetInnerHTML={{
               __html: `
           window.dataLayer = window.dataLayer || [];
@@ -134,7 +134,7 @@ class MyDocument extends Document {
         });
         `,
             }}
-          />
+          /> */}
           {/* ---------------------End Google Tag Manager---------------------  */}
         </Head>
         <body className='font-Outfit bg-white'>

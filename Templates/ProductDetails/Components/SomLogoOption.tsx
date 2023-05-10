@@ -412,58 +412,60 @@ const SomLogoOption: React.FC<_SOMLogoOptionProps> = ({
         <label htmlFor='' className='block mb-2'>
           {__pagesText.productInfo.somLogoOption.selectYourLogo}
         </label>
-        <div className='flex flex-wrap items-center justify-between border border-gray-600 shadow-sm text-sm p-2'>
-          {logoStatus === null && <div className=''>Upload Your Logo</div>}
-          {logoStatus === 'later' && (
+        {selectedLocation && (
+          <div className='flex flex-wrap items-center justify-between border border-gray-600 shadow-sm text-sm p-2'>
+            {logoStatus === null && <div className=''>Upload Your Logo</div>}
+            {logoStatus === 'later' && (
+              <div className=''>
+                <img src={dummyLogoImage} alt='' />
+              </div>
+            )}
+            {logoStatus === 'submitted' && (
+              <div className=''>
+                <img
+                  className='w-14 max-h-14'
+                  src={
+                    fileToUpload?.previewURL
+                      ? fileToUpload?.previewURL
+                      : `${store.mediaBaseUrl}${logoToBeSubmitted?.logo}`
+                  }
+                  alt=''
+                />
+              </div>
+            )}
+            {DisplayActions()}
+            {logoStatus === null && (
+              <div className=''>
+                <button
+                  className='cursor-pointer inline-block bg-indigo-600 border-0 py-2 px-3 text-white'
+                  onClick={() =>
+                    customerId ? fetchLogoLibrary() : setShowModal('login')
+                  }
+                >
+                  {__pagesText.productInfo.somLogoOption.uploadFromLibrary}
+                </button>
+              </div>
+            )}
+
             <div className=''>
-              <img src={dummyLogoImage} alt='' />
-            </div>
-          )}
-          {logoStatus === 'submitted' && (
-            <div className=''>
-              <img
-                className='w-14 max-h-14'
-                src={
-                  fileToUpload?.previewURL
-                    ? fileToUpload?.previewURL
-                    : `${store.mediaBaseUrl}${logoToBeSubmitted?.logo}`
-                }
-                alt=''
+              <label
+                htmlFor={id}
+                className='cursor-pointer inline-block bg-indigo-600 border-0 py-2 px-3 text-white'
+              >
+                {__pagesText.productInfo.somLogoOption.upload}
+              </label>
+              <input
+                type='file'
+                name={id}
+                id={id}
+                value={''}
+                className='sr-only'
+                onChange={fileReader}
+                accept={'image/*'}
               />
             </div>
-          )}
-          {DisplayActions()}
-          {logoStatus === null && (
-            <div className=''>
-              <button
-                className='cursor-pointer inline-block bg-indigo-600 border-0 py-2 px-3 text-white'
-                onClick={() =>
-                  customerId ? fetchLogoLibrary() : setShowModal('login')
-                }
-              >
-                {__pagesText.productInfo.somLogoOption.uploadFromLibrary}
-              </button>
-            </div>
-          )}
-
-          <div className=''>
-            <label
-              htmlFor={id}
-              className='cursor-pointer inline-block bg-indigo-600 border-0 py-2 px-3 text-white'
-            >
-              {__pagesText.productInfo.somLogoOption.upload}
-            </label>
-            <input
-              type='file'
-              name={id}
-              id={id}
-              value={''}
-              className='sr-only'
-              onChange={fileReader}
-              accept={'image/*'}
-            />
           </div>
-        </div>
+        )}
       </div>
       {showLogoLibrary ? (
         availableLogos.length > 0 ? (
