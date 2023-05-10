@@ -60,7 +60,7 @@ export const getServerSideProps = async (context: any) => {
   b = await PunchoutPostApi(a);
   let returnxml = b
     .toString()
-    .replace('###StoreUrl###', context.req.headers.host);
+    .replace('###StoreUrl###', `https://${context.req.headers.host}`);
 
   return { props: { body: returnxml, returnUrl: obj.return_url } };
 };
