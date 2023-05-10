@@ -71,36 +71,40 @@ const SideFiltersTypeThree = ({
                                     className='flex items-center !text-black font-bold !no-underline'
                                     href={`/${val.sename}.html`}
                                   >
-                                    <span className='material-icons-outlined'>
-                                      {val.subrows
-                                        ? 'chevron_right'
-                                        : 'expand_more'}
+                                    <span>
+                                      <span className='material-icons-outlined'>
+                                        {val.subrows
+                                          ? 'chevron_right'
+                                          : 'expand_more'}
+                                      </span>
+                                      {capitalizeFirstLetter(val.name)}(
+                                      {val.productCount})
                                     </span>
-                                    {capitalizeFirstLetter(val.name)}(
-                                    {val.productCount})
                                   </Link>
-                                  {val.subrows && (
+                                  {val.subrows && val.subrows.length > 0 && (
                                     <ul className='ml-3'>
                                       {val.subrows?.map((subrow) => (
                                         <li
                                           key={subrow.id}
                                           className='flex items-center !text-black !no-underline'
                                         >
-                                          {' '}
                                           <Link
                                             key={subrow.name}
                                             href={`/${subrow.sename}.html`}
                                             className='!text-black !no-underline'
                                           >
-                                            <span className='material-icons-outlined'>
-                                              {' '}
-                                              {
-                                                __pagesText.productListing
-                                                  .rightArrowIcon
-                                              }
+                                            <span>
+                                              <span className='material-icons-outlined'>
+                                                {
+                                                  __pagesText.productListing
+                                                    .rightArrowIcon
+                                                }
+                                              </span>
+                                              {capitalizeFirstLetter(
+                                                subrow.name,
+                                              )}{' '}
+                                              ({subrow.productCount})
                                             </span>
-                                            {capitalizeFirstLetter(subrow.name)}{' '}
-                                            ({subrow.productCount})
                                           </Link>
                                         </li>
                                       ))}

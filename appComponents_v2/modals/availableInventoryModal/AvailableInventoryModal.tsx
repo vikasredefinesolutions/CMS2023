@@ -1,7 +1,9 @@
 import { __pagesText } from '@constants/pages.text';
+import { _ProductInventory } from '@definations/APIs/inventory.res';
+import { FetchInventoryById } from '@services/product.service';
 import Image from 'appComponents_v2/reUsable/Image';
 import { useTypedSelector_v2 } from 'hooks_v2';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { _ModalProps } from '../modal.d';
 
 const AvailableInventoryModal: React.FC<_ModalProps> = ({ modalHandler }) => {
@@ -12,6 +14,27 @@ const AvailableInventoryModal: React.FC<_ModalProps> = ({ modalHandler }) => {
     inventory,
     name: productName,
   } = useTypedSelector_v2((state) => state.product.product);
+
+  const [availabelInventory, setAvailableInventory] = useState<
+    _ProductInventory[]
+  >([]);
+
+  const fetchInventory = async () => {
+    colors?.map((item) => {
+      FetchInventoryById({
+        productId: item.productId,
+        attributeOptionId: [item.attributeOptionId],
+      }).then((res) => {
+        if (res !== null) {
+          setAvailableInventory((prev) => [...prev, ...res.inventory]);
+        }
+      });
+    });
+  };
+
+  useEffect(() => {
+    fetchInventory();
+  }, []);
 
   return (
     <div
@@ -89,7 +112,7 @@ const AvailableInventoryModal: React.FC<_ModalProps> = ({ modalHandler }) => {
                           </td>
 
                           {sizes.split(',').map((size, index) => {
-                            const foundIt = inventory?.inventory.find(
+                            const foundIt = availabelInventory.find(
                               (int) =>
                                 int.name === size &&
                                 int.colorAttributeOptionId ===
@@ -119,7 +142,10 @@ const AvailableInventoryModal: React.FC<_ModalProps> = ({ modalHandler }) => {
 
             <div className='flex items-center justify-end p-4 lg:p-10 pt-0 lg:pt-0'>
               <button
-                onClick={() => modalHandler(null)}
+                onClick={() => {
+                  setAvailableInventory([]);
+                  modalHandler(null);
+                }}
                 type='button'
                 className='p-2 px-3 bg-indigo-600 border border-indigo-600 text-white'
               >

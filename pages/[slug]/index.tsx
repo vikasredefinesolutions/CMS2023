@@ -6,10 +6,10 @@ import { getServerSideProps } from '@controllers/getServerSideProps';
 import { _TopicHomeProps } from '@definations/slug.type';
 import { useActions_v2 } from '@hooks_v2/index';
 import PageNotFound from '@templates/404';
+import Banner from '@templates/banner';
 import Home from '@templates/Home';
 import ProductDetails from '@templates/ProductDetails';
 import ProductListing from '@templates/ProductListings';
-import Banner from '@templates/banner';
 import _ from 'lodash';
 import { NextPage } from 'next';
 import { useEffect } from 'react';
@@ -123,3 +123,4 @@ const SlugSearch: NextPage<_SlugServerSideProps | _SlugServerSide_WentWrong> = (
 
 export default SlugSearch;
 export { getServerSideProps };
+

@@ -6,8 +6,8 @@ import { listing_max_showcolors } from '@constants/global.constant';
 import { splitproductList } from '@definations/productList.type';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import {
-  GetProductImageOptionList,
   GetlAllProductList,
+  GetProductImageOptionList,
 } from '@templates/ProductListings/ProductListingType';
 import ProductBoxController from '@templates/ProductListings/productListingType1/components/productBoxController';
 import Link from 'next/link';
@@ -62,12 +62,16 @@ const TemplateThreeListing = ({
               href={`${origin}/${product.sename}.html`}
               className='relative'
             >
-              <NxtImage
-                src={currentProduct?.imageName ? currentProduct?.imageName : ''}
-                alt=''
-                className='w-auto h-auto max-h-max'
-                key={currentProduct?.id}
-              />
+              <a>
+                <NxtImage
+                  src={
+                    currentProduct?.imageName ? currentProduct?.imageName : ''
+                  }
+                  alt=''
+                  className='w-auto h-auto max-h-max'
+                  key={currentProduct?.id}
+                />
+              </a>
             </Link>
             <div className='absolute left-7 top-7 h-8 flex gap-1'>
               <div className='h-8'>
@@ -291,19 +295,24 @@ const TemplateThreeListing = ({
                   product?.splitproductList.map(
                     (subRow: splitproductList, index: number) =>
                       index < listing_max_showcolors ? (
-                        <Link key={product.id} href={`/${subRow.seName}.html`}>
-                          <li
-                            className={`w-7 h-7 border-2 hover:border-secondary cursor-pointer`}
-                            key={subRow.prodcutId}
+                        <li
+                          className={`w-7 h-7 border-2 hover:border-secondary cursor-pointer`}
+                          key={subRow.prodcutId}
+                        >
+                          <Link
+                            key={product.id}
+                            href={`/${subRow.seName}.html`}
                           >
-                            <NxtImage
-                              src={`${mediaBaseUrl}${subRow.imageurl}`}
-                              alt=''
-                              className=''
-                              title={subRow.colorName}
-                            />
-                          </li>
-                        </Link>
+                            <a>
+                              <NxtImage
+                                src={`${mediaBaseUrl}${subRow.imageurl}`}
+                                alt=''
+                                className=''
+                                title={subRow.colorName}
+                              />
+                            </a>
+                          </Link>
+                        </li>
                       ) : (
                         <>{(flag = true)}</>
                       ),

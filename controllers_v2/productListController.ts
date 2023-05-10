@@ -57,7 +57,7 @@ const ProductListController = (
       setFilters(data.filters);
       setFilterOption(checkedFilters);
     }
-  }, [slug, sorting]);
+  }, [slug, sorting, data?.product?.length]);
 
   useEffect(() => {
     if (!allProduct) {

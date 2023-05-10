@@ -12,6 +12,7 @@ import {
 } from '@templates/ProductListings/ProductListingType';
 
 import { Fragment } from 'react';
+
 const SideFilter = ({
   filters,
   handleChange,
@@ -96,43 +97,46 @@ const SideFilter = ({
                                     <Link
                                       key={option.name}
                                       id={option.name}
-                                      className='flex items-center !text-black font-bold !no-underline'
+                                      className='flex items-center !text-black !no-underline'
                                       href={`/${option.sename}.html`}
                                     >
                                       <span className='material-icons-outlined'>
-                                        {option.subrows
-                                          ? 'chevron_right'
-                                          : 'expand_more'}
+                                        {option.subrows &&
+                                        option.subrows.length > 0 &&
+                                        index === 0
+                                          ? 'expand_more'
+                                          : 'chevron_right'}
                                       </span>
                                       {capitalizeFirstLetter(option.name)}(
                                       {option.productCount})
                                     </Link>
-                                    {option.subrows && (
-                                      <ul className='ml-3'>
-                                        {option.subrows?.map((subrow) => (
-                                          <li
-                                            key={subrow.id}
-                                            className='flex items-center !text-black !no-underline'
-                                          >
-                                            {' '}
-                                            <Link
-                                              key={subrow.name}
-                                              href={`/${subrow.sename}.html`}
-                                              className='!text-black !no-underline'
+                                    {option.subrows &&
+                                      option.subrows.length > 0 && (
+                                        <ul className='ml-3'>
+                                          {option.subrows?.map((subrow) => (
+                                            <li
+                                              key={subrow.id}
+                                              className='flex items-center !text-black !no-underline'
                                             >
-                                              <span className='material-icons-outlined'>
-                                                {' '}
-                                                chevron_right
-                                              </span>
-                                              {capitalizeFirstLetter(
-                                                subrow.name,
-                                              )}{' '}
-                                              ({subrow.productCount})
-                                            </Link>
-                                          </li>
-                                        ))}
-                                      </ul>
-                                    )}
+                                              {' '}
+                                              <Link
+                                                key={subrow.name}
+                                                href={`/${subrow.sename}.html`}
+                                                className='!text-black !no-underline'
+                                              >
+                                                <span className='material-icons-outlined'>
+                                                  {' '}
+                                                  chevron_right
+                                                </span>
+                                                {capitalizeFirstLetter(
+                                                  subrow.name,
+                                                )}{' '}
+                                                ({subrow.productCount})
+                                              </Link>
+                                            </li>
+                                          ))}
+                                        </ul>
+                                      )}
                                   </li>
                                 ) : (
                                   <li

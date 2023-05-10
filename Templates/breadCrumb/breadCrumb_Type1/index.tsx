@@ -12,7 +12,6 @@ const BreadCrumb_Type1: NextPage<_BreadCrumbProps> = ({
 }) => {
   const router = useRouter();
   const product = useTypedSelector_v2((state) => state.product.product);
-
   return (
     <>
       <div className='container mx-auto'>

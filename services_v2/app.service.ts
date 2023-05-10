@@ -177,7 +177,7 @@ export const getAllConfigurations = async (payload: {
     });
   });
 
-  Promise.allSettled(configsToFetch)
+  await Promise.allSettled(configsToFetch)
     .then((values) => {
       values.forEach((value, index) => {
         configurations[index] =

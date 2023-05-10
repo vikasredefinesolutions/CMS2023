@@ -17,21 +17,21 @@ const BannerType1: React.FC<_BannerComponentProps> = ({
   } else {
     return (
       <>
-        {!userId && (
-          <div className='container pl-[15px] pr-[15px] mx-auto cursor-pointer'>
-            <div className='text-center bg-tertiary pl-[10px] pr-[10px] pt-[4px] pb-[4px]'>
-              <a
-                onClick={() => setShowModal('login')}
-                className='inline-flex items-center tracking-[1.2px] text-default-text font-medium'
-              >
-                {__pagesText.productListing.Banner.loginforExclusivePrice}
-                <span className='material-icons'>
-                  {__pagesText.Headers.loginIcon}
-                </span>
-              </a>
-            </div>
+        <div className='container pl-[15px] pr-[15px] mx-auto cursor-pointer'>
+          <div className='text-center bg-tertiary pl-[10px] pr-[10px] pt-[4px] pb-[4px]'>
+            <a
+              href='javascript:void(0);'
+              onClick={() => (!userId ? setShowModal('login') : null)}
+              className='inline-flex items-center tracking-[1.2px] text-default-text font-medium'
+            >
+              {__pagesText.productListing.Banner.loginforExclusivePrice}
+              <span className='material-icons'>
+                {__pagesText.Headers.loginIcon}
+              </span>
+            </a>
           </div>
-        )}
+        </div>
+
         <div className='container pl-[15px] pr-[15px] mx-auto'>
           <div className='items-center md:pl-[70px] md:pr-[70px] md:pt-[70px] md:pb-[70px] pl-[0px] pr-[0px] pt-[16px] pb-[16px] bg-light-gray'>
             <div className='flex flex-wrap items-center gap-y-[40px]'>
@@ -49,7 +49,7 @@ const BannerType1: React.FC<_BannerComponentProps> = ({
                     <ImageComponent
                       isStatic={true}
                       title={'category'}
-                      src='/images/your-favorite-brands.png'
+                      src='/assets/images/your-favorite-brands.webp'
                       className='lg:object-cover lg:max-w-none bg-white'
                       alt='category'
                       useNextImage={false}

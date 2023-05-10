@@ -10,8 +10,10 @@ const index = () => {
 
   useEffect(() => {
     let pageType = getPageType(storeId, 'myAccountPage').then((res: any) => {
-      let pageType = res.config_value ? JSON.parse(res.config_value) : {};
-      setSeType(pageType.myAccountTemplateId);
+      if (res) {
+        let pageType = res?.config_value ? JSON.parse(res.config_value) : {};
+        setSeType(pageType.myAccountTemplateId);
+      }
     });
   }, [storeId]);
   return <>{seType && <ManageLogo id={seType} />}</>;

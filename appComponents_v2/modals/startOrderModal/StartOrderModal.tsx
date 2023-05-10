@@ -174,6 +174,7 @@ const StartOrderModal: React.FC<_startOrderModalProps> = (props) => {
                         msrp: product.msrp,
                         salePrice: product.salePrice,
                       }}
+                      isSpecialBrand={product.isSpecialBrand}
                     />
 
                     <AskToLogin modalHandler={modalHandler} />

@@ -83,7 +83,7 @@ const SideFiltersTypeTwo = ({
                                       {val.productCount})
                                     </div>
                                   </Link>
-                                  {val.subrows && (
+                                  {val.subrows && val.subrows.length > 0 && (
                                     <ul className='ml-3'>
                                       {val.subrows?.map((subrow) => (
                                         <li

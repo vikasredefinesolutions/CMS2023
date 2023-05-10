@@ -153,9 +153,24 @@ const TemplateOneListing = ({
               >
                 {isAttributeSaparateProduct &&
                 product.splitproductList &&
-                product?.splitproductList?.length > 0
-                  ? product?.splitproductList?.map((subRow, index) =>
-                      index < listing_max_showcolors ? (
+                product?.splitproductList?.length > 0 ? (
+                  <div className='flex'>
+                    <Link key={product.id} href={`/${product.sename}.html`}>
+                      <li
+                        className={`w-7 h-7 border-2 hover:border-secondary cursor-pointer`}
+                        key={product.id}
+                      >
+                        <NxtImage
+                          src={`${mediaBaseUrl}${currentProduct.imageName}`}
+                          alt=''
+                          className=''
+                          title={product.name}
+                        />
+                      </li>
+                    </Link>
+
+                    {product?.splitproductList?.map((subRow, index) =>
+                      index < listing_max_showcolors - 1 ? (
                         <Link key={product.id} href={`/${subRow.seName}.html`}>
                           <li
                             className={`w-7 h-7 border-2 hover:border-secondary cursor-pointer`}
@@ -172,37 +187,40 @@ const TemplateOneListing = ({
                       ) : (
                         <>{(flag = true)}</>
                       ),
-                    )
-                  : product.getProductImageOptionList &&
-                    product.getProductImageOptionList.map((subRow, index) =>
-                      index < listing_max_showcolors ? (
-                        <li
-                          className={`w-7 h-7 border-2 hover:border-secondary cursor-pointer ${
-                            subRow.id === currentProduct.id
-                              ? ' border-secondary'
-                              : 'border-light-gray'
-                          }`}
-                          onClick={() => {
-                            colorChangeHandler(
-                              product.id,
-                              product.sename || '',
-                              subRow.colorName,
-                            );
-                            setCurrentProduct(subRow);
-                          }}
-                          key={subRow.id}
-                        >
-                          <NxtImage
-                            src={`${mediaBaseUrl}${subRow.imageName}`}
-                            alt=''
-                            className=''
-                            title={subRow.colorName}
-                          />
-                        </li>
-                      ) : (
-                        <>{(flag = true)}</>
-                      ),
                     )}
+                  </div>
+                ) : (
+                  product.getProductImageOptionList &&
+                  product.getProductImageOptionList.map((subRow, index) =>
+                    index < listing_max_showcolors ? (
+                      <li
+                        className={`w-7 h-7 border-2 hover:border-secondary cursor-pointer ${
+                          subRow.id === currentProduct.id
+                            ? ' border-secondary'
+                            : 'border-light-gray'
+                        }`}
+                        onClick={() => {
+                          colorChangeHandler(
+                            product.id,
+                            product.sename || '',
+                            subRow.colorName,
+                          );
+                          setCurrentProduct(subRow);
+                        }}
+                        key={subRow.id}
+                      >
+                        <NxtImage
+                          src={`${mediaBaseUrl}${subRow.imageName}`}
+                          alt=''
+                          className=''
+                          title={subRow.colorName}
+                        />
+                      </li>
+                    ) : (
+                      <>{(flag = true)}</>
+                    ),
+                  )
+                )}
                 {flag ? (
                   <Link key={product.id} href={`/${product.sename}.html`}>
                     <li className='w-[28px] h-[28px] border-2 border-light-gray hover:border-secondary relative cursor-pointer'>

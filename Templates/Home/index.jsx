@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react';
 import DIHomePage from '@templates/Home/components/DIHomePage';
 import * as helper from '@templates/Home/components/Helper';
 import AOS from 'aos';
-import "aos/dist/aos.css";
+import 'aos/dist/aos.css';
 
 const Home = (props) => {
   const pageData = props.props?.pageData;
@@ -83,7 +83,7 @@ const Home = (props) => {
           if (attributes.type == 'color') {
             return attributes.value;
           } else if (attributes.type == 'image') {
-            return 'url(\'' + attributes.value + '\')';
+            return "url('" + attributes.value + "')";
           } else if (attributes.type == 'none') {
             return 'none';
           }
@@ -112,8 +112,7 @@ const Home = (props) => {
 
         if (attributes != undefined && Object.keys(attributes).length > 0) {
           return attributes.type;
-        }
-        else {
+        } else {
           return '';
         }
       }
@@ -123,41 +122,32 @@ const Home = (props) => {
     return '';
   };
 
-    const loadBackgroundDefaultStyle = (element) => {
-      
-      if (element.selectedVal != undefined) {
-        if (Object.keys(element.selectedVal).length > 0) {
-          const bgPropertyName = 'bg';
+  const loadBackgroundDefaultStyle = (element) => {
+    if (element.selectedVal != undefined) {
+      if (Object.keys(element.selectedVal).length > 0) {
+        const bgPropertyName = 'bg';
 
-          let attributes;
-          Object.entries(element.selectedVal).map(
-            ([key, value]) => {
-              
-              if (key == bgPropertyName+'_bg_style')
-              {
-                attributes = value;
-              } 
-            }
-          );
+        let attributes;
+        Object.entries(element.selectedVal).map(([key, value]) => {
+          if (key == bgPropertyName + '_bg_style') {
+            attributes = value;
+          }
+        });
 
-
-          if (attributes != undefined && Object.keys(attributes).length > 0) {
-              if(attributes.value === 'fullbg')
-              {
-                  return 'outer';
-              }
-              else
-              {
-                  return 'inner';
-              }
+        if (attributes != undefined && Object.keys(attributes).length > 0) {
+          if (attributes.value === 'fullbg') {
+            return 'outer';
+          } else {
+            return 'inner';
           }
         }
-
-        return 'outer';
       }
+
       return 'outer';
-  }
-  
+    }
+    return 'outer';
+  };
+
   const checkFixedBG = (element) => {
     if (element.selectedVal != undefined) {
       if (Object.keys(element.selectedVal).length > 0) {
@@ -166,26 +156,21 @@ const Home = (props) => {
         );
 
         let attributes;
-        let fixedBg;  
-        Object.entries(element.selectedVal).map(
-          ([key, value]) => {
-
-            if (key == bgPropertyName) {
-              attributes = value;
-            }
-            if (key == bgPropertyName+"_fixed_bg") {
-              fixedBg = value;
-            }
+        let fixedBg;
+        Object.entries(element.selectedVal).map(([key, value]) => {
+          if (key == bgPropertyName) {
+            attributes = value;
           }
-        );
-
+          if (key == bgPropertyName + '_fixed_bg') {
+            fixedBg = value;
+          }
+        });
 
         if (attributes != undefined && Object.keys(attributes).length > 0) {
           if (attributes.type == 'color') {
             return false;
           } else if (attributes.type == 'image') {
-            if(fixedBg && fixedBg.value)
-            {
+            if (fixedBg && fixedBg.value) {
               return true;
             }
           } else if (attributes.type == 'none') {
@@ -197,54 +182,44 @@ const Home = (props) => {
       return false;
     }
     return false;
-
-
-  }
+  };
 
   const loadBackgroundImageClass = (element) => {
-      
-      if (element.selectedVal != undefined) {
-        if (Object.keys(element.selectedVal).length > 0) {
-          const bgPropertyName = 'bg';
+    if (element.selectedVal != undefined) {
+      if (Object.keys(element.selectedVal).length > 0) {
+        const bgPropertyName = 'bg';
 
-          let attributes;
-          Object.entries(element.selectedVal).map(
-            ([key, value]) => {
-              
-              if (key == bgPropertyName)
-              {
-                attributes = value;
-              } 
-            }
-          );
-
-          let bgType = '';
-          
-          if (attributes != undefined && Object.keys(attributes).length > 0) {
-            if (attributes.type == 'image') {
-              bgType = 'image';
-            }
+        let attributes;
+        Object.entries(element.selectedVal).map(([key, value]) => {
+          if (key == bgPropertyName) {
+            attributes = value;
           }
-          if(bgType === 'image')
-          {
-            let imageClass = '';
-            
-            if('bg_bg_image_style' in element.selectedVal)
-            {
-              imageClass += ' ' + element.selectedVal.bg_bg_image_style.value;                                                          
-            }
-            if('bg_bg_image_position' in element.selectedVal)
-            {
-              imageClass += ' ' + element.selectedVal.bg_bg_image_position.value;                                                          
-            }
-            return imageClass;
+        });
+
+        let bgType = '';
+
+        if (attributes != undefined && Object.keys(attributes).length > 0) {
+          if (attributes.type == 'image') {
+            bgType = 'image';
           }
         }
+        if (bgType === 'image') {
+          let imageClass = '';
 
-        return '';
+          if ('bg_bg_image_style' in element.selectedVal) {
+            imageClass += ' ' + element.selectedVal.bg_bg_image_style.value;
+          }
+          if ('bg_bg_image_position' in element.selectedVal) {
+            imageClass += ' ' + element.selectedVal.bg_bg_image_position.value;
+          }
+          return imageClass;
+        }
       }
+
       return '';
-  }
+    }
+    return '';
+  };
 
   useEffect(() => {
     componentHtml?.map((element, index) => {
@@ -285,150 +260,280 @@ const Home = (props) => {
                       componentValue.properties,
                     );
                   }
-                  
-                  const backgroundDefault = loadBackgroundDefault(componentValue);
-                  const backgroundStyle = loadBackgroundDefaultStyle(componentValue);
-                  const backgroundImageClass = loadBackgroundImageClass(componentValue);
+
+                  const backgroundDefault =
+                    loadBackgroundDefault(componentValue);
+                  const backgroundStyle =
+                    loadBackgroundDefaultStyle(componentValue);
+                  const backgroundImageClass =
+                    loadBackgroundImageClass(componentValue);
                   const fixedBgDisplay = checkFixedBG(componentValue);
-                  console.log("CHED", componentValue.selectedVal);
+                  // console.log("CHED", componentValue.selectedVal);
                   let additionalclass = '';
                   let innerDivClass = '';
-                  if(componentValue.selectedVal && 'additionalclass' in componentValue.selectedVal)
-                  {
-                      additionalclass = componentValue.selectedVal.additionalclass.value;                                                          
+                  if (
+                    componentValue.selectedVal &&
+                    'additionalclass' in componentValue.selectedVal
+                  ) {
+                    additionalclass =
+                      componentValue.selectedVal.additionalclass.value;
                   }
-                  if(componentValue.selectedVal && 'container' in componentValue.selectedVal)
-                  {
-                    if(componentValue.selectedVal.container.value == 'w-full')
-                      additionalclass += ' container-fluid'; 
+                  if (
+                    componentValue.selectedVal &&
+                    'container' in componentValue.selectedVal
+                  ) {
+                    if (componentValue.selectedVal.container.value == 'w-full')
+                      additionalclass += ' container-fluid';
                     else
-                      additionalclass += ' ' + componentValue.selectedVal.container.value + ' mx-auto ';                                                          
-                  }
-                  else
-                  {
+                      additionalclass +=
+                        ' ' +
+                        componentValue.selectedVal.container.value +
+                        ' mx-auto ';
+                  } else {
                     additionalclass += ' container mx-auto ';
                   }
-                  if(componentValue.selectedVal && 'container_left_padding' in componentValue.selectedVal)
-                  {
-                      innerDivClass += ' ' + 'pl-['+componentValue.selectedVal.container_left_padding.value+'px]';                                                          
+                  if (
+                    componentValue.selectedVal &&
+                    'container_left_padding' in componentValue.selectedVal
+                  ) {
+                    innerDivClass +=
+                      ' ' +
+                      'pl-[' +
+                      componentValue.selectedVal.container_left_padding.value +
+                      'px]';
                   }
-                  if(componentValue.selectedVal && 'container_top_padding' in componentValue.selectedVal)
-                  {
-                      innerDivClass += ' ' + 'pt-['+componentValue.selectedVal.container_top_padding.value+'px]';                                                          
+                  if (
+                    componentValue.selectedVal &&
+                    'container_top_padding' in componentValue.selectedVal
+                  ) {
+                    innerDivClass +=
+                      ' ' +
+                      'pt-[' +
+                      componentValue.selectedVal.container_top_padding.value +
+                      'px]';
                   }
-                  if(componentValue.selectedVal && 'container_right_padding' in componentValue.selectedVal)
-                  {
-                      innerDivClass += ' ' + 'pr-['+componentValue.selectedVal.container_right_padding.value+'px]';                                                            
+                  if (
+                    componentValue.selectedVal &&
+                    'container_right_padding' in componentValue.selectedVal
+                  ) {
+                    innerDivClass +=
+                      ' ' +
+                      'pr-[' +
+                      componentValue.selectedVal.container_right_padding.value +
+                      'px]';
                   }
-                  if(componentValue.selectedVal && 'container_bottom_padding' in componentValue.selectedVal)
-                  {
-                      innerDivClass += ' ' + 'pb-['+componentValue.selectedVal.container_bottom_padding.value+'px]';                                                            
+                  if (
+                    componentValue.selectedVal &&
+                    'container_bottom_padding' in componentValue.selectedVal
+                  ) {
+                    innerDivClass +=
+                      ' ' +
+                      'pb-[' +
+                      componentValue.selectedVal.container_bottom_padding
+                        .value +
+                      'px]';
                   }
-                  if(componentValue.selectedVal && 'container_left_margin' in componentValue.selectedVal)
-                  {
-                      innerDivClass += ' ' + 'ml-['+componentValue.selectedVal.container_left_margin.value+'px]';                                                            
+                  if (
+                    componentValue.selectedVal &&
+                    'container_left_margin' in componentValue.selectedVal
+                  ) {
+                    innerDivClass +=
+                      ' ' +
+                      'ml-[' +
+                      componentValue.selectedVal.container_left_margin.value +
+                      'px]';
                   }
-                  if(componentValue.selectedVal && 'container_top_margin' in componentValue.selectedVal)
-                  {
-                      innerDivClass += ' ' + 'mt-['+componentValue.selectedVal.container_top_margin.value+'px]';                                                            
+                  if (
+                    componentValue.selectedVal &&
+                    'container_top_margin' in componentValue.selectedVal
+                  ) {
+                    innerDivClass +=
+                      ' ' +
+                      'mt-[' +
+                      componentValue.selectedVal.container_top_margin.value +
+                      'px]';
                   }
-                  if(componentValue.selectedVal && 'container_right_margin' in componentValue.selectedVal)
-                  {
-                      innerDivClass += ' ' + 'mr-['+componentValue.selectedVal.container_right_margin.value+'px]';                                                            
+                  if (
+                    componentValue.selectedVal &&
+                    'container_right_margin' in componentValue.selectedVal
+                  ) {
+                    innerDivClass +=
+                      ' ' +
+                      'mr-[' +
+                      componentValue.selectedVal.container_right_margin.value +
+                      'px]';
                   }
-                  if(componentValue.selectedVal && 'container_bottom_margin' in componentValue.selectedVal)
-                  {
-                      innerDivClass += ' ' + 'mb-['+componentValue.selectedVal.container_bottom_margin.value+'px]';                                                          
+                  if (
+                    componentValue.selectedVal &&
+                    'container_bottom_margin' in componentValue.selectedVal
+                  ) {
+                    innerDivClass +=
+                      ' ' +
+                      'mb-[' +
+                      componentValue.selectedVal.container_bottom_margin.value +
+                      'px]';
                   }
 
-                  
                   return (
                     <div
                       key={index}
-                      className={`w-full mx-auto ${componentValue.visibility == 'off' ? 'hidden' : ''} ${backgroundStyle === 'outer' ? backgroundImageClass : ''}`} 
-                      
-                      style={ loadBackgroundType(componentValue) == 'image' ? { backgroundImage: backgroundStyle === 'outer' ? backgroundDefault : 'none', backgroundAttachment: backgroundStyle === 'outer' ? (fixedBgDisplay ? 'fixed' : 'inherit') : 'inherit' } : { background: backgroundStyle === 'outer' ? backgroundDefault : 'none' }}
+                      className={`w-full mx-auto ${
+                        componentValue.visibility == 'off' ? 'hidden' : ''
+                      } ${
+                        backgroundStyle === 'outer' ? backgroundImageClass : ''
+                      }`}
+                      style={
+                        loadBackgroundType(componentValue) == 'image'
+                          ? {
+                              backgroundImage:
+                                backgroundStyle === 'outer'
+                                  ? backgroundDefault
+                                  : 'none',
+                              backgroundAttachment:
+                                backgroundStyle === 'outer'
+                                  ? fixedBgDisplay
+                                    ? 'fixed'
+                                    : 'inherit'
+                                  : 'inherit',
+                            }
+                          : {
+                              background:
+                                backgroundStyle === 'outer'
+                                  ? backgroundDefault
+                                  : 'none',
+                            }
+                      }
                       id={`div${componentValue.no}`}
                       // ref={ref => {
                       //     refArray.current[componentValue.uid] = ref; // took this from your guide's example.
                       // }}
                     >
-                    <section className={`${additionalclass}`} >
-                     <div className={`${innerDivClass} ${backgroundStyle === 'inner' ? backgroundImageClass : ''}`} style={ loadBackgroundType(componentValue) == 'image' ? { backgroundImage: backgroundStyle === 'inner' ? backgroundDefault : 'none', backgroundAttachment: backgroundStyle === 'inner' ? (fixedBgDisplay ? 'fixed' : 'inherit') : 'inherit'  } : { background: backgroundStyle === 'inner' ? backgroundDefault : 'none' }} >     
-                     {Object.keys(componentValue.properties).includes('PlainText') ? (<>
-                      <div dangerouslySetInnerHTML={{ __html: componentValue.selectedVal?.PlainText.value }} />
-                     </>) : ( <>
-                        {Object.keys(componentValue.properties).includes(
-                            'socialshare',
-                          ) ? (<><SocialShare /> </>) : ( <>
-                          
-                          {Object.keys(componentValue.selectedVal).includes(
-                            'featuredproducts_section_title',
-                          ) ||
-                          Object.keys(componentValue.selectedVal).includes(
-                            'featuredproducts_product_count',
+                      <section className={`${additionalclass}`}>
+                        <div
+                          className={`${innerDivClass} ${
+                            backgroundStyle === 'inner'
+                              ? backgroundImageClass
+                              : ''
+                          }`}
+                          style={
+                            loadBackgroundType(componentValue) == 'image'
+                              ? {
+                                  backgroundImage:
+                                    backgroundStyle === 'inner'
+                                      ? backgroundDefault
+                                      : 'none',
+                                  backgroundAttachment:
+                                    backgroundStyle === 'inner'
+                                      ? fixedBgDisplay
+                                        ? 'fixed'
+                                        : 'inherit'
+                                      : 'inherit',
+                                }
+                              : {
+                                  background:
+                                    backgroundStyle === 'inner'
+                                      ? backgroundDefault
+                                      : 'none',
+                                }
+                          }
+                        >
+                          {Object.keys(componentValue.properties).includes(
+                            'PlainText',
                           ) ? (
                             <>
-                            <FeaturedProducts
-                                dataArr={componentValue.selectedVal}
+                              <div
+                                dangerouslySetInnerHTML={{
+                                  __html:
+                                    componentValue.selectedVal?.PlainText.value,
+                                }}
                               />
                             </>
                           ) : (
                             <>
-                              {Object.keys(componentValue.selectedVal).includes(
-                                'carousel',
+                              {Object.keys(componentValue.properties).includes(
+                                'socialshare',
                               ) ? (
                                 <>
-                                  <ElementCarouselDisplay
-                                    bannerArr={
-                                      componentValue.selectedVal.carousel.value
-                                    }
-                                  />
+                                  <SocialShare />{' '}
                                 </>
                               ) : (
                                 <>
-                                  {Object.keys(componentValue.selectedVal).includes(
-                                    'FullAccordion',
+                                  {Object.keys(
+                                    componentValue.selectedVal,
+                                  ).includes(
+                                    'featuredproducts_section_title',
+                                  ) ||
+                                  Object.keys(
+                                    componentValue.selectedVal,
+                                  ).includes(
+                                    'featuredproducts_product_count',
                                   ) ? (
                                     <>
-                                      
-                                        {componentValue?.selectedVal?.Title && (
-                                          <div class='text-box-h2 mb-4' id='Title'>
-                                            {componentValue.selectedVal.Title.value ?? ''}
-                                          </div>
-                                        )}
-                                        <ul className='w-full'>
-                                          <ElementAccordionDisplay
-                                          selected_Values={componentValue.selectedVal} 
-                                            acValues={
-                                              componentValue.selectedVal
-                                                .FullAccordion.value
-                                            }
-                                          
-                                          />
-                                        </ul>
-                                    
+                                      <FeaturedProducts
+                                        dataArr={componentValue.selectedVal}
+                                      />
                                     </>
                                   ) : (
                                     <>
-                                      <div
-                                        className={componentValue.uuid}
-                                        dangerouslySetInnerHTML={{
-                                          __html: componentValue.html,
-                                        }}
-                                      ></div>
+                                      {Object.keys(
+                                        componentValue.selectedVal,
+                                      ).includes('carousel') ? (
+                                        <>
+                                          <ElementCarouselDisplay
+                                            bannerArr={
+                                              componentValue.selectedVal
+                                                .carousel.value
+                                            }
+                                          />
+                                        </>
+                                      ) : (
+                                        <>
+                                          {Object.keys(
+                                            componentValue.selectedVal,
+                                          ).includes('FullAccordion') ? (
+                                            <>
+                                              {componentValue?.selectedVal
+                                                ?.Title && (
+                                                <div
+                                                  class='text-box-h2 mb-4'
+                                                  id='Title'
+                                                >
+                                                  {componentValue.selectedVal
+                                                    .Title.value ?? ''}
+                                                </div>
+                                              )}
+                                              <ul className='w-full'>
+                                                <ElementAccordionDisplay
+                                                  selected_Values={
+                                                    componentValue.selectedVal
+                                                  }
+                                                  acValues={
+                                                    componentValue.selectedVal
+                                                      .FullAccordion.value
+                                                  }
+                                                />
+                                              </ul>
+                                            </>
+                                          ) : (
+                                            <>
+                                              <div
+                                                className={componentValue.uuid}
+                                                dangerouslySetInnerHTML={{
+                                                  __html: componentValue.html,
+                                                }}
+                                              ></div>
+                                            </>
+                                          )}
+                                        </>
+                                      )}
                                     </>
-                                  )}
+                                  )}{' '}
                                 </>
                               )}
                             </>
-                          )} </>)
-                        }
-                        </>
-                        )
-                      }
-                    </div>  
-                    </section>
+                          )}
+                        </div>
+                      </section>
                     </div>
                   );
 
