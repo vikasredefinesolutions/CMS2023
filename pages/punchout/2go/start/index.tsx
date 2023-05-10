@@ -10,7 +10,7 @@ const Punchout = (props: any) => {
     withCredentials: false,
     headers: {
       'Content-Type': 'application/xml',
-      'Access-Control-Allow-Origin': ' no-cors',
+      'Access-Control-Allow-Origin': '*',
     },
     data: props.body,
   };
