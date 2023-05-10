@@ -67,7 +67,7 @@ export const updateSetProperties = (element) => {
             }
             if (key == cvalue +"_bg_type_hover")
             {
-              hImageOrColor =  value;
+              hImageOrColor =  value.value;
             }
             // if (key == cvalue+"_text_color")
             // {
@@ -629,6 +629,22 @@ export const updateSetProperties = (element) => {
               }
             }
            
+          }
+
+          if(!element.properties.leftBoxBg && value.type === 'individualbg')
+          {
+            if(x && x.querySelectorAll("#"+key).length > 0)
+            {
+                x.querySelectorAll("#"+key)[0].style = 'background: ' + value.value;
+            }
+          }
+
+          if(value.type === 'sectionbgcolor')
+          {
+            if(x && x.querySelectorAll("#"+key).length > 0)
+            {
+                x.querySelectorAll("#"+key)[0].style = 'background: ' + value.value;
+            }
           }
 
       if (value.type === 'finalclass') {
