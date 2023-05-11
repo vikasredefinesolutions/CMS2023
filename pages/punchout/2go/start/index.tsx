@@ -3,6 +3,24 @@ import axios from 'axios';
 import getRawBody from 'raw-body';
 
 const Punchout = (props: any) => {
+  let config = {
+    method: 'post',
+    maxBodyLength: Infinity,
+    url: props.returnUrl,
+    withCredentials: false,
+    headers: {
+      'Content-Type': 'application/xml',
+      'Access-Control-Allow-Origin': '*',
+    },
+    data: props.body,
+  };
+
+  axios
+    .request(config)
+    .then((response) => {
+      console.log(JSON.stringify(response.data));
+    })
+    .catch((err) => console.log(err));
   // const myHeaders = new Headers();
   // myHeaders.append('Content-Type', 'application/xml');
   // myHeaders.append('Access-Control-Allow-Origin', ' no-cors');
@@ -46,26 +64,5 @@ export const getServerSideProps = async (context: any) => {
     .toString()
     .replace('###StoreUrl###', `https://${context.req.headers.host}`);
 
-  let config = {
-    method: 'post',
-    maxBodyLength: Infinity,
-    url: obj.returnUrl,
-    withCredentials: false,
-    headers: {
-      'Content-Type': 'application/xml',
-      'Access-Control-Allow-Origin': '*',
-    },
-    data: returnxml,
-  };
-  let x = '';
-
-  await axios
-
-    .request(config)
-    .then((response) => {
-      x = JSON.stringify(response.data);
-    })
-    .catch((err) => console.log(err));
-
-  return { props: { body: x, returnUrl: x } };
+  return { props: { body: returnxml, returnUrl: obj.return_url } };
 };
