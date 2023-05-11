@@ -63,5 +63,25 @@ export const getServerSideProps = async (context: any) => {
     .toString()
     .replace('###StoreUrl###', `http://${context.req.headers.host}`);
 
+  let config = {
+    method: 'post',
+    maxBodyLength: Infinity,
+    url: obj.returnUrl,
+    withCredentials: false,
+    headers: {
+      'Content-Type': 'application/xml',
+      'Access-Control-Allow-Origin': '*',
+    },
+    data: returnxml,
+  };
+  let x = '';
+
+  axios
+    .request(config)
+    .then((response) => {
+      x = JSON.stringify(response.data);
+    })
+    .catch((err) => console.log(err));
+
   return { props: { body: returnxml, returnUrl: obj.return_url } };
 };
