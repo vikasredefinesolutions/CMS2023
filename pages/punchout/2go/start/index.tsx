@@ -3,24 +3,6 @@ import axios from 'axios';
 import getRawBody from 'raw-body';
 
 const Punchout = (props: any) => {
-  let config = {
-    method: 'post',
-    maxBodyLength: Infinity,
-    url: props.returnUrl,
-    withCredentials: false,
-    headers: {
-      'Content-Type': 'application/xml',
-      'Access-Control-Allow-Origin': '*',
-    },
-    data: props.body,
-  };
-
-  axios
-    .request(config)
-    .then((response) => {
-      console.log(JSON.stringify(response.data));
-    })
-    .catch((err) => console.log(err));
   // const myHeaders = new Headers();
   // myHeaders.append('Content-Type', 'application/xml');
   // myHeaders.append('Access-Control-Allow-Origin', ' no-cors');
@@ -41,6 +23,7 @@ const Punchout = (props: any) => {
   //     .catch((error) => console.log('error', error));
   // }
 
+  console.log(props, 'these are props');
   return <>This page exists and getting response</>;
 };
 
@@ -77,11 +60,12 @@ export const getServerSideProps = async (context: any) => {
   let x = '';
 
   axios
+
     .request(config)
     .then((response) => {
       x = JSON.stringify(response.data);
     })
     .catch((err) => console.log(err));
 
-  return { props: { body: returnxml, returnUrl: obj.return_url } };
+  return { props: { body: returnxml, returnUrl: x } };
 };
