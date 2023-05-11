@@ -3,6 +3,7 @@ import axios from 'axios';
 import getRawBody from 'raw-body';
 
 const Punchout = (props: any) => {
+  console.log(props.bpdy, 'body is console');
   let config = {
     method: 'post',
     maxBodyLength: Infinity,
