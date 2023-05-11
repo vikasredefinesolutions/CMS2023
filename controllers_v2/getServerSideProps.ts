@@ -144,7 +144,6 @@ export const getServerSideProps: GetServerSideProps = async (
         '' + store.storeId,
         'productDetail',
       );
-      console.log(res, 'this is response');
       let productDetailTypes = res.config_value
         ? JSON.parse(res.config_value)
         : {};
@@ -164,7 +163,6 @@ export const getServerSideProps: GetServerSideProps = async (
         seName: slug,
         isAttributeSaparateProduct: store.isAttributeSaparateProduct,
       });
-      console.log(productDetails, 'productDetails');
 
       if (
         productDetails.details === null ||

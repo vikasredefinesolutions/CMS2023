@@ -42,3 +42,8 @@ export enum UserAddressType {
   SHIPPINGADDRESS = 'S',
   OTHERUSERADDRESS = 'F',
 }
+
+export enum Sorting {
+  Ascending = 2,
+  Descending = 3,
+}

@@ -26,7 +26,9 @@ const checkoutTemplates: CTTemplates = {
 };
 
 const CheckoutTemplate: FC<_Props> = ({ cartTemplateId }) => {
-  const { cart: cartData } = useTypedSelector_v2((state) => state.cart);
+  const { cart: cartData, discount: cartDiscountDetails } = useTypedSelector_v2(
+    (state) => state.cart,
+  );
   const isEmployeeLoggedIn = useTypedSelector_v2(
     (state) => state.employee.loggedIn,
   );
@@ -42,7 +44,7 @@ const CheckoutTemplate: FC<_Props> = ({ cartTemplateId }) => {
       ecommerce: {
         currency: 'USD',
         value: totalPrice,
-        coupon: '',
+        coupon: cartDiscountDetails?.coupon || '',
         items: cartData?.map((item) => ({
           item_name: item?.productName,
           item_id: item?.sku,
@@ -54,6 +56,7 @@ const CheckoutTemplate: FC<_Props> = ({ cartTemplateId }) => {
           item_list_name: '', //Not available in cart
           item_list_id: item?.productId,
           price: item?.totalPrice,
+          coupon: cartDiscountDetails?.coupon || '',
         })),
       },
     };

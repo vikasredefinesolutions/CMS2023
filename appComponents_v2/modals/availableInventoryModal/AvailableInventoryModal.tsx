@@ -14,10 +14,10 @@ const AvailableInventoryModal: React.FC<_ModalProps> = ({ modalHandler }) => {
     inventory,
     name: productName,
   } = useTypedSelector_v2((state) => state.product.product);
-
   const [availabelInventory, setAvailableInventory] = useState<
     _ProductInventory[]
   >([]);
+  const [size, setSizes] = useState<string[]>([]);
 
   const fetchInventory = async () => {
     colors?.map((item) => {
@@ -27,11 +27,11 @@ const AvailableInventoryModal: React.FC<_ModalProps> = ({ modalHandler }) => {
       }).then((res) => {
         if (res !== null) {
           setAvailableInventory((prev) => [...prev, ...res.inventory]);
+          setSizes(res?.sizes[0]?.sizeArr);
         }
       });
     });
   };
-
   useEffect(() => {
     fetchInventory();
   }, []);
@@ -85,9 +85,9 @@ const AvailableInventoryModal: React.FC<_ModalProps> = ({ modalHandler }) => {
                           {__pagesText.productInfo.startOrderModal.color}
                         </div>
                       </th>
-                      {sizes.split(',').map((size) => (
-                        <th className='px-2 py-4' key={size}>
-                          <div className=''>{size}</div>
+                      {size.map((el, index) => (
+                        <th className='px-2 py-4' key={index}>
+                          <div className=''>{el}</div>
                         </th>
                       ))}
                     </tr>
@@ -111,10 +111,10 @@ const AvailableInventoryModal: React.FC<_ModalProps> = ({ modalHandler }) => {
                             <div>{color.name}</div>
                           </td>
 
-                          {sizes.split(',').map((size, index) => {
+                          {size.map((el, index) => {
                             const foundIt = availabelInventory.find(
                               (int) =>
-                                int.name === size &&
+                                int.name === el &&
                                 int.colorAttributeOptionId ===
                                   color.attributeOptionId,
                             );
@@ -126,6 +126,12 @@ const AvailableInventoryModal: React.FC<_ModalProps> = ({ modalHandler }) => {
                                       ? foundIt.futureInventory || '-'
                                       : foundIt.inventory}
                                   </div>
+                                </td>
+                              );
+                            } else {
+                              return (
+                                <td key={index} className='px-2 py-3'>
+                                  -
                                 </td>
                               );
                             }

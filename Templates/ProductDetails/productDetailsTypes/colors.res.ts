@@ -17,8 +17,15 @@ export interface _ProductColor {
   moreImages: _OtherImage[];
   minQuantity: number;
   multipleQuantity: number;
+  splitproductList: null | _splitProductList[];
 }
-
+export interface _splitProductList {
+  name: string;
+  seName: string;
+  imageurl: string;
+  colorName: string;
+  prodcutId: number;
+}
 export interface _ProductImageOption {
   id: number;
   productId: number;

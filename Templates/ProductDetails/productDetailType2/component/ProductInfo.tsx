@@ -1,6 +1,8 @@
+import Price from '@appComponents/Price';
+import PersonalizeFontModal from '@appComponents/modals/PersonalizeFontModal/PersonalizeFontModal';
 import LoginModal from '@appComponents/modals/loginModal';
 import { _modals } from '@appComponents/modals/modal';
-import Price from '@appComponents/Price';
+import SizeChartModal from '@appComponents/modals/sizeChartModal/SizeChartModal';
 import { storeBuilderTypeId } from '@configs/page.config';
 import { __pagesText } from '@constants/pages.text';
 import { paths } from '@constants/paths.constant';
@@ -12,8 +14,8 @@ import { useEffect, useState } from 'react';
 import AvailableColors from './AvailableColors';
 import DiscountPrice from './DiscountPrice';
 import DiscountPricing from './DiscountPricing';
-import { _ProductInfoProps } from './productDetailsComponents';
 import Inventory from './ProductInventory';
+import { _ProductInfoProps } from './productDetailsComponents';
 
 const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
   const [openModal, setOpenModal] = useState<null | _modals>(null);
@@ -196,20 +198,26 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
           <div
             className='text-anchor hover:text-anchor-hover underline'
             data-modal-toggle='FitandSize'
+            onClick={() => modalHandler('sizeChart')}
           >
             Fit and Size
           </div>{' '}
           <div
             className='text-anchor hover:text-anchor-hover underline'
             data-modal-toggle='Personalize'
+            onClick={() => {
+              modalHandler('personalizationFonts');
+            }}
           >
             Personalize
           </div>
         </div>
-        <Inventory
-          attributeOptionId={selectedColor.attributeOptionId}
-          storeCode={''}
-        />
+        {userId && (
+          <Inventory
+            attributeOptionId={selectedColor.attributeOptionId}
+            storeCode={''}
+          />
+        )}
 
         {/* only for substore */}
 
@@ -248,15 +256,18 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
             {__pagesText.productInfo.notesPk.minimumPiecePerColor}
           </div>
         </div>
-        <div className='pt-[15px] text-default-text flex flex-wrap items-center gap-[10px]'>
-          <DiscountPrice
-            storeCode={storeCode}
-            ourCost={product?.ourCost || 0}
-            msrp={product?.msrp || 0}
-            imap={product?.imap || 0}
-            salePrice={pricePerItem || 0}
-          />
-        </div>
+        {userId && (
+          <div className='pt-[15px] text-default-text flex flex-wrap items-center gap-[10px]'>
+            <DiscountPrice
+              storeCode={storeCode}
+              ourCost={product?.ourCost || 0}
+              msrp={product?.msrp || 0}
+              imap={product?.imap || 0}
+              salePrice={pricePerItem || 0}
+            />
+          </div>
+        )}
+
         <form className='mt-[24px]'>
           <div className='m-[12px] mt-[24px]'>
             <button
@@ -278,6 +289,12 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
           <div className=''>{__pagesText.productInfo.notesPk.backordered}</div>
         </div>
       </div>
+      {openModal === 'sizeChart' && (
+        <SizeChartModal storeCode={storeCode} modalHandler={modalHandler} />
+      )}
+      {openModal === 'personalizationFonts' && (
+        <PersonalizeFontModal modalHandler={modalHandler} />
+      )}
       {openModal === 'login' && <LoginModal modalHandler={modalHandler} />}
     </>
   );

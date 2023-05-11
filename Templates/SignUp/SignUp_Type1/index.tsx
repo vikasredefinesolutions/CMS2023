@@ -13,12 +13,28 @@ import {
   _CreateNewAccount_Payload,
   createNewAccount_payload,
 } from '@payloads/createNewAccount.payload';
-import { CreateNewAccount } from '@services/user.service';
+import {
+  CreateNewAccount,
+  GetStoreCustomer,
+  signInUser,
+} from '@services/user.service';
 import getLocation from 'helpers_v2/getLocation';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
 
-import { __UserMessages } from '@constants/global.constant';
-import { TrackGTMEvent } from '@helpers/common.helper';
+import {
+  __Cookie,
+  __Cookie_Expiry,
+  __UserMessages,
+} from '@constants/global.constant';
+import {
+  KlaviyoScriptTag,
+  TrackGTMEvent,
+  deleteCookie,
+  extractCookies,
+  setCookie,
+} from '@helpers/common.helper';
+import { updateCartByNewUserId } from '@services/cart.service';
+import { getWishlist } from '@services/wishlist.service';
 import SU_EmailInput from './Components/SU1_EmailInput';
 import SU1_Input from './Components/SU1_Input';
 import SU_PasswordInput from './Components/SU1_PasswordInput';
@@ -90,7 +106,13 @@ const _SignupSchema = Yup.object().shape({
 
 const SignUp_type1: React.FC = () => {
   const router = useRouter();
-  const { showModal } = useActions_v2();
+  const {
+    showModal,
+    updateWishListData,
+    setShowLoader,
+    updateCustomer,
+    logInUser,
+  } = useActions_v2();
   const storeId = useTypedSelector_v2((state) => state.store.id);
   const userId = useTypedSelector_v2((state) => state.user.id);
   // const state = useTypedSelector_v2((state) => state);
@@ -98,6 +120,7 @@ const SignUp_type1: React.FC = () => {
 
   const loginSubmitHandler = async (enteredInputs: _CNA_StoreCustomerModel) => {
     const location = await getLocation();
+    setShowLoader(true);
 
     const payload: _CreateNewAccount_Payload = {
       storeCustomerModel: {
@@ -134,10 +157,12 @@ const SignUp_type1: React.FC = () => {
 
     CreateNewAccount(payload).then((res) => {
       if (res === null) {
+        setShowLoader(false);
         showModal({
           message: res || __UserMessages.signUpPage.SomethingWentWrong,
           title: 'Error',
         });
+
         return;
       }
       const userRegistrationEventPayload = {
@@ -164,6 +189,57 @@ const SignUp_type1: React.FC = () => {
         message: __UserMessages.signUpPage.SuccessFullyAccountCreated,
         title: 'Success',
       });
+      signInUser({
+        userName: payload.storeCustomerModel.email,
+        password: payload.storeCustomerModel.password,
+        storeId: storeId!,
+      })
+        .then((user) => {
+          if (user.credentials === 'INVALID') {
+            // setErrorMsg(user.message);
+          }
+          if (user.credentials === 'VALID') {
+            logInUser({
+              id: +user.id,
+            });
+            setCookie(__Cookie.userId, user.id, __Cookie_Expiry.userId);
+
+            GetStoreCustomer(+user.id).then((res) => {
+              if (res === null) return;
+              if (localStorage) {
+                const tempCustomerId = extractCookies(
+                  __Cookie.tempCustomerId,
+                  'browserCookie',
+                ).tempCustomerId;
+
+                if (tempCustomerId) {
+                  updateCartByNewUserId(~~tempCustomerId, res.id);
+                  deleteCookie(__Cookie.tempCustomerId);
+                }
+              }
+
+              const userInfo = {
+                $email: res.email,
+                $first_name: res.firstname,
+                $last_name: res.lastName,
+                $phone_number: '',
+                $organization: res.companyName,
+                $title: 'title',
+                $timestamp: new Date(),
+              };
+
+              KlaviyoScriptTag(['identify', userInfo]);
+              updateCustomer({ customer: res });
+              getWishlist(res.id).then((wishListResponse) => {
+                updateWishListData(wishListResponse);
+              });
+            });
+          }
+        })
+        .finally(() => {
+          setShowLoader(false);
+          // CartController();
+        });
       router.push(paths.HOME);
     });
   };
@@ -177,8 +253,8 @@ const SignUp_type1: React.FC = () => {
     <>
       <section className='pt-[40px] pb-[30px]'>
         <div className='container mx-auto'>
-          <div className='text-2xl-text text-center'>
-            CREATE NEW CUSTOMER ACCOUNT
+          <div className='text-4xl text-center '>
+            <h1>CREATE NEW CUSTOMER ACCOUNT</h1>
           </div>
         </div>
       </section>

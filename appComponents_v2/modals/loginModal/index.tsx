@@ -10,9 +10,9 @@ import { getWishlist } from '@services/wishlist.service';
 import { paths } from 'constants_v2/paths.constant';
 import { Formik } from 'formik';
 import {
+  KlaviyoScriptTag,
   deleteCookie,
   extractCookies,
-  KlaviyoScriptTag,
   setCookie,
 } from 'helpers_v2/common.helper';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
@@ -148,7 +148,7 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
               </div>
 
               <div className='p-[25px]'>
-                <div className='mb-[10px] medium-text text-center'>
+                <div className='mb-[10px] font-[600] text-lg text-center'>
                   {__pagesText.productInfo.loginModal.signIn}
                 </div>
 

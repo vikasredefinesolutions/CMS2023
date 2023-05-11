@@ -39,6 +39,7 @@ const selected_initiaState = {
     ],
     minQuantity: 1,
     multipleQuantity: 0,
+    splitproductList: null,
   },
   sbState: [],
 };

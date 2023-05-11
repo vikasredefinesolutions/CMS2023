@@ -131,7 +131,7 @@ export const __pagesText = {
       colors: 'Colors:',
     },
     forgotModal: {
-      forgotPassword: 'Forget Password',
+      forgotPassword: 'Forgot Password',
       back: 'Back',
       notFound: 'not found',
       sentSucess1: 'An email has been sent to ',
@@ -139,7 +139,7 @@ export const __pagesText = {
         'with a link to reset your password. It may take a few minutes to arrive. If you dont see it in your inbox, please check your spam folder.',
     },
     loginModal: {
-      signIn: 'Sign In',
+      signIn: 'SIGN IN',
       shopNow: 'SHOP NOW',
       keepMeLoggedIn: 'Keep me logged',
       infoButton: {
@@ -149,7 +149,7 @@ export const __pagesText = {
         upperAndLowerCaseLetters: 'Upper and lowercase letters',
       },
       forgotPassword: 'Forgot Password?',
-      createNewAccount: 'CREATE NEW ACCOUNT',
+      createNewAccount: 'CREATE NEW CUSTOMER ACCOUNT',
       samllogin: 'LOGIN VIA SAML',
       emailPlaceHolder: 'Enter the email',
       passwordPlaceHolder: 'Enter the password',
@@ -205,6 +205,11 @@ export const __pagesText = {
       showMsg: `We reserve the right to reject orders that do not meet the {minQty}
       piece minimum per style <br /> and color, exceptions may apply for
       men’s and women’s companion styles per color.`,
+      firstMsg: 'We reserve the right to reject orders that do not meet the',
+      secondMsg: `piece minimum per style 
+      and color, exceptions may apply for',
+       men’s and women’s companion styles per color.`,
+
       perItem: 'per item',
     },
     availableInventoryModal: {

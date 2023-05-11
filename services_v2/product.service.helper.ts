@@ -105,7 +105,7 @@ export const singleColor_addToCart_PayloadGenerator = async (
             logoLocation: logo.positionImage.name,
             colorImagePath: item.product.color.imagePath,
             logoNames:
-              logo.filePathUrl === '' ? 'Add Logo Later' : logo.filePathUrl,
+              logo.filePathUrl === '' ? 'Add Logo Later' : 'Customize Logos',
             price: logo.price,
             logoDate: new Date(logo.date),
             logoPositionImage: logo.positionImage.path,

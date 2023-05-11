@@ -39,7 +39,7 @@ const ProductImg_Type3: React.FC<_ProductImgProps> = ({ product }) => {
   );
   mediaBaseUrl = mediaBaseUrl || clientSideMediaUrl;
   const selectImgHandler = (img: _OtherImage) => {
-    setImage_2(img);
+    setImage_2({ ...img, imageUrl: mediaBaseUrl + img.imageUrl });
   };
 
   useEffect(() => {

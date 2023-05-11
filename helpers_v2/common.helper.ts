@@ -418,7 +418,7 @@ export const getAddToCartObject = async (product: _Props): Promise<CartReq> => {
         logoLocation: logo.location.name,
         colorImagePath: productDetails.color.imageUrl,
         logoNames:
-          logo.logo.url === '' ? logoLocation.addLogoLater : logo.logo.name,
+          logo.logo.url === '' ? logoLocation.addLogoLater : 'Customize Logo',
         price: logo.location.cost,
         logoDate: new Date(),
         logoPositionImage: logo.location.image,

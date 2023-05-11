@@ -1,6 +1,5 @@
 import { __pagesText } from '@constants/pages.text';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
-import AskToLogin from '@templates/ProductDetails/Components/AskToLogin';
 import { useState } from 'react';
 import QtyPriceTable from './PriceTable';
 import { _DiscountPricingProps } from './productDetailsComponents';
@@ -34,7 +33,6 @@ const DiscountPricing: React.FC<
         </div>
       ) : null}
       <QtyPriceTable storeCode={storeCode} />
-      {showLogin && modalHandler && <AskToLogin modalHandler={modalHandler} />}
     </>
   );
 };

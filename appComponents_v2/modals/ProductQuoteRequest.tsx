@@ -39,16 +39,18 @@ interface _props {
   // eslint-disable-next-line no-unused-vars
   modalHandler: (param: null | _modals) => void;
   product?: string | undefined;
+  productColor?: string | undefined;
 }
 
-const ProductQuoteRequest: React.FC<_props> = ({ modalHandler, product }) => {
+const ProductQuoteRequest: React.FC<_props> = ({
+  modalHandler,
+  product,
+  productColor,
+}) => {
   const [verifiedRecaptch, setverifiedRecaptch] = useState(false);
   const { name } = useTypedSelector_v2((state) => state.product.product);
 
-  const { color } = useTypedSelector_v2((state) => state.product.selected);
-
   const productName = product ? product : name;
-  const productColor = product ? '' : color.name;
   const quoteRequestHandler = (value: any) => {
     // console.log(value);
     modalHandler(null);
@@ -106,9 +108,8 @@ const ProductQuoteRequest: React.FC<_props> = ({ modalHandler, product }) => {
                         Product Name :{productName}
                       </div>
                       {productColor && (
-                        <div className='flex flex-wrap gap-1 pt-4 first:pt-0 font-semibold'>
-                          <div className=''>Color :</div>
-                          <div className=''>{productColor}</div>
+                        <div className='mb-6 medium-text text-left'>
+                          Color :{productColor}
                         </div>
                       )}
                       <div className='flex flex-wrap -mx-3 gap-y-6 text-left'>

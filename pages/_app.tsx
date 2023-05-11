@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { storeBuilderTypeId, __domain } from '@configs/page.config';
+import { __domain, storeBuilderTypeId } from '@configs/page.config';
 import * as _AppController from '@controllers/_AppController.async';
 import { TrackFile } from '@services/tracking.service';
 import App, { AppContext, AppInitialProps, AppProps } from 'next/app';
@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import 'public/assets/css/custom.css';
 import GoogleTagManager from 'react-gtm-module';
 // import 'public/assets/css/main.css';
+import 'public/assets/css/accordian_pkhg.css';
 import 'public/assets/css/spinner.css';
 import { useEffect } from 'react';
 
@@ -35,14 +36,14 @@ import Spinner from '@appComponents/ui/spinner';
 import { PageResponseType } from '@definations/app.type';
 import { _MenuItems } from '@definations/header.type';
 import {
+  _PropsToStoreAndGetFromCookies,
+  _templateIds,
   callConfigsAndRemainingStoreAPIsAndSetURls,
   configsToCallEveryTime,
   expectedProps,
   extractAndfillCookiesIntoProps,
   passPropsToDocumentFile,
   storeCookiesToDecreaseNoOfAPIRecalls,
-  _PropsToStoreAndGetFromCookies,
-  _templateIds,
 } from '@helpers/app.extras';
 import { FetchSbStoreConfiguration } from '@services/app.service';
 import { GetStoreCustomer } from '@services/user.service';

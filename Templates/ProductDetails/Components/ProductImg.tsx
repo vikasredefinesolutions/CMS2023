@@ -29,7 +29,7 @@ const ProductImg: React.FC<_ProductImgProps> = ({ product }) => {
   );
   mediaBaseUrl = mediaBaseUrl || clientSideMediaUrl;
   const selectImgHandler = (img: _OtherImage) => {
-    setImage_2(img);
+    setImage_2({ ...img, imageUrl: mediaBaseUrl + img.imageUrl });
   };
 
   useEffect(() => {
@@ -54,6 +54,7 @@ const ProductImg: React.FC<_ProductImgProps> = ({ product }) => {
       <div className='col-span-12 border border-gray-border relative'>
         <div className='main-image max-w-lg mx-auto'>
           <InnerImageZoom
+            key={selectedImage.imageUrl}
             src={selectedImage?.imageUrl}
             zoomType='hover'
             hideHint={true}

@@ -1,18 +1,19 @@
 import {
-  checkoutPages,
   PaymentMethod,
+  checkoutPages,
   paymentMethodCustom as paymentEnum,
 } from '@constants/enum';
 import { __Cookie, __Cookie_Expiry } from '@constants/global.constant';
 import { paths } from '@constants/paths.constant';
-import { addAddress, AddOrderDefault } from '@constants/payloads/checkout';
+import { AddOrderDefault, addAddress } from '@constants/payloads/checkout';
 import { signup_payload } from '@constants/payloads/signup';
 import { commonMessage } from '@constants/successError.text';
 import { CreditCardDetailsType } from '@definations/checkout';
 import {
+  KlaviyoScriptTag,
+  TrackGTMEvent,
   deleteCookie,
   extractCookies,
-  KlaviyoScriptTag,
   setCookie,
 } from '@helpers/common.helper';
 import getLocation from '@helpers/getLocation';
@@ -121,6 +122,9 @@ const CheckoutController = () => {
   } = useActions_v2();
   const user = useTypedSelector_v2((state) => state.user);
   const cartData = useTypedSelector_v2((state) => state.cart.cart);
+  const { discount: cartDiscountDetails } = useTypedSelector_v2(
+    (state) => state.cart,
+  );
   const { loggedIn: isEmployeeLoggedIn, isLoadingComplete } =
     useTypedSelector_v2((state) => state.employee);
   const useBalance = useTypedSelector_v2(
@@ -353,6 +357,35 @@ const CheckoutController = () => {
     return true;
   };
 
+  // GTM event for "add_shipping_info" and "add_payment_info’"
+  const addShippingInfoEventHandle = (eventName: string) => {
+    const eventPayload = {
+      event: eventName,
+      ecommerce: {
+        currency: 'USD',
+        value: totalPrice,
+        coupon: cartDiscountDetails?.coupon || '',
+        ...(eventName === 'add_payment_info'
+          ? { payment_type: paymentMethod }
+          : { shipping_tier: 'Ground' }),
+        items: cartData?.map((item) => ({
+          item_name: item?.productName,
+          item_id: item?.sku,
+          item_brand: '', //Not available in cart
+          item_category: '', //Not available in cart
+          item_variant: item?.attributeOptionValue,
+          index: item?.productId,
+          quantity: item?.totalQty,
+          item_list_name: '', //Not available in cart
+          item_list_id: item?.productId,
+          price: item?.totalPrice,
+          coupon: cartDiscountDetails?.coupon || '',
+        })),
+      },
+    };
+    TrackGTMEvent(eventName, eventPayload);
+  };
+
   const reviewOrder = async () => {
     if (showAddAddress) {
       let isValid = true;
@@ -371,11 +404,16 @@ const CheckoutController = () => {
           } else {
             setBillingAdress(shippingForm.values);
           }
+          addShippingInfoEventHandle('add_shipping_info');
+          addShippingInfoEventHandle('add_payment_info');
+
           setCurrentPage(checkoutPages.reviewOrder);
         }
       }
     } else {
       if (shippingAdress && billingAdress && checkPayment()) {
+        addShippingInfoEventHandle('add_shipping_info');
+        addShippingInfoEventHandle('add_payment_info');
         setCurrentPage(checkoutPages.reviewOrder);
       }
     }
@@ -500,7 +538,6 @@ const CheckoutController = () => {
       try {
         logoutClearCart();
         deleteCookie(__Cookie.tempCustomerId);
-
 
         const res = await placeOrderService(order);
         setShowLoader(false);

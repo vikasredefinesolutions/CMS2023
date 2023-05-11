@@ -288,63 +288,109 @@ const TemplateThreeListing = ({
             </div> */}
             <ul
               role='list'
-              className='flex flex-wrap items-center mt-[8px] space-x-1'
+              className='flex flex-wrap items-center mt-[12px] justify-center space-x-1'
             >
-              {isAttributeSaparateProduct
-                ? product.splitproductList &&
-                  product?.splitproductList.map(
-                    (subRow: splitproductList, index: number) =>
-                      index < listing_max_showcolors ? (
+              {isAttributeSaparateProduct &&
+              product.splitproductList &&
+              product?.splitproductList?.length > 0 ? (
+                <div className='flex'>
+                  <Link key={product.id} href={`/${product.sename}.html`}>
+                    <li
+                      className={`w-7 h-7 border-2  border-secondary
+                          
+           hover:border-secondary cursor-pointer`}
+                      key={product.id}
+                    >
+                      <NxtImage
+                        src={`${mediaBaseUrl}${currentProduct.imageName}`}
+                        alt=''
+                        className='w-auto h-auto max-h-max cursor-pointer flex items-center'
+                        title={product.name}
+                      />
+                    </li>
+                  </Link>
+
+                  {product?.splitproductList?.map((subRow, index) =>
+                    index < listing_max_showcolors - 1 ? (
+                      <Link key={product.id} href={`/${subRow.seName}.html`}>
                         <li
                           className={`w-7 h-7 border-2 hover:border-secondary cursor-pointer`}
                           key={subRow.prodcutId}
                         >
-                          <Link
-                            key={product.id}
-                            href={`/${subRow.seName}.html`}
-                          >
-                            <a>
-                              <NxtImage
-                                src={`${mediaBaseUrl}${subRow.imageurl}`}
-                                alt=''
-                                className=''
-                                title={subRow.colorName}
-                              />
-                            </a>
-                          </Link>
+                          <NxtImage
+                            src={`${mediaBaseUrl}${subRow.imageurl}`}
+                            alt=''
+                            className=''
+                            title={subRow.colorName}
+                          />
                         </li>
-                      ) : (
-                        <>{(flag = true)}</>
-                      ),
-                  )
-                : product.getProductImageOptionList &&
-                  product.getProductImageOptionList.map(
-                    (subRow: GetProductImageOptionList, index: number) => (
-                      <li
-                        className={`w-7 h-7 border-2 hover:border-secondary cursor-pointer ${
-                          subRow.id === currentProduct.id
-                            ? ' border-secondary'
-                            : 'border-light-gray'
-                        }`}
-                        onClick={() => {
-                          colorChangeHandler(
-                            product.id,
-                            product.sename || '',
-                            subRow.colorName,
-                          );
-                          setCurrentProduct(subRow);
-                        }}
-                        key={subRow.id}
-                      >
-                        <NxtImage
-                          src={`${mediaBaseUrl}${subRow.imageName}`}
-                          alt=''
-                          className=''
-                          title={subRow.colorName}
-                        />
-                      </li>
+                      </Link>
+                    ) : (
+                      <>{(flag = true)}</>
                     ),
                   )}
+                </div>
+              ) : (
+                product.getProductImageOptionList &&
+                product.getProductImageOptionList.map((subRow, index) =>
+                  index < listing_max_showcolors ? (
+                    <li
+                      className={`w-7 h-7 border-2 hover:border-secondary cursor-pointer ${
+                        subRow.id === currentProduct.id
+                          ? ' border-secondary'
+                          : 'border-light-gray'
+                      }`}
+                      onClick={() => {
+                        colorChangeHandler(
+                          product.id,
+                          product.sename || '',
+                          subRow.colorName,
+                        );
+                        setCurrentProduct(subRow);
+                      }}
+                      key={subRow.id}
+                    >
+                      <NxtImage
+                        src={`${mediaBaseUrl}${subRow.imageName}`}
+                        alt=''
+                        className=''
+                        title={subRow.colorName}
+                      />
+                    </li>
+                  ) : (
+                    <>{(flag = true)}</>
+                  ),
+                )
+              )}
+              {flag ? (
+                <Link key={product.id} href={`/${product.sename}.html`}>
+                  <li className='w-[28px] h-[28px] border-2 border-light-gray hover:border-secondary relative cursor-pointer'>
+                    <span
+                      className='absolute inset-0 bg-primary text-xs bg-[#003a70] font-semibold flex items-center justify-center text-[#ffffff]'
+                      title={` See Additional ${
+                        isAttributeSaparateProduct
+                          ? product.splitproductList &&
+                            product.splitproductList?.length -
+                              listing_max_showcolors +
+                              1
+                          : product.getProductImageOptionList &&
+                            product.getProductImageOptionList.length -
+                              listing_max_showcolors
+                      } Colors`}
+                    >
+                      +
+                      {isAttributeSaparateProduct
+                        ? product.splitproductList &&
+                          product.splitproductList?.length -
+                            listing_max_showcolors +
+                            1
+                        : product.getProductImageOptionList &&
+                          product.getProductImageOptionList.length -
+                            listing_max_showcolors}
+                    </span>
+                  </li>
+                </Link>
+              ) : null}
             </ul>
           </div>
         </div>

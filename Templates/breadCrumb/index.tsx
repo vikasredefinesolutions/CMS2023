@@ -37,6 +37,7 @@ const BreadCrumb: NextPage<__BreadCrumbTemplatesProps> = ({ breadCrumbid }) => {
   const pageType = useTypedSelector_v2((state) => state.store.pageType);
   const isCMSpage = useTypedSelector_v2((state) => state.home.isCMS_page);
   const [breadCrumbs, setBreadCrumbs] = useState<_breadCrumbs[]>([]);
+
   const getBreadCrubs = async () => {
     if (isCMSpage) {
       return [
@@ -58,25 +59,16 @@ const BreadCrumb: NextPage<__BreadCrumbTemplatesProps> = ({ breadCrumbid }) => {
       const categories = await (pageType.type === 'category'
         ? fetchCategoryByCategoryId
         : FetchCategoryByproductId)(~~pageType.id, storeId || 0);
-      console.log(categories, 'categories');
       const breadCrumbs = [{ name: 'Home', url: '/' }];
+
       if (categories.length > 0) {
         const _categories = categories[0];
-        // console.log(categories, 'categories');
         const catNames = _categories.name.split(' > ');
         const catSeNames = _categories.sename.split(' > ');
-        // console.log(catSeNames, 'catSeNames');
         catNames.forEach((cate: string, index: number) => {
           breadCrumbs.push({
             name: cate,
-            url:
-              index == 0
-                ? `${catSeNames[index]}.html/`.toLowerCase()
-                : catSeNames.length - 1 == index
-                ? '#0'
-                : `${catSeNames[index - 1]}-${
-                    catSeNames[index]
-                  }.html/`.toLowerCase(),
+            url: `${catSeNames[index].trim()}.html/`,
           });
         });
       } else {
@@ -85,11 +77,11 @@ const BreadCrumb: NextPage<__BreadCrumbTemplatesProps> = ({ breadCrumbid }) => {
           url: pageType.slug,
         });
       }
-      // console.log(breadCrumbs, 'breadCrumbs');
       return breadCrumbs;
     }
     return [];
   };
+
   useEffect(() => {
     let callBreadCrumbAPI = true;
 
@@ -118,7 +110,6 @@ const BreadCrumb: NextPage<__BreadCrumbTemplatesProps> = ({ breadCrumbid }) => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.asPath, pageType.slug]);
-  // console.log(breadCrumbs, 'breadCrumbs');
   return (
     <BreadCrumbTemplate pageType={pageType.type} breadCrumbs={breadCrumbs} />
   );

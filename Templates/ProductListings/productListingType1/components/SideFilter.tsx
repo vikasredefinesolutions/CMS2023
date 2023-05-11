@@ -163,14 +163,14 @@ const SideFilter = ({
                                     option.label === 'Price Range' ? (
                                       <label
                                         htmlFor={`${option.name}-${ind}`}
-                                        className='text-black'
+                                        className='text-black cursor-pointer'
                                       >
                                         {capitalizeFirstLetter(option.name)}
                                       </label>
                                     ) : (
                                       <label
                                         htmlFor={`${option.name}-${ind}`}
-                                        className='text-black'
+                                        className='text-black cursor-pointer'
                                       >
                                         {capitalizeFirstLetter(option.name)} (
                                         {option?.productCount})

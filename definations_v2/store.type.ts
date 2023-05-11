@@ -2,6 +2,7 @@ export interface _StoreReturnType {
   storeId: null | number;
   pageType: string;
   storeTypeId: null | number;
+  logoUrl: string;
   code: string;
   storeName: string | null;
   isAttributeSaparateProduct: boolean;

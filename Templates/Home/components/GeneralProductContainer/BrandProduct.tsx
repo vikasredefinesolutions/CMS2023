@@ -1,7 +1,6 @@
-import ImageComponent from '@appComponents/reUsable/Image';
+import { default as ImageComponent } from '@appComponents/reUsable/Image';
 import Price from '@appComponents/reUsable/Price';
-import WishlistButton from '@appComponents/ui/Wishlist';
-import { showcolors, zeroValue } from '@constants/global.constant';
+import { showcolors } from '@constants/global.constant';
 import {
   newFetauredItemResponse,
   splitproductList,
@@ -76,26 +75,6 @@ const BrandProduct: React.FC<_props> = (props) => {
             />
           </div>
         </Link>
-        <div className='absolute top-5 right-5 text-gray-800 p-1 z-25'>
-          <button className=''>
-            <WishlistButton
-              {...{
-                productId:
-                  product && product?.productId
-                    ? product?.productId
-                    : zeroValue,
-                name: product?.productName ? product.productName : '',
-                color: currentProduct?.attributeOptionName
-                  ? currentProduct?.attributeOptionName
-                  : '',
-                price: product.salePrice,
-                wishlistId: wishListId,
-              }}
-              iswishlist={wishlistPresent}
-              brandId={props.brandId}
-            />
-          </button>
-        </div>
         <div className='mt-2.5'>
           <div className='hover:text-primary text-lg test'>
             <Link
@@ -117,30 +96,53 @@ const BrandProduct: React.FC<_props> = (props) => {
             </span>
           </div>
           <ul role='list' className='flex items-center justify-center mt-2'>
+            <Link
+              key={product.productId}
+              href={`/${product.productSEName}.html`}
+            >
+              <li
+                className={`w-7 h-7 border-2   border-secondary
+                     hover:border-secondary cursor-pointer`}
+                key={product.productId}
+              >
+                <ImageComponent
+                  src={
+                    store.mediaBaseUrl + currentProduct &&
+                    currentProduct?.imageUrl
+                      ? currentProduct.imageUrl
+                      : ''
+                  }
+                  alt='no image'
+                  className='max-h-full m-auto'
+                  key={currentProduct?.id}
+                />
+              </li>
+            </Link>
             {product?.splitproductList &&
               product?.splitproductList.map(
                 (option: splitproductList, index: number) =>
-                  index < showcolors ? (
-                    <Fragment key={option.prodcutId}>
-                      <Link href={`/${option.seName}.html`}>
-                        <li
-                          className={`border-2  w-7 h-7 text-center overflow-hidden ${
-                            option.colorName ==
-                            currentProduct?.attributeOptionName
-                              ? 'border-secondary'
-                              : ''
-                          } hover:border-secondary ml-1`}
-                        >
-                          <img
-                            src={`${mediaBaseUrl}${option.imageurl}`}
-                            alt=''
-                            title=''
-                            className='max-h-full m-auto'
-                            data-option={JSON.stringify(option)}
-                          />
-                        </li>
-                      </Link>
-                    </Fragment>
+                  index < showcolors - 1 ? (
+                    <Link
+                      key={option.prodcutId}
+                      href={`/${option.seName}.html`}
+                    >
+                      <li
+                        key={index}
+                        className={`border-2  w-7 h-7 text-center overflow-hidden ${
+                          option.colorName ==
+                          currentProduct?.attributeOptionName
+                            ? 'border-secondary'
+                            : ''
+                        } hover:border-secondary ml-1`}
+                      >
+                        <ImageComponent
+                          src={store.mediaBaseUrl + option.imageurl}
+                          alt='no image'
+                          className='max-h-full m-auto'
+                          key={currentProduct?.id}
+                        />
+                      </li>
+                    </Link>
                   ) : (
                     <Fragment key={index}>{(flag = true)}</Fragment>
                   ),
@@ -151,10 +153,10 @@ const BrandProduct: React.FC<_props> = (props) => {
                 href={`/${product.productSEName}.html`}
               >
                 <li className='extra w-7 h-7 text-center border-2 hover:border-secondary inset-0 bg-primary text-xs font-semibold flex items-center justify-center text-white cursor-pointer'>
-                  <span> +</span>
+                  <span>+</span>
                   {product &&
-                    product?.moreImages &&
-                    product.moreImages.length - showcolors}
+                    product?.splitproductList &&
+                    product?.splitproductList.length - showcolors + 1}
                 </li>
               </Link>
             ) : null}

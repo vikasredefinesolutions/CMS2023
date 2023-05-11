@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
-import React from 'react';
+import { useRouter } from 'next/router';
+import React, { useEffect } from 'react';
 import { SortingMethod } from '../../../../constants_v2/common.constant';
 
 type props = {
@@ -20,6 +21,11 @@ const TemplateOneFilterBar: React.FC<props> = ({
   sortOpenHandler,
   sortingType,
 }) => {
+  const router = useRouter();
+  console.log(router.asPath, '<-------');
+  useEffect(() => {
+    sortOpenHandler(false);
+  }, [router.asPath]);
   return (
     <div className='relative z-10 bg-light-gray pl-[8px]'>
       <h2 id='filter-heading' className='sr-only'>

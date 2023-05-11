@@ -4,6 +4,7 @@ import { perPageCount } from '@constants/global.constant';
 import { AddRemoveToCompare, getSkuList } from '@helpers/compare.helper';
 import { useActions_v2 } from '@hooks_v2/index';
 
+import { Sorting } from '@constants/enum';
 import { FilterType, ProductList } from '@definations/productList.type';
 import {
   GetlAllProductList,
@@ -197,11 +198,9 @@ const ProductListController = (
     }
     setCurrentCount(perPageCount);
     newList = newList.sort((pro1, pro2) => {
-      if (type === 1) {
-        return pro1?.id && pro2?.id && pro1?.id > pro2?.id ? 1 : -1;
-      } else if (type === 2) {
+      if (type === Sorting.Ascending) {
         return pro1.msrp > pro2.msrp ? 1 : -1;
-      } else if (type === 3) {
+      } else if (type === Sorting.Descending) {
         return pro1.msrp < pro2.msrp ? 1 : -1;
       }
       return 1;

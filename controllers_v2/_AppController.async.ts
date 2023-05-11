@@ -195,6 +195,7 @@ export const fetchStoreDetails = async (
     company_address: '',
     thirdPartyLogin: false,
     bothLogin: false,
+    logoUrl: '',
   };
   const adminConfigs: {
     blobUrlRootDirectory: string;
