@@ -5,7 +5,7 @@ import { _HeaderProps } from '@definations/header.type';
 import {
   useActions_v2,
   useTypedSelector_v2,
-  useWindowDimensions_v2
+  useWindowDimensions_v2,
 } from '@hooks_v2/index';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
@@ -15,7 +15,7 @@ import {
   LoggedInMenu,
   LoginIcon,
   Logo,
-  MyCartIcon
+  MyCartIcon,
 } from '../header_Type2/Components/Icons';
 import Header_MenuItems from '../header_Type2/Components/Menu/Header_MenuItems';
 import SearchBar from '../header_Type2/Components/Menu/Header_SearchBar';
@@ -53,7 +53,7 @@ const Header_Type2: NextPage<_HeaderProps> = ({
 
   return (
     <div
-      className={`bg-[${headerBgColor}] sticky top-0 z-40  shadow-[0_0px_5px_rgba(0,0,0,0.12)]`}
+      className={`bg-[${headerBgColor}] sticky top-7 z-40  shadow-[0_0px_5px_rgba(0,0,0,0.12)]`}
       id='mobile_menu_box'
     >
       {/* <NotificationBar /> */}
@@ -71,7 +71,10 @@ const Header_Type2: NextPage<_HeaderProps> = ({
         <div className='fixed z-40 lg:hidden'></div>
         <header className='relative trancking-[1px]'>
           <nav aria-label='Top'>
-            <div className={`${headerBgColor ? '' : 'bg-[#ffffff]'}]`} style={{backgroundColor: headerBgColor}}>
+            <div
+              className={`${headerBgColor ? '' : 'bg-[#ffffff]'}]`}
+              style={{ backgroundColor: headerBgColor }}
+            >
               <div className='container  mx-auto'>
                 <div className=''>
                   <div className='flex items-center justify-between'>

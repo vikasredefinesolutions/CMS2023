@@ -53,11 +53,13 @@ const ProductsInfoTabs: React.FC<_props> = ({ dataArr }) => {
       maximumItemsForFetch: dataArr.featuredproducts_product_count.value,
       tagName: 'featured',
     };
-    const data: newFetauredItemResponse[] = await FetchDataByBrand(body);
-    storeData({
-      [value]: data,
-    });
-    setBrandsData(data);
+    if (body.storeId) {
+      const data: newFetauredItemResponse[] = await FetchDataByBrand(body);
+      storeData({
+        [value]: data,
+      });
+      setBrandsData(data);
+    }
     setLoading(false);
   };
 

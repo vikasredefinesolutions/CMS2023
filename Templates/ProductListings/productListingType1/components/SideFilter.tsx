@@ -51,7 +51,9 @@ const SideFilter = ({
                       className='flex items-center justify-between w-full h-5 group mb-1 min-h-[auto]'
                     >
                       <div className='text-medium-text font-semibold text-[#000000] block uppercase'>
-                        {filter.label}
+                        {filter.label === 'Color' || filter.label === 'Size'
+                          ? `Select ${filter.label}`
+                          : filter.label}
                       </div>
                     </AccordionSummary>
                     <AccordionDetails className='text-[15px] tracking-[.1em]'>

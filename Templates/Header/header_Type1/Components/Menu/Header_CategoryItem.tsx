@@ -4,7 +4,7 @@ import SubMenuItem from '@header/header_Type1/Components/Menu/Header_SubMenuItem
 import { capitalizeFirstLetter } from '@helpers/common.helper';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
 import Link from 'next/link';
-import React, { useState } from 'react';
+import React, { Fragment, useState } from 'react';
 interface _props {
   title: string;
   url: string;
@@ -55,14 +55,15 @@ const Header_Category: React.FC<_props> = ({ content, title, url }) => {
                 >
                   {content?.map((item, index) => {
                     return (
-                      <SubMenuItem
-                        key={index}
-                        view={view}
-                        itemLabel={capitalizeFirstLetter(item.categoryName)}
-                        itemUrl={`${item.seName}.html?v=product-list`}
-                        type={'CATEGORY'}
-                        itemId={item.id}
-                      />
+                      <Fragment key={index}>
+                        <SubMenuItem
+                          view={view}
+                          itemLabel={capitalizeFirstLetter(item.categoryName)}
+                          itemUrl={`${item.seName}.html?v=product-list`}
+                          type={'CATEGORY'}
+                          itemId={item.id}
+                        />
+                      </Fragment>
                     );
                   })}
                 </ul>
@@ -136,15 +137,16 @@ const Header_Category: React.FC<_props> = ({ content, title, url }) => {
                           index <= (content.length / 2) * 2 + 1
                         )
                           return (
-                            <SubMenuItem
-                              key={index}
-                              view={view}
-                              itemLabel={capitalizeFirstLetter(
-                                item.categoryName,
-                              )}
-                              itemUrl={`${item.seName}.html?v=product-list`}
-                              type={'CATEGORY'}
-                            />
+                            <Fragment key={index}>
+                              <SubMenuItem
+                                view={view}
+                                itemLabel={capitalizeFirstLetter(
+                                  item.categoryName,
+                                )}
+                                itemUrl={`${item.seName}.html?v=product-list`}
+                                type={'CATEGORY'}
+                              />
+                            </Fragment>
                           );
                       })}
                     </ul>
@@ -158,7 +160,7 @@ const Header_Category: React.FC<_props> = ({ content, title, url }) => {
     );
   }
 
-  return <></>;
+  return null;
 };
 
 export default Header_Category;

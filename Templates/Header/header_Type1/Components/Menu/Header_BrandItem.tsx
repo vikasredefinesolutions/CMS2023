@@ -7,7 +7,7 @@ import SubMenuItem from '@header/header_Type1/Components/Menu/Header_SubMenuItem
 import { capitalizeFirstLetter } from '@helpers/common.helper';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
 import Link from 'next/link';
-import React, { useState } from 'react';
+import React, { Fragment, useState } from 'react';
 
 interface _props {
   url: string;
@@ -62,17 +62,18 @@ const Brand: React.FC<_props> = ({ url, title, content }) => {
                 >
                   {content?.map((brand) => {
                     return (
-                      <SubMenuItem
-                        view={view}
-                        key={brand.id}
-                        itemLabel={capitalizeFirstLetter(brand.brandName)}
-                        itemUrl={
-                          brand.brandCollectionUrl
-                            ? `${brand.brandCollectionUrl}.html`
-                            : `${brand.seName}.html?v=product-list`
-                        }
-                        type={'BRAND'}
-                      />
+                      <Fragment key={brand.id}>
+                        <SubMenuItem
+                          view={view}
+                          itemLabel={capitalizeFirstLetter(brand.brandName)}
+                          itemUrl={
+                            brand.brandCollectionUrl
+                              ? `${brand.brandCollectionUrl}.html`
+                              : `${brand.seName}.html?v=product-list`
+                          }
+                          type={'BRAND'}
+                        />{' '}
+                      </Fragment>
                     );
                   })}
                 </ul>
@@ -176,17 +177,20 @@ const Brand: React.FC<_props> = ({ url, title, content }) => {
                           index <= (content.length / 3) * 2 + 1
                         )
                           return (
-                            <SubMenuItem
-                              view={view}
-                              key={brand.id}
-                              itemLabel={capitalizeFirstLetter(brand.brandName)}
-                              itemUrl={
-                                brand.brandCollectionUrl
-                                  ? `${brand.brandCollectionUrl}.html`
-                                  : `${brand.seName}.html?v=product-list`
-                              }
-                              type={'BRAND'}
-                            />
+                            <Fragment key={brand.id}>
+                              <SubMenuItem
+                                view={view}
+                                itemLabel={capitalizeFirstLetter(
+                                  brand.brandName,
+                                )}
+                                itemUrl={
+                                  brand.brandCollectionUrl
+                                    ? `${brand.brandCollectionUrl}.html`
+                                    : `${brand.seName}.html?v=product-list`
+                                }
+                                type={'BRAND'}
+                              />
+                            </Fragment>
                           );
                       })}
                     </ul>

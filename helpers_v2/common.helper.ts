@@ -428,7 +428,6 @@ export const getAddToCartObject = async (product: _Props): Promise<CartReq> => {
   }
 
   sizeQtys?.map((res) => {
-    console.log(res, 'resssss');
     if (res !== null)
       cartLogoPersonModel.push({
         id: res.id || 0,

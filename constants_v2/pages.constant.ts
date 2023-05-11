@@ -68,4 +68,9 @@ export const __pagesConstant = {
   storyDetails: {
     products: ['adidas', 'under-armour', 'peter-millar', 'nike'],
   },
+  AddressType: {
+    B: 'B',
+    Bill: 'BILL ',
+    Ship: 'SHIP ',
+  },
 };

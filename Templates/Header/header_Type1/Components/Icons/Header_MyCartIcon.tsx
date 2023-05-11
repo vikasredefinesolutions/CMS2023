@@ -75,9 +75,9 @@ const MyCartIcon: React.FC = () => {
           <div className='relative bg-white z-50 text-[12px] leading-normal p-[15px]'>
             <div className=' max-h-60 overflow-x-hidden overflow-y-auto border-t first:border-t-0 border-[#758592] pt-[15px] first:pt-[0px] '>
               <ul className=''>
-                {cartData?.map((cartItem) => (
+                {cartData?.map((cartItem, index) => (
                   <li
-                    key={cartItem.attributeOptionId}
+                    key={`${cartItem.attributeOptionId}${index}`}
                     className='border-t first:border-t-0 border-[#758592] py-2.5 first:pt-0'
                   >
                     <div className='flex flex-wrap'>

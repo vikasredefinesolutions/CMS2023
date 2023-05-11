@@ -297,81 +297,56 @@ const Home = (props) => {
                     'container_left_padding' in componentValue.selectedVal
                   ) {
                     innerDivClass +=
-                      ' ' +
-                      'pl-[' +
-                      componentValue.selectedVal.container_left_padding.value +
-                      'px]';
+                      ' '+ componentValue.selectedVal.container_left_padding.value;
                   }
                   if (
                     componentValue.selectedVal &&
                     'container_top_padding' in componentValue.selectedVal
                   ) {
                     innerDivClass +=
-                      ' ' +
-                      'pt-[' +
-                      componentValue.selectedVal.container_top_padding.value +
-                      'px]';
+                      ' ' + componentValue.selectedVal.container_top_padding.value;
                   }
                   if (
                     componentValue.selectedVal &&
                     'container_right_padding' in componentValue.selectedVal
                   ) {
                     innerDivClass +=
-                      ' ' +
-                      'pr-[' +
-                      componentValue.selectedVal.container_right_padding.value +
-                      'px]';
+                      ' ' + componentValue.selectedVal.container_right_padding.value;
                   }
                   if (
                     componentValue.selectedVal &&
                     'container_bottom_padding' in componentValue.selectedVal
                   ) {
                     innerDivClass +=
-                      ' ' +
-                      'pb-[' +
-                      componentValue.selectedVal.container_bottom_padding
-                        .value +
-                      'px]';
+                      ' ' +  componentValue.selectedVal.container_bottom_padding.value;
                   }
                   if (
                     componentValue.selectedVal &&
                     'container_left_margin' in componentValue.selectedVal
                   ) {
                     innerDivClass +=
-                      ' ' +
-                      'ml-[' +
-                      componentValue.selectedVal.container_left_margin.value +
-                      'px]';
+                      ' ' + componentValue.selectedVal.container_left_margin.value;
                   }
                   if (
                     componentValue.selectedVal &&
                     'container_top_margin' in componentValue.selectedVal
                   ) {
                     innerDivClass +=
-                      ' ' +
-                      'mt-[' +
-                      componentValue.selectedVal.container_top_margin.value +
-                      'px]';
+                      ' ' + componentValue.selectedVal.container_top_margin.value;
                   }
                   if (
                     componentValue.selectedVal &&
                     'container_right_margin' in componentValue.selectedVal
                   ) {
                     innerDivClass +=
-                      ' ' +
-                      'mr-[' +
-                      componentValue.selectedVal.container_right_margin.value +
-                      'px]';
+                      ' ' + componentValue.selectedVal.container_right_margin.value;
                   }
                   if (
                     componentValue.selectedVal &&
                     'container_bottom_margin' in componentValue.selectedVal
                   ) {
                     innerDivClass +=
-                      ' ' +
-                      'mb-[' +
-                      componentValue.selectedVal.container_bottom_margin.value +
-                      'px]';
+                      ' ' + componentValue.selectedVal.container_bottom_margin.value;
                   }
 
                   return (

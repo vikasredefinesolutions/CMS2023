@@ -81,13 +81,7 @@ class MyDocument extends Document {
             }/${_globalStore.companyId}/store/main.css?${Math.random()}`}
           />
           {/* -----------------------SLIDER STYLESHEETS------------------------- */}
-          <link
-            rel='stylesheet'
-            type='text/css'
-            href={`${_globalStore.blobUrl}/${
-              _globalStore.blobUrlRootDirectory
-            }/${_globalStore.companyId}/store/main.css?${Math.random()}`}
-          />
+         
           <link
             rel='stylesheet'
             type='text/css'
@@ -120,7 +114,7 @@ class MyDocument extends Document {
             async
             src={`https://www.googletagmanager.com/gtm.js?id=${process.env.NEXT_PUBLIC_GTM_ID}`}
           /> */}
-          {/* <script
+          <script
             dangerouslySetInnerHTML={{
               __html: `
           window.dataLayer = window.dataLayer || [];
@@ -134,7 +128,7 @@ class MyDocument extends Document {
         });
         `,
             }}
-          /> */}
+          />
           {/* ---------------------End Google Tag Manager---------------------  */}
         </Head>
         <body className='font-Outfit bg-white'>

@@ -16,6 +16,13 @@ const ElementAccordionDisplay = ({ selected_Values, acValues }) => {
   };
 
   const showHideAccordion = (event) => {
+    const parentselector = document.querySelectorAll('.ac-description');
+    parentselector.forEach((el) => {
+      if (!el.classList.contains('hidden')) {
+        el.classList.add('hidden');
+      }
+    });
+
     if (event.target.querySelector('.pointer-class')) {
       let symbolobj = event.target.querySelector('.pointer-class');
       symbolobj.innerHTML = iconArr[symbolobj.innerHTML];
@@ -35,6 +42,7 @@ const ElementAccordionDisplay = ({ selected_Values, acValues }) => {
     }
   };
 
+  // console.log('acvalues', acValues);
   return (
     <>
       {acValues.length > 0 && (
@@ -92,7 +100,7 @@ const ElementAccordionDisplay = ({ selected_Values, acValues }) => {
             let liStyle = '';
             let titleStyle = '';
             if (tmpTitleBorderType === 'box')
-              liClass += ' border-[' + tmpTitleBorderSize+'px]';
+              liClass += ' border-[' + tmpTitleBorderSize + 'px]';
             else if (tmpTitleBorderType === 'single')
               liClass += ' border-b-[' + tmpTitleBorderSize + 'px]';
 
@@ -105,7 +113,8 @@ const ElementAccordionDisplay = ({ selected_Values, acValues }) => {
               liStyle += 'border-color: ' + tmpTitleBorderColor + '; ';
 
             return (
-                <li  key={index}
+              <li
+                key={index}
                 className={`mb-4 overflow-hidden last:mb-0 ${liClass}`}
                 style={{ borderColor: tmpTitleBorderColor }}
                 onClick={showHideAccordion}
@@ -118,9 +127,12 @@ const ElementAccordionDisplay = ({ selected_Values, acValues }) => {
                   }}
                 >
                   {/* <div className='text-defaule-text'> */}
-                  <div className="text-defaule-text pointer-events-none">{acValue.title}</div>
+                  <div className='text-defaule-text pointer-events-none'>
+                    {acValue.title}
+                  </div>
                   {/* </div> */}
-                  <span className='material-icons-outlined ml-3 pointer-class pointer-events-none'>{helper.getSymbol(acValue.icon, acValue.openstatus)}
+                  <span className='material-icons-outlined ml-3 pointer-class pointer-events-none'>
+                    {helper.getSymbol(acValue.icon, acValue.openstatus)}
                   </span>
                 </button>
                 <div

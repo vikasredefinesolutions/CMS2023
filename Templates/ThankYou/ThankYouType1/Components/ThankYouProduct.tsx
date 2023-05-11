@@ -63,7 +63,8 @@ const ThankYouProduct: React.FC<_props> = ({ product }) => {
             </div>
             <div className='mt-[8px] sm:w-1/3'>
               <div className='bold text-sub-text text-right'>
-                {__pagesText.ThankYouPage.TotalSummary.ItemTotal}
+                {__pagesText.ThankYouPage.TotalSummary.ItemTotal}{' '}
+                {`$${product.totalPrice.toFixed(2)}`}
               </div>
             </div>
             <div className='mt-[40px] mb-[40] w-full'>

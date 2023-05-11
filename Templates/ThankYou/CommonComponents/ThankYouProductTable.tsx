@@ -69,17 +69,17 @@ const ThankYouProductTable: React.FC<_props> = ({ product }) => {
             >
               <div className='text-base'>
                 <div className='mb-3 flex'>
-                  {item.logoImagePath === '' ? (
+                  {item.logoPositionImage === '' ? (
                     <NxtImage
                       className='w-14 h-12'
                       src='/images/logo-to-be-submitted.webp'
                       title=''
-                      alt={item.logoImagePath}
+                      alt={item.logoPositionImage}
                     />
                   ) : (
                     <NxtImage
                       className='w-14 h-12'
-                      src={`${mediaBaseUrl}${item.logoImagePath}`}
+                      src={`${mediaBaseUrl}${item.logoPositionImage}`}
                       title=''
                       alt={item.logoImagePath}
                     />
@@ -100,7 +100,7 @@ const ThankYouProductTable: React.FC<_props> = ({ product }) => {
                   )}
                 </div>
                 <div>
-                  <span className='font-semibold mr-1'>
+                  <span className='font-semibold mr-1 mt-2s'>
                     {__pagesText.ThankYouPage.Location}
                   </span>
                   <span>{item.logoLocation}</span>

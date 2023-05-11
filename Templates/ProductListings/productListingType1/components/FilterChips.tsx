@@ -15,7 +15,7 @@ const FilterChips = ({
   handleChange: FilterChangeHandler;
 }) => {
   return checkedFilters.length > 0 ? (
-    <div className='mt-4 flex gap-2 text-sm leading-none items-center '>
+    <div className='mt-4 flex gap-2 text-sm leading-none items-center pl-2'>
       <div className='font-semibold whitespace-nowrap mt-1.5'>Filters :</div>
       <div className=''>
         <ul className='flex flex-wrap gap-2'>

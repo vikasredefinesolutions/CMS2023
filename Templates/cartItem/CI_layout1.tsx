@@ -38,7 +38,7 @@ const CIlayout1: FC<any> = ({
       {cartData &&
         cartData.map((item: CartObject, cartItemIndex: number) => (
           <li
-            key={item.attributeOptionId}
+            key={`${item.attributeOptionId}${cartItemIndex}`}
             className='flex flex-wrap pl-[20px] pr-[20px] ml-[-12px] mr-[-12px] mb-[40px]'
           >
             <div className='w-full lg:w-2/6 pl-[15px] pr-[15px]'>

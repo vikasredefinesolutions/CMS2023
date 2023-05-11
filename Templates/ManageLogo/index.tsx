@@ -3,6 +3,7 @@ import { LogoList } from '@definations/APIs/logo.res';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import { getLogoDetailsList } from '@services/logo.service';
 import React, { useEffect, useState } from 'react';
+import AccountTabs from './AccountTabs';
 import ManageLogoType1 from './ManageLogoType1';
 import ManageLogoType2 from './ManageLogoType2';
 import { _ManageLogoTemplates } from './managelogo.d';
@@ -59,16 +60,14 @@ const ManageLogo: React.FC<{ id: string }> = ({ id }) => {
     ManageLogoTemplates[
       (`type${id}` as 'type1') || 'type2' || 'type3' || 'type4'
     ];
-
-  // const stateAll = useTypedSelector_v2((state) => state);
-  // console.log('managelogo', stateAll);
-
   return (
     <>
       {logoList && logoList.items.length > 0 ? (
         <ManagelogoDeatils logoList={logoList} />
       ) : (
-        <div className='text-center col-span-8 p-2 mt-2'>No record found.</div>
+        <>
+          <AccountTabs setype={id} />
+        </>
       )}
     </>
   );

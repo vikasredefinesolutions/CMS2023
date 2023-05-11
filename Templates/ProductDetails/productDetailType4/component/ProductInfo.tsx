@@ -170,8 +170,6 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
                   return res;
                 })
                 .then((res) => {
-                  console.log(res, 'promise chaining');
-
                   if (storeTypeId === storeBuilderTypeId) {
                     const Sbs_constant = {
                       id: 0,
@@ -184,7 +182,6 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
                       isExclusive: true,
                       isChargePerCharacter: true,
                     };
-                    console.log('addto cart ', res);
                     const payload_sbs = sbState.map((el: any) => {
                       return { ...el, ...Sbs_constant };
                     });

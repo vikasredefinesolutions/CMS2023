@@ -8,11 +8,6 @@ interface _props {
 }
 
 const BrandImage: React.FC<_props> = ({ url, src, alt }) => {
-  // const {
-  //   // layout: storeLayout,
-  //   view,
-  // } = useTypedSelector_v2((state) => state.store);
-
   return (
     <div className='lg:w-1/4 text-center w-full relative'>
       <div className='pl-[15px] pr-[15px]'>
@@ -30,34 +25,6 @@ const BrandImage: React.FC<_props> = ({ url, src, alt }) => {
       </div>
     </div>
   );
-  // if (view === 'MOBILE') {
-  //   return (
-  //     <div className='flex flex-wrap py-3  w-1/2 relative max-w-[140px]'>
-  //       <div className='w-1/2 lg:w-1/4 text-center'>
-  //         <Link href={`/${url}`} className='block p-2 bg-secondary m-2'>
-  //           <a title={alt}>
-  //             <Image className='h-14 w-auto brand-logo' src={src} alt={alt} />
-  //           </a>
-  //         </Link>
-  //       </div>
-  //     </div>
-  //   );
-  // }
-
-  // if (view === 'DESKTOP') {
-  //   return (
-  //     <div className='lg:w-1/4 text-center w-full relative max-w-[140px]'>
-  //       <Link
-  //         href={`/${url}`}
-  //         className='text-anchor hover:text-anchor-hover'
-  //       >
-  //         <a title={alt}>
-  //           <Image className='h-14 w-auto brand-logo' src={src} alt={alt} />
-  //         </a>
-  //       </Link>
-  //     </div>
-  //   );
-  // }
 };
 
 export default BrandImage;

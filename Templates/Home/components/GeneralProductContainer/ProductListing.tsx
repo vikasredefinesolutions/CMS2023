@@ -50,10 +50,9 @@ const ProductListing: React.FC<_props> = ({ brandsData, brandId }) => {
                 brandsData?.length > 0 &&
                 brandsData.map(
                   (product: newFetauredItemResponse, index: number) => (
-                    <Fragment key={index}>
+                    <Fragment key={`${product.productId}${index}`}>
                       <BrandProduct
                         brandId={brandId}
-                        key={index}
                         product={product}
                         colorChangeHandler={colorChangeHandler}
                       />

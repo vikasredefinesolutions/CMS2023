@@ -68,6 +68,15 @@ const TemplateOneListing = ({
     return <></>;
   }
 
+  const getProductsColorCount = () => {
+    if (isAttributeSaparateProduct && product.splitproductList) {
+      return product.splitproductList?.length - listing_max_showcolors + 1;
+    } else if (product?.getProductImageOptionList) {
+      return product.getProductImageOptionList.length - listing_max_showcolors;
+    }
+    return '';
+  };
+
   return (
     <li className='text-center'>
       <div className=''>
@@ -226,17 +235,9 @@ const TemplateOneListing = ({
                     <li className='w-[28px] h-[28px] border-2 border-light-gray hover:border-secondary relative cursor-pointer'>
                       <span
                         className='absolute inset-0 bg-primary text-xs bg-[#003a70] font-semibold flex items-center justify-center text-[#ffffff]'
-                        title={` See Additional ${
-                          product.getProductImageOptionList &&
-                          product.getProductImageOptionList.length -
-                            listing_max_showcolors
-                        } Colors`}
+                        title={` See Additional ${getProductsColorCount()} Colors`}
                       >
-                        {' '}
-                        +{' '}
-                        {product.getProductImageOptionList &&
-                          product.getProductImageOptionList.length -
-                            listing_max_showcolors}
+                        +{getProductsColorCount()}
                       </span>
                     </li>
                   </Link>

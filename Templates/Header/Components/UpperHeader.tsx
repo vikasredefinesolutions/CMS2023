@@ -12,16 +12,16 @@ const UpperHeader: React.FC<_props> = (headerContent) => {
     : '';
   return (
     <>
-    <div className='bg-primary hidden md:block'>
-        <div className='container pl-[15px] pr-[15px] mx-auto'>
-          <div className='flex flex-wrap justify-between items-center'>
+      <div className='sticky top-0 z-40 '>
+        <div className='bg-primary hidden md:block'>
+          <div className='container pl-[15px] pr-[15px] mx-auto'>
+            <div className='flex flex-wrap justify-between items-center'>
               <div dangerouslySetInnerHTML={{ __html: leftcontent }} />
               <div dangerouslySetInnerHTML={{ __html: rightContent }} />
+            </div>
           </div>
         </div>
-
-    </div>
-     
+      </div>
     </>
   );
 };

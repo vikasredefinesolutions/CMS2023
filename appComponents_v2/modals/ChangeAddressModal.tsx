@@ -1,3 +1,4 @@
+import { __pagesConstant } from '@constants/pages.constant';
 import { AddressType } from '@controllers/checkoutController/CheckoutAddressForm';
 import { CustomerAddress } from '@definations/APIs/user.res';
 import { FC } from 'react';
@@ -95,7 +96,10 @@ const ChangeAddressModal: FC<props> = ({
                               className='btn btn-sm btn-primary'
                               data-modal-toggle='shippingaddressModal'
                             >
-                              SHIP TO THIS ADDRESS
+                              {addressType === __pagesConstant.AddressType.B
+                                ? __pagesConstant.AddressType.Bill
+                                : __pagesConstant.AddressType.Ship}
+                              TO THIS ADDRESS
                             </button>
                           </div>
                         </div>

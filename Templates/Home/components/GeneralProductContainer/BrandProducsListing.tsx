@@ -64,7 +64,7 @@ const BrandProductListing: React.FC<_props> = ({
               {cacheData[recentBrand] && !loading
                 ? cacheData[recentBrand].map(
                     (product: newFetauredItemResponse, index: number) => (
-                      <Fragment key={product.productId}>
+                      <Fragment key={`${product.productId}${index}`}>
                         <BrandProduct
                           brandId={brandId}
                           product={product}
@@ -76,7 +76,7 @@ const BrandProductListing: React.FC<_props> = ({
                   )
                 : totalBrands.map((_, index) => {
                     return (
-                      <Fragment key={index}>
+                      <Fragment key={_.label}>
                         <li className='text-center relative border border-gray-200 border-solid'>
                           <FeaturedSkeleton />
                         </li>

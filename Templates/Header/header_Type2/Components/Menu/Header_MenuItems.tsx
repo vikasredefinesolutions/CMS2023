@@ -1,7 +1,7 @@
 import { _MenuItems } from '@definations/header.type';
 import MenuItem from '@header/header_Type2/Components/Menu//Header_MenuItem';
 import Backdrop from '@templates/Header/header_Type2/Components/Backdrop';
-import React, { useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { CloseIcon } from '../Icons';
 
 interface _props {
@@ -49,13 +49,14 @@ const MenuItems: React.FC<_props> = ({
               }
 
               return (
-                <MenuItem
-                  key={index}
-                  title={menu.title}
-                  type={menu.type}
-                  content={menu.items}
-                  url={menu.seName}
-                />
+                <Fragment key={index}>
+                  <MenuItem
+                    title={menu.title}
+                    type={menu.type}
+                    content={menu.items}
+                    url={menu.seName}
+                  />
+                </Fragment>
               );
             })}
           </div>
@@ -73,13 +74,14 @@ const MenuItems: React.FC<_props> = ({
                 return <></>;
               }
               return (
-                <MenuItem
-                  key={index}
-                  title={menu.title}
-                  type={menu.type}
-                  content={menu.items}
-                  url={menu.seName}
-                />
+                <Fragment key={index}>
+                  <MenuItem
+                    title={menu.title}
+                    type={menu.type}
+                    content={menu.items}
+                    url={menu.seName}
+                  />
+                </Fragment>
               );
             })}
           </div>

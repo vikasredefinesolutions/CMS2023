@@ -3,7 +3,7 @@ import { _MenuCategory } from '@definations/header.type';
 import { FetchMenuCategories } from '@services/header.service';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
 import Link from 'next/link';
-import React, { useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import SubCategoryItem from './Header_SubCategoryItem';
 
 interface _props {
@@ -110,19 +110,16 @@ const SubMenuItem: React.FC<_props> = ({
               <div className='text-[14px]' x-show='subopen1'>
                 <div className='relative bg-light-gray'>
                   <div className=''>
-                    <ul
-                      // role='list'
-                      // aria-labelledby='desktop-featured-heading-1'
-                      className=''
-                    >
+                    <ul className=''>
                       {subCategories.map((subCat, index) => {
                         return (
-                          <SubCategoryItem
-                            key={`${index}_${subCat.id}`}
-                            itemLabel={subCat.categoryName}
-                            type={'CATEGORY'}
-                            view={'MOBILE'}
-                          />
+                          <Fragment key={`${index}_${subCat.id}`}>
+                            <SubCategoryItem
+                              itemLabel={subCat.categoryName}
+                              type={'CATEGORY'}
+                              view={'MOBILE'}
+                            />
+                          </Fragment>
                         );
                       })}
                     </ul>

@@ -8,7 +8,7 @@ import {
 } from '@definations/productList.type';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import Link from 'next/link';
-import React, { useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { _globalStore } from 'store.global';
 import ProductBoxController from './ProductBox.controller';
 
@@ -121,30 +121,28 @@ const BrandProduct: React.FC<_props> = (props) => {
               product?.splitproductList.map(
                 (option: splitproductList, index: number) =>
                   index < showcolors ? (
-                    <Link
-                      key={option.prodcutId}
-                      href={`/${option.seName}.html`}
-                    >
-                      <li
-                        key={index}
-                        className={`border-2  w-7 h-7 text-center overflow-hidden ${
-                          option.colorName ==
-                          currentProduct?.attributeOptionName
-                            ? 'border-secondary'
-                            : ''
-                        } hover:border-secondary ml-1`}
-                      >
-                        <img
-                          src={`${mediaBaseUrl}${option.imageurl}`}
-                          alt=''
-                          title=''
-                          className='max-h-full m-auto'
-                          data-option={JSON.stringify(option)}
-                        />
-                      </li>
-                    </Link>
+                    <Fragment key={option.prodcutId}>
+                      <Link href={`/${option.seName}.html`}>
+                        <li
+                          className={`border-2  w-7 h-7 text-center overflow-hidden ${
+                            option.colorName ==
+                            currentProduct?.attributeOptionName
+                              ? 'border-secondary'
+                              : ''
+                          } hover:border-secondary ml-1`}
+                        >
+                          <img
+                            src={`${mediaBaseUrl}${option.imageurl}`}
+                            alt=''
+                            title=''
+                            className='max-h-full m-auto'
+                            data-option={JSON.stringify(option)}
+                          />
+                        </li>
+                      </Link>
+                    </Fragment>
                   ) : (
-                    <>{(flag = true)}</>
+                    <Fragment key={index}>{(flag = true)}</Fragment>
                   ),
               )}
             {flag ? (

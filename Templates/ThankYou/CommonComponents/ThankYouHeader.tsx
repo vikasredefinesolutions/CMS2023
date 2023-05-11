@@ -1,8 +1,8 @@
 /* eslint-disable no-unused-vars */
+import NxtImage from '@appComponents/reUsable/Image';
 import { __pagesText } from '@constants/pages.text';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import { _ThankYouProps } from '@templates/ThankYou/ThankYou';
-import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 import ThankYouCreatePassword from './ThankYouCreatePassword';
@@ -25,8 +25,8 @@ const ThankYouHeader: React.FC<_ThankYouProps> = ({ order }) => {
             <div className='bg-primary w-full mt-[20px] mb-[20px]'>
               <div className='pl-[15px] pr-[15px] pb-[15px] pt-[15px] w-full'>
                 <div className='text-center'>
-                  <Image
-                    src=''
+                  <NxtImage
+                    src='/images/thank-you-icon.png'
                     alt=''
                     className='mx-auto border-2 rounded-full pl-[15px] pr-[15px] pb-[15px] pt-[15px]'
                     width={'20px'}

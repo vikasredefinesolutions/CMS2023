@@ -691,6 +691,15 @@ export const updateSetProperties = (element) => {
 
               let objName={};
 
+              if (Object.keys(element.selectedVal).includes(key + '_image_hv_position')) {
+                Object.entries(element.selectedVal).map(([keyq, valueq]) => {
+                  if (keyq == key + '_image_hv_position') {
+                    if(x.querySelectorAll('#' + key+"HVPosition").length > 0)
+                      x.querySelectorAll('#' + key+"HVPosition")[0].className = valueq.value; 
+                  }
+                });
+              }
+
               Object.entries(element.properties).map(([keyq, valueq]) => {
                 if (keyq == key) {
                   objName = valueq;
