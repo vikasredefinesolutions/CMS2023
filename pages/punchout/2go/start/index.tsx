@@ -44,7 +44,7 @@ export const getServerSideProps = async (context: any) => {
   b = await PunchoutPostApi(a);
   let returnxml = b
     .toString()
-    .replace('###StoreUrl###', `http://${context.req.headers.host}`);
+    .replace('###StoreUrl###', `https://${context.req.headers.host}`);
 
   let config = {
     method: 'post',
@@ -59,7 +59,7 @@ export const getServerSideProps = async (context: any) => {
   };
   let x = '';
 
-  axios
+  await axios
 
     .request(config)
     .then((response) => {
@@ -67,5 +67,5 @@ export const getServerSideProps = async (context: any) => {
     })
     .catch((err) => console.log(err));
 
-  return { props: { body: returnxml, returnUrl: x } };
+  return { props: { body: x, returnUrl: x } };
 };
