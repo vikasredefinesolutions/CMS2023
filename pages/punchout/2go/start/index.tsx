@@ -61,9 +61,5 @@ export const getServerSideProps = async (context: any) => {
   let a = `${JSON.stringify(obj)}`;
   let b = '';
   b = await PunchoutPostApi(a);
-  let returnxml = b
-    .toString()
-    .replace('###StoreUrl###', `https://${context.req.headers.host}`);
-
-  return { props: { body: returnxml, returnUrl: obj.return_url } };
+  return { props: { body: b, returnUrl: obj.return_url } };
 };
