@@ -144,22 +144,27 @@ export const getServerSideProps: GetServerSideProps = async (
         '' + store.storeId,
         'productDetail',
       );
+      console.log(res, 'this is response');
       let productDetailTypes = res.config_value
         ? JSON.parse(res.config_value)
         : {};
 
       let view: string[] = [];
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      Object.entries(productDetailTypes.sectionDisplay).forEach((val: any) => {
-        if (val[1].isVisible) {
-          view[view.length] = val[0];
-        }
-      });
+      productDetailTypes.sectionDisplay &&
+        Object.entries(productDetailTypes.sectionDisplay).forEach(
+          (val: any) => {
+            if (val[1].isVisible) {
+              view[view.length] = val[0];
+            }
+          },
+        );
       const productDetails = await getProductDetailProps({
         storeId: store.storeId,
         seName: slug,
         isAttributeSaparateProduct: store.isAttributeSaparateProduct,
       });
+      console.log(productDetails, 'productDetails');
 
       if (
         productDetails.details === null ||
