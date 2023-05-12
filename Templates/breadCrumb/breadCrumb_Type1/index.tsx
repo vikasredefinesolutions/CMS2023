@@ -1,9 +1,11 @@
 import NxtImage from '@appComponents/reUsable/Image';
 import { __pagesText } from '@constants/pages.text';
+import { paths } from '@constants/paths.constant';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import { NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 import { _BreadCrumbProps } from '../breadcrumb';
 
 const BreadCrumb_Type1: NextPage<_BreadCrumbProps> = ({
@@ -11,20 +13,39 @@ const BreadCrumb_Type1: NextPage<_BreadCrumbProps> = ({
   breadCrumbs,
 }) => {
   const router = useRouter();
+  // const showborderlineandlogo={pagetype=="product"||router.pathname=paths.REQUEST_CONSULTATION?"":""}
+  const [showBorderAndLogo, setShowBorderAndLogo] = useState<boolean>(false);
+  useEffect(() => {
+    if (
+      pageType == 'product' ||
+      router.pathname == paths.REQUEST_CONSULTATION
+    ) {
+      setShowBorderAndLogo(true);
+    } else {
+      setShowBorderAndLogo(false);
+    }
+  }, [router, pageType]);
+
   const product = useTypedSelector_v2((state) => state.product.product);
   return (
     <>
       <div className='container mx-auto'>
-        <div className='border-b border-b-gray-border mb-[10px]'>
+        <div
+          className={`${
+            showBorderAndLogo ? 'border-b border-b-gray-border' : ''
+          } mb-[10px]`}
+        >
           <div className='flex flex-wrap justify-between py-[15px]'>
             <nav
               className='flex flex-wrap items-center text-small-text'
               aria-label='Breadcrumb'
             >
-              {pageType === 'product' && (
+              {showBorderAndLogo && (
                 <div
                   className='hidden text-anchor hover:text-anchor-hover cursor-pointer lg:inline-block mr-4 !no-underline'
-                  onClick={() => router.push('/')}
+                  onClick={() => {
+                    window.history.back();
+                  }}
                 >
                   &lt;&lt; {__pagesText.BreadCrumbs.back}
                 </div>
@@ -59,12 +80,12 @@ const BreadCrumb_Type1: NextPage<_BreadCrumbProps> = ({
                 </>
               </ol>
             </nav>
-            {pageType === 'product' && (
+            {showBorderAndLogo && (
               <div className='text-center w-auto product-brand-logo '>
                 <Link href={`/${product.brand?.name}.html`}>
                   <a>
                     <NxtImage
-                      src={product.brand?.url || ''}
+                      src={product.brand?.url2 || ''}
                       title={product.brand?.name || ''}
                       className='inline-block'
                       // height={100}

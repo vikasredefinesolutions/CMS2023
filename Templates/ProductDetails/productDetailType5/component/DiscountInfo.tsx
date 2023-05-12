@@ -28,7 +28,7 @@ const DiscountInfo: React.FC<{
         seName: selectedColor.productSEName
           ? selectedColor.productSEName
           : c_getSeName('PRODUCT DETAILS'),
-        customerId: customerId,
+        customerId: customerId ? customerId : 0,
         attributeOptionId: selectedColor.attributeOptionId,
       }).then((res) => {
         product_storeData({

@@ -36,12 +36,14 @@ const Header_Category: React.FC<_props> = ({ content, title, url }) => {
             </span>
             <div className=''>{title}</div>
           </button>
-          <a
+          <div
             className='text-[12px] mr-[5px] underline'
             onClick={() => toggleSideMenu('CLOSE')}
           >
-            <Link href={`${url}`}>{__pagesText.Headers.mobileViewAll}</Link>
-          </a>
+            <Link href={`${url}.html`}>
+              {__pagesText.Headers.mobileViewAll}
+            </Link>
+          </div>
           {/* </div> */}
         </div>
         {showAllItems && (
@@ -77,7 +79,7 @@ const Header_Category: React.FC<_props> = ({ content, title, url }) => {
   if (view === 'DESKTOP') {
     return (
       <>
-        <Link href={`${url}`} className='flex'>
+        <Link href={`${url}.html`} className='flex'>
           <div className='relative flex'>
             <button
               title={title}

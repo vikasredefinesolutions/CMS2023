@@ -11,7 +11,7 @@ import {
   _Product_UpdateLogoDetails_Actions,
   _Product_UpdateSelectedValeus_Action,
   _Product_UpdateSewOutCharges,
-  _UpdateProperties_Action,
+  _UpdateProperties_Action
 } from './product.slice.types';
 
 const selected_initiaState = {
@@ -372,6 +372,7 @@ export const productSlice = createSlice({
             id: number | null;
             name: string | null;
             url: string | null;
+            url2: string | null;
           };
           product: {
             id: number | null;
@@ -1129,6 +1130,8 @@ export const productSlice = createSlice({
             id: number | null;
             name: string | null;
             url: string | null;
+            // for image dimension 200*35
+            url2: string | null;
           };
           product: {
             id: number | null;

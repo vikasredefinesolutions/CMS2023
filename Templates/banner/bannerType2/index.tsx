@@ -17,7 +17,7 @@ const BannerType2: React.FC<_BannerComponentProps> = ({
         {!userId && (
           <div className='container pl-[15px] pr-[15px] mx-auto cursor-pointer'>
             <div className='text-center bg-tertiary pl-[10px] pr-[10px] pt-[4px] pb-[4px]'>
-              <a
+              <div
                 onClick={() => setShowModal('login')}
                 className='inline-flex items-center tracking-[1.2px] text-default-text font-medium'
               >
@@ -25,7 +25,7 @@ const BannerType2: React.FC<_BannerComponentProps> = ({
                 <span className='material-icons'>
                   {__pagesText.Headers.loginIcon}
                 </span>
-              </a>
+              </div>
             </div>
           </div>
         )}

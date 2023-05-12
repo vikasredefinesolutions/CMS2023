@@ -39,6 +39,7 @@ export const expectedProps: _Expected_AppProps = {
     company_address: '',
     thirdPartyLogin: false,
     bothLogin: false,
+    logoUrl: '',
   },
   menuItems: null,
   sbStore: {
@@ -155,8 +156,8 @@ export const callConfigsAndRemainingStoreAPIsAndSetURls = async (
     company_address: '',
   };
   let templateIDs: _templateIds = {
-    headerTemplateId: '3',
-    breadCrumbsTemplateId: '3',
+    headerTemplateId: '1',
+    breadCrumbsTemplateId: '1',
   };
   let headerConfig: _FetchStoreConfigurations | null = null;
 

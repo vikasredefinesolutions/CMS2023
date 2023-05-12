@@ -88,6 +88,8 @@ const Ecommerce_ProductDetails_View: React.FC<_Props> = (product) => {
           id: product.details?.brandID,
           name: product?.details?.brandName,
           url: product.details?.brandColorLogoUrl,
+          // img dimension 200*35
+          url2: product.details?.brandImage,
         },
         product: {
           id: product?.details?.id || null,

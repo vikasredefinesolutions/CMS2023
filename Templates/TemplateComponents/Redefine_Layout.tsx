@@ -143,9 +143,10 @@ const Layout: React.FC<_props & _StoreCache> = ({
         announcementRow={announcementRow}
       />
 
-      {router.pathname !== paths.PRODUCT_COMPARE && (
-        <BreadCrumb breadCrumbid={breadCrumbTemplateId} />
-      )}
+      {router.pathname !== paths.PRODUCT_COMPARE &&
+        router.pathname !== paths.HOME && (
+          <BreadCrumb breadCrumbid={breadCrumbTemplateId} />
+        )}
       <SuccessErrorModal />
       {storeTypeId == storeBuilderTypeId ? (
         <>

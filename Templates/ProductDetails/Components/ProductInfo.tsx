@@ -75,6 +75,7 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
         <div className='w-full md:w-1/3 mt-[10px] md:text-right'>
           <div className='inline-flex items-center'>
             <a
+              href='javascript:void(0);'
               onClick={() => router.push(consultationURL)}
               className='!text-anchor hover:!text-anchor-hover text-normal-text pr-[1px]'
             >
@@ -200,12 +201,13 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
         )} */}
 
         <div className='mt-[20px] text-center'>
-          <button
+          <a
+            href='javascript:void(0);'
             onClick={() => router.push(consultationURL)}
-            className='!text-anchor hover:!text-anchor-hover text-sub-text'
+            className='!text-anchor hover:!text-anchor-hover text-normal-text pr-[1px]'
           >
             {__pagesText.productInfo.requestAFreeConsulation}
-          </button>
+          </a>
         </div>
       </form>
 

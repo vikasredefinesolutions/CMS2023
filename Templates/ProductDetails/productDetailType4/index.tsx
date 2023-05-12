@@ -84,6 +84,7 @@ const ProductDetails_Type4: React.FC<_ProductDetailsProps & _StoreCache> = (
           id: product.details?.brandID,
           name: product?.details?.brandName,
           url: product.details?.brandColorLogoUrl,
+          url2: product.details?.brandImage,
         },
         product: {
           id: product?.details?.id || null,

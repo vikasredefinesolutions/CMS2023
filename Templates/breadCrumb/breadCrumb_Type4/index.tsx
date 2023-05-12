@@ -35,7 +35,7 @@ const BreadCrumb_Type4: NextPage<_BreadCrumbProps> = ({
                               east
                             </span>
                           )}
-                          <a
+                          <div
                             className={` ${
                               index == 0
                                 ? 'inline-flex items-center font-semibold'
@@ -45,7 +45,7 @@ const BreadCrumb_Type4: NextPage<_BreadCrumbProps> = ({
                             } `}
                           >
                             {item.name}
-                          </a>
+                          </div>
                         </div>
                       }
                     </Link>

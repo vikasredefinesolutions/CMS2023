@@ -157,14 +157,14 @@ const CIlayout4: FC<any> = ({ cartData, removeCartItem }) => {
                                     {'QTY'}
                                   </div>
                                   <div className='"mt-[15px] lg:ml-[40px] w-full cursor-pointer'>
-                                    <a
+                                    <div
                                       onClick={() =>
                                         removeCartItem(item.shoppingCartItemsId)
                                       }
                                       className='!w-full !py-[5px] '
                                     >
                                       Remove Item
-                                    </a>
+                                    </div>
                                   </div>
                                 </div>
                               </div>

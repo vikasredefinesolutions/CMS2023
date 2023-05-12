@@ -98,6 +98,7 @@ const LoggedInMenu: React.FC = () => {
               </li>
               <li className='border-t border-t-gray-300'>
                 <a
+                  href='javascript:void(0);'
                   onClick={() => logoutHandler()}
                   className='flex items-center p-2 gap-2.5 text-primary hover:text-primary-hover'
                 >

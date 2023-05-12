@@ -115,10 +115,6 @@ const CartSummarryType4: FC<CartSummarryProps> = ({
       <div className='p-2'>
         <Link className='' href={paths.CHECKOUT}>
           <a className='btn btn-lg btn-secondary !flex items-center justify-center w-full'>
-            {/* <i
-                      className='fa fa-shopping-cart mr-[10px]'
-                      aria-hidden='true'
-                    ></i> */}
             {__pagesText.cart.checkOutNow}
           </a>
         </Link>

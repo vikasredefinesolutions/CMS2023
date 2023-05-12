@@ -220,6 +220,7 @@ export interface _ProductStore {
       id: number | null;
       name: string | null;
       url: string | null;
+      url2: string | null;
     } | null;
     categoryName?: string;
   };

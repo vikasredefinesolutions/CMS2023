@@ -32,7 +32,7 @@ const QtyPriceTable: React.FC<{
         seName: selectedColor.productSEName
           ? selectedColor.productSEName
           : c_getSeName('PRODUCT DETAILS'),
-        customerId: 0,
+        customerId: customerId ? customerId : 0,
         attributeOptionId: selectedColor.attributeOptionId,
       }).then((res) =>
         product_storeData({

@@ -283,27 +283,20 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
                           </div>
                           <div className='mt-[10px] text-extra-small-text text-center'>
                             {__pagesText.productInfo.loginModal.clickMessage}{' '}
-                            <a className='text-anchor'>
-                              <Link href={'terms-and-conditions.html'}>
-                                <>
-                                  {
-                                    __pagesText.productInfo.loginModal
-                                      .termsOfUse
-                                  }
-                                </>
-                              </Link>
-                            </a>{' '}
+                            <Link href={'terms-and-conditions.html'}>
+                              <a className='text-anchor'>
+                                {__pagesText.productInfo.loginModal.termsOfUse}
+                              </a>
+                            </Link>
                             {__pagesText.productInfo.loginModal.and}{' '}
-                            <a className='text-anchor'>
-                              <Link href={'policy.html'}>
-                                <>
-                                  {
-                                    __pagesText.productInfo.loginModal
-                                      .privacyPolicy
-                                  }
-                                </>
-                              </Link>
-                            </a>
+                            <Link href={'policy.html'}>
+                              <a className='text-anchor'>
+                                {
+                                  __pagesText.productInfo.loginModal
+                                    .privacyPolicy
+                                }
+                              </a>
+                            </Link>
                           </div>
                         </div>
                       </>

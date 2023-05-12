@@ -16,6 +16,7 @@ const ProductCompanion: React.FC<_ProductCompanion> = ({ product }) => {
           </div>
           <div className=''>
             <a
+              href='javascript:void(0);'
               onClick={() =>
                 goToProduct(product?.companionProductSEName ?? null)
               }

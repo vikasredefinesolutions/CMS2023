@@ -32,6 +32,7 @@ const TemplateOneListing = ({
   let flag: boolean = false;
   const [wishListId, setWishListId] = useState<number>(0);
   const [wishlistPresent, setWishlistPresent] = useState<boolean>(false);
+
   const customerId = useTypedSelector_v2((state) => state.user.id);
   const wishListData = useTypedSelector_v2(
     (state) => state.wishlist.wishListData,
@@ -45,6 +46,9 @@ const TemplateOneListing = ({
     product,
     colorChangeHandler,
   });
+  const [mainImageUrl, setMainImageUrl] = useState<string>(
+    currentProduct?.imageName ? currentProduct.imageName : '',
+  );
   const isbrand: boolean = seType === 'brand' ? true : false;
   useEffect(() => {
     setCurrentProduct(
@@ -86,9 +90,7 @@ const TemplateOneListing = ({
               <Link href={`/${product.sename}.html`}>
                 <div>
                   <NxtImage
-                    src={
-                      currentProduct?.imageName ? currentProduct.imageName : ''
-                    }
+                    src={mainImageUrl}
                     alt=''
                     className='w-auto h-auto max-h-max cursor-pointer'
                     cKey={currentProduct.id}
@@ -124,8 +126,12 @@ const TemplateOneListing = ({
                 )}
             </div>
             <div className='mt-[24px] pl-[8px] pr-[8px]'>
-              <div className='mt-[4px] text-center h-[35px]'>
-                <Link href={!isbrand ? product.brandUrl : '#0'}>
+              <div className='mt-[4px] text-center h-[35px] cursor-pointer'>
+                <Link
+                  href={
+                    !isbrand ? `${product.brandUrl}.html` : 'javascript:void(0)'
+                  }
+                >
                   <img
                     className='inline-block max-h-full'
                     src={`${mediaBaseUrl}${product.brandlogo}`}
@@ -184,6 +190,14 @@ const TemplateOneListing = ({
                           <li
                             className={`w-7 h-7 border-2 hover:border-secondary cursor-pointer`}
                             key={subRow.prodcutId}
+                            onMouseOver={() => setMainImageUrl(subRow.imageurl)}
+                            onMouseLeave={() =>
+                              setMainImageUrl(
+                                currentProduct?.imageName
+                                  ? currentProduct?.imageName
+                                  : '',
+                              )
+                            }
                           >
                             <NxtImage
                               src={`${mediaBaseUrl}${subRow.imageurl}`}

@@ -36,12 +36,12 @@ const Header_Category: React.FC<_props> = ({ content, title, url }) => {
             </span>
             <div className=''>{title}</div>
           </button>
-          <a
+          <div
             className='text-[12px] mr-[5px] underline'
             onClick={() => toggleSideMenu('CLOSE')}
           >
             <Link href={`${url}`}>{__pagesText.Headers.mobileViewAll}</Link>
-          </a>
+          </div>
           {/* </div> */}
         </div>
         {showAllItems && (

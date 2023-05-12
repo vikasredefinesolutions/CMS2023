@@ -30,7 +30,10 @@ const TopRatedProducts: React.FC<_TopRatedProductsProps> = ({
                   <div className='flex text-center lg:w-auto mb-6'>
                     <div className='relative pb-4'>
                       <div className='w-full bg-gray-200 rounded-md overflow-hidden aspect-w-1 aspect-h-1'>
-                        <Link href={`/${product.seName}`} className='relative'>
+                        <Link
+                          href={`/${product.seName}.html`}
+                          className='relative'
+                        >
                           <Image
                             src={product.image}
                             alt={product.name}
@@ -41,7 +44,7 @@ const TopRatedProducts: React.FC<_TopRatedProductsProps> = ({
                       <div className='mt-6'>
                         <div className='mt-1 text-anchor hover:text-anchor-hover'>
                           <Link
-                            href={`/${product.seName}`}
+                            href={`/${product.seName}.html`}
                             className='relative underline'
                           >
                             <>

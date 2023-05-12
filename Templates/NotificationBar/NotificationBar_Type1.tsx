@@ -37,7 +37,11 @@ const NotificationBar_Type1: React.FC = () => {
                       style={{ color: '#7BC24E' }}
                       onClick={() => employeeClear()}
                     >
-                      <a className='ml-1' style={{ color: '#7BC24E' }}>
+                      <a
+                        href='javascript:void(0);'
+                        className='ml-1'
+                        style={{ color: '#7BC24E' }}
+                      >
                         (LogOut)
                       </a>
                     </button>

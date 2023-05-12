@@ -22,7 +22,6 @@ const TemplateOneFilterBar: React.FC<props> = ({
   sortingType,
 }) => {
   const router = useRouter();
-  console.log(router.asPath, '<-------');
   useEffect(() => {
     sortOpenHandler(false);
   }, [router.asPath]);

@@ -327,6 +327,7 @@ const CartController = () => {
               id: res.brandID,
               name: res.brandName,
               url: res.brandColorLogoUrl,
+              url2: res.brandImage,
             },
             product: {
               id: res?.id || null,

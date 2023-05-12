@@ -98,6 +98,7 @@ const SubMenuItem: React.FC<_props> = ({
               </button>
               <a
                 className='text-[12px] mr-[5px] underline'
+                href='javascript:void(0);'
                 onClick={() => toggleSideMenu('CLOSE')}
               >
                 <Link href={`${itemUrl}`}>

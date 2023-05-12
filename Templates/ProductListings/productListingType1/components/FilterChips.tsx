@@ -21,7 +21,10 @@ const FilterChips = ({
         <ul className='flex flex-wrap gap-2'>
           {checkedFilters.map((filter, index) => (
             <li key={index} className=''>
-              <a className='btn btn-sm btn-primary !inline-flex items-center !rounded-md gap-x-1 !py-0.5 !text-sm'>
+              <a
+                className='btn btn-sm btn-primary !inline-flex items-center !rounded-md gap-x-1 !py-0.5 !text-sm'
+                href='javascript:void(0);'
+              >
                 <span>{capitalizeFirstLetter(filter.value)}</span>
                 <span
                   onClick={() => {

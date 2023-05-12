@@ -2,7 +2,6 @@
 import { __pagesText } from '@constants/pages.text';
 import { useTypedSelector_v2 } from 'hooks_v2';
 import React, { useState } from 'react';
-import AskToLogin from './AskToLogin';
 import QtyPriceTable from './PriceTable';
 import { _DiscountPricingProps } from './productDetailsComponents';
 
@@ -76,8 +75,8 @@ const DiscountPricing: React.FC<
             ) : null}
           </div>
         )} */}
-
-        {isSpecialBrand ? (
+        <QtyPriceTable storeCode={storeCode} />
+        {/* {isSpecialBrand ? (
           customerId !== null ? (
             <QtyPriceTable storeCode={storeCode} />
           ) : (
@@ -85,10 +84,10 @@ const DiscountPricing: React.FC<
           )
         ) : (
           <QtyPriceTable storeCode={storeCode} />
-        )}
-        {isSpecialBrand && showLogin && modalHandler && (
+        )} */}
+        {/* {isSpecialBrand && showLogin && modalHandler && (
           <AskToLogin modalHandler={modalHandler} />
-        )}
+        )} */}
       </div>
 
       {showMsg && (

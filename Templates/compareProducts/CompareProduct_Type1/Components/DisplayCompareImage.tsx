@@ -19,14 +19,14 @@ const DisplayCompareImage: React.FC<_props> = ({ onRemove }) => {
       {images?.map((item, index) => (
         <td key={index} className='relative'>
           <div className='w-96 text-center'>
-            <a
+            <div
               onClick={() => onRemove(index)}
               className='absolute right-[20px] top-[20px]'
             >
               <span className='material-icons-outlined text-sub-text font-[900] text-anchor hover:text-anchor-hover'>
                 close
               </span>
-            </a>
+            </div>
             <a href={item.seName || '/'}>
               <NxtImage
                 src={item.url}

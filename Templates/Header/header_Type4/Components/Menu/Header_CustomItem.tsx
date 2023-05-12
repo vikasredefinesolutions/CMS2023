@@ -35,6 +35,7 @@ const Custom: React.FC<_props> = ({ content, title, url }) => {
           <a
             className='text-[12px] mr-[5px] underline'
             onClick={() => toggleSideMenu('CLOSE')}
+            href='javascript:void(0);'
           >
             <Link href={`${url}`}>{__pagesText.Headers.mobileViewAll}</Link>
           </a>

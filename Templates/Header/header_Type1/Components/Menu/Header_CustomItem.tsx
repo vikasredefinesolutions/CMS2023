@@ -36,7 +36,9 @@ const Custom: React.FC<_props> = ({ content, title, url }) => {
             className='text-[12px] mr-[5px] underline'
             onClick={() => toggleSideMenu('CLOSE')}
           >
-            <Link href={`${url}`}>{__pagesText.Headers.mobileViewAll}</Link>
+            <Link href={`${url}.html`}>
+              {__pagesText.Headers.mobileViewAll}
+            </Link>
           </a>
         </div>
         {showAllItems && (
@@ -53,7 +55,7 @@ const Custom: React.FC<_props> = ({ content, title, url }) => {
   if (view === 'DESKTOP') {
     return (
       <>
-        <Link href={`${url}`} className='flex'>
+        <Link href={`${url}.html`} className='flex'>
           <div className='relative flex'>
             <button
               onMouseOver={() => setFocus(true)}

@@ -43,12 +43,12 @@ const ForgotModal: React.FC<_ModalProps> = ({ modalHandler }) => {
                 </div>
 
                 <div className='flex items-center gap-x-2'>
-                  <a
+                  <div
                     onClick={() => modalHandler('login')}
                     className='text-anchor'
                   >
                     &lt; {__pagesText.productInfo.forgotModal.back}
-                  </a>
+                  </div>
 
                   <button
                     type='button'

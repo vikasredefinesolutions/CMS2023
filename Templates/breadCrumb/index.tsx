@@ -1,23 +1,23 @@
-import { __SpecialBreadCrumbsPaths, paths } from '@constants/paths.constant';
+import { paths, __SpecialBreadCrumbsPaths } from '@constants/paths.constant';
 import { capitalizeFirstLetter } from '@helpers/common.helper';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import {
-  FetchCategoryByproductId,
   fetchCategoryByCategoryId,
+  FetchCategoryByproductId,
 } from '@services/product.service';
 
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import {
+  _breadCrumbs,
+  _BreadCrumbTemplates,
+  __BreadCrumbTemplatesProps,
+} from './breadcrumb';
 import BreadCrumb_Type1 from './breadCrumb_Type1';
 import BreadCrumb_Type2 from './breadCrumb_Type2';
 import BreadCrumb_Type3 from './breadCrumb_Type3';
 import BreadCrumb_Type4 from './breadCrumb_Type4';
-import {
-  _BreadCrumbTemplates,
-  __BreadCrumbTemplatesProps,
-  _breadCrumbs,
-} from './breadcrumb';
 
 const BreadCrumbTemplates: _BreadCrumbTemplates = {
   type1: BreadCrumb_Type1,
@@ -37,7 +37,7 @@ const BreadCrumb: NextPage<__BreadCrumbTemplatesProps> = ({ breadCrumbid }) => {
   const pageType = useTypedSelector_v2((state) => state.store.pageType);
   const isCMSpage = useTypedSelector_v2((state) => state.home.isCMS_page);
   const [breadCrumbs, setBreadCrumbs] = useState<_breadCrumbs[]>([]);
-
+  const productId = useTypedSelector_v2((state) => state.product.product.id);
   const getBreadCrubs = async () => {
     if (isCMSpage) {
       return [
@@ -59,6 +59,29 @@ const BreadCrumb: NextPage<__BreadCrumbTemplatesProps> = ({ breadCrumbid }) => {
       const categories = await (pageType.type === 'category'
         ? fetchCategoryByCategoryId
         : FetchCategoryByproductId)(~~pageType.id, storeId || 0);
+      const breadCrumbs = [{ name: 'Home', url: '/' }];
+      if (categories.length > 0) {
+        const _categories = categories[0];
+        const catNames = _categories.name.split(' > ');
+        const catSeNames = _categories.sename.split(' > ');
+        catNames.forEach((cate: string, index: number) => {
+          breadCrumbs.push({
+            name: cate,
+            url: `${catSeNames[index].trim()}.html/`,
+          });
+        });
+      } else {
+        breadCrumbs.push({
+          name: pageType.slug,
+          url: pageType.slug,
+        });
+      }
+      return breadCrumbs;
+    } else if (router.pathname == paths.REQUEST_CONSULTATION && productId) {
+      const categories = await FetchCategoryByproductId(
+        productId,
+        storeId || 0,
+      );
       const breadCrumbs = [{ name: 'Home', url: '/' }];
 
       if (categories.length > 0) {
@@ -109,7 +132,7 @@ const BreadCrumb: NextPage<__BreadCrumbTemplatesProps> = ({ breadCrumbid }) => {
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [router.asPath, pageType.slug]);
+  }, [router.asPath, pageType.slug, productId]);
   return (
     <BreadCrumbTemplate pageType={pageType.type} breadCrumbs={breadCrumbs} />
   );

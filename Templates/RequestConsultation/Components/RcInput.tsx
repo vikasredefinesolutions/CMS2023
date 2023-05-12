@@ -1,3 +1,4 @@
+import { ErrorMessage } from 'formik';
 import React from 'react';
 
 interface _props {
@@ -33,6 +34,7 @@ const RcInput: React.FC<_props> = ({
           className='text-medium-text border border-[#ababab] rounded pt-[12px] pb-[12px] pl-[12px] pr-[12px] w-full'
         />
       </div>
+      <ErrorMessage name={name} className='text-rose-500' component={'p'} />
     </div>
   );
 };

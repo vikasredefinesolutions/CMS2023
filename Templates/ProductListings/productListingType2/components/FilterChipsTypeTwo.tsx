@@ -19,7 +19,10 @@ const FilterChipsTypeTwo = ({
         <ul className='flex flex-wrap gap-2'>
           {checkedFilters.map((filter, index) => (
             <li key={index} className=''>
-              <a className='bg-secondary inline-flex items-center py-[4px] px-[20px] text-sm text-[#ffffff] rounded cursor-pointer'>
+              <a
+                className='bg-secondary inline-flex items-center py-[4px] px-[20px] text-sm text-[#ffffff] rounded cursor-pointer'
+                href='javascript:void(0);'
+              >
                 <span className='mr-[10px]'>
                   {capitalizeFirstLetter(filter.value)}
                 </span>
@@ -39,6 +42,7 @@ const FilterChipsTypeTwo = ({
       <div className=''>
         <a
           onClick={clearFilters}
+          href='javascript:void(0);'
           className='inline-block font-semibold text-default-text cursor-pointer'
         >
           {__pagesText.productListing.clearAllButton}

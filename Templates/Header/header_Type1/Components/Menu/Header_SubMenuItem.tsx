@@ -96,14 +96,14 @@ const SubMenuItem: React.FC<_props> = ({
                 </span>
                 <div className=''>{itemLabel}</div>
               </button>
-              <a
+              <div
                 className='text-[12px] mr-[5px] underline'
                 onClick={() => toggleSideMenu('CLOSE')}
               >
                 <Link href={`${itemUrl}`}>
                   {__pagesText.Headers.mobileViewAll}
                 </Link>
-              </a>
+              </div>
             </div>
 
             {showAllItems && (

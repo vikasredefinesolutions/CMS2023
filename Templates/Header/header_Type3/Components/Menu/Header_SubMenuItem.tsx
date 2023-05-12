@@ -99,6 +99,7 @@ const SubMenuItem: React.FC<_props> = ({
               <a
                 className='text-[12px] mr-[5px] underline'
                 onClick={() => toggleSideMenu('CLOSE')}
+                href='javascript:void(0);'
               >
                 <Link href={`${itemUrl}`}>
                   {__pagesText.Headers.mobileViewAll}

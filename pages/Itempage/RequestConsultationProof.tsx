@@ -7,13 +7,43 @@ import { paths } from '@constants/paths.constant';
 import { _ExpectedRequestConsultationProps } from '@controllers/request';
 import * as ConsultationController from '@controllers/requestConsultationController.async';
 import { conditionalLog_V2 } from '@helpers/console.helper';
+import { useActions_v2 } from '@hooks_v2/index';
 import { _RequestConsultationProps } from '@templates/RequestConsultation/requestConsultation';
 import { GetServerSideProps, GetServerSidePropsResult } from 'next';
+import { useEffect } from 'react';
 import { _globalStore } from 'store.global';
 
 const RequestConsultationProof: NextPage<_RequestConsultationProps> = (
   props,
 ) => {
+  const { store_productDetails } = useActions_v2();
+  useEffect(() => {
+    if (props.details) {
+      store_productDetails({
+        brand: {
+          id: props?.details.brandID,
+          name: props?.details.brandName,
+          url: props?.details.brandColorLogoUrl,
+          url2: props?.details.brandImage,
+        },
+        product: {
+          id: props?.details?.id || null,
+          name: props?.details.name || null,
+          sizes: props?.details.sizes || '',
+          sizeChart: null,
+          colors: null,
+          customization: props?.details.isEnableLogolocation,
+          price:
+            {
+              msrp: props?.details.msrp,
+              ourCost: props?.details.ourCost,
+              salePrice: props?.details.salePrice,
+            } || null,
+        },
+      });
+    }
+  }, []);
+
   return <RC_Template {...props} id={_defaultTemplates.requestConsultation} />;
 };
 

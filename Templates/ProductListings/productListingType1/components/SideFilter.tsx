@@ -10,6 +10,7 @@ import {
   FilterType,
   _CheckedFilter,
 } from '@templates/ProductListings/ProductListingType';
+import { useRouter } from 'next/router';
 
 import { Fragment } from 'react';
 
@@ -22,6 +23,7 @@ const SideFilter = ({
   handleChange: FilterChangeHandler;
   checkedFilters: Array<_CheckedFilter>;
 }) => {
+  const router = useRouter();
   return (
     <div className='relative'>
       <div className={'pt-[16px] pb-[16px] bg-light-gray'}>
@@ -113,6 +115,7 @@ const SideFilter = ({
                                       {option.productCount})
                                     </Link>
                                     {option.subrows &&
+                                      router.asPath != '/accessories.html' &&
                                       option.subrows.length > 0 && (
                                         <ul className='ml-3'>
                                           {option.subrows?.map((subrow) => (

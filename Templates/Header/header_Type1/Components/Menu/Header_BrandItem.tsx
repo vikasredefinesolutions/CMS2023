@@ -45,7 +45,7 @@ const Brand: React.FC<_props> = ({ url, title, content }) => {
             <span className=''>{title}</span>
           </button>
           <div className='' onClick={() => toggleSideMenu('CLOSE')}>
-            <a href={url} className='text-[12px] mr-[5px] underline'>
+            <a href={`${url}.html`} className='text-[12px] mr-[5px] underline'>
               {__pagesText.Headers.mobileViewAll}
             </a>
             {/* </div> */}
@@ -88,7 +88,7 @@ const Brand: React.FC<_props> = ({ url, title, content }) => {
   if (view === 'DESKTOP') {
     return (
       <>
-        <Link href={url}>
+        <Link href={`${url}`}>
           <div className='relative flex'>
             <button
               title={title}
@@ -145,7 +145,11 @@ const Brand: React.FC<_props> = ({ url, title, content }) => {
                               : `${brand.seName}.html?v=product-list`
                           }
                           alt={capitalizeFirstLetter(brand.brandName)}
-                          src={brand.brandColorImageUrl}
+                          src={
+                            brand.seName != 'patagonia'
+                              ? brand.brandColorImageUrl
+                              : brand.brandBlackColorImageUrl
+                          }
                         />
                       ))}
                   </div>

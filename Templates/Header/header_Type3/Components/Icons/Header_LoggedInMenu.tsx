@@ -99,7 +99,7 @@ const LoggedInMenu: React.FC = () => {
                 </Link>
               </li>
               <li className='border-t border-t-gray-300'>
-                <a
+                <div
                   onClick={() => logoutHandler()}
                   className='flex items-center p-[10px] gap-2.5 text-[#000000] hover:text-[#000000]'
                 >
@@ -114,7 +114,7 @@ const LoggedInMenu: React.FC = () => {
                     />
                   </span>
                   <span className=''> {__pagesText.Headers.signOut}</span>
-                </a>
+                </div>
               </li>
             </ul>
           </div>

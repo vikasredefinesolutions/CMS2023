@@ -8,6 +8,7 @@ import { useTypedSelector_v2 } from '@hooks_v2/index';
 import { GetlAllProductList } from '@templates/ProductListings/ProductListingType';
 import ProductBoxController from '@templates/ProductListings/productListingType1/components/productBoxController';
 import Link from 'next/link';
+import { useState } from 'react';
 import { _globalStore } from 'store.global';
 
 let mediaBaseUrl = _globalStore.blobUrl;
@@ -39,6 +40,7 @@ const TemplateFourListing = ({
   const { isAttributeSaparateProduct } = useTypedSelector_v2(
     (state) => state.store,
   );
+  const [mainImageUrl, setMainImageUrl] = useState<string>('');
   mediaBaseUrl = mediaBaseUrl || store.mediaBaseUrl;
   // let flag:boolean = product.getProductImageOptionList.length > 4 ? true : false;
   // let countImage:Number = product.getProductImageOptionList.length - 4;
@@ -164,6 +166,14 @@ const TemplateFourListing = ({
                         <li
                           className={`w-7 h-7 border-2 hover:border-secondary cursor-pointer`}
                           key={subRow.prodcutId}
+                          onMouseOver={() => setMainImageUrl(subRow.imageurl)}
+                          onMouseLeave={() =>
+                            setMainImageUrl(
+                              currentProduct?.imageName
+                                ? currentProduct?.imageName
+                                : '',
+                            )
+                          }
                         >
                           <NxtImage
                             src={`${mediaBaseUrl}${subRow.imageurl}`}

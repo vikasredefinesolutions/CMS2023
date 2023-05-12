@@ -1,7 +1,7 @@
 import { __pagesText } from '@constants/pages.text';
 import { _ProductInventory } from '@definations/APIs/inventory.res';
 import { FetchInventoryById } from '@services/product.service';
-import Image from 'appComponents_v2/reUsable/Image';
+import { default as Image } from 'appComponents_v2/reUsable/Image';
 import { useTypedSelector_v2 } from 'hooks_v2';
 import React, { useEffect, useState } from 'react';
 import { _ModalProps } from '../modal.d';
@@ -36,6 +36,9 @@ const AvailableInventoryModal: React.FC<_ModalProps> = ({ modalHandler }) => {
     fetchInventory();
   }, []);
 
+  const mediaBaseURL = useTypedSelector_v2((state) => state.store.mediaBaseUrl);
+
+  const state = useTypedSelector_v2((state) => console.log(state));
   return (
     <div
       onClick={() => modalHandler(null)}
@@ -48,7 +51,11 @@ const AvailableInventoryModal: React.FC<_ModalProps> = ({ modalHandler }) => {
             <div className='px-4 lg:px-10 bg-blue-900 text-white'>
               <div className='flex flex-wrap items-center justify-between py-6'>
                 <div className='pl-8'>
-                  <Image src={brand?.url ?? ''} alt='' className={''} />
+                  <img
+                    src={`${mediaBaseURL}${brand?.url}`}
+                    alt=''
+                    className={'w-16'}
+                  />
                 </div>
                 <div className='uppercase font-semibold flex flex-wrap items-center'>
                   <svg

@@ -51,7 +51,7 @@ const FeaturedItems: React.FC<_props> = ({ brands, products: productsArr }) => {
                   }`}
                   onClick={() => setBrandIndex(index)}
                 >
-                  <a>{brand.name}</a>
+                  <a href='javascript:void(0);'>{brand.name}</a>
                 </li>
               ))}
             </ul>

@@ -21,7 +21,10 @@ const FilterChipsTypeFive = ({
         <ul className='flex flex-wrap gap-2'>
           {checkedFilters.map((filter, index) => (
             <li key={index} className=''>
-              <a className='inline-flex items-center py-[10px] px-[20px] text-sm rounded bg-tertiary'>
+              <a
+                className='inline-flex items-center py-[10px] px-[20px] text-sm rounded bg-tertiary'
+                href='javascript:void(0);'
+              >
                 <span className='mr-[10px] text-[#ffffff]'>
                   {capitalizeFirstLetter(filter.value)}
                 </span>

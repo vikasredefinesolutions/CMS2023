@@ -34,7 +34,7 @@ const BreadCrumb_Type3: NextPage<_BreadCrumbProps> = ({
                           <span className='material-icons-outlined text-base leading-none'>
                             chevron_right
                           </span>
-                          <a
+                          <div
                             className={` ml-[5px] md:ml-[10px] ${
                               index == breadCrumbs.length - 1
                                 ? 'ml-[6px] text-gray-text'
@@ -42,7 +42,7 @@ const BreadCrumb_Type3: NextPage<_BreadCrumbProps> = ({
                             } `}
                           >
                             {item.name}
-                          </a>
+                          </div>
                         </div>
                       ) : (
                         <a

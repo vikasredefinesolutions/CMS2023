@@ -12,6 +12,7 @@ import {
 } from '@templates/ProductListings/ProductListingType';
 import ProductBoxController from '@templates/ProductListings/productListingType1/components/productBoxController';
 import Link from 'next/link';
+import { useState } from 'react';
 import { _globalStore } from 'store.global';
 
 let mediaBaseUrl = _globalStore.blobUrl;
@@ -37,6 +38,9 @@ const TemplateTwoListing = ({
     product,
     colorChangeHandler,
   });
+  const [mainImageUrl, setMainImageUrl] = useState<string>(
+    currentProduct?.imageName ? currentProduct.imageName : '',
+  );
   const store = useTypedSelector_v2((state) => state.store);
   const { isAttributeSaparateProduct } = useTypedSelector_v2(
     (state) => state.store,
@@ -60,7 +64,7 @@ const TemplateTwoListing = ({
               className='relative'
             >
               <NxtImage
-                src={currentProduct?.imageName ? currentProduct?.imageName : ''}
+                src={mainImageUrl}
                 alt=''
                 className='w-auto h-auto m-auto max-h-[400px]'
                 key={currentProduct?.id}
@@ -134,6 +138,14 @@ const TemplateTwoListing = ({
                           <li
                             className={`w-7 h-7 border-2 hover:border-secondary cursor-pointer`}
                             key={subRow.prodcutId}
+                            onMouseOver={() => setMainImageUrl(subRow.imageurl)}
+                            onMouseLeave={() =>
+                              setMainImageUrl(
+                                currentProduct?.imageName
+                                  ? currentProduct?.imageName
+                                  : '',
+                              )
+                            }
                           >
                             <NxtImage
                               src={`${mediaBaseUrl}${subRow.imageurl}`}
@@ -214,7 +226,7 @@ const TemplateTwoListing = ({
               className='relative cursor-pointer'
             >
               <NxtImage
-                src={currentProduct?.imageName ? currentProduct?.imageName : ''}
+                src={mainImageUrl}
                 alt=''
                 className='w-auto h-auto max-h-max'
                 key={currentProduct?.id}
@@ -287,9 +299,8 @@ const TemplateTwoListing = ({
                 <div className='flex'>
                   <Link key={product.id} href={`/${product.sename}.html`}>
                     <li
-                      className={`w-7 h-7 border-2  border-secondary
-                          
-           hover:border-secondary cursor-pointer`}
+                      className={`w-7 h-7 border-2  border-secondary 
+                      hover:border-secondary cursor-pointer`}
                       key={product.id}
                     >
                       <NxtImage
@@ -307,6 +318,14 @@ const TemplateTwoListing = ({
                         <li
                           className={`w-7 h-7 border-2 hover:border-secondary cursor-pointer`}
                           key={subRow.prodcutId}
+                          onMouseOver={() => setMainImageUrl(subRow.imageurl)}
+                          onMouseLeave={() =>
+                            setMainImageUrl(
+                              currentProduct?.imageName
+                                ? currentProduct?.imageName
+                                : '',
+                            )
+                          }
                         >
                           <NxtImage
                             src={`${mediaBaseUrl}${subRow.imageurl}`}
