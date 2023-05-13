@@ -42,6 +42,9 @@ export interface _BannerRes {
   seTitle: null;
   seKeyWords: null;
   seDescription: null;
+  // collection url
+  customSEName: string | null;
+  brandImage: string | null;
 }
 
 export interface Errors {}

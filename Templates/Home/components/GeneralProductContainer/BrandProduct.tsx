@@ -31,6 +31,7 @@ const BrandProduct: React.FC<_props> = (props) => {
     product,
     colorChangeHandler,
   });
+  const [mainImageUrl, setMainImageUrl] = useState<string>('');
   const store = useTypedSelector_v2((state) => state.store);
   mediaBaseUrl = mediaBaseUrl || store.mediaBaseUrl;
   const customerId = useTypedSelector_v2((state) => state.user.id);
@@ -47,6 +48,9 @@ const BrandProduct: React.FC<_props> = (props) => {
         }
       });
     }
+    if (currentProduct && currentProduct?.imageUrl) {
+      setMainImageUrl(currentProduct.imageUrl);
+    }
   }, [customerId, wishListData]);
   return (
     <li
@@ -62,11 +66,7 @@ const BrandProduct: React.FC<_props> = (props) => {
         >
           <div className='w-full overflow-hidden aspect-w-1 aspect-h-1'>
             <ImageComponent
-              src={
-                store.mediaBaseUrl + currentProduct && currentProduct?.imageUrl
-                  ? currentProduct.imageUrl
-                  : ''
-              }
+              src={store.mediaBaseUrl + mainImageUrl}
               alt='no image'
               className='w-auto h-auto m-auto max-h-[348px]'
               height={350}
@@ -101,9 +101,8 @@ const BrandProduct: React.FC<_props> = (props) => {
               href={`/${product.productSEName}.html`}
             >
               <li
-                className={`w-7 h-7 border-2   border-secondary
+                className={`w-7 h-7 border-2 border-secondary
                      hover:border-secondary cursor-pointer`}
-                key={product.productId}
               >
                 <ImageComponent
                   src={
@@ -114,7 +113,7 @@ const BrandProduct: React.FC<_props> = (props) => {
                   }
                   alt='no image'
                   className='max-h-full m-auto'
-                  key={currentProduct?.id}
+                  title={product?.moreImages[0].attributeOptionName}
                 />
               </li>
             </Link>
@@ -128,18 +127,21 @@ const BrandProduct: React.FC<_props> = (props) => {
                     >
                       <li
                         key={index}
-                        className={`border-2  w-7 h-7 text-center overflow-hidden ${
-                          option.colorName ==
-                          currentProduct?.attributeOptionName
-                            ? 'border-secondary'
-                            : ''
-                        } hover:border-secondary ml-1`}
+                        className={`border-2  w-7 h-7 text-center overflow-hidden  hover:border-secondary ml-1 cursor-pointer`}
+                        onMouseOver={() => setMainImageUrl(option.imageurl)}
+                        onMouseLeave={() =>
+                          setMainImageUrl(
+                            currentProduct?.imageUrl
+                              ? currentProduct?.imageUrl
+                              : '',
+                          )
+                        }
                       >
                         <ImageComponent
                           src={store.mediaBaseUrl + option.imageurl}
                           alt='no image'
                           className='max-h-full m-auto'
-                          key={currentProduct?.id}
+                          title={option.colorName}
                         />
                       </li>
                     </Link>
@@ -148,10 +150,7 @@ const BrandProduct: React.FC<_props> = (props) => {
                   ),
               )}
             {flag ? (
-              <Link
-                key={product.productId}
-                href={`/${product.productSEName}.html`}
-              >
+              <Link href={`/${product.productSEName}.html`}>
                 <li className='extra w-7 h-7 text-center border-2 hover:border-secondary inset-0 bg-primary text-xs font-semibold flex items-center justify-center text-white cursor-pointer'>
                   <span>+</span>
                   {product &&

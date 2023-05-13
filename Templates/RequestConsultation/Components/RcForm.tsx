@@ -185,8 +185,8 @@ const RcForm: React.FC<{ productId: number; attriubteOptionId: number }> = ({
             <Form>
               <div className='flex flex-wrap gap-y-4 pl-[15px] pr-[15px]'>
                 <div className='w-full'>
-                  <div className='bg-[#f5f7f6] flex flex-wrap items-center justify-between pt-[8px] pb-[8px] pl-[12px] pr-[12px]'>
-                    <div className='text-sub-text font-bold'>
+                  <div className='bg-[#f5f7f6] flex flex-wrap items-center justify-between pt-[8px] pb-[8px] pl-[8px] pr-[8px]'>
+                    <div className='text-sub-text font-semibold'>
                       Contact Information
                     </div>
                     <div className='text-[#a94442] text-small-text font-semibold'>
@@ -273,10 +273,10 @@ const RcForm: React.FC<{ productId: number; attriubteOptionId: number }> = ({
                     {!showLogo && (
                       <div className=''>
                         <button
-                          className='text-medium-text rounded pt-[12px] pb-[12px] pl-[12px] !text-anchor hover:!text-anchor-hover underline text-normal-text font-semibold'
+                          className='text-medium-text rounded pt-[12px] pb-[12px] pl-[12px] !text-anchor hover:!text-anchor-hover underline text-normal-text font-bold'
                           onClick={() => setShowLogo(true)}
                         >
-                          + Add Logo
+                          <u> + Add Logo</u>
                         </button>
                       </div>
                     )}
@@ -396,7 +396,7 @@ const RcForm: React.FC<{ productId: number; attriubteOptionId: number }> = ({
                 <div className='w-full  text-center'>
                   <button
                     type={'submit'}
-                    className='btn btn-md btn-secondary w-full mb-[15px]'
+                    className='btn btn-md btn-secondary text-sub-text font-bold w-full mb-[15px]'
                   >
                     SUBMIT
                   </button>

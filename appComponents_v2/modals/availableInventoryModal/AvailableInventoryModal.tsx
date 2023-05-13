@@ -19,6 +19,7 @@ const AvailableInventoryModal: React.FC<_ModalProps> = ({ modalHandler }) => {
   >([]);
   const [size, setSizes] = useState<string[]>([]);
 
+  const { favIcon, mediaBaseUrl } = useTypedSelector_v2((state) => state.store);
   const fetchInventory = async () => {
     colors?.map((item) => {
       FetchInventoryById({
@@ -36,9 +37,6 @@ const AvailableInventoryModal: React.FC<_ModalProps> = ({ modalHandler }) => {
     fetchInventory();
   }, []);
 
-  const mediaBaseURL = useTypedSelector_v2((state) => state.store.mediaBaseUrl);
-
-  const state = useTypedSelector_v2((state) => console.log(state));
   return (
     <div
       onClick={() => modalHandler(null)}
@@ -50,11 +48,11 @@ const AvailableInventoryModal: React.FC<_ModalProps> = ({ modalHandler }) => {
           <div className='relative bg-gray-200 shadow max-h-screen overflow-y-auto'>
             <div className='px-4 lg:px-10 bg-blue-900 text-white'>
               <div className='flex flex-wrap items-center justify-between py-6'>
-                <div className='pl-8'>
+                <div className='pl-8 w-16 h-8'>
                   <img
-                    src={`${mediaBaseURL}${brand?.url}`}
+                    src={`${mediaBaseUrl}${favIcon}` ?? ''}
                     alt=''
-                    className={'w-16'}
+                    className={''}
                   />
                 </div>
                 <div className='uppercase font-semibold flex flex-wrap items-center'>

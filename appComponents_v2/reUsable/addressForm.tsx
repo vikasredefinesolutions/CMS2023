@@ -47,27 +47,29 @@ const AddressForm = (props: AddressFormRefType) => {
   }, [values.countryName, country]);
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className='checkoutpage'>
       <div className='flex flex-wrap -mx-3'>
         <div className='w-full lg:w-1/2 pl-[12px] pr-[12px] mb-[20px]'>
-          <div className='relative z-0 w-full                                                                                                         2 border border-gray-border rounded'>
-            <input
-              onBlur={handleBlur}
-              onChange={handleChange}
-              name='firstname'
-              placeholder=' '
-              value={values.firstname}
-              className='pt-[15px] pb-[0px] block w-full px-[8px] h-[48px] mt-[0px] text-sub-text text-[18px] text-[#000000] bg-transparent border-0 appearance-none focus:outline-none focus:ring-0'
-            />
-            <label
-              htmlFor='FirstName'
-              className='left-[8px] absolute duration-300 top-[11px] -z-1 origin-0 text-[#000000] text-[18px]'
-            >
-              First Name *
-            </label>
-          </div>
-          <div className='text-red-500 text-s'>
-            {touched.firstname && errors.firstname}
+          <div>
+            <div className='relative z-0 w-full border border-gray-border rounded'>
+              <input
+                onBlur={handleBlur}
+                onChange={handleChange}
+                name='firstname'
+                placeholder=' '
+                value={values.firstname}
+                className='pt-[15px] pb-[0px] block w-full px-[8px] h-[48px] mt-[0px] text-sub-text text-[18px] text-[#000000] bg-transparent border-0 appearance-none focus:outline-none focus:ring-0'
+              />
+              <label
+                htmlFor='FirstName'
+                className='left-[8px] absolute duration-300 top-[11px] -z-1 origin-0 text-[#000000] text-[18px]'
+              >
+                First Name *
+              </label>
+            </div>
+            <div className='text-red-500 text-s'>
+              {touched.firstname && errors.firstname}
+            </div>
           </div>
         </div>
         <div className='w-full lg:w-1/2 pl-[12px] pr-[12px] mb-[20px]'>

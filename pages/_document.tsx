@@ -4,7 +4,7 @@ import Document, {
   Head,
   Html,
   Main,
-  NextScript
+  NextScript,
 } from 'next/document';
 import { _globalStore } from 'store.global';
 import DcTags from 'tags/DcTags';
@@ -67,7 +67,6 @@ class MyDocument extends Document {
               _globalStore.blobUrlRootDirectory
             }/${_globalStore.companyId}/store/tailwin-css.css?${Math.random()}`}
           />
-         
           <link
             rel='stylesheet'
             type='text/css'
@@ -81,7 +80,6 @@ class MyDocument extends Document {
             }/${_globalStore.companyId}/store/main.css?${Math.random()}`}
           />
           {/* -----------------------SLIDER STYLESHEETS------------------------- */}
-         
           <link
             rel='stylesheet'
             type='text/css'
@@ -108,7 +106,9 @@ class MyDocument extends Document {
           <script
             type='text/javascript'
             src='https://platform-api.sharethis.com/js/sharethis.js#property=622863e42e0ffb001379992c&product=sop'
+            async={true}
           ></script>
+
           {/* ---------------------Google Tag Manager--------------------- */}
           {/* <script
             async

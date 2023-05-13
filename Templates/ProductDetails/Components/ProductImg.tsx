@@ -1,5 +1,6 @@
 import WishlistButton from '@appComponents/ui/Wishlist';
 import { _OtherImage } from '@definations/APIs/colors.res';
+import SocialShare from '@templates/Home/components/SocialShare';
 import { _ProductImgProps } from '@templates/ProductDetails/Components/productDetailsComponents';
 import Image from 'appComponents_v2/reUsable/Image';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
@@ -61,7 +62,6 @@ const ProductImg: React.FC<_ProductImgProps> = ({ product }) => {
             className='w-full object-center object-cover sm:rounded-lg main_image max-h'
           />
         </div>
-
         <div className='hidden md:block sub-image absolute left-[10px] top-[15px] w-[70px]'>
           {selectedColor?.moreImages
             ?.map((img, index) => ({ ...img, id: index }))
@@ -103,6 +103,8 @@ const ProductImg: React.FC<_ProductImgProps> = ({ product }) => {
           </button>
         </div>
       </div>
+      {/* Social Media third Party */}
+      <SocialShare />
     </div>
   );
 };

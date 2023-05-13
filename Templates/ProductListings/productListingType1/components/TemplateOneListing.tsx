@@ -82,12 +82,12 @@ const TemplateOneListing = ({
   };
 
   return (
-    <li className='text-center'>
+    <li key={product.id} className='text-center'>
       <div className=''>
         <div className='flex text-center lg:w-auto'>
           <div className='relative border border-gray-200 pb-[30px] w-full'>
             <div className='w-full rounded-md overflow-hidden aspect-w-1 aspect-h-1'>
-              <Link href={`/${product.sename}.html`}>
+              <Link key={product.id} href={`/${product.sename}.html`}>
                 <div>
                   <NxtImage
                     src={mainImageUrl}
@@ -128,6 +128,7 @@ const TemplateOneListing = ({
             <div className='mt-[24px] pl-[8px] pr-[8px]'>
               <div className='mt-[4px] text-center h-[35px] cursor-pointer'>
                 <Link
+                  key={product.id}
                   href={
                     !isbrand ? `${product.brandUrl}.html` : 'javascript:void(0)'
                   }
@@ -162,34 +163,30 @@ const TemplateOneListing = ({
                   />
                 </span>
               </div>
-              <ul
-                role='list'
-                className='flex flex-wrap items-center mt-[12px] justify-center space-x-1'
-              >
+              <ul className='flex flex-wrap items-center mt-[12px] justify-center space-x-1'>
                 {isAttributeSaparateProduct &&
                 product.splitproductList &&
                 product?.splitproductList?.length > 0 ? (
                   <div className='flex'>
                     <Link key={product.id} href={`/${product.sename}.html`}>
                       <li
-                        className={`w-7 h-7 border-2 hover:border-secondary cursor-pointer`}
-                        key={product.id}
+                        className={`w-7 h-7 border-2 border-secondary hover:border-secondary cursor-pointer`}
                       >
                         <NxtImage
                           src={`${mediaBaseUrl}${currentProduct.imageName}`}
                           alt=''
                           className=''
-                          title={product.name}
+                          title={currentProduct.colorName}
                         />
                       </li>
                     </Link>
 
                     {product?.splitproductList?.map((subRow, index) =>
                       index < listing_max_showcolors - 1 ? (
-                        <Link key={product.id} href={`/${subRow.seName}.html`}>
+                        <Link href={`/${subRow.seName}.html`}>
                           <li
                             className={`w-7 h-7 border-2 hover:border-secondary cursor-pointer`}
-                            key={subRow.prodcutId}
+                            key={`${index}_${subRow.prodcutId}`}
                             onMouseOver={() => setMainImageUrl(subRow.imageurl)}
                             onMouseLeave={() =>
                               setMainImageUrl(
@@ -230,7 +227,7 @@ const TemplateOneListing = ({
                           );
                           setCurrentProduct(subRow);
                         }}
-                        key={subRow.id}
+                        key={`${index}_${subRow.id}`}
                       >
                         <NxtImage
                           src={`${mediaBaseUrl}${subRow.imageName}`}

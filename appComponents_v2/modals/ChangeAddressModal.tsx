@@ -25,7 +25,7 @@ const ChangeAddressModal: FC<props> = ({
     <div
       id='shippingaddressModal'
       aria-hidden='true'
-      className='overflow-y-auto overflow-x-hidden fixed inset-0 z-50 justify-center items-center h-modal max-h-screen'
+      className='overflow-y-auto overflow-x-hidden fixed inset-0 z-50 justify-center items-center h-modal max-h-screen checkoutpage'
     >
       <div className='w-full h-full bg-black bg-opacity-50 flex items-center justify-center'>
         <div className='relative w-full max-w-xl'>

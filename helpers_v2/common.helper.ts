@@ -79,6 +79,56 @@ interface _NextJsSetCookie {
 //////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////
 
+export const isNumberKey = (event: React.ChangeEvent<HTMLInputElement>) => {
+  let keyAllowed = false;
+
+  if ((event.nativeEvent as any).inputType === 'deleteContentBackward') {
+    keyAllowed = true;
+  }
+
+  switch ((event.nativeEvent as any).data) {
+    case 'Backspace':
+      keyAllowed = true;
+      break;
+    case 'Enter':
+      keyAllowed = true;
+      break;
+    case '0':
+      keyAllowed = true;
+      break;
+    case '1':
+      keyAllowed = true;
+      break;
+    case '2':
+      keyAllowed = true;
+      break;
+    case '3':
+      keyAllowed = true;
+      break;
+    case '4':
+      keyAllowed = true;
+      break;
+    case '5':
+      keyAllowed = true;
+      break;
+    case '6':
+      keyAllowed = true;
+      break;
+    case '7':
+      keyAllowed = true;
+      break;
+    case '8':
+      keyAllowed = true;
+      break;
+    case '9':
+      keyAllowed = true;
+      break;
+    default:
+      break;
+  }
+  return keyAllowed;
+};
+
 export const Logout = (
   logInUser: ActionCreatorWithPayload<
     {
@@ -136,9 +186,16 @@ export const extractCookies = (
       .find((cookie) => cookie.split('=')[0] === __Cookie.tempCustomerId)
       ?.split('=')[1];
 
-    const empData = _cookiesArr
+    const encodedEmpData = _cookiesArr
       .find((cookie) => cookie.split('=')[0] === __Cookie.empData)
       ?.split('=')[1];
+
+    if (encodedEmpData) {
+      const decodedEmpData = decodeURIComponent(encodedEmpData);
+      const parsedEmpData: null | EmployeeDataObject =
+        (decodedEmpData && JSON.parse(decodedEmpData)) || null;
+      expectedCookies.empData = parsedEmpData;
+    }
 
     if (encodedStoreInfo) {
       const decodedStoreInfo = decodeURIComponent(encodedStoreInfo);
@@ -152,7 +209,7 @@ export const extractCookies = (
       loggedIN: Boolean(userId),
       storeInfo: expectedCookies.storeInfo,
       tempCustomerId: tempCustomerId || null,
-      empData: (empData && JSON.parse(empData)) || null,
+      empData: expectedCookies.empData,
       adminConfigs: {
         companyId: expectedCookies.storeInfo?.companyId || 0,
         blobUrl: expectedCookies.storeInfo?.blobUrl || '',
@@ -221,7 +278,7 @@ export function setCookie(
 
 export function deleteCookie(cookieName: string) {
   return (document.cookie =
-    cookieName + '=; Expires=Thu, 01 Jan 1970 00:00:01 GMT; ');
+    cookieName + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT; Path=/;');
 }
 
 export const nextJsSetCookie = ({ res, cookie }: _NextJsSetCookie) => {

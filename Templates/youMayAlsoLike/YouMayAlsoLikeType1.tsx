@@ -81,7 +81,7 @@ const YouMayAlsoLikeType1: React.FC<_TemplateProps> = ({ productsData }) => {
                                 </Link>
                               </div>
                               <div className='mt-6'>
-                                <div className='mt-1 text-anchor hover:text-anchor-hover h-[42px]'>
+                                <div className='mt-1 text-anchor hover:text-anchor-hover h-[42px] underline'>
                                   <Link
                                     key={product.id}
                                     href={`${encodeURIComponent(

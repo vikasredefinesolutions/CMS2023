@@ -3,6 +3,7 @@ import CloseStore from '@appComponents/reUsable/CloseStore';
 import { storeBuilderTypeId } from '@configs/page.config';
 import { paths } from '@constants/paths.constant';
 import { _AnnouncementRow, _MenuItems } from '@definations/header.type';
+import { _GetPageType } from '@definations/slug.type';
 import { _FetchStoreConfigurations } from '@definations/store.type';
 import { _templateIds } from '@helpers/app.extras';
 import { addCustomEvents } from '@helpers/common.helper';
@@ -23,6 +24,7 @@ interface _props {
   sbStore: any;
   headerConfig: _FetchStoreConfigurations | null;
   templateIDs: _templateIds;
+  pageMetaData: _GetPageType;
 }
 
 const Layout: React.FC<_props & _StoreCache> = ({
@@ -35,6 +37,7 @@ const Layout: React.FC<_props & _StoreCache> = ({
   sbStore,
   templateIDs,
   headerConfig,
+  pageMetaData,
 }) => {
   useEffect(() => {
     if (localStorage) {
@@ -102,33 +105,8 @@ const Layout: React.FC<_props & _StoreCache> = ({
     }
   }, [storeCode, logoUrl, storeId]);
   const router = useRouter();
-  // useEffect(() => {
-  //   FetchStoreConfigurations({ storeId, configname: 'header_config' }).then(
-  //     (res) => {
-  //       if (res?.config_value) {
-  //         const headerInfo = JSON.parse(res.config_value);
-  //         setHeaderTeamplateId(headerInfo.template_Id);
-  //         setHeaderBgColor(headerInfo?.header_bg_color);
-  //         setHeaderTextColor(headerInfo?.header_text_color);
 
-  //         headerInfo?.announcementRow &&
-  //           setAnnouncementRow(headerInfo?.announcementRow);
-  //       }
-  //     },
-  //   );
-
-  //   // const productListdata = configs.filter((config) => {
-  //   //   if (
-  //   //     config?.config_name &&
-  //   //     config?.config_name == 'productListing' &&
-  //   //     config?.config_value
-  //   //   ) {
-  //   //     const breadCrumbsInfo = JSON.parse(config?.config_value);
-  //   //     setBreadCrumbTemplateId(breadCrumbsInfo.breadCrumbTemplateId);
-  //   //   }
-  //   // });
-  // }, [storeId]);
-
+  const isbreadcrumbShow = pageMetaData?.isbreadcrumbShow;
   return (
     <>
       <Header
@@ -143,8 +121,12 @@ const Layout: React.FC<_props & _StoreCache> = ({
         announcementRow={announcementRow}
       />
 
-      {router.pathname !== paths.PRODUCT_COMPARE &&
-        router.pathname !== paths.HOME && (
+      {(pageMetaData &&
+      pageMetaData.type &&
+      pageMetaData.type.toLowerCase() === 'topic'
+        ? isbreadcrumbShow
+        : true) &&
+        router.pathname !== paths.PRODUCT_COMPARE && (
           <BreadCrumb breadCrumbid={breadCrumbTemplateId} />
         )}
       <SuccessErrorModal />

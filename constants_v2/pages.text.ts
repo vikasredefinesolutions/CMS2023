@@ -125,7 +125,8 @@ export const __pagesText = {
     availableSizes: 'Available Size(s):',
     companionProduct: 'Companion Product',
     availableColors: {
-      availableColors: 'Available Colors:',
+      availableColors: 'Available Color',
+      selectColor: 'Select Color:',
       showless: 'Show Less',
       seeAll: 'See All',
       colors: 'Colors:',

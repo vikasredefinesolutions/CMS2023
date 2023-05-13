@@ -61,7 +61,7 @@ const ChekoutType1: React.FC<_Props> = ({ cartTemplateId }) => {
   return (
     <>
       {' '}
-      <div className='container mx-auto pl-[15px] pr-[15px] mt-[20px] mb-[50px]'>
+      <div className='container mx-auto pl-[15px] pr-[15px] mt-[20px] mb-[50px] checkoutpage'>
         <div className='flex flex-wrap justify-between -mx-[15px]'>
           <div className='w-full md:w-8/12 lg:w-[72%] pl-[15px] pr-[15px]'>
             {currentPage === checkoutPages.reviewOrder ? (

@@ -40,7 +40,7 @@ const CartType1: React.FC<_CartProps> = ({
                 className='w-full lg:w-8/12 pl-[15px] pr-[15px] mt-[12px]'
               >
                 <div className='flex justify-between items-center w-full pl-[16px] pr-[16px] pt-[16px] pb-[16px] mb-[20px] bg-light-gray'>
-                  <div className='text-title-text mr-[12px] font-semibold'>
+                  <div className='text-title-text mr-[12px] font-bold'>
                     Shopping Cart
                   </div>
                   {isEmployeeLoggedIn && (
@@ -97,7 +97,10 @@ const CartType1: React.FC<_CartProps> = ({
                       alt=''
                       className='mr-2'
                     /> */}
-                    <span className='text-sub-text font-semibold'>
+                    <span className='material-icons mr-[4px] text-quaternary leading-[30px]'>
+                      verified
+                    </span>
+                    <span className='text-sub-text font-bold'>
                       Order Risk-Free!
                     </span>
                   </div>

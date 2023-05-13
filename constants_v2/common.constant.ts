@@ -106,13 +106,6 @@ export const __Login = {
   something_went_wrong: 'Something went wrong, try again!!!',
 };
 
-export enum __Cookie {
-  loggedIn = 'loggedIn',
-  userId = 'userId',
-  storeInfo = 'storeInfo',
-  tempCustomerId = 'tempCustomerId',
-}
-
 // cookie_expiry in days
 export const __Cookie_Expiry = {
   userId: 2,

@@ -22,26 +22,25 @@ export const employeeSlice = createSlice({
     updateEmployeeV2: (
       state,
       action: {
-        payload: {
-          employee: EmployeeType;
-          empId: number;
-        };
+        payload:
+          | 'CLEAN_UP'
+          | {
+              employee: EmployeeType;
+              empId: number;
+            };
       },
     ) => {
+      if (action.payload === 'CLEAN_UP') {
+        state.employee = null;
+        state.empId = null;
+        state.loggedIn = false;
+        state.isLoadingComplete = true;
+        return;
+      }
+
       state.employee = action.payload.employee;
       state.empId = action.payload.empId;
       state.loggedIn = true;
-      state.isLoadingComplete = true;
-    },
-    clearEmployeeDetails: (
-      state,
-      action: {
-        payload: {};
-      },
-    ) => {
-      state.employee = null;
-      state.empId = null;
-      state.loggedIn = false;
       state.isLoadingComplete = true;
     },
   },

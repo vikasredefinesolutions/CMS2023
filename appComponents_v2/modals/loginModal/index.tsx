@@ -289,8 +289,11 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
                               </a>
                             </Link>
                             {__pagesText.productInfo.loginModal.and}{' '}
-                            <Link href={'policy.html'}>
-                              <a className='text-anchor'>
+                            <Link href={'privacy-policy'}>
+                              <a
+                                className='text-anchor'
+                                onClick={() => modalHandler(null)}
+                              >
                                 {
                                   __pagesText.productInfo.loginModal
                                     .privacyPolicy

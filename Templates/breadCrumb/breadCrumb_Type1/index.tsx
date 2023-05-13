@@ -32,8 +32,8 @@ const BreadCrumb_Type1: NextPage<_BreadCrumbProps> = ({
       <div className='container mx-auto'>
         <div
           className={`${
-            showBorderAndLogo ? 'border-b border-b-gray-border' : ''
-          } mb-[10px]`}
+            showBorderAndLogo ? 'border-b border-b-gray-border mb-[10px]' : ''
+          } `}
         >
           <div className='flex flex-wrap justify-between py-[15px]'>
             <nav
@@ -82,19 +82,15 @@ const BreadCrumb_Type1: NextPage<_BreadCrumbProps> = ({
             </nav>
             {showBorderAndLogo && (
               <div className='text-center w-auto product-brand-logo '>
-                <Link href={`/${product.brand?.name}.html`}>
-                  <a>
-                    <NxtImage
-                      src={product.brand?.url2 || ''}
-                      title={product.brand?.name || ''}
-                      className='inline-block'
-                      // height={100}
-                      // width={100}
-                      alt=''
-                      useNextImage={false}
-                    />
-                  </a>
-                </Link>
+                <NxtImage
+                  src={product.brand?.url || ''}
+                  title={product.brand?.name || ''}
+                  className='inline-block'
+                  // height={100}
+                  // width={100}
+                  alt=''
+                  useNextImage={false}
+                />
               </div>
             )}
           </div>

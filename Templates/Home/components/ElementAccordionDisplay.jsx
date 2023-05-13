@@ -22,27 +22,24 @@ const ElementAccordionDisplay = ({ selected_Values, acValues }) => {
         el.classList.add('hidden');
       }
     });
-
-    if (event.target.querySelector('.pointer-class')) {
-      let symbolobj = event.target.querySelector('.pointer-class');
-      symbolobj.innerHTML = iconArr[symbolobj.innerHTML];
-
-      if (
-        event.currentTarget
-          .querySelector('.ac-description')
-          .classList.contains('hidden')
-      )
-        event.currentTarget
+    let symbolobj = event.target.querySelector('.pointer-class');
+    const accordionButtons = document.querySelectorAll('.pointer-class');
+    accordionButtons?.forEach((el) => {
+      if (el !== symbolobj) el.innerHTML = iconArr.remove_circle_outline;
+    });
+    if (symbolobj) {
+      if (symbolobj.innerHTML === iconArr.remove_circle_outline) {
+        event.target
           .querySelector('.ac-description')
           .classList.remove('hidden');
-      else
-        event.currentTarget
-          .querySelector('.ac-description')
-          .classList.add('hidden');
+        symbolobj.innerHTML = iconArr.add_circle_outline;
+      } else {
+        event.target.querySelector('.ac-description').classList.add('hidden');
+        symbolobj.innerHTML = iconArr.remove_circle_outline;
+      }
     }
   };
 
-  // console.log('acvalues', acValues);
   return (
     <>
       {acValues.length > 0 && (

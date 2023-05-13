@@ -1,3 +1,5 @@
+import { newFetauredItemResponse } from '@definations/productList.type';
+
 export interface Welcome {
   success: boolean;
   data: _StoreDetails;
@@ -80,13 +82,36 @@ export interface StoreType {
 
 export interface _SelectedBrands {
   bg: _Value;
-  featuredproducts_brandwise_display: _Value;
-  featuredproducts_product_count: _Value;
   featuredproducts_section_title: _Value;
-  featuredproducts_selected_brands: {
+  featuredproducts_tabing_display: { type: string; value: string };
+  featuredproducts: {
     type: string;
-    value: { value: string; label: string }[];
+    value: {
+      data: newFetauredItemResponse[];
+      displayMethod: string;
+      index: string;
+      productCount: number;
+      selectedProducts: any;
+      tabName: string;
+      tabing: string;
+      proudctType?: string;
+      selectedBrands: any;
+      label: string;
+    }[];
   };
+}
+
+export interface _SelectedTab {
+  data: newFetauredItemResponse[];
+  displayMethod: string;
+  index: string;
+  productCount: number;
+  selectedProducts: any;
+  tabName: string;
+  tabing: string;
+  proudctType?: string;
+  selectedBrands?: { value: string; label: string }[];
+  label: string;
 }
 
 export interface _Value {

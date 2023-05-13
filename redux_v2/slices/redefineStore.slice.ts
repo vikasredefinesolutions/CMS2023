@@ -23,6 +23,7 @@ export interface _RedesignStore {
     logoSetupCharges: number;
   };
   logoAlt: string | null;
+  favIcon: string | null;
   logoUrl: string | null;
   isSewOutEnable: boolean;
   sewOutCharges: number;
@@ -53,6 +54,7 @@ const initialState: _RedesignStore = {
   logoAlt: null,
   logoUrl: null,
   isSewOutEnable: false,
+  favIcon: '',
   sewOutCharges: 0,
   mediaBaseUrl: '',
   imageFolderPath: '',
@@ -97,6 +99,8 @@ export const storeSlice = createSlice({
       state.phone_number = store.phone_number;
       state.company_address = store.company_address;
       state.bothLogin = store.bothLogin;
+      state.logoUrl = store.urls.logo;
+      state.favIcon = store.urls.favicon;
       state.thirdPartyLogin = store.thirdPartyLogin;
     },
 

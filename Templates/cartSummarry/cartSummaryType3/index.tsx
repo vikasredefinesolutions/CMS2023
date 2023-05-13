@@ -15,13 +15,14 @@ const CartSummarryType3: FC<CartSummarryProps> = ({
   return (
     <div className='border border-gray-border bg-white'>
       <div className='bg-light-gray w-full text-sub-text font-medium px-[15px] py-[15px]'>
-        Order Summary
+        Cart Summary
       </div>
       <div className='px-[15px] py-[15px]'>
         <dl className=''>
           {/* <div className='font-[600] text-medium-text'>Products Price</div> */}
-          <div className='flex items-center justify-between pt-[10px]'>
-            <dt className='text-normal-text'>Subtotal</dt>
+          <div className='text-medium-text font-semibold'>Products Price</div>
+          <div className='flex items-center justify-between pt-[10px] pb-[20px]'>
+            <dt className='text-normal-text'>Subtotal:</dt>
             <dd className='text-normal-text font-medium'>
               <Price value={subTotal} />
             </dd>
@@ -53,7 +54,7 @@ const CartSummarryType3: FC<CartSummarryProps> = ({
               </dd>
             </div>
           ) : (
-            <div className='border-t border-gray-200 flex items-center pt-[10px] pb-[20px]'>
+            <div className='border-t border-gray-200 flex items-center pt-[5px] pb-[10px]'>
               <dt className='text-base z-0 w-full promocode relative'>
                 <input
                   name='Promo_code'
@@ -66,16 +67,16 @@ const CartSummarryType3: FC<CartSummarryProps> = ({
                 />
                 <label
                   htmlFor='Promo_code'
-                  className='absolute duration-300 -top-3 -z-1 origin-0 text-base bg-[#ffffff] peer-focus:-top-3 peer-placeholder-shown:top-2'
+                  className='absolute duration-300 -top-4 -z-1 origin-0 text-base bg-[#ffffff] peer-focus:-top-4 peer-placeholder-shown:top-2'
                 >
                   PROMO CODE
                 </label>{' '}
                 {showApplyButton ? (
                   <button
                     onClick={couponSubmitHandler}
-                    className='coupon-code-Apply text-sm absolute right-0 top-2 curosr-pointer z-40'
+                    className='coupon-code-Apply text-sm absolute right-0 top-2 curosr-pointer z-40 btn btn-secondary btn-sm'
                   >
-                    Apply
+                    Update
                   </button>
                 ) : (
                   <div className='text-base font-medium absolute right-0 top-2'>
@@ -91,9 +92,9 @@ const CartSummarryType3: FC<CartSummarryProps> = ({
             </dt>
             <dd className='text-normal-text'>FREE</dd>
           </div> */}
-          <div className='border-t border-gray-200 flex items-center justify-between pt-[10px]'>
+          <div className='border-t border-gray-200 flex items-center justify-between pt-[20px]'>
             <dt className='text-normal-text flex items-center'>
-              <span>Estimated Tax</span>
+              <span>Estimated Tax:</span>
             </dt>
             <dd className='text-normal-text'>
               <Price value={salesTax} />

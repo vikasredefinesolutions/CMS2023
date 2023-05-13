@@ -37,6 +37,8 @@ const StartOrderModal: React.FC<_startOrderModalProps> = (props) => {
     (state) => state.product.product.customization,
   );
 
+  const [notevalue, setNotevalue] = useState<string>('');
+
   useEffect(() => {
     setShowLoader(false);
     if (!allColorsInventory && colors) {
@@ -206,12 +208,13 @@ const StartOrderModal: React.FC<_startOrderModalProps> = (props) => {
                     id=''
                     className='block w-full border border-gray-600 shadow-sm text-base py-2 px-4'
                     rows={3}
+                    onChange={(e) => setNotevalue(e.target.value)}
                   ></textarea>
                 </div>
               </div>
               <SomActionsHandler
                 closeStartOrderModal={() => modalHandler(null)}
-                note={textRef.current?.value || ''}
+                note={notevalue}
                 cartItemId={editDetails?.shoppingCartItemsId || 0}
                 isUpdate={Boolean(editDetails?.shoppingCartItemsId)}
               />

@@ -5,12 +5,12 @@ import React from 'react';
 
 const NotificationBar_Type1: React.FC = () => {
   // const storeLayout = useTypedSelector_v2((state) => state.store.layout);
-  const { clearEmployeeDetails } = useActions_v2();
+  const { updateEmployeeV2 } = useActions_v2();
   const employeeDetails = useTypedSelector_v2((state) => state.employee);
 
   const employeeClear = () => {
     deleteCookie(__Cookie.empData);
-    clearEmployeeDetails({});
+    updateEmployeeV2('CLEAN_UP');
   };
 
   return (

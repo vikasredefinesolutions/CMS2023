@@ -5,6 +5,7 @@ import {
 import Price from '@appComponents/reUsable/Price';
 import { _Store } from '@configs/page.config';
 import { __pagesText } from '@constants/pages.text';
+import { isNumberKey } from '@helpers/common.helper';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import { CartObject } from '@services/cart';
 import Link from 'next/link';
@@ -39,22 +40,20 @@ const CIlayout1: FC<any> = ({
         cartData.map((item: CartObject, cartItemIndex: number) => (
           <li
             key={`${item.attributeOptionId}${cartItemIndex}`}
-            className='flex flex-wrap pl-[20px] pr-[20px] ml-[-12px] mr-[-12px] mb-[40px]'
+            className='flex flex-wrap pl-[20px] pr-[20px] ml-[-15px] mr-[-15px] mb-[40px]'
           >
             <div className='w-full lg:w-2/6 pl-[15px] pr-[15px]'>
               <div className='w-full'>
-                {
-                  <Image
-                    src={
-                      item.colorImage
-                        ? item.colorImage
-                        : '/assets/images/image_not_available.jpg'
-                    }
-                    alt={item.productName}
-                    className=''
-                    isStatic={!Boolean(item.colorImage)}
-                  />
-                }
+                <Image
+                  src={
+                    item.colorImage
+                      ? item.colorImage
+                      : '/assets/images/image_not_available.jpg'
+                  }
+                  alt={item.productName}
+                  className=''
+                  isStatic={!Boolean(item.colorImage)}
+                />
               </div>
             </div>
             <div className='w-full lg:w-4/6 pl-[0px] pr-[0px] flex flex-wrap lg:justify-between'>
@@ -129,13 +128,15 @@ const CIlayout1: FC<any> = ({
                                   className='block w-full border border-gray-600 shadow-sm text-sm py-1 px-2'
                                   value={viewObject ? viewObject.qty : 0}
                                   name='qty'
-                                  onChange={(event) =>
-                                    employeeAmtChangeHandler(
-                                      event,
-                                      viewIndex,
-                                      cartItemIndex,
-                                    )
-                                  }
+                                  onChange={(event) => {
+                                    if (isNumberKey(event)) {
+                                      employeeAmtChangeHandler(
+                                        event,
+                                        viewIndex,
+                                        cartItemIndex,
+                                      );
+                                    }
+                                  }}
                                   onBlur={() =>
                                     amtQtyBlurHandler(
                                       cartItemIndex,
@@ -153,13 +154,15 @@ const CIlayout1: FC<any> = ({
                                   className='block w-full border border-gray-600 shadow-sm text-sm py-1 px-2'
                                   value={viewObject ? viewObject.price : 0}
                                   name='price'
-                                  onChange={(event) =>
-                                    employeeAmtChangeHandler(
-                                      event,
-                                      viewIndex,
-                                      cartItemIndex,
-                                    )
-                                  }
+                                  onChange={(event) => {
+                                    if (isNumberKey(event)) {
+                                      employeeAmtChangeHandler(
+                                        event,
+                                        viewIndex,
+                                        cartItemIndex,
+                                      );
+                                    }
+                                  }}
                                   onBlur={() =>
                                     amtQtyBlurHandler(
                                       cartItemIndex,

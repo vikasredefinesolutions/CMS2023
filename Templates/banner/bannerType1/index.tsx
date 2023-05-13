@@ -4,6 +4,7 @@ import ForgotModal from '@appComponents/modals/forgotModal';
 import LoginModal from '@appComponents/modals/loginModal';
 import ImageComponent from '@appComponents/reUsable/Image';
 import { __pagesText } from '@constants/pages.text';
+import Link from 'next/link';
 import React from 'react';
 import { _BannerComponentProps } from '../Banner';
 const BannerType1: React.FC<_BannerComponentProps> = ({
@@ -20,7 +21,6 @@ const BannerType1: React.FC<_BannerComponentProps> = ({
         <div className='container pl-[15px] pr-[15px] mx-auto cursor-pointer'>
           <div className='text-center bg-tertiary pl-[10px] pr-[10px] pt-[4px] pb-[4px]'>
             <a
-              href='javascript:void(0);'
               onClick={() => (!userId ? setShowModal('login') : null)}
               className='inline-flex items-center tracking-[1.2px] text-default-text font-medium'
             >
@@ -38,13 +38,23 @@ const BannerType1: React.FC<_BannerComponentProps> = ({
               <div className='w-full lg:w-1/2 sm:flex gap-[8px] h-full md:pl-[0px] pl-[16px] pr-[16px] pt-[2px] pb-[2px]'>
                 <div className='w-full md:w-5/12 min-h-[100px] bg-[#ffffff] sm:bg-transparent shadow sm:shadow-none flex items-center justify-center pt-[15px] pb-[15px] sm:pt-[0px] sm:pb-[0px] text-sub-text md:text-title-text sm:text-[45px] font-bold sm:flex sm:items-center sm:justify-center cursor-pointer'>
                   {banner[0] && (banner[0].brandLogo || banner[0].banner) ? (
-                    <ImageComponent
-                      title={banner[0].name}
-                      className='lg:object-cover lg:max-w-none bg-white'
-                      src={banner[0].brandLogo || banner[0].banner}
-                      alt={''}
-                      useNextImage={false}
-                    />
+                    <Link
+                      href={`${
+                        banner[0].customSEName
+                          ? `${banner[0].customSEName}.html`
+                          : `javascript:void(0);`
+                      }`}
+                    >
+                      <a>
+                        <ImageComponent
+                          title={banner[0].name}
+                          className='lg:object-cover lg:max-w-none bg-white'
+                          src={banner[0]?.brandImage || banner[0].banner}
+                          alt={''}
+                          useNextImage={false}
+                        />
+                      </a>
+                    </Link>
                   ) : (
                     <ImageComponent
                       isStatic={true}

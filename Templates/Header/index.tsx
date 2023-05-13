@@ -29,8 +29,6 @@ const Header: NextPage<_HeaderPropsWithTemplateid> = ({
     ? (('type' + headerTemplateId) as 'type1' | 'type2' | 'type3' | 'type4')
     : 'type1';
   const HeaderTemplate = HeaderTemplates[templateTypeToShow];
-  // console.log('header type is ', headerTemplateId);
-  // console.log('close store on ', closeStoreOn);
 
   return (
     <>

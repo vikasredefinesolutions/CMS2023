@@ -21,7 +21,7 @@ const CartSummarryType1: FC<CartSummarryProps> = ({
         <dl className=''>
           <div className='font-[600] text-medium-text'>Products Price</div>
           <div className='flex items-center justify-between pt-[15px] pb-[20px]'>
-            <dt className='text-normal-text'>Subtotal</dt>
+            <dt className='text-normal-text'>Subtotal:</dt>
             <dd className='text-normal-text'>
               <Price value={subTotal} />
             </dd>
@@ -93,7 +93,7 @@ const CartSummarryType1: FC<CartSummarryProps> = ({
           </div>
           <div className='border-t border-gray-200 flex items-center justify-between pt-[10px]'>
             <dt className='text-normal-text flex items-center'>
-              <span>Estimated Tax</span>
+              <span>Estimated Tax:</span>
             </dt>
             <dd className='text-normal-text'>
               <Price value={salesTax} />

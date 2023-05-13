@@ -30,6 +30,7 @@ export interface _GetPageType {
   meta_Title: string;
   meta_Keywords: string;
   meta_Description: string;
+  isbreadcrumbShow: string;
 }
 
 export interface _SlugServerSide_WentWrong {

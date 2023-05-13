@@ -1,7 +1,6 @@
 import { _SelectedBrands } from '@definations/APIs/storeDetails.res';
 import React from 'react';
 import ProductsInfoTabs from './GeneralProductContainer/GeneralProductTabs';
-import ProductsInfo from './GeneralProductContainer/ProductInfo';
 
 interface _props {
   dataArr: _SelectedBrands;
@@ -14,11 +13,13 @@ const FeaturedProducts: React.FC<_props> = ({ dataArr }) => {
         {dataArr.featuredproducts_section_title.value ?? ''}
       </div>
       <div>
-        {dataArr.featuredproducts_brandwise_display.value === 'Yes' &&
-        dataArr.featuredproducts_selected_brands.value.length > 1 ? (
-          <ProductsInfoTabs dataArr={dataArr} />
+        {dataArr?.featuredproducts_tabing_display &&
+        dataArr?.featuredproducts_tabing_display?.value === 'Yes' &&
+        dataArr.featuredproducts.value.length > 1 ? (
+          <ProductsInfoTabs data={dataArr?.featuredproducts?.value} />
         ) : (
-          <ProductsInfo dataArr={dataArr} />
+          // <ProductsInfo dataArr={dataArr} />
+          <h1></h1>
         )}
       </div>
     </section>

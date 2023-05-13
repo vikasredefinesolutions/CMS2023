@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { __domain, storeBuilderTypeId } from '@configs/page.config';
+import { storeBuilderTypeId, __domain } from '@configs/page.config';
 import * as _AppController from '@controllers/_AppController.async';
 import { TrackFile } from '@services/tracking.service';
 import App, { AppContext, AppInitialProps, AppProps } from 'next/app';
@@ -13,12 +13,7 @@ import { useEffect } from 'react';
 
 import { reduxWrapper } from '@redux/store.redux';
 import { getWishlist } from '@services/wishlist.service';
-import {
-  deleteCookie,
-  domainToShow,
-  extractCookies,
-  Logout,
-} from 'helpers_v2/common.helper';
+import { domainToShow, extractCookies, Logout } from 'helpers_v2/common.helper';
 import { useActions_v2 } from 'hooks_v2';
 
 import { __console_v2 } from '@configs/console.config';
@@ -36,14 +31,14 @@ import Spinner from '@appComponents/ui/spinner';
 import { PageResponseType } from '@definations/app.type';
 import { _MenuItems } from '@definations/header.type';
 import {
-  _PropsToStoreAndGetFromCookies,
-  _templateIds,
   callConfigsAndRemainingStoreAPIsAndSetURls,
   configsToCallEveryTime,
   expectedProps,
   extractAndfillCookiesIntoProps,
   passPropsToDocumentFile,
   storeCookiesToDecreaseNoOfAPIRecalls,
+  _PropsToStoreAndGetFromCookies,
+  _templateIds,
 } from '@helpers/app.extras';
 import { FetchSbStoreConfiguration } from '@services/app.service';
 import { GetStoreCustomer } from '@services/user.service';
@@ -110,13 +105,6 @@ const RedefineCustomApp = ({
       },
     };
     await TrackFile(data);
-  };
-
-  const refreshHandler = () => {
-    return () => {
-      deleteCookie(__Cookie.empData);
-      deleteCookie(__Cookie.storeInfo);
-    };
   };
 
   const getUserDetails = async (
@@ -201,15 +189,6 @@ const RedefineCustomApp = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    window.addEventListener('beforeunload', refreshHandler);
-    return () => {
-      window.removeEventListener('beforeunload', refreshHandler);
-      setShowLoader(false);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   if (!store) {
     return <>Store Details not found</>;
   }
@@ -231,6 +210,7 @@ const RedefineCustomApp = ({
           sbStore={sbStore}
           headerConfig={headerConfig}
           templateIDs={templateIDs}
+          pageMetaData={pageProps?.pageMetaData}
         >
           <Component {...pageProps} />
         </Redefine_Layout>
@@ -330,7 +310,6 @@ RedefineCustomApp.getInitialProps = async (
 
       if (details?.store.storeId) {
         const { store: storeDetails, adminConfig } = details;
-
         const response = await callConfigsAndRemainingStoreAPIsAndSetURls(
           storeDetails,
         );

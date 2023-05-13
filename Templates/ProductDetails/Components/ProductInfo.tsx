@@ -15,8 +15,8 @@ import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import AvailableColors from './AvailableColors';
 import DiscountPricing from './DiscountPricing';
-import ProductFeatures from './ProductFeatures';
 import { _ProductInfoProps } from './productDetailsComponents';
+import ProductFeatures from './ProductFeatures';
 
 const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
   const { setShowLoader } = useActions_v2();
@@ -77,7 +77,7 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
             <a
               href='javascript:void(0);'
               onClick={() => router.push(consultationURL)}
-              className='!text-anchor hover:!text-anchor-hover text-normal-text pr-[1px]'
+              className='text-anchor hover:!text-anchor-hover text-normal-text pr-[1px] font-[600] underline '
             >
               {__pagesText.productInfo.requestConsultaionProof}
             </a>

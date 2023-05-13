@@ -1,7 +1,7 @@
 import ForgotModal from '@appComponents/modals/forgotModal';
 import LoginModal from '@appComponents/modals/loginModal';
 import { _modals } from '@appComponents/modals/modal';
-import { __Cookie } from '@constants/common.constant';
+import { __Cookie } from '@constants/global.constant';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import { ClearBrandCache } from '@services/cache.service';

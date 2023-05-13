@@ -6,6 +6,9 @@ import React, { useEffect } from 'react';
 const StartOrderAvailableColors: React.FC = () => {
   const { colors } = useTypedSelector_v2((state) => state.product.product);
   const { setColor } = useActions_v2();
+  const selectedColor = useTypedSelector_v2(
+    (state) => state.product.selected.color.name,
+  );
 
   useEffect(() => {
     if (colors === null) return;
@@ -16,7 +19,7 @@ const StartOrderAvailableColors: React.FC = () => {
     <div>
       <div className='text-gray-600 bg-primary flex flex-wrap justify-between items-center pl-[10px] pr-[10px] pt-[6px] pb-[6px] mt-[13px] mb-[10px] text-default-text'>
         <span className='font-[600] text-[#ffffff] leading-none text-sub-text'>
-          {__pagesText.productInfo.availableColors.availableColors}
+          {__pagesText.productInfo.availableColors.selectColor}
         </span>
       </div>
 
@@ -27,7 +30,13 @@ const StartOrderAvailableColors: React.FC = () => {
             key={color.productId}
             onClick={() => setColor(color)}
           >
-            <div className='w-[80px] h-[80px] border border-[#d8dfe1] hover:border-secondary mb-[6px]'>
+            <div
+              className={`w-[80px] h-[80px] border ${
+                selectedColor === color.name
+                  ? ' border-secondary'
+                  : 'border-[#d8dfe1]'
+              } hover:border-secondary mb-[6px]`}
+            >
               <Image
                 src={color.imageUrl}
                 alt={color.altTag}

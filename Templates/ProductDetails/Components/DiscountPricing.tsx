@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+import Price from '@appComponents/Price';
 import { __pagesText } from '@constants/pages.text';
 import { useTypedSelector_v2 } from 'hooks_v2';
 import React, { useState } from 'react';
@@ -40,12 +41,12 @@ const DiscountPricing: React.FC<
               <span className='inline-block mr-[2px]'>
                 {__pagesText.productInfo.discountPricing.minimumOrder}
               </span>
-              {` ${minQty} ${unitUnits} per color`}
+              {` ${minQty} ${unitUnits} per color for $${minQty * price.msrp}`}
             </button>
           ) : null}
         </div>
 
-        {/* {!customerId && showMsrpLine && (
+        {!customerId && showMsrpLine && (
           <div className='flex flex-wrap justify-between items-center mt-[18px] text-default-text'>
             <div className='flex items-start'>
               <span className='font-[600] mr-[3px] text-sub-text'>
@@ -74,9 +75,12 @@ const DiscountPricing: React.FC<
               </button>
             ) : null}
           </div>
-        )} */}
+        )}
         <QtyPriceTable storeCode={storeCode} />
         {/* {isSpecialBrand ? (
+        )}
+
+        {isSpecialBrand ? (
           customerId !== null ? (
             <QtyPriceTable storeCode={storeCode} />
           ) : (
