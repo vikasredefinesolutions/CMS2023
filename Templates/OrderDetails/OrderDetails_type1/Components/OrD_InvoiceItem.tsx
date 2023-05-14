@@ -8,9 +8,10 @@ import React from 'react';
 
 interface _props {
   item: _MyAcc_OrderProductDetails;
+  mediaBaseUrl: string;
 }
 
-const OrD_InvoiceItem: React.FC<_props> = ({ item }) => {
+const OrD_InvoiceItem: React.FC<_props> = ({ item, mediaBaseUrl }) => {
   return (
     <div className='flex flex-wrap justify-between -mx-3 gap-y-4'>
       <Link href={`/${item.seName}.html`}>
@@ -39,10 +40,6 @@ const OrD_InvoiceItem: React.FC<_props> = ({ item }) => {
           <span>{item.sku}</span>
         </div>
         <div className='mt-1'>
-          <span className='font-[600]'>SIZE : </span>
-          {item.attributeOptionId}
-        </div>
-        <div className='mt-1'>
           <span className='font-[600]'>COLOR : </span>
           {item.attributeOptionValue}
         </div>
@@ -54,7 +51,7 @@ const OrD_InvoiceItem: React.FC<_props> = ({ item }) => {
             >
               <div className='w-1/3 p-3'>
                 <div className='font-[500]'>SIZE</div>
-                <div className=''>{product.attributeOptionId}</div>
+                <div className=''>{product.attributeOptionValue}</div>
               </div>
               <div className='w-1/3 p-3'>
                 <div className='font-[600]'>PRICE</div>
@@ -75,10 +72,8 @@ const OrD_InvoiceItem: React.FC<_props> = ({ item }) => {
 
             if (logo.logoName === 'Add Logo Later') {
               logoToShow = __StaticImg.orderDetails.logoWillComeHere;
-            }
-
-            if (logo.logoName === 'Customize Logo') {
-              logoToShow = logo.logoPositionImage;
+            } else {
+              logoToShow = mediaBaseUrl + logo.logoImagePath;
             }
 
             return (

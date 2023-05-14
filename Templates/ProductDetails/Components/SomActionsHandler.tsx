@@ -34,6 +34,8 @@ const SomActionsHandler: React.FC<_SOMActionHandlerProps> = ({
   const { selected, toCheckout, som_logos, product } = useTypedSelector_v2(
     (state) => state.product,
   );
+
+  const { clearToCheckout, setShowLoader } = useActions_v2();
   const store = useTypedSelector_v2((state) => state.store);
 
   const isEmployeeLoggedIn = useTypedSelector_v2(
@@ -106,16 +108,21 @@ const SomActionsHandler: React.FC<_SOMActionHandlerProps> = ({
 
   const addToCartHandler = async () => {
     if (!toCheckout.allowAddToCart && !isEmployeeLoggedIn) {
+      setShowLoader(false);
       setShowRequiredModal('quantity');
       return;
     }
 
     if (som_logos.choosedLogoCompletionPending) {
+      setShowLoader(false);
       setShowRequiredModal('logo');
       return;
     }
 
-    if (!toCheckout.sizeQtys) return;
+    if (!toCheckout.sizeQtys) {
+      setShowLoader(false);
+      return;
+    }
 
     let lineCartItems: [] = [];
 
@@ -196,6 +203,8 @@ const SomActionsHandler: React.FC<_SOMActionHandlerProps> = ({
     CaptureGTMEvent(eventPayload);
     try {
       const guestId: number = await AddItemsToTheCart(cartPayload);
+      setShowLoader(false);
+
       await addItemToKlaviyo(selected.productId);
 
       let guest_OR_loggedIN_userID: number = loggedIN_userId
@@ -217,20 +226,27 @@ const SomActionsHandler: React.FC<_SOMActionHandlerProps> = ({
         message: `${isUpdate ? 'Update' : 'Add to'} cart Successfully`,
         title: 'Success',
       });
+      clearToCheckout();
     } catch (error) {
       showModal({
         message: 'Something went wrong. Try Again!!!',
         title: 'Error',
       });
+      setShowLoader(false);
+      clearToCheckout();
       highLightError({ error, component: 'StartOrderModal' });
     }
+
     closeStartOrderModal();
   };
 
   return (
     <div className='p-[25px] pt-0 text-center'>
       <button
-        onClick={addToCartHandler}
+        onClick={() => {
+          setShowLoader(true);
+          addToCartHandler();
+        }}
         type='button'
         className='btn btn-xl btn-secondary w-full uppercase mb-2'
       >

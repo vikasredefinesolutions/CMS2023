@@ -7,8 +7,8 @@ import {
   FetchCategoryByproductId,
   FetchInventoryById,
 } from '@services/product.service';
-import ProductRecentlyViewed from '@templates/recentlyViewedProducts';
 import Reviews from '@templates/Review';
+import ProductRecentlyViewed from '@templates/recentlyViewedProducts';
 import YouMayAlsoLike from '@templates/youMayAlsoLike';
 import Head from 'next/head';
 import { useEffect } from 'react';
@@ -85,6 +85,7 @@ const ProductDetails_Type4: React.FC<_ProductDetailsProps & _StoreCache> = (
           name: product?.details?.brandName,
           url: product.details?.brandColorLogoUrl,
           url2: product.details?.brandImage,
+          url3: product.details?.productBrandLogo,
         },
         product: {
           id: product?.details?.id || null,
@@ -157,10 +158,9 @@ const ProductDetails_Type4: React.FC<_ProductDetailsProps & _StoreCache> = (
           return (
             <div key={val + index}>
               <YouMayAlsoLike
-                product={product.alike}
+                product={product?.alike}
                 id={_defaultTemplates.youMayAlsoLike}
               />
-              ;
             </div>
           );
         } else if (val === 'writereview') {
@@ -173,11 +173,13 @@ const ProductDetails_Type4: React.FC<_ProductDetailsProps & _StoreCache> = (
             </div>
           );
         } else {
-          return (
-            <div key={val + index}>
-              <ProductRecentlyViewed product={product} />
-            </div>
-          );
+          if (product) {
+            return (
+              <div key={val + index}>
+                <ProductRecentlyViewed product={product} />
+              </div>
+            );
+          }
         }
       })}
     </>

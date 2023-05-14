@@ -42,6 +42,7 @@ export interface _ProductDetails {
   isPolicywithcheckbox: boolean;
   policyMessage: string;
   isEnduserDisplay: boolean;
+  productBrandLogo: string | null;
 }
 
 export interface _SuggestedProduct {

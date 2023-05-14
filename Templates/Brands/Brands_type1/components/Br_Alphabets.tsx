@@ -71,7 +71,7 @@ const Br_Alphabets: React.FC<_Props> = ({
                       activeAlphabet ? '' : 'text-[#a7a8a9] cursor-not-allowed'
                     }`}
                   >
-                    {al}
+                    {al.toUpperCase()}
                   </button>
                 );
               })}
@@ -99,8 +99,8 @@ const Br_Alphabets: React.FC<_Props> = ({
                           <div className='mr-[20px] mb-[8px]'>
                             <Link
                               title={brand.brandName}
-                              className='text-[18px] mb-[4px] text-anchor-hover hover:text-anchor'
-                              href={brand.seName || '/'}
+                              className='text-[18px] mb-[4px] text-anchor hover:text-anchor'
+                              href={`${brand.seName}.html` || '/'}
                             >
                               <a>{brand.brandName}</a>
                             </Link>

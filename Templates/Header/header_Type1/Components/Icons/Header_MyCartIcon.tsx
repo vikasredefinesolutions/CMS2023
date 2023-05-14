@@ -30,12 +30,13 @@ const MyCartIcon: React.FC = () => {
   const [Focus, setFocus] = useState(false);
 
   useEffect(() => {
-    if (customerId) {
+    if (customerId && (totalQty === 0 || totalQty !== totalCartQty)) {
       fetchCartDetails({
         customerId: customerId,
         isEmployeeLoggedIn,
       });
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [customerId, isEmployeeLoggedIn]);
 

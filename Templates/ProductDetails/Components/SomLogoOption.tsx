@@ -262,7 +262,7 @@ const SomLogoOption: React.FC<_SOMLogoOptionProps> = ({
       case null:
         text = (
           <div
-            className='cursor-pointer'
+            className='cursor-pointer w-full text-anchor font-[600]'
             onClick={() => actionHandler('later')}
           >
             {__pagesText.productInfo.somLogoOption.addLogoLater}
@@ -271,7 +271,7 @@ const SomLogoOption: React.FC<_SOMLogoOptionProps> = ({
         break;
       case 'later':
         text = (
-          <div className=''>
+          <div className='cursor-pointer w-full text-anchor font-[600]'>
             {__pagesText.productInfo.somLogoOption.logoToBeSubmitted}
           </div>
         );
@@ -279,16 +279,19 @@ const SomLogoOption: React.FC<_SOMLogoOptionProps> = ({
       case 'submitted':
         text = (
           <div
-            className='cursor-pointer w-full order-3'
+            className='cursor-pointer w-full text-anchor font-[600] underline'
             onClick={() => actionHandler(null)}
           >
-            {__pagesText.productInfo.somLogoOption.remove}
+            X {__pagesText.productInfo.somLogoOption.remove}
           </div>
         );
         break;
       default:
         text = (
-          <div className='' onClick={() => actionHandler('later')}>
+          <div
+            className='cursor-pointer w-full text-anchor font-[600] '
+            onClick={() => actionHandler('later')}
+          >
             {__pagesText.productInfo.somLogoOption.addLogoLater}
           </div>
         );
@@ -365,8 +368,8 @@ const SomLogoOption: React.FC<_SOMLogoOptionProps> = ({
 
   return (
     <div className='p-2 mb-2 border bg-gray-50 border-slate-200'>
-      <div className='flex items-center justify-between mb-4 gap-2'>
-        <div className='font-semibold text-lg mb-4'>{title}</div>
+      <div className='flex items-center justify-between mb-2 gap-2'>
+        <div className='font-semibold text-lg '>{title}</div>
         {index !== 0 && (
           <div className=''>
             <button
@@ -433,11 +436,11 @@ const SomLogoOption: React.FC<_SOMLogoOptionProps> = ({
                 />
               </div>
             )}
-            {DisplayActions()}
+            <div>{DisplayActions()}</div>
             {logoStatus === null && (
               <div className=''>
                 <button
-                  className='cursor-pointer inline-block bg-indigo-600 border-0 py-2 px-3 text-white'
+                  className='cursor-pointer inline-block bg-primary border-0 py-2 px-3 text-white'
                   onClick={() =>
                     customerId ? fetchLogoLibrary() : setShowModal('login')
                   }
@@ -450,7 +453,7 @@ const SomLogoOption: React.FC<_SOMLogoOptionProps> = ({
             <div className=''>
               <label
                 htmlFor={id}
-                className='cursor-pointer inline-block bg-indigo-600 border-0 py-2 px-3 text-white'
+                className='cursor-pointer inline-block bg-primary border-0 py-2 px-3 text-white'
               >
                 {__pagesText.productInfo.somLogoOption.upload}
               </label>

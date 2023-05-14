@@ -3,6 +3,7 @@
 import { __length, __messages } from '@constants/form.config';
 import { __Cookie, __Cookie_Expiry } from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
+import { fetchCartDetails } from '@redux/asyncActions/cart.async';
 import { updateCartByNewUserId } from '@services/cart.service';
 import { fetchThirdpartyservice } from '@services/thirdparty.service';
 import { GetStoreCustomer, signInUser } from '@services/user.service';
@@ -79,6 +80,10 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
 
               if (tempCustomerId) {
                 updateCartByNewUserId(~~tempCustomerId, res.id);
+                fetchCartDetails({
+                  customerId: res.id,
+                  isEmployeeLoggedIn: false,
+                });
                 deleteCookie(__Cookie.tempCustomerId);
               }
             }
@@ -123,8 +128,8 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
         <div className='w-full h-full bg-[#000000] bg-opacity-[0.50] flex items-center justify-center'>
           <div className='relative px-[16px] w-full max-w-4xl h-full md:h-auto'>
             <div className='relative bg-[#ffffff] shadow max-h-screen overflow-y-auto h-full'>
-              <div className='flex justify-between items-start p-[25px] rounded-t border-b sticky top-0 left-0 bg-[#ffffff] z-50'>
-                <div className='font-[600] text-large-text'>
+              <div className='flex justify-between items-center p-[15px] rounded-t border-b sticky top-0 left-0 bg-[#ffffff] z-50'>
+                <div className='font-[600] text-medium-text'>
                   {__pagesText.productInfo.loginModal.signIn}
                 </div>
                 <button
@@ -148,7 +153,7 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
               </div>
 
               <div className='p-[25px]'>
-                <div className='mb-[10px] font-[600] text-lg text-center'>
+                <div className='mb-[10px] font-[700] text-lg text-center'>
                   {__pagesText.productInfo.loginModal.signIn}
                 </div>
 

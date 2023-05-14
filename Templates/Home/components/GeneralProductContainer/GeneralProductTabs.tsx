@@ -35,6 +35,7 @@ const ProductsInfoTabs: React.FC<_props> = ({ data }) => {
 
   // ** redux
   const storeId = useTypedSelector_v2((state) => state.store.id);
+  const cacheData = useTypedSelector_v2((state) => state?.cache.cacheData);
   const [featuredProducts, setFeaturedProducts] = useState<
     _SelectedTab[] | null
   >(null);

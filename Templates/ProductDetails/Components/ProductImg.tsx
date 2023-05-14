@@ -63,28 +63,29 @@ const ProductImg: React.FC<_ProductImgProps> = ({ product }) => {
           />
         </div>
         <div className='hidden md:block sub-image absolute left-[10px] top-[15px] w-[70px]'>
-          {selectedColor?.moreImages
-            ?.map((img, index) => ({ ...img, id: index }))
-            .map((img) => {
-              const highlight =
-                img.id === selectedImage.id
-                  ? 'border-secondary'
-                  : 'border-slate-200';
-              return (
-                <div
-                  key={img.id + img.imageUrl}
-                  className={`md:border hover:border-secondary p-[3px] mt-[5px] mb-[5px] last:mb-0 ${highlight}`}
-                  onClick={() => selectImgHandler(img)}
-                >
-                  <Image
-                    src={img.imageUrl}
-                    alt={img.altTag}
-                    className='w-full object-center object-cover'
-                    title={img.altTag}
-                  />
-                </div>
-              );
-            })}
+          {selectedColor.moreImages.length > 1 &&
+            selectedColor?.moreImages
+              ?.map((img, index) => ({ ...img, id: index }))
+              .map((img) => {
+                const highlight =
+                  img.id === selectedImage.id
+                    ? 'border-secondary'
+                    : 'border-slate-200';
+                return (
+                  <div
+                    key={img.id + img.imageUrl}
+                    className={`md:border hover:border-secondary p-[3px] mt-[5px] mb-[5px] last:mb-0 ${highlight}`}
+                    onClick={() => selectImgHandler(img)}
+                  >
+                    <Image
+                      src={img.imageUrl}
+                      alt={img.altTag}
+                      className='w-full object-center object-cover'
+                      title={img.altTag}
+                    />
+                  </div>
+                );
+              })}
         </div>
 
         <div className='absolute right-[10px] top-[25px] w-6 h-6'>

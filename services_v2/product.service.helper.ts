@@ -158,7 +158,8 @@ export const logoCartItems_Generator = (
   product: _state_SelectedProduct,
   sizeQtys: _Product_SizeQtys[],
 ): _AddToCart_LogoCartItems[] => {
-  const cartItems = sizeQtys.map((size) => {
+  const newSizeQty = sizeQtys.filter((size) => size.qty > 0);
+  const cartItems = newSizeQty.map((size) => {
     let logos: _LogoCartItems_LogoDetails[] = [];
 
     if (som_logos) {

@@ -13,7 +13,7 @@ const brandsTemplates: _BrandsTemplates = {
 const BrandsListingTemplate: React.FC<
   _BrandProps & { id: 'type1' | 'type3' }
 > = ({ id, ...rest }) => {
-  id = 'type3';
+  id = 'type1';
   const Template = brandsTemplates[id];
 
   return <Template {...rest} />;

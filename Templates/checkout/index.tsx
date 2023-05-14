@@ -1,6 +1,7 @@
 import { _defaultTemplates } from '@configs/template.config';
 import { TrackGTMEvent } from '@helpers/common.helper';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
+import { useRouter } from 'next/router';
 import { FC, useEffect } from 'react';
 import CheckoutType1 from './checkoutType1';
 import CheckoutType2 from './checkoutType2';
@@ -26,6 +27,7 @@ const checkoutTemplates: CTTemplates = {
 };
 
 const CheckoutTemplate: FC<_Props> = ({ cartTemplateId }) => {
+  const router = useRouter();
   const { cart: cartData, discount: cartDiscountDetails } = useTypedSelector_v2(
     (state) => state.cart,
   );
@@ -34,34 +36,39 @@ const CheckoutTemplate: FC<_Props> = ({ cartTemplateId }) => {
   );
   useEffect(() => {
     let totalPrice = 0;
-    cartData?.forEach((item) => (totalPrice += item.totalPrice));
-    const checkoutEventPayload = {
-      pageTitle: document?.title || 'Checkout',
-      pageCategory: 'Checkout page',
-      customProperty1: '',
-      visitorType: isEmployeeLoggedIn ? 'high-value' : 'low-value',
-      event: 'begin_checkout',
-      ecommerce: {
-        currency: 'USD',
-        value: totalPrice,
-        coupon: cartDiscountDetails?.coupon || '',
-        items: cartData?.map((item) => ({
-          item_name: item?.productName,
-          item_id: item?.sku,
-          item_brand: '', //Not available in cart
-          item_category: '', //Not available in cart
-          item_variant: item?.attributeOptionValue,
-          index: item?.productId,
-          quantity: item?.totalQty,
-          item_list_name: '', //Not available in cart
-          item_list_id: item?.productId,
-          price: item?.totalPrice,
+    if (cartData == null) {
+      router.push('/cart/IndexNew');
+    } else {
+      cartData?.forEach((item) => (totalPrice += item.totalPrice));
+      const checkoutEventPayload = {
+        pageTitle: document?.title || 'Checkout',
+        pageCategory: 'Checkout page',
+        customProperty1: '',
+        visitorType: isEmployeeLoggedIn ? 'high-value' : 'low-value',
+        event: 'begin_checkout',
+        ecommerce: {
+          currency: 'USD',
+          value: totalPrice,
           coupon: cartDiscountDetails?.coupon || '',
-        })),
-      },
-    };
-    TrackGTMEvent('begin_checkout', checkoutEventPayload);
-  }, []);
+          items: cartData?.map((item) => ({
+            item_name: item?.productName,
+            item_id: item?.sku,
+            item_brand: '', //Not available in cart
+            item_category: '', //Not available in cart
+            item_variant: item?.attributeOptionValue,
+            index: item?.productId,
+            quantity: item?.totalQty,
+            item_list_name: '', //Not available in cart
+            item_list_id: item?.productId,
+            price: item?.totalPrice,
+            coupon: cartDiscountDetails?.coupon || '',
+          })),
+        },
+      };
+
+      TrackGTMEvent('begin_checkout', checkoutEventPayload);
+    }
+  }, [cartData]);
   const CheckoutSelectedTemplate =
     checkoutTemplates[_defaultTemplates.checkout];
 

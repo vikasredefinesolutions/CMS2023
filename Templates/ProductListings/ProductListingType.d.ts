@@ -244,7 +244,7 @@ export interface GetlAllProductList {
     productTagName: string;
     tagPosition: string;
   }>;
-
+  isspecialbrand: boolean;
   sename?: string;
   msrp: number;
   salePrice: number;
@@ -265,6 +265,8 @@ export interface GetlAllProductList {
   ourCost?: number;
   brandName: string;
   index: number | string;
+  lowPrice: number;
+  productBrandlogo: string | null;
 }
 
 export interface BrandFilter {

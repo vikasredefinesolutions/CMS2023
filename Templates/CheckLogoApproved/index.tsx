@@ -12,10 +12,7 @@ const CheckLogoTemplates: _CheckLogoTemplates = {
 };
 const CheckLogoApproved: React.FC<{ id: string }> = ({ id }) => {
   const CheckLogoTemplate =
-    CheckLogoTemplates[
-      (`type${id}` as 'type1') || 'type2' || 'type3' || 'type4'
-    ];
-  console.log('check approved logo id is ', id);
+    CheckLogoTemplates[(`${id}` as 'type1') || 'type2' || 'type3' || 'type4'];
 
   return (
     <>

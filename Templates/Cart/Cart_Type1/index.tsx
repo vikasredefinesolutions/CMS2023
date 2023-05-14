@@ -92,15 +92,12 @@ const CartType1: React.FC<_CartProps> = ({
                 </div>
                 <div className='mt-4 bg-light-gray px-4 py-4'>
                   <div className='flex items-center justify-center'>
-                    {/* <img
-                      src='images/order-risk-free-icon.jpg'
+                    <img
+                      src='/order-risk-free-icon.jpg'
                       alt=''
-                      className='mr-2'
-                    /> */}
-                    <span className='material-icons mr-[4px] text-quaternary leading-[30px]'>
-                      verified
-                    </span>
-                    <span className='text-sub-text font-bold'>
+                      className='mr-2 w-5 h-5'
+                    />
+                    <span className='text-sub-text font-semibold'>
                       Order Risk-Free!
                     </span>
                   </div>

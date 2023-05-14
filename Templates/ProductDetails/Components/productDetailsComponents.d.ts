@@ -15,6 +15,7 @@ export interface _AskToLoginprops {
 }
 
 export interface _DiscountPricingProps {
+  title?: string;
   showMsrpLine: boolean;
   price: {
     msrp: number;

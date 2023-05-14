@@ -55,7 +55,7 @@ export interface CartObject {
   shoppingCartLinePersonViewModel: unknown[];
   totalQty: number;
   totalPrice: number;
-  txtcode: unknown;
+  txtcode: string;
   seName: string;
   cartLinePersonModels?: unknown[];
 }

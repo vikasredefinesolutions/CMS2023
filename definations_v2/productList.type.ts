@@ -94,6 +94,7 @@ export interface Item {
   modifiedName: string;
   subRows: SubRow | number[];
   brandImage: string;
+  productBrandLogo?: string | null;
 }
 
 export interface ProductListObject {

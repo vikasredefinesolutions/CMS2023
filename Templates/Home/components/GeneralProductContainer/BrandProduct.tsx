@@ -24,8 +24,6 @@ interface _props {
 let mediaBaseUrl = _globalStore.blobUrl;
 
 const BrandProduct: React.FC<_props> = (props) => {
-  const [wishListId, setWishListId] = useState<number>(0);
-  const [wishlistPresent, setWishlistPresent] = useState<boolean>(false);
   const { product, colorChangeHandler, style } = props;
   const { currentProduct, origin, setCurrentProduct } = ProductBoxController({
     product,
@@ -35,23 +33,12 @@ const BrandProduct: React.FC<_props> = (props) => {
   const store = useTypedSelector_v2((state) => state.store);
   mediaBaseUrl = mediaBaseUrl || store.mediaBaseUrl;
   const customerId = useTypedSelector_v2((state) => state.user.id);
-  const wishListData = useTypedSelector_v2(
-    (state) => state.wishlist.wishListData,
-  );
   let flag: boolean = false;
   useEffect(() => {
-    if (customerId) {
-      wishListData.map((item) => {
-        if (item.productId === product?.productId) {
-          setWishlistPresent(true);
-          setWishListId(item.id);
-        }
-      });
-    }
     if (currentProduct && currentProduct?.imageUrl) {
       setMainImageUrl(currentProduct.imageUrl);
     }
-  }, [customerId, wishListData]);
+  }, []);
   return (
     <li
       className={`w-full ${
@@ -85,7 +72,7 @@ const BrandProduct: React.FC<_props> = (props) => {
           </div>
           <div className='mt-3 text-gray-900'>
             <span className='font-bold'>
-              MSRP{' '}
+              {customerId && product.isSpecialBrand ? 'Price' : 'MSRP'}
               <Price
                 value={undefined}
                 prices={{

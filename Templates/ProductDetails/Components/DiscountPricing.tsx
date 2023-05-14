@@ -9,6 +9,7 @@ import { _DiscountPricingProps } from './productDetailsComponents';
 const DiscountPricing: React.FC<
   _DiscountPricingProps & { storeCode: string }
 > = ({
+  title,
   price,
   showLogin,
   storeCode,
@@ -29,7 +30,9 @@ const DiscountPricing: React.FC<
       <div>
         <div className='bg-primary flex flex-wrap justify-between items-center pl-[10px] pr-[10px] pt-[4px] pb-[5px] mt-[16px] text-default-text'>
           <span className='font-[600] text-[#ffffff] text-sub-text'>
-            {__pagesText.productInfo.discountPricing.exclusivePricing}
+            {title === 'selectsizeandquanity'
+              ? __pagesText.productInfo.discountPricing.selectSizeAndQuantity
+              : __pagesText.productInfo.discountPricing.exclusivePricing}
           </span>
 
           {showMinQuantity ? (
@@ -46,7 +49,7 @@ const DiscountPricing: React.FC<
           ) : null}
         </div>
 
-        {!customerId && showMsrpLine && (
+        {!customerId && showMsrpLine && isSpecialBrand && (
           <div className='flex flex-wrap justify-between items-center mt-[18px] text-default-text'>
             <div className='flex items-start'>
               <span className='font-[600] mr-[3px] text-sub-text'>

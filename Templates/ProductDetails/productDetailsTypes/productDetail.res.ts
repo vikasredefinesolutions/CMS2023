@@ -58,6 +58,7 @@ export interface _LogoLocation {
 }
 
 export interface _ProductDetails {
+  productBrandLogo: string | null;
   id: number;
   storeId: number;
   name: string;

@@ -12,7 +12,6 @@ interface _props {
 }
 
 const BrandProductListing: React.FC<_props> = ({ productsData }) => {
-  console.log(productsData, 'productsData');
   const sliderRef = useRef<null | Slider>(null);
 
   const goToNextProduct = () => {

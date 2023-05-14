@@ -15,8 +15,8 @@ import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import AvailableColors from './AvailableColors';
 import DiscountPricing from './DiscountPricing';
-import { _ProductInfoProps } from './productDetailsComponents';
 import ProductFeatures from './ProductFeatures';
+import { _ProductInfoProps } from './productDetailsComponents';
 
 const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
   const { setShowLoader } = useActions_v2();
@@ -90,6 +90,7 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
 
       <AvailableColors />
       <DiscountPricing
+        title='Exclusivepricing'
         storeCode={storeCode}
         showMsrpLine={true}
         price={{
@@ -119,15 +120,17 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
           <span className='ml-[5px]'>{` ${sizes}`}</span>
         </div>
 
-        <div className='pb-[0px]'>
-          <button
-            type='button'
-            className='text-anchor hover:text-anchor-hover font-[600] underline text-default-text'
-            onClick={() => modalHandler('sizeChart')}
-          >
-            {__pagesText.productInfo.sizeChart}
-          </button>
-        </div>
+        {!sizes.includes('MISC') && (
+          <div className='pb-[0px]'>
+            <button
+              type='button'
+              className='text-anchor hover:text-anchor-hover font-[600] underline text-default-text'
+              onClick={() => modalHandler('sizeChart')}
+            >
+              {__pagesText.productInfo.sizeChart}
+            </button>
+          </div>
+        )}
       </div>
 
       {product.companionProductName && (
@@ -137,7 +140,9 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
           </div>
           <div className='mt-[9px]'>
             <button
-              onClick={() => goToProduct(product.companionProductSEName)}
+              onClick={() =>
+                goToProduct(`${product.companionProductSEName}.html`)
+              }
               className='text-anchor hover:text-anchor-hover font-[600] underline text-normal-text'
             >
               {product.companionProductName}
@@ -204,7 +209,7 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
           <a
             href='javascript:void(0);'
             onClick={() => router.push(consultationURL)}
-            className='!text-anchor hover:!text-anchor-hover text-normal-text pr-[1px]'
+            className='text-anchor tracking-normal text-base underline font-bold'
           >
             {__pagesText.productInfo.requestAFreeConsulation}
           </a>

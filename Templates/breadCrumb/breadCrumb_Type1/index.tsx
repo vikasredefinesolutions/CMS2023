@@ -83,7 +83,7 @@ const BreadCrumb_Type1: NextPage<_BreadCrumbProps> = ({
             {showBorderAndLogo && (
               <div className='text-center w-auto product-brand-logo '>
                 <NxtImage
-                  src={product.brand?.url || ''}
+                  src={product.brand?.url3 || ''}
                   title={product.brand?.name || ''}
                   className='inline-block'
                   // height={100}

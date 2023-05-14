@@ -16,7 +16,6 @@ const Header_Category: React.FC<_props> = ({ content, title, url }) => {
   const { toggleSideMenu } = useActions_v2();
   const [focus, setFocus] = useState(false);
   const [showAllItems, setShowAllItems] = useState<boolean>(false);
-
   if (view === 'MOBILE') {
     return (
       <>
@@ -135,7 +134,7 @@ const Header_Category: React.FC<_props> = ({ content, title, url }) => {
                     <ul className='w-full lg:w-1/2 text-[13px] pl-[20px] pr-[20px]'>
                       {content?.map((item, index) => {
                         if (
-                          index >= content.length / 2 &&
+                          index > content.length / 2 &&
                           index <= (content.length / 2) * 2 + 1
                         )
                           return (

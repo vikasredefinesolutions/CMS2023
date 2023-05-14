@@ -119,8 +119,8 @@ const TemplateOneListing = ({
                   <div className='absolute top-1 left-1 text-gray-800 p-1 z-5"'>
                     <img
                       src={`${mediaBaseUrl}${product?.productTagViewModel[0].imagename}`}
-                      width='80px'
-                      height='80px'
+                      width='70px'
+                      height='70px'
                     />
                   </div>
                 )}
@@ -135,7 +135,7 @@ const TemplateOneListing = ({
                 >
                   <img
                     className='inline-block max-h-full'
-                    src={`${mediaBaseUrl}${product.brandlogo}`}
+                    src={`${mediaBaseUrl}${product.productBrandlogo}`}
                     alt={product.brandlogo}
                     title={product.brandName || ''}
                   />
@@ -153,11 +153,14 @@ const TemplateOneListing = ({
               </div>
               <div className='mt-[12px] text-[#000000] text-normal-text text-medium-text tracking-wider'>
                 <span className='font-semibold'>
-                  MSRP{' '}
+                  {customerId && product.isspecialbrand ? 'PRICE' : 'MSRP'}
                   <Price
                     value={undefined}
                     prices={{
-                      msrp: product.msrp,
+                      msrp:
+                        product.isspecialbrand && customerId
+                          ? product?.lowPrice
+                          : product.msrp,
                       salePrice: product.salePrice,
                     }}
                   />

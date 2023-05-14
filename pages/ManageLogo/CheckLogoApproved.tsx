@@ -13,11 +13,11 @@ const index = () => {
     if (storeId) {
       getPageType(storeId, 'myAccountPage').then((res: any) => {
         let pageType = res.config_value ? JSON.parse(res.config_value) : {};
-        setSeType(pageType.customizeLogoTemplate);
+        setSeType(`${pageType?.customizeLogoTemplate}`);
       });
     }
   }, [storeId]);
-  return <>{seType && <CheckLogoApproved id={seType} />}</>;
+  return seType ? <CheckLogoApproved id={seType} /> : null;
 };
 
 export default index;

@@ -21,7 +21,7 @@ const NextLogoButton: React.FC<_NextLogoButtonProps> = ({
       {allowNextLogo && (
         <div className=''>
           <button
-            className='text-indigo-600 font-semibold'
+            className='text-anchor font-[600]'
             onClick={() => {
               arrayHelpers.push('');
             }}

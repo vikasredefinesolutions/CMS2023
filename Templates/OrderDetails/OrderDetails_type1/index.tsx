@@ -5,6 +5,7 @@ import {
   _MyAcc_OrderBillingDetails,
   _MyAcc_OrderProductDetails,
 } from '@definations/APIs/user.res';
+import { useTypedSelector_v2 } from '@hooks_v2/index';
 import { FetchOrderDetails } from '@services/user.service';
 import moment from 'moment';
 import { useRouter } from 'next/router';
@@ -32,6 +33,7 @@ const OrderDetails_type1: React.FC = () => {
     null,
   );
 
+  const { logoUrl, mediaBaseUrl } = useTypedSelector_v2((state) => state.store);
   const getOrderDetails = () => {
     if (orderId) {
       FetchOrderDetails({ orderId: +orderId }).then((details) => {
@@ -158,6 +160,8 @@ const OrderDetails_type1: React.FC = () => {
                 onClose={() => setShowModal(null)}
                 billing={order.billing}
                 product={order.product}
+                logoUrl={logoUrl ? logoUrl : ''}
+                mediaBaseUrl={mediaBaseUrl}
               />
             </>
           )}

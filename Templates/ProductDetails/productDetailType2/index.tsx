@@ -83,6 +83,7 @@ const ProductDetails_Type2: React.FC<_Props> = (product) => {
           name: product?.details?.brandName,
           url: product.details?.brandColorLogoUrl,
           url2: product.details?.brandImage,
+          url3: product.details?.productBrandLogo,
         },
         product: {
           id: product?.details?.id || null,

@@ -92,6 +92,7 @@ export interface _ProductDetails {
   isEnduserDisplay: boolean;
   isSpecialBrand: boolean;
   categoryName?: string;
+  productBrandLogo: string | null;
 }
 export interface _ProductPolicy {
   storeId: number;
@@ -152,6 +153,7 @@ export interface _ProductsAlike {
   msrp: number;
   seName: string;
   image: null | string;
+  isSpecialBrand?: boolean;
   categoryId: number;
   getProductImageOptionList: _ProductImageOption[];
 }

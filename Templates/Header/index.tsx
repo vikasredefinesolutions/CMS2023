@@ -31,7 +31,7 @@ const Header: NextPage<_HeaderPropsWithTemplateid> = ({
   const HeaderTemplate = HeaderTemplates[templateTypeToShow];
 
   return (
-    <>
+    <div className='header' id='MainHeader'>
       {announcementRow && announcementRow[0]?.isVisible && (
         <UpperHeader headerContent={announcementRow[0]} />
       )}
@@ -45,7 +45,7 @@ const Header: NextPage<_HeaderPropsWithTemplateid> = ({
       {announcementRow && announcementRow[1]?.isVisible && (
         <LowerHeader headerContent={announcementRow[1]} />
       )}
-    </>
+    </div>
   );
 };
 

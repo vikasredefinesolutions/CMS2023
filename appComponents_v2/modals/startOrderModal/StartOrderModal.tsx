@@ -170,6 +170,7 @@ const StartOrderModal: React.FC<_startOrderModalProps> = (props) => {
                   </div>
                   <div>
                     <DiscountPricing
+                      title={'selectsizeandquanity'}
                       storeCode={storeCode ? storeCode : ''}
                       showMsrpLine={false}
                       price={{
@@ -213,7 +214,10 @@ const StartOrderModal: React.FC<_startOrderModalProps> = (props) => {
                 </div>
               </div>
               <SomActionsHandler
-                closeStartOrderModal={() => modalHandler(null)}
+                closeStartOrderModal={() => {
+                  clearToCheckout();
+                  modalHandler(null);
+                }}
                 note={notevalue}
                 cartItemId={editDetails?.shoppingCartItemsId || 0}
                 isUpdate={Boolean(editDetails?.shoppingCartItemsId)}

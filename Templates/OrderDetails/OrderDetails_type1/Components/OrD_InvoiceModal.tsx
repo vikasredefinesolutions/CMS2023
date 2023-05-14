@@ -10,9 +10,17 @@ interface _Props {
   onClose(): void;
   billing: _MyAcc_OrderBillingDetails;
   product: _MyAcc_OrderProductDetails[];
+  logoUrl: string;
+  mediaBaseUrl: string;
 }
 
-const OrD_InvoiceModal: React.FC<_Props> = ({ onClose, billing, product }) => {
+const OrD_InvoiceModal: React.FC<_Props> = ({
+  onClose,
+  billing,
+  product,
+  logoUrl,
+  mediaBaseUrl,
+}) => {
   const getBillingAddress = (billing: _MyAcc_OrderBillingDetails | null) => {
     let address = '';
     if (billing?.billingAddress1) {
@@ -80,7 +88,7 @@ const OrD_InvoiceModal: React.FC<_Props> = ({ onClose, billing, product }) => {
           <div className='relative bg-[#ffffff] shadow max-h-screen overflow-y-auto h-full'>
             <div className='flex justify-between items-start p-[25px] rounded-t border-b sticky top-0 left-0 bg-[#ffffff] z-50'>
               <div className='text-[30px] font-[600] text-large-text'>
-                &nbsp;
+                <img src={`${mediaBaseUrl}${logoUrl}`} />
               </div>
               <button
                 type='button'
@@ -109,7 +117,11 @@ const OrD_InvoiceModal: React.FC<_Props> = ({ onClose, billing, product }) => {
               </div>
               <div className='p-4 border-b border-b-gray-300 last:border-b-0'>
                 {product.map((prod, index) => (
-                  <OrD_InvoiceItem key={index} item={prod} />
+                  <OrD_InvoiceItem
+                    key={index}
+                    item={prod}
+                    mediaBaseUrl={mediaBaseUrl}
+                  />
                 ))}
               </div>
               <div className='p-4 border-b border-b-gray-300 last:border-b-0'>

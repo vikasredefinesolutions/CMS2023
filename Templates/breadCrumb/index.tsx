@@ -37,7 +37,10 @@ const BreadCrumb: NextPage<__BreadCrumbTemplatesProps> = ({ breadCrumbid }) => {
   const pageType = useTypedSelector_v2((state) => state.store.pageType);
   const isCMSpage = useTypedSelector_v2((state) => state.home.isCMS_page);
   const [breadCrumbs, setBreadCrumbs] = useState<_breadCrumbs[]>([]);
-  const productId = useTypedSelector_v2((state) => state.product.product.id);
+  const { id: productId, brand: brandDetails } = useTypedSelector_v2(
+    (state) => state.product.product,
+  );
+
   const getBreadCrubs = async () => {
     if (isCMSpage) {
       return [
@@ -70,6 +73,14 @@ const BreadCrumb: NextPage<__BreadCrumbTemplatesProps> = ({ breadCrumbid }) => {
             url: `${catSeNames[index].trim()}.html/`,
           });
         });
+        if (pageType.type == 'product' && brandDetails?.name) {
+          breadCrumbs.push({
+            name: brandDetails?.name,
+            url: `${brandDetails?.name
+              .replaceAll(/[. ]/g, '')
+              .toLowerCase()}.html/`,
+          });
+        }
       } else {
         breadCrumbs.push({
           name: pageType.slug,

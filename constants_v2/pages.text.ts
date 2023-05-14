@@ -152,8 +152,8 @@ export const __pagesText = {
       forgotPassword: 'Forgot Password?',
       createNewAccount: 'CREATE NEW CUSTOMER ACCOUNT',
       samllogin: 'LOGIN VIA SAML',
-      emailPlaceHolder: 'Enter the email',
-      passwordPlaceHolder: 'Enter the password',
+      emailPlaceHolder: 'Enter the email address',
+      passwordPlaceHolder: 'Password',
       clickMessage: ` By Clicking "SHOP NOW", you agree to our`,
       termsOfUse: 'Terms of use',
       and: 'and',
@@ -201,6 +201,7 @@ export const __pagesText = {
     discountPricing: {
       exclusivePricingAvailable: 'EXCLUSIVE PRICING AVAILABLE',
       exclusivePricing: 'EXCLUSIVE PRICING',
+      selectSizeAndQuantity: 'Select Size & Quantity:',
       minimumOrder: 'MINIMUM ORDER :',
       price: 'Price:',
       showMsg: `We reserve the right to reject orders that do not meet the {minQty}

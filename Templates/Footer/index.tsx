@@ -15,11 +15,11 @@ const Footer: React.FC<_props> = ({ data: dataFromRoot }) => {
   }, [dataFromRoot]);
 
   return (
-    <>
+    <div className='footer' id='MainFooter'>
       <div
         dangerouslySetInnerHTML={{ __html: footerHTML?.config_value || '' }}
       ></div>
-    </>
+    </div>
   );
 };
 

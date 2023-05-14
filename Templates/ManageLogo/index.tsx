@@ -62,7 +62,7 @@ const ManageLogo: React.FC<{ id: string }> = ({ id }) => {
     ];
   return (
     <>
-      {logoList && logoList.items.length < 0 ? (
+      {logoList && logoList?.items?.length ? (
         <ManagelogoDeatils logoList={logoList} />
       ) : (
         <>

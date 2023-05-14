@@ -2,6 +2,7 @@ import Price from '@appComponents/Price';
 import NxtImage from '@appComponents/reUsable/Image';
 import { __pagesConstant } from '@constants/pages.constant';
 import { __pagesText } from '@constants/pages.text';
+import { useTypedSelector_v2 } from '@hooks_v2/index';
 import Link from 'next/link';
 import React, { useRef } from 'react';
 import Slider from 'react-slick';
@@ -9,6 +10,7 @@ import { _TemplateProps } from './youMayAlsoLike';
 
 const YouMayAlsoLikeType1: React.FC<_TemplateProps> = ({ productsData }) => {
   const sliderRef = useRef<null | Slider>(null);
+  const customerId = useTypedSelector_v2((state) => state.user.id);
 
   const goToNextProduct = () => {
     sliderRef.current?.slickNext();
@@ -40,13 +42,13 @@ const YouMayAlsoLikeType1: React.FC<_TemplateProps> = ({ productsData }) => {
                     __pagesConstant._productAlike.carouselCounter
                       ? 'absolute'
                       : 'hidden'
-                  } inset-y-0 top-1/2 -translate-x-3.5 lg:-translate-x-1/2 -trnaslate-y-1/2 z-10 flex items-center left-0`}
+                  } top-1/2 -translate-x-3.5 lg:-translate-x-1/2 -trnaslate-y-1/2 z-10 flex items-center left-0`}
                 >
                   <button
                     onClick={() => goToPrevProduct()}
                     className='flex justify-center items-center w-6 h-6 focus:outline-none text-black'
                   >
-                    <span className='chevron-left ml-2 text-base material-symbols-outlined font-semibold '>
+                    <span className='text-3xl leading-none absolute top-1/2 -translate-y-1/2 left-0 z-50 cursor-pointer material-icons-outlined slick-arrow'>
                       arrow_back_ios
                     </span>
                   </button>
@@ -87,7 +89,7 @@ const YouMayAlsoLikeType1: React.FC<_TemplateProps> = ({ productsData }) => {
                                     href={`${encodeURIComponent(
                                       product.seName,
                                     )}.html`}
-                                    className='text-anchor hover:text-anchor-hover underline  text-ellipsis overflow-hidden line-clamp-2 text-small-text bloc'
+                                    className='text-anchor hover:text-anchor-hover underline  text-ellipsis overflow-hidden underline line-clamp-2 text-small-text bloc'
                                   >
                                     {product.name}
                                   </Link>
@@ -95,7 +97,10 @@ const YouMayAlsoLikeType1: React.FC<_TemplateProps> = ({ productsData }) => {
                                 <div className='mt-3 text-[#000000] text-base tracking-wider'>
                                   <span className='font-[600]'>
                                     {' '}
-                                    MSRP <Price value={product.msrp} />
+                                    {customerId && product.isSpecialBrand
+                                      ? 'Price'
+                                      : 'MSRP'}{' '}
+                                    <Price value={product.msrp} />
                                   </span>
                                 </div>
                               </div>
@@ -112,13 +117,13 @@ const YouMayAlsoLikeType1: React.FC<_TemplateProps> = ({ productsData }) => {
                     __pagesConstant._productAlike.carouselCounter
                       ? 'absolute'
                       : 'hidden'
-                  } inset-y-0  top-1/2 -translate-x-3.5 lg:-translate-x-1/2 -trnaslate-y-1/2 right-0 z-10 flex items-center`}
+                  }  top-1/2 -translate-x-3.5 lg:-translate-x-1/2 -trnaslate-y-1/2 right-0 z-10 flex items-center`}
                 >
                   <button
                     onClick={() => goToNextProduct()}
-                    className='bg-white w-7 h-7 rounded-full shadow focus:outline-none'
+                    className='flex justify-center items-center w-6 h-6 focus:outline-none text-black'
                   >
-                    <span className='chevron-right -mr-1  text-base material-symbols-outlined font-semibold'>
+                    <span className='chevron-right text-3xl leading-none absolute top-1/2 -translate-y-1/2 left-0 z-50 cursor-pointer material-icons-outlined slick-arrow'>
                       arrow_forward_ios
                     </span>
                   </button>

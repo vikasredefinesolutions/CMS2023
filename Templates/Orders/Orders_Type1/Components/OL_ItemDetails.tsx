@@ -53,7 +53,9 @@ const OL_ItemDetails: React.FC<_props> = ({ item }) => {
         </Link>
         <div className='flex-1 sm:mt-0 mt-6 text-default-text text-center sm:text-left px-3'>
           <div className='mb-6 font-bold text-sub-text cursor-pointer'>
-            {item.productName}
+            <Link href={`/${item.seName}.html`}>
+              <a>{item.productName}</a>
+            </Link>
           </div>
           <div className='mb-6'>
             <span className='font-[600] inline-block'>

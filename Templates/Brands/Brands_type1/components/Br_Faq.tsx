@@ -1,12 +1,11 @@
 import React from 'react';
-
 const Br_Faq: React.FC = () => {
   return (
     <section
-      className='relative overflow-hidden pt-[80px] mt-[0px] mb-[20px] sm:h-[800px] h-auto bg-cover'
+      className='relative overflow-hidden pt-[80px] mt-[0px] mb-[20px] sm:h-[800px] max-h-[500px] h-auto bg-cover'
       style={{
-        backgroundImage:
-          "url('/images/brands-img/faq-bg.png'); background-attachment: fixed;",
+        backgroundImage: `url(/faq-bg.png)`,
+        backgroundAttachment: 'fixed',
       }}
     >
       <div className='flex justify-center items-center flex-wrap'>

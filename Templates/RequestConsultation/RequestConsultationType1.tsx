@@ -1,6 +1,8 @@
 import NxtImage from '@appComponents/reUsable/Image';
+import { _defaultTemplates } from '@configs/template.config';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import { CartObject } from '@services/cart';
+import YouMayAlsoLike from '@templates/youMayAlsoLike';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
@@ -44,41 +46,49 @@ const RequestConsultationType1: React.FC<_RequestConsultationProps> = ({
       </Head>
       {details && (
         <section className='container pl-[15px] pr-[15px] mx-auto'>
-          <div className='font-bold text-2xl-text mb-[13px] text-center text tracking-[1.4px]'>
-            Request Consultation & Proof
-          </div>
-          <div className='border border-gray-400 pt-[12px] pb-[12px]'>
-            <div className='flex flex-wrap -mx-[15px]'>
-              <div className='w-full lg:w-4/12 md:w-full text-center pl-[15px] pr-[15px] mb-[30px]'>
-                <div className=''>
-                  <NxtImage
-                    src={color?.imageUrl || ''}
-                    alt={details.name}
-                    className='w-full object-center object-cover sm:rounded-lg'
-                    title={details.name}
-                  />
+          <div>
+            <div className='font-bold text-2xl-text mb-[13px] text-center text tracking-[1.4px]'>
+              Request Consultation & Proof
+            </div>
+            <div className='border border-gray-400 pt-[12px] pb-[12px]'>
+              <div className='flex flex-wrap -mx-[15px]'>
+                <div className='w-full lg:w-4/12 md:w-full text-center pl-[15px] pr-[15px] mb-[30px]'>
+                  <div className=''>
+                    <NxtImage
+                      src={color?.imageUrl || ''}
+                      alt={details.name}
+                      className='w-full object-center object-cover sm:rounded-lg'
+                      title={details.name}
+                    />
+                  </div>
+                  <div className=''>
+                    <button
+                      className='text-medium-text font-bold'
+                      onClick={() => router.back()}
+                    >
+                      {details.name}
+                    </button>
+                  </div>
                 </div>
-                <div className=''>
-                  <button
-                    className='text-medium-text font-bold'
-                    onClick={() => router.back()}
-                  >
-                    {details.name}
-                  </button>
+                <RcForm
+                  productId={details.id}
+                  attriubteOptionId={color?.attributeOptionId || 0}
+                />
+                <div className='w-full lg:w-4/12 px-[15px]'>
+                  {itemInCart ? (
+                    <RcOrderSummary item={itemInCart} />
+                  ) : (
+                    <RcFeatures />
+                  )}
                 </div>
-              </div>
-              <RcForm
-                productId={details.id}
-                attriubteOptionId={color?.attributeOptionId || 0}
-              />
-              <div className='w-full lg:w-4/12 px-[15px]'>
-                {itemInCart ? (
-                  <RcOrderSummary item={itemInCart} />
-                ) : (
-                  <RcFeatures />
-                )}
               </div>
             </div>
+          </div>
+          <div>
+            <YouMayAlsoLike
+              product={alike}
+              id={_defaultTemplates.youMayAlsoLike}
+            />
           </div>
         </section>
       )}

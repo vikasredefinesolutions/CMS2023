@@ -373,6 +373,7 @@ export const productSlice = createSlice({
             name: string | null;
             url: string | null;
             url2: string | null;
+            url3: string | null;
           };
           product: {
             id: number | null;
@@ -1132,6 +1133,7 @@ export const productSlice = createSlice({
             url: string | null;
             // for image dimension 200*35
             url2: string | null;
+            url3: string | null;
           };
           product: {
             id: number | null;

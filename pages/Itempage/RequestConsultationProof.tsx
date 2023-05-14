@@ -25,6 +25,7 @@ const RequestConsultationProof: NextPage<_RequestConsultationProps> = (
           name: props?.details.brandName,
           url: props?.details.brandColorLogoUrl,
           url2: props?.details.brandImage,
+          url3: props?.details.productBrandLogo,
         },
         product: {
           id: props?.details?.id || null,
