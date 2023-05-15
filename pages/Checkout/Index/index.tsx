@@ -20,7 +20,11 @@ const Checkout = () => {
     });
   }, [storeId]);
 
-  return <CheckoutTemplate cartTemplateId={cartTemplateId} />;
+  return (
+    <div className='checkoutpage'>
+      <CheckoutTemplate cartTemplateId={cartTemplateId} />
+    </div>
+  );
 };
 
 export default Checkout;

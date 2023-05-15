@@ -43,6 +43,7 @@ export interface ShoppingCartLogoPersonViewModel {
 }
 
 export interface CartObject {
+  itemNote: string;
   colorImage: string;
   productName: string;
   productId: number;

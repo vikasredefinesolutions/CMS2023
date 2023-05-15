@@ -72,7 +72,7 @@ const getDynamicContent = async (
   }
 
   if (item.category === 'topic') {
-    if (item.menu_Type === 'brand') {
+    if (item.menu_Type === 'brands') {
       const res = await HeaderService.FetchBrands({ storeId });
 
       return {

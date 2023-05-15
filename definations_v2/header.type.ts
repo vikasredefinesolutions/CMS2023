@@ -15,7 +15,7 @@ export interface _StoreMenu {
   modified_By: string;
   modified_Date: null;
   se_Name: string;
-  menu_Type: 'brand';
+  menu_Type: 'brands';
 }
 
 export interface _t_Brands {

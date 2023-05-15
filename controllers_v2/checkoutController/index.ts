@@ -95,6 +95,7 @@ const CheckoutController = () => {
   const [paymentOptions, setPaymentOption] = useState<PaymentOptions | null>(
     null,
   );
+  const [orderNote, setorderNotes] = useState<string>('');
   const [billingAdress, setBillingAdress] = useState<AddressType | null>(null);
   const [addressType, setAddressType] = useState<null | 'S' | 'B'>(null);
   const [showAddAddressModal, setShowAddAddressModal] = useState(false);
@@ -525,6 +526,7 @@ const CheckoutController = () => {
         orderSubtotal: subTotal,
         orderTax: salesTax,
         orderTotal: totalPrice,
+        orderNotes: orderNote,
         couponDiscountAmount: discount,
         orderStatus: __pagesConstant.checkoutPage.orderStatus,
         transactionStatus: __pagesConstant.checkoutPage.transactionStatus,
@@ -681,6 +683,10 @@ const CheckoutController = () => {
     endUserDisplay,
     productPolicy,
     endUserNameS,
+    cardDetails,
+    purchaseOrder,
+    orderNote,
+    setorderNotes,
   };
 };
 

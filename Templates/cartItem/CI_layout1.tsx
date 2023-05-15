@@ -4,7 +4,9 @@ import {
 } from '@appComponents/reUsable/Image';
 import Price from '@appComponents/reUsable/Price';
 import { _Store } from '@configs/page.config';
+import { checkoutPages } from '@constants/enum';
 import { __pagesText } from '@constants/pages.text';
+import CheckoutController from '@controllers/checkoutController';
 import { isNumberKey } from '@helpers/common.helper';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import { CartObject } from '@services/cart';
@@ -33,6 +35,8 @@ const CIlayout1: FC<any> = ({
 
   const storeCode = useTypedSelector_v2((state) => state.store.code);
   mediaBaseUrl = mediaBaseUrl || clientSideMediaBaseUrl;
+
+  const { currentPage } = CheckoutController();
 
   return (
     <ul role='list' className='overflow-hidden'>
@@ -128,6 +132,11 @@ const CIlayout1: FC<any> = ({
                                   className='block w-full border border-gray-600 shadow-sm text-sm py-1 px-2'
                                   value={viewObject ? viewObject.qty : 0}
                                   name='qty'
+                                  disabled={
+                                    currentPage === checkoutPages.reviewOrder
+                                      ? true
+                                      : false
+                                  }
                                   onChange={(event) => {
                                     if (isNumberKey(event)) {
                                       employeeAmtChangeHandler(
@@ -154,6 +163,11 @@ const CIlayout1: FC<any> = ({
                                   className='block w-full border border-gray-600 shadow-sm text-sm py-1 px-2'
                                   value={viewObject ? viewObject.price : 0}
                                   name='price'
+                                  disabled={
+                                    currentPage === checkoutPages.reviewOrder
+                                      ? true
+                                      : false
+                                  }
                                   onChange={(event) => {
                                     if (isNumberKey(event)) {
                                       employeeAmtChangeHandler(

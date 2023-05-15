@@ -73,22 +73,24 @@ const Cart = () => {
 
   return (
     <>
-      <CartTemplate
-        {...{
-          cartData,
-          removeCartItem,
-          couponInputChangeHandler,
-          couponSubmitHandler,
-          showApplyButton,
-          coupon,
-          empCustomQtyPrice,
-          employeeAmtChangeHandler,
-          amtQtyBlurHandler,
-          loadProduct,
-          setShowAddOtf,
-          cartType,
-        }}
-      />
+      <div className='checkoutpage'>
+        <CartTemplate
+          {...{
+            cartData,
+            removeCartItem,
+            couponInputChangeHandler,
+            couponSubmitHandler,
+            showApplyButton,
+            coupon,
+            empCustomQtyPrice,
+            employeeAmtChangeHandler,
+            amtQtyBlurHandler,
+            loadProduct,
+            setShowAddOtf,
+            cartType,
+          }}
+        />
+      </div>
       {showEdit && product && (
         <StartOrderModal
           modalHandler={() => setShowEdit(false)}

@@ -1,6 +1,6 @@
 import { __pagesText } from '@constants/pages.text';
 import { Form, Formik } from 'formik';
-import React from 'react';
+import React, { useRef } from 'react';
 
 interface _props {
   screen?: 'MOBILE' | 'DESKTOP';
@@ -12,6 +12,7 @@ const SearchBar: React.FC<_props> = ({
   screen = 'DESKTOP',
   onSearchInput = () => {},
 }) => {
+  const searchRef = useRef<HTMLInputElement>(null);
   const searchHandler = (value: { text: string }) => {
     // SearchFor(value);
     onSearchInput(value.text as string);
@@ -29,6 +30,7 @@ const SearchBar: React.FC<_props> = ({
                   <div className=''>
                     <div className='border border-[#003a70] pt-[5px] pb-[4px] pl-[15px] pr-[24px] text-primary relative'>
                       <input
+                        ref={searchRef}
                         type='text'
                         name='text'
                         min={1}
@@ -46,7 +48,10 @@ const SearchBar: React.FC<_props> = ({
                           handleReset();
                         }}
                       >
-                        <span className='material-icons text-primary font-[900]'>
+                        <span
+                          className='material-icons text-primary font-[900]'
+                          onClick={() => searchRef?.current?.focus()}
+                        >
                           {__pagesText.Headers.searchIcon}
                         </span>
                       </button>
@@ -70,6 +75,7 @@ const SearchBar: React.FC<_props> = ({
                 <div className=''>
                   <div className='border border-primary pt-[5px] pb-[4px] pl-[15px] pr-[24px] text-primary relative'>
                     <input
+                      ref={searchRef}
                       type='text'
                       name='text'
                       min={1}
@@ -87,7 +93,10 @@ const SearchBar: React.FC<_props> = ({
                         handleReset();
                       }}
                     >
-                      <span className='material-icons text-primary font-[900]'>
+                      <span
+                        className='material-icons text-primary font-[900]'
+                        onClick={() => searchRef?.current?.focus()}
+                      >
                         {__pagesText.Headers.searchIcon}
                       </span>
                     </button>
