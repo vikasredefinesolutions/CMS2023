@@ -67,94 +67,93 @@ const ElementCarouselDisplay = ({ bannerArr }) => {
   console.log(bannerArr, 'baneerArrrrr');
   return (
     <>
-      {Object.keys(bannerArr).length > 0 &&
-      bannerArr.images != null &&
-      bannerArr.images.length == 1 ? (
-        <div class='relative overflow-hidden'>
-             {' '}
-          <div class='absolute inset-0'>
-            <img src={bannerArr.images[0].image_url} alt='corousel' />
-          </div>
-             {' '}
-          <div
-            class={`flex justify-center items-center w-full relative z-10 ${
-              bannerArr?.images[0].headline1_display &&
-              bannerArr?.images[0].headline1_class
-                ? bannerArr?.images[0].headline1_class
-                : ''
-            } ${
-              bannerArr?.images[0].headline2_display &&
-              bannerArr?.images[0].headline2_class
-                ? bannerArr?.images[0].headline2_class
-                : ''
-            }`}
-          >
-                   {' '}
-            <div class=''>
-                         {' '}
-              <div
-                class='text-[23px] sm:text-[32px] lg:text-[60px] font-family-1 leading-[66px] font-semibold not-italic text-center mt-[8px] mb-[8px] pl-[50px] pr-[50px]'
-                style={{ color: '#ffffff' }}
-              >
-                {bannerArr?.images[0].headline1_display && (
-                  <div
-                    className={''}
-                    style={{
-                      color: bannerArr?.images[0].font_color ?? '',
-                      textShadow:
-                        bannerArr?.images[0].headline1_box_shadow ?? '',
-                    }}
-                    dangerouslySetInnerHTML={{
-                      __html: bannerArr?.images[0].headline,
-                    }}
-                  ></div>
-                )}
-                {bannerArr?.images[0].headline2_display && (
-                  <div
-                    className={bannerArr?.images[0].headline2_class ?? ''}
-                    style={{
-                      color: bannerArr?.images[0].font_color1 ?? '',
-                      textShadow:
-                        bannerArr?.images[0].headline2_box_shadow ?? '',
-                    }}
-                    dangerouslySetInnerHTML={{
-                      __html: bannerArr?.images[0].headline1,
-                    }}
-                  ></div>
-                )}
-                {bannerArr?.images[0].description_display && (
-                  <div
-                    className={bannerArr?.images[0].description_class ?? ''}
-                    style={{ color: bannerArr?.images[0].font_color2 ?? '' }}
-                    dangerouslySetInnerHTML={{
-                      __html: bannerArr?.images[0].description,
-                    }}
-                  ></div>
-                )}
-              </div>
-                         {' '}
-              {bannerArr?.images[0].button_display == 'Yes' && (
-                <>
-                  <div className='text-center' title='SHOP alternative'>
-                    <a
-                      href={bannerArr?.images[0].button_link}
-                      target={
-                        bannerArr?.images[0].button_link_window ? '_blank' : ''
-                      }
-                      className=' uppercase text-[18px] sm:text-[19px] lg:text-[26px] font-family-1 text-center leading-[35px] font-semibold inline-block custbtn-secondary mt-[12px] pl-[27px] pr-[27px] pt-[12px] pb-[12px]'
-                      rel='noreferrer'
-                    >
-                      {bannerArr?.images[0].button_text}
-                    </a>
-                  </div>
-                </>
-              )}
-                     {' '}
-            </div>
-               {' '}
-          </div>
-        </div>
-      ) : (
+      {Object.keys(bannerArr).length > 0 && bannerArr.images != null && (
+        // bannerArr.images.length == 1 ? (
+        //   <div class='relative overflow-hidden'>
+        //        {' '}
+        //     <div class='absolute inset-0'>
+        //       <img src={bannerArr.images[0].image_url} alt='corousel' />
+        //     </div>
+        //        {' '}
+        //     <div
+        //       class={`flex justify-center items-center w-full relative z-10 ${
+        //         bannerArr?.images[0].headline1_display &&
+        //         bannerArr?.images[0].headline1_class
+        //           ? bannerArr?.images[0].headline1_class
+        //           : ''
+        //       } ${
+        //         bannerArr?.images[0].headline2_display &&
+        //         bannerArr?.images[0].headline2_class
+        //           ? bannerArr?.images[0].headline2_class
+        //           : ''
+        //       }`}
+        //     >
+        //              {' '}
+        //       <div class=''>
+        //                    {' '}
+        //         <div
+        //           class='text-[23px] sm:text-[32px] lg:text-[60px] font-family-1 leading-[66px] font-semibold not-italic text-center mt-[8px] mb-[8px] pl-[50px] pr-[50px]'
+        //           style={{ color: '#ffffff' }}
+        //         >
+        //           {bannerArr?.images[0].headline1_display && (
+        //             <div
+        //               className={''}
+        //               style={{
+        //                 color: bannerArr?.images[0].font_color ?? '',
+        //                 textShadow:
+        //                   bannerArr?.images[0].headline1_box_shadow ?? '',
+        //               }}
+        //               dangerouslySetInnerHTML={{
+        //                 __html: bannerArr?.images[0].headline,
+        //               }}
+        //             ></div>
+        //           )}
+        //           {bannerArr?.images[0].headline2_display && (
+        //             <div
+        //               className={bannerArr?.images[0].headline2_class ?? ''}
+        //               style={{
+        //                 color: bannerArr?.images[0].font_color1 ?? '',
+        //                 textShadow:
+        //                   bannerArr?.images[0].headline2_box_shadow ?? '',
+        //               }}
+        //               dangerouslySetInnerHTML={{
+        //                 __html: bannerArr?.images[0].headline1,
+        //               }}
+        //             ></div>
+        //           )}
+        //           {bannerArr?.images[0].description_display && (
+        //             <div
+        //               className={bannerArr?.images[0].description_class ?? ''}
+        //               style={{ color: bannerArr?.images[0].font_color2 ?? '' }}
+        //               dangerouslySetInnerHTML={{
+        //                 __html: bannerArr?.images[0].description,
+        //               }}
+        //             ></div>
+        //           )}
+        //         </div>
+        //                    {' '}
+        //         {bannerArr?.images[0].button_display == 'Yes' && (
+        //           <>
+        //             <div className='text-center' title='SHOP alternative'>
+        //               <a
+        //                 href={bannerArr?.images[0].button_link}
+        //                 target={
+        //                   bannerArr?.images[0].button_link_window ? '_blank' : ''
+        //                 }
+        //                 className=' uppercase text-[18px] sm:text-[19px] lg:text-[26px] font-family-1 text-center leading-[35px] font-semibold inline-block custbtn-secondary mt-[12px] pl-[27px] pr-[27px] pt-[12px] pb-[12px]'
+        //                 rel='noreferrer'
+        //               >
+        //                 {bannerArr?.images[0].button_text}
+        //               </a>
+        //             </div>
+        //           </>
+        //         )}
+        //                {' '}
+        //       </div>
+        //          {' '}
+        //     </div>
+        //   </div>
+        // ) :
         <Carousel
           renderArrowPrev={(clickHandler, hasPrev, labelPrev) =>
             hasPrev && (
