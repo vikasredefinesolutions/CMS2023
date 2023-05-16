@@ -205,9 +205,11 @@ export const __pagesText = {
       minimumOrder: 'MINIMUM ORDER :',
       price: 'Price:',
       MSRP: 'MSRP',
-      showMsg: `We reserve the right to reject orders that do not meet the {minQty}
-      piece minimum per style <br /> and color, exceptions may apply for
-      men’s and women’s companion styles per color.`,
+      showMsgStartingText:
+        'We reserve the right to reject orders that do not meet the',
+      showMsgMiddleText: ' piece minimum per style',
+      showMsgLastText:
+        ' and color, exceptions may apply for men’s and women’s companion styles per color.',
       firstMsg: 'We reserve the right to reject orders that do not meet the',
       secondMsg: `piece minimum per style 
       and color, exceptions may apply for',
