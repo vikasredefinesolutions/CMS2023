@@ -21,7 +21,7 @@ const nextConfig = {
     ],
   },
   rules: {
-    '@typescript-eslint/no-non-null-assertion': 'off',
+    '@typescript-eslint/no-non-null-assertion': 0,
   },
   experimental: {
     swcMinify: true,
