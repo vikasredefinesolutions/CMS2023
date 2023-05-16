@@ -20,10 +20,6 @@ import EmptyCart from '../components/emptyCart';
 const CartType2: React.FC<_CartProps> = ({
   cartData,
   removeCartItem,
-  couponInputChangeHandler,
-  couponSubmitHandler,
-  showApplyButton,
-  coupon,
   empCustomQtyPrice,
   employeeAmtChangeHandler,
   amtQtyBlurHandler,
@@ -98,12 +94,7 @@ const CartType2: React.FC<_CartProps> = ({
               aria-labelledby='summary-heading'
               className='w-full lg:w-4/12 md:w-5/12 pl-[15px] pr-[15px] mt-[15px]'
             >
-              <CartSummarry
-                couponInputChangeHandler={couponInputChangeHandler}
-                couponSubmitHandler={couponSubmitHandler}
-                showApplyButton={showApplyButton}
-                coupon={coupon}
-              />
+              <CartSummarry />
             </section>
           </div>
         </div>

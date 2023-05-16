@@ -7,7 +7,6 @@ import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
 import MuiTab from '@mui/material/Tab';
 import { styled } from '@mui/material/styles';
 import { _SelectedTab } from '@templates/ProductDetails/productDetailsTypes/storeDetails.res';
@@ -50,7 +49,7 @@ const ProductsInfoTabs: React.FC<_props> = ({ data }) => {
 
   return (
     <TabContext value={value}>
-      <Card>
+      <div>
         <TabList
           variant='scrollable'
           scrollButtons='auto'
@@ -58,7 +57,7 @@ const ProductsInfoTabs: React.FC<_props> = ({ data }) => {
           aria-label='forced scroll tabs example'
           sx={{
             borderBottom: (theme) => `1px solid ${theme.palette.divider}`,
-            marginLeft: '30px',
+            marginBottom: '30px',
           }}
           className='tab-container'
         >
@@ -74,7 +73,7 @@ const ProductsInfoTabs: React.FC<_props> = ({ data }) => {
               );
             })}
         </TabList>
-      </Card>
+      </div>
       <Box sx={{ marginTop: 0 }}>
         {featuredProducts &&
           featuredProducts.map((product: any, index: number) => {

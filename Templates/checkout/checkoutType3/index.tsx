@@ -11,20 +11,11 @@ import LoginEmail from './components/LoginEmailType1';
 import LoginPassword from './components/LoginPasswordType1';
 import PaymentType1 from './components/PaymentType1';
 
-import SummarryController from '@controllers/summarryController';
-
 interface _Props {
   cartTemplateId: number;
 }
 
 const ChekoutType3: FC<_Props> = ({ cartTemplateId }) => {
-  const {
-    couponInputChangeHandler,
-    couponSubmitHandler,
-    showApplyButton,
-    coupon,
-  } = SummarryController();
-
   const {
     currentPage,
     checkEmail,
@@ -176,14 +167,7 @@ const ChekoutType3: FC<_Props> = ({ cartTemplateId }) => {
           )}
         </div>
         <div className='w-full md:w-4/12 lg:w-[27%] pl-[15px] pr-[15px]'>
-          <CartSummarry
-            {...{
-              couponInputChangeHandler,
-              couponSubmitHandler,
-              showApplyButton,
-              coupon,
-            }}
-          />
+          <CartSummarry />
           <div id='OrderNoteDiv mt-[20px]'>
             <div className='mt-[20px] font-[600] '>
               Patagonia end users are approved on a per project basis.

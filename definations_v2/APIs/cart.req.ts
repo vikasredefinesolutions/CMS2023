@@ -48,6 +48,7 @@ export interface CartLogoPersonDetailModel {
   logoQty: number;
   logoFile: string;
   logoLocation: string;
+  id: number;
   logoTotal: number;
   colorImagePath: string;
   logoUniqueId: string;
@@ -60,6 +61,9 @@ export interface CartLogoPersonDetailModel {
   logoPositionImage: string;
   oldFilePath: string;
   originalLogoFilePath: string;
+  sewOutAmount: number;
+  isSewOut: boolean;
+  reUsableCustomerLogo: number;
 }
 
 export interface CartLinePersonDetailModel {

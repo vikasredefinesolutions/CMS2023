@@ -185,11 +185,9 @@ const RcForm: React.FC<{ productId: number; attriubteOptionId: number }> = ({
             <Form>
               <div className='flex flex-wrap gap-y-4 pl-[15px] pr-[15px]'>
                 <div className='w-full'>
-                  <div className='bg-[#f5f7f6] flex flex-wrap items-center justify-between pt-[8px] pb-[8px] pl-[8px] pr-[8px]'>
-                    <div className='text-sub-text font-semibold'>
-                      Contact Information
-                    </div>
-                    <div className='text-[#a94442] text-small-text font-semibold'>
+                  <div className='bg-gray-100 flex flex-wrap items-center justify-between px-3 py-1'>
+                    <div className='font-bold text-xl'>Contact Information</div>
+                    <div className='text-red-500 text-sm font-bold'>
                       All fields marked * are required.
                     </div>
                   </div>
@@ -257,7 +255,7 @@ const RcForm: React.FC<{ productId: number; attriubteOptionId: number }> = ({
                 />
                 <div className='w-full'>
                   <div className='bg-[#f5f7f6] flex flex-wrap items-center justify-between pt-[8px] pb-[8px] pl-[12px] pr-[12px]'>
-                    <div className='text-sub-text font-bold'>
+                    <div className='font-bold text-lg'>
                       Optional Information
                     </div>
                     <div>&nbsp;</div>
@@ -273,7 +271,7 @@ const RcForm: React.FC<{ productId: number; attriubteOptionId: number }> = ({
                     {!showLogo && (
                       <div className=''>
                         <button
-                          className='text-medium-text rounded pt-[12px] pb-[12px] pl-[12px] !text-anchor hover:!text-anchor-hover underline text-normal-text font-bold'
+                          className='text-lg rounded pt-[12px] pb-[12px] pl-[12px] !text-anchor hover:!text-anchor-hover underline font-bold'
                           onClick={() => setShowLogo(true)}
                         >
                           <u> + Add Logo</u>
@@ -396,13 +394,13 @@ const RcForm: React.FC<{ productId: number; attriubteOptionId: number }> = ({
                 <div className='w-full  text-center'>
                   <button
                     type={'submit'}
-                    className='btn btn-md btn-secondary text-sub-text font-bold w-full mb-[15px]'
+                    className='btn btn-md btn-secondary text-3xl font-[900] w-full mb-[15px]'
                   >
                     SUBMIT
                   </button>
                   <button
                     onClick={() => router.back()}
-                    className='text-center !text-anchor hover:!text-anchor-hover text-sub-text font-semibold'
+                    className='text-center !text-anchor hover:!text-anchor-hover text-xl font-semibold'
                   >
                     Cancel
                   </button>

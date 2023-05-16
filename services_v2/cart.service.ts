@@ -41,9 +41,10 @@ export const deleteItemCart = async (
 
 export const addPromoCode = async (
   req: AddPromoCodeReq,
-): Promise<AddPromoCodeResponse> => {
+): Promise<AddPromoCodeResponse['data']> => {
   const url = `/Store/CouponCode/GetCouponDetails.json`;
-  const res = await SendAsync<AddPromoCodeResponse>({
+
+  const res = await SendAsync<AddPromoCodeResponse['data']>({
     url: url,
     method: 'POST',
     data: req,

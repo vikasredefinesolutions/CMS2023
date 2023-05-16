@@ -1,17 +1,15 @@
 import Price from '@appComponents/reUsable/Price';
+import SummarryController from '@controllers/summarryController';
 import { GetCartTotals, useTypedSelector_v2 } from 'hooks_v2';
 import { FC } from 'react';
-import { CartSummarryProps } from '../CartSumarry';
 
-const CartSummarryType1: FC<CartSummarryProps> = ({
-  couponInputChangeHandler,
-  couponSubmitHandler,
-  showApplyButton,
-  coupon,
-}) => {
+const CartSummarryType1: FC = () => {
+  const couponDetails = useTypedSelector_v2((state) => state.cart.discount);
+
+  // Functions
+  const { coupon, setCoupon, applyCouponHandler } = SummarryController();
   const { totalPrice, subTotal, logoSetupCharges, smallRunFee, salesTax } =
     GetCartTotals();
-  const couponDetails = useTypedSelector_v2((state) => state.cart.discount);
   return (
     <div className='border border-slate-400 bg-[#ffffff] mb-[20px]'>
       <div className='bg-light-gray w-full text-sub-text font-medium pl-[16px] pr-[16px] pt-[8px] pb-[8px]'>
@@ -61,7 +59,7 @@ const CartSummarryType1: FC<CartSummarryProps> = ({
                   placeholder='Promo code'
                   type='text'
                   value={coupon}
-                  onChange={(e) => couponInputChangeHandler(e.target.value)}
+                  onChange={(e) => setCoupon(e.target.value.trim())}
                   className='peer placeholder:opacity-0 block w-full bg-transparent pt-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200 pr-10 relative z-10'
                 />
                 <label
@@ -70,9 +68,9 @@ const CartSummarryType1: FC<CartSummarryProps> = ({
                 >
                   PROMO CODE
                 </label>{' '}
-                {showApplyButton ? (
+                {coupon ? (
                   <button
-                    onClick={couponSubmitHandler}
+                    onClick={applyCouponHandler}
                     className='coupon-code-Apply text-sm absolute right-0 top-2 curosr-pointer z-40'
                   >
                     Apply

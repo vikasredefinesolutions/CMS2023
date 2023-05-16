@@ -26,6 +26,7 @@ export interface _Cart_Initials {
     allowNextLogo: boolean;
     availableOptions: AvailableLocationDetails[] | null;
   };
+  lastUpdate: number;
 }
 
 const initialState: _Cart_Initials = {
@@ -46,6 +47,7 @@ const initialState: _Cart_Initials = {
   email: '',
   isGuestCustomer: false,
   showThankYou: false,
+  lastUpdate: 0,
 };
 
 export const cartSlice = createSlice({
@@ -101,6 +103,7 @@ export const cartSlice = createSlice({
       if (payload && payload.length > 0) {
         state.cart = payload;
         state.cartQty = payload.length;
+        state.lastUpdate = new Date().getTime();
       } else {
         state.cart = null;
         state.cartQty = 0;

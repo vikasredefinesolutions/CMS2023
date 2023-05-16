@@ -102,13 +102,13 @@ const MyCartIcon: React.FC = () => {
                         </div>
                         <div className='flex flex-wrap mt-[5px] text-center leading-none'>
                           <div className=''>
-                            <div className='text-gray-600'>
+                            <div className='text-slate-100	  font-[400]'>
                               {__pagesText.Headers.qty}
                             </div>
                             <div className='mt-[3px]'>{cartItem.totalQty}</div>
                           </div>
                           <div className='pl-[15px]'>
-                            <div className='text-gray-600'>
+                            <div className='text-slate-100	 font-[400]'>
                               {__pagesText.Headers.subtotal}
                             </div>
                             <div className='mt-[3px]'>
@@ -123,8 +123,8 @@ const MyCartIcon: React.FC = () => {
               </ul>
             </div>
             <div className='border-t first:border-t-0 border-[#758592] pt-[15px] first:pt-[0px]'>
-              <div className='mb-3 font-medium text-right'>
-                <div className='text-gray-600'>
+              <div className='mb-3 text-right'>
+                <div className='text-slate-200	font-[400]'>
                   {totalCartQty} {__pagesText.Headers.totalItemInCartMessage}
                 </div>
                 <div className='text-[16px]'>

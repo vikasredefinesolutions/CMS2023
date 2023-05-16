@@ -8,10 +8,6 @@ import { ChangeEvent } from 'react';
 export interface _CartProps {
   cartData: CartList | null;
   removeCartItem: (itemId: number) => void;
-  couponInputChangeHandler: (arg: string) => void;
-  couponSubmitHandler: () => void;
-  showApplyButton: boolean;
-  coupon: string;
   empCustomQtyPrice: EmpCustomQtyPriceType;
   employeeAmtChangeHandler: (
     event: ChangeEvent<HTMLInputElement>,

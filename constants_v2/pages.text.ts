@@ -204,6 +204,7 @@ export const __pagesText = {
       selectSizeAndQuantity: 'Select Size & Quantity:',
       minimumOrder: 'MINIMUM ORDER :',
       price: 'Price:',
+      MSRP: 'MSRP',
       showMsg: `We reserve the right to reject orders that do not meet the {minQty}
       piece minimum per style <br /> and color, exceptions may apply for
       men’s and women’s companion styles per color.`,
@@ -403,7 +404,7 @@ export const __pagesText = {
     mycart: 'my cart',
     shoppingCartIcon: 'shopping_cart',
     qty: 'QTY',
-    subtotal: 'subtotal',
+    subtotal: 'SUBTOTAL',
     totalItemInCartMessage: 'ITEMS IN CART',
     total: 'Total',
     checkoutNow: ' CHECKOUT NOW',

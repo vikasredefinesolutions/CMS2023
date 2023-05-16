@@ -1,7 +1,7 @@
 import { __pagesText } from '@constants/pages.text';
 import { OTFItemValidation } from '@constants/validationMessages';
 import { OTFItemNoList } from '@definations/otfItem.res';
-import { getAddToCartObject } from '@helpers/common.helper';
+import { getAddToCartObject, isNumberKey } from '@helpers/common.helper';
 import {
   GetCustomerId,
   useActions_v2,
@@ -439,7 +439,11 @@ const AddOTFItemNo = ({ closeModal }: { closeModal: () => void }) => {
                         placeholder='Qty'
                         className='form-input'
                         value={values.qty}
-                        onChange={handleChange}
+                        onChange={(event) => {
+                          if (isNumberKey(event)) {
+                            handleChange(event);
+                          }
+                        }}
                         onBlur={handleBlur}
                       />
                     </div>
@@ -467,7 +471,11 @@ const AddOTFItemNo = ({ closeModal }: { closeModal: () => void }) => {
                         placeholder='Price'
                         className='form-input'
                         value={values.price}
-                        onChange={handleChange}
+                        onChange={(event) => {
+                          if (isNumberKey(event)) {
+                            handleChange(event);
+                          }
+                        }}
                         onBlur={handleBlur}
                       />
                     </div>

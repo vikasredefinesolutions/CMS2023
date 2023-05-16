@@ -6,14 +6,11 @@ import Link from 'next/link';
 import React from 'react';
 import { _CartProps } from '../Cart';
 import EmptyCart from '../components/emptyCart';
+import CT1_EmployeeLoginCart from './Components/CT1_EL_Cart';
 
 const CartType1: React.FC<_CartProps> = ({
   cartData,
   removeCartItem,
-  couponInputChangeHandler,
-  couponSubmitHandler,
-  showApplyButton,
-  coupon,
   empCustomQtyPrice,
   employeeAmtChangeHandler,
   amtQtyBlurHandler,
@@ -27,6 +24,10 @@ const CartType1: React.FC<_CartProps> = ({
 
   if (!cartData || cartData.length === 0) {
     return <EmptyCart />;
+  }
+
+  if (isEmployeeLoggedIn) {
+    return <CT1_EmployeeLoginCart cartItems={cartData} />;
   }
 
   return (
@@ -76,12 +77,7 @@ const CartType1: React.FC<_CartProps> = ({
                 aria-labelledby='summary-heading'
                 className='w-full sticky overflow-auto lg:w-4/12 pl-[12px] pr-[12px] mt-3'
               >
-                <CartSummarry
-                  couponInputChangeHandler={couponInputChangeHandler}
-                  couponSubmitHandler={couponSubmitHandler}
-                  showApplyButton={showApplyButton}
-                  coupon={coupon}
-                />
+                <CartSummarry />
                 <div className='mt-4'>
                   <Link className='' href={paths.CHECKOUT}>
                     <a className='btn btn-lg btn-secondary !flex items-center justify-center w-full'>

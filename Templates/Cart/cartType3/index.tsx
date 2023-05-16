@@ -3,19 +3,15 @@ import { paths } from '@constants/paths.constant';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import { fetchThirdpartyservice } from '@services/thirdparty.service';
 import CartSummarry from '@templates/cartSummarry';
+import CartItem from 'Templates/cartItem';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
-import CartItem from 'Templates/cartItem';
 import { _CartProps } from '../Cart';
 import EmptyCart from '../components/emptyCart';
 const CartType3: React.FC<_CartProps> = ({
   cartData,
   removeCartItem,
-  couponInputChangeHandler,
-  couponSubmitHandler,
-  showApplyButton,
-  coupon,
   empCustomQtyPrice,
   employeeAmtChangeHandler,
   amtQtyBlurHandler,
@@ -92,12 +88,7 @@ const CartType3: React.FC<_CartProps> = ({
               aria-labelledby='summary-heading'
               className='w-full lg:w-3/12 px-[10px] mt-[15px]'
             >
-              <CartSummarry
-                couponInputChangeHandler={couponInputChangeHandler}
-                couponSubmitHandler={couponSubmitHandler}
-                showApplyButton={showApplyButton}
-                coupon={coupon}
-              />
+              <CartSummarry />
               {!loggedIn && thirdPartyLogin ? (
                 <div className='mt-[15px]'>
                   <button

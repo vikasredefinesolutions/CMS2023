@@ -2,23 +2,20 @@ import Price from '@appComponents/reUsable/Price';
 import { __pagesText } from '@constants/pages.text';
 import { paths } from '@constants/paths.constant';
 import CheckoutController from '@controllers/checkoutController';
+import SummarryController from '@controllers/summarryController';
 import { GetCartTotals, useTypedSelector_v2 } from 'hooks_v2';
 import Link from 'next/link';
 import { FC } from 'react';
-import { CartSummarryProps } from '../CartSumarry';
 
-const CartSummarryType4: FC<CartSummarryProps> = ({
-  couponInputChangeHandler,
-  couponSubmitHandler,
-  showApplyButton,
-  coupon,
-}) => {
-  const { totalPrice, subTotal, logoSetupCharges, smallRunFee, salesTax } =
-    GetCartTotals();
-  const { shippingMethod } = CheckoutController();
+const CartSummarryType4: FC = () => {
   const couponDetails = useTypedSelector_v2((state) => state.cart.discount);
   const storeId = useTypedSelector_v2((state) => state.store.id);
-  // console.log('store id from cart summary ', storeId);
+
+  // FUNCTIONS
+  const { coupon, setCoupon, applyCouponHandler } = SummarryController();
+  const { shippingMethod } = CheckoutController();
+  const { totalPrice, subTotal, logoSetupCharges, smallRunFee, salesTax } =
+    GetCartTotals();
 
   return (
     <div className='border border-gray-border bg-white'>
@@ -54,7 +51,7 @@ const CartSummarryType4: FC<CartSummarryProps> = ({
                     placeholder='Promo code'
                     type='text'
                     value={coupon}
-                    onChange={(e) => couponInputChangeHandler(e.target.value)}
+                    onChange={(e) => setCoupon(e.target.value.trim())}
                     className='peer placeholder:opacity-0 block w-full bg-transparent pt-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200 pr-10 relative z-10'
                   />
                   <label
@@ -63,9 +60,9 @@ const CartSummarryType4: FC<CartSummarryProps> = ({
                   >
                     PROMO CODE
                   </label>{' '}
-                  {showApplyButton ? (
+                  {coupon ? (
                     <button
-                      onClick={couponSubmitHandler}
+                      onClick={applyCouponHandler}
                       className='coupon-code-Apply text-sm absolute right-0 top-2 curosr-pointer z-40'
                     >
                       Apply

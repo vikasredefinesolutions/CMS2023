@@ -48,13 +48,7 @@ const AvailableInventoryModal: React.FC<_ModalProps> = ({ modalHandler }) => {
           <div className='relative bg-gray-200 shadow max-h-screen overflow-y-auto'>
             <div className='px-4 lg:px-10 bg-blue-900 text-white'>
               <div className='flex flex-wrap items-center justify-between py-6'>
-                <div className='pl-8  w-16 h-6'>
-                  <img
-                    src={`${mediaBaseUrl}${favIcon}` ?? ''}
-                    alt=''
-                    className={''}
-                  />
-                </div>
+                <div className='pl-8  w-16 h-6'></div>
                 <div className='uppercase font-semibold flex flex-wrap items-center'>
                   <svg
                     xmlns='http://www.w3.org/2000/svg'

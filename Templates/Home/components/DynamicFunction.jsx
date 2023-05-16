@@ -3,9 +3,9 @@ export const dynamicHalfSizeBoxes = (dataArr, selectedObj) => {
   if (dataArr.length > 0) {
     let cnt = 1;
     dataArr.forEach(function (item) {
-      strHTML += '<div className="w-full md:w-1/2 p-px">';
+      strHTML += '<div class="w-full md:w-1/2 p-px">';
       strHTML +=
-        '<div className="text-center h-full bg-gray-50 p-6 lg:py-12 lg:px-16 md:rounded-tl-lg ' +
+        '<div class="text-center h-full bg-gray-50 p-6 lg:py-12 lg:px-16 md:rounded-tl-lg ' +
         (item.ImageNumber === 'Number' ? ' relative' : '') +
         ' ' +
         (item.HOverColor ? item.HOverColor : '') +
@@ -15,32 +15,32 @@ export const dynamicHalfSizeBoxes = (dataArr, selectedObj) => {
 
       if (item.ImageNumber === 'Number') {
         strHTML +=
-          '<div className="inset-x-0 flex justify-center items-center w-12 h-12 mx-auto rounded-full bg-gray-500 text-gray-50 font-bold font-heading -top-6 absolute">';
+          '<div class="inset-x-0 flex justify-center items-center w-12 h-12 mx-auto rounded-full bg-gray-500 text-gray-50 font-bold font-heading -top-6 absolute">';
         strHTML += cnt;
         strHTML += '</div>';
       } else if (item.ImageNumber === 'Image') {
         strHTML +=
-          '<span className="inline-block mx-auto mb-6 flex items-center justify-center bg-gray-400 rounded-full w-16 h-16">';
+          '<span class="inline-block mx-auto mb-6 flex items-center justify-center bg-gray-400 rounded-full w-16 h-16">';
         strHTML += '<img src="' + item.ImageNumber_image + '" />';
         strHTML += '</span>';
       } else {
         strHTML +=
-          '<div className="inset-x-0 -mt-6 flex justify-center items-center w-12 h-12 mx-auto font-bold font-heading">';
+          '<div class="inset-x-0 -mt-6 flex justify-center items-center w-12 h-12 mx-auto font-bold font-heading">';
         if (item.ImageNumber_icon_type === 'googlematerial') {
           strHTML +=
-            '<span className="material-icons-outlined">' +
+            '<span class="material-icons-outlined">' +
             item.ImageNumber_icon_symbol +
             '</span>';
         } else if (item.ImageNumber_icon_type === 'googlesymbol') {
           strHTML +=
-            '<span className="material-symbols-outlined">' +
+            '<span class="material-symbols-outlined">' +
             item.ImageNumber_icon_symbol +
             '</span>';
         }
 
         strHTML += '</div>';
       }
-      // strHTML += '<div className="inset-x-0 -mt-6 flex justify-center items-center w-12 h-12 mx-auto rounded-full bg-gray-500 text-gray-50 font-bold font-heading">';
+      // strHTML += '<div class="inset-x-0 -mt-6 flex justify-center items-center w-12 h-12 mx-auto rounded-full bg-gray-500 text-gray-50 font-bold font-heading">';
       // if(item.ImageNumber === "Number")
       //     strHTML += cnt;
       // else
@@ -48,10 +48,10 @@ export const dynamicHalfSizeBoxes = (dataArr, selectedObj) => {
       cnt++;
 
       strHTML +=
-        '<div className="mb-4 text-box-h2 font-heading">' +
+        '<div class="mb-4 text-box-h2 font-heading">' +
         item.Headline +
         '</div>';
-      strHTML += '<div className="text-box-p mt-4 leading-loose">';
+      strHTML += '<div class="text-box-p mt-4 leading-loose">';
       strHTML += item.Description;
       strHTML += '</div>';
       strHTML += '</div>';
@@ -67,9 +67,9 @@ export const numberdescriptionblock = (dataArr, selectedObj) => {
   if (dataArr.length > 0) {
     let count = 1;
     dataArr.forEach(function (item) {
-      strHTML += '<div className="w-full lg:w-1/3 px-4 mb-8">';
+      strHTML += '<div class="w-full lg:w-1/3 px-4 mb-8">';
       strHTML +=
-        '<div className="g-gray-50 text-center p-6 rounded' +
+        '<div class="g-gray-50 text-center p-6 rounded' +
         (item.ImageNumber === 'Number' ? ' relative' : '') +
         ' ' +
         (item.HOverColor ? item.HOverColor : '') +
@@ -79,31 +79,31 @@ export const numberdescriptionblock = (dataArr, selectedObj) => {
 
       if (item.ImageNumber === 'Number') {
         strHTML +=
-          '<div className="inset-x-0 flex justify-center items-center w-12 h-12 mx-auto rounded-full bg-gray-500 text-gray-50 font-bold font-heading -top-6 absolute">';
+          '<div class="inset-x-0 flex justify-center items-center w-12 h-12 mx-auto rounded-full bg-gray-500 text-gray-50 font-bold font-heading -top-6 absolute">';
         strHTML += count;
         strHTML += '</div>';
       } else if (item.ImageNumber === 'Image') {
         strHTML +=
-          '<div className="inset-x-0 -mt-6 flex justify-center items-center w-12 h-12 mx-auto rounded-full bg-gray-500 text-gray-50 font-bold font-heading">';
+          '<div class="inset-x-0 -mt-6 flex justify-center items-center w-12 h-12 mx-auto rounded-full bg-gray-500 text-gray-50 font-bold font-heading">';
         strHTML += '<img src="' + item.ImageNumber_image + '" />';
         strHTML += '</div>';
       } else {
         strHTML +=
-          '<div className="inset-x-0 -mt-6 flex justify-center items-center w-12 h-12 mx-auto font-bold font-heading">';
+          '<div class="inset-x-0 -mt-6 flex justify-center items-center w-12 h-12 mx-auto font-bold font-heading">';
         if (item.ImageNumber_icon_type === 'googlematerial') {
           strHTML +=
-            '<span className="material-icons-outlined">' +
+            '<span class="material-icons-outlined">' +
             item.ImageNumber_icon_symbol +
             '</span>';
         } else if (item.ImageNumber_icon_type === 'googlesymbol') {
           strHTML +=
-            '<span className="material-symbols-outlined">' +
+            '<span class="material-symbols-outlined">' +
             item.ImageNumber_icon_symbol +
             '</span>';
         }
         strHTML += '</div>';
       }
-      // strHTML += '<div className="inset-x-0 -mt-6 flex justify-center items-center w-12 h-12 mx-auto rounded-full bg-gray-500 text-gray-50 font-bold font-heading">';
+      // strHTML += '<div class="inset-x-0 -mt-6 flex justify-center items-center w-12 h-12 mx-auto rounded-full bg-gray-500 text-gray-50 font-bold font-heading">';
       // if(item.ImageNumber === "Number")
       //     strHTML += cnt;
       // else
@@ -118,8 +118,8 @@ export const numberdescriptionblock = (dataArr, selectedObj) => {
       }
 
       strHTML +=
-        '<div className="' + hclassNameName + '">' + item.Headline + '</div>';
-      strHTML += '<div className="text-box-h4 mt-4">';
+        '<div class="' + hclassNameName + '">' + item.Headline + '</div>';
+      strHTML += '<div class="text-box-h4 mt-4">';
       strHTML += item.Description;
       strHTML += '</div>';
       strHTML += '</div>';
@@ -135,13 +135,13 @@ export const numberingdiv = (dataArr, selectedObj) => {
   if (dataArr?.length) {
     let count = 1;
     dataArr.forEach(function (item) {
-      strHTML += '<div className="flex items-start mb-6">';
+      strHTML += '<div class="flex items-start mb-6">';
       strHTML +=
-        '<div className="mr-10 flex-shrink-0 flex justify-center items-center w-12 h-12 rounded-full bg-gray-500 text-gray-50 font-bold font-heading">' +
+        '<div class="mr-10 flex-shrink-0 flex justify-center items-center w-12 h-12 rounded-full bg-gray-500 text-gray-50 font-bold font-heading">' +
         count +
         '</div>';
-      strHTML += '<div className="max-w-xs">';
-      strHTML += '<div className="text-box-p leading-loose">';
+      strHTML += '<div class="max-w-xs">';
+      strHTML += '<div class="text-box-p leading-loose">';
       strHTML += item.Description;
       strHTML += '</div>';
       strHTML += '</div>';
@@ -157,12 +157,12 @@ export const multipleBrands = (dataArr, selectedObj) => {
     let cnt = 1;
     dataArr.forEach(function (item) {
       if (item.Image !== undefined) {
-        strHTML += '<div className="w-full lg:w-1/4 px-3 mt-3 mb-3">';
+        strHTML += '<div class="w-full lg:w-1/4 px-3 mt-3 mb-3">';
         strHTML +=
-          '<div className="border bg-[] hover:bg-[] relative" style="background-color:' +
+          '<div class="border bg-[] hover:bg-[] relative" style="background-color:' +
           (item.BgColor ? item.BgColor : '#003a70') +
           ' ">';
-        strHTML += '<div className="flex justify-center items-center">';
+        strHTML += '<div class="flex justify-center items-center">';
         strHTML += '<a href="' + item?.Image_alt + '">';
         strHTML +=
           '<img className="w-full mx-auto" alt="' +
@@ -191,12 +191,12 @@ export const boximage = (dataArr, selectedObj) => {
       else if (item.colcount == 3) classNameName = 'lg:w-1/3';
       else classNameName = 'md:w-1/2 lg:w-1/4';
       strHTML +=
-        '<div className="w-full ' + classNameName + ' px-[15px] mt-[30px]">';
+        '<div class="w-full ' + classNameName + ' px-[15px] mt-[30px]">';
       // strHTML += '<div classNameName="flex justify-center pb-5">';
       // strHTML += '<div classNameName="btn-primary rounded-full w-10 h-10 flex justify-center items-center text-base text-white font-semibold">'+item.index+'</div>';
       // strHTML += '</div>';
 
-      strHTML += '<div className="">';
+      strHTML += '<div class="">';
       let clName = 'flex justify-center';
       let aprData = {};
       let textPos = 'bottom';
@@ -218,8 +218,7 @@ export const boximage = (dataArr, selectedObj) => {
         item.Button_text != null
       ) {
         let btnclassName = item.Button_className;
-        buttonHTML +=
-          '<div className="mt-5 mb-5 ' + item.Button_alignment + '">';
+        buttonHTML += '<div class="mt-5 mb-5 ' + item.Button_alignment + '">';
         buttonHTML +=
           '<a target="" href="' +
           item.Button_link +
@@ -260,7 +259,7 @@ export const boximage = (dataArr, selectedObj) => {
       ) {
         clName = 'flex relative w-full text-white';
         headLine +=
-          '<div className="flex absolute ' +
+          '<div class="flex absolute ' +
           sectionWidth +
           ' ' +
           textHPos +
@@ -268,13 +267,13 @@ export const boximage = (dataArr, selectedObj) => {
           textVPos +
           ' inset-0 p-1 lg:p-4 text-white">';
         headLine +=
-          '<div className="" style="background: rgba(' +
+          '<div class="" style="background: rgba(' +
           bgColor +
           ',' +
           bgOpacity +
           '); padding: 20px;">';
         headLine +=
-          '<div className="' +
+          '<div class="' +
           themeclassName +
           '" style="color:' +
           fontColor +
@@ -289,7 +288,7 @@ export const boximage = (dataArr, selectedObj) => {
       } else {
         clName = 'flex relative w-full text-white';
         headLine +=
-          '<div className="flex absolute ' +
+          '<div class="flex absolute ' +
           sectionWidth +
           ' ' +
           textHPos +
@@ -297,7 +296,7 @@ export const boximage = (dataArr, selectedObj) => {
           textVPos +
           ' inset-0 p-1 lg:p-4 text-white">';
         headLine +=
-          '<div className="" style="background: rgba(' +
+          '<div class="" style="background: rgba(' +
           bgColor +
           ',' +
           bgOpacity +
@@ -314,7 +313,7 @@ export const boximage = (dataArr, selectedObj) => {
       }
 
       if (item.Image !== undefined) {
-        strHTML += '<div className="' + clName + '">';
+        strHTML += '<div class="' + clName + '">';
         strHTML += '<a title="' + item.Image_link + '">';
         strHTML +=
           '<img className="w-full" alt="' +
@@ -382,8 +381,7 @@ export const multipleImages = (dataArr, selectedObj) => {
         item.Button_text !== null
       ) {
         let btnclassName = item.Button_className;
-        buttonHTML +=
-          '<div className="mt-5 mb-5 ' + item.Button_alignment + '">';
+        buttonHTML += '<div class="mt-5 mb-5 ' + item.Button_alignment + '">';
         buttonHTML +=
           '<a target="" href="' +
           item.Button_link +
@@ -425,19 +423,19 @@ export const multipleImages = (dataArr, selectedObj) => {
         // {
         //   clName = 'flex relative w-full text-white';
         headLine +=
-          '<div className="flex absolute inset-0 p-1 lg:p-4 text-white ' +
+          '<div class="flex absolute inset-0 p-1 lg:p-4 text-white ' +
           textHPos +
           ' ' +
           textVPos +
           '">';
         headLine +=
-          '<div className="" style="background: rgba(' +
+          '<div class="" style="background: rgba(' +
           bgColor +
           ',' +
           bgOpacity +
           '); padding: 20px;">';
         headLine +=
-          '<div className="pb-2 ' +
+          '<div class="pb-2 ' +
           themeclassName +
           '" style="color:' +
           fontColor +
@@ -452,20 +450,20 @@ export const multipleImages = (dataArr, selectedObj) => {
         // }
         // else
         // {
-        //     headLine += '<div className="text-center bg-white w-full">';
-        //     headLine += '<div className="p-4 '+fontSize+'">'+item.Headline+'</div>';
+        //     headLine += '<div class="text-center bg-white w-full">';
+        //     headLine += '<div class="p-4 '+fontSize+'">'+item.Headline+'</div>';
         //     headLine += '</div>';
         // }
       } else {
         clName = 'flex relative w-full text-white';
         headLine +=
-          '<div className="flex absolute inset-0 p-1 lg:p-4 text-white ' +
+          '<div class="flex absolute inset-0 p-1 lg:p-4 text-white ' +
           textHPos +
           ' ' +
           textVPos +
           '">';
         headLine +=
-          '<div className="" style="background: rgba(' +
+          '<div class="" style="background: rgba(' +
           bgColor +
           ',' +
           bgOpacity +
@@ -477,17 +475,17 @@ export const multipleImages = (dataArr, selectedObj) => {
         headLine += '</div>';
       }
 
-      strHTML += '<div className="w-full lg:w-1/3">';
+      strHTML += '<div class="w-full lg:w-1/3">';
       cnt = cnt + 1;
-      strHTML += '<div className="border border-gray-50 px-2 py-2">';
+      strHTML += '<div class="border border-gray-50 px-2 py-2">';
 
       if (textPos === 'top') {
         strHTML += headLine;
       }
 
       if (item.Image !== undefined) {
-        strHTML += '<div className="' + clName + '">';
-        strHTML += '<div className="flex justify-center">';
+        strHTML += '<div class="' + clName + '">';
+        strHTML += '<div class="flex justify-center">';
         strHTML += '<a title="' + item.Image_link + '">';
         strHTML +=
           '<img className="w-full" alt="' +

@@ -101,7 +101,7 @@ export const singleColor_addToCart_PayloadGenerator = async (
             logoPrice: logo.price,
             logoQty: logo.qty,
             logoFile: logo.filePathUrl,
-            logoTotal: logo.total,
+            logoTotal: logo.qty * logo.price,
             logoLocation: logo.positionImage.name,
             colorImagePath: item.product.color.imagePath,
             logoNames:
@@ -122,10 +122,13 @@ export const singleColor_addToCart_PayloadGenerator = async (
         id: 0,
         attributeOptionId: item.product.attributeOptionId,
         attributeOptionValue: item.product.attributeOptionValue,
-        price: cart.product.price,
+        price: cart.product.price ? +cart.product.price : 0,
         quantity: item.product.qty,
         estimateDate: item.product.date,
-        isEmployeeLoginPrice: 0,
+        isEmployeeLoginPrice:
+          cart.isEmployeeLoggedIn && cart.product.price
+            ? +cart.product.price
+            : 0,
       };
     });
   }
@@ -139,12 +142,16 @@ export const singleColor_addToCart_PayloadGenerator = async (
       shoppingCartItemModel: {
         ..._default_shoppingCartItemModel,
         id: cart.cartItemId,
-        price: cart.product.price,
+        price: +cart.product.price,
         quantity: cart.product.total.qty,
         logoTitle: cart.product.color.altTag,
         logogImagePath: cart.product.color.imageUrl,
         status: cart.product.status,
         itemNotes: cart.product.note,
+        isEmployeeLoginPrice:
+          cart.isEmployeeLoggedIn && cart.product.price
+            ? +cart.product.price
+            : 0,
       },
       shoppingCartItemsDetailModels: shoppingCartItemsDetailModel,
       cartLogoPersonModel: cartLogoPersonModel,

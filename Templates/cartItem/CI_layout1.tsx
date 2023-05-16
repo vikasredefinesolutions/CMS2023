@@ -207,6 +207,18 @@ const CIlayout1: FC<any> = ({
                         <Price value={item.totalPrice} />
                       </div>
                     </div>
+
+                    {item.itemNote && (
+                      <div className='flex  py-3 border-t border-b'>
+                        <div className='text-normal-text w-30 font-bold'>
+                          Item Note:
+                        </div>
+                        <div className='text-normal-text px-3  text-center'>
+                          {item.itemNote}
+                        </div>
+                      </div>
+                    )}
+
                     {storeCode !== _Store.type4 &&
                       item.shoppingCartLogoPersonViewModels.map(
                         (_item, _index) => {

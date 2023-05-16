@@ -11,7 +11,7 @@ import {
   _Product_UpdateLogoDetails_Actions,
   _Product_UpdateSelectedValeus_Action,
   _Product_UpdateSewOutCharges,
-  _UpdateProperties_Action
+  _UpdateProperties_Action,
 } from './product.slice.types';
 
 const selected_initiaState = {

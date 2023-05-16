@@ -173,6 +173,7 @@ const StartOrderModal: React.FC<_startOrderModalProps> = (props) => {
                       title={'selectsizeandquanity'}
                       storeCode={storeCode ? storeCode : ''}
                       showMsrpLine={false}
+                      modalHandler={modalHandler}
                       price={{
                         msrp: product.msrp,
                         salePrice: product.salePrice,

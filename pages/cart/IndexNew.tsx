@@ -1,7 +1,6 @@
 import AddOTFItemNo from '@appComponents/modals/addOtfItem';
 import StartOrderModal from '@appComponents/modals/startOrderModal/StartOrderModal';
 import CartController from '@controllers/cartController';
-import SummarryController from '@controllers/summarryController';
 import { TrackGTMEvent } from '@helpers/common.helper';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import { FetchPageThemeConfigs } from '@services/product.service';
@@ -25,12 +24,6 @@ const Cart = () => {
     setShowAddOtf,
   } = CartController();
 
-  const {
-    couponInputChangeHandler,
-    couponSubmitHandler,
-    showApplyButton,
-    coupon,
-  } = SummarryController();
   const { id: customerId } = useTypedSelector_v2((state) => state.user);
 
   useEffect(() => {
@@ -73,24 +66,18 @@ const Cart = () => {
 
   return (
     <>
-      <div className='checkoutpage'>
-        <CartTemplate
-          {...{
-            cartData,
-            removeCartItem,
-            couponInputChangeHandler,
-            couponSubmitHandler,
-            showApplyButton,
-            coupon,
-            empCustomQtyPrice,
-            employeeAmtChangeHandler,
-            amtQtyBlurHandler,
-            loadProduct,
-            setShowAddOtf,
-            cartType,
-          }}
-        />
-      </div>
+      <CartTemplate
+        {...{
+          cartData,
+          removeCartItem,
+          empCustomQtyPrice,
+          employeeAmtChangeHandler,
+          amtQtyBlurHandler,
+          loadProduct,
+          setShowAddOtf,
+          cartType,
+        }}
+      />
       {showEdit && product && (
         <StartOrderModal
           modalHandler={() => setShowEdit(false)}

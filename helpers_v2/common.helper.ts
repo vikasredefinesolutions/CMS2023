@@ -454,6 +454,10 @@ export const getAddToCartObject = async (product: _Props): Promise<CartReq> => {
         ...personalization.defaultLogoDetail,
         colorImagePath: productDetails.color.imageUrl,
         logoNames: logoLocation.customizeLogo,
+        id: 0,
+        sewOutAmount: 0,
+        isSewOut: false,
+        reUsableCustomerLogo: 0,
       },
     ];
   } else {
@@ -461,6 +465,7 @@ export const getAddToCartObject = async (product: _Props): Promise<CartReq> => {
       return {
         ...personalization.defaultLogoDetail,
         logoUniqueId: '',
+        id: 0,
         logoColors: '',
         logoNotes: '',
         digitalPrice: 0,

@@ -18,10 +18,6 @@ import EmptyCart from '../components/emptyCart';
 const CartType4: React.FC<_CartProps> = ({
   cartData,
   removeCartItem,
-  couponInputChangeHandler,
-  couponSubmitHandler,
-  showApplyButton,
-  coupon,
   empCustomQtyPrice,
   employeeAmtChangeHandler,
   amtQtyBlurHandler,
@@ -87,12 +83,7 @@ const CartType4: React.FC<_CartProps> = ({
                 aria-labelledby='summary-heading'
                 className='w-full lg:w-3/12 px-[10px] mt-[15px]'
               >
-                <CartSummary
-                  couponInputChangeHandler={couponInputChangeHandler}
-                  couponSubmitHandler={couponSubmitHandler}
-                  showApplyButton={showApplyButton}
-                  coupon={coupon}
-                />
+                <CartSummary />
               </section>
             </form>
           </div>

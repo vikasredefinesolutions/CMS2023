@@ -1,17 +1,16 @@
 import Price from '@appComponents/reUsable/Price';
+import SummarryController from '@controllers/summarryController';
 import { GetCartTotals, useTypedSelector_v2 } from 'hooks_v2';
 import { FC } from 'react';
-import { CartSummarryProps } from '../CartSumarry';
 
-const CartSummarryType3: FC<CartSummarryProps> = ({
-  couponInputChangeHandler,
-  couponSubmitHandler,
-  showApplyButton,
-  coupon,
-}) => {
+const CartSummarryType3: FC = () => {
+  const couponDetails = useTypedSelector_v2((state) => state.cart.discount);
+
+  // Functions
+  const { coupon, setCoupon, applyCouponHandler } = SummarryController();
   const { totalPrice, subTotal, logoSetupCharges, smallRunFee, salesTax } =
     GetCartTotals();
-  const couponDetails = useTypedSelector_v2((state) => state.cart.discount);
+
   return (
     <div className='border border-gray-border bg-white'>
       <div className='bg-light-gray w-full text-sub-text font-medium px-[15px] py-[15px]'>
@@ -62,7 +61,7 @@ const CartSummarryType3: FC<CartSummarryProps> = ({
                   placeholder='Promo code'
                   type='text'
                   value={coupon}
-                  onChange={(e) => couponInputChangeHandler(e.target.value)}
+                  onChange={(e) => setCoupon(e.target.value.trim())}
                   className='peer placeholder:opacity-0 block w-full bg-transparent pt-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200 pr-10 relative z-10'
                 />
                 <label
@@ -71,9 +70,9 @@ const CartSummarryType3: FC<CartSummarryProps> = ({
                 >
                   PROMO CODE
                 </label>{' '}
-                {showApplyButton ? (
+                {coupon ? (
                   <button
-                    onClick={couponSubmitHandler}
+                    onClick={applyCouponHandler}
                     className='coupon-code-Apply text-sm absolute right-0 top-2 curosr-pointer z-40 btn btn-secondary btn-sm'
                   >
                     Update

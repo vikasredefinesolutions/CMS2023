@@ -21,7 +21,7 @@ export interface _DiscountPricingProps {
     msrp: number;
     salePrice: number;
   };
-  modalHandler?: (param: null | _modals) => void;
+  modalHandler: (param: null | _modals) => void;
   showLogin?: boolean;
   isSpecialBrand?: boolean;
 }

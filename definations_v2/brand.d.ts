@@ -13,6 +13,7 @@ export interface _Brand {
 export interface _BrandProps {
   brands: _Brand[] | null;
   alphabets: string[];
+  accordian: any;
 }
 
 export interface _BrandsTemplates {

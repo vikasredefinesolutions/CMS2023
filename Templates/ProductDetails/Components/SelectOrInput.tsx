@@ -66,12 +66,12 @@ const SelectOrInput: React.FC<_SelectOrInputProps> = ({
       updateQuantities({
         attributeOptionId: sizeAttributeOptionId,
         size: size,
-        qty: value.itemCount,
+        qty: Math.ceil(value.itemCount),
         price: price.msrp,
       });
       setInputOrSelect({
         type: 'select',
-        choosedValue: value.itemCount,
+        choosedValue: Math.ceil(value.itemCount),
         focus: false,
       });
       return;
@@ -80,12 +80,13 @@ const SelectOrInput: React.FC<_SelectOrInputProps> = ({
     updateQuantities({
       attributeOptionId: sizeAttributeOptionId,
       size: size,
-      qty: value.itemCount,
+      qty: Math.ceil(value.itemCount),
       price: price.msrp,
     });
+
     setInputOrSelect({
       type: 'input',
-      choosedValue: value.itemCount,
+      choosedValue: Math.ceil(value.itemCount),
       focus: false,
     });
   };
@@ -230,8 +231,16 @@ const SelectOrInput: React.FC<_SelectOrInputProps> = ({
                   <input
                     type='number'
                     name='itemCount'
+                    onKeyDown={(e) => {
+                      if (/[^0-9]+/.test(e.currentTarget.value)) {
+                        e.currentTarget.value = e.currentTarget.value.replace(
+                          /[^0-9]*/g,
+                          '',
+                        );
+                      }
+                    }}
                     max={isEmployeeLoggedIn ? '' : qty}
-                    value={values.itemCount}
+                    value={Math.ceil(values.itemCount)}
                     onFocus={() =>
                       setInputOrSelect((state) => ({
                         ...state,

@@ -8,7 +8,10 @@ interface _props {
 
 const FeaturedProducts: React.FC<_props> = ({ dataArr }) => {
   return (
-    <section className='mainsection featured_items text-center pt-[20px]'>
+    <section
+      className='mainsection featured_items text-center'
+      style={{ padding: '50px 0 0' }}
+    >
       <div className='peter-millar-promotional-embroidered-clothing-nw'>
         {dataArr.featuredproducts_section_title.value ?? ''}
       </div>

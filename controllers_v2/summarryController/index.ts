@@ -1,21 +1,71 @@
-import { commonMessage } from '@constants/successError.text';
-import { extractAPIErrors } from '@helpers/common.helper';
-import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
+import {
+  __SuccessErrorText,
+  commonMessage,
+} from '@constants/successError.text';
+import {
+  GetCustomerId,
+  useActions_v2,
+  useTypedSelector_v2,
+} from '@hooks_v2/index';
 import { addPromoCode } from '@services/cart.service';
 import { useState } from 'react';
 
 const SummarryController = () => {
-  const [coupon, setCoupon] = useState<string>('');
-
-  const stateUserId = useTypedSelector_v2((state) => state.user.id);
   const storeId = useTypedSelector_v2((state) => state.store.id);
+  const [coupon, setCoupon] = useState<string>('');
+  const customerId = GetCustomerId();
 
-  const { showModal, addPromoCode: addPromoCodeRedux } = useActions_v2();
+  const {
+    setShowLoader,
+    showModal,
+    addPromoCode: addPromoCodeRedux,
+  } = useActions_v2();
 
-  const couponSubmitHandler = async () => {
+  const handleIfCouponIsValid = (details: {
+    couponCode: string;
+    percentage: string;
+    discountAmount: string;
+    isFreeShipping: boolean;
+    taxCost: string;
+    shiipingCost: string;
+  }) => {
+    addPromoCodeRedux({
+      coupon: details.couponCode,
+      amount: details.discountAmount,
+      percentage: details.percentage,
+    });
+  };
+
+  const handleIfCouponIsNotValid = (errors: { [key: string]: string }) => {
+    const objToArr = Object.values(errors);
+
+    if (objToArr.length === 0) return;
+
+    if ('promotionsModel.CustomerId' in errors) {
+      showModal({
+        message: objToArr[0],
+        title: commonMessage.failed,
+      });
+      setCoupon(objToArr[0]);
+      setTimeout(() => {
+        setCoupon('');
+      }, 1500);
+      return;
+    }
+
+    // if No errors matched
+    showModal({
+      message: __SuccessErrorText.SomethingWentWrong,
+      title: commonMessage.failed,
+    });
+    setCoupon('');
+  };
+
+  const applyCouponHandler = async () => {
+    setShowLoader(true);
     const couponObject = {
       promotionsModel: {
-        customerId: stateUserId || 0,
+        customerId: +customerId || 0,
         couponCode: coupon,
         storeId: storeId || 0,
         taxCost: 0,
@@ -23,36 +73,23 @@ const SummarryController = () => {
       },
     };
 
-    const res = await addPromoCode(couponObject);
-    if (res.success) {
-      addPromoCodeRedux({
-        coupon: res.data.couponCode,
-        amount: res.data.discountAmount,
-        percentage: res.data.percentage,
-      });
-    } else {
-      const errors = extractAPIErrors(res.errors);
-      if (errors.length > 0) {
-        if (errors.length > 1) {
-          showModal({
-            message: errors.toString(),
-            title: commonMessage.failed,
-          });
-        } else {
-          setCoupon(errors[0]);
-          setTimeout(() => {
-            setCoupon('');
-          }, 3000);
+    await addPromoCode(couponObject)
+      .then((res) => {
+        if ('discountAmount' in res) {
+          handleIfCouponIsValid(res);
+          return;
         }
-      }
-    }
+
+        handleIfCouponIsNotValid(res);
+      })
+      .catch((errors) => handleIfCouponIsNotValid(errors))
+      .finally(() => setShowLoader(false));
   };
 
   return {
-    couponInputChangeHandler: setCoupon,
-    couponSubmitHandler,
-    showApplyButton: Boolean(coupon),
     coupon,
+    setCoupon,
+    applyCouponHandler,
   };
 };
 

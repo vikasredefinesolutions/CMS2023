@@ -14,20 +14,12 @@ import ChangeAddressModal from '@appComponents/modals/ChangeAddressModal';
 import NxtImage from '@appComponents/reUsable/Image';
 import { cardType } from '@constants/common.constant';
 import CheckoutController from '@controllers/checkoutController';
-import SummarryController from '@controllers/summarryController';
 
 interface _Props {
   cartTemplateId: number;
 }
 
 const ChekoutType1: React.FC<_Props> = ({ cartTemplateId }) => {
-  const {
-    couponInputChangeHandler,
-    couponSubmitHandler,
-    showApplyButton,
-    coupon,
-  } = SummarryController();
-
   const {
     currentPage,
     checkEmail,
@@ -275,14 +267,7 @@ const ChekoutType1: React.FC<_Props> = ({ cartTemplateId }) => {
             )}
           </div>
           <div className='w-full md:w-4/12 lg:w-[27%] pl-[15px] pr-[15px]'>
-            <CartSummarry
-              {...{
-                couponInputChangeHandler,
-                couponSubmitHandler,
-                showApplyButton,
-                coupon,
-              }}
-            />
+            <CartSummarry />
             <div id='OrderNoteDiv mt-[20px]'>
               <div className='text-sub-text font-bold &nbsp;trsacking-normal mb-[5px]'>
                 <label>Add a note to your order</label>

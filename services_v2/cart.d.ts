@@ -36,6 +36,8 @@ export interface ShoppingCartLogoPersonViewModel {
   logoLocation: string;
   logoName: string;
   logoPositionImage: string;
+  isSewOut: boolean;
+  sewOutAmount: number;
   sku?: string;
   size?: string;
   name?: string;
@@ -49,15 +51,19 @@ export interface CartObject {
   productId: number;
   sku: string;
   attributeOptionId: string;
+  discountPrice: number;
   attributeOptionValue: string;
   shoppingCartItemsId: number;
   shoppingCartItemDetailsViewModels: ShoppingCartItemDetailsViewModel[];
   shoppingCartLogoPersonViewModels: ShoppingCartLogoPersonViewModel[];
   shoppingCartLinePersonViewModel: unknown[];
+  totalCustomFieldsCharges: number;
   totalQty: number;
   totalPrice: number;
   txtcode: string;
+  itemNote: string;
   seName: string;
+  itemNote: string;
   cartLinePersonModels?: unknown[];
 }
 
@@ -134,6 +140,7 @@ export interface CartLogoPersonModel {
 }
 
 export interface CartLogoPersonDetailModel {
+  id: number;
   logoPrice: number;
   logoQty: number;
   logoFile: string;
@@ -149,6 +156,9 @@ export interface CartLogoPersonDetailModel {
   digitalPrice: number;
   logoPositionImage: string;
   oldFilePath: string;
+  isSewOut: boolean;
+  sewOutAmount: number;
+  reUsableCustomerLogo: number;
   originalLogoFilePath: string;
 }
 

@@ -4,10 +4,16 @@ import { useTypedSelector_v2 } from 'hooks_v2';
 import React from 'react';
 
 const AskToLogin: React.FC<_AskToLoginprops> = ({ modalHandler }) => {
-  const { id } = useTypedSelector_v2((state) => state.user);
+  const isUserLoggedIn = useTypedSelector_v2((state) => state.user.id);
+  const isEmployeeLoggedIn = useTypedSelector_v2(
+    (state) => state.employee.loggedIn,
+  );
+
+  const showLoginOption = !isEmployeeLoggedIn && !isUserLoggedIn;
+
   return (
     <>
-      {id === null && (
+      {showLoginOption && (
         <div className='mt-[15px] border border-gray-300 p-[10px] flex flex-wrap justify-between items-center'>
           <div className='w-full md:w-1/2 text-medium-text font-bold text-gray-900'>
             <span className='w-full block'>

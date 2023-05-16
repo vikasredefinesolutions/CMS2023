@@ -3,6 +3,7 @@ import Price from '@appComponents/Price';
 import { __pagesText } from '@constants/pages.text';
 import { useTypedSelector_v2 } from 'hooks_v2';
 import React, { useState } from 'react';
+import AskToLogin from './AskToLogin';
 import QtyPriceTable from './PriceTable';
 import { _DiscountPricingProps } from './productDetailsComponents';
 
@@ -44,7 +45,9 @@ const DiscountPricing: React.FC<
               <span className='inline-block mr-[2px]'>
                 {__pagesText.productInfo.discountPricing.minimumOrder}
               </span>
-              {` ${minQty} ${unitUnits} per color for $${minQty * price.msrp}`}
+              {` ${minQty} ${unitUnits} per color for $${(
+                minQty * price.msrp
+              ).toFixed(2)}`}
             </button>
           ) : null}
         </div>
@@ -53,7 +56,7 @@ const DiscountPricing: React.FC<
           <div className='flex flex-wrap justify-between items-center mt-[18px] text-default-text'>
             <div className='flex items-start'>
               <span className='font-[600] mr-[3px] text-sub-text'>
-                {__pagesText.productInfo.discountPricing.price}
+                {__pagesText.productInfo.discountPricing.MSRP}
                 <Price
                   value={undefined}
                   prices={{
@@ -79,22 +82,16 @@ const DiscountPricing: React.FC<
             ) : null}
           </div>
         )}
-        <QtyPriceTable storeCode={storeCode} />
-        {/* {isSpecialBrand ? (
-        )}
 
         {isSpecialBrand ? (
           customerId !== null ? (
             <QtyPriceTable storeCode={storeCode} />
           ) : (
-            <></>
+            <AskToLogin modalHandler={modalHandler} />
           )
         ) : (
           <QtyPriceTable storeCode={storeCode} />
-        )} */}
-        {/* {isSpecialBrand && showLogin && modalHandler && (
-          <AskToLogin modalHandler={modalHandler} />
-        )} */}
+        )}
       </div>
 
       {showMsg && (

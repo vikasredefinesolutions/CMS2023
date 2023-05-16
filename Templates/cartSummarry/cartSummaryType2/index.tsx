@@ -1,16 +1,12 @@
 import Price from '@appComponents/reUsable/Price';
 import { GetCartTotals, useTypedSelector_v2 } from 'hooks_v2';
 import { FC } from 'react';
-import { CartSummarryProps } from '../CartSumarry';
 
-const CartSummarryType2: FC<CartSummarryProps> = ({
-  couponInputChangeHandler,
-  couponSubmitHandler,
-  showApplyButton,
-  coupon,
-}) => {
-  const { totalPrice, subTotal, smallRunFee } = GetCartTotals();
+const CartSummarryType2: FC = () => {
   const couponDetails = useTypedSelector_v2((state) => state.cart.discount);
+
+  // Functions
+  const { totalPrice, subTotal, smallRunFee } = GetCartTotals();
   return (
     <>
       <div className='border border-gray-border p-[15px]'>

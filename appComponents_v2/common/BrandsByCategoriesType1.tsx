@@ -372,7 +372,7 @@ const BrandsByCategoriesType1: React.FC<_Props> = ({ brands }) => {
                 {cateogory.map((category, index) => {
                   const activeClass =
                     activeTab === category
-                      ? 'text-anchor border-b-[2px]'
+                      ? 'text-anchor hover:text-anchor-hover border-[#006CD1] border-b-[2px]'
                       : 'rounded-sm';
 
                   return (
@@ -380,7 +380,7 @@ const BrandsByCategoriesType1: React.FC<_Props> = ({ brands }) => {
                       <button
                         onClick={() => setActiveTab(category)}
                         className={
-                          `tab pt-[8px] pb-[8px] pl-[8px] pr-[8px] mr-[4px] block hover:text-anchor-hover focus:outline-none font-[600] border-anchor` +
+                          `tab pt-[8px] pb-[8px] pl-[8px] pr-[8px] mr-[4px] block hover:text-anchor focus:outline-none font-[600] border-anchor` +
                           activeClass
                         }
                       >
