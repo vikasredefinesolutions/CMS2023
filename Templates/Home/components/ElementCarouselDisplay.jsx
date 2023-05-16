@@ -76,7 +76,19 @@ const ElementCarouselDisplay = ({ bannerArr }) => {
             <img src={bannerArr.images[0].image_url} alt='corousel' />
           </div>
              {' '}
-          <div class='flex justify-center items-center w-full relative z-10 p-1 lg:p-4'>
+          <div
+            class={`flex justify-center items-center w-full relative z-10 ${
+              bannerArr?.images[0].headline1_display &&
+              bannerArr?.images[0].headline1_class
+                ? bannerArr?.images[0].headline1_class
+                : ''
+            } ${
+              bannerArr?.images[0].headline2_display &&
+              bannerArr?.images[0].headline2_class
+                ? bannerArr?.images[0].headline2_class
+                : ''
+            }`}
+          >
                    {' '}
             <div class=''>
                          {' '}
@@ -86,7 +98,7 @@ const ElementCarouselDisplay = ({ bannerArr }) => {
               >
                 {bannerArr?.images[0].headline1_display && (
                   <div
-                    className={bannerArr?.images[0].headline1_class ?? ''}
+                    className={''}
                     style={{
                       color: bannerArr?.images[0].font_color ?? '',
                       textShadow:

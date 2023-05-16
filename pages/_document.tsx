@@ -130,6 +130,12 @@ class MyDocument extends Document {
             }}
           />
           {/* ---------------------End Google Tag Manager---------------------  */}
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+              https://static.klaviyo.com/onsite/js/klaviyo.js?company_id=Tr8sxw`,
+            }}
+          />
         </Head>
         <body className='font-Outfit bg-white'>
           <noscript
