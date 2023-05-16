@@ -12,9 +12,9 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import {
   AddCustomerUser,
+  UpdateCustomerUser,
   deleteCustomerUserList,
   getCustomerUserList,
-  UpdateCustomerUser,
 } from '@services/customerUser.service';
 import {
   CustomerAddResponse,
@@ -99,6 +99,7 @@ const UserManagement = () => {
             : UserMessage.AddedSuccessfully,
           title: 'Success',
         });
+
         fetchUserList();
         closeModal();
       } else {
@@ -113,6 +114,7 @@ const UserManagement = () => {
         }
       }
     } catch (error) {
+      closeModal();
       showModal({ message: CommanMessage.Failed, title: 'Failed' });
     }
     setShowLoader(false);
@@ -188,9 +190,7 @@ const UserManagement = () => {
                       Last log on: {new Date().toLocaleDateString()}
                     </div>
                     <div className='w-full lg:w-1/3'>
-                      <button onClick={logoutHandler}>
-                        Logout
-                      </button>
+                      <button onClick={logoutHandler}>Logout</button>
                     </div>
                   </div>
                 </li>
@@ -204,7 +204,7 @@ const UserManagement = () => {
                     <tr className='divide-x divide-[#ddd] text-left text-default-text bg-light-gray'>
                       <th className='p-2'>Username</th>
                       <th className='p-2'>Role</th>
-                      <th className='p-2'>Rec Status</th>
+                      {/* <th className='p-2'>Rec Status</th> */}
                       <th className='p-2'>Email Address</th>
                       <th className='p-2'>Created date</th>
                       <th className='p-2'>Action</th>
@@ -220,9 +220,9 @@ const UserManagement = () => {
                           <td className='border-b border-r border-[#ddd] px-[12px] py-[12px]'>
                             {user.customerRoleName}
                           </td>
-                          <td className='border-b border-r border-[#ddd] px-[12px] py-[12px]'>
+                          {/* <td className='border-b border-r border-[#ddd] px-[12px] py-[12px]'>
                             {user.recStatus}
-                          </td>
+                          </td> */}
                           <td className='border-b border-r border-[#ddd] px-[12px] py-[12px]'>
                             {user.email}
                           </td>

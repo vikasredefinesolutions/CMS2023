@@ -228,10 +228,9 @@ const AddUserModal = ({
                       className='btn btn-primary'
                       onClick={() => {
                         handleSubmit();
-                        closeModal();
                       }}
                     >
-                      Save
+                      {editData ? 'Update' : 'Save'}
                     </button>
                   </div>
                 </form>

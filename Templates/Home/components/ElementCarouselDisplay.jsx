@@ -64,7 +64,6 @@ const ElementCarouselDisplay = ({ bannerArr }) => {
       setTransition('width-carousel');
     }, 2000);
   };
-  console.log(bannerArr, 'baneerArrrrr');
   return (
     <>
       {Object.keys(bannerArr).length > 0 && bannerArr.images != null && (

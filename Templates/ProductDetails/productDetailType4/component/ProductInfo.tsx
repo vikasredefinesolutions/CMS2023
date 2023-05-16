@@ -50,7 +50,6 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
   const { toCheckout, product: storeProduct } = useTypedSelector_v2(
     (state) => state.product,
   );
-  console.log(toCheckout, 'CHECK');
   // const productDis = useTypedSelector_v2((state) =>
   //   console.log(state, 'discount'),
   // );
@@ -83,7 +82,6 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
       const addToCartHandler = async () => {
         setShowLoader(true);
         const { sizeQtys, totalPrice, totalQty, logos, price } = toCheckout;
-        console.log(sizeQtys, 'SIXEEE');
         const location = await getLocation();
 
         const selectedProducts: _Selectedproduct_v2[] = [];

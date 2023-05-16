@@ -39,7 +39,6 @@ const InventoryAvailability: React.FC<_props> = ({
         attributeOptionId: attributeOptionId,
       });
     } else {
-      console.log(price, 'sizzeeee');
       updateQuantities3({
         size: size,
         qty: qty > +event.target.value ? +event.target.value : qty,

@@ -10,20 +10,32 @@ const ForgotModal: React.FC<_ModalProps> = ({ modalHandler }) => {
   const [Email, setEmail] = useState('');
   const [FinalMessage, setFinalMessage] = useState(false);
   const [Error, setError] = useState(false);
+  const [errorStatement, setErrorStatement] = useState(false);
 
   const forgotPassword = async (email: string) => {
-    try {
-      const res = await ForgetCustomerPassword({ email, storeId });
-      if (res?.issend) {
-        setError(false);
-        setFinalMessage(true);
-        setEmail(email);
+    if (email) {
+      const regex = new RegExp(
+        /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
+      );
+      if (email.match(regex)) {
+        try {
+          const res = await ForgetCustomerPassword({ email, storeId });
+          if (res?.issend) {
+            setError(false);
+            setFinalMessage(true);
+            setEmail(email);
+          } else {
+            setError(true);
+            setFinalMessage(false);
+          }
+        } catch (error) {
+          console.log(error);
+        }
       } else {
-        setError(true);
-        setFinalMessage(false);
+        setErrorStatement(true);
       }
-    } catch (error) {
-      console.log(error);
+    } else {
+      setErrorStatement(true);
     }
   };
 
@@ -91,14 +103,23 @@ const ForgotModal: React.FC<_ModalProps> = ({ modalHandler }) => {
                         </p>
                       )
                     ) : (
-                      <input
-                        type='email'
-                        id='email-address0'
-                        name='email-address0'
-                        placeholder='Enter Your Email Address'
-                        className='form-input'
-                        onChange={(e) => setEmail(e.target.value)}
-                      />
+                      <>
+                        <input
+                          type='email'
+                          id='email-address0'
+                          name='email-address0'
+                          placeholder='Enter Your Email Address'
+                          className='form-input'
+                          onChange={(e) => setEmail(e.target.value)}
+                        />
+                        <div>
+                          {errorStatement && (
+                            <p className='text-red-500 text-xs mt-1'>
+                              Please enter a valid email address
+                            </p>
+                          )}
+                        </div>
+                      </>
                     )}
                   </div>
                   {FinalMessage || Error ? (
