@@ -20,6 +20,9 @@ const nextConfig = {
       // },
     ],
   },
+  rules: {
+    '@typescript-eslint/no-non-null-assertion': 'off',
+  },
   experimental: {
     swcMinify: true,
     // set large page allocation size to 1GB
