@@ -170,7 +170,7 @@ const TemplateOneListing = ({
                 {isAttributeSaparateProduct &&
                 product.splitproductList &&
                 product?.splitproductList?.length > 0 ? (
-                  <div className='flex'>
+                  <>
                     <Link key={product.id} href={`/${product.sename}.html`}>
                       <li
                         className={`w-7 h-7 border-2 border-secondary hover:border-secondary cursor-pointer`}
@@ -211,7 +211,7 @@ const TemplateOneListing = ({
                         <>{(flag = true)}</>
                       ),
                     )}
-                  </div>
+                  </>
                 ) : (
                   product.getProductImageOptionList &&
                   product.getProductImageOptionList.map((subRow, index) =>

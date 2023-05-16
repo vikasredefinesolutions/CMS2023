@@ -3,7 +3,6 @@ import { useTypedSelector_v2 } from '@hooks_v2/index';
 import { useState } from 'react';
 import QtyPriceTable from './PriceTable';
 import { _DiscountPricingProps } from './productDetailsComponents';
-
 const DiscountPricing: React.FC<
   _DiscountPricingProps & { storeCode: string }
 > = ({ price, showLogin, storeCode, showMsrpLine, modalHandler }) => {

@@ -681,11 +681,9 @@ export const CaptureGTMEvent = (payload: any) => {
 };
 
 //Track event using Google tag manager Library
-export const TrackGTMEvent = (eventname: string, payload: any) => {
+export const TrackGTMEvent = (payload: any) => {
+  GoogleTagManager.dataLayer({ dataLayer: { ecommerce: null } });
   GoogleTagManager.dataLayer({
-    dataLayer: {
-      event: eventname,
-      eventData: { ...payload },
-    },
+    dataLayer: payload,
   });
 };

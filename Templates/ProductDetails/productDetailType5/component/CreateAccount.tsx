@@ -8,9 +8,9 @@ import * as Yup from 'yup';
 import { paths } from '@constants/paths.constant';
 import { __ValidationText } from '@constants/validation.text';
 import {
-  createNewAccount_payload,
   _CNA_StoreCustomerModel,
   _CreateNewAccount_Payload,
+  createNewAccount_payload,
 } from '@payloads/createNewAccount.payload';
 import { CreateNewAccount } from '@services/user.service';
 import getLocation from 'helpers_v2/getLocation';
@@ -151,7 +151,7 @@ const CreateAccount: React.FC = () => {
           payload?.storeCustomerModel?.storeCustomerAddress[0]?.countryName,
         location: `${location?.city}, ${location?.region}, ${location?.country}, ${location?.postal_code}`,
       };
-      TrackGTMEvent('user_registration', userRegistrationEventPayload);
+      TrackGTMEvent(userRegistrationEventPayload);
       showModal({
         message: __UserMessages.signUpPage.SuccessFullyAccountCreated,
         title: 'Success',

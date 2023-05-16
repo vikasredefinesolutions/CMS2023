@@ -31,42 +31,40 @@ const CheckoutTemplate: FC<_Props> = ({ cartTemplateId }) => {
   const { cart: cartData, discount: cartDiscountDetails } = useTypedSelector_v2(
     (state) => state.cart,
   );
-  const isEmployeeLoggedIn = useTypedSelector_v2(
-    (state) => state.employee.loggedIn,
-  );
   useEffect(() => {
     let totalPrice = 0;
+    cartData?.forEach((item) => (totalPrice += item.totalPrice));
+    const checkoutEventPayload = {
+      pageTitle: document?.title || 'Checkout',
+      pageCategory: 'Checkout page',
+      customProperty1: '',
+      visitorType: 'high-value',
+      event: 'begin_checkout',
+      ecommerce: {
+        currency: 'USD',
+        value: totalPrice,
+        coupon: cartDiscountDetails?.coupon || '',
+        items: cartData?.map((item) => ({
+          item_name: item?.productName,
+          item_id: item?.sku,
+          item_brand: item?.brandName,
+          item_category: item?.categoryName,
+          item_variant: item?.attributeOptionValue,
+          index: item?.productId,
+          quantity: item?.totalQty,
+          item_list_name: item?.productName,
+          item_list_id: item?.productId,
+          price: item?.totalPrice,
+          coupon: cartDiscountDetails?.coupon || '',
+        })),
+      },
+    };
+    TrackGTMEvent(checkoutEventPayload);
+  }, []);
+
+  useEffect(() => {
     if (cartData == null) {
       router.push('/cart/IndexNew');
-    } else {
-      cartData?.forEach((item) => (totalPrice += item.totalPrice));
-      const checkoutEventPayload = {
-        pageTitle: document?.title || 'Checkout',
-        pageCategory: 'Checkout page',
-        customProperty1: '',
-        visitorType: isEmployeeLoggedIn ? 'high-value' : 'low-value',
-        event: 'begin_checkout',
-        ecommerce: {
-          currency: 'USD',
-          value: totalPrice,
-          coupon: cartDiscountDetails?.coupon || '',
-          items: cartData?.map((item) => ({
-            item_name: item?.productName,
-            item_id: item?.sku,
-            item_brand: '', //Not available in cart
-            item_category: '', //Not available in cart
-            item_variant: item?.attributeOptionValue,
-            index: item?.productId,
-            quantity: item?.totalQty,
-            item_list_name: '', //Not available in cart
-            item_list_id: item?.productId,
-            price: item?.totalPrice,
-            coupon: cartDiscountDetails?.coupon || '',
-          })),
-        },
-      };
-
-      TrackGTMEvent('begin_checkout', checkoutEventPayload);
     }
   }, [cartData]);
   const CheckoutSelectedTemplate =

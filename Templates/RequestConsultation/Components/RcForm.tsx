@@ -2,6 +2,12 @@ import { __pagesConstant } from '@constants/pages.constant';
 import { __ValidationText } from '@constants/validation.text';
 import getLocation from '@helpers/getLocation';
 
+import {
+  phonePattern1,
+  phonePattern2,
+  phonePattern3,
+  phonePattern4,
+} from '@constants/global.constant';
 import { UploadImage } from '@services/file.service';
 import { SumbitRequestConsultationDetails } from '@services/product.service';
 import { Form, Formik } from 'formik';
@@ -54,9 +60,20 @@ const _RequestConsulationSchema = Yup.object().shape({
     .email(__ValidationText.requestConsultation.email.validRequest)
     .required(__ValidationText.requestConsultation.email.required),
   phone: Yup.string()
-    .length(
-      __ValidationText.requestConsultation.phone.length,
-      __ValidationText.requestConsultation.phone.valid,
+    .required(__ValidationText.signUp.storeCustomerAddress.phone.required)
+    .test(
+      'phone-test',
+      __ValidationText.signUp.storeCustomerAddress.phone.valid,
+      (value) => {
+        if (
+          phonePattern1.test(value || '') ||
+          phonePattern2.test(value || '') ||
+          phonePattern3.test(value || '') ||
+          phonePattern4.test(value || '')
+        )
+          return true;
+        return false;
+      },
     )
     .required(__ValidationText.requestConsultation.phone.required),
   preferedContactMethod: Yup.string().required(
@@ -228,7 +245,7 @@ const RcForm: React.FC<{ productId: number; attriubteOptionId: number }> = ({
                 <RcInput
                   onChange={handleChange}
                   value={values.phone}
-                  type={'number'}
+                  type={'text'}
                   id='Phone Number'
                   name={'phone'}
                   placeholder='Phone'

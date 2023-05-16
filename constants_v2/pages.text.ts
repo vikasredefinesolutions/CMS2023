@@ -200,7 +200,7 @@ export const __pagesText = {
     },
     discountPricing: {
       showMsg:
-        'We reserve the right to reject orders that do not meet the  piece minimum per style  and color, exceptions may apply for men’s and women’s companion styles per color.',
+        'We reserve the right to reject orders that do not meet the  piece minimum per style  and color, exceptions may apply for men’s and women’s companion styles per color.',
       exclusivePricingAvailable: 'EXCLUSIVE PRICING AVAILABLE',
       exclusivePricing: 'EXCLUSIVE PRICING',
       selectSizeAndQuantity: 'Select Size & Quantity:',

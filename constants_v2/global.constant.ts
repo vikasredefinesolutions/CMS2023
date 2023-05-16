@@ -71,3 +71,9 @@ export enum __pageTypeConstant {
   blog = 'blog',
   stories = 'stories',
 }
+
+//Regex for multiple phone number pattern test
+export const phonePattern1 = /^\(?([0-9]{3})\)?[-]([0-9]{3})[-]([0-9]{4})$/; //Matches xxx-xxx-xxxx
+export const phonePattern2 = /^\(?([0-9]{3})\)?[.]([0-9]{3})[.]([0-9]{4})$/; //Matches xxx.xxx.xxxx
+export const phonePattern3 = /^\(?([0-9]{3})\)?[ ]([0-9]{3})[ ]([0-9]{4})$/; //Matches xxx xxx xxxx
+export const phonePattern4 = /^[0-9]{10}$/; //Matches xxxxxxxxxx

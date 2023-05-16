@@ -372,19 +372,19 @@ const CheckoutController = () => {
         items: cartData?.map((item) => ({
           item_name: item?.productName,
           item_id: item?.sku,
-          item_brand: '', //Not available in cart
-          item_category: '', //Not available in cart
+          item_brand: item?.brandName,
+          item_category: item?.categoryName,
           item_variant: item?.attributeOptionValue,
           index: item?.productId,
           quantity: item?.totalQty,
-          item_list_name: '', //Not available in cart
+          item_list_name: item?.productName,
           item_list_id: item?.productId,
           price: item?.totalPrice,
           coupon: cartDiscountDetails?.coupon || '',
         })),
       },
     };
-    TrackGTMEvent(eventName, eventPayload);
+    TrackGTMEvent(eventPayload);
   };
 
   const reviewOrder = async () => {

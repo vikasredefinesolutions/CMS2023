@@ -274,6 +274,8 @@ export interface _MyAcc_OrderProductDetails {
   totalPrice: number;
   txtcode: null;
   seName: null | string;
+  categoryName?: string;
+  brandName?: string;
 }
 
 export interface ShoppingCartItemDetailsViewModel {

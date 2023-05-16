@@ -25,6 +25,10 @@ import {
   __Cookie,
   __Cookie_Expiry,
   __UserMessages,
+  phonePattern1,
+  phonePattern2,
+  phonePattern3,
+  phonePattern4,
 } from '@constants/global.constant';
 import {
   KlaviyoScriptTag,
@@ -39,12 +43,6 @@ import SU_EmailInput from './Components/SU1_EmailInput';
 import SU1_Input from './Components/SU1_Input';
 import SU_PasswordInput from './Components/SU1_PasswordInput';
 import SU_StateNcountries from './Components/SU1_StateNcountries';
-
-//Regex for multiple phone number pattern test
-const pattern1 = /^\(?([0-9]{3})\)?[-]([0-9]{3})[-]([0-9]{4})$/; //Matches xxx-xxx-xxxx
-const pattern2 = /^\(?([0-9]{3})\)?[.]([0-9]{3})[.]([0-9]{4})$/; //Matches xxx.xxx.xxxx
-const pattern3 = /^\(?([0-9]{3})\)?[ ]([0-9]{3})[ ]([0-9]{4})$/; //Matches xxx xxx xxxx
-const pattern4 = /^[0-9]{10}$/; //Matches xxxxxxxxxx
 
 const _SignupSchema = Yup.object().shape({
   firstname: Yup.string()
@@ -91,10 +89,10 @@ const _SignupSchema = Yup.object().shape({
           __ValidationText.signUp.storeCustomerAddress.phone.valid,
           (value) => {
             if (
-              pattern1.test(value || '') ||
-              pattern2.test(value || '') ||
-              pattern3.test(value || '') ||
-              pattern4.test(value || '')
+              phonePattern1.test(value || '') ||
+              phonePattern2.test(value || '') ||
+              phonePattern3.test(value || '') ||
+              phonePattern4.test(value || '')
             )
               return true;
             return false;
@@ -184,7 +182,7 @@ const SignUp_type1: React.FC = () => {
           payload?.storeCustomerModel?.storeCustomerAddress[0]?.countryName,
         location: `${location?.city}, ${location?.region}, ${location?.country}, ${location?.postal_code}`,
       };
-      TrackGTMEvent('user_registration', userRegistrationEventPayload);
+      TrackGTMEvent(userRegistrationEventPayload);
       showModal({
         message: __UserMessages.signUpPage.SuccessFullyAccountCreated,
         title: 'Success',

@@ -3,11 +3,11 @@ import ProductDetails_Type1 from './ProductDetailsType1';
 
 import { CaptureGTMEvent } from '@helpers/common.helper';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
-import { _ProductDetailsTemplates, _Props } from './productDetails';
 import ProductDetails_Type2 from './productDetailType2';
 import ProductDetails_Type3 from './productDetailType3';
 import ProductDetails_Type4 from './productDetailType4';
 import ProductDetails_Type5 from './productDetailType5';
+import { _ProductDetailsTemplates, _Props } from './productDetails';
 
 const ProductDetailTemplates: _ProductDetailsTemplates = {
   type1: ProductDetails_Type1,
@@ -43,10 +43,12 @@ const ProductDetails: React.FC<_Props> = (props) => {
               item_id: details?.sku,
               item_brand: details?.brandName,
               item_category: details?.categoryName,
-              item_variant: colors?.length ? colors[0]?.productSEName : '',
+              item_variant: colors?.length
+                ? colors.find((clr) => clr.productId === details?.id)?.name
+                : '',
               index: details?.id,
               quantity: details?.quantity,
-              item_list_name: details?.categoryName,
+              item_list_name: details?.name,
               item_list_id: details?.id,
               price: details?.salePrice,
             },

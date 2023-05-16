@@ -1,6 +1,6 @@
 import { newFetauredItemResponse } from '@definations/productList.type';
 import { useTypedSelector_v2, useWindowDimensions_v2 } from '@hooks_v2/index';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import 'react-loading-skeleton/dist/skeleton.css';
 import Slider from 'react-slick';
 import SingleProductListing from './SingleProductListing';
@@ -41,26 +41,41 @@ const BrandProductListing: React.FC<_props> = ({ productsData }) => {
 
   const { width } = useWindowDimensions_v2();
 
-  // useEffect(() => {
-  //   console.log(width, 'widthhhhhhhhhhhhhhhhhhhhhhhhhhhhhh');
-  //   if (width == 768) {
-  //     setFeaturedProductCarouselSetting({
-  //       ...featuredProductCarouselSetting,
-  //       sliderSettings: {
-  //         ...featuredProductCarouselSetting?.sliderSettings,
-  //         slidesToShow: 2,
-  //       },
-  //     });
-  //   } else if (width == 480) {
-  //     setFeaturedProductCarouselSetting({
-  //       ...featuredProductCarouselSetting,
-  //       sliderSettings: {
-  //         ...featuredProductCarouselSetting?.sliderSettings,
-  //         slidesToShow: 1,
-  //       },
-  //     });
-  //   }
-  // }, [width]);
+  useEffect(() => {
+    if (width <= 480) {
+      setFeaturedProductCarouselSetting({
+        sliderSettings: {
+          ...featuredProductCarouselSetting?.sliderSettings,
+          slidesToShow: 1,
+        },
+        carouselCounter: 1,
+      });
+    } else if (width <= 768) {
+      setFeaturedProductCarouselSetting({
+        sliderSettings: {
+          ...featuredProductCarouselSetting?.sliderSettings,
+          slidesToShow: 2,
+        },
+        carouselCounter: 2,
+      });
+    } else if (width <= 1024) {
+      setFeaturedProductCarouselSetting({
+        sliderSettings: {
+          ...featuredProductCarouselSetting?.sliderSettings,
+          slidesToShow: 3,
+        },
+        carouselCounter: 3,
+      });
+    } else {
+      setFeaturedProductCarouselSetting({
+        sliderSettings: {
+          ...featuredProductCarouselSetting?.sliderSettings,
+          slidesToShow: 4,
+        },
+        carouselCounter: 4,
+      });
+    }
+  }, [width]);
 
   const sliderRef = useRef<null | Slider>(null);
 
@@ -87,20 +102,20 @@ const BrandProductListing: React.FC<_props> = ({ productsData }) => {
                     featuredProductCarouselSetting?.carouselCounter
                       ? 'absolute'
                       : 'hidden'
-                  } inset-y-0 top-1/2 -translate-x-3.5 lg:-translate-x-1/2 -trnaslate-y-1/2 z-10 flex items-center left-0`}
+                  } inset-y-10 left-0 z-10 flex items-center`}
                 >
                   <button
                     onClick={() => goToPrevProduct()}
-                    className='flex justify-center items-center w-6 h-6 focus:outline-none text-black'
+                    className='bg-white -ml-2 lg:-ml-4 flex justify-center items-center w-10 h-10 rounded-full shadow focus:outline-none'
                   >
-                    <span className='chevron-left ml-2 text-base material-symbols-outlined font-semibold '>
+                    <span className='chevron-left mr-2 text-base material-symbols-outlined font-semibold '>
                       arrow_back_ios
                     </span>
                   </button>
                 </div>
                 <Slider
                   ref={(c) => (sliderRef.current = c)}
-                  {...featuredProductCarouselSetting}
+                  {...featuredProductCarouselSetting.sliderSettings}
                 >
                   {productsData.map((product) => {
                     return (
@@ -119,13 +134,13 @@ const BrandProductListing: React.FC<_props> = ({ productsData }) => {
                     featuredProductCarouselSetting?.carouselCounter
                       ? 'absolute'
                       : 'hidden'
-                  } inset-y-0  top-1/2 -translate-x-3.5 lg:-translate-x-1/2 -trnaslate-y-1/2 right-0 z-10 flex items-center`}
+                  } inset-y-0 right-0 z-10 flex items-center`}
                 >
                   <button
                     onClick={() => goToNextProduct()}
-                    className='bg-white w-7 h-7 rounded-full shadow focus:outline-none'
+                    className='bg-white -mr-2 lg:-mr-4 flex justify-center items-center w-10 h-10 rounded-full shadow focus:outline-none'
                   >
-                    <span className='chevron-right -mr-1  text-base material-symbols-outlined font-semibold'>
+                    <span className='chevron-right ml-2  text-base material-symbols-outlined font-semibold'>
                       arrow_forward_ios
                     </span>
                   </button>

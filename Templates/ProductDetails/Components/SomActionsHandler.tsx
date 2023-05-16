@@ -185,14 +185,14 @@ const SomActionsHandler: React.FC<_SOMActionHandlerProps> = ({
           {
             item_name: product?.name,
             item_id: product?.sku,
-            item_brand: product?.brand,
+            item_brand: product?.brand?.name,
             item_category: product?.categoryName,
             item_variant: product?.colors?.length
               ? product?.colors?.find((clr) => clr.productId === product.id)
-                  ?.productSEName
+                  ?.name
               : '',
             index: product.id,
-            item_list_name: product?.categoryName,
+            item_list_name: product?.name,
             item_list_id: product?.id,
             quantity: toCheckout?.totalQty,
             price: toCheckout?.totalPrice,

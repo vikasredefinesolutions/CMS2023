@@ -40,12 +40,12 @@ const ThankYouTemplate: React.FC<_props> = ({ order, id }) => {
         items: order?.product?.map((item) => ({
           item_name: item?.productName,
           item_id: item?.sku,
-          item_brand: '', //Not available in purchase response
-          item_category: '', //Not available in purchase response
+          item_brand: item?.brandName,
+          item_category: item?.categoryName,
           item_variant: item?.attributeOptionValue,
           index: item?.productId,
           quantity: item?.totalQty,
-          item_list_name: '', //Not available in purchase response
+          item_list_name: item?.productName,
           item_list_id: item?.productId,
           price: item?.totalPrice,
           discount: order?.billing?.couponCode,
@@ -53,7 +53,7 @@ const ThankYouTemplate: React.FC<_props> = ({ order, id }) => {
         })),
       },
     };
-    TrackGTMEvent('purchase', purchaseEventPayload);
+    TrackGTMEvent(purchaseEventPayload);
   }, []);
 
   const ThankYouSelected = ThankYouTemplates[id];
