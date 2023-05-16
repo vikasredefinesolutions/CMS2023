@@ -52,7 +52,7 @@ const DiscountPricing: React.FC<
           ) : null}
         </div>
 
-        {!customerId && showMsrpLine && isSpecialBrand && (
+        {!customerId && isSpecialBrand && (
           <div className='flex flex-wrap justify-between items-center mt-[18px] text-default-text'>
             <div className='flex items-start'>
               <span className='font-[600] mr-[3px] text-sub-text'>
@@ -95,7 +95,7 @@ const DiscountPricing: React.FC<
       </div>
 
       {showMsg && (
-        <div className='text-sm  p-3 pb-0 leading-8' id='divMinorder'>
+        <div className='text-lg  p-3 pb-0 leading-8' id='divMinorder'>
           {__pagesText.productInfo.discountPricing.showMsgStartingText + ' '}
           {minQty} {__pagesText.productInfo.discountPricing.showMsgMiddleText}
           <br />

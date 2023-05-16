@@ -2,7 +2,6 @@ import { _Store } from '@configs/page.config';
 import { __pagesText } from '@constants/pages.text';
 import { _startOrderModalProps } from '@definations/startOrderModal';
 import { FetchInventoryById } from '@services/product.service';
-import AskToLogin from '@templates/ProductDetails/Components/AskToLogin';
 import CalculativeFigure from '@templates/ProductDetails/Components/CalculativeFigure';
 import DiscountPricing from '@templates/ProductDetails/Components/DiscountPricing';
 import SizePriceQtyTable from '@templates/ProductDetails/Components/SizePriceQtyTable';
@@ -180,8 +179,6 @@ const StartOrderModal: React.FC<_startOrderModalProps> = (props) => {
                       }}
                       isSpecialBrand={product.isSpecialBrand}
                     />
-
-                    <AskToLogin modalHandler={modalHandler} />
                   </div>
                 </div>
                 {storeCode !== _Store.type4 ? (
