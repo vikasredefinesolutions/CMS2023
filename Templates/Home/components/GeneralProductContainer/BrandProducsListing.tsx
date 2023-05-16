@@ -1,9 +1,11 @@
 import { newFetauredItemResponse } from '@definations/productList.type';
-import { useTypedSelector_v2, useWindowDimensions_v2 } from '@hooks_v2/index';
+import { useWindowDimensions_v2 } from '@hooks_v2/index';
+import { useRouter } from 'next/router';
 import React, { useEffect, useRef, useState } from 'react';
 import 'react-loading-skeleton/dist/skeleton.css';
 import Slider from 'react-slick';
 import SingleProductListing from './SingleProductListing';
+import SlugSingleProductListing from './SlugSingleProductListing';
 
 interface _props {
   productsData: newFetauredItemResponse[];
@@ -21,9 +23,6 @@ interface _carouselProps {
 }
 
 const BrandProductListing: React.FC<_props> = ({ productsData }) => {
-  const [currentProduct, setCurrentProduct] = useState<
-    newFetauredItemResponse | undefined | null
-  >(productsData?.length > 0 ? productsData[0] : null);
   const [featuredProductCarouselSetting, setFeaturedProductCarouselSetting] =
     useState<_carouselProps>({
       sliderSettings: {
@@ -36,8 +35,7 @@ const BrandProductListing: React.FC<_props> = ({ productsData }) => {
       },
       carouselCounter: 4,
     });
-
-  const store = useTypedSelector_v2((state) => state.store);
+  const router = useRouter();
 
   const { width } = useWindowDimensions_v2();
 
@@ -108,7 +106,7 @@ const BrandProductListing: React.FC<_props> = ({ productsData }) => {
                     onClick={() => goToPrevProduct()}
                     className='bg-white -ml-2 lg:-ml-4 flex justify-center items-center w-10 h-10 rounded-full shadow focus:outline-none'
                   >
-                    <span className='chevron-left mr-2 text-base material-symbols-outlined font-semibold '>
+                    <span className='chevron-left mr-1 text-base material-symbols-outlined font-semibold '>
                       arrow_back_ios
                     </span>
                   </button>
@@ -119,12 +117,17 @@ const BrandProductListing: React.FC<_props> = ({ productsData }) => {
                 >
                   {productsData.map((product) => {
                     return (
-                      <div key={product.productId} className='slide-item'>
-                        <SingleProductListing
-                          product={product}
-                          productsData={productsData}
-                        />
-                      </div>
+                      <>
+                        {router?.query?.slug == 'adidas-collection.html' ? (
+                          <div key={product.productId} className='slide-item'>
+                            <SlugSingleProductListing product={product} />
+                          </div>
+                        ) : (
+                          <div key={product.productId} className='slide-item'>
+                            <SingleProductListing product={product} />
+                          </div>
+                        )}
+                      </>
                     );
                   })}
                 </Slider>
@@ -140,7 +143,7 @@ const BrandProductListing: React.FC<_props> = ({ productsData }) => {
                     onClick={() => goToNextProduct()}
                     className='bg-white -mr-2 lg:-mr-4 flex justify-center items-center w-10 h-10 rounded-full shadow focus:outline-none'
                   >
-                    <span className='chevron-right ml-2  text-base material-symbols-outlined font-semibold'>
+                    <span className='chevron-right ml-1  text-base material-symbols-outlined font-semibold'>
                       arrow_forward_ios
                     </span>
                   </button>

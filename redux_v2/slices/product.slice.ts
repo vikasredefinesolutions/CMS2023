@@ -374,6 +374,7 @@ export const productSlice = createSlice({
             url: string | null;
             url2: string | null;
             url3: string | null;
+            brandSEname: string | null;
           };
           product: {
             id: number | null;
@@ -1134,6 +1135,7 @@ export const productSlice = createSlice({
             // for image dimension 200*35
             url2: string | null;
             url3: string | null;
+            brandSEname: string | null;
           };
           product: {
             id: number | null;

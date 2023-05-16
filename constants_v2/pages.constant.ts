@@ -92,6 +92,7 @@ export const __pagesConstant = {
     },
     orderDetails: {
       dateFormat: 'DD-MM-YYYY',
+      dFormat: 'DD/MM/YYYY',
     },
   },
   checkoutPage: {

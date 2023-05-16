@@ -329,6 +329,7 @@ const CartController = () => {
               url: res.brandColorLogoUrl,
               url2: res.brandImage,
               url3: res.productBrandLogo || '',
+              brandSEname: res.brandSEname,
             },
             product: {
               id: res?.id || null,
@@ -381,6 +382,7 @@ const CartController = () => {
                 }
                 return undefined;
               });
+              setShowLoader(false);
               setShowEdit(true);
             }
           });

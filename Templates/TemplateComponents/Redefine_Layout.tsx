@@ -61,6 +61,9 @@ const Layout: React.FC<_props & _StoreCache> = ({
   const [announcementRow, setAnnouncementRow] = useState<_AnnouncementRow[]>(
     [],
   );
+  const router = useRouter();
+
+  const [showFooter, setshowFooter] = useState<boolean>(true);
   const storeId = useTypedSelector_v2((state) => state.store?.id);
   // const islogo = useTypedSelector_v2((state) => state.sbStore.isLogo);
   const [isStoreOpend, setIsStoreOpen] = useState<boolean>(true);
@@ -104,7 +107,14 @@ const Layout: React.FC<_props & _StoreCache> = ({
         setAnnouncementRow(headerInfo?.announcementRow);
     }
   }, [storeCode, logoUrl, storeId]);
-  const router = useRouter();
+
+  useEffect(() => {
+    if (router.asPath == paths.CHECKOUT) {
+      setshowFooter(false);
+    } else {
+      setshowFooter(true);
+    }
+  }, [router.asPath]);
 
   const isbreadcrumbShow = pageMetaData?.isbreadcrumbShow;
   return (
@@ -142,7 +152,7 @@ const Layout: React.FC<_props & _StoreCache> = ({
         <div style={{ flexGrow: 1 }}>{children}</div>
       )}
 
-      <Footer data={configs.footer} />
+      {showFooter && <Footer data={configs.footer} />}
     </>
   );
 };

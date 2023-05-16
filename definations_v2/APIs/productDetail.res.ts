@@ -93,6 +93,7 @@ export interface _ProductDetails {
   isSpecialBrand: boolean;
   categoryName?: string;
   productBrandLogo: string | null;
+  brandSEname: string | null;
 }
 export interface _ProductPolicy {
   storeId: number;

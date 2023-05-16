@@ -44,6 +44,7 @@ export interface _ProductDetails {
   isEnduserDisplay: boolean;
   isSpecialBrand?: boolean;
   productBrandLogo: string | null;
+  brandSEname: string | null;
 }
 
 export interface _SuggestedProduct {

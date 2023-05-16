@@ -28,6 +28,7 @@ export interface _Cart_Initials {
     availableOptions: AvailableLocationDetails[] | null;
   };
   lastUpdate: number;
+  isCartLoading: boolean;
 }
 
 const initialState: _Cart_Initials = {
@@ -49,6 +50,7 @@ const initialState: _Cart_Initials = {
   isGuestCustomer: false,
   showThankYou: false,
   lastUpdate: 0,
+  isCartLoading: true,
 };
 
 export const cartSlice = createSlice({
@@ -120,11 +122,19 @@ export const cartSlice = createSlice({
         } else {
           state.cart = payload.cart;
         }
+        state.isCartLoading = false;
         state.cartQty = payload.cart.length;
       } else {
+        state.isCartLoading = false;
         state.cart = null;
         state.cartQty = 0;
       }
+    });
+    builder.addCase(fetchCartDetails.pending, (state) => {
+      state.isCartLoading = true;
+    });
+    builder.addCase(fetchCartDetails.rejected, (state) => {
+      state.isCartLoading = false;
     });
   },
 });

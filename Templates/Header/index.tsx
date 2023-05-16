@@ -31,7 +31,10 @@ const Header: NextPage<_HeaderPropsWithTemplateid> = ({
   const HeaderTemplate = HeaderTemplates[templateTypeToShow];
 
   return (
-    <div className='header' id='MainHeader'>
+    <div
+      className='sticky md:top-7 z-40 shadow-[0_0px_5px_rgba(0,0,0,0.12)]'
+      id='MainHeader'
+    >
       {announcementRow && announcementRow[0]?.isVisible && (
         <UpperHeader headerContent={announcementRow[0]} />
       )}

@@ -309,6 +309,22 @@ const ChekoutType1: React.FC<_Props> = ({ cartTemplateId }) => {
                 </button>{' '}
               </div>
             )}
+            <div className='mt-4 bg-light-gray px-4 py-4'>
+              <div className='flex items-center justify-center'>
+                <img
+                  src='/order-risk-free-icon.jpg'
+                  alt=''
+                  className='mr-2 w-5 h-5'
+                />
+                <span className='text-sub-text font-semibold'>
+                  Order Risk-Free!
+                </span>
+              </div>
+              <div className='flex items-center justify-center text-sub-text text-center mt-3'>
+                Cancel your order without penalty anytime before your proof is
+                approved.
+              </div>
+            </div>
           </div>
         </div>
       </div>

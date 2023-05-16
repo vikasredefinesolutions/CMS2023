@@ -11,7 +11,7 @@ const CardPaymentType1: paymentProps = ({
   detectCardType,
 }) => {
   const [showCardHelp, setShowCardHelp] = useState(false);
-
+  const [checkCard, setcardCheck] = useState(false);
   return (
     <div id='PaymentCard'>
       <div className='flex justify-between items-center mt-[12px] mb-[12px] pb-[18px] border-b border-gray-border'>
@@ -32,10 +32,16 @@ const CardPaymentType1: paymentProps = ({
       </div>
       <div className='relative z-0 w-full mb-[20px] border border-gray-border rounded'>
         <input
-          onChange={changeHandler}
+          onBlur={changeHandler}
+          onChange={(e) =>
+            e.target.value.length == 16
+              ? setcardCheck(true)
+              : setcardCheck(false)
+          }
           name='cardNumber'
           placeholder=' '
           required={true}
+          maxLength={16}
           className='pt-[15px] pb-[0px] block w-full px-[8px] h-[48px] mt-[0px] text-sub-text text-[18px] text-[#000000] bg-transparent border-0 appearance-none focus:outline-none focus:ring-0'
         />
         <label
@@ -45,16 +51,25 @@ const CardPaymentType1: paymentProps = ({
           Credit Card Number *
         </label>
         <div className='absolute top-[14px] right-[8px] flex items-center'>
-          {cardType.map((res) => (
-            <div
-              key={res.name}
-              className={`opacity-${
-                detectCardType && detectCardType() === res.name ? '100' : '40'
-              } ml-[4px] w-[32px]`}
-            >
-              <NxtImage isStatic={true} className='' src={res.url} alt='' />
-            </div>
-          ))}
+          {!checkCard &&
+            cardType.map((res) => (
+              <div key={res.name} className={`opacity-70 ml-[4px] w-[32px]`}>
+                <NxtImage isStatic={true} className='' src={res.url} alt='' />
+              </div>
+            ))}
+          {checkCard &&
+            cardType.map((res) => (
+              <div
+                key={res.name}
+                className={`opacity-${
+                  detectCardType && detectCardType() === res.name
+                    ? '1 block'
+                    : '0 hidden'
+                } ml-[4px] w-[32px]`}
+              >
+                <NxtImage isStatic={true} className='' src={res.url} alt='' />
+              </div>
+            ))}
         </div>
       </div>
       <div className='flex flex-wrap -mx-3 md:gap-y-6'>
@@ -112,6 +127,7 @@ const CardPaymentType1: paymentProps = ({
               name='cardVarificationCode'
               placeholder=' '
               required={true}
+              maxLength={3}
               className='pt-[15px] pb-[0px] block w-full px-[8px] h-[48px] mt-[0px] text-sub-text text-[18px] text-[#000000] bg-transparent border-0 appearance-none focus:outline-none focus:ring-0'
             />
             <label

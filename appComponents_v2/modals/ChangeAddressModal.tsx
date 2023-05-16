@@ -1,6 +1,8 @@
 import { __pagesConstant } from '@constants/pages.constant';
 import { AddressType } from '@controllers/checkoutController/CheckoutAddressForm';
 import { CustomerAddress } from '@definations/APIs/user.res';
+import { useTypedSelector_v2 } from '@hooks_v2/index';
+import { udpateIsDefaultAddress } from '@services/address.service';
 import { FC } from 'react';
 
 type props = {
@@ -21,6 +23,18 @@ const ChangeAddressModal: FC<props> = ({
   addAddressButtonHandler,
   setAddressEditData,
 }) => {
+  const customerId = useTypedSelector_v2((state) => state.user.id);
+  const addressUpdateHandler = async (address: CustomerAddress) => {
+    changeAddresHandler(address);
+    const obj = {
+      isDefault: true,
+      addressId: address.id,
+      customerId: customerId || 0,
+      addressType: address.addressType,
+    };
+
+    await udpateIsDefaultAddress(obj);
+  };
   return (
     <div
       id='shippingaddressModal'
@@ -92,7 +106,7 @@ const ChangeAddressModal: FC<props> = ({
                           </div>
                           <div className=''>
                             <button
-                              onClick={() => changeAddresHandler(address)}
+                              onClick={() => addressUpdateHandler(address)}
                               className='btn btn-sm btn-primary'
                               data-modal-toggle='shippingaddressModal'
                             >

@@ -60,7 +60,7 @@ const _RequestConsulationSchema = Yup.object().shape({
     .email(__ValidationText.requestConsultation.email.validRequest)
     .required(__ValidationText.requestConsultation.email.required),
   phone: Yup.string()
-    .required(__ValidationText.signUp.storeCustomerAddress.phone.required)
+    .required(__ValidationText.requestConsultation.phone.required)
     .test(
       'phone-test',
       __ValidationText.signUp.storeCustomerAddress.phone.valid,
@@ -74,8 +74,7 @@ const _RequestConsulationSchema = Yup.object().shape({
           return true;
         return false;
       },
-    )
-    .required(__ValidationText.requestConsultation.phone.required),
+    ),
   preferedContactMethod: Yup.string().required(
     __ValidationText.requestConsultation.preferedContactMethod,
   ),
@@ -263,7 +262,7 @@ const RcForm: React.FC<{ productId: number; attriubteOptionId: number }> = ({
                 />
                 <RcInput
                   onChange={handleChange}
-                  value={values.desiredQty}
+                  value={values.desiredQty || ''}
                   type={'number'}
                   id='Desired Quantity'
                   name={'desiredQty'}

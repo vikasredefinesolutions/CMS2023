@@ -46,6 +46,7 @@ export const __pagesText = {
     writeAReview: 'Write A Review',
     foundHelpfull: 'people found this helpful',
     wasThisHelpfull: 'Was This Helpful? ',
+    blank: '',
     hateIt: 'I HATE IT',
     loveIt: 'I LOVE IT',
     ok: "IT'S OK",

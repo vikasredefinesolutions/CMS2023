@@ -40,7 +40,6 @@ const BreadCrumb: NextPage<__BreadCrumbTemplatesProps> = ({ breadCrumbid }) => {
   const { id: productId, brand: brandDetails } = useTypedSelector_v2(
     (state) => state.product.product,
   );
-
   const getBreadCrubs = async () => {
     if (isCMSpage) {
       return [
@@ -75,10 +74,8 @@ const BreadCrumb: NextPage<__BreadCrumbTemplatesProps> = ({ breadCrumbid }) => {
         });
         if (pageType.type == 'product' && brandDetails?.name) {
           breadCrumbs.push({
-            name: brandDetails?.name,
-            url: `${brandDetails?.name
-              .replaceAll(/[. ]/g, '')
-              .toLowerCase()}.html/`,
+            name: capitalizeFirstLetter(brandDetails?.name),
+            url: `${brandDetails.brandSEname}.html/?v=brand-product-list`,
           });
         }
       } else {

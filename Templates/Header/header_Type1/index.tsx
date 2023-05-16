@@ -120,11 +120,13 @@ const Header_Type1: NextPage<_HeaderProps> = ({
                     <div className='flex items-center justify-end'>
                       <div className='flex items-center '>
                         <div className='flex items-center '>
-                          <SearchBar screen={'DESKTOP'} />
+                          {router.asPath != paths.CHECKOUT && (
+                            <SearchBar screen={'DESKTOP'} />
+                          )}
 
-                          <WishListIcon />
-                          <LoginIcon />
-                          <LoggedInMenu />
+                          {router.asPath != paths.CHECKOUT && <WishListIcon />}
+                          {router.asPath != paths.CHECKOUT && <LoginIcon />}
+                          {router.asPath != paths.CHECKOUT && <LoggedInMenu />}
                           {/* {storeCode !== _Store.type1 && <CompareIcon />} */}
                           {/* <!-- <span className="mx-4 h-6 w-px bg-gray-200 lg:mx-6" aria-hidden="true"></span> --> */}
                           <MyCartIcon />

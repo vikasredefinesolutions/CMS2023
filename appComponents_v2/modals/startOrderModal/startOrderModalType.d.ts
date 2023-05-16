@@ -43,6 +43,7 @@ export interface _ProductDetails {
   policyMessage: string;
   isEnduserDisplay: boolean;
   productBrandLogo: string | null;
+  brandSEname: string | null;
 }
 
 export interface _SuggestedProduct {

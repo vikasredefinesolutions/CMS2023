@@ -76,7 +76,7 @@ const OrderDetails_type1: React.FC = () => {
                     <dd className='mt-2 text-default-text'>
                       <time>
                         {moment(order?.billing?.orderDate).format(
-                          __pagesConstant._myAccount.orderDetails.dateFormat,
+                          __pagesConstant._myAccount.orderDetails.dFormat,
                         )}
                       </time>
                     </dd>

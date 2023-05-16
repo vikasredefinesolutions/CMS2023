@@ -168,7 +168,6 @@ const AddAddress = ({
                   onBlur={handleBlur}
                   onChange={handleChange}
                   name='countryName'
-                  value=''
                   className='pt-[15px] pb-[0px] block w-full px-[8px] h-[48px] mt-[0px] text-sub-text text-[18px] text-[#000000] bg-transparent border-0 appearance-none focus:outline-none focus:ring-0'
                 >
                   <option value=''></option>
@@ -192,7 +191,6 @@ const AddAddress = ({
                   onBlur={handleBlur}
                   onChange={handleChange}
                   name='state'
-                  value=''
                   className='pt-[15px] pb-[0px] block w-full px-[8px] h-[48px] mt-[0px] text-sub-text text-[18px] text-[#000000] bg-transparent border-0 appearance-none focus:outline-none focus:ring-0'
                 >
                   <option value=''></option>
@@ -225,6 +223,7 @@ const AddAddress = ({
                   onChange={handleChange}
                   name='postalCode'
                   placeholder=' '
+                  type='number'
                   className='pt-[15px] pb-[0px] block w-full px-[8px] h-[48px] mt-[0px] text-sub-text text-[18px] text-[#000000] bg-transparent border-0 appearance-none focus:outline-none focus:ring-0'
                 />
                 <label
@@ -246,6 +245,7 @@ const AddAddress = ({
                   onChange={handleChange}
                   name='phone'
                   placeholder=' '
+                  type='number'
                   className='pt-[15px] pb-[0px] block w-full px-[8px] h-[48px] mt-[0px] text-sub-text text-[18px] text-[#000000] bg-transparent border-0 appearance-none focus:outline-none focus:ring-0'
                 />
                 <label

@@ -55,7 +55,7 @@ const CheckLogoApproved1 = () => {
     values: {
       comment: string;
       logoImageName: string;
-      logoType: string;
+      logoType: string | number;
       logoSize: string;
       embroideryColor: string;
       parentId: number;
@@ -81,6 +81,7 @@ const CheckLogoApproved1 = () => {
       logoSize: values.logoSize || '',
       embroideryColor: values.embroideryColor || '',
       parentId: values.parentId,
+      logoType: values.logoType,
     };
 
     try {
@@ -97,7 +98,7 @@ const CheckLogoApproved1 = () => {
 
   const Approve_Fn = async (values: {
     logoImageName: string;
-    logoType: string;
+    logoType: string | number;
     logoSize: string;
     embroideryColor: string;
     parentId: number;
@@ -117,6 +118,7 @@ const CheckLogoApproved1 = () => {
       logoSize: values.logoSize || '',
       embroideryColor: values.embroideryColor || '',
       parentId: values.parentId,
+      logoType: values.logoType,
     };
     try {
       await approveLogo({
@@ -240,7 +242,7 @@ const CheckLogoApproved1 = () => {
                             initialValues={{
                               comment: '',
                               logoImageName: logoDetail?.imageUrl,
-                              logoType: '',
+                              logoType: index,
                               logoSize: logoDetail?.logoSize,
                               embroideryColor: logoDetail?.embroideryColor,
                               parentId:
@@ -306,7 +308,7 @@ const CheckLogoApproved1 = () => {
                                       onClick={() =>
                                         Approve_Fn({
                                           logoImageName: logoDetail?.imageUrl,
-                                          logoType: '',
+                                          logoType: index,
                                           logoSize: logoDetail?.logoSize,
                                           embroideryColor:
                                             logoDetail?.embroideryColor,

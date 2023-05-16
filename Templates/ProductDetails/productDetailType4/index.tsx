@@ -7,8 +7,8 @@ import {
   FetchCategoryByproductId,
   FetchInventoryById,
 } from '@services/product.service';
-import Reviews from '@templates/Review';
 import ProductRecentlyViewed from '@templates/recentlyViewedProducts';
+import Reviews from '@templates/Review';
 import YouMayAlsoLike from '@templates/youMayAlsoLike';
 import Head from 'next/head';
 import { useEffect } from 'react';
@@ -86,6 +86,7 @@ const ProductDetails_Type4: React.FC<_ProductDetailsProps & _StoreCache> = (
           url: product.details?.brandColorLogoUrl,
           url2: product.details?.brandImage,
           url3: product.details?.productBrandLogo,
+          brandSEname: product?.details?.brandSEname,
         },
         product: {
           id: product?.details?.id || null,

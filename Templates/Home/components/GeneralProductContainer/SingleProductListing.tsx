@@ -11,13 +11,12 @@ import React, { Fragment, useEffect, useState } from 'react';
 import { _globalStore } from 'store.global';
 
 interface _props {
-  productsData: any;
-  product: any;
+  product: newFetauredItemResponse;
 }
 let mediaBaseUrl = _globalStore.blobUrl;
 
 const SingleProductListing: React.FC<_props> = (props) => {
-  const { productsData, product } = props;
+  const { product } = props;
 
   const [mainImageUrl, setMainImageUrl] = useState<string>('');
   const [currentProduct, setCurrentProduct] = useState<
@@ -36,10 +35,10 @@ const SingleProductListing: React.FC<_props> = (props) => {
     <>
       <div className='px-4'>
         <div
-          className='flex text-center border border-gray-200 bg-white border-solid p-5 row'
+          className='flex text-center border border-gray-200 bg-white border-solid p-5'
           style={{ margin: '30px 0 0' }}
         >
-          <div className='relative pb-4 w-full col-sm-6 col-md-3 col-xs-12 cat-pro-list'>
+          <div className='relative pb-4 w-full cat-pro-list'>
             <div className='w-full rounded-md overflow-hidden aspect-w-1 aspect-h-1'>
               <Link
                 href={`${encodeURIComponent(product.productSEName)}.html`}
@@ -58,11 +57,11 @@ const SingleProductListing: React.FC<_props> = (props) => {
               </Link>
             </div>
             <div className='mt-6'>
-              <div className='mt-1 text-anchor hover:text-anchor-hover h-[42px] text-color-[#006cd1]'>
+              <div className='mt-1 text-anchor hover:text-anchor-hover h-[42px] text-color-[#006cd1] overflow-hidden'>
                 <Link
                   key={product.productId}
                   href={`${encodeURIComponent(product.productSEName)}.html`}
-                  className='text-anchor hover:text-anchor-hover underline  text-ellipsis overflow-hidden line-clamp-2 text-small-text bloc text-color-[#006cd1]'
+                  className='text-anchor hover:text-anchor-hover underline  text-ellipsis line-clamp-2 text-small-text bloc text-color-[#006cd1]'
                 >
                   <a className='underline'>{product.productName}</a>
                 </Link>

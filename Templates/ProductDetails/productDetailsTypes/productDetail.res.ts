@@ -91,6 +91,7 @@ export interface _ProductDetails {
   isEnduserDisplay: boolean;
   isSpecialBrand: boolean;
   categoryName?: string;
+  brandSEname: string | null;
 }
 export interface _ProductPolicy {
   storeId: number;

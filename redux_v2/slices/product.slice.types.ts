@@ -222,6 +222,7 @@ export interface _ProductStore {
       url: string | null;
       url2: string | null;
       url3: string | null;
+      brandSEname: string | null;
     } | null;
     categoryName?: string;
   };

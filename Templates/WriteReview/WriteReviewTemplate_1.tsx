@@ -162,6 +162,8 @@ const WriteReviewTemplate_1 = () => {
       return __pagesText.review.ok;
     } else if (star === 4) {
       return __pagesText.review.likeIt;
+    } else if (star === 0) {
+      return __pagesText.review.blank;
     } else {
       return __pagesText.review.loveIt;
     }
@@ -258,6 +260,7 @@ const WriteReviewTemplate_1 = () => {
                             <button
                               className='!text-anchor hover:!text-anchor-hover text-default-text'
                               onClick={() => {
+                                setStar(0);
                                 setComment('');
                                 setCommentHeading('');
                                 setFilesFn([]);

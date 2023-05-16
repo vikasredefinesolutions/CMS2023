@@ -16,6 +16,7 @@ import {
 } from 'helpers_v2/common.helper';
 import { highLightError } from 'helpers_v2/console.helper';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
+import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { _SOMActionHandlerProps } from './productDetailsComponents';
 
@@ -25,6 +26,7 @@ const SomActionsHandler: React.FC<_SOMActionHandlerProps> = ({
   cartItemId,
   isUpdate,
 }) => {
+  const router = useRouter();
   const { showModal, fetchCartDetails } = useActions_v2();
   const [showRequiredModal, setShowRequiredModal] = useState<
     'quantity' | 'logo' | null
@@ -222,10 +224,14 @@ const SomActionsHandler: React.FC<_SOMActionHandlerProps> = ({
         customerId: guestId,
         isEmployeeLoggedIn,
       });
-      showModal({
-        message: `${isUpdate ? 'Update' : 'Add to'} cart Successfully`,
-        title: 'Success',
-      });
+      if (isUpdate) {
+        showModal({
+          message: `${isUpdate ? 'Update' : 'Add to'} cart Successfully`,
+          title: 'Success',
+        });
+      } else {
+        router.push(paths.CART);
+      }
       clearToCheckout();
     } catch (error) {
       showModal({

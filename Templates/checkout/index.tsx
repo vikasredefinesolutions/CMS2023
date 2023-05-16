@@ -1,4 +1,5 @@
 import { _defaultTemplates } from '@configs/template.config';
+import { paths } from '@constants/paths.constant';
 import { TrackGTMEvent } from '@helpers/common.helper';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import { useRouter } from 'next/router';
@@ -28,9 +29,11 @@ const checkoutTemplates: CTTemplates = {
 
 const CheckoutTemplate: FC<_Props> = ({ cartTemplateId }) => {
   const router = useRouter();
-  const { cart: cartData, discount: cartDiscountDetails } = useTypedSelector_v2(
-    (state) => state.cart,
-  );
+  const {
+    cart: cartData,
+    discount: cartDiscountDetails,
+    isCartLoading,
+  } = useTypedSelector_v2((state) => state.cart);
   useEffect(() => {
     let totalPrice = 0;
     cartData?.forEach((item) => (totalPrice += item.totalPrice));
@@ -63,10 +66,10 @@ const CheckoutTemplate: FC<_Props> = ({ cartTemplateId }) => {
   }, []);
 
   useEffect(() => {
-    if (cartData == null) {
-      router.push('/cart/IndexNew');
+    if (!isCartLoading && (!cartData?.length || cartData === null)) {
+      router.push(paths.CART);
     }
-  }, [cartData]);
+  }, [cartData, isCartLoading]);
   const CheckoutSelectedTemplate =
     checkoutTemplates[_defaultTemplates.checkout];
 

@@ -37,7 +37,7 @@ export interface Customeradminlogodescriptionrequestmodel {
   logoImageName: string;
   isApproved: boolean;
   approvedDate: Date;
-  logoType: number;
+  logoType: number | string;
   isAdmin: number;
   logoSize: string;
   embroideryColor: string;
