@@ -1,10 +1,10 @@
-import BrandsListing from '@templates/Brands';
 import { NextPage } from 'next';
 
 import { _defaultTemplates } from '@configs/template.config';
 import { _Brand } from '@definations/brand';
 import { removeDuplicates } from '@helpers/common.helper';
 import { FetchBrands } from '@services/header.service';
+import BrandsListingTemplate from '@templates/Brands';
 import { GetServerSideProps, GetServerSidePropsResult } from 'next';
 import { _globalStore } from 'store.global';
 
@@ -14,7 +14,7 @@ interface _Props {
 }
 
 const Brands: NextPage<_Props> = (props) => {
-  return <BrandsListing id={_defaultTemplates.brands} {...props} />;
+  return <BrandsListingTemplate id={_defaultTemplates.brands} {...props} />;
 };
 
 export default Brands;
