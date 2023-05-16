@@ -4,7 +4,7 @@ import React from 'react';
 
 const RcRequestDone: React.FC = () => {
   return (
-    <div className='container mx-auto'>
+    <div className=' w-full lg:w-4/12 md:w-6/12 pl-[15px] pr-[15px] mb-[30px]'>
       <div className='p-6 text-center'>
         <div className='text-2xl md:text-3xl lg:text-title font-title text-color-title mb-4'>
           Thank you! Your request has beed received.

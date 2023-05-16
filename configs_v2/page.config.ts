@@ -50,3 +50,4 @@ export const __domain = {
 
 export const defaultCountry = 1;
 export const storeBuilderTypeId = 4;
+export const defaultState = 1;
