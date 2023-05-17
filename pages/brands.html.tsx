@@ -2,8 +2,11 @@ import { NextPage } from 'next';
 
 import { _defaultTemplates } from '@configs/template.config';
 import { _Brand } from '@definations/brand';
+import { _GetPageType } from '@definations/slug.type';
 import { removeDuplicates } from '@helpers/common.helper';
 import { FetchBrands } from '@services/header.service';
+import { getPageComponents } from '@services/home.service';
+import { FetchPageType } from '@services/slug.service';
 import BrandsListingTemplate from '@templates/Brands';
 import { GetServerSideProps, GetServerSidePropsResult } from 'next';
 import { _globalStore } from 'store.global';
@@ -11,6 +14,7 @@ import { _globalStore } from 'store.global';
 interface _Props {
   brands: _Brand[] | null;
   alphabets: string[];
+  accordian: any;
 }
 
 const Brands: NextPage<_Props> = (props) => {
@@ -19,12 +23,27 @@ const Brands: NextPage<_Props> = (props) => {
 
 export default Brands;
 
-export const getServerSideProps: GetServerSideProps = async (): Promise<
-  GetServerSidePropsResult<_Props>
-> => {
+export const getServerSideProps: GetServerSideProps = async (
+  context,
+): Promise<GetServerSidePropsResult<_Props>> => {
   const { storeId } = _globalStore;
   let brands: _Brand[] | null = null;
   let alphabets: string[] = [];
+  let accordian: any = [];
+
+  let pageMetaData: _GetPageType | null = null;
+
+  pageMetaData = await FetchPageType({
+    storeId: _globalStore.storeId!,
+    slug: 'brands',
+  });
+
+  if (pageMetaData) {
+    accordian = await getPageComponents({
+      pageId: pageMetaData.id,
+      type: pageMetaData.type,
+    });
+  }
 
   if (storeId) {
     await FetchBrands({ storeId: storeId }).then((result) => {
@@ -58,6 +77,7 @@ export const getServerSideProps: GetServerSideProps = async (): Promise<
     props: {
       brands: brands,
       alphabets: alphabets,
+      accordian: accordian,
     },
   };
 };

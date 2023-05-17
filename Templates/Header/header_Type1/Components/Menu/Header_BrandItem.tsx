@@ -145,11 +145,7 @@ const Brand: React.FC<_props> = ({ url, title, content }) => {
                               : `${brand.seName}.html?v=product-list`
                           }
                           alt={capitalizeFirstLetter(brand.brandName)}
-                          src={
-                            brand.seName != 'patagonia'
-                              ? brand.brandColorImageUrl
-                              : brand.brandBlackColorImageUrl
-                          }
+                          src={brand.brandBlackColorImageUrl}
                         />
                       ))}
                   </div>

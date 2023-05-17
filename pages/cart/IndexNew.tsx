@@ -39,6 +39,7 @@ const Cart = () => {
   }, [id]);
 
   useEffect(() => {
+    //GTM event for view_cart
     const viewCartEventPayload = {
       pageTitle: document?.title || 'Cart',
       pageCategory: 'View cart',

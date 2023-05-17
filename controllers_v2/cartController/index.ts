@@ -10,7 +10,11 @@ import {
   FetchInventoryById,
   FetchProductById,
 } from '@services/product.service';
-import { generateImageUrl, getAddToCartObject } from 'helpers_v2/common.helper';
+import {
+  CaptureGTMEvent,
+  generateImageUrl,
+  getAddToCartObject,
+} from 'helpers_v2/common.helper';
 import { GetCustomerId, useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
 import { ChangeEvent, useEffect, useState } from 'react';
 import {
@@ -82,12 +86,46 @@ const CartController = () => {
     return response;
   };
 
+  //GTM event for remove_from_cart
+  const captureRemoveItemEvent = (removedProductId: number) => {
+    const removedProduct = cartData?.find(
+      (item) => item.shoppingCartItemsId === removedProductId,
+    );
+    const eventPayload = {
+      pageTitle: document?.title || 'Cart',
+      pageCategory: 'Remove From Cart',
+      visitorType: isEmployeeLoggedIn ? 'high-value' : 'low-value',
+      customProperty1: '',
+      event: 'remove_from_cart',
+      ecommerce: {
+        value: removedProduct?.totalPrice,
+        currency: 'USD', // USD
+        items: [
+          {
+            item_name: removedProduct?.productName,
+            item_id: removedProduct?.sku,
+            item_brand: removedProduct?.brandName,
+            item_category: removedProduct?.categoryName,
+            item_variant: '',
+            index: removedProduct?.productId,
+            item_list_name: removedProduct?.productName,
+            item_list_id: removedProduct?.productId,
+            quantity: removedProduct?.totalQty,
+            price: removedProduct?.totalPrice,
+          },
+        ],
+      },
+    };
+    CaptureGTMEvent(eventPayload);
+  };
+
   const removeCartItem = async (itemId: number) => {
     const confirmRes = confirm(cartRemoveConfirmMessage);
     if (confirmRes) {
       setShowLoader(true);
       const response = await deleteItemCart(itemId);
       if (response) {
+        captureRemoveItemEvent(itemId);
         await fetchCartData();
       } else {
         showModal({

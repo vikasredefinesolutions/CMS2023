@@ -13,7 +13,7 @@ import { IndexLabels } from 'mock_v2/startModal.mock';
 import React, { useEffect, useState } from 'react';
 import Select from 'react-select';
 
-const dummyLogoImage = 'images/logo-to-be-submitted.webp';
+const dummyLogoImage = 'logo-to-be-submitted.webp';
 
 const SomLogoOption: React.FC<_SOMLogoOptionProps> = ({
   title,

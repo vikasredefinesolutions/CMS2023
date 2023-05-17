@@ -99,7 +99,10 @@ const StartOrderModal: React.FC<_startOrderModalProps> = (props) => {
                 <div className='font-[600] text-large-text'>{product.name}</div>
                 <button
                   className='text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-[14px] p-[6px] ml-auto inline-flex items-center'
-                  onClick={() => modalHandler(null)}
+                  onClick={() => {
+                    clearToCheckout();
+                    modalHandler(null);
+                  }}
                 >
                   <svg
                     className='w-[24px] h-[24px]'

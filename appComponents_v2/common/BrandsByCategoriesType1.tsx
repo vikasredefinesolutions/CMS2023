@@ -328,6 +328,7 @@ const categoriesWithBrands: {
     ],
   },
 ];
+const colorImgTabArray = ['Featured', 'Outerwear', 'Golf'];
 
 const BrandsByCategoriesType1: React.FC<_Props> = ({ brands }) => {
   const [activeTab, setActiveTab] = useState<_Category>('Featured');
@@ -346,7 +347,6 @@ const BrandsByCategoriesType1: React.FC<_Props> = ({ brands }) => {
         return 'bg-default';
     }
   };
-
   return (
     <section className='relative pt-[40px] pb-[40px]'>
       <div className='overflow-x-hidden'>
@@ -415,8 +415,11 @@ const BrandsByCategoriesType1: React.FC<_Props> = ({ brands }) => {
                             if (brandWithSeName) {
                               brand.name = brandWithSeName.brandName;
                               brand.seName = brandWithSeName.seName;
-                              brand.imagePath =
-                                brandWithSeName.brandColorImageUrl;
+                              brand.imagePath = !colorImgTabArray.includes(
+                                activeTab,
+                              )
+                                ? brandWithSeName.brandColorImageUrl
+                                : brandWithSeName.brandBlackColorImageUrl;
                             }
 
                             return (
@@ -427,18 +430,17 @@ const BrandsByCategoriesType1: React.FC<_Props> = ({ brands }) => {
                                 <div
                                   className={`border border-gray-border ${activeTabColor()} hover:${activeTabColor()}-hover relative font-light w-full h-full flex items-center justify-center`}
                                 >
-                                  <div className='flex justify-center items-center brand-listing-logo'>
+                                  <div className='flex justify-center items-center brand-listing-logo cursor-pointer'>
                                     <Link
                                       title={brand.name}
-                                      href={brand.seName}
+                                      href={`${brand.seName}.html`}
                                     >
-                                      <a>
-                                        <NxtImage
-                                          className='w-full mx-auto'
-                                          src={brand.imagePath}
-                                          alt={brand.name}
-                                        />
-                                      </a>
+                                      <NxtImage
+                                        className='w-full mx-auto'
+                                        src={brand.imagePath}
+                                        title={brand.name}
+                                        alt={brand.name}
+                                      />
                                     </Link>
                                   </div>
                                 </div>

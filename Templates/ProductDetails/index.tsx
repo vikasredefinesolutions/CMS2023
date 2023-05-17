@@ -19,6 +19,7 @@ const ProductDetailTemplates: _ProductDetailsTemplates = {
 
 const ProductDetails: React.FC<_Props> = (props) => {
   const { id: customerId } = useTypedSelector_v2((state) => state.user);
+  const { SEO, details, colors } = props;
   const ProductDetails =
     ProductDetailTemplates[
       `type${props.productDetailsTemplateId}` as
@@ -28,8 +29,7 @@ const ProductDetails: React.FC<_Props> = (props) => {
         | 'type4'
     ];
   useEffect(() => {
-    if (props.details) {
-      const { SEO, details, colors } = props;
+    if (details) {
       const eventPayload = {
         pageTitle: SEO?.pageTitle,
         pageCategory: details?.categoryName,
@@ -57,7 +57,8 @@ const ProductDetails: React.FC<_Props> = (props) => {
       };
       CaptureGTMEvent(eventPayload);
     }
-  }, []);
+  }, [details?.id]);
+
   return <ProductDetails {...props} />;
 };
 

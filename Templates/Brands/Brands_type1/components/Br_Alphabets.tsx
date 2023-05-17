@@ -80,11 +80,11 @@ const Br_Alphabets: React.FC<_Props> = ({
           <div className='lg:w-8/12 W-full'>
             <div className='flex flex-wrap lg:ml-[40px] lg:mr-[40px] bg-light-gray pt-[40px] lg:pl-[24px] lg:pr-[24px]'>
               {allAlphabets.map((al) => {
-                const brandsToShow = brands!.filter(
+                const brandsToShow = brands?.filter(
                   (brand) => brand.brandName[0].toLowerCase() === al,
                 );
 
-                if (brandsToShow.length === 0) {
+                if (brandsToShow?.length === 0) {
                   return <></>;
                 }
 
@@ -94,7 +94,7 @@ const Br_Alphabets: React.FC<_Props> = ({
                       {al.toUpperCase()}
                     </div>
                     <div className='mb-[8px] flex flex-wrap'>
-                      {brandsToShow.map((brand) => {
+                      {brandsToShow?.map((brand) => {
                         return (
                           <div className='mr-[20px] mb-[8px]'>
                             <Link

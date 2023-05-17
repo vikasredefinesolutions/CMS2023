@@ -123,6 +123,15 @@ export const getServerSideProps: GetServerSideProps = async (
       },
     };
   }
+
+  if (slug !== pageMetaData.slug) {
+    return {
+      redirect: {
+        destination: `${pageMetaData.slug}.html`,
+        permanent: false,
+      },
+    };
+  }
   // ------------------------------------------------------------------
 
   ////////////////////////////////////////////////
@@ -135,7 +144,6 @@ export const getServerSideProps: GetServerSideProps = async (
         type: '',
       });
       page.slug = slug;
-
       page.home.featuredItems = [];
     }
 

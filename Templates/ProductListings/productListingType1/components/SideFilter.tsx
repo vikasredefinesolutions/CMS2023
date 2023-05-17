@@ -24,6 +24,8 @@ const SideFilter = ({
   checkedFilters: Array<_CheckedFilter>;
 }) => {
   const router = useRouter();
+  let route = router.asPath.replace('.html', '').replace('/', '');
+
   return (
     <div className='relative'>
       <div className={'pt-[16px] pb-[16px] bg-light-gray'}>
@@ -101,7 +103,11 @@ const SideFilter = ({
                                     <Link
                                       key={option.name}
                                       id={option.name}
-                                      className='flex items-center !text-black !no-underline'
+                                      className={`flex items-center !text-black !no-underline cursor-pointer ${
+                                        route === option.sename
+                                          ? 'font-bold'
+                                          : ''
+                                      }`}
                                       href={`/${option.sename}.html`}
                                     >
                                       <span className='material-icons-outlined'>
@@ -121,22 +127,30 @@ const SideFilter = ({
                                           {option.subrows?.map((subrow) => (
                                             <li
                                               key={subrow.id}
-                                              className='flex items-center !text-black !no-underline'
+                                              className='w-full py-0'
                                             >
                                               {' '}
                                               <Link
                                                 key={subrow.name}
                                                 href={`/${subrow.sename}.html`}
-                                                className='!text-black !no-underline'
+                                                className={`flex items-center !text-black !no-underline cursor-pointer ${
+                                                  route === subrow.sename
+                                                    ? 'font-bold'
+                                                    : ''
+                                                }`}
                                               >
-                                                <span className='material-icons-outlined'>
-                                                  {' '}
-                                                  chevron_right
-                                                </span>
-                                                {capitalizeFirstLetter(
-                                                  subrow.name,
-                                                )}{' '}
-                                                ({subrow.productCount})
+                                                <>
+                                                  <span className='material-icons-outlined'>
+                                                    {' '}
+                                                    chevron_right
+                                                  </span>
+                                                  <span>
+                                                    {capitalizeFirstLetter(
+                                                      subrow.name,
+                                                    )}{' '}
+                                                    ({subrow.productCount})
+                                                  </span>
+                                                </>
                                               </Link>
                                             </li>
                                           ))}

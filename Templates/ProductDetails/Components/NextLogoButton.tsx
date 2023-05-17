@@ -1,4 +1,4 @@
-import { useTypedSelector_v2 } from 'hooks_v2';
+import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
 import React from 'react';
 import { _NextLogoButtonProps } from './productDetailsComponents';
 
@@ -6,6 +6,7 @@ const NextLogoButton: React.FC<_NextLogoButtonProps> = ({
   cIndex,
   arrayHelpers,
 }) => {
+  const { product_updateLogoDetails } = useActions_v2();
   const { allowNextLogo } = useTypedSelector_v2(
     (state) => state.product.som_logos,
   );
@@ -24,6 +25,10 @@ const NextLogoButton: React.FC<_NextLogoButtonProps> = ({
             className='text-anchor font-[600]'
             onClick={() => {
               arrayHelpers.push('');
+              product_updateLogoDetails({
+                type: 'Allow_Next_Logo',
+                allow: false,
+              });
             }}
             type='button'
           >

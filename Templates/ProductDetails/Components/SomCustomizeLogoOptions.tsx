@@ -18,6 +18,7 @@ const SomCustomizeLogoOptions: React.FC<{
 }> = ({ editDetails, totalQty }) => {
   const { product_updateLogoDetails } = useActions_v2();
   const { getDetailsLogo } = LogoSetterToStore();
+  const { som_logos } = useTypedSelector_v2((state) => state.product);
 
   const [nowOrLater, setNowOrLater] = useState<'later' | 'now'>('later');
   const [firstLogoFree, setFirstLogoFree] = useState<Boolean>(true);
@@ -59,7 +60,6 @@ const SomCustomizeLogoOptions: React.FC<{
       }
     }
   }, [editDetails, logoLocation]);
-
   const showPrice = (price: 'FREE' | number) => {
     if (price === 'FREE') return `FREE`;
     return `${currency}${price}`;
@@ -208,18 +208,20 @@ const SomCustomizeLogoOptions: React.FC<{
                                 }
                               />
                             ))}
-                            {logoLocation.length > values.logos.length && (
-                              <NextLogoButton
-                                cIndex={{
-                                  label: numberToOrdinalString(
-                                    values.logos.length + 1,
-                                  ),
-                                  value: values.logos.length + 1,
-                                  price: values.logos.length === 0 ? 'FREE' : 0,
-                                }}
-                                arrayHelpers={arrayHelpers}
-                              />
-                            )}
+                            {som_logos.availableOptions &&
+                              som_logos?.availableOptions?.length > 0 && (
+                                <NextLogoButton
+                                  cIndex={{
+                                    label: numberToOrdinalString(
+                                      values.logos.length + 1,
+                                    ),
+                                    value: values.logos.length + 1,
+                                    price:
+                                      values.logos.length === 0 ? 'FREE' : 0,
+                                  }}
+                                  arrayHelpers={arrayHelpers}
+                                />
+                              )}
                           </>
                         );
                       }}

@@ -213,6 +213,7 @@ export const productSlice = createSlice({
         const updatedLogos = updatedLogosHandler(oldLogos, upcomingLogo);
         state.som_logos = {
           ...state.som_logos,
+          allowNextLogo: true,
           details: updatedLogos,
           choosedLogoCompletionPending: null,
         };
