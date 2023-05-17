@@ -23,11 +23,20 @@ export const userSlice = createSlice({
     logInUser: (
       state,
       action: {
-        payload: {
-          id: number | null;
-        };
+        payload:
+          | {
+              id: number | null;
+            }
+          | 'CLEAN_UP';
       },
     ) => {
+      if (action.payload === 'CLEAN_UP') {
+        state.id = null;
+        state.customer = null;
+        state.loggedIn = false;
+        return;
+      }
+
       state.id = action.payload.id;
     },
     updateCustomer: (

@@ -103,6 +103,7 @@ export const cartSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(fetchCartDetails.fulfilled, (state, { payload }) => {
+      state.lastUpdate = new Date().getTime();
       if (payload.cart && payload.cart.length > 0) {
         //Adding missing key brandName and categoryName that is required for GTM event payload
         if (payload?.productdetails?.length) {

@@ -273,7 +273,7 @@ const CheckLogoApproved1 = () => {
                                   <input
                                     type='hidden'
                                     name='logoType'
-                                    value={''}
+                                    value={index}
                                   />
                                   <input
                                     type='hidden'

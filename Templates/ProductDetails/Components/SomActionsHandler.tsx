@@ -109,7 +109,7 @@ const SomActionsHandler: React.FC<_SOMActionHandlerProps> = ({
   };
 
   const addToCartHandler = async () => {
-    if (!toCheckout.allowAddToCart && !isEmployeeLoggedIn) {
+    if (!toCheckout.allowAddToCart) {
       setShowLoader(false);
       setShowRequiredModal('quantity');
       return;

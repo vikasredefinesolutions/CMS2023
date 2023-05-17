@@ -45,9 +45,7 @@ const DiscountPricing: React.FC<
               <span className='inline-block mr-[2px]'>
                 {__pagesText.productInfo.discountPricing.minimumOrder}
               </span>
-              {` ${minQty} ${unitUnits} per color for $${(
-                minQty * price.msrp
-              ).toFixed(2)}`}
+              {` ${minQty} ${unitUnits} per color `}
             </button>
           ) : null}
         </div>

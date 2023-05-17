@@ -34,6 +34,7 @@ export const __LocalStorage = {
   recetlyViewedProducts: '_rcvwp',
   compareProducts: '_cmpPdts',
   tempCustomerId: 'tempCustomerId',
+  empData: 'empData',
 };
 
 export const __Params = {

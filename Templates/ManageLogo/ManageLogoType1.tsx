@@ -68,7 +68,12 @@ const ManageLogoType1: NextPage<_ManageLogoProps> = ({ logoList }) => {
                 </tr>
                 {logoList &&
                   logoList.items.map((logo) => (
-                    <tr key={logo.logo} className='text-center'>
+                    <tr
+                      key={logo.logo}
+                      className={`text-center ${
+                        logo.logo == '' ? 'hidden' : ''
+                      }`}
+                    >
                       <td className='border-b border-r border-[#ddd] p-[16px]'>
                         <div className='w-24 h-24 mx-auto'>
                           <NxtImage

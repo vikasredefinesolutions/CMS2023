@@ -5,11 +5,7 @@ import React from 'react';
 
 const AskToLogin: React.FC<_AskToLoginprops> = ({ modalHandler }) => {
   const isUserLoggedIn = useTypedSelector_v2((state) => state.user.id);
-  const isEmployeeLoggedIn = useTypedSelector_v2(
-    (state) => state.employee.loggedIn,
-  );
-
-  const showLoginOption = !isEmployeeLoggedIn && !isUserLoggedIn;
+  const showLoginOption = !isUserLoggedIn;
 
   return (
     <>

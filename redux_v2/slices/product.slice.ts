@@ -75,6 +75,7 @@ const initialState: _ProductStore = {
     logo: { price: null },
     logos: null,
     lines: null,
+    minQtyShouldNotBeMoreThanOne: false,
   },
   som_logos: {
     prices: null,
@@ -91,6 +92,21 @@ export const productSlice = createSlice({
   name: 'product',
   initialState,
   reducers: {
+    product_employeeLogin: (
+      state,
+      { payload }: { payload: 'MinQtyToOne' | 'MinQtyToOne_CleanUp' },
+    ) => {
+      if (payload === 'MinQtyToOne') {
+        state.toCheckout.minQtyShouldNotBeMoreThanOne = true;
+        return;
+      }
+
+      if (payload === 'MinQtyToOne_CleanUp') {
+        state.toCheckout.minQtyShouldNotBeMoreThanOne = false;
+        return;
+      }
+    },
+
     product_storeData: (state, { payload }: _UpdateProperties_Action) => {
       if (payload.type === 'DISOCUNT_TABLE_PRICES') {
         state.product.discounts = null;
@@ -107,7 +123,13 @@ export const productSlice = createSlice({
 
     product_setValues: (state, { payload }: _Product_SetValues_Action) => {
       if (payload.type === 'MINIMUM_QTY') {
-        state.toCheckout.minQty = payload.data.qty;
+        let minQty = payload.data.qty;
+
+        if (state.toCheckout.minQtyShouldNotBeMoreThanOne) {
+          minQty = 1;
+        }
+
+        state.toCheckout.minQty = minQty;
         return;
       }
     },
@@ -328,7 +350,11 @@ export const productSlice = createSlice({
       }
 
       state.selected.color = action.payload;
-      state.toCheckout.minQty = action.payload.minQuantity;
+
+      const minQty = state.toCheckout.minQtyShouldNotBeMoreThanOne
+        ? 1
+        : action.payload.minQuantity;
+      state.toCheckout.minQty = minQty;
       state.selected.productId = action.payload.productId;
     },
 

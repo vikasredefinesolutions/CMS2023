@@ -1,6 +1,6 @@
 import { employeeData } from '@constants/common.constant';
-import { __Cookie } from '@constants/global.constant';
-import { extractCookies, setCookie } from '@helpers/common.helper';
+import { __LocalStorage } from '@constants/global.constant';
+import { extractFromLocalStorage } from '@helpers/common.helper';
 import { useActions_v2 } from '@hooks_v2/index';
 import CryptoJS from 'crypto-js';
 import { useRouter } from 'next/router';
@@ -14,7 +14,7 @@ export type EmployeeDataObject = {
 };
 const EmployeeController = () => {
   const router = useRouter();
-  const { updateEmployeeV2 } = useActions_v2();
+  const { updateEmployeeV2, product_employeeLogin } = useActions_v2();
   let empData = router.query.id;
 
   const decryptData = () => {
@@ -26,7 +26,7 @@ const EmployeeController = () => {
       const encodedEmployeeData = encodeURIComponent(stringyfiedBytes);
 
       if (decrptedData) {
-        setCookie(__Cookie.empData, encodedEmployeeData, 'Session');
+        localStorage.setItem(__LocalStorage.empData, encodedEmployeeData);
         updateEmployeeV2({
           empId: decrptedData.id,
           employee: {
@@ -35,6 +35,7 @@ const EmployeeController = () => {
             email: decrptedData.email,
           },
         });
+        product_employeeLogin('MinQtyToOne');
       }
     }
   };
@@ -47,10 +48,9 @@ const EmployeeController = () => {
   }, [empData]);
 
   useEffect(() => {
-    const newsavedEmpData = extractCookies(
-      __Cookie.empData,
-      'browserCookie',
-    ).empData;
+    const newsavedEmpData = extractFromLocalStorage<EmployeeDataObject>(
+      __LocalStorage.empData,
+    );
 
     if (newsavedEmpData) {
       updateEmployeeV2({
@@ -61,6 +61,7 @@ const EmployeeController = () => {
           email: newsavedEmpData.email,
         },
       });
+      product_employeeLogin('MinQtyToOne');
     }
   }, []);
 };

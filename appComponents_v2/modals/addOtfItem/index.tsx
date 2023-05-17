@@ -522,13 +522,20 @@ const AddOTFItemNo = ({ closeModal }: { closeModal: () => void }) => {
                   </div>
                 </div>
               </div>
-              <div className='flex items-center justify-end p-6 space-x-2 rounded-b border-t border-gray-200 dark:border-gray-600'>
+              <div className='flex items-center justify-between p-6 space-x-2 rounded-b border-t border-gray-200 dark:border-gray-600'>
                 <button
                   data-modal-toggle='adduserModal'
                   type='submit'
                   className='btn btn-primary'
                 >
-                  Save
+                  Add
+                </button>
+                <button
+                  data-modal-toggle='adduserModal'
+                  onClick={closeModal}
+                  className='btn btn-primary'
+                >
+                  Canel
                 </button>
               </div>
             </form>

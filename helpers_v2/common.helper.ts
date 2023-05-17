@@ -1,6 +1,5 @@
 import { __domain } from '@configs/page.config';
 import { __Cookie, __Params } from '@constants/global.constant';
-import { EmployeeDataObject } from '@controllers/EmployeeController';
 import { _ProductInventoryTransfomed } from '@definations/APIs/inventory.res';
 import { ActionCreatorWithPayload } from '@reduxjs/toolkit/dist/createAction';
 import { CartLogoPersonDetailModel, CartLogoPersonModel } from '@services/cart';
@@ -41,7 +40,6 @@ interface _ExtractCookies {
   loggedIN: boolean;
   storeInfo: null | _StoreInfoCookies['value'];
   tempCustomerId: string | null;
-  empData: EmployeeDataObject | null;
 
   adminConfigs: null | {
     imageFolderPath: string;
@@ -78,6 +76,18 @@ interface _NextJsSetCookie {
 //////// FUNCTIONS ---------------------------------------
 //////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////
+
+export const extractFromLocalStorage = <T>(key: string): T | null => {
+  let dataToReturn: null | T = null;
+  const data = localStorage.getItem(key);
+
+  if (data) {
+    const decodedString = decodeURIComponent(data);
+    return JSON.parse(decodedString);
+  }
+
+  return dataToReturn;
+};
 
 export const isNumberKey = (event: React.ChangeEvent<HTMLInputElement>) => {
   let keyAllowed = false;
@@ -131,14 +141,15 @@ export const isNumberKey = (event: React.ChangeEvent<HTMLInputElement>) => {
 
 export const Logout = (
   logInUser: ActionCreatorWithPayload<
-    {
-      id: number | null;
-    },
+    | {
+        id: number | null;
+      }
+    | 'CLEAN_UP',
     'userDetails/logInUser'
   >,
 ) => {
   setCookie(__Cookie.userId, '', 'EPOCH');
-  logInUser({ id: null });
+  logInUser('CLEAN_UP');
   router.push('/');
   return;
 };
@@ -161,7 +172,6 @@ export const extractCookies = (
     loggedIN: false,
     storeInfo: null,
     tempCustomerId: null,
-    empData: null,
     adminConfigs: null,
   };
 
@@ -190,13 +200,6 @@ export const extractCookies = (
       .find((cookie) => cookie.split('=')[0] === __Cookie.empData)
       ?.split('=')[1];
 
-    if (encodedEmpData) {
-      const decodedEmpData = decodeURIComponent(encodedEmpData);
-      const parsedEmpData: null | EmployeeDataObject =
-        (decodedEmpData && JSON.parse(decodedEmpData)) || null;
-      expectedCookies.empData = parsedEmpData;
-    }
-
     if (encodedStoreInfo) {
       const decodedStoreInfo = decodeURIComponent(encodedStoreInfo);
       const parsedStoreInfo: null | _StoreInfoCookies['value'] =
@@ -209,7 +212,6 @@ export const extractCookies = (
       loggedIN: Boolean(userId),
       storeInfo: expectedCookies.storeInfo,
       tempCustomerId: tempCustomerId || null,
-      empData: expectedCookies.empData,
       adminConfigs: {
         companyId: expectedCookies.storeInfo?.companyId || 0,
         blobUrl: expectedCookies.storeInfo?.blobUrl || '',

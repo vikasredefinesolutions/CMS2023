@@ -34,9 +34,15 @@ const CT1_EL_SizeQtyPrice: React.FC<_Props> = ({ details, setDetails }) => {
           prev.sizesWithPriceNQty;
 
         if (newQty === 0) {
-          updateSizeWithPriceNQty = prev.sizesWithPriceNQty.filter(
-            (item) => item.id !== +inputs.id,
-          );
+          updateSizeWithPriceNQty = prev.sizesWithPriceNQty.filter((item) => {
+            if (item.id !== +inputs.id) {
+              updateTotalPrice += item.totalPrice;
+              udpateTotalQty += item.qty;
+              return true;
+            }
+
+            if (item.id === inputs.id) return false;
+          });
         }
 
         if (newQty > 0) {

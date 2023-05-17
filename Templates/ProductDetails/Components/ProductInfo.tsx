@@ -24,6 +24,9 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
   const [openModal, setOpenModal] = useState<null | _modals>(null);
   const color = useTypedSelector_v2((state) => state.product.selected.color);
   const sizes = useTypedSelector_v2((state) => state.product.product.sizes);
+  const isEmployeeLoggedIn = useTypedSelector_v2(
+    (state) => state.employee.loggedIn,
+  );
 
   const router = useRouter();
 
@@ -38,6 +41,18 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
   const goToProduct = (seName: string | null) => {
     if (seName === null) return;
     router.push(`${seName}`);
+  };
+
+  const startOrderBtnText = () => {
+    let text = 'START ORDER';
+
+    if (isEmployeeLoggedIn) {
+      text = 'START OVER';
+    }
+    if (product.isDiscontinue) {
+      text = 'Discontinued';
+    }
+    return text;
   };
 
   const consultationURL = `${paths.REQUEST_CONSULTATION}?productid=${product.id}&title=Request%20Consultation%20%26%20Proof&Color=${color.name}`;
@@ -77,7 +92,7 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
             <a
               href='javascript:void(0);'
               onClick={() => router.push(consultationURL)}
-              className='text-anchor hover:!text-anchor-hover text-normal-text pr-[1px] font-[600] underline '
+              className='text-anchor hover:!text-anchor-hover text-small-text pr-[1px] font-[600] underline '
             >
               {__pagesText.productInfo.requestConsultaionProof}
             </a>
@@ -194,7 +209,7 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
             }}
             className='btn btn-xl btn-secondary w-full'
           >
-            {product.isDiscontinue ? 'Discontinued' : 'START ORDER'}
+            {startOrderBtnText()}
           </button>
         </div>
 

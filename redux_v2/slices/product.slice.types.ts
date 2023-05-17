@@ -177,6 +177,7 @@ export interface _state_productToCheckout {
         price: number;
       }[]
     | null;
+  minQtyShouldNotBeMoreThanOne: boolean;
 }
 
 export interface _state_SelectedProduct {

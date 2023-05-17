@@ -92,6 +92,7 @@ const CT1_EL_Item: React.FC<CartObject> = (item) => {
         }),
       },
     };
+
     await addToCart(payload);
     await refreshCartItems();
 
@@ -122,6 +123,11 @@ const CT1_EL_Item: React.FC<CartObject> = (item) => {
 
   useEffect(() => {
     if (details.updateCart) {
+      if (details.sizesWithPriceNQty.length === 0) {
+        handleRemoveItem(item.shoppingCartItemsId);
+        return;
+      }
+
       updateCartItems();
     }
   }, [details]);
@@ -227,7 +233,10 @@ const CT1_EL_Item: React.FC<CartObject> = (item) => {
               {item.shoppingCartLogoPersonViewModels.map((logo, index) => {
                 if (logo.logoName === 'Customize Later') {
                   return (
-                    <div className='flex justify-start items-center mt-3'>
+                    <div
+                      key={index}
+                      className='flex justify-start items-center mt-3'
+                    >
                       <div>
                         <span className='material-icons text-[60px] mr-3'>
                           support_agent

@@ -1,4 +1,4 @@
-import { __Cookie } from '@constants/global.constant';
+import { __Cookie, __LocalStorage } from '@constants/global.constant';
 import { paths } from '@constants/paths.constant';
 import { _AnnouncementRow } from '@definations/header.type';
 import { deleteCookie } from '@helpers/common.helper';
@@ -10,7 +10,13 @@ interface _props {
 }
 const UpperHeader: React.FC<_props> = (headerContent) => {
   const router = useRouter();
-  const { updateEmployeeV2 } = useActions_v2();
+  const {
+    setShowLoader,
+    updateEmployeeV2,
+    product_employeeLogin,
+    logoutClearCart,
+    logInUser,
+  } = useActions_v2();
   const employeeDetails = useTypedSelector_v2((state) => state.employee);
 
   const leftcontent = headerContent.headerContent.leftSideText
@@ -22,8 +28,14 @@ const UpperHeader: React.FC<_props> = (headerContent) => {
     : '';
 
   const employeeClear = () => {
+    setShowLoader(true);
     updateEmployeeV2('CLEAN_UP');
-    deleteCookie(__Cookie.empData);
+    product_employeeLogin('MinQtyToOne_CleanUp');
+    logoutClearCart();
+    logInUser('CLEAN_UP');
+
+    deleteCookie(__Cookie.tempCustomerId);
+    localStorage.removeItem(__LocalStorage.empData);
     router.push(paths.HOME);
   };
 
