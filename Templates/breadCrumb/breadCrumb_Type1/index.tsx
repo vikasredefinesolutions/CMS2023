@@ -35,7 +35,7 @@ const BreadCrumb_Type1: NextPage<_BreadCrumbProps> = ({
             showBorderAndLogo ? 'border-b border-b-gray-border mb-[10px]' : ''
           } `}
         >
-          <div className='flex flex-wrap justify-between py-[30px]'>
+          <div className='flex flex-wrap justify-between py-[15px]'>
             <nav
               className='flex flex-wrap items-center text-small-text'
               aria-label='Breadcrumb'
