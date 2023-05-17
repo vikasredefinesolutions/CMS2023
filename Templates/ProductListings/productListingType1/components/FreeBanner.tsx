@@ -1,7 +1,7 @@
 import { __pagesText } from '@constants/pages.text';
 const FreeBanner = () => {
   return (
-    <section className='mainsection text-center text-sm leading-none mt-[20px]'>
+    <section className='mainsection text-center text-sm leading-none '>
       <div className='container mx-auto pl-[15px] pr-[15px]'>
         <div className='bg-secondary md:pt-[16px] md:pb-[16px] text-center'>
           <div className='md:flex justify-center pl-[15px] pr-[15px] md:pl-[0] md:pr-[0]'>

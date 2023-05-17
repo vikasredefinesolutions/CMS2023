@@ -353,7 +353,7 @@ const RcForm: React.FC<{ productId: number; attriubteOptionId: number }> = ({
                             />
                           </div>
                         ) : (
-                          <div className='flex items-center justify-between border border-[#a5a5a5] text-medium-text pl-[5px] pr-[5px] pt-[5px] pb-[5px] rounded'>
+                          <div className='flex items-center justify-between border border-[#a5a5a5] text-medium-text pl-[5px] pr-[5px] pt-[5px] pb-[5px] rounded bg-[#ffffff]'>
                             <div className='text-medium-text'>
                               Upload Your Logo
                             </div>

@@ -15,7 +15,7 @@ const SizeChart: React.FC<
     <div
       onClick={() => modalHandler(null)}
       id='sizechartModal'
-      className='overflow-y-auto overflow-x-hidden fixed right-0 left-0 top-4 z-50 justify-center items-center h-modal md:h-full md:inset-0'
+      className='overflow-y-auto overflow-x-hidden fixed right-0 left-0 top-4 z-50 justify-center items-center h-modal md:h-full md:inset-0 '
     >
       <div className='w-full h-full bg-black bg-opacity-50 flex items-center justify-center'>
         <div className='relative px-4 w-full max-w-3xl h-full md:h-auto'>
@@ -46,11 +46,11 @@ const SizeChart: React.FC<
             </div>
 
             <div className=''>
-              <div className='overflow-x-auto max-h-screen'>
+              <div className='overflow-x-auto max-h-screen p-5'>
                 <table
                   cellPadding='0'
                   cellSpacing='0'
-                  className='table-auto w-full text-sm text-center text-[#191919]'
+                  className='table-auto w-full text-sm text-center border border-neutral-200 text-[#191919]'
                 >
                   <thead className='text-sm bg-gray-100 font-semibold uppercase border-b border-neutral-200'>
                     <tr className='divide-x divide-slate-200'>

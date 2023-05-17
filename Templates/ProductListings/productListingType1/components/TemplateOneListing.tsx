@@ -82,7 +82,7 @@ const TemplateOneListing = ({
   };
 
   return (
-    <li key={product.id} className='text-center'>
+    <li className='text-center' key={product.id}>
       <div className=''>
         <div className='flex text-center lg:w-auto'>
           <div className='relative border border-gray-200 pb-[30px] w-full'>
@@ -99,7 +99,7 @@ const TemplateOneListing = ({
                 </div>
               </Link>
 
-              <div className='absolute top-1 right-1 text-gray-800 p-1 z-5"'>
+              <div className='absolute top-1 right-1 text-gray-800 p-1 z-5 cursor-pointer'>
                 <WishlistButton
                   {...{
                     productId: product && product?.id ? product?.id : zeroValue,
@@ -119,8 +119,8 @@ const TemplateOneListing = ({
                   <div className='absolute top-1 left-1 text-gray-800 p-1 z-5"'>
                     <img
                       src={`${mediaBaseUrl}${product?.productTagViewModel[0].imagename}`}
-                      width='70px'
-                      height='70px'
+                      width='60px'
+                      height='60px'
                     />
                   </div>
                 )}
@@ -141,10 +141,10 @@ const TemplateOneListing = ({
                   />
                 </Link>
               </div>
-              <div className='mt-[14px] text-anchor hover:text-anchor-hover h-[44px] text-ellipsis overflow-hidden line-clamp-2 text-small-text tracking-[1.4px] leading-5'>
+              <div className='mt-[14px] text-anchor hover:text-anchor-hover h-[44px] text-ellipsis overflow-hidden line-clamp-2 text-small-text tracking-[1.4px]'>
                 <Link key={product.id} href={`/${product.sename}.html`}>
                   <a
-                    className='relative underline text-[#006cd1]'
+                    className='relative underline text-[#006cd1] leading-[20px]'
                     title={product.name}
                   >
                     {product.name}
@@ -153,7 +153,7 @@ const TemplateOneListing = ({
               </div>
               <div className='mt-[12px] text-[#000000] text-normal-text text-medium-text tracking-wider'>
                 <span className='font-semibold'>
-                  {customerId && product.isspecialbrand ? 'PRICE' : 'MSRP'}
+                  {customerId && product.isspecialbrand ? 'PRICE ' : 'MSRP '}
                   <Price
                     value={undefined}
                     prices={{
@@ -166,14 +166,17 @@ const TemplateOneListing = ({
                   />
                 </span>
               </div>
-              <ul className='flex flex-wrap items-center mt-[12px] justify-center space-x-1'>
+              <ul
+                role='list'
+                className='flex flex-wrap items-center mt-[12px] justify-center space-x-1'
+              >
                 {isAttributeSaparateProduct &&
                 product.splitproductList &&
                 product?.splitproductList?.length > 0 ? (
                   <>
                     <Link key={product.id} href={`/${product.sename}.html`}>
                       <li
-                        className={`w-7 h-7 border-2 border-secondary hover:border-secondary cursor-pointer`}
+                        className={`w-[28px] h-[28px] border-2 border-secondary hover:border-secondary cursor-pointer`}
                       >
                         <NxtImage
                           src={`${mediaBaseUrl}${currentProduct.imageName}`}
@@ -188,7 +191,7 @@ const TemplateOneListing = ({
                       index < listing_max_showcolors - 1 ? (
                         <Link href={`/${subRow.seName}.html`}>
                           <li
-                            className={`w-7 h-7 border-2 hover:border-secondary cursor-pointer`}
+                            className={`w-[28px] h-[28px]  border-2 hover:border-secondary cursor-pointer`}
                             key={`${index}_${subRow.prodcutId}`}
                             onMouseOver={() => setMainImageUrl(subRow.imageurl)}
                             onMouseLeave={() =>

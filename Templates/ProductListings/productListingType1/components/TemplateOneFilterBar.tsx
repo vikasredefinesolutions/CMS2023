@@ -26,12 +26,12 @@ const TemplateOneFilterBar: React.FC<props> = ({
     sortOpenHandler(false);
   }, [router.asPath]);
   return (
-    <div className='relative z-10 bg-light-gray pl-[8px]'>
+    <div className='relative z-10 bg-light-gray px-[10px] mt-[20px] lg:mt-[0px]'>
       <h2 id='filter-heading' className='sr-only'>
         Filters
       </h2>
       <div className='relative py-3'>
-        <div className='container mx-auto flex flex-wrap gap-y-6 text-default-text'>
+        <div className='flex flex-wrap gap-y-6 text-default-text'>
           <div className='w-full md:w-1/3 flex justify-center lg:justify-start flex-wrap items-center'>
             <span className='text-small-text'>
               Total
@@ -45,15 +45,14 @@ const TemplateOneFilterBar: React.FC<props> = ({
             <div className='flex justify-center md:justify-end max-w-7xl mx-auto pl-[16px] sm:pl-[24px] lg:pl-[32px] z-40'>
               <div className='flex items-center'>
                 <div className='relative inline-block text-left'>
-                  <div className='flex items-center gap-3'>
-                    <span className='px-2'>Sort </span>
+                  <div className='flex items-center gap-2'>
+                    <span>Sort </span>
                     <button
-                      type='button'
                       onClick={() =>
                         sortOpenHandler(showSortMenu ? false : true)
                       }
+                      type='button'
                       className='group inline-flex items-center justify-between text-small-text text-[#ffffff] bg-primary w-[200px] md:w-[245px] pl-[8px] pt-[4px] pb-[4px] pr-[4px]'
-                      id='menu-button'
                     >
                       <span>
                         {

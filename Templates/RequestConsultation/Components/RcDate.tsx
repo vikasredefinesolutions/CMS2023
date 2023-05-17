@@ -18,7 +18,7 @@ const RcDate: React.FC<_props> = ({ value, setFieldValue }) => {
   return (
     <div className='w-full '>
       <div className='flex flex-wrap items-center justify-between'>
-        <div className=''>In Hand Date:</div>
+        <div className=''>In Hands Date:</div>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DesktopDatePicker
             inputFormat={__pagesConstant._requestConsultation.dateFormat}
@@ -28,7 +28,7 @@ const RcDate: React.FC<_props> = ({ value, setFieldValue }) => {
             }}
             disableHighlightToday={true}
             disablePast={true}
-            renderInput={(params) => <TextField {...params} />}
+            renderInput={(params) => <TextField {...params} error={false} />}
           />
         </LocalizationProvider>
       </div>

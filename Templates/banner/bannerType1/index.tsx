@@ -25,7 +25,7 @@ const BannerType1: React.FC<_BannerComponentProps> = ({
               className='inline-flex items-center tracking-[1.2px] text-default-text font-medium'
             >
               {__pagesText.productListing.Banner.loginforExclusivePrice}
-              <span className='material-icons'>
+              <span className='material-icons ml-[7px]'>
                 {__pagesText.Headers.loginIcon}
               </span>
             </a>
@@ -76,7 +76,7 @@ const BannerType1: React.FC<_BannerComponentProps> = ({
                 </div>
               </div>
               <div className='w-full lg:w-1/2 text-gray-900 px-5'>
-                <div className='font-normal text-title-text pb-[10px]'>
+                <div className='font-normal text-2xl-text pb-[10px]'>
                   {banner[0].h1}
                 </div>
                 <div className='font-normal text-sub-text pb-[5px]'>

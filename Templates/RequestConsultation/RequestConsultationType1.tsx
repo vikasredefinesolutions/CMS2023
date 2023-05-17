@@ -50,7 +50,7 @@ const RequestConsultationType1: React.FC<_RequestConsultationProps> = ({
             <div className='font-bold text-2xl-text mb-[13px] text-center text tracking-[1.4px]'>
               Request Consultation & Proof
             </div>
-            <div className='border border-gray-400 pt-[12px] pb-[12px]'>
+            <div className='border border-gray-400 pt-[12px] pb-[12px] px-[20px]'>
               <div className='flex flex-wrap -mx-[15px]'>
                 <div className='w-full lg:w-4/12 md:w-full text-center pl-[15px] pr-[15px] mb-[30px]'>
                   <div className=''>

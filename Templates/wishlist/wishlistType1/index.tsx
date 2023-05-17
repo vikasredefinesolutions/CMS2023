@@ -22,7 +22,7 @@ const WishlistType1: React.FC<_Wishlist> = ({
       <div className='text-2xl-text font-[600] text-center pt-[20px] pb-[10px]'>
         {__pagesText.Wishlist.wishlist}
       </div>
-      <div className='flex flex-wrap mx-[-15px] mt-[50px]'>
+      <div className='flex flex-wrap mx-[-15px] mt-[30px] mb-[30px]'>
         {wishlist.map((list: WishlistType) => (
           <div
             key={`${list.id}`}
@@ -60,7 +60,7 @@ const WishlistType1: React.FC<_Wishlist> = ({
                   </Link>
                 </div>
                 <div className='flex flex-wrap justify-center items-center mt-[5px] mb-[10px]'>
-                  <div className=''>{__pagesText.msrp}:</div>
+                  <div className=''>{__pagesText.productInfo.price}</div>
                   <div className='font-[600]'>
                     <Price
                       value={undefined}

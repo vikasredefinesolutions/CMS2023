@@ -163,7 +163,7 @@ export const multipleBrands = (dataArr, selectedObj) => {
           (item.BgColor ? item.BgColor : '#003a70') +
           ' ">';
         strHTML += '<div class="flex justify-center items-center">';
-        strHTML += '<a href="' + item?.Image_alt + '">';
+        strHTML += '<a href="' + item?.Image_link + '">';
         strHTML +=
           '<img className="w-full mx-auto" alt="' +
           item?.Image_alt +

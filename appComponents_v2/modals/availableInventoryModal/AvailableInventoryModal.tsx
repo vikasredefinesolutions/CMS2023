@@ -152,7 +152,7 @@ const AvailableInventoryModal: React.FC<_ModalProps> = ({ modalHandler }) => {
                   modalHandler(null);
                 }}
                 type='button'
-                className='p-2 px-3 bg-indigo-600 border border-indigo-600 text-white'
+                className='p-2 px-3 btn btn-secondary text-white'
               >
                 {__pagesText.productInfo.availableInventoryModal.close}
               </button>
