@@ -34,10 +34,7 @@ const SingleProductListing: React.FC<_props> = (props) => {
   return (
     <>
       <div className='px-4'>
-        <div
-          className='flex text-center border border-gray-200 bg-white border-solid p-5'
-          style={{ margin: '30px 0 0' }}
-        >
+        <div className='flex text-center border border-gray-200 bg-white border-solid p-5'>
           <div className='relative pb-4 w-full cat-pro-list'>
             <div className='w-full rounded-md overflow-hidden aspect-w-1 aspect-h-1'>
               <Link

@@ -90,7 +90,7 @@ const BrandProductListing: React.FC<_props> = ({ productsData }) => {
       {productsData === null ? (
         <></>
       ) : (
-        <section className='mainsection mt-10'>
+        <section className='mainsection'>
           <div className='container mx-auto'>
             <div className='relative'>
               <div className=''>
@@ -106,7 +106,7 @@ const BrandProductListing: React.FC<_props> = ({ productsData }) => {
                     onClick={() => goToPrevProduct()}
                     className='bg-white -ml-2 lg:-ml-4 flex justify-center items-center w-10 h-10 rounded-full shadow focus:outline-none'
                   >
-                    <span className='chevron-left mr-1 text-base material-symbols-outlined font-semibold '>
+                    <span className='chevron-left ml-1 text-base material-symbols-outlined font-semibold '>
                       arrow_back_ios
                     </span>
                   </button>
