@@ -81,23 +81,25 @@ const CartType1: React.FC<_CartProps> = ({
                 <div className='mt-4'>
                   <Link className='' href={paths.CHECKOUT}>
                     <a className='btn btn-lg btn-secondary !flex items-center justify-center w-full'>
-                      <span className='material-icons'>shopping_cart</span>
+                      <span className='material-icons text-lg mr-[2px]'>
+                        shopping_cart
+                      </span>
                       CHECKOUT NOW
                     </a>
                   </Link>
                 </div>
-                <div className='mt-4 bg-light-gray px-4 py-4'>
-                  <div className='flex items-center justify-center'>
+                <div className='mt-[20px] bg-light-gray px-4 py-4'>
+                  <div className='flex items-center justify-center mb-[15px]'>
                     <img
                       src='/order-risk-free-icon.jpg'
                       alt=''
                       className='mr-2 w-5 h-5'
                     />
-                    <span className='text-sub-text font-semibold'>
+                    <span className='text-title-text font-semibold'>
                       Order Risk-Free!
                     </span>
                   </div>
-                  <div className='flex items-center justify-center text-sub-text text-center mt-3'>
+                  <div className='flex items-center justify-center text-medium-text font-[600] leading-normal text-center mb-[10px]'>
                     Cancel your order without penalty anytime before your proof
                     is approved.
                   </div>

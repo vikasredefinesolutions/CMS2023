@@ -88,6 +88,7 @@ export const cartSlice = createSlice({
       state.logos.availableOptions = action.payload.availableOptions;
     },
     logoutClearCart: (state) => {
+      state.isCartLoading = true;
       state.cart = null;
       state.guestId = 0;
       state.email = '';

@@ -1,4 +1,4 @@
-import { defaultCountry, defaultState } from '@configs/page.config';
+import { defaultCountry } from '@configs/page.config';
 import { AddressFormRefType } from '@controllers/checkoutController/CheckoutAddressForm';
 import { FetchCountriesList, FetchStatesList } from '@services/general.service';
 import { useEffect, useState } from 'react';
@@ -44,10 +44,7 @@ const AddressForm = (props: AddressFormRefType) => {
       FetchStatesList(obj.id).then((res) => {
         if (res) {
           setState(res);
-          setFieldValue(
-            'state',
-            state.find((res) => res.id === defaultState)?.name,
-          );
+          setFieldValue('state', res[0].name);
         }
       });
     }

@@ -54,6 +54,7 @@ const ChekoutType1: React.FC<_Props> = ({ cartTemplateId }) => {
     purchaseOrder,
     orderNote,
     setorderNotes,
+    setCurrentPage,
   } = CheckoutController();
 
   return (
@@ -77,10 +78,10 @@ const ChekoutType1: React.FC<_Props> = ({ cartTemplateId }) => {
                           </div>
                           <div className='text-default-text'>
                             <div
-                              onClick={() => setAddressType('S')}
+                              onClick={() => setAddressType('B')}
                               className='!text-anchor hover:!text-anchor-hover '
                             >
-                              {__pagesText.CheckoutPage.Change}
+                              {__pagesText.CheckoutPage.Edit}
                             </div>
                           </div>
                         </div>
@@ -110,40 +111,17 @@ const ChekoutType1: React.FC<_Props> = ({ cartTemplateId }) => {
                       <div className='pl-[15px] pr-[15px] pt-[15px] pb-[15px]'>
                         <div className='flex flex-wrap items-center justify-between pt-[10px] border-b border-[#ececec]'>
                           <div className='pb-[10px] text-title-text'>
-                            {__pagesText.CheckoutPage.BillingInformation}
+                            {__pagesText.CheckoutPage.PaymentMethod}
                           </div>
                           <div className='text-default-text'>
                             <div
-                              onClick={() => setAddressType('B')}
+                              onClick={() =>
+                                setCurrentPage(checkoutPages.address)
+                              }
                               className='!text-anchor hover:!text-anchor-hover '
                             >
-                              {__pagesText.CheckoutPage.Change}
+                              {__pagesText.CheckoutPage.Edit}
                             </div>
-                          </div>
-                        </div>
-                        {billingAdress && (
-                          <div className='text-default-text mt-[10px]'>
-                            {billingAdress?.firstname} {billingAdress?.lastName}
-                            <br />
-                            {billingAdress?.companyName}
-                            <br />
-                            {billingAdress?.address1}
-                            <br />
-                            {[
-                              billingAdress?.city,
-                              billingAdress?.state,
-                              billingAdress?.postalCode,
-                            ].join(', ')}
-                            <br />
-                            {billingAdress?.countryName}
-                            <br />
-                            {billingAdress?.phone}
-                          </div>
-                        )}
-
-                        <div className='pt-[10px] border-b border-[#ececec]'>
-                          <div className='pb-[10px] text-title-text'>
-                            {__pagesText.CheckoutPage.PaymentMethod}
                           </div>
                         </div>
                         <div className='flex flex-wrap items-center justify-between pt-[10px]'>
@@ -177,6 +155,38 @@ const ChekoutType1: React.FC<_Props> = ({ cartTemplateId }) => {
                             )}
                           </div>
                         </div>
+                        <div className='flex flex-wrap items-center justify-between pt-[10px] border-b border-[#ececec]'>
+                          <div className='pb-[10px] text-title-text'>
+                            {__pagesText.CheckoutPage.BillingInformation}
+                          </div>
+                          <div className='text-default-text'>
+                            <div
+                              onClick={() => setAddressType('B')}
+                              className='!text-anchor hover:!text-anchor-hover '
+                            >
+                              {__pagesText.CheckoutPage.Edit}
+                            </div>
+                          </div>
+                        </div>
+                        {billingAdress && (
+                          <div className='text-default-text mt-[10px]'>
+                            {billingAdress?.firstname} {billingAdress?.lastName}
+                            <br />
+                            {billingAdress?.companyName}
+                            <br />
+                            {billingAdress?.address1}
+                            <br />
+                            {[
+                              billingAdress?.city,
+                              billingAdress?.state,
+                              billingAdress?.postalCode,
+                            ].join(', ')}
+                            <br />
+                            {billingAdress?.countryName}
+                            <br />
+                            {billingAdress?.phone}
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>

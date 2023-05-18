@@ -1,12 +1,10 @@
-import React from 'react';
-
 import {
   _MyAcc_OrderBillingDetails,
   _MyAcc_OrderProductDetails,
 } from '@definations/APIs/user.res';
+import React from 'react';
 import ThankYouHeader from '../CommonComponents/ThankYouHeader';
 import ThankYouAccordian from './Components/ThankYouAccordian';
-
 interface _props {
   order: {
     billing: _MyAcc_OrderBillingDetails | null;

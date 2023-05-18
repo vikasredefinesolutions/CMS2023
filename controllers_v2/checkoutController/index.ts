@@ -38,7 +38,6 @@ import { Klaviyo_PlaceOrder } from '@services/klaviyo.service';
 import { signInUser } from '@services/user.service';
 import { getWishlist } from '@services/wishlist.service';
 import _ from 'lodash';
-import router from 'next/router';
 import { ChangeEvent, useEffect, useState } from 'react';
 
 import { __pagesConstant } from '@constants/pages.constant';
@@ -540,17 +539,20 @@ const CheckoutController = () => {
         orderModel,
       };
       try {
+        setShowLoader(true);
+
         logoutClearCart();
         deleteCookie(__Cookie.tempCustomerId);
 
         const res = await placeOrderService(order);
-        setShowLoader(false);
         if (res) {
           await Klaviyo_PlaceOrder({
             orderNumber: res.id,
           });
 
-          router.push(`${paths.THANK_YOU}?orderNumber=${res.id}`);
+          // router.push(`${paths.THANK_YOU}?orderNumber=${res.id}`);
+          window.location.assign(`${paths.THANK_YOU}?orderNumber=${res.id}`);
+          setShowLoader(false);
         }
       } catch (error) {
         setShowLoader(false);
@@ -689,6 +691,7 @@ const CheckoutController = () => {
     purchaseOrder,
     orderNote,
     setorderNotes,
+    setCurrentPage,
   };
 };
 

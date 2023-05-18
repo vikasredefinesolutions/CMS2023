@@ -23,15 +23,14 @@ const ThankYouHeader: React.FC<_ThankYouProps> = ({ order }) => {
         <div className='bg-[#ffffff]'>
           <div className='container mx-auto'>
             <div className='bg-primary w-full mt-[20px] mb-[20px]'>
-              <div className='pl-[15px] pr-[15px] pb-[15px] pt-[15px] w-full'>
+              <div className='pl-[15px] pr-[15px] pb-[15px] pt-[15px] w-full '>
                 <div className='text-center'>
-                  <div className='mx-auto w-[50px] border-2 rounded-full '>
+                  <div className='mx-auto w-[50px]'>
                     <NxtImage
-                      src='/images/thank-you-icon.png'
+                      src='/assets/images/thank-you-icon.png'
+                      isStatic
                       alt=''
-                      className=''
-                      width={'20px'}
-                      height={'20px'}
+                      className='mx-auto border-2 rounded-full pl-[15px] pr-[15px] pb-[15px] pt-[15px]'
                     />
                   </div>
                   <span className='block text-[#ffffff] text-large-text pt-[8px] pb-[8px]'>

@@ -499,6 +499,7 @@ export const __pagesText = {
   },
   CheckoutPage: {
     Change: 'Change',
+    Edit: 'Edit',
     GoToPayment: 'GO TO PAYMENT DETAILS',
     GotoReview: 'GO TO REVIEW ORDER',
     secure128: 'This is a secure 128-bit SSL encrypted method',

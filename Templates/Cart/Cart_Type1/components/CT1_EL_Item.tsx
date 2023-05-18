@@ -320,7 +320,7 @@ const CT1_EL_Item: React.FC<CartObject> = (item) => {
             <div className='mt-[12px] lg:ml-[20px]'>
               <button
                 onClick={() => handleRemoveItem(item.shoppingCartItemsId)}
-                className='btn btn-primary !w-full !pt-[0px] !pb-[0px] text-center uppercase'
+                className='btn btn-primary !w-full  text-center uppercase'
               >
                 Remove
               </button>
