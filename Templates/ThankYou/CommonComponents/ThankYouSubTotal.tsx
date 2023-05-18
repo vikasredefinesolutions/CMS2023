@@ -53,14 +53,16 @@ const ThankYouSubTotal: React.FC<_props> = ({ billing }) => {
                 <Price value={billing?.orderTax} />
               </dd>
             </div>
-            <div className='flex justify-between pt-[8px]'>
-              <dt className='font-[600]'>
-                {__pagesText.ThankYouPage.TotalSummary.couponDiscountAmount}
-              </dt>
-              <dd>
-                <Price value={billing?.couponDiscountAmount} />
-              </dd>
-            </div>
+            {billing?.couponCode && (
+              <div className='flex justify-between pt-[8px]'>
+                <dt className='font-[600]'>
+                  {__pagesText.ThankYouPage.TotalSummary.couponDiscountAmount}
+                </dt>
+                <dd>
+                  <Price value={billing?.couponDiscountAmount} />
+                </dd>
+              </div>
+            )}
             <div className='flex justify-between pt-[8px]'>
               <dt className='font-[600]'>
                 {__pagesText.ThankYouPage.TotalSummary.SewOut}

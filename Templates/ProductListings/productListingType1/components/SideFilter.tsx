@@ -35,7 +35,7 @@ const SideFilter = ({
       >
         <div className='text-lg font-semibold text-[#ffffff]'>Filters</div>
         <a href='javascript:void(0);' className='inline-flex'>
-          <span className='material-symbols-outlined'>
+          <span className='material-symbols-outlined mt-[5px]'>
             {openFilters ? 'remove' : 'add'}
           </span>
         </a>
@@ -142,7 +142,7 @@ const SideFilter = ({
                                               {option.subrows?.map((subrow) => (
                                                 <li
                                                   key={subrow.id}
-                                                  className='w-full py-0'
+                                                  className='w-full py-0 flex items-center'
                                                 >
                                                   {' '}
                                                   <Link
@@ -331,7 +331,7 @@ const SideFilter = ({
                                             {option.subrows?.map((subrow) => (
                                               <li
                                                 key={subrow.id}
-                                                className='w-full py-0'
+                                                className='w-full py-0 flex items-center'
                                               >
                                                 {' '}
                                                 <Link

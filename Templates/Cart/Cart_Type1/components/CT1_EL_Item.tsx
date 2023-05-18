@@ -44,10 +44,11 @@ const CT1_EL_Item: React.FC<CartObject> = (item) => {
 
   // Component Functions
   const refreshCartItems = async () => {
-    fetchCartDetails({
+    await fetchCartDetails({
       customerId,
       isEmployeeLoggedIn,
     });
+    setShowLoader(false);
   };
 
   const updateCartItems = async () => {
@@ -62,18 +63,20 @@ const CT1_EL_Item: React.FC<CartObject> = (item) => {
           id: item.shoppingCartItemsId,
           price: details.totalPrice,
           quantity: details.totalQty,
-          weight: 0,
-          productType: 0,
           discountPrice: item.discountPrice,
           logoTitle: item.productName,
           logogImagePath: item.colorImage,
+          isEmployeeLoginPrice: details.totalPrice,
+
+          // Static values
+          status: 2,
+          weight: 0,
+          productType: 0,
           perQuantity: 0,
           appQuantity: 0,
-          status: 2,
           discountPercentage: 0,
-          productCustomizationId: 0,
           itemNotes: item.itemNote,
-          isEmployeeLoginPrice: details.totalPrice,
+          productCustomizationId: 0,
         },
         shoppingCartItemsDetailModels: [
           {
@@ -110,12 +113,12 @@ const CT1_EL_Item: React.FC<CartObject> = (item) => {
           refreshCartItems();
         })
         .catch(() => {
+          setShowLoader(false);
           showModal({
             message: commonMessage.somethingWentWrong,
             title: commonMessage.failed,
           });
-        })
-        .finally(() => setShowLoader(false));
+        });
     }
   };
 

@@ -7,6 +7,10 @@ export const __SuccessErrorText = {
   noPageFound: 'No Page found.',
   noPageTypeFound: 'No page type found',
   alreadyRegistered: 'Email is already registered',
+  promoCode: {
+    valid: 'Coupon Code Successfully Updated!',
+    invalid: `Enter a valid Promo code.`,
+  },
 };
 
 export const commonMessage = {

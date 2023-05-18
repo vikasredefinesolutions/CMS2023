@@ -8,7 +8,7 @@ import { checkoutPages } from '@constants/enum';
 import { __pagesText } from '@constants/pages.text';
 import CheckoutController from '@controllers/checkoutController';
 import { isNumberKey } from '@helpers/common.helper';
-import { useTypedSelector_v2 } from '@hooks_v2/index';
+import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import { CartObject } from '@services/cart';
 import Link from 'next/link';
 import { FC } from 'react';
@@ -27,6 +27,7 @@ const CIlayout1: FC<any> = ({
   const { loggedIn: empLoggedIn } = useTypedSelector_v2(
     (state) => state.employee,
   );
+  const { setShowLoader } = useActions_v2();
 
   let mediaBaseUrl = _globalStore.blobUrl; // for server side
   const clientSideMediaBaseUrl = useTypedSelector_v2(
@@ -301,17 +302,18 @@ const CIlayout1: FC<any> = ({
                 </div>
                 {isEditable && (
                   <div className='lg:w-1/4 w-full'>
-                    {!empLoggedIn && (
-                      <div className='mt-[24px] lg:ml-[20px]'>
-                        <button
-                          data-modal-toggle='startorderModal'
-                          className='btn btn-secondary !w-full !pt-[0px] !pb-[0px] text-center uppercase'
-                          onClick={() => loadProduct(item)}
-                        >
-                          EDIT ITEM
-                        </button>
-                      </div>
-                    )}
+                    <div className='mt-[24px] lg:ml-[20px]'>
+                      <button
+                        data-modal-toggle='startorderModal'
+                        className='btn btn-secondary !w-full !pt-[0px] !pb-[0px] text-center uppercase'
+                        onClick={() => {
+                          setShowLoader(true);
+                          loadProduct(item);
+                        }}
+                      >
+                        EDIT ITEM
+                      </button>
+                    </div>
                     <div className='mt-[12px] lg:ml-[20px]'>
                       <button
                         onClick={() => removeCartItem(item.shoppingCartItemsId)}

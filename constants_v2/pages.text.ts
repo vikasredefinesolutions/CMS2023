@@ -143,7 +143,7 @@ export const __pagesText = {
     loginModal: {
       signIn: 'SIGN IN',
       shopNow: 'SHOP NOW',
-      keepMeLoggedIn: 'Keep me logged',
+      keepMeLoggedIn: 'Keep me logged in',
       infoButton: {
         yourPasswordMustHave: 'Your password must have :',
         orMoreCharaters: '8 Or more character',

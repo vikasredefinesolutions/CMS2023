@@ -1,14 +1,18 @@
 import { __pagesText } from '@constants/pages.text';
 import { _ThankYouProps } from '@templates/ThankYou/ThankYou';
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import ThankYouSubTotal from '../../CommonComponents/ThankYouSubTotal';
 import ThankYouProduct from './ThankYouProduct';
 
 const ThankYouAccordian: React.FC<_ThankYouProps> = ({ order }) => {
+  const [showAccordian, setshowAccordian] = useState<boolean>(true);
   return (
     <>
       <div className='accordion w-full mb-[30px]' id='accordionExample'>
-        <div className='accordion-item !rounded-none bg-[#ffffff] border border-gray-border'>
+        <div
+          className='accordion-item !rounded-none bg-[#ffffff] border border-gray-border '
+          onClick={() => setshowAccordian(!showAccordian)}
+        >
           <h2 className='accordion-header mb-0' id='headingOne'>
             <button
               className='accordion relative flex items-center w-full py-4 px-5 !text-primary text-left bg-white border rounded-none transition focus:outline-none text-2xl '
@@ -20,7 +24,7 @@ const ThankYouAccordian: React.FC<_ThankYouProps> = ({ order }) => {
           </h2>
           <div
             id='collapseOne'
-            className='accordion-collapse'
+            className={`accordion-collapse ${showAccordian ? '' : 'hidden'}`}
             aria-labelledby='headingOne'
           >
             <div className='accordion-body pl-[15px] pr-[15px] pb-[15px] pt-[15px]'>

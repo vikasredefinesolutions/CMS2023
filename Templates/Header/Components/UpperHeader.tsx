@@ -47,23 +47,25 @@ const UpperHeader: React.FC<_props> = (headerContent) => {
             <div className='flex flex-wrap justify-between items-center'>
               <div dangerouslySetInnerHTML={{ __html: leftcontent }} />
               <div className='flex items-center gap-3'>
-                {employeeDetails.empId ? (
-                  <>
-                    <span className='text-center text-capitalize cursor-pointer'>
-                      Employee logged in
-                      <button
-                        className='ml-1'
-                        style={{ color: '#7BC24E' }}
-                        onClick={() => employeeClear()}
-                      >
-                        (LogOut)
-                      </button>
-                    </span>
-                    <span className='p-l-5 p-r-5'>|</span>
-                  </>
-                ) : null}
+                <div className='flex items-center gap-3'>
+                  {employeeDetails.empId ? (
+                    <>
+                      <span className='text-center text-capitalize cursor-pointer text-[#ffffff]'>
+                        Employee logged in
+                        <button
+                          className='ml-1'
+                          style={{ color: '#7BC24E' }}
+                          onClick={() => employeeClear()}
+                        >
+                          (LogOut)
+                        </button>
+                      </span>
+                      <span className='p-l-5 p-r-5 text-[#ffffff]'>|</span>
+                    </>
+                  ) : null}
+                </div>
+                <div dangerouslySetInnerHTML={{ __html: rightContent }} />
               </div>
-              <div dangerouslySetInnerHTML={{ __html: rightContent }} />
             </div>
           </div>
         </div>

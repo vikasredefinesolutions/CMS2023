@@ -320,12 +320,21 @@ const CheckoutController = () => {
 
   const checkPayment = () => {
     let { totalPrice } = { totalPrice: 200 };
+
     if (totalPrice > 0) {
       if (paymentEnum.creditCard === paymentMethod) {
         if (
-          cardDetails &&
-          Object.values(cardDetails).some((x) => x === null || x === '')
+          (cardDetails &&
+            Object.values(cardDetails).some((x) => x === null || x === '')) ||
+          cardDetails.cardNumber.length !== 16
         ) {
+          if (cardDetails.cardNumber.length < 16) {
+            showModal({
+              message: 'Please enter valid card number',
+              title: 'Warning',
+            });
+            return;
+          }
           showModal({ message: 'Invalid Card Details', title: 'Warning' });
           return;
         }

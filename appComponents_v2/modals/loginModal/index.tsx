@@ -288,16 +288,23 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
                           </div>
                           <div className='mt-[10px] text-extra-small-text text-center'>
                             {__pagesText.productInfo.loginModal.clickMessage}{' '}
-                            <Link href={'terms-and-conditions.html'}>
-                              <a className='text-anchor'>
+                            <Link
+                              href='https://www.corporategear.com/terms-and-conditions.html'
+                              target='_blank'
+                            >
+                              <a className='text-anchor' target='_blank'>
                                 {__pagesText.productInfo.loginModal.termsOfUse}
                               </a>
-                            </Link>
+                            </Link>{' '}
                             {__pagesText.productInfo.loginModal.and}{' '}
-                            <Link href={'privacy-policy'}>
+                            <Link
+                              href='https://www.corporategear.com/privacypolicy.html'
+                              target='_blank'
+                            >
                               <a
                                 className='text-anchor'
                                 onClick={() => modalHandler(null)}
+                                target='_blank'
                               >
                                 {
                                   __pagesText.productInfo.loginModal
@@ -305,6 +312,7 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
                                 }
                               </a>
                             </Link>
+                            .
                           </div>
                         </div>
                       </>

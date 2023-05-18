@@ -18,9 +18,10 @@ export interface _Cart_Initials {
     allowedBalance: number;
   };
   discount: {
-    coupon: null | string;
-    amount: null | number;
-    percentage: null | number;
+    coupon: string;
+    amount: number;
+    percentage: number;
+    showTextFor3Sec: boolean;
   } | null;
   logos: {
     details: LogoDetails[] | null;
@@ -70,7 +71,32 @@ export const cartSlice = createSlice({
         state.isGuestCustomer = payload.data.isGuestCustomer;
       }
     },
-    addPromoCode: (state, { payload }) => {
+    cart_promoCode: (
+      state,
+      {
+        payload,
+      }: {
+        payload:
+          | 'HIDE_TEXT'
+          | 'REMOVE_PROMO_CODE'
+          | {
+              coupon: string;
+              amount: number;
+              percentage: number;
+              showTextFor3Sec: boolean;
+            };
+      },
+    ) => {
+      if (payload === 'HIDE_TEXT') {
+        state.discount!.showTextFor3Sec = false;
+        return;
+      }
+
+      if (payload === 'REMOVE_PROMO_CODE') {
+        state.discount = null;
+        return;
+      }
+
       state.discount = payload;
     },
     updateSomLogo: (

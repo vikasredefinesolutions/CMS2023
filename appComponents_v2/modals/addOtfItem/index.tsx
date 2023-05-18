@@ -1,195 +1,190 @@
 import { __pagesText } from '@constants/pages.text';
-import { OTFItemValidation } from '@constants/validationMessages';
-import { OTFItemNoList } from '@definations/otfItem.res';
-import { getAddToCartObject, isNumberKey } from '@helpers/common.helper';
+import { __SuccessErrorText } from '@constants/successError.text';
 import {
   GetCustomerId,
   useActions_v2,
   useTypedSelector_v2,
 } from '@hooks_v2/index';
+import { CartReq } from '@services/cart';
 import { addToCart } from '@services/cart.service';
 import { UploadImage } from '@services/file.service';
 import {
-  addOtfItem,
-  getOtfItemNo,
-  getOtfItemVariant,
+  FetchOtfItemNumbers,
+  FetchOtfItemVariants,
+  OTFItem,
+  OTFVariant,
 } from '@services/otfItems.service';
-import { useFormik } from 'formik';
+import { Form, Formik, FormikHelpers } from 'formik';
 import { useEffect, useState } from 'react';
-import * as Yup from 'yup';
+import {
+  OTF_InitialValues,
+  OTF_ValidationSchema,
+  _OTF_Fields,
+  _OTF_InitialValues,
+  addOTFItemToStore,
+  calculateTotals,
+} from './Components/OTF_Extra';
+import { OTF_Input, OTF_Select } from './Components/OTF_Input';
 
 const AddOTFItemNo = ({ closeModal }: { closeModal: () => void }) => {
-  const [otfItemNo, setOtfItemNo] = useState<OTFItemNoList | null>(null);
-  const [otfItemVariant, setOtfItemVariant] = useState<OTFItemNoList | null>(
-    null,
+  const { fetchCartDetails, setShowLoader, showModal } = useActions_v2();
+  const { id: storeId, imageFolderPath } = useTypedSelector_v2(
+    (state) => state.store,
   );
-  const [fileUrl, setFileUrl] = useState('');
+  const mediaBaseUrl = useTypedSelector_v2((state) => state.store.mediaBaseUrl);
 
-  const {
-    id: storeId,
-    imageFolderPath,
-    isSewOutEnable,
-    sewOutCharges,
-  } = useTypedSelector_v2((state) => state.store);
-  const userId = GetCustomerId();
-  const { fetchCartDetails, setShowLoader } = useActions_v2();
-  useEffect(() => {
-    (async () => {
-      const itmes = await getOtfItemNo();
-      setOtfItemNo(itmes);
-      const variants = await getOtfItemVariant();
-      setOtfItemVariant(variants);
-    })();
-  }, []);
+  // COMPONENT STATES
+  const [otfItemNo, setOtfItemNo] = useState<OTFItem[]>([]);
+  const [otfItemVariant, setOtfItemVariant] = useState<OTFVariant[]>([]);
+  const [fileToUpload, setFileToUpload] = useState<{
+    name: string;
+    type: string;
+    previewURL: string;
+    serverURL: string | null;
+  } | null>(null);
+
+  // IMPORTED FUNCTIONS
+  const customerId = GetCustomerId();
+
+  // COMPONENT FUNCTIONS
+  const fetchOtfItemsNVariants = async () => {
+    setShowLoader(true);
+
+    await Promise.allSettled([FetchOtfItemNumbers(), FetchOtfItemVariants()])
+      .then((values) => {
+        if (values[0].status === 'fulfilled') {
+          setOtfItemNo(values[0].value);
+        }
+
+        if (values[1].status === 'fulfilled') {
+          setOtfItemVariant(values[1].value);
+        }
+      })
+      .catch(() => {})
+      .finally(() => {
+        setShowLoader(false);
+      });
+  };
 
   const fileReader = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.currentTarget?.files === null) return;
     setShowLoader(true);
 
     try {
-      // const file = {
-      //   name: event.currentTarget.files[0].name,
-      //   type: event.currentTarget.files[0].type,
-      //   previewURL: URL.createObjectURL(event.currentTarget.files[0]),
-      // };
+      const file: typeof fileToUpload = {
+        name: event.currentTarget.files[0].name,
+        type: event.currentTarget.files[0].type,
+        previewURL: URL.createObjectURL(event.currentTarget.files[0]),
+        serverURL: null,
+      };
 
-      const logoFileURL: string | null = await UploadImage({
+      file.serverURL = await UploadImage({
         folderPath: imageFolderPath,
         files: event.currentTarget?.files[0],
       });
-      if (logoFileURL) {
-        setFileUrl(logoFileURL);
+
+      if (file.serverURL) {
+        setFileToUpload(file);
       }
-      setShowLoader(false);
     } catch (error) {
-      setShowLoader(false);
-      console.log(error);
-    }
-  };
-
-  const initialValues = {
-    otfItemNo: '',
-    otfItemVariant: '',
-    ourSKU: '',
-    name: '',
-    color: '',
-    size: '',
-    price: '',
-    qty: '',
-  };
-
-  const validationSchema = Yup.object().shape({
-    otfItemNo: Yup.string().required(OTFItemValidation.otfItemNo.required),
-    otfItemVariant: Yup.string().required(
-      OTFItemValidation.otfItemVariant.required,
-    ),
-    ourSKU: Yup.string().required(OTFItemValidation.ourSKU.required),
-    name: Yup.string().required(OTFItemValidation.name.required),
-    color: Yup.string().required(OTFItemValidation.color.required),
-    size: Yup.string().required(OTFItemValidation.size.required),
-    price: Yup.number().required(OTFItemValidation.price.required),
-    qty: Yup.string().required(OTFItemValidation.qty.required),
-  });
-
-  const submitHandler = async (values: typeof initialValues) => {
-    try {
-      const size = values.size.split(',');
-      const qty = values.qty.split(',');
-      const res = await addOtfItem({
-        addOTFItemModel: {
-          id: 0,
-          otfItemNo: values.otfItemNo,
-          otfItemVariant: values.otfItemVariant,
-          ourSKU: values.ourSKU,
-          name: values.name,
-          color: values.color,
-          colorOptionId: 0,
-          size: size.map((res) => ({ attributeOptionId: 0, name: res.trim() })),
-          price: values.price,
-          qty: qty.map((res) => res.trim()),
-          storeId: storeId,
-          imagePath: fileUrl,
-        },
+      showModal({
+        title: 'Error',
+        message: __SuccessErrorText.SomethingWentWrong,
       });
+    }
+    setShowLoader(false);
+  };
 
-      const productDetails = {
-        productId: res?.id || 0,
-        image: {
-          id: 0,
-          imageUrl: fileUrl,
-          altTag: res.name,
-        },
-        color: {
-          altTag: res.color,
-          imageUrl: fileUrl,
-          name: res.color,
-          attributeOptionId: res.colorOptionId,
-        },
-        inventory: null,
-      };
-      const totalQty = ~~qty.reduce((prev: string, newQty: string) =>
-        (~~prev + ~~newQty).toString(),
+  const submitHandler = async (
+    values: _OTF_InitialValues,
+    actions: FormikHelpers<_OTF_InitialValues>,
+  ) => {
+    setShowLoader(true);
+
+    try {
+      const otfResponse = await addOTFItemToStore(
+        storeId,
+        values,
+        fileToUpload?.serverURL || '',
       );
 
-      const price = res.price * totalQty;
-      const cartModel = await getAddToCartObject({
-        userId: +userId,
-        note: '',
-        sizeQtys: res.size.map((optn, index) => {
-          const qtySize = +qty[index].trim();
-          if (qtySize) {
-            return {
-              attributeOptionId: optn.attributeOptionId,
-              price: qtySize * res.price,
-              qty: qtySize,
-              size: optn.name,
-            };
-          }
-          return null;
-        }),
-        productDetails,
-        total: {
-          totalPrice: price,
-          totalQty: totalQty,
-        },
-
-        storeId: storeId,
-        isEmployeeLoggedIn: true,
-        shoppingCartItemId: 0,
-        isSewOutEnable: isSewOutEnable,
-        sewOutCharges: sewOutCharges,
-        logos: [],
+      const { totalPrice, totalQty } = calculateTotals({
+        qty: otfResponse.qty,
+        responsePrice: otfResponse.price,
       });
-      setFileUrl('');
-      await addToCart(cartModel);
-      fetchCartDetails({ customerId: userId, isEmployeeLoggedIn: true });
+
+      const payload: CartReq = {
+        addToCartModel: {
+          customerId: +customerId,
+          productId: otfResponse.id,
+          storeId: storeId,
+          isempLogin: true,
+          shoppingCartItemModel: {
+            price: totalPrice,
+            quantity: totalQty,
+            isEmployeeLoginPrice: totalPrice, // Questionable
+            logoTitle: otfResponse.name,
+            logogImagePath: otfResponse.imagePath,
+            // Static
+            id: 0,
+            status: 2,
+            weight: 0,
+            itemNotes: '',
+            productType: 0,
+            appQuantity: 0,
+            perQuantity: 0,
+            discountPrice: 0,
+            discountPercentage: 0,
+            productCustomizationId: 0,
+          },
+          shoppingCartItemsDetailModels: [
+            {
+              attributeOptionId: otfResponse.colorOptionId,
+              attributeOptionName: 'color',
+              attributeOptionValue: otfResponse.color,
+            },
+          ],
+          //Sizes info
+          cartLogoPersonModel: otfResponse.size.map((item, index) => ({
+            attributeOptionId: item.attributeOptionId,
+            attributeOptionValue: item.name,
+            //
+            isEmployeeLoginPrice: otfResponse.price,
+            price: otfResponse.price,
+            quantity: otfResponse.qty[index],
+            // Static
+            id: 0,
+            code: '', //
+            estimateDate: new Date(),
+          })),
+          // Empty Logos
+          cartLogoPersonDetailModels: [],
+        },
+      };
+
+      await addToCart(payload);
+      await fetchCartDetails({
+        customerId: customerId,
+        isEmployeeLoggedIn: true,
+      });
       closeModal();
     } catch (error: any) {
       const err = JSON.parse(error.message);
       for (const key in err) {
-        setFieldError(
+        actions.setFieldError(
           key.replace('addOTFItemModel.', '').toLowerCase(),
           err[key],
         );
       }
     }
+    setShowLoader(false);
   };
 
-  const otfForm = useFormik({
-    validationSchema,
-    initialValues,
-    onSubmit: submitHandler,
-  });
+  // ALL UseEffects
+  useEffect(() => {
+    fetchOtfItemsNVariants();
+  }, []);
 
-  const {
-    values,
-    touched,
-    errors,
-    handleChange,
-    handleBlur,
-    handleSubmit,
-    setFieldError,
-  } = otfForm;
   return (
     <div
       id='adduserModal'
@@ -224,321 +219,152 @@ const AddOTFItemNo = ({ closeModal }: { closeModal: () => void }) => {
               </div>
             </div>
 
-            <form onSubmit={handleSubmit}>
-              <div className='p-6'>
-                <div className='flex flex-wrap'>
-                  <div className='w-full lg:w-1/3 mt-4'>
-                    <label
-                      htmlFor='First Name'
-                      className='block text-base font-medium text-gray-700'
-                    >
-                      OTF Item No.
-                    </label>
-                  </div>
-                  <div className='w-full lg:w-1/2'>
-                    <div className='mt-2'>
-                      <select
-                        value={values.otfItemNo}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        className='form-input'
-                        name='otfItemNo'
-                      >
-                        <option
-                          disabled={Boolean(values.otfItemNo)}
-                          selected={true}
-                        >
-                          Select OTF Item No
-                        </option>
-                        {otfItemNo &&
-                          otfItemNo.map((itemNo) => (
-                            <option key={itemNo.value} value={itemNo.value}>
-                              {itemNo.label}
-                            </option>
-                          ))}
-                      </select>
-                    </div>
-                    {touched.otfItemNo && errors.otfItemNo && (
-                      <p className='text-red-500 text-xs mt-1'>
-                        {errors.otfItemNo}
-                      </p>
-                    )}
-                  </div>
-                </div>
-                <div className='flex flex-wrap'>
-                  <div className='w-full lg:w-1/3 mt-4'>
-                    <label
-                      htmlFor='First Name'
-                      className='block text-base font-medium text-gray-700 align-middle '
-                    >
-                      OTF Variant Code
-                    </label>
-                  </div>
-                  <div className='w-full lg:w-1/2'>
-                    <div className='mt-2'>
-                      <select
-                        value={values.otfItemVariant}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        className='form-input'
-                        name='otfItemVariant'
-                      >
-                        <option
-                          selected={true}
-                          disabled={Boolean(values.otfItemVariant)}
-                        >
-                          Select OTF Item Variant
-                        </option>
-                        {otfItemVariant &&
-                          otfItemVariant.map((variant) => (
-                            <option key={variant.value} value={variant.value}>
-                              {variant.label}
-                            </option>
-                          ))}
-                      </select>
-                    </div>
-                    {touched.otfItemVariant && errors.otfItemVariant && (
-                      <p className='text-red-500 text-xs mt-1'>
-                        {errors.otfItemVariant}
-                      </p>
-                    )}
-                  </div>
-                </div>
-                <div className='flex flex-wrap'>
-                  <div className='w-full lg:w-1/3 mt-4'>
-                    <label
-                      htmlFor='First Name'
-                      className='block text-base font-medium text-gray-700'
-                    >
-                      SKU
-                    </label>
-                  </div>
-                  <div className='w-full lg:w-1/2'>
-                    <div className='mt-2'>
-                      <input
-                        type='text'
-                        id='SKU'
-                        name='ourSKU'
-                        autoComplete='SKU'
-                        placeholder='SKU'
-                        className='form-input'
-                        value={values.ourSKU}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                      />
-                    </div>
-                    {touched.ourSKU && errors.ourSKU && (
-                      <p className='text-red-500 text-xs mt-1'>
-                        {errors.ourSKU}
-                      </p>
-                    )}
-                  </div>
-                </div>
-                <div className='flex flex-wrap'>
-                  <div className='w-full lg:w-1/3 mt-4'>
-                    <label
-                      htmlFor='First Name'
-                      className='block text-base font-medium text-gray-700'
-                    >
-                      Name
-                    </label>
-                  </div>
-                  <div className='w-full lg:w-1/2'>
-                    <div className='mt-2'>
-                      <input
-                        type='text'
-                        id='Name'
-                        name='name'
-                        autoComplete='Name'
-                        placeholder='Name'
-                        className='form-input'
-                        value={values.name}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                      />
-                    </div>
-                    {touched.name && errors.name && (
-                      <p className='text-red-500 text-xs mt-1'>{errors.name}</p>
-                    )}
-                  </div>
-                </div>
-                <div className='flex flex-wrap'>
-                  <div className='w-full lg:w-1/3 mt-4'>
-                    <label
-                      htmlFor='First Name'
-                      className='block text-base font-medium text-gray-700'
-                    >
-                      Color
-                    </label>
-                  </div>
-                  <div className='w-full lg:w-1/2'>
-                    <div className='mt-2'>
-                      <input
-                        type='text'
-                        id='Color'
-                        name='color'
-                        autoComplete='Color'
-                        placeholder='Color'
-                        className='form-input'
-                        value={values.color}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                      />
-                    </div>
-                    {touched.color && errors.color && (
-                      <p className='text-red-500 text-xs mt-1'>
-                        {errors.color}
-                      </p>
-                    )}
-                  </div>
-                </div>
-                <div className='flex flex-wrap'>
-                  <div className='w-full lg:w-1/3 mt-4'>
-                    <label
-                      htmlFor='First Name'
-                      className='block text-base font-medium text-gray-700'
-                    >
-                      Size
-                    </label>
-                  </div>
-                  <div className='w-full lg:w-1/2'>
-                    <div className='mt-2'>
-                      <input
-                        type='text'
-                        id='Size'
-                        name='size'
-                        autoComplete='Size'
-                        placeholder='Size'
-                        className='form-input'
-                        value={values.size}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                      />
-                    </div>
-                    {touched.size && errors.size && (
-                      <p className='text-red-500 text-xs mt-1'>{errors.size}</p>
-                    )}
-                  </div>
-                </div>
-                <div className='flex flex-wrap'>
-                  <div className='lg:w-1/3 mt-4'>
-                    <label
-                      htmlFor='First Name'
-                      className='block text-base font-medium text-gray-700'
-                    >
-                      Qty
-                    </label>
-                  </div>
-                  <div className='w-full lg:w-1/2'>
-                    <div className='mt-2'>
-                      <input
-                        type='text'
-                        id='Qty'
-                        name='qty'
-                        autoComplete='Qty'
-                        placeholder='Qty'
-                        className='form-input'
-                        value={values.qty}
-                        onChange={(event) => {
-                          if (isNumberKey(event)) {
-                            handleChange(event);
-                          }
-                        }}
-                        onBlur={handleBlur}
-                      />
-                    </div>
-                    {touched.qty && errors.qty && (
-                      <p className='text-red-500 text-xs mt-1'>{errors.qty}</p>
-                    )}
-                  </div>
-                </div>
-                <div className='flex flex-wrap'>
-                  <div className='w-full lg:w-1/3 mt-4'>
-                    <label
-                      htmlFor='First Name'
-                      className='block text-base font-medium text-gray-700'
-                    >
-                      Price
-                    </label>
-                  </div>
-                  <div className='w-full lg:w-1/2'>
-                    <div className='mt-2'>
-                      <input
-                        type='text'
-                        id='Price'
-                        name='price'
-                        autoComplete='Price'
-                        placeholder='Price'
-                        className='form-input'
-                        value={values.price}
-                        onChange={(event) => {
-                          if (isNumberKey(event)) {
-                            handleChange(event);
-                          }
-                        }}
-                        onBlur={handleBlur}
-                      />
-                    </div>
+            <Formik
+              initialValues={OTF_InitialValues}
+              onSubmit={submitHandler}
+              validationSchema={OTF_ValidationSchema}
+            >
+              {({
+                values,
+                handleChange,
+                handleBlur,
+                handleSubmit,
+                setFieldValue,
+              }) => {
+                return (
+                  <Form onSubmit={handleSubmit}>
+                    <div className='p-6'>
+                      {_OTF_Fields.map((field) => {
+                        if (field.type === 'select') {
+                          let options: { value: string; label: string }[] = [];
 
-                    {touched.price && errors.price && (
-                      <p className='text-red-500 text-xs mt-1'>
-                        {errors.price}
-                      </p>
-                    )}
-                  </div>
-                </div>
-                <div className='flex flex-wrap mt-2'>
-                  <div className='w-full lg:w-1/3 mt-4'>
-                    <label
-                      htmlFor='First Name'
-                      className='block text-base font-medium text-gray-700'
-                    >
-                      Upload Image
-                    </label>
-                  </div>
-                  <div className='w-full lg:w-1/2'>
-                    <div className='flex flex-wrap items-center justify-between border border-gray-300 text-sm p-1'>
-                      {<div className=''></div>}
+                          switch (field.name) {
+                            case 'otfItemNo':
+                              options = otfItemNo;
+                              break;
+                            case 'otfItemVariant':
+                              options = otfItemVariant;
+                              break;
 
-                      <div className=''>
-                        <label
-                          htmlFor={'id'}
-                          className='cursor-pointer inline-block bg-indigo-600 border-0 py-2 px-3 text-white'
-                        >
-                          {__pagesText.productInfo.somLogoOption.upload}
-                        </label>
-                        <input
-                          type='file'
-                          name={'id'}
-                          id={'id'}
-                          onChange={fileReader}
-                          value={''}
-                          className='sr-only'
-                          // onChange={fileReader}
-                          accept={'image/*'}
-                        />
+                            default:
+                              options = [];
+                              break;
+                          }
+                          return (
+                            <OTF_Select
+                              key={field.name}
+                              name={field.name}
+                              value={values[field.name]}
+                              label={field.label}
+                              onChange={(ev) => {
+                                handleChange(ev);
+                              }}
+                              placeHolder={field.placeHolder}
+                              options={options}
+                              setFieldValue={setFieldValue}
+                              noOptionText={field.noOptionFound}
+                            />
+                          );
+                        }
+
+                        return (
+                          <OTF_Input
+                            key={field.name}
+                            name={field.name}
+                            value={values[field.name]}
+                            label={field.label}
+                            type={field.type}
+                            onChange={handleChange}
+                            required={field.required}
+                            placeHolder={field.placeHolder}
+                            onBlur={handleBlur}
+                          />
+                        );
+                      })}
+                      <div className='flex flex-wrap mt-2'>
+                        <div className='w-full lg:w-1/3 mt-4'>
+                          <label
+                            htmlFor='First Name'
+                            className='block text-base font-medium text-gray-700'
+                          >
+                            Upload Image
+                          </label>
+                        </div>
+                        <div className='w-full '>
+                          <div className='border border-gray-300 text-sm p-2 bg-light-gray'>
+                            <div className='flex flex-wrap items-center justify-between bg-white border border-gray-300 text-sm p-1'>
+                              {fileToUpload?.serverURL ? (
+                                <>
+                                  <img
+                                    className='w-14 max-h-14'
+                                    src={`${mediaBaseUrl}${fileToUpload?.serverURL}`}
+                                    alt={fileToUpload?.name || ''}
+                                  />
+                                  <button
+                                    className='underline font-bold text-base text-[#006cd1]'
+                                    onClick={() => {
+                                      setFileToUpload({
+                                        name: '',
+                                        type: '',
+                                        previewURL: '',
+                                        serverURL: '',
+                                      });
+                                    }}
+                                  >
+                                    X Remove
+                                  </button>
+                                </>
+                              ) : null}
+                              <>
+                                <div>
+                                  {/* Just to keep second div at right */}
+                                </div>
+                                <div className=''>
+                                  <label
+                                    htmlFor={'id'}
+                                    className='cursor-pointer inline-block bg-indigo-600 border-0 py-2 px-3 text-white'
+                                  >
+                                    {
+                                      __pagesText.productInfo.somLogoOption
+                                        .upload
+                                    }
+                                  </label>
+                                  <input
+                                    type='file'
+                                    name={'id'}
+                                    id={'id'}
+                                    onChange={fileReader}
+                                    value={''}
+                                    className='sr-only'
+                                    accept={'image/*'}
+                                  />
+                                </div>
+                              </>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </div>
-              </div>
-              <div className='flex items-center justify-between p-6 space-x-2 rounded-b border-t border-gray-200 dark:border-gray-600'>
-                <button
-                  data-modal-toggle='adduserModal'
-                  type='submit'
-                  className='btn btn-primary'
-                >
-                  Add
-                </button>
-                <button
-                  data-modal-toggle='adduserModal'
-                  onClick={closeModal}
-                  className='btn btn-primary'
-                >
-                  Canel
-                </button>
-              </div>
-            </form>
+                    <div className='flex items-center justify-between p-6 space-x-2 rounded-b border-t border-gray-200 dark:border-gray-600'>
+                      <button
+                        data-modal-toggle='adduserModal'
+                        type='submit'
+                        className='btn btn-secondary'
+                      >
+                        Add
+                      </button>
+                      <button
+                        data-modal-toggle='adduserModal'
+                        onClick={closeModal}
+                        className='btn btn-primary'
+                      >
+                        Canel
+                      </button>
+                    </div>
+                  </Form>
+                );
+              }}
+            </Formik>
           </div>
         </div>
       </div>
