@@ -230,6 +230,7 @@ export interface GetProductImageOptionList {
   attributeOptionName?: string;
   displayOrder?: number;
   altTag?: string;
+  productId?: number;
 }
 
 export interface GetlAllProductList {

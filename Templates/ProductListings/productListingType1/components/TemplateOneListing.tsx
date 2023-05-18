@@ -4,10 +4,11 @@ import NxtImage from '@appComponents/reUsable/Image';
 import Price from '@appComponents/reUsable/Price';
 import WishlistButton from '@appComponents/ui/Wishlist';
 import { listing_max_showcolors, zeroValue } from '@constants/common.constant';
+import { CaptureGTMEvent } from '@helpers/common.helper';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import { GetlAllProductList } from '@templates/ProductListings/ProductListingType';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { SyntheticEvent, useEffect, useState } from 'react';
 import { _globalStore } from 'store.global';
 import ProductBoxController from './productBoxController';
 
@@ -81,6 +82,41 @@ const TemplateOneListing = ({
     return '';
   };
 
+  const captureViewItemList = (event: SyntheticEvent) => {
+    event.stopPropagation();
+    const eventPayload = {
+      pageTitle: document?.title ? document?.title : 'Product Listing',
+      pageCategory: 'Product Listing',
+      customProperty1: '',
+      visitorType: customerId ? 'high-value' : 'low-value',
+      event: 'view_item_list',
+      ecommerce: {
+        items: [
+          {
+            item_id: product?.sku,
+            item_name: product?.name,
+            item_brand: product?.brandName,
+            item_category: '',
+            item_category2: '',
+            item_category3: '',
+            item_category4: '',
+            item_variant: product?.getProductImageOptionList?.length
+              ? product?.getProductImageOptionList?.find(
+                  (clr) => clr.productId === product?.id,
+                )?.colorName
+              : '',
+            item_list_id: product?.id,
+            item_list_name: product?.name,
+            index: product?.id,
+            price: product?.salePrice,
+            quantity: '',
+          },
+        ],
+      },
+    };
+    CaptureGTMEvent(eventPayload);
+  };
+
   return (
     <li className='text-center' key={product.id}>
       <div className=''>
@@ -88,7 +124,7 @@ const TemplateOneListing = ({
           <div className='relative border border-gray-200 pb-[30px] w-full'>
             <div className='w-full rounded-md overflow-hidden aspect-w-1 aspect-h-1'>
               <Link key={product.id} href={`/${product.sename}.html`}>
-                <div>
+                <div onClick={(e) => captureViewItemList(e)}>
                   <NxtImage
                     src={mainImageUrl}
                     alt=''
@@ -146,6 +182,7 @@ const TemplateOneListing = ({
                   <a
                     className='relative underline text-[#006cd1] leading-[20px]'
                     title={product.name}
+                    onClick={(e) => captureViewItemList(e)}
                   >
                     {product.name}
                   </a>
@@ -176,6 +213,7 @@ const TemplateOneListing = ({
                   <>
                     <Link key={product.id} href={`/${product.sename}.html`}>
                       <li
+                        onClick={(e) => captureViewItemList(e)}
                         className={`w-[28px] h-[28px] border-2 border-secondary hover:border-secondary cursor-pointer`}
                       >
                         <NxtImage
@@ -249,7 +287,10 @@ const TemplateOneListing = ({
                 )}
                 {flag ? (
                   <Link key={product.id} href={`/${product.sename}.html`}>
-                    <li className='w-[28px] h-[28px] border-2 border-light-gray hover:border-secondary relative cursor-pointer'>
+                    <li
+                      onClick={(e) => captureViewItemList(e)}
+                      className='w-[28px] h-[28px] border-2 border-light-gray hover:border-secondary relative cursor-pointer'
+                    >
                       <span
                         className='absolute inset-0 bg-primary text-xs bg-[#003a70] font-semibold flex items-center justify-center text-[#ffffff]'
                         title={` See Additional ${getProductsColorCount()} Colors`}
