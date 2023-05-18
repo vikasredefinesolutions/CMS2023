@@ -74,7 +74,7 @@ const ProductImg: React.FC<_ProductImgProps> = ({ product }) => {
                 return (
                   <div
                     key={img.id + img.imageUrl}
-                    className={`md:border hover:border-secondary p-[3px] mt-[5px] mb-[5px] last:mb-0 cursor-pointer ${highlight}`}
+                    className={`md:border hover:border-secondary p-[3px] mt-[5px] mb-[5px] last:mb-0 bg-white cursor-pointer ${highlight}`}
                     onClick={() => selectImgHandler(img)}
                   >
                     <Image
