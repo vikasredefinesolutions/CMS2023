@@ -118,7 +118,7 @@ const BrandProductListing: React.FC<_props> = ({ productsData }) => {
                   {productsData.map((product) => {
                     return (
                       <>
-                        {router?.query?.slug == 'adidas-collection.html' ? (
+                        {router?.query?.slug !== '/' ? (
                           <div key={product.productId} className='slide-item'>
                             <SlugSingleProductListing product={product} />
                           </div>

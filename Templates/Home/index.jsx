@@ -241,12 +241,16 @@ const Home = (props) => {
       ) : (
         <>
           <div className=''>
-            {/* {featuredItems?.products && (
+            {
+              console.log(pageData)
+              /* 
+            {featuredItems?.products && (
           <FeaturedItems
             brands={__constant._Home.featuredItems.brands}
             products={featuredItems.products}
           />          
-        )}*/}
+        )}*/
+            }
             <main>
               {pageData?.components && pageData?.components.length > 0 ? (
                 pageData.components.map((componentValue, index) => {
@@ -297,56 +301,64 @@ const Home = (props) => {
                     'container_left_padding' in componentValue.selectedVal
                   ) {
                     innerDivClass +=
-                      ' '+ componentValue.selectedVal.container_left_padding.value;
+                      ' ' +
+                      componentValue.selectedVal.container_left_padding.value;
                   }
                   if (
                     componentValue.selectedVal &&
                     'container_top_padding' in componentValue.selectedVal
                   ) {
                     innerDivClass +=
-                      ' ' + componentValue.selectedVal.container_top_padding.value;
+                      ' ' +
+                      componentValue.selectedVal.container_top_padding.value;
                   }
                   if (
                     componentValue.selectedVal &&
                     'container_right_padding' in componentValue.selectedVal
                   ) {
                     innerDivClass +=
-                      ' ' + componentValue.selectedVal.container_right_padding.value;
+                      ' ' +
+                      componentValue.selectedVal.container_right_padding.value;
                   }
                   if (
                     componentValue.selectedVal &&
                     'container_bottom_padding' in componentValue.selectedVal
                   ) {
                     innerDivClass +=
-                      ' ' +  componentValue.selectedVal.container_bottom_padding.value;
+                      ' ' +
+                      componentValue.selectedVal.container_bottom_padding.value;
                   }
                   if (
                     componentValue.selectedVal &&
                     'container_left_margin' in componentValue.selectedVal
                   ) {
                     innerDivClass +=
-                      ' ' + componentValue.selectedVal.container_left_margin.value;
+                      ' ' +
+                      componentValue.selectedVal.container_left_margin.value;
                   }
                   if (
                     componentValue.selectedVal &&
                     'container_top_margin' in componentValue.selectedVal
                   ) {
                     innerDivClass +=
-                      ' ' + componentValue.selectedVal.container_top_margin.value;
+                      ' ' +
+                      componentValue.selectedVal.container_top_margin.value;
                   }
                   if (
                     componentValue.selectedVal &&
                     'container_right_margin' in componentValue.selectedVal
                   ) {
                     innerDivClass +=
-                      ' ' + componentValue.selectedVal.container_right_margin.value;
+                      ' ' +
+                      componentValue.selectedVal.container_right_margin.value;
                   }
                   if (
                     componentValue.selectedVal &&
                     'container_bottom_margin' in componentValue.selectedVal
                   ) {
                     innerDivClass +=
-                      ' ' + componentValue.selectedVal.container_bottom_margin.value;
+                      ' ' +
+                      componentValue.selectedVal.container_bottom_margin.value;
                   }
 
                   return (
