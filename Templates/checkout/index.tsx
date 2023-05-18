@@ -40,25 +40,28 @@ const CheckoutTemplate: FC<_Props> = ({ cartTemplateId }) => {
     const checkoutEventPayload = {
       pageTitle: document?.title || 'Checkout',
       pageCategory: 'Checkout page',
-      customProperty1: '',
       visitorType: 'high-value',
+      customProperty1: '',
+      namedItem: '',
       event: 'begin_checkout',
       ecommerce: {
-        currency: 'USD',
         value: totalPrice,
+        currency: 'USD',
         coupon: cartDiscountDetails?.coupon || '',
         items: cartData?.map((item) => ({
           item_name: item?.productName,
           item_id: item?.sku,
           item_brand: item?.brandName,
           item_category: item?.categoryName,
+          item_category2: '',
+          item_category3: '',
+          item_category4: '',
           item_variant: item?.attributeOptionValue,
-          index: item?.productId,
-          quantity: item?.totalQty,
           item_list_name: item?.productName,
           item_list_id: item?.productId,
+          index: item?.productId,
+          quantity: item?.totalQty,
           price: item?.totalPrice,
-          coupon: cartDiscountDetails?.coupon || '',
         })),
       },
     };
@@ -67,9 +70,11 @@ const CheckoutTemplate: FC<_Props> = ({ cartTemplateId }) => {
 
   useEffect(() => {
     if (!isCartLoading && (!cartData?.length || cartData === null)) {
+      console.log('---reaching condition---');
       router.push(paths.CART);
     }
   }, [cartData, isCartLoading]);
+
   const CheckoutSelectedTemplate =
     checkoutTemplates[_defaultTemplates.checkout];
 

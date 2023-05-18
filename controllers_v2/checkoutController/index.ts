@@ -363,8 +363,8 @@ const CheckoutController = () => {
     const eventPayload = {
       event: eventName,
       ecommerce: {
-        currency: 'USD',
         value: totalPrice,
+        currency: 'USD',
         coupon: cartDiscountDetails?.coupon || '',
         ...(eventName === 'add_payment_info'
           ? { payment_type: paymentMethod }
@@ -374,13 +374,15 @@ const CheckoutController = () => {
           item_id: item?.sku,
           item_brand: item?.brandName,
           item_category: item?.categoryName,
+          item_category2: '',
+          item_category3: '',
+          item_category4: '',
           item_variant: item?.attributeOptionValue,
-          index: item?.productId,
-          quantity: item?.totalQty,
           item_list_name: item?.productName,
           item_list_id: item?.productId,
+          index: item?.productId,
+          quantity: item?.totalQty,
           price: item?.totalPrice,
-          coupon: cartDiscountDetails?.coupon || '',
         })),
       },
     };

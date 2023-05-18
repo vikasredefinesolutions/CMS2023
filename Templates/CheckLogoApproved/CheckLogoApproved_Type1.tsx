@@ -197,7 +197,7 @@ const CheckLogoApproved1 = () => {
                       <div className='font-[600] mb-[8px]'>
                         {__pagesText.CheckLogoApproved.comment}
                       </div>
-                      {!logoDetail?.isjpeglogo ? (
+                      {/* {logoDetail?.isjpeglogo ? (
                         <>
                           <div className='text-gray-500 text-sm'>
                             {logoDetail?.comments.length > 0
@@ -205,37 +205,37 @@ const CheckLogoApproved1 = () => {
                               : null}
                           </div>
                         </>
-                      ) : (
-                        <>
-                          {' '}
-                          <div className='overflow-auto max-h-screen border border-gray-border mb-[16px] rounded-md'>
-                            <table
-                              className='table-auto w-full text-sm text-[#191919]'
-                              data-value={logoDetail?.isjpeglogo}
-                            >
-                              <tbody className='text-sm divide-y divide-slate-200'>
-                                {logoDetail?.comments.map((comment) => (
-                                  <tr key={comment?.id}>
-                                    <td className='px-2 first:pl-5 py-3 font-semibold'>
-                                      {comment?.senderName}:
-                                    </td>
-                                    <td className='px-2 first:pl-5 py-3'>
-                                      <div className='font-semibold'>
-                                        {moment(comment?.date).format(
-                                          'MMM DD, YYYY',
-                                        )}
-                                      </div>
-                                      <div className='text-gray-500'>
-                                        {comment?.message}
-                                      </div>
-                                    </td>
-                                  </tr>
-                                ))}
-                              </tbody>
-                            </table>
-                          </div>
-                        </>
-                      )}
+                      ) : ( */}
+                      <>
+                        {' '}
+                        <div className='overflow-auto max-h-screen border border-gray-border mb-[16px] rounded-md'>
+                          <table
+                            className='table-auto w-full text-sm text-[#191919]'
+                            data-value={logoDetail?.isjpeglogo}
+                          >
+                            <tbody className='text-sm divide-y divide-slate-200'>
+                              {logoDetail?.comments.map((comment) => (
+                                <tr key={comment?.id}>
+                                  <td className='px-2 first:pl-5 py-3 font-semibold'>
+                                    {comment?.senderName}:
+                                  </td>
+                                  <td className='px-2 first:pl-5 py-3'>
+                                    <div className='font-semibold'>
+                                      {moment(comment?.date).format(
+                                        'MMM DD, YYYY',
+                                      )}
+                                    </div>
+                                    <div className='text-gray-500'>
+                                      {comment?.message}
+                                    </div>
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      </>
+                      {/* )} */}
                       {!logoDetail?.isApproved && (
                         <>
                           <Formik

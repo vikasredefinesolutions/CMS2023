@@ -11,7 +11,7 @@ const LoggedInMenu: React.FC = () => {
   const { logInUser, logoutClearCart, setWishListEmpty } = useActions_v2();
   const { id: loggedIn, customer } = useTypedSelector_v2((state) => state.user);
   const [focus, setFocus] = useState(false);
-
+  const { view } = useTypedSelector_v2((state) => state.store);
   const logoutHandler = () => {
     setFocus(false);
     logoutClearCart();
@@ -28,7 +28,11 @@ const LoggedInMenu: React.FC = () => {
         onMouseOver={() => setFocus(true)}
         onMouseLeave={() => setFocus(false)}
       >
-        <Link href={paths.loggedInMenu.title}>
+        <Link
+          href={
+            view == 'MOBILE' ? `javascript:void(0);` : paths.loggedInMenu.title
+          }
+        >
           <a
             className='text-primary hover:text-anchor-hover flex items-center gap-1'
             title={__pagesText.Headers.myAccountTittle}

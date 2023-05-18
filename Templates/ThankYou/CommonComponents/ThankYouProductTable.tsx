@@ -48,7 +48,7 @@ const ThankYouProductTable: React.FC<_props> = ({ product }) => {
       {product.shoppingCartLogoPersonViewModels.map(
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (item: any, index: number) => {
-          return item.logoName === 'Customize Later' ? (
+          return item.logoName === 'Customize Logo' ? (
             <div className='flex justify-start items-center mt-3'>
               <div>
                 <span className='material-icons text-[60px] mr-3'>

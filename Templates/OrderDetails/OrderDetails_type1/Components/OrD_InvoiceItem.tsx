@@ -1,6 +1,8 @@
 import Price from '@appComponents/Price';
 import NxtImage from '@appComponents/reUsable/Image';
 import { __StaticImg } from '@constants/assets';
+import { CustomizeLaterMain } from '@constants/common.constant';
+import { CustomizeLater } from '@constants/global.constant';
 import { _MyAcc_OrderProductDetails } from '@definations/APIs/user.res';
 import { StaticImageData } from 'next/image';
 import Link from 'next/link';
@@ -83,15 +85,31 @@ const OrD_InvoiceItem: React.FC<_props> = ({ item, mediaBaseUrl }) => {
               >
                 <div className='w-1/3 px-3'>
                   <div className='font-[600]'>Logo</div>
-                  <div className='w-20 h-20 border flex items-center justify-center'>
-                    <NxtImage
-                      className='inline-block max-h-full w-full h-full'
-                      src={logoToShow}
-                      alt=''
-                      width={100}
-                      height={100}
-                    />
-                  </div>
+                  {logo.logoName === 'Customize Logo' ? (
+                    <div className='flex justify-start items-center mt-3'>
+                      <div>
+                        <span className='material-icons text-[60px] mr-3'>
+                          support_agent
+                        </span>
+                      </div>
+                      <div>
+                        <div className='text-lg font-semibold'>
+                          {CustomizeLaterMain}
+                        </div>
+                        <div className='text-base hidden'>{CustomizeLater}</div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className='w-20 h-20 border flex items-center justify-center'>
+                      <NxtImage
+                        className='inline-block max-h-full w-full h-full'
+                        src={logoToShow}
+                        alt=''
+                        width={100}
+                        height={100}
+                      />
+                    </div>
+                  )}
                 </div>
                 <div className='w-1/3 px-3'>
                   <div className='font-[600]'>Location</div>

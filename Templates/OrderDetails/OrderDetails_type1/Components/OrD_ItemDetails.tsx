@@ -1,5 +1,7 @@
 import Price from '@appComponents/Price';
 import NxtImage from '@appComponents/reUsable/Image';
+import { CustomizeLaterMain } from '@constants/common.constant';
+import { CustomizeLater } from '@constants/global.constant';
 import { paths } from '@constants/paths.constant';
 import { _MyAcc_OrderProductDetails } from '@definations/APIs/user.res';
 import Link from 'next/link';
@@ -49,15 +51,33 @@ const OrD_ItemDetails: React.FC<_props> = ({
 
     if (logoStatus === 'Customize Logo') {
       return (
-        <div className='w-20 h-20 border flex items-center justify-center'>
-          <NxtImage
-            className='inline-block max-h-full w-full h-full'
-            src={logoPositionImage}
-            alt=''
-            width={100}
-            height={100}
-          />
-        </div>
+        <>
+          {logoPositionImage == '' ? (
+            <div className='flex justify-start items-center mt-3'>
+              <div>
+                <span className='material-icons text-[60px] mr-3'>
+                  support_agent
+                </span>
+              </div>
+              <div>
+                <div className='text-lg font-semibold'>
+                  {CustomizeLaterMain}
+                </div>
+                <div className='text-base hidden'>{CustomizeLater}</div>
+              </div>
+            </div>
+          ) : (
+            <div className='w-20 h-20 border flex items-center justify-center'>
+              <NxtImage
+                className='inline-block max-h-full w-full h-full'
+                src={logoPositionImage}
+                alt=''
+                width={100}
+                height={100}
+              />
+            </div>
+          )}
+        </>
       );
     }
 

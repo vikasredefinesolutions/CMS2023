@@ -62,7 +62,7 @@ const BuyNowHandler: React.FC<_Props> = (size) => {
     if (cartObject) {
       //GTM event for add-to-cart
       const eventPayload = {
-        pageTitle: document ? document?.title : '',
+        pageTitle: document?.title ? document?.title : '',
         pageCategory: 'Add to Cart',
         visitorType: loggedIN_userId ? 'high-value' : 'low-value',
         customProperty1: '',
@@ -77,13 +77,16 @@ const BuyNowHandler: React.FC<_Props> = (size) => {
               item_id: product?.sku,
               item_brand: product?.brand?.name,
               item_category: product?.categoryName,
+              item_category2: '',
+              item_category3: '',
+              item_category4: '',
               item_variant: product?.colors?.length
                 ? product?.colors?.find((clr) => clr.productId === product.id)
                     ?.name
                 : '',
-              index: product.id,
               item_list_name: product?.name,
               item_list_id: product?.id,
+              index: product.id,
               quantity: toCheckout?.totalQty,
               price: toCheckout?.totalPrice,
             },

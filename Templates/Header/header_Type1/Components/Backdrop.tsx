@@ -5,7 +5,7 @@ const Backdrop: React.FC = () => {
   return (
     <div
       onClick={() => toggleSideMenu('CLOSE')}
-      className='fixed inset-0 bg-black bg-opacity-25'
+      className='fixed inset-0 '
     ></div>
   );
 };

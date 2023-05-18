@@ -456,6 +456,7 @@ export const __pagesText = {
       Shipping: 'Shipping:',
       Tax: 'Tax:',
       SewOut: 'Sew Out:',
+      couponDiscountAmount: 'Coupon Discount Amount :',
       GrandTotal: 'Grand Total',
       Sku: 'SKU :',
       Color: 'Color :',

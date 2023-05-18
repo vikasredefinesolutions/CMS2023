@@ -51,7 +51,7 @@ const CheckLogoApproved2 = () => {
     values: {
       comment: string;
       logoImageName: string;
-      logoType: string;
+      logoType: string | number;
       logoSize: string;
       embroideryColor: string;
       parentId: number;
@@ -91,7 +91,7 @@ const CheckLogoApproved2 = () => {
 
   const Approve_Fn = async (values: {
     logoImageName: string;
-    logoType: string;
+    logoType: string | number;
     logoSize: string;
     embroideryColor: string;
     parentId: number;
@@ -222,7 +222,7 @@ const CheckLogoApproved2 = () => {
                                             comment: '',
                                             logoImageName:
                                               logoDetails[0].imageUrl,
-                                            logoType: '',
+                                            logoType: 0,
                                             logoSize: logoDetails[0].logoSize,
                                             embroideryColor:
                                               logoDetails[0].embroideryColor,
@@ -303,7 +303,7 @@ const CheckLogoApproved2 = () => {
                                                         logoImageName:
                                                           logoDetails[0]
                                                             .imageUrl,
-                                                        logoType: '',
+                                                        logoType: 0,
                                                         logoSize:
                                                           logoDetails[0]
                                                             .logoSize,

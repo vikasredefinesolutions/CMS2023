@@ -222,7 +222,7 @@ const CIlayout1: FC<any> = ({
                     {storeCode !== _Store.type4 &&
                       item.shoppingCartLogoPersonViewModels.map(
                         (_item, _index) => {
-                          return _item.logoName === 'Customize Later' ? (
+                          return _item.logoName === 'Customize Logo' ? (
                             <div className='flex justify-start items-center mt-3'>
                               <div>
                                 <span className='material-icons text-[60px] mr-3'>

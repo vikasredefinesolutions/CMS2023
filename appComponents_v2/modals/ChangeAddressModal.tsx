@@ -75,7 +75,7 @@ const ChangeAddressModal: FC<props> = ({
                     .filter((address) => address.addressType === addressType)
                     .map((address, index) => (
                       <div key={index} className='w-full lg:w-1/2 px-3'>
-                        <div className='bg-gray-100 border p-2 border-300'>
+                        <div className=''>
                           <div className='mb-3 '>
                             {address.firstname} {address.lastName}
                             <br />
@@ -99,7 +99,7 @@ const ChangeAddressModal: FC<props> = ({
                                 setAddressEditData(address);
                                 addAddressButtonHandler();
                               }}
-                              className='text-anchor'
+                              className='text-anchor '
                             >
                               Edit
                             </button>
@@ -107,7 +107,7 @@ const ChangeAddressModal: FC<props> = ({
                           <div className=''>
                             <button
                               onClick={() => addressUpdateHandler(address)}
-                              className='btn btn-sm btn-primary'
+                              className='btn btn-sm btn-primary p-2'
                               data-modal-toggle='shippingaddressModal'
                             >
                               {addressType === __pagesConstant.AddressType.B
@@ -122,7 +122,15 @@ const ChangeAddressModal: FC<props> = ({
                 </div>
               </div>
             </div>
-            <div className='flex items-center justify-between p-6 space-x-2 rounded-b border-t border-gray-200 dark:border-gray-600'>
+            <div className='flex items-center justify-between p-6 space-x-2 flex-wrap rounded-b border-t border-gray-200 dark:border-gray-600'>
+              <button
+                data-modal-toggle='addshippingaddressModal'
+                type='button'
+                className='btn btn-primary w-full mb-3'
+                onClick={addAddressButtonHandler}
+              >
+                Add New Address
+              </button>
               <button
                 data-modal-toggle='shippingaddressModal'
                 type='button'
@@ -130,14 +138,6 @@ const ChangeAddressModal: FC<props> = ({
                 className='btn btn-outline-primary'
               >
                 Cancel
-              </button>
-              <button
-                data-modal-toggle='addshippingaddressModal'
-                type='button'
-                className='btn btn-primary'
-                onClick={addAddressButtonHandler}
-              >
-                Add New Address
               </button>
             </div>
           </div>

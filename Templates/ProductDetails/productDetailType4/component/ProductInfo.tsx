@@ -127,7 +127,7 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
           if (cartObject) {
             //GTM event for add-to-cart
             const eventPayload = {
-              pageTitle: document ? document?.title : '',
+              pageTitle: document?.title ? document?.title : '',
               pageCategory: 'Add to Cart',
               visitorType: isLoggedIn ? 'high-value' : 'low-value',
               customProperty1: '',
@@ -142,14 +142,17 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
                     item_id: storeProduct?.sku,
                     item_brand: storeProduct?.brand?.name,
                     item_category: storeProduct?.categoryName,
+                    item_category2: '',
+                    item_category3: '',
+                    item_category4: '',
                     item_variant: storeProduct?.colors?.length
                       ? storeProduct?.colors?.find(
                           (clr) => clr.productId === storeProduct.id,
                         )?.name
                       : '',
-                    index: storeProduct.id,
                     item_list_name: storeProduct?.name,
                     item_list_id: storeProduct?.id,
+                    index: storeProduct.id,
                     quantity: toCheckout?.totalQty,
                     price: toCheckout?.totalPrice,
                   },

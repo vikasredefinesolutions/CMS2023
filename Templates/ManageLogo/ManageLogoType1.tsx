@@ -1,13 +1,14 @@
 import MyAccountTabs from '@appComponents/common/MyAccountTabsType1';
 import NxtImage from '@appComponents/reUsable/Image';
 import { __pagesText } from '@constants/pages.text';
-import _ from 'lodash';
 import moment from 'moment';
 import { NextPage } from 'next';
 import Link from 'next/link';
 import { _ManageLogoProps } from './managelogo';
 
 const ManageLogoType1: NextPage<_ManageLogoProps> = ({ logoList }) => {
+  // console.log('logo list', logoList);
+
   return (
     <>
       <MyAccountTabs />
@@ -114,11 +115,11 @@ const ManageLogoType1: NextPage<_ManageLogoProps> = ({ logoList }) => {
                             src={logo.logoLocationImage}
                             alt=''
                             className='max-h-[100px]'
-                          />
+                          />{' '}
                         </div>
                       </td>
                       <td className='border-b border-r border-[#ddd] p-[16px]'>
-                        {_.isEmpty(logo.approvedDate) ? (
+                        {logo.status === __pagesText.ManageLogo.Waiting ? (
                           <Link
                             href={`/ManageLogo/CheckLogoApproved?logoId=${logo.logoId}`}
                             title=''
@@ -130,12 +131,12 @@ const ManageLogoType1: NextPage<_ManageLogoProps> = ({ logoList }) => {
                             {__pagesText.ManageLogo.Approved}
                           </div>
                         )}
-                        {_.isEmpty(logo.approvedDate) ? (
-                          <div className='text-center'>-</div>
+                        {logo.status === __pagesText.ManageLogo.Waiting ? (
+                          <div className='text-center'></div>
                         ) : (
                           <>
                             <div className=''>
-                              {__pagesText.ManageLogo.ApprovedDate} test
+                              {__pagesText.ManageLogo.ApprovedDate}
                             </div>
                             <div className=''>
                               {moment(logo.approvedDate).format('MMMM D, YYYY')}
