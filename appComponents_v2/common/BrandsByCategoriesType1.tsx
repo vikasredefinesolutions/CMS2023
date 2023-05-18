@@ -435,12 +435,14 @@ const BrandsByCategoriesType1: React.FC<_Props> = ({ brands }) => {
                                       title={brand.name}
                                       href={`${brand.seName}.html`}
                                     >
-                                      <NxtImage
-                                        className='w-full mx-auto'
-                                        src={brand.imagePath}
-                                        title={brand.name}
-                                        alt={brand.name}
-                                      />
+                                      <a>
+                                        <NxtImage
+                                          className='w-full mx-auto'
+                                          src={brand.imagePath}
+                                          title={brand.name}
+                                          alt={brand.name}
+                                        />
+                                      </a>
                                     </Link>
                                   </div>
                                 </div>
