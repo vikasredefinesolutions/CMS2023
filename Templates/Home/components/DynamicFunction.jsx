@@ -165,7 +165,7 @@ export const multipleBrands = (dataArr, selectedObj) => {
         strHTML += '<div class="flex justify-center items-center">';
         strHTML += '<a href="' + item?.Image_link + '">';
         strHTML +=
-          '<img className="w-full mx-auto" alt="' +
+          '<img class="w-full mx-auto" alt="' +
           item?.Image_alt +
           '" title="' +
           item?.Image_alt +
@@ -316,7 +316,7 @@ export const boximage = (dataArr, selectedObj) => {
         strHTML += '<div class="' + clName + '">';
         strHTML += '<a title="' + item.Image_link + '">';
         strHTML +=
-          '<img className="w-full" alt="' +
+          '<img class="w-full" alt="' +
           item?.Image_alt +
           '" title="' +
           item?.Image_alt +
@@ -488,7 +488,7 @@ export const multipleImages = (dataArr, selectedObj) => {
         strHTML += '<div class="flex justify-center">';
         strHTML += '<a title="' + item.Image_link + '">';
         strHTML +=
-          '<img className="w-full" alt="' +
+          '<img class="w-full" alt="' +
           item?.Image_alt +
           '" title="' +
           item?.Image_alt +
