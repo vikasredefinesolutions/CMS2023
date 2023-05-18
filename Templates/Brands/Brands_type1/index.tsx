@@ -11,17 +11,13 @@ const BrandsType1: React.FC<_BrandProps> = (props) => {
       <BrandsByCategories brands={props.brands!} />
       <Br_Alphabets {...props} />
       <Br_Faq />
-      <div className='w-full order-1 mt-[24px] flex px-[12px]'>
-        <div className='w-full flex h-full bg-[#ffffff] p-[40px]'>
-          <Home
-            props={{
-              pageData: { components: props.accordian },
-              pageType: 'Topic',
-              slug: 'brands.html',
-            }}
-          />
-        </div>
-      </div>
+      <Home
+        props={{
+          pageData: { components: props.accordian },
+          pageType: 'Topic',
+          slug: 'brands.html',
+        }}
+      />
     </div>
   );
 };

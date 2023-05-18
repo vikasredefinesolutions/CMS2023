@@ -136,7 +136,8 @@ const Layout: React.FC<_props & _StoreCache> = ({
       pageMetaData.type.toLowerCase() === 'topic'
         ? isbreadcrumbShow
         : true) &&
-        router.pathname !== paths.PRODUCT_COMPARE && (
+        router.pathname !== paths.PRODUCT_COMPARE &&
+        router.asPath != paths.BRAND && (
           <BreadCrumb breadCrumbid={breadCrumbTemplateId} />
         )}
       <SuccessErrorModal />

@@ -34,7 +34,7 @@ const SideFilter = ({
         className='lg:hidden border-b border-b-neutral-300 p-2 sticky top-0 left-0 bg-primary flex items-center justify-between text-[#ffffff]'
       >
         <div className='text-lg font-semibold text-[#ffffff]'>Filters</div>
-        <a href='javascript:void(0);'>
+        <a href='javascript:void(0);' className='inline-flex'>
           <span className='material-symbols-outlined'>
             {openFilters ? 'remove' : 'add'}
           </span>

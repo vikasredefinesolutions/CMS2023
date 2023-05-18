@@ -151,15 +151,22 @@ const TemplateOneListing = ({
                 />
               </div>
               {product.productTagViewModel &&
-                product.productTagViewModel.length > 0 && (
-                  <div className='absolute top-1 left-1 text-gray-800 p-1 z-5"'>
+                product.productTagViewModel.length > 0 &&
+                (product.productTagViewModel[0].productTagName === 'sale' ? (
+                  <div className='absolute top-1 left-2 text-gray-800 p-1 z-5"'>
                     <img
                       src={`${mediaBaseUrl}${product?.productTagViewModel[0].imagename}`}
-                      width='60px'
-                      height='60px'
                     />
                   </div>
-                )}
+                ) : (
+                  <div className='absolute -top-2 -left-2 text-gray-800 p-1 z-5"'>
+                    <img
+                      src={`${mediaBaseUrl}${product?.productTagViewModel[0].imagename}`}
+                      width={'60px'}
+                      height={'60px'}
+                    />
+                  </div>
+                ))}
             </div>
             <div className='mt-[24px] pl-[8px] pr-[8px]'>
               <div className='mt-[4px] text-center h-[35px] cursor-pointer'>
