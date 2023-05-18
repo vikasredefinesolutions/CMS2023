@@ -36,7 +36,7 @@ const AvailableColors: React.FC = () => {
         </span>
       </div>
 
-      <div className='flex flex-wrap text-center pl-[10px] pr-[10px] available-colors text-default-text'>
+      <div className='flex flex-wrap text-center available-colors text-default-text'>
         {colors.map((product, index) => {
           const show =
             showAllColors ||
@@ -50,18 +50,18 @@ const AvailableColors: React.FC = () => {
             <div
               className={`w-20 ${
                 show === false && 'sr-only'
-              } mr-[20px] mb-[10px]`}
+              } mx-[10px] mb-[10px]`}
               key={product.attributeOptionId}
               onClick={() => handleChooseColor(product)}
             >
               <div
-                className={`border-2 ${highlight} hover:border-secondary mb-1 last:mb-0 w-[80px] h-[80px] mb-[6px]`}
+                className={`w-[80px] h-[80px] mx-auto border-2 border-secondary hover:border-secondary mb-[6px] cursor-pointer ${highlight}`}
               >
                 <Image
                   title={`${product.name}`}
                   src={product.imageUrl}
                   alt={product.altTag}
-                  className='w-full object-center object-cover cursor-pointer'
+                  className='w-full object-center object-cover'
                 />
               </div>
 

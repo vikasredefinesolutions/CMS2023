@@ -87,16 +87,16 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
           </div>
         </div>
 
-        <div className='w-full md:w-1/3 mt-[10px] md:text-right'>
+        <div className='w-full md:w-1/3 mt-2.5 md:text-right text-sm font-semibold text-anchor'>
           <div className='inline-flex items-center'>
             <a
               href='javascript:void(0);'
               onClick={() => router.push(consultationURL)}
-              className='text-anchor hover:!text-anchor-hover text-small-text pr-[1px] font-[600] underline '
+              className='text-anchor hover:text-anchor-hover underline text-[15px]'
             >
               {__pagesText.productInfo.requestConsultaionProof}
-            </a>
-            <span className='material-icons-outlined leading-none text-[20px] font-[600] w-[15px] text-anchor hover:text-anchor-hover !no-underline'>
+            </a>{' '}
+            <span className='material-icons-outlined leading-none text-xl font-semibold'>
               chevron_right
             </span>
           </div>
@@ -117,7 +117,17 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
         isSpecialBrand={product.isSpecialBrand}
       />
 
-      <div className='ml-[10px] mr-[10px] mt-[13px]'>
+      <div className='m-3'>
+        <button
+          type='button'
+          className='text-anchor hover:text-anchor-hover text-[15px] font-semibold underline'
+          onClick={() => modalHandler('availableInventory')}
+        >
+          {__pagesText.productInfo.checkAvailableInventory}
+        </button>
+      </div>
+
+      {/* <div className='ml-[10px] mr-[10px] mt-[13px]'>
         <button
           type='button'
           className='text-anchor hover:text-anchor-hover font-[600] underline text-normal-text'
@@ -125,9 +135,29 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
         >
           {__pagesText.productInfo.checkAvailableInventory}
         </button>
+      </div> */}
+      <div className='m-3 flex flex-wrap text-gray-900 justify-between items-center gap-2'>
+        <div className='text-lg'>
+          <span className='font-semibold'>
+            {' '}
+            {__pagesText.productInfo.availableSizes}
+          </span>
+          <span className='ml-1.5'>{` ${sizes}`}</span>
+        </div>
+        {!sizes.includes('MISC') && (
+          <div>
+            <button
+              type='button'
+              className='text-anchor text-sm font-semibold underline'
+              onClick={() => modalHandler('sizeChart')}
+            >
+              {__pagesText.productInfo.sizeChart}
+            </button>
+          </div>
+        )}
       </div>
 
-      <div className='ml-[10px] mr-[10px] mt-[6px] flex flex-wrap justify-between gap-[8px] items-center'>
+      {/* <div className='ml-[10px] mr-[10px] mt-[6px] flex flex-wrap justify-between gap-[8px] items-center'>
         <div className='pt-[10px] text-sub-text'>
           <span className='font-[600]'>
             {__pagesText.productInfo.availableSizes}
@@ -146,27 +176,78 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
             </button>
           </div>
         )}
-      </div>
+      </div> */}
 
       {product.companionProductName && (
-        <div className='ml-[10px] mr-[10px] mt-[19px] text-sub-text'>
-          <div className='font-[600]'>
-            {__pagesText.productInfo.companionProduct}
+        <>
+          <div className='text-lg mx-3 mt-3'>
+            <div className='font-semibold'>
+              {' '}
+              {__pagesText.productInfo.companionProduct} :
+            </div>
+            <div>
+              <a
+                href='javascript:void(0);'
+                onClick={() =>
+                  goToProduct(`${product.companionProductSEName}.html`)
+                }
+                className='text-anchor hover:text-anchor-hover text-[15px] font-semibold underline leading-[20px]'
+              >
+                {product.companionProductName}
+              </a>
+            </div>
           </div>
-          <div className='mt-[9px]'>
-            <button
-              onClick={() =>
-                goToProduct(`${product.companionProductSEName}.html`)
-              }
-              className='text-anchor hover:text-anchor-hover font-[600] underline text-normal-text'
-            >
-              {product.companionProductName}
-            </button>
-          </div>
-        </div>
+          {/* <div className='ml-[10px] mr-[10px] mt-[19px] text-sub-text'>
+            <div className='font-[600]'>
+              {__pagesText.productInfo.companionProduct}
+            </div>
+            <div className='mt-[9px]'>
+              <button
+                onClick={() =>
+                  goToProduct(`${product.companionProductSEName}.html`)
+                }
+                className='text-anchor hover:text-anchor-hover font-[600] underline text-normal-text'
+              >
+                {product.companionProductName}
+              </button>
+            </div>
+          </div> */}
+        </>
       )}
 
-      <div className='m-[10px] mt-[18px]'>
+      <div className='m-3 mt-1'>
+        <h3 className='font-semibold text-2xl mb-2'>
+          {__pagesText.productInfo.description}
+        </h3>
+        <div
+          className={`relative text-sm text-black tracking-widest div_description transition-all pb-8 ${
+            !showExtra && 'h-32 overflow-hidden'
+          }`}
+        >
+          <div
+            className='pb-3'
+            dangerouslySetInnerHTML={{
+              __html: product.description,
+            }}
+          ></div>
+          {showExtraButton && (
+            <div
+              className={`bg-gradient-to-b from-[#fffefe00] to-[#ffffff] absolute bottom-0 left-0 right-0 pt-[80px] text-center ${
+                !showExtra && 'pt-20'
+              } text-center`}
+            >
+              <button
+                className='text-anchor tracking-normal text-base underline font-bold'
+                onClick={() => setShowExtra((show) => !show)}
+              >
+                {showExtra ? 'Read Less' : 'Read More'}
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* <div className='m-[10px] mt-[18px]'>
         <h3 className='font-[600] mb-[12px] text-title-text'>
           {__pagesText.productInfo.description}
         </h3>
@@ -196,10 +277,23 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
             </div>
           )}
         </div>
-      </div>
+      </div> */}
 
       <form className='mt-[24px]'>
-        <div className='m-[12px] mt-[24px]'>
+        <div className='m-3 mt-6'>
+          <button
+            type='button'
+            disabled={product.isDiscontinue}
+            onClick={() => {
+              setOpenModal('startOrder');
+              setShowLoader(true);
+            }}
+            className='btn btn-xl btn-secondary !flex items-center justify-center lg:!text-3xl w-full uppercase'
+          >
+            {startOrderBtnText()}
+          </button>
+        </div>
+        {/* <div className='m-[12px] mt-[24px]'>
           <button
             type='button'
             disabled={product.isDiscontinue}
@@ -211,7 +305,7 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
           >
             {startOrderBtnText()}
           </button>
-        </div>
+        </div> */}
 
         {/* {product.isDiscontinue && (
           <TopRatedProducts
@@ -224,11 +318,21 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
           <a
             href='javascript:void(0);'
             onClick={() => router.push(consultationURL)}
-            className='text-anchor tracking-normal text-base underline font-bold'
+            className='text-anchor text-lg font-semibold underline leading-[20px]'
           >
             {__pagesText.productInfo.requestAFreeConsulation}
           </a>
         </div>
+
+        {/* <div className='mt-[20px] text-center'>
+          <a
+            href='javascript:void(0);'
+            onClick={() => router.push(consultationURL)}
+            className='text-anchor tracking-normal text-base underline font-bold'
+          >
+            {__pagesText.productInfo.requestAFreeConsulation}
+          </a>
+        </div> */}
       </form>
 
       <ProductFeatures />

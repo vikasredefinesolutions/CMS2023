@@ -89,13 +89,13 @@ const StartOrderModal: React.FC<_startOrderModalProps> = (props) => {
   return (
     <div
       id='startorderModal'
-      className='overflow-y-auto overflow-x-hidden fixed z-50 justify-center items-center h-modal inset-0'
+      className='overflow-y-auto overflow-x-hidden fixed z-50 justify-center items-center h-modal inset-0 text-default-text'
     >
       <div className='w-full h-full bg-[#000000] bg-opacity-[0.50] flex items-center justify-center'>
         <div className='relative px-[16px] w-full max-w-4xl h-full md:h-auto'>
           {allColorsInventory && (
             <div className='relative bg-[#ffffff] shadow max-h-screen overflow-y-auto h-full'>
-              <div className='flex justify-between items-start p-[25px] rounded-t border-b sticky top-0 left-0 bg-[#ffffff] z-50'>
+              <div className='flex justify-between items-start p-[25px] rounded-t border-b sticky top-0 left-0 bg-[#ffffff]'>
                 <div className='font-[600] text-large-text'>{product.name}</div>
                 <button
                   className='text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-[14px] p-[6px] ml-auto inline-flex items-center'

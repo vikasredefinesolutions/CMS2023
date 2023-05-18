@@ -25,7 +25,7 @@ const SideFilter = ({
 }) => {
   const router = useRouter();
   const [openFilters, setOpenFilters] = useState<boolean>(false);
-  let route = router.asPath.replace('.html', '').replace('/', '');
+  let route = router.asPath.split('.')[0].replace('.html', '').replace('/', '');
 
   return (
     <div>

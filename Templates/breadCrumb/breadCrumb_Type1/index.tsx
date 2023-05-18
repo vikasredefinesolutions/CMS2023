@@ -25,6 +25,7 @@ const BreadCrumb_Type1: NextPage<_BreadCrumbProps> = ({
       setShowBorderAndLogo(false);
     }
   }, [router, pageType]);
+  const { view } = useTypedSelector_v2((state) => state.store);
 
   const product = useTypedSelector_v2((state) => state.product.product);
   return (
@@ -80,7 +81,7 @@ const BreadCrumb_Type1: NextPage<_BreadCrumbProps> = ({
                 </>
               </ol>
             </nav>
-            {showBorderAndLogo && (
+            {showBorderAndLogo && view !== 'MOBILE' && (
               <div className='text-center w-auto product-brand-logo '>
                 <NxtImage
                   src={product.brand?.url3 || ''}

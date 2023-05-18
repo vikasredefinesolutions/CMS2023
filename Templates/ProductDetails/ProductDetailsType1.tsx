@@ -158,43 +158,36 @@ const Ecommerce_ProductDetails_View: React.FC<_Props> = (product) => {
   return (
     <>
       {HeadTag}
-      <div className={`font-Outfit`}>
-        <div className=''>
-          <ProductDetails
-            product={product.details}
-            storeCode={product.storeCode}
-          />
+      <ProductDetails product={product.details} storeCode={product.storeCode} />
 
-          {product.sectionView.map((val: string, index: number) => {
-            if (val === 'youmayalsolike') {
-              return (
-                <div key={val + index}>
-                  <YouMayAlsoLike
-                    product={product.alike}
-                    id={_defaultTemplates.youMayAlsoLike}
-                  />
-                  ;
-                </div>
-              );
-            } else if (val === 'writereview') {
-              return (
-                <div key={val + index}>
-                  <Reviews
-                    storeCode={product.storeCode}
-                    productId={product?.details?.id ? product.details.id : 0}
-                  />
-                </div>
-              );
-            } else {
-              return (
-                <div key={val + index}>
-                  <ProductRecentlyViewed product={product} />
-                </div>
-              );
-            }
-          })}
-        </div>
-      </div>
+      {product.sectionView.map((val: string, index: number) => {
+        if (val === 'youmayalsolike') {
+          return (
+            <div key={val + index}>
+              <YouMayAlsoLike
+                product={product.alike}
+                id={_defaultTemplates.youMayAlsoLike}
+              />
+              ;
+            </div>
+          );
+        } else if (val === 'writereview') {
+          return (
+            <div key={val + index}>
+              <Reviews
+                storeCode={product.storeCode}
+                productId={product?.details?.id ? product.details.id : 0}
+              />
+            </div>
+          );
+        } else {
+          return (
+            <div key={val + index}>
+              <ProductRecentlyViewed product={product} />
+            </div>
+          );
+        }
+      })}
     </>
   );
 };

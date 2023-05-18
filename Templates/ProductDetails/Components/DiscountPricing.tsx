@@ -28,8 +28,8 @@ const DiscountPricing: React.FC<
 
   return (
     <>
-      <div>
-        <div className='bg-primary flex flex-wrap justify-between items-center pl-[10px] pr-[10px] pt-[4px] pb-[5px] mt-[16px] text-default-text'>
+      <div className=''>
+        {/* <div className='bg-primary flex flex-wrap justify-between items-center pl-[10px] pr-[10px] pt-[4px] pb-[5px] mt-[16px] text-default-text'>
           <span className='font-[600] text-[#ffffff] text-sub-text'>
             {title === 'selectsizeandquanity'
               ? __pagesText.productInfo.discountPricing.selectSizeAndQuantity
@@ -39,46 +39,99 @@ const DiscountPricing: React.FC<
           {showMinQuantity ? (
             <button
               onClick={() => setShowMsg((show) => !show)}
-              className='text-[#ffffff] hover:text-[#ffffff] pt-[6px] pb-[2px] flex flex-wrap font-[600] uppercase items-center text-small-text'
+              className='text-[#ffffff] hover:text-[#ffffff] pt-[6px] pb-[2px] flex flex-wrap uppercase items-center text-small-text '
               id='aMinOrder'
             >
               <span className='inline-block mr-[2px]'>
                 {__pagesText.productInfo.discountPricing.minimumOrder}
               </span>
-              {` ${minQty} ${unitUnits} per color `}
+              {` ${minQty} ${unitUnits} per color for $${(
+                minQty * price.msrp
+              ).toFixed(2)}`}
             </button>
+          ) : null}
+        </div> */}
+        <div className='text-sm text-gray-900 bg-primary flex flex-wrap justify-between items-center px-2.5 py-1 mt-5 leading-none'>
+          <span className='text-lg font-semibold text-white leading-none'>
+            {title === 'selectsizeandquanity'
+              ? __pagesText.productInfo.discountPricing.selectSizeAndQuantity
+              : __pagesText.productInfo.discountPricing.exclusivePricing}
+          </span>
+          {showMinQuantity ? (
+            <a
+              href='javascript:void(0);'
+              onClick={() => setShowMsg((show) => !show)}
+              className='text-white hover:text-white py-1 md:px-2 flex flex-wrap text-[13px] font-semibold uppercase items-center'
+            >
+              <span>
+                {' '}
+                {__pagesText.productInfo.discountPricing.minimumOrder}
+              </span>
+              {` ${minQty} ${unitUnits} per color for $${(
+                minQty * price.msrp
+              ).toFixed(2)}`}
+            </a>
           ) : null}
         </div>
 
         {!customerId && isSpecialBrand && (
-          <div className='flex flex-wrap justify-between items-center mt-[18px] text-default-text'>
-            <div className='flex items-start'>
-              <span className='font-[600] mr-[3px] text-sub-text'>
-                {__pagesText.productInfo.discountPricing.MSRP}
-                <Price
-                  value={undefined}
-                  prices={{
-                    salePrice: price.salePrice,
-                    msrp: price.msrp,
-                  }}
-                />
-              </span>
-              {__pagesText.productInfo.discountPricing.perItem}
-            </div>
+          <>
+            {/* <div className='flex flex-wrap justify-between items-center mt-[18px] text-default-text'>
+              <div className='flex items-start'>
+                <span className='font-[600] mr-[3px] text-sub-text'>
+                  {__pagesText.productInfo.discountPricing.MSRP}
+                  <Price
+                    value={undefined}
+                    prices={{
+                      salePrice: price.salePrice,
+                      msrp: price.msrp,
+                    }}
+                  />
+                </span>
+                {__pagesText.productInfo.discountPricing.perItem}
+              </div>
 
-            {showMinQuantity ? (
-              <button
-                onClick={() => setShowMsg((show) => !show)}
-                className='uppercase items-center font-[600] text-[#000000] pb-[5px]'
-                id='aMinOrder'
-              >
-                {
-                  __pagesText.productInfo.discountPricing
-                    .exclusivePricingAvailable
-                }
-              </button>
-            ) : null}
-          </div>
+              {showMinQuantity ? (
+                <button
+                  onClick={() => setShowMsg((show) => !show)}
+                  className='uppercase items-center font-[600] text-[#000000] pb-[5px]'
+                  id='aMinOrder'
+                >
+                  {
+                    __pagesText.productInfo.discountPricing
+                      .exclusivePricingAvailable
+                  }
+                </button>
+              ) : null}
+            </div> */}
+            <div className='text-sm text-gray-900 flex flex-wrap justify-between items-center mt-4'>
+              <p className='flex items-start leading-none'>
+                <span className='leading-none text-lg font-semibold mr-1'>
+                  {__pagesText.productInfo.discountPricing.MSRP}
+                  <Price
+                    value={undefined}
+                    prices={{
+                      salePrice: price.salePrice,
+                      msrp: price.msrp,
+                    }}
+                  />
+                </span>
+                {__pagesText.productInfo.discountPricing.perItem}
+              </p>
+              {showMinQuantity ? (
+                <a
+                  href='javascript:void(0);'
+                  className='uppercase items-center font-semibold text-black'
+                  onClick={() => setShowMsg((show) => !show)}
+                >
+                  {
+                    __pagesText.productInfo.discountPricing
+                      .exclusivePricingAvailable
+                  }
+                </a>
+              ) : null}
+            </div>
+          </>
         )}
 
         {isSpecialBrand ? (
@@ -93,7 +146,7 @@ const DiscountPricing: React.FC<
       </div>
 
       {showMsg && (
-        <div className='text-lg  p-3 pb-0 leading-8' id='divMinorder'>
+        <div className='text-xs  p-3 pb-0 leading-8' id='divMinorder'>
           {__pagesText.productInfo.discountPricing.showMsgStartingText + ' '}
           {minQty} {__pagesText.productInfo.discountPricing.showMsgMiddleText}
           <br />
