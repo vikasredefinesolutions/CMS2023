@@ -11,9 +11,9 @@ import EditIcon from '@mui/icons-material/Edit';
 import { FormControlLabel } from '@mui/material';
 import {
   CreateUserAddress,
-  UpdateUserAddress,
   deleteCustomerAddress,
   udpateIsDefaultAddress,
+  UpdateUserAddress,
 } from '@services/address.service';
 import { GetAdminCustomerUsers } from '@services/user.service';
 import { useRouter } from 'next/router';
@@ -22,7 +22,7 @@ import { useEffect, useState } from 'react';
 const ManageAddress_Type2 = () => {
   const { getStoreCustomer } = useActions_v2();
   const [showAddressPopup, setShowAddresss] = useState('');
-  const [showTab, setShowTab] = useState('S');
+  const [showTab, setShowTab] = useState(UserAddressType.SHIPPINGADDRESS);
   const [editData, setEditData] = useState<CustomerAddress | null>(null);
   const [address, setAddress] = useState<CustomerAddress[] | null>(null);
   const [id, setId] = useState<number | null>(null);

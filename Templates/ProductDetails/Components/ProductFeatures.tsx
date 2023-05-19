@@ -4,8 +4,8 @@ const ProductFeatures: React.FC = () => {
   return (
     <section className='mainsection text-center text-sm leading-none text-primary'>
       <div className=''>
-        <div className='mt-5 py-3 text-center'>
-          <div className='block md:inline-block px-6 md:border-r border-slate-800 border-b border-b-black md:border-b-0 last:border-b-0 py-2.5 md:py-0'>
+        <div className='mt-5 py-3 px-3 xl:px-0 text-center'>
+          <div className='block xl:inline-block px-6 xl:border-r border-slate-800 border-b border-b-black xl:border-b-0 last:border-b-0 py-2.5 xl:py-0'>
             <div className='w-full md:w-auto flex flex-wrap justify-center items-center'>
               <span className='material-icons text-4xl leading-[15px]'>
                 local_shipping
@@ -16,7 +16,7 @@ const ProductFeatures: React.FC = () => {
               </div>
             </div>
           </div>
-          <div className='block md:inline-block px-6 border-b border-b-black md:border-b-0 last:border-b-0 py-2.5 md:py-0'>
+          <div className='block xl:inline-block px-6 border-b border-b-black xl:border-b-0 last:border-b-0 py-2.5 xl:py-0'>
             <div className='w-full md:w-auto flex flex-wrap justify-center items-center'>
               <span className='material-icons text-4xl leading-[15px]'>
                 style
@@ -27,7 +27,7 @@ const ProductFeatures: React.FC = () => {
               </div>
             </div>
           </div>
-          <div className='block md:inline-block px-6 md:border-l border-slate-800 border-b border-b-black md:border-b-0 last:border-b-0 py-2.5 md:py-0'>
+          <div className='block xl:inline-block px-6 xl:border-l border-slate-800 border-b border-b-black xl:border-b-0 last:border-b-0 py-2.5 xl:py-0'>
             <div className='w-full md:w-auto flex flex-wrap justify-center items-center'>
               <span className='material-icons text-4xl leading-[15px]'>
                 verified

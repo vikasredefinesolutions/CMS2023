@@ -1,5 +1,5 @@
 import NxtImage from '@appComponents/reUsable/Image';
-import { checkoutPages } from '@constants/enum';
+import { checkoutPages, UserAddressType } from '@constants/enum';
 import { __pagesText } from '@constants/pages.text';
 import { GetCartTotals, useTypedSelector_v2 } from '@hooks_v2/index';
 import { GetShippingmethod } from '@services/address.service';
@@ -87,7 +87,9 @@ const ChekoutType2: FC<_Props> = ({ cartTemplateId }) => {
                       </div>
                       <div className='text-default-text'>
                         <div
-                          onClick={() => setAddressType('B')}
+                          onClick={() =>
+                            setAddressType(UserAddressType.BILLINGADDRESS)
+                          }
                           className='!text-anchor hover:!text-anchor-hover '
                         >
                           {__pagesText.CheckoutPage.Change}
@@ -177,7 +179,9 @@ const ChekoutType2: FC<_Props> = ({ cartTemplateId }) => {
                           </div>
                           <div className='text-default-text'>
                             <div
-                              onClick={() => setAddressType('S')}
+                              onClick={() =>
+                                setAddressType(UserAddressType.SHIPPINGADDRESS)
+                              }
                               className='!text-anchor hover:!text-anchor-hover cursor-pointer'
                             >
                               {__pagesText.CheckoutPage.Change}

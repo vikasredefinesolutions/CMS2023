@@ -1,5 +1,5 @@
 import Price from '@appComponents/Price';
-import { checkoutPages } from '@constants/enum';
+import { checkoutPages, UserAddressType } from '@constants/enum';
 import CheckoutController from '@controllers/checkoutController';
 import CartItem from '@templates/cartItem';
 import CartSummarry from '@templates/cartSummarry';
@@ -118,7 +118,9 @@ const ChekoutType3: FC<_Props> = ({ cartTemplateId }) => {
                         <CheckoutAddress
                           address={shippingAdress}
                           addressType={1}
-                          changeClickHandler={() => setAddressType('S')}
+                          changeClickHandler={() =>
+                            setAddressType(UserAddressType.SHIPPINGADDRESS)
+                          }
                         />
                       )}
                     </div>
@@ -156,7 +158,9 @@ const ChekoutType3: FC<_Props> = ({ cartTemplateId }) => {
                           addressType={2}
                           setShippingAddress={setShippingAddress}
                           useShippingAddress={useShippingAddress}
-                          changeClickHandler={() => setAddressType('B')}
+                          changeClickHandler={() =>
+                            setAddressType(UserAddressType.BILLINGADDRESS)
+                          }
                         />
                       )}
                     </div>

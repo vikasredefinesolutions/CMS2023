@@ -11,33 +11,35 @@ const AskToLogin: React.FC<_AskToLoginprops> = ({ modalHandler }) => {
     <>
       {showLoginOption && (
         <>
-          <div className='mt-3 border border-gray-700 p-2.5 flex flex-wrap justify-between items-center gap-y-2'>
-            <div className='w-full md:w-1/2 text-lg leading-none font-bold text-gray-900'>
-              <span className='w-full block'>
-                {' '}
-                {
-                  __pagesText.productInfo.startOrderModal.askToLogin
-                    .loginOrCreateAnAccount
-                }
-              </span>{' '}
-              <span className='w-full block text-base font-normal'>
-                {
-                  __pagesText.productInfo.startOrderModal.askToLogin
-                    .toSeeDiscountPricing
-                }
-              </span>
-            </div>
-            <div className='w-full md:w-1/2 text-left flex justify-end'>
-              <button
-                onClick={() => modalHandler('login')}
-                type='button'
-                className='btn btn-secondary !flex !py-4 items-center justify-center w-full !font-semibold uppercase'
-              >
-                {
-                  __pagesText.productInfo.startOrderModal.askToLogin
-                    .loginCreateAccount
-                }
-              </button>
+          <div className='p-[10px] mt-[15px] border border-gray-700'>
+            <div className='flex flex-wrap justify-between gap-y-[8px] '>
+              <div className='w-full md:w-1/2  text-sub-text'>
+                <span className='w-full block text-sub-text '>
+                  {' '}
+                  {
+                    __pagesText.productInfo.startOrderModal.askToLogin
+                      .loginOrCreateAnAccount
+                  }
+                </span>{' '}
+                <span className='w-full block text-default-text'>
+                  {
+                    __pagesText.productInfo.startOrderModal.askToLogin
+                      .toSeeDiscountPricing
+                  }
+                </span>
+              </div>
+              <div className='w-full md:w-1/2  text-left'>
+                <button
+                  onClick={() => modalHandler('login')}
+                  type='button'
+                  className='btn btn-secondary !flex !py-4 items-center justify-center w-full !font-semibold uppercase'
+                >
+                  {
+                    __pagesText.productInfo.startOrderModal.askToLogin
+                      .loginCreateAccount
+                  }
+                </button>
+              </div>
             </div>
           </div>
         </>

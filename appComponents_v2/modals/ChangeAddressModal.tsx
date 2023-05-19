@@ -1,3 +1,4 @@
+import { UserAddressType } from '@constants/enum';
 import { __pagesConstant } from '@constants/pages.constant';
 import { AddressType } from '@controllers/checkoutController/CheckoutAddressForm';
 import { CustomerAddress } from '@definations/APIs/user.res';
@@ -6,7 +7,10 @@ import { udpateIsDefaultAddress } from '@services/address.service';
 import { FC } from 'react';
 
 type props = {
-  addressType: null | 'S' | 'B';
+  addressType:
+    | null
+    | UserAddressType.SHIPPINGADDRESS
+    | UserAddressType.BILLINGADDRESS;
   addressArray: Array<CustomerAddress>;
   // eslint-disable-next-line no-unused-vars
   changeAddresHandler: (address: AddressType) => void;
@@ -46,7 +50,11 @@ const ChangeAddressModal: FC<props> = ({
           <div className='relative bg-white rounded-lg shadow max-h-screen overflow-y-auto'>
             <div className='flex justify-between items-start p-4 rounded-t border-b dark:border-gray-600'>
               <h3 className='text-xl font-semibold text-gray-900 dark:text-white'>
-                Change {addressType === 'S' ? 'Shipping' : 'Billing'} Address
+                Change{' '}
+                {addressType === UserAddressType.SHIPPINGADDRESS
+                  ? 'Shipping'
+                  : 'Billing'}{' '}
+                Address
               </h3>
               <button
                 onClick={closeModalHandler}

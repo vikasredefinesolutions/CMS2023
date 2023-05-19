@@ -141,7 +141,7 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
                     item_name: storeProduct?.name,
                     item_id: storeProduct?.sku,
                     item_brand: storeProduct?.brand?.name,
-                    item_category: storeProduct?.categoryName,
+                    item_category: '',
                     item_category2: '',
                     item_category3: '',
                     item_category4: '',

@@ -8,14 +8,15 @@ import * as Yup from 'yup';
 import { paths } from '@constants/paths.constant';
 import { __ValidationText } from '@constants/validation.text';
 import {
+  createNewAccount_payload,
   _CNA_StoreCustomerModel,
   _CreateNewAccount_Payload,
-  createNewAccount_payload,
 } from '@payloads/createNewAccount.payload';
 import { CreateNewAccount } from '@services/user.service';
 import getLocation from 'helpers_v2/getLocation';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
 
+import { UserAddressType } from '@constants/enum';
 import { __UserMessages } from '@constants/global.constant';
 import { TrackGTMEvent } from '@helpers/common.helper';
 
@@ -112,7 +113,7 @@ const CreateAccount: React.FC = () => {
         storeCustomerAddress: [
           {
             ...enteredInputs.storeCustomerAddress[0],
-            addressType: 'B',
+            addressType: UserAddressType.BILLINGADDRESS,
             companyName: enteredInputs.companyName,
             firstname: enteredInputs.firstname,
             lastName: enteredInputs.lastName,

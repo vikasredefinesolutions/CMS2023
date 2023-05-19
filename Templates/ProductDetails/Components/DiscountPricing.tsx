@@ -51,8 +51,8 @@ const DiscountPricing: React.FC<
             </button>
           ) : null}
         </div> */}
-        <div className='text-sm text-gray-900 bg-primary flex flex-wrap justify-between items-center px-2.5 py-1 mt-5 leading-none'>
-          <span className='text-lg font-semibold text-white leading-none'>
+        <div className='bg-primary flex flex-wrap justify-between items-center pl-[10px] pr-[10px] pt-[4px] pb-[5px] mt-[16px] text-default-text'>
+          <span className='font-[600] text-[#ffffff] text-sub-text'>
             {title === 'selectsizeandquanity'
               ? __pagesText.productInfo.discountPricing.selectSizeAndQuantity
               : __pagesText.productInfo.discountPricing.exclusivePricing}
@@ -61,7 +61,7 @@ const DiscountPricing: React.FC<
             <a
               href='javascript:void(0);'
               onClick={() => setShowMsg((show) => !show)}
-              className='text-white hover:text-white py-1 md:px-2 flex flex-wrap text-[13px] font-semibold uppercase items-center'
+              className='text-[#ffffff] hover:text-[#ffffff] pt-[6px] pb-[2px] flex flex-wrap uppercase items-center text-small-text'
             >
               <span>
                 {' '}
@@ -104,9 +104,9 @@ const DiscountPricing: React.FC<
                 </button>
               ) : null}
             </div> */}
-            <div className='text-sm text-gray-900 flex flex-wrap justify-between items-center mt-4'>
-              <p className='flex items-start leading-none'>
-                <span className='leading-none text-lg font-semibold mr-1'>
+            <div className='flex flex-wrap justify-between items-center mt-[18px] text-default-text'>
+              <p className='flex items-start'>
+                <span className='mr-[3px] text-sub-text'>
                   {__pagesText.productInfo.discountPricing.MSRP}
                   <Price
                     value={undefined}
@@ -121,7 +121,7 @@ const DiscountPricing: React.FC<
               {showMinQuantity ? (
                 <a
                   href='javascript:void(0);'
-                  className='uppercase items-center font-semibold text-black'
+                  className='items-center text-[#000000] pb-[5px]'
                   onClick={() => setShowMsg((show) => !show)}
                 >
                   {

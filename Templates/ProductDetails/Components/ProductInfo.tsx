@@ -73,7 +73,7 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
             <span className='ml-[4px]'>: {product.sku}</span>
           </div>
 
-          <div className='text-black text-sm'>
+          <div className='pt-[6px] text-default-text'>
             <span className='font-[600] inline-block w-[43px]'>
               {__pagesText.productInfo.msrp}
             </span>
@@ -92,11 +92,11 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
             <a
               href='javascript:void(0);'
               onClick={() => router.push(consultationURL)}
-              className='text-anchor hover:text-anchor-hover underline text-[15px]'
+              className='!text-anchor hover:!text-anchor-hover text-normal-text pr-[1px]'
             >
               {__pagesText.productInfo.requestConsultaionProof}
             </a>{' '}
-            <span className='material-icons-outlined leading-none text-xl font-semibold'>
+            <span className='material-icons-outlined leading-none text-[20px] font-600 w-[15px] text-anchor hover:text-anchor-hover no-underline'>
               chevron_right
             </span>
           </div>
@@ -117,10 +117,10 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
         isSpecialBrand={product.isSpecialBrand}
       />
 
-      <div className='m-3'>
+      <div className='ml-[10px] mr-[10px] mt-[13px]'>
         <button
           type='button'
-          className='text-anchor hover:text-anchor-hover text-[15px] font-semibold underline'
+          className='!text-anchor hover:!text-anchor-hover text-normal-text'
           onClick={() => modalHandler('availableInventory')}
         >
           {__pagesText.productInfo.checkAvailableInventory}
@@ -136,19 +136,16 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
           {__pagesText.productInfo.checkAvailableInventory}
         </button>
       </div> */}
-      <div className='m-3 flex flex-wrap text-gray-900 justify-between items-center gap-2'>
-        <div className='text-lg'>
-          <span className='font-semibold'>
-            {' '}
-            {__pagesText.productInfo.availableSizes}
-          </span>
-          <span className='ml-1.5'>{` ${sizes}`}</span>
+      <div className='ml-[10px] mr-[10px] mt-[6px] flex flex-wrap justify-between gap-[8px] items-center'>
+        <div className='pt-[10px] text-sub-text'>
+          <span> {__pagesText.productInfo.availableSizes}</span>
+          <span className='ml-[5px]'>{` ${sizes}`}</span>
         </div>
         {!sizes.includes('MISC') && (
-          <div>
+          <div className='pb-[0px]'>
             <button
               type='button'
-              className='text-anchor text-sm font-semibold underline'
+              className='!text-anchor hover:!text-anchor-hover text-default-text'
               onClick={() => modalHandler('sizeChart')}
             >
               {__pagesText.productInfo.sizeChart}

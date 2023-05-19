@@ -52,7 +52,7 @@ const CheckoutTemplate: FC<_Props> = ({ cartTemplateId }) => {
           item_name: item?.productName,
           item_id: item?.sku,
           item_brand: item?.brandName,
-          item_category: item?.categoryName,
+          item_category: '',
           item_category2: '',
           item_category3: '',
           item_category4: '',

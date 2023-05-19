@@ -57,13 +57,15 @@ const CardPaymentType1: paymentProps = ({
 
   return (
     <div id='PaymentCard'>
-      <div className='flex items-baseline mt-[12px] mb-[12px] pb-[18px] border-b border-gray-border'>
+      {/* flex items-baseline mt-[12px] mb-[12px] pb-[18px] border-b border-gray-border */}
+      <div className='flex justify-between items-center mt-[12px] mb-[12px] pb-[18px] border-b border-gray-border'>
         <div className='text-title-text font-semibold tracking-normal'>
           Payment
         </div>
         <div>
+          {/*  ml-3 text-anchor underline*/}
           <button
-            className='ml-3 text-anchor underline'
+            className='!text-anchor hover:!text-anchor-hover underline'
             id='btn-use-purchase-order'
             onClick={() =>
               updatePaymentMethod(paymentMethodCustom.purchaseOrder)

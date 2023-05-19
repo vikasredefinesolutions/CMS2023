@@ -182,7 +182,7 @@ export const __pagesText = {
       },
       askToLogin: {
         loginOrCreateAnAccount: 'LOGIN OR CREATE AN ACCOUNT',
-        toSeeDiscountPricing: 'to see discounted pricing on this product.',
+        toSeeDiscountPricing: 'to see exclusive pricing on this product.',
         loginCreateAccount: 'Login / Create an account',
       },
       sizePriceQty: {

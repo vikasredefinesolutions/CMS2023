@@ -188,7 +188,7 @@ const SomActionsHandler: React.FC<_SOMActionHandlerProps> = ({
             item_name: product?.name,
             item_id: product?.sku,
             item_brand: product?.brand?.name,
-            item_category: product?.categoryName,
+            item_category: '',
             item_category2: '',
             item_category3: '',
             item_category4: '',

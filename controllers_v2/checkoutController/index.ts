@@ -1,20 +1,21 @@
 import {
-  checkoutPages,
   PaymentMethod,
+  checkoutPages,
   paymentMethodCustom as paymentEnum,
+  UserAddressType,
 } from '@constants/enum';
 import { __Cookie, __Cookie_Expiry } from '@constants/global.constant';
 import { paths } from '@constants/paths.constant';
-import { addAddress, AddOrderDefault } from '@constants/payloads/checkout';
+import { AddOrderDefault, addAddress } from '@constants/payloads/checkout';
 import { signup_payload } from '@constants/payloads/signup';
 import { commonMessage } from '@constants/successError.text';
 import { CreditCardDetailsType } from '@definations/checkout';
 import {
+  KlaviyoScriptTag,
+  TrackGTMEvent,
   deleteCookie,
   extractCookies,
-  KlaviyoScriptTag,
   setCookie,
-  TrackGTMEvent,
 } from '@helpers/common.helper';
 import getLocation from '@helpers/getLocation';
 import {
@@ -97,7 +98,9 @@ const CheckoutController = () => {
   const [orderNote, setorderNotes] = useState<string>('');
   const [billingAdress, setBillingAdress] = useState<AddressType | null>(null);
   const [billAddress, setBillAddress] = useState<AddressType | null>(null);
-  const [addressType, setAddressType] = useState<null | 'S' | 'B'>(null);
+  const [addressType, setAddressType] = useState<
+    null | UserAddressType.SHIPPINGADDRESS | UserAddressType.BILLINGADDRESS
+  >(null);
   const [showAddAddressModal, setShowAddAddressModal] = useState(false);
   const [addressEditData, setAddressEditData] =
     useState<CustomerAddress | null>(null);
@@ -176,9 +179,12 @@ const CheckoutController = () => {
             setShowAddAddress(false);
           }
           customer.customerAddress.map((res) => {
-            if (res.addressType == 'S') {
+            if (res.addressType == UserAddressType.SHIPPINGADDRESS) {
               setShippingAdress(res as AddressType);
-            } else if (res.addressType == 'B' && res.isDefault) {
+            } else if (
+              res.addressType == UserAddressType.BILLINGADDRESS &&
+              res.isDefault
+            ) {
               setBillingAdress(res as AddressType);
               billAddress && setBillingAdress(billAddress);
             }
@@ -394,7 +400,7 @@ const CheckoutController = () => {
           item_name: item?.productName,
           item_id: item?.sku,
           item_brand: item?.brandName,
-          item_category: item?.categoryName,
+          item_category: '',
           item_category2: '',
           item_category3: '',
           item_category4: '',
@@ -446,7 +452,7 @@ const CheckoutController = () => {
                 fax: shippingForm.values.fax ? shippingForm.values.fax : '',
                 countryName: shippingForm.values.countryName,
                 countryCode: shippingForm.values.countryCode || '',
-                addressType: 'S',
+                addressType: UserAddressType.SHIPPINGADDRESS,
                 isDefault: shippingForm.values.isDefault,
                 recStatus: 'A',
                 companyName: shippingForm.values.companyName || ' ',
@@ -670,7 +676,7 @@ const CheckoutController = () => {
   };
 
   const changeAddresHandler = (address: AddressType) => {
-    addressType === 'S'
+    addressType === UserAddressType.SHIPPINGADDRESS
       ? setShippingAdress(address)
       : setBillingAdress(address);
     setAddressType(null);

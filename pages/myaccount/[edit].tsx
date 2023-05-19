@@ -1,3 +1,4 @@
+import { UserAddressType } from '@constants/enum';
 import { paths } from '@constants/paths.constant';
 import { addressMessages } from '@constants/validationMessages';
 import { CustomerAddress } from '@definations/APIs/user.res';
@@ -129,7 +130,10 @@ const index = () => {
         fax: values.fax ? values.fax : '',
         countryName: values.countryName,
         countryCode: '91',
-        addressType: edit === paths.myAccount.editShippingAddress ? 'S' : 'B',
+        addressType:
+          edit === paths.myAccount.editShippingAddress
+            ? UserAddressType.SHIPPINGADDRESS
+            : UserAddressType.BILLINGADDRESS,
         isDefault: values.isDefault,
         recStatus: 'A',
         companyName: values.companyName || ' ',
