@@ -339,7 +339,8 @@ const ElementCarouselDisplay = ({ bannerArr }) => {
                             <a
                               href={image.button_link}
                               target={
-                                image.button_link_window == '_self'
+                                image.button_link_window == '_self' &&
+                                image.button_link_window == ''
                                   ? ''
                                   : '_blank'
                               }
