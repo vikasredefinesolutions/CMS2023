@@ -140,7 +140,7 @@ const ManageAddress = () => {
             className='w-full mt-[50px] mb-[50px]'
           >
             <ul className='w-full flex justify-center max-w-4xl mx-auto flex-wrap'>
-              <li className=''>
+              <li className='font-semibold'>
                 <button
                   onClick={() => setShowTab(UserAddressType.SHIPPINGADDRESS)}
                   className={`tab py-2 px-2 block btn-lg  ${
@@ -154,7 +154,7 @@ const ManageAddress = () => {
                   Shipping Address
                 </button>
               </li>
-              <li className=''>
+              <li className='font-semibold'>
                 <button
                   onClick={() => setShowTab(UserAddressType.BILLINGADDRESS)}
                   className={`tab py-2 px-2 block btn-lg ${
@@ -170,10 +170,10 @@ const ManageAddress = () => {
               </li>
               {customer?.customerRoleId === 0 ||
               customer?.customerRoleId === 2 ? (
-                <li className=''>
+                <li className='font-semibold mt-8 sm:mt-0 md:mt-0 lg:mt-0'>
                   <button
                     onClick={() => setShowTab(UserAddressType.OTHERUSERADDRESS)}
-                    className={`tab py-2 px-2 block btn-lg ${
+                    className={`tab py-2 px-2 block btn-lg  ${
                       showTab === UserAddressType.SHIPPINGADDRESS ||
                       showTab === UserAddressType.BILLINGADDRESS
                         ? 'btn-secondary border-spacing-0'
@@ -191,7 +191,7 @@ const ManageAddress = () => {
             <div className='mx-auto pt-[40px] max-w-[1050px]'>
               <div className='panel-01 tab-content pb-4'>
                 <div className='flex flex-wrap lg:-mx-3 gap-y-[24px]'>
-                  {address &&
+                  {address && address.length > 0 ? (
                     address.map((address_obj) => (
                       <div
                         className='w-full lg:w-1/2 lg:px-[12px]'
@@ -286,7 +286,18 @@ const ManageAddress = () => {
                           </div>
                         </div>
                       </div>
-                    ))}
+                    ))
+                  ) : (
+                    <section className='container mx-auto text-center'>
+                      <div className='pt-[60px] pb-[30px] flex flex-col justify-center items-center '>
+                        <div className='mb-[30px] mt-[15px]'>
+                          <div className='text-2xl-text mb-[20px] font-bold border-rose-600'>
+                            No Address Available
+                          </div>
+                        </div>
+                      </div>
+                    </section>
+                  )}
                 </div>
                 {showTab === UserAddressType.OTHERUSERADDRESS ? (
                   <></>

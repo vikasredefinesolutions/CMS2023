@@ -40,6 +40,7 @@ export const __console_v2: __Console = {
       OrderedProductDetails: false,
       UpdatePasswordForGuestEmail: false,
       GetCustomerUsersByCustomerId: false,
+      DecryptPassword: false,
     },
   },
   product: {

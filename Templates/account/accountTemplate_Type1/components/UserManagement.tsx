@@ -120,7 +120,7 @@ const UserManagement = () => {
     setShowLoader(false);
   };
   const isAdmin =
-    customer?.customerRoleId === 0 || customer?.customerRoleId === 2
+    customer?.customerRoleId === 0 || customer?.customerRoleId === 4
       ? true
       : false;
   const deleteUser = async (customerId: number) => {
@@ -143,17 +143,17 @@ const UserManagement = () => {
 
   return (
     <>
-      <section className='pt-[40px] pb-[40px]'>
-        <div className='cotainer mx-10'>
+      <section className='pt-[40px] pb-[50px]'>
+        <div className='container mx-auto'>
           <div className='mx-auto space-y-10 sm:px-[16px] lg:px-0 pb-[8px]'>
-            <div className='bg-[#ffffff] border-t border-b border-[#d2d2d2] sm:border'>
+            <div className='bg-[#ffffff] border-t border-b border-gray-border sm:border'>
               {isAdmin && (
-                <div className='flex items-center p-4 border-b border-gray-200 sm:p-6 sm:grid sm:grid-cols-4 sm:gap-x-6 bg-gray-50'>
+                <div className='flex items-center p-[10px] pr-[20px] bg-light-gray border-b border-gray-border'>
                   <div className='flex-1 grid grid-cols-2 gap-x-[24px] text-sm sm:col-span-4 sm:grid-cols-4 md:col-span-2'></div>
-                  <div className='hidden md:col-span-2 md:flex md:items-center md:justify-end md:space-x-4'>
+                  <div className='md:col-span-2 md:flex md:items-center md:justify-end md:space-x-4'>
                     <button
                       data-modal-toggle='adduserModal'
-                      className='btn btn-secondary btn-md'
+                      className='btn btn-secondary !font-[600]'
                       onClick={() => setShowAddUserModal(true)}
                     >
                       <span>Add User</span>
@@ -163,7 +163,7 @@ const UserManagement = () => {
               )}
               <ul
                 role='list'
-                className='divide-y divide-[#ddd] text-default-text bg-light-gray px-[20px]'
+                className='divide-y divide-border-gray-border text-default-text bg-light-gray px-[20px]'
               >
                 <li className='p-2 sm:p-4'>
                   <div className='flex flex-wrap'>
@@ -199,38 +199,38 @@ const UserManagement = () => {
 
             {isAdmin && (
               <div className='bg-[#ffffff] sm:border overflow-auto'>
-                <table className='table w-full border border-[#ddd]'>
+                <table className='table w-full border border-gray-border'>
                   <thead className=''>
-                    <tr className='divide-x divide-[#ddd] text-left text-default-text bg-light-gray'>
-                      <th className='p-2'>Username</th>
-                      <th className='p-2'>Role</th>
-                      {/* <th className='p-2'>Rec Status</th> */}
-                      <th className='p-2'>Email Address</th>
-                      <th className='p-2'>Created date</th>
-                      <th className='p-2'>Action</th>
+                    <tr className='divide-x divide-border-gray-border text-left text-default-text bg-light-gray'>
+                      <th className='px-[12px] py-[14px]'>Username</th>
+                      <th className='px-[12px] py-[14px]'>Role</th>
+                      {/* <th className='px-[12px] py-[14px]'>Rec Status</th> */}
+                      <th className='px-[12px] py-[14px]'>Email Address</th>
+                      <th className='px-[12px] py-[14px]'>Created date</th>
+                      <th className='px-[12px] py-[14px]'>Action</th>
                     </tr>
                   </thead>
-                  <tbody className='divide-y divide-[#ddd] text-left text-default-text'>
+                  <tbody className='divide-y divide-border-gray-border text-left text-default-text'>
                     {userList &&
                       userList.map((user, index) => (
                         <tr key={index} className=''>
-                          <td className='border-b border-r border-[#ddd] px-[12px] py-[12px]'>
+                          <td className='border-b border-r border-gray-border px-[12px] py-[12px]'>
                             {user.firstname} {user.lastname}
                           </td>
-                          <td className='border-b border-r border-[#ddd] px-[12px] py-[12px]'>
+                          <td className='border-b border-r border-gray-border px-[12px] py-[12px]'>
                             {user.customerRoleName}
                           </td>
-                          {/* <td className='border-b border-r border-[#ddd] px-[12px] py-[12px]'>
+                          {/* <td className='border-b border-r border-gray-border px-[12px] py-[12px]'>
                             {user.recStatus}
                           </td> */}
-                          <td className='border-b border-r border-[#ddd] px-[12px] py-[12px]'>
+                          <td className='border-b border-r border-gray-border px-[12px] py-[12px]'>
                             {user.email}
                           </td>
-                          <td className='border-b border-r border-[#ddd] px-[12px] py-[12px]'>
+                          <td className='border-b border-r border-gray-border px-[12px] py-[12px]'>
                             {new Date(user.createdDate).toLocaleDateString()}
                           </td>
-                          <td className='border-b border-r border-[#ddd] px-[12px] py-[12px]'>
-                            <div className='flex flex-wrap gap-x-4'>
+                          <td className='border-b border-r border-gray-border px-[12px] py-[12px]'>
+                            <div className='flex flex-wrap gap-x-0 md:gap-x-4'>
                               <EditIcon
                                 className='text-primary'
                                 onClick={() => {

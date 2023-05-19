@@ -48,11 +48,9 @@ const CalculativeFigure: React.FC = () => {
           <span className='font-[600] text-sub-text'>
             {' '}
             {`${
-              logo.price?.length && logo.price[0] !== 'FREE' ? (
-                <Price value={logo.price[0]} />
-              ) : (
-                'FREE'
-              )
+              logo.price?.length && logo.price[0] !== 'FREE'
+                ? `$${logo.price[0]}`
+                : 'FREE'
             }`}
           </span>
         </div>

@@ -1,4 +1,5 @@
 import Price from '@appComponents/reUsable/Price';
+import { __pagesText } from '@constants/pages.text';
 import SummarryController from '@controllers/summarryController';
 import { GetCartTotals, useTypedSelector_v2 } from 'hooks_v2';
 import { FC } from 'react';
@@ -47,11 +48,10 @@ const CartSummarryType1: FC = () => {
     }
     return false;
   };
-
   return (
     <div className='border border-slate-400 bg-[#ffffff] mb-[20px]'>
       <div className='bg-light-gray w-full text-sub-text font-medium pl-[16px] pr-[16px] pt-[8px] pb-[8px]'>
-        Cart Summary
+        {__pagesText.CheckoutPage.orderSummary.OrderSummary}
       </div>
       <div className='px-[15px] py-[15px]'>
         <dl className=''>
@@ -143,7 +143,7 @@ const CartSummarryType1: FC = () => {
           </div>
           <div className='border-t border-gray-200 flex items-center justify-between pt-[10px]'>
             <dt className='text-normal-text flex items-center'>
-              <span>Estimated Tax:</span>
+              <span>{__pagesText.CheckoutPage.orderSummary.tax}</span>
             </dt>
             <dd className='text-normal-text'>
               <Price value={salesTax} />

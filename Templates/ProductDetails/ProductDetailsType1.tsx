@@ -3,14 +3,10 @@ import Head from 'next/head';
 import { useEffect } from 'react';
 
 // Services and Types imports
-import {
-  FetchCategoryByproductId,
-  FetchInventoryById,
-} from '@services/product.service';
+import { FetchInventoryById } from '@services/product.service';
 import { KlaviyoScriptTag } from 'helpers_v2/common.helper';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
 // Componennts
-import { CategoriesByPid } from '@definations/APIs/category.res';
 import ProductRecentlyViewed from '@templates/recentlyViewedProducts';
 import Reviews from '@templates/Review';
 // import { _StoreCache } from 'pages/[slug]/slug';
@@ -27,21 +23,8 @@ const Ecommerce_ProductDetails_View: React.FC<_Props> = (product) => {
     product_storeData,
     product_UpdateSelectedValues,
   } = useActions_v2();
-
   const { id: storeId, pageType } = useTypedSelector_v2((state) => state.store);
-
-  const getCategoriesArr = (): string[] => {
-    let categories: CategoriesByPid = [];
-    let categoryArr: string[] = [];
-    FetchCategoryByproductId(+pageType.id, storeId).then((res) => {
-      categories = res;
-    });
-    if (categories.length > 0) {
-      categoryArr = categories[0].name.split(' > ');
-    }
-    return categoryArr;
-  };
-
+  const { categoryArr } = useTypedSelector_v2((state) => state.product);
   useEffect(() => {
     if (product.details && storeId && pageType.id) {
       product_UpdateSelectedValues({
@@ -51,12 +34,11 @@ const Ecommerce_ProductDetails_View: React.FC<_Props> = (product) => {
         },
       });
 
-      const categories = getCategoriesArr();
       const item = {
         ProductName: product.details.name,
         ProductID: product.details.id,
         SKU: product.details.sku,
-        Categories: categories,
+        Categories: categoryArr,
         ImageURL: product.colors && product.colors[0].imageUrl,
         URL: window.location.href,
         Brand: product.details.brandName,
@@ -79,7 +61,7 @@ const Ecommerce_ProductDetails_View: React.FC<_Props> = (product) => {
       KlaviyoScriptTag(['track', 'Viewed Product', item]);
       KlaviyoScriptTag(['trackViewedItem', viewedItem]);
     }
-  }, [storeId, pageType.id]);
+  }, [storeId, pageType.id, categoryArr]);
 
   useEffect(() => {
     if (product.details) {
@@ -120,12 +102,12 @@ const Ecommerce_ProductDetails_View: React.FC<_Props> = (product) => {
         FetchInventoryById({
           productId: product.details.id,
           attributeOptionId: allColorAttributes,
-        }).then((res) =>
+        }).then((res) => {
           product_storeData({
             type: 'INVENTORY_LIST',
             data: res,
-          }),
-        );
+          });
+        });
       }
     }
     setShowLoader(false);
@@ -168,7 +150,6 @@ const Ecommerce_ProductDetails_View: React.FC<_Props> = (product) => {
                 product={product.alike}
                 id={_defaultTemplates.youMayAlsoLike}
               />
-              ;
             </div>
           );
         } else if (val === 'writereview') {

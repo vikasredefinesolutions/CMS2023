@@ -36,7 +36,7 @@ const BreadCrumb_Type1: NextPage<_BreadCrumbProps> = ({
             showBorderAndLogo ? 'border-b border-b-gray-border mb-[10px]' : ''
           } `}
         >
-          <div className='flex flex-wrap justify-between py-[30px]'>
+          <div className='flex flex-wrap justify-between py-[10px]'>
             <nav
               className='flex flex-wrap items-center text-small-text'
               aria-label='Breadcrumb'
@@ -51,7 +51,7 @@ const BreadCrumb_Type1: NextPage<_BreadCrumbProps> = ({
                   &lt;&lt; {__pagesText.BreadCrumbs.back}
                 </div>
               )}
-              <ol className='inline-flex items-center'>
+              <ol className='flex flex-wrap items-center gap-y-2'>
                 <>
                   {breadCrumbs.map((item, index) => (
                     <li
@@ -82,7 +82,7 @@ const BreadCrumb_Type1: NextPage<_BreadCrumbProps> = ({
               </ol>
             </nav>
             {showBorderAndLogo && view !== 'MOBILE' && (
-              <div className='text-center w-auto product-brand-logo '>
+              <div className='text-center w-auto product-brand-logo flex items-center justify-center '>
                 <NxtImage
                   src={product.brand?.url3 || ''}
                   title={product.brand?.name || ''}

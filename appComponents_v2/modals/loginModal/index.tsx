@@ -126,8 +126,8 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
         className=' overflow-y-auto overflow-x-hidden fixed z-50 justify-center items-center h-modal inset-0 text-default-text'
       >
         <div className='w-full h-full bg-[#000000] bg-opacity-[0.50] flex items-center justify-center'>
-          <div className='relative px-[16px] w-full max-w-xl h-full md:h-auto'>
-            <div className='relative bg-[#ffffff] shadow max-h-screen overflow-y-auto h-full rounded-md'>
+          <div className='relative px-[16px] w-full max-w-4xl h-full md:h-auto'>
+            <div className='relative bg-[#ffffff] shadow max-h-screen overflow-y-auto h-full'>
               <div className='flex justify-between items-center p-[15px] rounded-t border-b sticky top-0 left-0 bg-[#ffffff] z-50'>
                 <div className='font-[600] text-medium-text'>
                   {__pagesText.productInfo.loginModal.signIn}
@@ -216,7 +216,7 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
                           <div className='mb-[20px]'>
                             <button
                               disabled={!!showErroMsg}
-                              className='btn btn-md btn-secondary w-full'
+                              className='btn btn-xl btn-secondary w-full'
                               type='submit'
                               onClick={() => {
                                 handleSubmit();
@@ -265,7 +265,7 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
                             <div className='mb-4'>
                               <button
                                 onClick={SamlloginHandler}
-                                className='btn btn-md btn-secondary w-full'
+                                className='btn btn-xl btn-secondary w-full'
                                 type='button'
                               >
                                 {__pagesText.productInfo.loginModal.samllogin}
@@ -278,7 +278,7 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
                                 modalHandler(null);
                                 router.push(paths.SIGN_UP);
                               }}
-                              className='btn btn-md btn-secondary w-full'
+                              className='btn btn-xl btn-secondary w-full'
                             >
                               {
                                 __pagesText.productInfo.loginModal
@@ -288,20 +288,16 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
                           </div>
                           <div className='mt-[10px] text-extra-small-text text-center'>
                             {__pagesText.productInfo.loginModal.clickMessage}{' '}
-                            <Link
-                              href={'terms-and-conditions.html'}
-                              target='_blank'
-                            >
-                              <a className='text-anchor' target='_blank'>
+                            <Link href={'terms-and-conditions.html'}>
+                              <a className='text-anchor'>
                                 {__pagesText.productInfo.loginModal.termsOfUse}
                               </a>
-                            </Link>{' '}
+                            </Link>
                             {__pagesText.productInfo.loginModal.and}{' '}
-                            <Link href={'privacy-policy.html'} target='_blank'>
+                            <Link href={'privacy-policy'}>
                               <a
                                 className='text-anchor'
                                 onClick={() => modalHandler(null)}
-                                target='_blank'
                               >
                                 {
                                   __pagesText.productInfo.loginModal
@@ -309,7 +305,6 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
                                 }
                               </a>
                             </Link>
-                            .
                           </div>
                         </div>
                       </>

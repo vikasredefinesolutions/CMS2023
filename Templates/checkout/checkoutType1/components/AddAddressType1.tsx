@@ -1,4 +1,10 @@
-import { AddressFormRefType } from '@controllers/checkoutController/CheckoutAddressForm';
+import {
+  AddressFormRefType,
+  AddressType,
+} from '@controllers/checkoutController/CheckoutAddressForm';
+import { useTypedSelector_v2 } from '@hooks_v2/index';
+import { FetchCountriesList, FetchStatesList } from '@services/general.service';
+import { useEffect, useState } from 'react';
 
 const AddAddress = ({
   refrence,
@@ -6,6 +12,7 @@ const AddAddress = ({
   setShippingAddress,
   useShippingAddress,
   isBillingForm,
+  billingAddress,
 }: {
   refrence: AddressFormRefType;
   title: string;
@@ -13,8 +20,56 @@ const AddAddress = ({
   setShippingAddress?: (arg: boolean) => void;
   useShippingAddress?: boolean;
   isBillingForm: boolean;
+  billingAddress?: AddressType | null;
 }) => {
-  const { handleBlur, handleChange, errors, touched, handleSubmit } = refrence;
+  const {
+    handleBlur,
+    handleChange,
+    errors,
+    touched,
+    handleSubmit,
+    values,
+    isSubmitting,
+  } = refrence;
+  const customerId = useTypedSelector_v2((state) => state.user.id);
+  const customer = useTypedSelector_v2((state) => {
+    return state.user.customer;
+  });
+
+  const [country, setCountry] = useState<
+    {
+      id: number;
+      name: string;
+    }[]
+  >([]);
+
+  const [state, setState] = useState<
+    {
+      id: number;
+      name: string;
+    }[]
+  >([]);
+
+  useEffect(() => {
+    FetchCountriesList().then((res) => res && setCountry(res));
+  }, []);
+
+  useEffect(() => {
+    if (!values.countryName) {
+      values.countryName = country[0]?.name;
+    }
+    const obj = country.find((count) => count.name === values.countryName);
+    if (obj) {
+      FetchStatesList(obj.id).then((res) => {
+        if (res) {
+          setState(res);
+          res ? (values.state = res[0]?.name) : '';
+        }
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [values.countryName, country]);
+
   return (
     <div className='' id='ShippingAddress'>
       <div className='flex justify-between items-center mt-[12px] mb-[12px] pb-[18px] border-b border-gray-border'>
@@ -31,7 +86,9 @@ const AddAddress = ({
               name='UseShippingAddress'
               data-modal-toggle='billingaddressModal'
               onChange={(e) =>
-                setShippingAddress && setShippingAddress(e.target.checked)
+                setShippingAddress &&
+                !billingAddress &&
+                setShippingAddress(e.target.checked)
               }
               checked={useShippingAddress}
             />{' '}
@@ -45,6 +102,7 @@ const AddAddress = ({
             <div className='w-full lg:w-1/2 pl-[12px] pr-[12px] mb-[20px]'>
               <div className='relative z-0 w-full                                                                                                         2 border border-gray-border rounded'>
                 <input
+                  value={values.firstname}
                   onBlur={handleBlur}
                   onChange={handleChange}
                   name='firstname'
@@ -65,6 +123,7 @@ const AddAddress = ({
             <div className='w-full lg:w-1/2 pl-[12px] pr-[12px] mb-[20px]'>
               <div className='relative z-0 w-full border border-gray-border rounded'>
                 <input
+                  value={values.lastName}
                   onBlur={handleBlur}
                   onChange={handleChange}
                   name='lastName'
@@ -85,6 +144,7 @@ const AddAddress = ({
             <div className='w-full pl-[12px] pr-[12px] mb-[20px]'>
               <div className='relative z-0 w-full border border-gray-border rounded'>
                 <input
+                  value={values.companyName}
                   onBlur={handleBlur}
                   onChange={handleChange}
                   name='companyName'
@@ -105,6 +165,7 @@ const AddAddress = ({
             <div className='w-full pl-[12px] pr-[12px] mb-[20px]'>
               <div className='relative z-0 w-full border border-gray-border rounded'>
                 <input
+                  value={values.address1}
                   onBlur={handleBlur}
                   onChange={handleChange}
                   name='address1'
@@ -125,6 +186,7 @@ const AddAddress = ({
             <div className='w-full pl-[12px] pr-[12px] mb-[20px]'>
               <div className='relative z-0 w-full border border-gray-border rounded'>
                 <input
+                  value={values.address2}
                   onBlur={handleBlur}
                   onChange={handleChange}
                   name='address2'
@@ -145,6 +207,7 @@ const AddAddress = ({
             <div className='w-full pl-[12px] pr-[12px] mb-[20px]'>
               <div className='relative z-0 w-full border border-gray-border rounded'>
                 <input
+                  value={values.city}
                   onBlur={handleBlur}
                   onChange={handleChange}
                   name='city'
@@ -165,14 +228,15 @@ const AddAddress = ({
             <div className='w-full pl-[12px] pr-[12px] mb-[20px]'>
               <div className='relative z-0 w-full border border-gray-border rounded'>
                 <select
+                  value={values.countryName}
                   onBlur={handleBlur}
                   onChange={handleChange}
                   name='countryName'
                   className='pt-[15px] pb-[0px] block w-full px-[8px] h-[48px] mt-[0px] text-sub-text text-[18px] text-[#000000] bg-transparent border-0 appearance-none focus:outline-none focus:ring-0'
                 >
-                  <option value=''></option>
-                  <option value='United States'>United States</option>
-                  <option value='Canada'>Canada</option>
+                  {country.map((res) => (
+                    <option key={res.id}>{res.name}</option>
+                  ))}
                 </select>{' '}
                 <label
                   htmlFor='countryName'
@@ -188,22 +252,15 @@ const AddAddress = ({
             <div className='w-full lg:w-1/2 pl-[12px] pr-[12px] mb-[20px]'>
               <div className='relative z-0 w-full border border-gray-border rounded'>
                 <select
+                  value={values.state}
                   onBlur={handleBlur}
                   onChange={handleChange}
                   name='state'
                   className='pt-[15px] pb-[0px] block w-full px-[8px] h-[48px] mt-[0px] text-sub-text text-[18px] text-[#000000] bg-transparent border-0 appearance-none focus:outline-none focus:ring-0'
                 >
-                  <option value=''></option>
-                  <option value='1'>Alabama - AL</option>
-                  <option value='2'>Alaska - AK</option>
-                  <option value='3'>American Samoa - AS</option>
-                  <option value='4'>
-                    Armed Forces Americas (except Canada) - AA
-                  </option>
-                  <option value='5'>
-                    Armed Forces Eur., Mid. East, Africa, Canada - AE
-                  </option>
-                  <option value='6'>Armed Forces Pacific - AP</option>
+                  {state.map((res) => (
+                    <option key={res.id}>{res.name}</option>
+                  ))}
                 </select>{' '}
                 <label
                   htmlFor='StateProvince'
@@ -219,6 +276,7 @@ const AddAddress = ({
             <div className='w-full lg:w-1/2 pl-[12px] pr-[12px] mb-[20px]'>
               <div className='relative z-0 w-full border border-gray-border rounded'>
                 <input
+                  value={values.postalCode}
                   onBlur={handleBlur}
                   onChange={handleChange}
                   name='postalCode'
@@ -241,6 +299,7 @@ const AddAddress = ({
             <div className='w-full pl-[12px] pr-[12px] mb-[20px]'>
               <div className='relative z-0 w-full border border-gray-border rounded'>
                 <input
+                  value={values.phone}
                   onBlur={handleBlur}
                   onChange={handleChange}
                   name='phone'

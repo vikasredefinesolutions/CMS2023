@@ -5,6 +5,7 @@ import { _SizeChartTransformed } from '@definations/APIs/sizeChart.res';
 import { createSlice } from '@reduxjs/toolkit';
 import { updatedLogosHandler } from './product.slice.helper';
 import {
+  _CategoryArr_Action,
   _LogoDetail,
   _ProductStore,
   _Product_SetValues_Action,
@@ -86,6 +87,7 @@ const initialState: _ProductStore = {
     choosedLogoCompletionPending: null,
   },
   offlineProductSelected: '',
+  categoryArr: [],
 };
 
 export const productSlice = createSlice({
@@ -119,6 +121,11 @@ export const productSlice = createSlice({
         state.product.inventory = payload.data;
         return;
       }
+    },
+
+    product_storeCategory: (state, { payload }: _CategoryArr_Action) => {
+      state.categoryArr = payload.arr;
+      return;
     },
 
     product_setValues: (state, { payload }: _Product_SetValues_Action) => {

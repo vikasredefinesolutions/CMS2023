@@ -80,7 +80,7 @@ const ChangeAddressModal: FC<props> = ({
                             {address.firstname} {address.lastName}
                             <br />
                             {/* {address.companyName} */}
-                            <br />
+                            {/* <br /> */}
                             {address.address1}
                             <br />
                             {[
@@ -122,23 +122,25 @@ const ChangeAddressModal: FC<props> = ({
                 </div>
               </div>
             </div>
-            <div className='flex items-center justify-between p-6 space-x-2 flex-wrap rounded-b border-t border-gray-200 dark:border-gray-600'>
+            <div className='flex items-center justify-between p-6 space-x-2 flex-wrap rounded-b border-t border-gray-200 dark:border-gray-600 text-center'>
               <button
                 data-modal-toggle='addshippingaddressModal'
                 type='button'
-                className='btn btn-primary w-full mb-3'
+                className='btn  btn-secondary w-full '
                 onClick={addAddressButtonHandler}
               >
                 Add New Address
               </button>
-              <button
-                data-modal-toggle='shippingaddressModal'
-                type='button'
-                onClick={closeModalHandler}
-                className='btn btn-outline-primary'
-              >
-                Cancel
-              </button>
+              <div className='text-center w-full'>
+                <button
+                  data-modal-toggle='shippingaddressModal'
+                  type='button'
+                  onClick={closeModalHandler}
+                  className='btn  text-anchor underline'
+                >
+                  Cancel
+                </button>
+              </div>
             </div>
           </div>
         </div>

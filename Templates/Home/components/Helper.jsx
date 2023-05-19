@@ -431,7 +431,7 @@ export const updateSetProperties = (element) => {
               iconBottomMargin = valueq.value;
             }
           });
-          console.log(element.selected_Values, 'KE', iconType);
+          // console.log(element.selected_Values, 'KE', iconType);
           let className = '';
           if (iconType == 'fontawesome') {
             className += '';

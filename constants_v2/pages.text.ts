@@ -98,6 +98,7 @@ export const __pagesText = {
       remove: 'Remove',
       selectYourLogo: 'Select your logo :',
       upload: 'Upload',
+      edit: 'Edit',
       selectALocationToPrintLogo: 'Select a location to print your logo :',
       uploadFromLibrary: 'Upload From Library',
     },
@@ -236,6 +237,7 @@ export const __pagesText = {
     upperOrLowerCase: 'Upper and lowercase letters',
     atLeastOneNumber: 'At least one number',
     passwordUpdate: 'Update Password',
+    passwordChange: 'CHANGE',
     profileEdit: 'Edit Profile',
     saveBtn: 'Save',
     cancelBtn: 'Cancel',
@@ -438,6 +440,11 @@ export const __pagesText = {
     note: 'Your credit card will be authorized at checkout and you will see a pending charge on your bank statement. A sales representative will review the order details once received. Your card will then be charged in 5-7 days after submitted unless confirmed as finalized or otherwise cancelled prior to then.',
   },
   ThankYouPage: {
+    ThankYouFooter: {
+      heading: 'OVER 1 MILLION PRODUCTS DECORATED',
+      description:
+        'We are here to help Monday through Friday from 9am to 5pm EST',
+    },
     Total: 'Product Total:',
     ThankYouLabel: 'Thank You,',
     ForYourOrder: 'FOR YOUR ORDER',
@@ -515,6 +522,7 @@ export const __pagesText = {
     cardInstruction:
       'The last three digits \n displayed on the \n back of your card \n or first four \n digits on the front \n of your AMEX.',
     orderSummary: {
+      tax: 'Tax:',
       OrderSummary: 'Order Summary',
       Merchandise: 'Merchandise',
       Discount: 'Discount',

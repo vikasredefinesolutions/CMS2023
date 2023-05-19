@@ -1,3 +1,4 @@
+import { __pagesConstant } from '@constants/pages.constant';
 import { newFetauredItemResponse } from '@definations/productList.type';
 import { useWindowDimensions_v2 } from '@hooks_v2/index';
 import { useRouter } from 'next/router';
@@ -8,7 +9,8 @@ import SingleProductListing from './SingleProductListing';
 import SlugSingleProductListing from './SlugSingleProductListing';
 
 interface _props {
-  productsData: newFetauredItemResponse[];
+  productsData: newFetauredItemResponse[] | [];
+  showBorder: string;
 }
 interface _carouselProps {
   sliderSettings: {
@@ -22,7 +24,10 @@ interface _carouselProps {
   carouselCounter: number;
 }
 
-const BrandProductListing: React.FC<_props> = ({ productsData }) => {
+const BrandProductListing: React.FC<_props> = ({
+  productsData,
+  showBorder,
+}) => {
   const [featuredProductCarouselSetting, setFeaturedProductCarouselSetting] =
     useState<_carouselProps>({
       sliderSettings: {
@@ -118,7 +123,7 @@ const BrandProductListing: React.FC<_props> = ({ productsData }) => {
                   {productsData.map((product) => {
                     return (
                       <>
-                        {router?.query?.slug?.includes('html') ? (
+                        {showBorder == __pagesConstant?.showBorder?.No ? (
                           <div key={product.productId} className='slide-item'>
                             <SlugSingleProductListing product={product} />
                           </div>

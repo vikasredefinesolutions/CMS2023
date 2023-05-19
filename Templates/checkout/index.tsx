@@ -70,7 +70,7 @@ const CheckoutTemplate: FC<_Props> = ({ cartTemplateId }) => {
 
   useEffect(() => {
     if (!isCartLoading && (!cartData?.length || cartData === null)) {
-      console.log('---reaching condition---');
+      // console.log('---reaching condition---');
       router.push(paths.CART);
     }
   }, [cartData, isCartLoading]);

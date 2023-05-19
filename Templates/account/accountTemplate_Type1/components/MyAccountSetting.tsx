@@ -1,6 +1,10 @@
 import { __pagesText } from '@constants/pages.text';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
-import { UpdateUserData, UpdateUserPassword } from '@services/user.service';
+import {
+  UpdateUserData,
+  UpdateUserPassword,
+  getDecryptPassword,
+} from '@services/user.service';
 import { Form, Formik } from 'formik';
 import { useEffect, useState } from 'react';
 import * as Yup from 'yup';
@@ -9,6 +13,7 @@ const initValue = {
   firstName: '',
   lastName: '',
   companyName: '',
+  password: '',
 };
 
 type SettingForm = typeof initValue;
@@ -20,14 +25,23 @@ const AccountSetting = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordUpdate, setShowPasswordUpdate] = useState(false);
   const [newPassword, setNewPassword] = useState('');
+  const [getPass, setGetPass] = useState('');
   const [initialValues, setInitialValues] = useState<SettingForm>(initValue);
   useEffect(() => {
-    if (newPassword && activeEditBox) {
+    if (activeEditBox) {
       setShowPasswordUpdate(true);
     } else {
       setShowPasswordUpdate(false);
     }
-  }, [newPassword, activeEditBox]);
+  }, [activeEditBox]);
+
+  const passDecryptFuc = async () => {
+    const response = await getDecryptPassword(
+      customer?.password ? customer.password : '',
+    );
+
+    return response;
+  };
 
   const updatePassword = async () => {
     try {
@@ -63,10 +77,13 @@ const AccountSetting = () => {
 
   useEffect(() => {
     if (customer) {
-      setInitialValues({
-        firstName: customer.firstname,
-        lastName: customer.lastName,
-        companyName: customer.companyName,
+      passDecryptFuc().then((res) => {
+        setInitialValues({
+          firstName: customer.firstname,
+          lastName: customer.lastName,
+          companyName: customer.companyName,
+          password: res,
+        });
       });
     }
   }, [customer]);
@@ -118,6 +135,9 @@ const AccountSetting = () => {
                           placeholder='Enter Your Full Name'
                           value={values.firstName}
                           className='form-input'
+                          style={
+                            !activeEditBox ? { backgroundColor: '#eee' } : {}
+                          }
                           disabled={!activeEditBox}
                           onChange={handleChange}
                           onBlur={handleBlur}
@@ -137,6 +157,9 @@ const AccountSetting = () => {
                           placeholder='Enter Your Last Name'
                           value={values.lastName}
                           className='form-input'
+                          style={
+                            !activeEditBox ? { backgroundColor: '#eee' } : {}
+                          }
                           disabled={!activeEditBox}
                           onChange={handleChange}
                           onBlur={handleBlur}
@@ -157,6 +180,7 @@ const AccountSetting = () => {
                           placeholder='Enter Email Address'
                           value={customer?.email}
                           className='form-input bg-slate-400'
+                          style={{ backgroundColor: '#eee' }}
                           disabled
                         />
                       </div>
@@ -176,6 +200,9 @@ const AccountSetting = () => {
                           // value="johnthomas@ecommerce.com"
                           value={values.companyName}
                           className='form-input'
+                          style={
+                            !activeEditBox ? { backgroundColor: '#eee' } : {}
+                          }
                           disabled={!activeEditBox}
                           onChange={handleChange}
                           onBlur={handleBlur}
@@ -193,10 +220,14 @@ const AccountSetting = () => {
                           <input
                             id='password'
                             className='form-input'
+                            style={
+                              !activeEditBox ? { backgroundColor: '#eee' } : {}
+                            }
                             placeholder='Password'
                             type={showPassword ? 'text' : 'password'}
-                            value={newPassword}
+                            value={values.password}
                             onChange={(e) => {
+                              handleChange(e);
                               setNewPassword(e.target.value);
                             }}
                             disabled={!activeEditBox}
@@ -254,9 +285,9 @@ const AccountSetting = () => {
                             <button
                               type='button'
                               onClick={updatePassword}
-                              className='m-r-10 btn btn-primary '
+                              className='m-r-10 btn btn-secondary '
                             >
-                              {__pagesText.accountPage.passwordUpdate}
+                              {__pagesText.accountPage.passwordChange}
                             </button>
                           </div>
                         )}

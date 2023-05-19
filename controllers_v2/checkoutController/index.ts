@@ -1,20 +1,20 @@
 import {
-  PaymentMethod,
   checkoutPages,
+  PaymentMethod,
   paymentMethodCustom as paymentEnum,
 } from '@constants/enum';
 import { __Cookie, __Cookie_Expiry } from '@constants/global.constant';
 import { paths } from '@constants/paths.constant';
-import { AddOrderDefault, addAddress } from '@constants/payloads/checkout';
+import { addAddress, AddOrderDefault } from '@constants/payloads/checkout';
 import { signup_payload } from '@constants/payloads/signup';
 import { commonMessage } from '@constants/successError.text';
 import { CreditCardDetailsType } from '@definations/checkout';
 import {
-  KlaviyoScriptTag,
-  TrackGTMEvent,
   deleteCookie,
   extractCookies,
+  KlaviyoScriptTag,
   setCookie,
+  TrackGTMEvent,
 } from '@helpers/common.helper';
 import getLocation from '@helpers/getLocation';
 import {
@@ -96,6 +96,7 @@ const CheckoutController = () => {
   );
   const [orderNote, setorderNotes] = useState<string>('');
   const [billingAdress, setBillingAdress] = useState<AddressType | null>(null);
+  const [billAddress, setBillAddress] = useState<AddressType | null>(null);
   const [addressType, setAddressType] = useState<null | 'S' | 'B'>(null);
   const [showAddAddressModal, setShowAddAddressModal] = useState(false);
   const [addressEditData, setAddressEditData] =
@@ -131,7 +132,7 @@ const CheckoutController = () => {
     (state) => state.cart.userCreditBalance.useBalance,
   );
   const customer = user.customer;
-
+  const userId = useTypedSelector_v2((state) => state.user.id);
   const customerId = GetCustomerId();
   const { totalPrice, subTotal, salesTax, discount, creditBalance } =
     GetCartTotals();
@@ -169,9 +170,19 @@ const CheckoutController = () => {
     if (isLoggedIn && user.customer) {
       if (user.customer.customerAddress.length > 0) {
         if (customer && customer.customerAddress) {
-          setShowAddAddress(false);
-          setShippingAdress(customer.customerAddress[0] as AddressType);
-          setBillingAdress(customer.customerAddress[0] as AddressType);
+          if (!shippingAdress) {
+            setShowAddAddress(true);
+          } else {
+            setShowAddAddress(false);
+          }
+          customer.customerAddress.map((res) => {
+            if (res.addressType == 'S') {
+              setShippingAdress(res as AddressType);
+            } else if (res.addressType == 'B' && res.isDefault) {
+              setBillingAdress(res as AddressType);
+              billAddress && setBillingAdress(billAddress);
+            }
+          });
         }
       }
     }
@@ -345,6 +356,8 @@ const CheckoutController = () => {
             title: 'Warning',
           });
           return;
+        } else if (purchaseOrder.length > 0) {
+          return true;
         }
       } else {
         showModal({
@@ -403,16 +416,56 @@ const CheckoutController = () => {
       if (shippingForm) {
         isValid = await checkForms(shippingForm);
       }
-      if (!useShippingAddress && billingForm) {
+      if (!useShippingAddress && !billingAdress && billingForm) {
         isValid = await checkForms(billingForm);
       }
 
       if (isValid) {
         if (checkPayment()) {
+          const data = await getLocation();
+          {
+            const data = await getLocation();
+            const obj = {
+              storeCustomerAddressModel: {
+                id: 0,
+                rowVersion: '',
+                location: `${data.city}, ${data.region}, ${data.country}, ${data.postal_code}`,
+                ipAddress: data.ip_address,
+                macAddress: '00-00-00-00-00-00',
+                customerId: userId ? userId : +customerId || 0,
+                firstname: shippingForm.values.firstname,
+                lastName: shippingForm.values.lastName,
+                email: customer ? customer.email : '',
+                address1: shippingForm.values.address1,
+                address2: shippingForm.values.address2 || ' ',
+                suite: ' ',
+                city: shippingForm.values.city,
+                state: shippingForm.values.state,
+                postalCode: shippingForm.values.postalCode,
+                phone: shippingForm.values.phone,
+                fax: shippingForm.values.fax ? shippingForm.values.fax : '',
+                countryName: shippingForm.values.countryName,
+                countryCode: shippingForm.values.countryCode || '',
+                addressType: 'S',
+                isDefault: shippingForm.values.isDefault,
+                recStatus: 'A',
+                companyName: shippingForm.values.companyName || ' ',
+              },
+            };
+            userId &&
+              (await CreateUserAddress(obj).then(() => {
+                GetStoreCustomer(userId).then((res) => {
+                  if (res === null) return;
+                  updateCustomer({ customer: res });
+                });
+              }));
+          }
+
           setShippingAdress(shippingForm.values);
           if (!useShippingAddress) {
-            setBillingAdress(billingForm.values);
+            !billingAdress && setBillingAdress(billingForm.values);
           } else {
+            setBillAddress(shippingForm.values);
             setBillingAdress(shippingForm.values);
           }
           addShippingInfoEventHandle('add_shipping_info');
@@ -423,6 +476,11 @@ const CheckoutController = () => {
       }
     } else {
       if (shippingAdress && billingAdress && checkPayment()) {
+        if (useShippingAddress) {
+          setBillAddress(shippingAdress);
+
+          setBillingAdress(shippingAdress);
+        }
         addShippingInfoEventHandle('add_shipping_info');
         addShippingInfoEventHandle('add_payment_info');
         setCurrentPage(checkoutPages.reviewOrder);
@@ -701,6 +759,9 @@ const CheckoutController = () => {
     orderNote,
     setorderNotes,
     setCurrentPage,
+    setShowAddAddress,
+    setShippingAdress,
+    setBillingAdress,
   };
 };
 

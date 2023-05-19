@@ -81,6 +81,7 @@ export interface _SelectedBrands {
   bg?: _Value;
   featuredproducts_tabing_display: _Value;
   featuredproducts_section_title: _Value;
+  featuredproducts_show_border: _Value;
   featuredproducts: {
     type: string;
     value: {

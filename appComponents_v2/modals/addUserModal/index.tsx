@@ -226,9 +226,6 @@ const AddUserModal = ({
                       data-modal-toggle='adduserModal'
                       type='submit'
                       className='btn btn-primary'
-                      onClick={() => {
-                        handleSubmit();
-                      }}
                     >
                       {editData ? 'Update' : 'Save'}
                     </button>

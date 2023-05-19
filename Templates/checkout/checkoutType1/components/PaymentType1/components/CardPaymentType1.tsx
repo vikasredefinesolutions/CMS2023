@@ -2,7 +2,7 @@ import NxtImage from '@appComponents/reUsable/Image';
 import { cardType } from '@constants/common.constant';
 import { paymentMethodCustom } from '@constants/enum';
 import { __pagesText } from '@constants/pages.text';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { paymentProps } from '..';
 
 const CardPaymentType1: paymentProps = ({
@@ -39,15 +39,31 @@ const CardPaymentType1: paymentProps = ({
     }
   };
 
+  const [yearMonth, setyearMonth] = useState({
+    cardExpirationYear: '',
+    cardExpirationMonth: '',
+  });
+
+  const handledefault = (e: any) => {
+    e.target.setAttribute('value', e.target.value);
+    setyearMonth({ ...yearMonth, [e.target.name]: e.target.value });
+  };
+
+  useEffect(() => {
+    document.querySelectorAll('.selectFiled').forEach((el) => {
+      el.setAttribute('value', '');
+    });
+  }, []);
+
   return (
     <div id='PaymentCard'>
-      <div className='flex justify-between items-center mt-[12px] mb-[12px] pb-[18px] border-b border-gray-border'>
+      <div className='flex items-baseline mt-[12px] mb-[12px] pb-[18px] border-b border-gray-border'>
         <div className='text-title-text font-semibold tracking-normal'>
           Payment
         </div>
         <div>
           <button
-            className='!text-anchor hover:!text-anchor-hover underline'
+            className='ml-3 text-anchor underline'
             id='btn-use-purchase-order'
             onClick={() =>
               updatePaymentMethod(paymentMethodCustom.purchaseOrder)
@@ -108,17 +124,19 @@ const CardPaymentType1: paymentProps = ({
         <div className='md:w-3/12 w-6/12 pl-[12px] pr-[12px]'>
           <div className='relative z-0 w-full mb-[20px] border border-gray-border rounded'>
             <select
-              onChange={changeHandler}
+              onBlur={changeHandler}
+              onChange={handledefault}
               name='cardExpirationMonth'
-              className='pt-[15px] pb-[0px] block w-full px-[8px] h-[48px] mt-[0px] text-sub-text text-[18px] text-[#000000] bg-transparent border-0 appearance-none focus:outline-none focus:ring-0'
+              data-value={yearMonth.cardExpirationMonth}
+              className='selectFiled pt-[15px] pb-[0px] block w-full px-[8px] h-[48px] mt-[0px] text-sub-text text-[18px] text-[#000000] bg-transparent border-0 appearance-none focus:outline-none focus:ring-0'
             >
-              <option value=''>Select</option>
+              <option value=''></option>
               {new Array(12).fill('').map((_, index) => (
                 <option key={index} value={index + 1}>
                   {index + 1}
                 </option>
               ))}
-            </select>{' '}
+            </select>
             <label
               htmlFor='Month'
               className='left-[8px] absolute duration-300 top-[11px] -z-1 origin-0 text-[#000000] text-[18px]'
@@ -130,11 +148,13 @@ const CardPaymentType1: paymentProps = ({
         <div className='md:w-3/12 w-6/12 pl-[12px] pr-[12px]'>
           <div className='relative z-0 w-full mb-[20px] border border-gray-border rounded'>
             <select
-              onChange={changeHandler}
+              onBlur={changeHandler}
+              onChange={handledefault}
               name='cardExpirationYear'
-              className='pt-[15px] pb-[0px] block w-full px-[8px] h-[48px] mt-[0px] text-sub-text text-[18px] text-[#000000] bg-transparent border-0 appearance-none focus:outline-none focus:ring-0'
+              data-value={yearMonth.cardExpirationYear}
+              className='selectFiled pt-[15px] pb-[0px] block w-full px-[8px] h-[48px] mt-[0px] text-sub-text text-[18px] text-[#000000] bg-transparent border-0 appearance-none focus:outline-none focus:ring-0'
             >
-              <option value=''>Select</option>
+              <option value=''></option>
               {new Array(12).fill('').map((_, index) => {
                 const optin = new Date().getFullYear() + index;
                 return (
@@ -177,7 +197,7 @@ const CardPaymentType1: paymentProps = ({
                 <span
                   onMouseEnter={() => setShowCardHelp(true)}
                   onMouseLeave={() => setShowCardHelp(false)}
-                  className='material-icons-outlined text-base'
+                  className='material-icons-outlined text-base text-anchor'
                 >
                   {' '}
                   help

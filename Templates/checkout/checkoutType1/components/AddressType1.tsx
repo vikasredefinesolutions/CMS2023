@@ -16,7 +16,7 @@ const CheckoutAddress = ({
 }) => {
   return (
     <div className='' id='ShippingAddress'>
-      <div className='flex justify-between items-center mt-[12px] mb-[12px] pb-[18px] border-b border-gray-border'>
+      <div className='flex items-baseline mt-[12px] mb-[12px] pb-[18px] border-b border-gray-border'>
         <div className='text-title-text font-semibold tracking-normal'>
           {addressType === 1 ? 'Shipping Address' : 'Billing Address'}
         </div>
@@ -24,7 +24,7 @@ const CheckoutAddress = ({
           <div>
             <button
               onClick={changeClickHandler}
-              className='!text-anchor hover:!text-anchor-hover underline'
+              className='ml-4 text-anchor underline'
               data-modal-toggle='shippingaddressModal'
             >
               Change
@@ -34,18 +34,23 @@ const CheckoutAddress = ({
       </div>
       {addressType === 2 && (
         <div className='mb-3 font-semibold text-lg'>
-          <div>
-            <input
-              type='checkbox'
-              id='UseShippingAddress'
-              name='UseShippingAddress'
-              data-modal-toggle='billingaddressModal'
-              onChange={(e) =>
-                setShippingAddress && setShippingAddress(e.target.checked)
-              }
-              checked={useShippingAddress}
-            />{' '}
-            <label htmlFor='UseShippingAddress'>Use Shipping Address</label>
+          <div className='flex items-center'>
+            <div className='input_checkbox'>
+              <input
+                type='checkbox'
+                id='UseShippingAddress test'
+                name='UseShippingAddress'
+                className='checkbox'
+                data-modal-toggle='billingaddressModal'
+                onChange={(e) =>
+                  setShippingAddress && setShippingAddress(e.target.checked)
+                }
+                checked={useShippingAddress}
+              />
+            </div>
+            <label htmlFor='UseShippingAddress' className='ml-2'>
+              Use Shipping Address
+            </label>
           </div>
         </div>
       )}

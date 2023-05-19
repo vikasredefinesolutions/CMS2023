@@ -19,7 +19,6 @@ const AvailableInventoryModal: React.FC<_ModalProps> = ({ modalHandler }) => {
   >([]);
   const [size, setSizes] = useState<string[]>([]);
 
-  const { favIcon, mediaBaseUrl } = useTypedSelector_v2((state) => state.store);
   const fetchInventory = async () => {
     colors?.map((item) => {
       FetchInventoryById({

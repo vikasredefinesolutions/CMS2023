@@ -227,7 +227,7 @@ const SelectOrInput: React.FC<_SelectOrInputProps> = ({
           {({ values, handleChange }) => {
             return (
               <Form>
-                <div className='flex items-center gap-2'>
+                <div className='flex items-center gap-2 flex-wrap'>
                   <input
                     type='number'
                     name='itemCount'

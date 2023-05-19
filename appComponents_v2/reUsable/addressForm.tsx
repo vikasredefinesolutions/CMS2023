@@ -44,7 +44,7 @@ const AddressForm = (props: AddressFormRefType) => {
       FetchStatesList(obj.id).then((res) => {
         if (res) {
           setState(res);
-          setFieldValue('state', res[0].name);
+          setFieldValue('state', res[0]?.name);
         }
       });
     }
@@ -54,8 +54,8 @@ const AddressForm = (props: AddressFormRefType) => {
 
   return (
     <form onSubmit={handleSubmit} className='checkoutpage'>
-      <div className='flex flex-wrap -mx-3'>
-        <div className='w-full lg:w-1/2 pl-[12px] pr-[12px] mb-[20px]'>
+      <div className='flex flex-wrap mx-[-15px] gap-y-[20px]'>
+        <div className='w-full lg:w-1/2 pl-[12px] pr-[12px] mb-[15px]'>
           <div>
             <div className='relative z-0 w-full border border-gray-border rounded'>
               <input
@@ -68,7 +68,7 @@ const AddressForm = (props: AddressFormRefType) => {
               />
               <label
                 htmlFor='FirstName'
-                className='left-[8px] absolute duration-300 top-[11px] -z-1 origin-0 text-[#000000] text-[18px]'
+                className='left-[8px] absolute duration-300 top-[15px] -z-1 origin-0 text-[#000000] text-[18px]'
               >
                 First Name *
               </label>
@@ -78,7 +78,7 @@ const AddressForm = (props: AddressFormRefType) => {
             </div>
           </div>
         </div>
-        <div className='w-full lg:w-1/2 pl-[12px] pr-[12px] mb-[20px]'>
+        <div className='w-full lg:w-1/2 pl-[12px] pr-[12px] mb-[15px]'>
           <div className='relative z-0 w-full border border-gray-border rounded'>
             <input
               onBlur={handleBlur}
@@ -90,7 +90,7 @@ const AddressForm = (props: AddressFormRefType) => {
             />
             <label
               htmlFor='LastName'
-              className='left-[8px] absolute duration-300 top-[11px] -z-1 origin-0 text-[#000000] text-[18px]'
+              className='left-[8px] absolute duration-300 top-[15px] -z-1 origin-0 text-[#000000] text-[18px]'
             >
               Last Name *
             </label>
@@ -111,7 +111,7 @@ const AddressForm = (props: AddressFormRefType) => {
             />
             <label
               htmlFor='CompanyName'
-              className='left-[8px] absolute duration-300 top-[11px] -z-1 origin-0 text-[#000000] text-[18px]'
+              className='left-[8px] absolute duration-300 top-[15px] -z-1 origin-0 text-[#000000] text-[18px]'
             >
               Company Name *
             </label>
@@ -132,7 +132,7 @@ const AddressForm = (props: AddressFormRefType) => {
             />
             <label
               htmlFor='address1'
-              className='left-[8px] absolute duration-300 top-[11px] -z-1 origin-0 text-[#000000] text-[18px]'
+              className='left-[8px] absolute duration-300 top-[15px] -z-1 origin-0 text-[#000000] text-[18px]'
             >
               Street Address *
             </label>
@@ -153,7 +153,7 @@ const AddressForm = (props: AddressFormRefType) => {
             />
             <label
               htmlFor='address2'
-              className='left-[8px] absolute duration-300 top-[11px] -z-1 origin-0 text-[#000000] text-[18px]'
+              className='left-[8px] absolute duration-300 top-[15px] -z-1 origin-0 text-[#000000] text-[18px]'
             >
               Address 2
             </label>
@@ -174,7 +174,7 @@ const AddressForm = (props: AddressFormRefType) => {
             />
             <label
               htmlFor='city'
-              className='left-[8px] absolute duration-300 top-[11px] -z-1 origin-0 text-[#000000] text-[18px]'
+              className='left-[8px] absolute duration-300 top-[15px] -z-1 origin-0 text-[#000000] text-[18px]'
             >
               City *
             </label>
@@ -183,7 +183,53 @@ const AddressForm = (props: AddressFormRefType) => {
             {touched.city && errors.city}
           </div>
         </div>
+
         <div className='w-full pl-[12px] pr-[12px] mb-[20px]'>
+          <div className='relative z-0 w-full border border-gray-border rounded'>
+            <input
+              onBlur={handleBlur}
+              onChange={handleChange}
+              name='postalCode'
+              value={values.postalCode}
+              placeholder=' '
+              className='pt-[15px] pb-[0px] block w-full px-[8px] h-[48px] mt-[0px] text-sub-text text-[18px] text-[#000000] bg-transparent border-0 appearance-none focus:outline-none focus:ring-0'
+            />
+            <label
+              htmlFor='postalCode'
+              className='left-[8px] absolute duration-300 top-[11px] -z-1 origin-0 text-[#000000] text-[18px]'
+            >
+              Zip Code *
+            </label>
+          </div>
+          <div className='text-red-500 text-s'>
+            {touched.postalCode && errors.postalCode}
+          </div>
+        </div>
+        <div className='w-full lg:w-1/2 pl-[12px] pr-[12px] mb-[20px]'>
+          <div className='relative z-0 w-full border border-gray-border rounded'>
+            <select
+              onBlur={handleBlur}
+              onChange={handleChange}
+              name='state'
+              value={values.state}
+              className='pt-[15px] pb-[0px] block w-full px-[8px] h-[48px] mt-[0px] text-sub-text text-[18px] text-[#000000] bg-transparent border-0 appearance-none focus:outline-none focus:ring-0'
+            >
+              {state.map((res) => (
+                <option key={res.id}>{res.name}</option>
+              ))}
+            </select>{' '}
+            <label
+              htmlFor='StateProvince'
+              className='left-[8px] absolute duration-300 top-[15px] -z-1 origin-0 text-[#000000] text-[18px]'
+            >
+              State / Province *
+            </label>
+          </div>
+          <div className='text-red-500 text-s'>
+            {touched.state && errors.state}
+          </div>
+        </div>
+        <div className=' w-full lg:w-1/2 pl-[12px] pr-[12px] mb-[20px]'>
           <div className='relative z-0 w-full border border-gray-border rounded'>
             <select
               onBlur={handleBlur}
@@ -207,51 +253,6 @@ const AddressForm = (props: AddressFormRefType) => {
             {touched.countryName && errors.countryName}
           </div>
         </div>
-        <div className='w-full lg:w-1/2 pl-[12px] pr-[12px] mb-[20px]'>
-          <div className='relative z-0 w-full border border-gray-border rounded'>
-            <select
-              onBlur={handleBlur}
-              onChange={handleChange}
-              name='state'
-              value={values.state}
-              className='pt-[15px] pb-[0px] block w-full px-[8px] h-[48px] mt-[0px] text-sub-text text-[18px] text-[#000000] bg-transparent border-0 appearance-none focus:outline-none focus:ring-0'
-            >
-              {state.map((res) => (
-                <option key={res.id}>{res.name}</option>
-              ))}
-            </select>{' '}
-            <label
-              htmlFor='StateProvince'
-              className='left-[8px] absolute duration-300 top-[11px] -z-1 origin-0 text-[#000000] text-[18px]'
-            >
-              State / Province *
-            </label>
-          </div>
-          <div className='text-red-500 text-s'>
-            {touched.state && errors.state}
-          </div>
-        </div>
-        <div className='w-full lg:w-1/2 pl-[12px] pr-[12px] mb-[20px]'>
-          <div className='relative z-0 w-full border border-gray-border rounded'>
-            <input
-              onBlur={handleBlur}
-              onChange={handleChange}
-              name='postalCode'
-              value={values.postalCode}
-              placeholder=' '
-              className='pt-[15px] pb-[0px] block w-full px-[8px] h-[48px] mt-[0px] text-sub-text text-[18px] text-[#000000] bg-transparent border-0 appearance-none focus:outline-none focus:ring-0'
-            />
-            <label
-              htmlFor='postalCode'
-              className='left-[8px] absolute duration-300 top-[11px] -z-1 origin-0 text-[#000000] text-[18px]'
-            >
-              Zip Code *
-            </label>
-          </div>
-          <div className='text-red-500 text-s'>
-            {touched.postalCode && errors.postalCode}
-          </div>
-        </div>
 
         <div className='w-full pl-[12px] pr-[12px] mb-[20px]'>
           <div className='relative z-0 w-full border border-gray-border rounded'>
@@ -265,7 +266,7 @@ const AddressForm = (props: AddressFormRefType) => {
             />
             <label
               htmlFor='phone'
-              className='left-[8px] absolute duration-300 top-[11px] -z-1 origin-0 text-[#000000] text-[18px]'
+              className='left-[8px] absolute duration-300 top-[15px] -z-1 origin-0 text-[#000000] text-[18px]'
             >
               Phone Number*
             </label>

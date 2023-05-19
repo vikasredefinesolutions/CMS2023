@@ -51,18 +51,18 @@ const AddAddress = ({
     <div
       id='AddNewAddress'
       aria-hidden='true'
-      className='overflow-y-auto overflow-x-hidden fixed z-50 justify-center items-center h-modal inset-0 text-default-text'
+      className='overflow-y-auto overflow-x-hidden fixed inset-0 z-50 justify-center items-center h-modal max-h-screen'
     >
-      <div className='w-full h-full bg-[#000000] bg-opacity-[0.50] flex items-center justify-center'>
-        <div className='relative px-[16px] w-full max-w-4xl h-full md:h-auto'>
-          <div className='relative bg-[#ffffff] shadow max-h-screen overflow-y-auto h-full'>
-            <div className='flex justify-between items-start p-[25px] rounded-t border-b sticky top-0 left-0 bg-[#ffffff] z-50'>
-              <h3 className='font-[600] text-large-text'>
+      <div className='w-full h-full bg-black bg-opacity-50 flex items-center justify-center'>
+        <div className='relative w-full max-w-2xl'>
+          <div className='relative bg-white rounded-lg shadow max-h-screen overflow-y-auto'>
+            <div className='flex justify-between items-start p-4 rounded-t border-b dark:border-gray-600'>
+              <h3 className='text-xl font-semibold text-gray-900 dark:text-white'>
                 {editData ? 'Edit Address' : 'Add New Address'}
               </h3>
               <button
                 type='button'
-                className='text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-[14px] p-[6px] ml-auto inline-flex items-center'
+                className='text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white'
                 data-modal-toggle='AddNewAddress'
                 onClick={closePopupHandler}
               >
@@ -85,20 +85,20 @@ const AddAddress = ({
             </div>
             <div className='flex items-center justify-between p-6 space-x-2 rounded-b border-t border-gray-200 dark:border-gray-600'>
               <button
-                data-modal-toggle='AddNewAddress'
-                className='btn btn-outline-primary'
-                onClick={closePopupHandler}
-              >
-                Cancel
-              </button>
-              <button
                 type='submit'
                 disabled={isSubmitting}
                 data-modal-toggle='AddNewAddress'
                 onClick={submitForm}
-                className='btn btn-primary'
+                className='btn btn-secondary'
               >
                 Save
+              </button>
+              <button
+                data-modal-toggle='AddNewAddress'
+                className='btn btn-primary'
+                onClick={closePopupHandler}
+              >
+                Cancel
               </button>
             </div>
           </div>

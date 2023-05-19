@@ -16,6 +16,7 @@ import BrandProductListing from './BrandProducsListing';
 
 interface _props {
   data: _SelectedTab[];
+  showBorder: string;
 }
 
 // ** Styled Tab component
@@ -28,7 +29,7 @@ const Tab = styled(MuiTab)(({ theme }) => ({
   },
 }));
 
-const ProductsInfoTabs: React.FC<_props> = ({ data }) => {
+const ProductsInfoTabs: React.FC<_props> = ({ data, showBorder }) => {
   // ** State
   const [value, setValue] = useState<string>(data[0]?.index);
 
@@ -80,7 +81,10 @@ const ProductsInfoTabs: React.FC<_props> = ({ data }) => {
             return (
               <Fragment key={`${product.index}`}>
                 <TabPanel sx={{ p: 0 }} value={product.index}>
-                  <BrandProductListing productsData={product?.data} />
+                  <BrandProductListing
+                    showBorder={showBorder}
+                    productsData={product?.data}
+                  />
                 </TabPanel>
               </Fragment>
             );

@@ -455,7 +455,9 @@ const SomLogoOption: React.FC<_SOMLogoOptionProps> = ({
                 htmlFor={id}
                 className='cursor-pointer inline-block bg-primary border-0 py-2 px-3 text-white'
               >
-                {__pagesText.productInfo.somLogoOption.upload}
+                {fileToUpload?.previewURL
+                  ? __pagesText.productInfo.somLogoOption.edit
+                  : __pagesText.productInfo.somLogoOption.upload}
               </label>
               <input
                 type='file'

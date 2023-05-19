@@ -14,6 +14,8 @@ import ChangeAddressModal from '@appComponents/modals/ChangeAddressModal';
 import NxtImage from '@appComponents/reUsable/Image';
 import { cardType } from '@constants/common.constant';
 import CheckoutController from '@controllers/checkoutController';
+import { useTypedSelector_v2 } from '@hooks_v2/index';
+import { useEffect } from 'react';
 
 interface _Props {
   cartTemplateId: number;
@@ -55,7 +57,18 @@ const ChekoutType1: React.FC<_Props> = ({ cartTemplateId }) => {
     orderNote,
     setorderNotes,
     setCurrentPage,
+    setShowAddAddress,
+    setShippingAdress,
+    setBillingAdress,
   } = CheckoutController();
+  const userId = useTypedSelector_v2((state) => state.user.id);
+  useEffect(() => {
+    if (!shippingAdress) {
+      setShowAddAddress(true);
+    } else {
+      setShowAddAddress(false);
+    }
+  }, [shippingAdress]);
 
   return (
     <>
@@ -78,7 +91,15 @@ const ChekoutType1: React.FC<_Props> = ({ cartTemplateId }) => {
                           </div>
                           <div className='text-default-text'>
                             <div
-                              onClick={() => setAddressType('B')}
+                              onClick={() => {
+                                if (userId) {
+                                  setAddressType('S');
+                                } else {
+                                  setShippingAdress(null);
+                                  setBillingAdress(null);
+                                  setCurrentPage(checkoutPages.address);
+                                }
+                              }}
                               className='!text-anchor hover:!text-anchor-hover '
                             >
                               {__pagesText.CheckoutPage.Edit}
@@ -107,8 +128,41 @@ const ChekoutType1: React.FC<_Props> = ({ cartTemplateId }) => {
                         )}
                       </div>
                     </div>
+
                     <div className=' flex-1 w-full md:w-6/12 mt-[15px] ml-[15px] mr-[15px] mb-[30px]'>
-                      <div className='pl-[15px] pr-[15px] pt-[15px] pb-[15px]'>
+                      <div className='pl-[15px] pr-[15px] pt-[15px] pb-[15px] '>
+                        <div className='flex flex-wrap items-center justify-between pt-[10px] border-b border-[#ececec]'>
+                          <div className='pb-[10px] text-title-text'>
+                            {__pagesText.CheckoutPage.BillingInformation}
+                          </div>
+                          <div className='text-default-text'>
+                            <div
+                              onClick={() => setAddressType('B')}
+                              className='!text-anchor hover:!text-anchor-hover '
+                            >
+                              {__pagesText.CheckoutPage.Edit}
+                            </div>
+                          </div>
+                        </div>
+                        {billingAdress && (
+                          <div className='text-default-text mt-[10px]'>
+                            {billingAdress?.firstname} {billingAdress?.lastName}
+                            <br />
+                            {billingAdress?.companyName}
+                            <br />
+                            {billingAdress?.address1}
+                            <br />
+                            {[
+                              billingAdress?.city,
+                              billingAdress?.state,
+                              billingAdress?.postalCode,
+                            ].join(', ')}
+                            <br />
+                            {billingAdress?.countryName}
+                            <br />
+                            {billingAdress?.phone}
+                          </div>
+                        )}
                         <div className='flex flex-wrap items-center justify-between pt-[10px] border-b border-[#ececec]'>
                           <div className='pb-[10px] text-title-text'>
                             {__pagesText.CheckoutPage.PaymentMethod}
@@ -155,38 +209,6 @@ const ChekoutType1: React.FC<_Props> = ({ cartTemplateId }) => {
                             )}
                           </div>
                         </div>
-                        <div className='flex flex-wrap items-center justify-between pt-[10px] border-b border-[#ececec]'>
-                          <div className='pb-[10px] text-title-text'>
-                            {__pagesText.CheckoutPage.BillingInformation}
-                          </div>
-                          <div className='text-default-text'>
-                            <div
-                              onClick={() => setAddressType('B')}
-                              className='!text-anchor hover:!text-anchor-hover '
-                            >
-                              {__pagesText.CheckoutPage.Edit}
-                            </div>
-                          </div>
-                        </div>
-                        {billingAdress && (
-                          <div className='text-default-text mt-[10px]'>
-                            {billingAdress?.firstname} {billingAdress?.lastName}
-                            <br />
-                            {billingAdress?.companyName}
-                            <br />
-                            {billingAdress?.address1}
-                            <br />
-                            {[
-                              billingAdress?.city,
-                              billingAdress?.state,
-                              billingAdress?.postalCode,
-                            ].join(', ')}
-                            <br />
-                            {billingAdress?.countryName}
-                            <br />
-                            {billingAdress?.phone}
-                          </div>
-                        )}
                       </div>
                     </div>
                   </div>
@@ -252,13 +274,14 @@ const ChekoutType1: React.FC<_Props> = ({ cartTemplateId }) => {
                           updatePaymentMethod={updatePaymentMethod}
                           detectCardType={detectCardType}
                         />
-                        {showAddAddress ? (
+                        {showAddAddress && !billingAdress ? (
                           <AddAddress
                             refrence={billingForm}
                             title={'Billing Address'}
                             setShippingAddress={setShippingAddress}
                             useShippingAddress={useShippingAddress}
                             isBillingForm={true}
+                            billingAddress={billingAdress}
                           />
                         ) : (
                           <CheckoutAddress
@@ -326,11 +349,9 @@ const ChekoutType1: React.FC<_Props> = ({ cartTemplateId }) => {
                   alt=''
                   className='mr-2 w-5 h-5'
                 />
-                <span className='text-sub-text font-semibold'>
-                  Order Risk-Free!
-                </span>
+                <span className='text-2xl font-semibold'>Order Risk-Free!</span>
               </div>
-              <div className='flex items-center justify-center text-sub-text text-center mt-3'>
+              <div className='flex items-center justify-center text-base text-center mt-3 font-semibold'>
                 Cancel your order without penalty anytime before your proof is
                 approved.
               </div>

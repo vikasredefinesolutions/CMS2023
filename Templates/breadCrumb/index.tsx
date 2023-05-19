@@ -1,23 +1,23 @@
-import { paths, __SpecialBreadCrumbsPaths } from '@constants/paths.constant';
+import { __SpecialBreadCrumbsPaths, paths } from '@constants/paths.constant';
 import { capitalizeFirstLetter } from '@helpers/common.helper';
-import { useTypedSelector_v2 } from '@hooks_v2/index';
+import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import {
-  fetchCategoryByCategoryId,
   FetchCategoryByproductId,
+  fetchCategoryByCategoryId,
 } from '@services/product.service';
 
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import {
-  _breadCrumbs,
-  _BreadCrumbTemplates,
-  __BreadCrumbTemplatesProps,
-} from './breadcrumb';
 import BreadCrumb_Type1 from './breadCrumb_Type1';
 import BreadCrumb_Type2 from './breadCrumb_Type2';
 import BreadCrumb_Type3 from './breadCrumb_Type3';
 import BreadCrumb_Type4 from './breadCrumb_Type4';
+import {
+  _BreadCrumbTemplates,
+  __BreadCrumbTemplatesProps,
+  _breadCrumbs,
+} from './breadcrumb';
 
 const BreadCrumbTemplates: _BreadCrumbTemplates = {
   type1: BreadCrumb_Type1,
@@ -31,6 +31,7 @@ const BreadCrumb: NextPage<__BreadCrumbTemplatesProps> = ({ breadCrumbid }) => {
     ? (('type' + breadCrumbid) as 'type1' | 'type2' | 'type3' | 'type4')
     : 'type1';
   const BreadCrumbTemplate = BreadCrumbTemplates[breadCrumbtemplateid];
+  const { product_storeCategory } = useActions_v2();
   //   const storeLayout = useTypedSelector_v2((state) => state.store.layout);
   const storeId = useTypedSelector_v2((state) => state.store.id);
   const router = useRouter();
@@ -65,6 +66,10 @@ const BreadCrumb: NextPage<__BreadCrumbTemplatesProps> = ({ breadCrumbid }) => {
       if (categories.length > 0) {
         const _categories = categories[0];
         const catNames = _categories.name.split(' > ');
+        product_storeCategory({
+          type: 'ADD',
+          arr: catNames,
+        });
         const catSeNames = _categories.sename.split(' > ');
         catNames.forEach((cate: string, index: number) => {
           breadCrumbs.push({
@@ -95,6 +100,10 @@ const BreadCrumb: NextPage<__BreadCrumbTemplatesProps> = ({ breadCrumbid }) => {
       if (categories.length > 0) {
         const _categories = categories[0];
         const catNames = _categories.name.split(' > ');
+        product_storeCategory({
+          type: 'ADD',
+          arr: catNames,
+        });
         const catSeNames = _categories.sename.split(' > ');
         catNames.forEach((cate: string, index: number) => {
           breadCrumbs.push({

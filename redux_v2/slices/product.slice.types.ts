@@ -230,6 +230,7 @@ export interface _ProductStore {
   toCheckout: _state_productToCheckout;
   som_logos: _state_SOM_Logos_Container;
   offlineProductSelected: string;
+  categoryArr: string[];
 }
 
 export interface _updateDiscountTablePrices {
@@ -251,6 +252,15 @@ export interface _SetValue_MinQty {
   data: {
     qty: number;
   };
+}
+
+export interface _CategoryArr {
+  type: 'ADD';
+  arr: string[];
+}
+
+export interface _CategoryArr_Action {
+  payload: _CategoryArr;
 }
 
 export interface _UpdateSelectedValue_Color {

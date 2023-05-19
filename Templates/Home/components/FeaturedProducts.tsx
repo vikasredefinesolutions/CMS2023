@@ -1,5 +1,6 @@
 import { _SelectedBrands } from '@definations/APIs/storeDetails.res';
 import React from 'react';
+import BrandProductListing from './GeneralProductContainer/BrandProducsListing';
 import ProductsInfoTabs from './GeneralProductContainer/GeneralProductTabs';
 
 interface _props {
@@ -16,10 +17,17 @@ const FeaturedProducts: React.FC<_props> = ({ dataArr }) => {
         {dataArr?.featuredproducts_tabing_display &&
         dataArr?.featuredproducts_tabing_display?.value === 'Yes' &&
         dataArr.featuredproducts.value.length > 1 ? (
-          <ProductsInfoTabs data={dataArr?.featuredproducts?.value} />
+          <ProductsInfoTabs
+            data={dataArr?.featuredproducts?.value}
+            showBorder={dataArr?.featuredproducts_show_border?.value}
+          />
         ) : (
-          // <ProductsInfo dataArr={dataArr} />
-          <h1></h1>
+          <>
+            <BrandProductListing
+              showBorder={dataArr?.featuredproducts_show_border?.value}
+              productsData={[]}
+            />
+          </>
         )}
       </div>
     </section>
