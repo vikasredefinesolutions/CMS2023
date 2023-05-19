@@ -339,10 +339,9 @@ const ElementCarouselDisplay = ({ bannerArr }) => {
                             <a
                               href={image.button_link}
                               target={
-                                image.button_link_window == '_self' &&
-                                image.button_link_window == ''
-                                  ? ''
-                                  : '_blank'
+                                image.button_link_window == '_blank'
+                                  ? '_blank'
+                                  : ''
                               }
                               className={`${image.button_class}`}
                               style={{ boxShadow: image?.button_box_shadow }}
