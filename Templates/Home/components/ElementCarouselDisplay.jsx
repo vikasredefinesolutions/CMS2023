@@ -69,11 +69,9 @@ const ElementCarouselDisplay = ({ bannerArr }) => {
       {Object.keys(bannerArr).length > 0 && bannerArr.images != null && (
         // bannerArr.images.length == 1 ? (
         //   <div class='relative overflow-hidden'>
-        //        {' '}
         //     <div class='absolute inset-0'>
         //       <img src={bannerArr.images[0].image_url} alt='corousel' />
         //     </div>
-        //        {' '}
         //     <div
         //       class={`flex justify-center items-center w-full relative z-10 ${
         //         bannerArr?.images[0].headline1_display &&
@@ -87,9 +85,7 @@ const ElementCarouselDisplay = ({ bannerArr }) => {
         //           : ''
         //       }`}
         //     >
-        //              {' '}
         //       <div class=''>
-        //                    {' '}
         //         <div
         //           class='text-[23px] sm:text-[32px] lg:text-[60px] font-family-1 leading-[66px] font-semibold not-italic text-center mt-[8px] mb-[8px] pl-[50px] pr-[50px]'
         //           style={{ color: '#ffffff' }}
@@ -130,14 +126,15 @@ const ElementCarouselDisplay = ({ bannerArr }) => {
         //             ></div>
         //           )}
         //         </div>
-        //                    {' '}
         //         {bannerArr?.images[0].button_display == 'Yes' && (
         //           <>
         //             <div className='text-center' title='SHOP alternative'>
         //               <a
         //                 href={bannerArr?.images[0].button_link}
         //                 target={
-        //                   bannerArr?.images[0].button_link_window ? '_blank' : ''
+        //                   bannerArr?.images[0].button_link_window
+        //                     ? '_blank'
+        //                     : ''
         //                 }
         //                 className=' uppercase text-[18px] sm:text-[19px] lg:text-[26px] font-family-1 text-center leading-[35px] font-semibold inline-block custbtn-secondary mt-[12px] pl-[27px] pr-[27px] pt-[12px] pb-[12px]'
         //                 rel='noreferrer'
@@ -147,9 +144,9 @@ const ElementCarouselDisplay = ({ bannerArr }) => {
         //             </div>
         //           </>
         //         )}
-        //                {' '}
+        //         {' '}
         //       </div>
-        //          {' '}
+        //       {' '}
         //     </div>
         //   </div>
         // ) :
@@ -341,7 +338,11 @@ const ElementCarouselDisplay = ({ bannerArr }) => {
                           >
                             <a
                               href={image.button_link}
-                              target={image.button_link_window ? '_blank' : ''}
+                              target={
+                                image.button_link_window == '_self'
+                                  ? ''
+                                  : '_blank'
+                              }
                               className={`${image.button_class}`}
                               style={{ boxShadow: image?.button_box_shadow }}
                               rel='noreferrer'
