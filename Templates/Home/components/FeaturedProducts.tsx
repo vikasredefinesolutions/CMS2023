@@ -22,12 +22,12 @@ const FeaturedProducts: React.FC<_props> = ({ dataArr }) => {
             showBorder={dataArr?.featuredproducts_show_border?.value}
           />
         ) : (
-          <>
+          <div className='relative pt-5 bg-gray-100  pb-10'>
             <BrandProductListing
               showBorder={dataArr?.featuredproducts_show_border?.value}
-              productsData={[]}
+              productsData={dataArr?.featuredproducts?.value[0]?.data}
             />
-          </>
+          </div>
         )}
       </div>
     </section>
