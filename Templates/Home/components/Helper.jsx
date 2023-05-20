@@ -787,7 +787,7 @@ export const updateSetProperties = (element) => {
                 }
               }
               if (
-                Object.keys(element.selectedVal).includes(key + '_image_size')
+                 Object.keys(element.selectedVal).includes(key + '_image_size')
               ) {
                 Object.entries(element.selectedVal).map(([keyq, valueq]) => {
                   if (keyq == key + '_image_size') {
@@ -806,6 +806,7 @@ export const updateSetProperties = (element) => {
               // if(imageSize == '')
               //   imageSize = 'max-w-none';
               x.querySelectorAll('#' + key)[0].className = classAlign;
+              
               x.querySelectorAll('#' + key)[0].innerHTML =
                 starttag +
                 imageSize +

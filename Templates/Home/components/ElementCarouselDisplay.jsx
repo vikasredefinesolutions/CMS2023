@@ -257,6 +257,20 @@ const ElementCarouselDisplay = ({ bannerArr }) => {
           transitionTime='700'
         >
           {bannerArr.images.map((image) => {
+            let headlineStartTag = '';
+            let headline1StartTag = '';
+            let headlineEndTag = '';
+            let headline1EndTag = '';
+            if(image.headline_tag)
+            {
+              headlineStartTag = '<'+image.headline_tag+'>';
+              headlineEndTag = '</'+image.headline_tag+'>';
+            }
+            if(image.headline_tag1)
+            {
+              headline1StartTag = '<'+image.headline_tag1+'>';
+              headline1EndTag = '</'+image.headline_tag1+'>';
+            }
             return (
               <div key={image} className='relative presentation-mode'>
                 <div className='overflow-hidden'>
@@ -308,7 +322,7 @@ const ElementCarouselDisplay = ({ bannerArr }) => {
                             textShadow: image.headline1_box_shadow ?? '',
                           }}
                           dangerouslySetInnerHTML={{
-                            __html: image.headline,
+                            __html: headlineStartTag + image.headline + headlineEndTag,
                           }}
                         ></div>
                       )}
@@ -320,7 +334,7 @@ const ElementCarouselDisplay = ({ bannerArr }) => {
                             textShadow: image.headline2_box_shadow ?? '',
                           }}
                           dangerouslySetInnerHTML={{
-                            __html: image.headline1,
+                            __html: headline1StartTag + image.headline1 + headline1EndTag,
                           }}
                         ></div>
                       )}
