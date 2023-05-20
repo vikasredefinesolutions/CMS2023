@@ -803,7 +803,6 @@ export const updateSetProperties = (element) => {
                   '<a href="' + link + '"class="inline-block group ';
                 var endTag = '/> </a>';
               }
-
               // if(imageSize == '')
               //   imageSize = 'max-w-none';
               x.querySelectorAll('#' + key)[0].className = classAlign;

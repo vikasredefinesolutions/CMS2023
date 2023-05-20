@@ -58,6 +58,13 @@ class MyDocument extends Document {
           <link
             rel='stylesheet'
             type='text/css'
+            href={`${_globalStore.blobUrl}/${
+              _globalStore.blobUrlRootDirectory
+            }/${_globalStore.companyId}/store/main.css?${Math.random()}`}
+          />
+          <link
+            rel='stylesheet'
+            type='text/css'
             href={`${_globalStore.blobUrl}/${_globalStore.blobUrlRootDirectory}/${_globalStore.companyId}/store/${_globalStore.storeId}/css/${_globalStore.storeId}.css`}
           />
           <link
@@ -72,13 +79,7 @@ class MyDocument extends Document {
             type='text/css'
             href={`${_globalStore.blobUrl}/${_globalStore.blobUrlRootDirectory}/${_globalStore.companyId}/store/${_globalStore.storeId}/css/custom.css`}
           />
-          <link
-            rel='stylesheet'
-            type='text/css'
-            href={`${_globalStore.blobUrl}/${
-              _globalStore.blobUrlRootDirectory
-            }/${_globalStore.companyId}/store/main.css?${Math.random()}`}
-          />
+
           {/* -----------------------SLIDER STYLESHEETS------------------------- */}
           <link
             rel='stylesheet'
