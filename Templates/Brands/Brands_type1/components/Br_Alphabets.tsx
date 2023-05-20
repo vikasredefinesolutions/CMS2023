@@ -29,7 +29,8 @@ const Br_Alphabets: React.FC<_Props> = ({
     const headerOffset =
       document.getElementById('header_with_navBar')!.offsetHeight;
     const elementPosition = element.getBoundingClientRect().top;
-    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+    const offsetPosition =
+      elementPosition + window.pageYOffset - headerOffset - 40;
 
     window.scrollTo({
       top: offsetPosition,
