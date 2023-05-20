@@ -278,7 +278,7 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
                                 modalHandler(null);
                                 router.push(paths.SIGN_UP);
                               }}
-                              className='btn btn-xl btn-secondary w-full'
+                              className='btn btn-md btn-secondary w-full'
                             >
                               {
                                 __pagesText.productInfo.loginModal

@@ -65,7 +65,7 @@ const SideFiltersTypeTwo = ({
                               ) : filter.label === 'Category' ? (
                                 <li
                                   key={`${index}${_index}`}
-                                  className='w-full py-0'
+                                  className='w-full py-[1px]'
                                 >
                                   <Link
                                     key={val.name}
@@ -84,7 +84,7 @@ const SideFiltersTypeTwo = ({
                                     </div>
                                   </Link>
                                   {val.subrows && val.subrows.length > 0 && (
-                                    <ul className='ml-3'>
+                                    <ul className='ml-[10px]'>
                                       {val.subrows?.map((subrow) => (
                                         <li
                                           key={subrow.id}
