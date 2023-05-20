@@ -4,6 +4,7 @@ import NxtImage from '@appComponents/reUsable/Image';
 import Price from '@appComponents/reUsable/Price';
 import WishlistButton from '@appComponents/ui/Wishlist';
 import { listing_max_showcolors, zeroValue } from '@constants/common.constant';
+import { __pagesText } from '@constants/pages.text';
 import { CaptureGTMEvent } from '@helpers/common.helper';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import { GetlAllProductList } from '@templates/ProductListings/ProductListingType';
@@ -116,7 +117,6 @@ const TemplateOneListing = ({
     };
     CaptureGTMEvent(eventPayload);
   };
-
   return (
     <li className='text-center' key={product.id}>
       <div className=''>
@@ -195,16 +195,15 @@ const TemplateOneListing = ({
                   </a>
                 </Link>
               </div>
-              <div className='mt-[12px] text-[#000000] text-normal-text text-medium-text tracking-wider'>
+              <div className='mt-[12px] text-[#000000] text-medium-text tracking-wider'>
                 <span className='font-semibold'>
-                  {customerId && product.isspecialbrand ? 'PRICE ' : 'MSRP '}
+                  {customerId
+                    ? __pagesText.productListing.PRICE
+                    : __pagesText.productListing.MSRP}
                   <Price
                     value={undefined}
                     prices={{
-                      msrp:
-                        product.isspecialbrand && customerId
-                          ? product?.lowPrice
-                          : product.msrp,
+                      msrp: customerId ? product?.lowPrice : product.msrp,
                       salePrice: product.salePrice,
                     }}
                   />

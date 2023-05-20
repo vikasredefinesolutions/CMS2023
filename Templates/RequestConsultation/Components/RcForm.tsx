@@ -8,6 +8,7 @@ import {
   phonePattern3,
   phonePattern4,
 } from '@constants/global.constant';
+import { __pagesText } from '@constants/pages.text';
 import { UploadImage } from '@services/file.service';
 import { SumbitRequestConsultationDetails } from '@services/product.service';
 import { Form, Formik } from 'formik';
@@ -202,9 +203,11 @@ const RcForm: React.FC<{ productId: number; attriubteOptionId: number }> = ({
               <div className='flex flex-wrap gap-y-4 pl-[15px] pr-[15px]'>
                 <div className='w-full'>
                   <div className='bg-gray-100 flex flex-wrap items-center justify-between px-3 py-1'>
-                    <div className='font-bold text-xl'>Contact Information</div>
+                    <div className='font-bold text-xl'>
+                      {__pagesText.requestConsultation.contactInformation}
+                    </div>
                     <div className='text-red-500 text-sm font-bold'>
-                      All fields marked * are required.
+                      {__pagesText.requestConsultation.allFields}
                     </div>
                   </div>
                 </div>

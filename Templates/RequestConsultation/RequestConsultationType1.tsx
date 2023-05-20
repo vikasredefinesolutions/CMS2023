@@ -1,5 +1,6 @@
 import NxtImage from '@appComponents/reUsable/Image';
 import { _defaultTemplates } from '@configs/template.config';
+import { __pagesText } from '@constants/pages.text';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import { CartObject } from '@services/cart';
 import YouMayAlsoLike from '@templates/youMayAlsoLike';
@@ -48,7 +49,7 @@ const RequestConsultationType1: React.FC<_RequestConsultationProps> = ({
         <section className='container pl-[15px] pr-[15px] mx-auto'>
           <div>
             <div className='font-bold text-2xl-text mb-[13px] text-center text tracking-[1.4px]'>
-              Request Consultation & Proof
+              {__pagesText.requestConsultation.heading}
             </div>
             <div className='border border-gray-400 pt-[12px] pb-[12px] px-[20px]'>
               <div className='flex flex-wrap -mx-[15px]'>
