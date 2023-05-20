@@ -239,6 +239,7 @@ const SelectOrInput: React.FC<_SelectOrInputProps> = ({
                         );
                       }
                     }}
+                    min={0}
                     max={isEmployeeLoggedIn ? '' : qty}
                     value={Math.ceil(values.itemCount)}
                     onFocus={() =>

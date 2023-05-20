@@ -15,6 +15,7 @@ const QtyPriceTable: React.FC<{
   const selectedColor = useTypedSelector_v2(
     (state) => state.product.selected.color,
   );
+  const { minQty } = useTypedSelector_v2((state) => state.product.toCheckout);
   const { discounts } = useTypedSelector_v2((state) => state.product.product);
 
   const fillEmptySpaces = (arr: SubRow[]): 'empty'[] | null => {
@@ -57,16 +58,19 @@ const QtyPriceTable: React.FC<{
 
         <div className='flex flex-wrap text-center grow md:w-5/6'>
           {discounts?.subRows?.map((column) => {
-            return (
-              <div className='md:w-1/6' key={column.discountPrice}>
-                <div className='p-1 px-2 border-b border-gray-300'>
-                  {column.displayQuantity}
+            let qty = column.displayQuantity.split('+');
+            if (parseInt(qty[0]) >= minQty) {
+              return (
+                <div className='md:w-1/6' key={column.discountPrice}>
+                  <div className='p-1 px-2 border-b border-gray-300'>
+                    {column.displayQuantity}
+                  </div>
+                  <div className='p-1 px-2'>
+                    <Price value={column.discountPrice} />
+                  </div>
                 </div>
-                <div className='p-1 px-2'>
-                  <Price value={column.discountPrice} />
-                </div>
-              </div>
-            );
+              );
+            }
           })}
 
           {discounts?.subRows &&

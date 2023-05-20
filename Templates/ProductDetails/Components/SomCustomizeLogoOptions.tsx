@@ -99,7 +99,7 @@ const SomCustomizeLogoOptions: React.FC<{
   return (
     <div className='mb-[10px]'>
       <div className='' x-data='{custom_logo : 1}'>
-        <div className='text-gray-900 bg-primary flex flex-wrap justify-between items-center pl-[10px] pr-[10px] pt-[6px] pb-[6px] mt-5 mb-[10px] text-default-text'>
+        <div className='bg-primary flex flex-wrap justify-between items-center pl-[10px] pr-[10px] pt-[6px] pb-[6px] mt-5 mb-[10px] text-default-text'>
           <span className='font-[600] text-[#ffffff] text-sub-text'>
             {
               __pagesText.productInfo.startOrderModal.customizeLogoOption

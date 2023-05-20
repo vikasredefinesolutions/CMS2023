@@ -212,12 +212,12 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
         </>
       )}
 
-      <div className='m-3 mt-1'>
-        <h3 className='font-semibold text-2xl mb-2'>
+      <div className='m-[10px] mt-[18px]'>
+        <h3 className='mb-[12px] text-title-text'>
           {__pagesText.productInfo.description}
         </h3>
         <div
-          className={`relative text-sm text-black tracking-widest div_description transition-all pb-8 ${
+          className={`relative text-sm text-default-text div_description transition-all pb-[32px] ${
             !showExtra && 'h-32 overflow-hidden'
           }`}
         >
@@ -234,7 +234,7 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
               } text-center`}
             >
               <button
-                className='text-anchor tracking-normal text-base underline font-bold'
+                className='!text-anchor tracking-normal text-base underline font-bold'
                 onClick={() => setShowExtra((show) => !show)}
               >
                 {showExtra ? 'Read Less' : 'Read More'}

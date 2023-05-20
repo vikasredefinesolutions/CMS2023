@@ -20,12 +20,14 @@ const FeaturedProducts: React.FC<_props> = ({ dataArr }) => {
           <ProductsInfoTabs
             data={dataArr?.featuredproducts?.value}
             showBorder={dataArr?.featuredproducts_show_border?.value}
+            customMessage={dataArr?.featuredproducts_custom_message?.value}
           />
         ) : (
           <div className='relative pt-5 bg-gray-100  pb-10'>
             <BrandProductListing
               showBorder={dataArr?.featuredproducts_show_border?.value}
               productsData={dataArr?.featuredproducts?.value[0]?.data}
+              customMessage={dataArr?.featuredproducts_custom_message?.value}
             />
           </div>
         )}

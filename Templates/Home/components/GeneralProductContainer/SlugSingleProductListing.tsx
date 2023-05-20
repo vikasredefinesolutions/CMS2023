@@ -6,9 +6,13 @@ import 'react-loading-skeleton/dist/skeleton.css';
 
 interface _props {
   product: newFetauredItemResponse;
+  customMessage: string;
 }
 
-const SlugSingleProductListing: React.FC<_props> = ({ product }) => {
+const SlugSingleProductListing: React.FC<_props> = ({
+  product,
+  customMessage,
+}) => {
   return (
     <>
       <div key={product?.productId} className='slide-item'>
@@ -39,7 +43,7 @@ const SlugSingleProductListing: React.FC<_props> = ({ product }) => {
                   </Link>
                 </div>
                 <div className='mb-2 font-semibold uppercase isinput'>
-                  ADD YOUR LOGO
+                  {customMessage ?? 'No Custom Message'}
                 </div>
                 <a
                   style={{

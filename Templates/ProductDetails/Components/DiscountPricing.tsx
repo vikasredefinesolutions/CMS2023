@@ -51,8 +51,10 @@ const DiscountPricing: React.FC<
             </button>
           ) : null}
         </div> */}
-        <div className='bg-primary flex flex-wrap justify-between items-center pl-[10px] pr-[10px] pt-[4px] pb-[5px] mt-[16px] text-default-text'>
-          <span className='font-[600] text-[#ffffff] text-sub-text'>
+        <div
+          className={` bg-primary flex flex-wrap justify-between items-center pl-[10px] pr-[10px] pt-[4px] pb-[5px] mt-[16px] text-default-text`}
+        >
+          <span className={'font-[600] text-[#ffffff] text-sub-text'}>
             {title === 'selectsizeandquanity'
               ? __pagesText.productInfo.discountPricing.selectSizeAndQuantity
               : __pagesText.productInfo.discountPricing.exclusivePricing}
@@ -67,9 +69,11 @@ const DiscountPricing: React.FC<
                 {' '}
                 {__pagesText.productInfo.discountPricing.minimumOrder}
               </span>
-              {` ${minQty} ${unitUnits} per color for $${(
-                minQty * price.msrp
-              ).toFixed(2)}`}
+              {title === 'selectsizeandquanity'
+                ? ` ${minQty} ${unitUnits} per color `
+                : ` ${minQty} ${unitUnits} per color for $${(
+                    minQty * price.msrp
+                  ).toFixed(2)}`}
             </a>
           ) : null}
         </div>
@@ -105,8 +109,18 @@ const DiscountPricing: React.FC<
               ) : null}
             </div> */}
             <div className='flex flex-wrap justify-between items-center mt-[18px] text-default-text'>
-              <p className='flex items-start'>
-                <span className='mr-[3px] text-sub-text'>
+              <div
+                className={
+                  title === 'selectsizeandquanity' ? '' : 'flex item-start'
+                }
+              >
+                <span
+                  className={
+                    title === 'selectsizeandquanity'
+                      ? `text-medium-text font-[600px]`
+                      : `mr-[3px] text-sub-text`
+                  }
+                >
                   {__pagesText.productInfo.discountPricing.MSRP}
                   <Price
                     value={undefined}
@@ -117,11 +131,15 @@ const DiscountPricing: React.FC<
                   />
                 </span>
                 {__pagesText.productInfo.discountPricing.perItem}
-              </p>
+              </div>
               {showMinQuantity ? (
                 <a
                   href='javascript:void(0);'
-                  className='items-center text-[#000000] pb-[5px]'
+                  className={
+                    title === 'selectsizeandquanity'
+                      ? `text-medium-text font-[600px]`
+                      : `items-center text-[#000000] pb-[5px]`
+                  }
                   onClick={() => setShowMsg((show) => !show)}
                 >
                   {

@@ -1,7 +1,6 @@
 import { __pagesConstant } from '@constants/pages.constant';
 import { newFetauredItemResponse } from '@definations/productList.type';
 import { useWindowDimensions_v2 } from '@hooks_v2/index';
-import { useRouter } from 'next/router';
 import React, { useEffect, useRef, useState } from 'react';
 import 'react-loading-skeleton/dist/skeleton.css';
 import Slider from 'react-slick';
@@ -11,6 +10,7 @@ import SlugSingleProductListing from './SlugSingleProductListing';
 interface _props {
   productsData: newFetauredItemResponse[] | [];
   showBorder: string;
+  customMessage: string;
 }
 interface _carouselProps {
   sliderSettings: {
@@ -27,6 +27,7 @@ interface _carouselProps {
 const BrandProductListing: React.FC<_props> = ({
   productsData,
   showBorder,
+  customMessage,
 }) => {
   const [featuredProductCarouselSetting, setFeaturedProductCarouselSetting] =
     useState<_carouselProps>({
@@ -40,7 +41,6 @@ const BrandProductListing: React.FC<_props> = ({
       },
       carouselCounter: 4,
     });
-  const router = useRouter();
 
   const { width } = useWindowDimensions_v2();
 
@@ -123,13 +123,16 @@ const BrandProductListing: React.FC<_props> = ({
                   {productsData.map((product) => {
                     return (
                       <>
-                        {showBorder == __pagesConstant?.showBorder?.No ? (
+                        {showBorder == __pagesConstant?.showBorder?.Yes ? (
                           <div key={product.productId} className='slide-item'>
-                            <SlugSingleProductListing product={product} />
+                            <SingleProductListing product={product} />
                           </div>
                         ) : (
                           <div key={product.productId} className='slide-item'>
-                            <SingleProductListing product={product} />
+                            <SlugSingleProductListing
+                              product={product}
+                              customMessage={customMessage}
+                            />
                           </div>
                         )}
                       </>

@@ -81,7 +81,7 @@ const CalculativeFigure: React.FC = () => {
           </span>
         </div>
       </div>
-      <div className='text-base'>
+      <div className='text-medium-text'>
         <span className='inline-block mb-2 w-40 sm:text-right'>
           {__pagesText.productInfo.startOrderModal.calculativeFigure.subTotal}
         </span>
