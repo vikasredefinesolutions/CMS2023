@@ -100,9 +100,6 @@ const SideFilter = ({
                                         className={`w-8 h-8 border-2 hover:border-secondary p-0.5 cursor-pointer ${
                                           checked && 'border-secondary'
                                         }`}
-                                        style={{
-                                          background: option.colorCode,
-                                        }}
                                         onClick={() => {
                                           handleChange(
                                             filter.label,
@@ -111,7 +108,14 @@ const SideFilter = ({
                                           );
                                         }}
                                         title={option.name}
-                                      ></li>
+                                      >
+                                        <div
+                                          className='w-full h-full'
+                                          style={{
+                                            background: option.colorCode,
+                                          }}
+                                        ></div>
+                                      </li>
                                     ) : filter.label === 'Category' ? (
                                       <li key={ind} className='w-full py-[1px]'>
                                         <Link
@@ -300,6 +304,7 @@ const SideFilter = ({
                                       title={option.name}
                                     >
                                       <div
+                                        className='w-full h-full'
                                         style={{
                                           background: option.colorCode,
                                         }}
