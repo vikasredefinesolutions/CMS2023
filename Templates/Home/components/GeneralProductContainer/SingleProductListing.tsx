@@ -1,6 +1,7 @@
 import { default as ImageComponent } from '@appComponents/reUsable/Image';
 import Price from '@appComponents/reUsable/Price';
 import { showcolors } from '@constants/global.constant';
+import { __pagesText } from '@constants/pages.text';
 import {
   newFetauredItemResponse,
   splitproductList,
@@ -22,6 +23,8 @@ const SingleProductListing: React.FC<_props> = (props) => {
   const [currentProduct, setCurrentProduct] = useState<
     newFetauredItemResponse | undefined | null
   >(null);
+
+  const customerId = useTypedSelector_v2((state) => state.user.id);
 
   const store = useTypedSelector_v2((state) => state.store);
 
@@ -65,8 +68,16 @@ const SingleProductListing: React.FC<_props> = (props) => {
               </div>
               <div className='mt-3 text-[#000000] text-base tracking-wider'>
                 <span className='font-[600]'>
-                  {' '}
-                  MSRP <Price value={product.msrp} />
+                  {customerId
+                    ? __pagesText.productListing.PRICE
+                    : __pagesText.productListing.MSRP}
+                  <Price
+                    value={undefined}
+                    prices={{
+                      msrp: customerId ? product?.lowPrice : product.msrp,
+                      salePrice: product.salePrice,
+                    }}
+                  />
                 </span>
               </div>
             </div>
