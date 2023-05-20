@@ -74,7 +74,7 @@ const MyAccountTabsType1: React.FC = () => {
                 return (
                   <li
                     key={index}
-                    className={`border-t hover:border-black px-[40px] py-[10px] md:inline-block block text-center  ${
+                    className={`border-t hover:border-black px-[40px] py-[13px] md:inline-block block text-center  ${
                       activeDir ? 'border-black ' : ''
                     }`}
                   >

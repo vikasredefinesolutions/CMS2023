@@ -236,7 +236,7 @@ const AccountSetting = () => {
                             onClick={() => setShowPassword(!showPassword)}
                             className='block w-7 h-7 text-center absolute top-2 right-2'
                           >
-                            <span className='material-symbols-outlined text-title-text text-gray-400 focus:outline-none hover:text-indigo-500 transition-colors'>
+                            <span className='material-symbols-outlined text-gray-400 focus:outline-none hover:text-primary transition-colors'>
                               visibility
                             </span>
                           </button>
@@ -248,7 +248,7 @@ const AccountSetting = () => {
                               className=''
                               aria-haspopup='true'
                             >
-                              <span className='material-icons-outlined ml-2 text-title-text text-gray-400 focus:outline-none hover:text-indigo-500 transition-colors'>
+                              <span className='material-icons-outlined ml-2 text-gray-400 focus:outline-none hover:text-primary transition-colors'>
                                 info
                               </span>
                             </button>
