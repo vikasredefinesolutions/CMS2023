@@ -44,7 +44,7 @@ const Br_Alphabets: React.FC<_Props> = ({
         <div className='w-full flex flex-wrap'>
           <div className='lg:w-2/12 W-full pt-[40px]'>
             <div
-              className='mb-[24px] pt-[12px] pb-[12px] sm:sticky sm:top-32'
+              className='text-title-text mb-[24px] pt-[12px] pb-[12px] sm:sticky sm:top-32'
               id='list-id'
             >
               <div className='text-title-text ml-[8px] mr-[8px] font-[600] pb-[28px]'>
@@ -68,7 +68,7 @@ const Br_Alphabets: React.FC<_Props> = ({
                         highlightBrands(al);
                       }
                     }}
-                    className={`text-title-text ml-[8px] mr-[8px] border-b border-b-solid border-[#ffffff] pb-[12px] inline-block font-[600] hover:text-anchor hover:border-anchor-hover ${
+                    className={`ml-[8px] mr-[8px] border-b border-b-solid border-[#ffffff] pb-[12px] inline-block font-[600] hover:text-anchor hover:border-anchor-hover ${
                       activeAlphabet ? '' : 'text-[#a7a8a9] cursor-not-allowed'
                     }`}
                   >
