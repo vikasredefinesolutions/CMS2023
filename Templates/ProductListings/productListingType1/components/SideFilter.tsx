@@ -66,7 +66,7 @@ const SideFilter = ({
                           }
                           aria-controls='panel1a-content'
                           id='panel1a-header'
-                          className='flex items-center justify-between w-full h-5 group mb-1 min-h-[auto]'
+                          className='flex items-center justify-between w-full h-5 group mb-[10px] min-h-[auto]'
                         >
                           <div className='text-medium-text font-semibold text-[#000000] block uppercase'>
                             {filter.label === 'Color' || filter.label === 'Size'
@@ -100,9 +100,6 @@ const SideFilter = ({
                                         className={`w-8 h-8 border-2 hover:border-secondary p-0.5 cursor-pointer ${
                                           checked && 'border-secondary'
                                         }`}
-                                        style={{
-                                          background: option.colorCode,
-                                        }}
                                         onClick={() => {
                                           handleChange(
                                             filter.label,
@@ -111,7 +108,14 @@ const SideFilter = ({
                                           );
                                         }}
                                         title={option.name}
-                                      ></li>
+                                      >
+                                        {' '}
+                                        <div
+                                          style={{
+                                            background: option.colorCode,
+                                          }}
+                                        ></div>
+                                      </li>
                                     ) : filter.label === 'Category' ? (
                                       <li key={ind} className='w-full py-[1px]'>
                                         <Link
@@ -256,7 +260,7 @@ const SideFilter = ({
                         }
                         aria-controls='panel1a-content'
                         id='panel1a-header'
-                        className='flex items-center justify-between w-full h-5 group mb-1 min-h-[auto]'
+                        className='flex items-center justify-between w-full h-5 group mb-[10px] min-h-[auto]'
                       >
                         <div className='text-medium-text font-semibold text-[#000000] block uppercase'>
                           {filter.label === 'Color' || filter.label === 'Size'
@@ -290,9 +294,6 @@ const SideFilter = ({
                                       className={`w-8 h-8 border-2 hover:border-secondary p-0.5 cursor-pointer ${
                                         checked && 'border-secondary'
                                       }`}
-                                      style={{
-                                        background: option.colorCode,
-                                      }}
                                       onClick={() => {
                                         handleChange(
                                           filter.label,
@@ -301,7 +302,14 @@ const SideFilter = ({
                                         );
                                       }}
                                       title={option.name}
-                                    ></li>
+                                    >
+                                      <div
+                                        className='w-full h-full'
+                                        style={{
+                                          background: option.colorCode,
+                                        }}
+                                      ></div>
+                                    </li>
                                   ) : filter.label === 'Category' ? (
                                     <li key={ind} className='w-full py-[1px]'>
                                       <Link
@@ -327,7 +335,7 @@ const SideFilter = ({
                                       {option.subrows &&
                                         router.asPath != '/accessories.html' &&
                                         option.subrows.length > 0 && (
-                                          <ul className='ml-[10px]'>
+                                          <ul className='ml-[10]'>
                                             {option.subrows?.map((subrow) => (
                                               <li
                                                 key={subrow.id}
