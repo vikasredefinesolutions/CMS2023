@@ -221,7 +221,7 @@ const SelectOrInput: React.FC<_SelectOrInputProps> = ({
 
       {inputOrSelect.type === 'input' && (
         <Formik
-          initialValues={{ itemCount: inputOrSelect.choosedValue }}
+          initialValues={{ itemCount: Math.ceil(inputOrSelect.choosedValue) }}
           onSubmit={enterQtyHandler}
         >
           {({ values, handleChange }) => {
@@ -231,17 +231,11 @@ const SelectOrInput: React.FC<_SelectOrInputProps> = ({
                   <input
                     type='number'
                     name='itemCount'
-                    onKeyDown={(e) => {
-                      if (/[^0-9]+/.test(e.currentTarget.value)) {
-                        e.currentTarget.value = e.currentTarget.value.replace(
-                          /[^0-9]*/g,
-                          '',
-                        );
-                      }
-                    }}
+                    
                     min={0}
+                    defaultValue={''}
                     max={isEmployeeLoggedIn ? '' : qty}
-                    value={Math.ceil(values.itemCount)}
+                    // value={Math.ceil(values.itemCount)}
                     onFocus={() =>
                       setInputOrSelect((state) => ({
                         ...state,
@@ -263,13 +257,19 @@ const SelectOrInput: React.FC<_SelectOrInputProps> = ({
                         }
                       </button>
                       <button
-                        onClick={() =>
+                        onClick={() => {
+                          updateQuantities({
+                            attributeOptionId: sizeAttributeOptionId,
+                            size: size,
+                            qty: 0,
+                            price: price.msrp,
+                          });
                           setInputOrSelect({
                             type: 'select',
                             choosedValue: 0,
                             focus: false,
-                          })
-                        }
+                          });
+                        }}
                         className='btn btn-sm btn-primary'
                       >
                         {

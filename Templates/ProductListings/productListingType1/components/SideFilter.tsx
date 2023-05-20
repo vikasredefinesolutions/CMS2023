@@ -288,7 +288,8 @@ const SideFilter = ({
 
                             return (
                               <Fragment key={ind}>
-                                {option.name || option.colorCode ? (
+                                {option.productCount > 0 &&
+                                (option.name || option.colorCode) ? (
                                   filter.label === 'Color' ? (
                                     <li
                                       className={`w-8 h-8 border-2 hover:border-secondary p-0.5 cursor-pointer ${
@@ -325,7 +326,7 @@ const SideFilter = ({
                                         <span className='material-icons-outlined'>
                                           {option.subrows &&
                                           option.subrows.length > 0 &&
-                                          index === 0
+                                          route === option.sename
                                             ? 'expand_more'
                                             : 'chevron_right'}
                                         </span>
@@ -333,7 +334,9 @@ const SideFilter = ({
                                         {option.productCount})
                                       </Link>
                                       {option.subrows &&
+                                        option.sename &&
                                         router.asPath != '/accessories.html' &&
+                                        route.includes(option.sename) &&
                                         option.subrows.length > 0 && (
                                           <ul className='ml-[10px]'>
                                             {option.subrows?.map((subrow) => (
