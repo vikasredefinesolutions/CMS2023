@@ -795,7 +795,7 @@ export const updateSetProperties = (element) => {
                   }
                 });
               }
-              if (link != '') {
+              if (link === '') {
                 var starttag = '<div class="inline-block group ';
                 var endTag = '/> </div>';
               } else {
