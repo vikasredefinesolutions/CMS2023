@@ -113,7 +113,7 @@ const SideFilter = ({
                                         title={option.name}
                                       ></li>
                                     ) : filter.label === 'Category' ? (
-                                      <li key={ind} className='w-full py-0'>
+                                      <li key={ind} className='w-full py-[1px]'>
                                         <Link
                                           key={option.name}
                                           id={option.name}
@@ -138,7 +138,7 @@ const SideFilter = ({
                                           router.asPath !=
                                             '/accessories.html' &&
                                           option.subrows.length > 0 && (
-                                            <ul className='ml-3'>
+                                            <ul className='ml-[10px]'>
                                               {option.subrows?.map((subrow) => (
                                                 <li
                                                   key={subrow.id}
