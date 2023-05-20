@@ -13,6 +13,9 @@ const ElementAccordionDisplay = ({ selected_Values, acValues }) => {
     keyboard_arrow_down: 'keyboard_arrow_up',
     remove_circle_outline: 'add_circle_outline',
     add_circle_outline: 'remove_circle_outline',
+    add_circle: 'remove_circle',
+    remove_circle: 'add_circle'
+
   };
 
   const showHideAccordion = (event) => {
@@ -23,16 +26,49 @@ const ElementAccordionDisplay = ({ selected_Values, acValues }) => {
       }
     });
     let symbolobj = event.target.querySelector('.pointer-class');
+    let existH = symbolobj.innerHTML;
     const accordionButtons = document.querySelectorAll('.pointer-class');
     accordionButtons?.forEach((el) => {
-      if (el !== symbolobj) el.innerHTML = iconArr.remove_circle_outline;
+      console.log(symbolobj, el);
+      if (symbolobj && symbolobj != el)
+      {
+        if(el.innerHTML === 'remove_circle_outline') {
+          el.innerHTML = iconArr.remove_circle_outline;
+        } 
+        // else if (el.innerHTML === 'add_circle_outline') {
+        //   el.innerHTML = iconArr.add_circle_outline;
+        // } else if (el.innerHTML === 'add_circle') {
+        //   el.innerHTML = iconArr.add_circle;
+        // } 
+        else if (el.innerHTML === 'remove_circle') {
+          el.innerHTML = iconArr.remove_circle;
+        } else if (el.innerHTML === 'keyboard_arrow_down') {
+          el.innerHTML = iconArr.keyboard_arrow_down;
+        }
+        //  else {
+        //   el.innerHTML = iconArr.keyboard_arrow_up;
+        // }
+      }
+
+     // if (el !== symbolobj) el.innerHTML = iconArr.remove_circle_outline;
     });
+    console.log(existH);
     if (symbolobj) {
-      if (symbolobj.innerHTML === iconArr.remove_circle_outline) {
+      if (existH === iconArr.remove_circle_outline) {
         event.target
           .querySelector('.ac-description')
           .classList.remove('hidden');
         symbolobj.innerHTML = iconArr.add_circle_outline;
+      } else if (existH === iconArr.remove_circle) {
+        event.target
+          .querySelector('.ac-description')
+          .classList.remove('hidden');
+        symbolobj.innerHTML = iconArr.add_circle;
+      } else if (existH === iconArr.add_circle) {
+        event.target
+          .querySelector('.ac-description')
+          .classList.add('hidden');
+        symbolobj.innerHTML = iconArr.remove_circle;
       } else {
         event.target.querySelector('.ac-description').classList.add('hidden');
         symbolobj.innerHTML = iconArr.remove_circle_outline;
