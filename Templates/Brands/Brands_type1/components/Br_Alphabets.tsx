@@ -38,7 +38,7 @@ const Br_Alphabets: React.FC<_Props> = ({
   };
 
   return (
-    <section className='relative pt-[40px] pb-[40px]'>
+    <section className='relative pb-[30px]'>
       <div className='pl-[16px] pr-[16px] mx-auto container'>
         <div className='w-full flex flex-wrap'>
           <div className='lg:w-2/12 W-full pt-[40px]'>

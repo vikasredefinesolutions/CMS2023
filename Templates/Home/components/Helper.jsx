@@ -803,21 +803,18 @@ export const updateSetProperties = (element) => {
                   '<a href="' + link + '"class="inline-block group ';
                 var endTag = '/> </a>';
               }
-              console.log('!!!!!!!!!!!!!!!!!!!! Value ' + value.value);
+
               // if(imageSize == '')
               //   imageSize = 'max-w-none';
               x.querySelectorAll('#' + key)[0].className = classAlign;
               x.querySelectorAll('#' + key)[0].innerHTML =
-                '<a href="' +
-                link +
-                '" class="inline-block group ' +
+                starttag +
                 imageSize +
                 '" id="' +
                 key +
                 '_img_link"><img id="' +
                 key +
                 '_img" class="' +
-                ' ' +
                 effectClass +
                 ' ' +
                 imgClass +
@@ -827,7 +824,8 @@ export const updateSetProperties = (element) => {
                 alt +
                 '" title="' +
                 alt +
-                '" /> </a>';
+                '"' +
+                endTag;
             }
           }
         }

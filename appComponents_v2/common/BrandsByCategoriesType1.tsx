@@ -348,7 +348,7 @@ const BrandsByCategoriesType1: React.FC<_Props> = ({ brands }) => {
     }
   };
   return (
-    <section className='relative pt-[40px] pb-[40px]'>
+    <section className='relative pt-[30px] pb-[30px]'>
       <div className='overflow-x-hidden'>
         <div className='w-full'>
           <div className='mt-[12px] mb-[12px] text-center'>
@@ -391,7 +391,7 @@ const BrandsByCategoriesType1: React.FC<_Props> = ({ brands }) => {
                 })}
               </ul>
               <div className='ml-[16px] mr-[16px]'>
-                <div className='w-full text-center mx-auto max-w-6xl pt-[40px] pb-[40px]'>
+                <div className='w-full text-center mx-auto max-w-6xl pt-[30px]'>
                   <div className='panel-01 tab-content pb-[16px]'>
                     <div className='w-full'>
                       <div className='flex flex-wrap ml-[-12px] mr-[-12px] mt-[-12px] '>
@@ -454,7 +454,7 @@ const BrandsByCategoriesType1: React.FC<_Props> = ({ brands }) => {
                     </div>
                   </div>
                 </div>
-                <div className='mb-[12px] text-medium-text text-center mx-auto max-w-3xl pb-[40px]'>
+                <div className='text-medium-text text-center mx-auto max-w-3xl pb-[30px]'>
                   Jumpstart your creativity and shop by brand category. Browse
                   your favorite brands for corporate apparel and gear. From
                   company jackets, polos, custom longsleeve shirts to brand logo
@@ -464,7 +464,7 @@ const BrandsByCategoriesType1: React.FC<_Props> = ({ brands }) => {
                 </div>
               </div>
 
-              <ul className='w-full flex justify-center flex-wrap mt-[32px]'>
+              <ul className='w-full flex justify-center flex-wrap'>
                 {categories.map((cate, index) => {
                   return (
                     <li key={index} className='lg:w-1/5 w-full'>
