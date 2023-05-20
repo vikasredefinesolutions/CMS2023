@@ -28,6 +28,8 @@ export const __pagesText = {
     closeIcon: 'close',
     rightArrowIcon: 'chevron_right',
     products: 'Products',
+    PRICE: 'PRICE ',
+    MSRP: 'MSRP ',
   },
   home: {},
   ContactUs: {
@@ -208,7 +210,7 @@ export const __pagesText = {
       selectSizeAndQuantity: 'Select Size & Quantity:',
       minimumOrder: 'MINIMUM ORDER :',
       price: 'Price:',
-      MSRP: 'MSRP',
+      MSRP: 'MSRP: ',
       showMsgStartingText:
         'We reserve the right to reject orders that do not meet the',
       showMsgMiddleText: ' piece minimum per style',
