@@ -1,18 +1,24 @@
+import {
+  phonePattern1,
+  phonePattern2,
+  phonePattern3,
+  phonePattern4,
+} from '@constants/global.constant';
+import { __pagesText } from '@constants/pages.text';
+import { __ValidationText } from '@constants/validation.text';
+import { _SubmitConsultationPayload } from '@definations/requestConsultation.type';
 import getLocation from '@helpers/getLocation';
 import { TextField } from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { Form, Formik } from 'formik';
+import { SumbitRequestConsultationDetails } from '@services/product.service';
+import { ErrorMessage, Form, Formik } from 'formik';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
 import * as Yup from 'yup';
-
-import { __pagesText } from '@constants/pages.text';
-import { _SubmitConsultationPayload } from '@definations/requestConsultation.type';
-import { SumbitRequestConsultationDetails } from '@services/product.service';
 import Ecommerce_RequestSubmitted from './Ecommerce_RequestSubmitted';
 import RequestInput from './RequestInput';
 import RequestSelect from './RequestSelect';
@@ -29,13 +35,48 @@ type _RequestConsultation = {
 };
 
 const _RequestConsulationSchema = Yup.object().shape({
-  firstName: Yup.string().required('Enter your first name.'),
-  lastName: Yup.string().required('Enter your Last name.'),
-  companyName: Yup.string().required('Enter Company name.'),
-  email: Yup.string().required('Enter your email.'),
-  phone: Yup.string().required('Enter your Phone.'),
-  preferedContactMethod: Yup.string().required('Please Select Contact Method.'),
-  inHandDate: Yup.string(),
+  firstName: Yup.string()
+    .trim()
+    .required(__ValidationText.requestConsultation.firstName.required)
+    .min(__ValidationText.requestConsultation.firstName.minLength)
+    .max(__ValidationText.requestConsultation.firstName.maxLength),
+  lastName: Yup.string()
+    .trim()
+    .required(__ValidationText.requestConsultation.lastName.required)
+    .min(__ValidationText.requestConsultation.lastName.minLength)
+    .max(__ValidationText.requestConsultation.lastName.maxLength),
+  companyName: Yup.string()
+    .trim()
+    .required(__ValidationText.requestConsultation.companyName.required)
+    .min(__ValidationText.requestConsultation.companyName.minLength)
+    .max(__ValidationText.requestConsultation.companyName.maxLength),
+  email: Yup.string()
+    .trim()
+    .email(__ValidationText.requestConsultation.email.validRequest)
+    .required(__ValidationText.requestConsultation.email.required),
+  phone: Yup.string()
+    .required(__ValidationText.requestConsultation.phone.required)
+    .test(
+      'phone-test',
+      __ValidationText.signUp.storeCustomerAddress.phone.valid,
+      (value) => {
+        if (
+          phonePattern1.test(value || '') ||
+          phonePattern2.test(value || '') ||
+          phonePattern3.test(value || '') ||
+          phonePattern4.test(value || '')
+        )
+          return true;
+        return false;
+      },
+    ),
+  preferedContactMethod: Yup.string().required(
+    __ValidationText.requestConsultation.preferedContactMethod,
+  ),
+  inHandDate: Yup.date()
+    .typeError(__ValidationText.requestConsultation.inHandDate.typeError)
+    .required(__ValidationText.requestConsultation.inHandDate.required)
+    .min(new Date(), __ValidationText.requestConsultation.inHandDate.min),
   message: Yup.string(),
 });
 
@@ -225,13 +266,20 @@ const RequestConsultationForm: React.FC<{
                                 inputFormat='MM/DD/YYYY'
                                 value={values.inHandDate}
                                 onChange={(event: any) => {
-                                  setFieldValue('inHandDate', event['$d']);
+                                  event && event['$d'] !== null
+                                    ? setFieldValue('inHandDate', event['$d'])
+                                    : '';
                                 }}
                                 disableHighlightToday={true}
                                 disablePast={true}
                                 renderInput={(params) => (
                                   <TextField {...params} />
                                 )}
+                              />
+                              <ErrorMessage
+                                name={'inHandDate'}
+                                className='text-rose-500'
+                                component={'p'}
                               />
                             </LocalizationProvider>
                           </div>

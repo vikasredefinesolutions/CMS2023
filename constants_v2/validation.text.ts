@@ -34,7 +34,11 @@ export const __ValidationText = {
       minText: `Minimum ${__pagesConstant._requestConsultation.minimumDesiredQtyToSelect} quantity required.`,
       required: 'Enter desired quantity.',
     },
-    inHandDate: '',
+    inHandDate: {
+      typeError: 'In hands Date is required in mm/dd/yyyy format',
+      required: 'In hands Date is required',
+      min: 'In Hand Date Cannot be Past date',
+    },
     message: '',
     captcha: 'Captcha is not valid !',
   },
