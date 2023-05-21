@@ -23,7 +23,7 @@ const NotificationBar_Type1: React.FC = () => {
                 verified
               </span>
               <div className='text-[#ffffff] text-[14px] tracking-[1.4px] leading-[30px]'>
-                Free Logo &amp; Proof on All Orders + Free Shipping on Orders
+                Free Logo &amp; Proof on All Orders +  Orders
                 Over $4K
               </div>
             </div>

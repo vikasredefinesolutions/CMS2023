@@ -233,7 +233,7 @@ const Home = (props) => {
   const storeTypeId = useTypedSelector_v2((state) => state.store.storeTypeId);
   return (
     <>
-      {storeId === 22 &&
+      {storeId === 4 &&
       (props.props.slug === '/' || props.props.slug === '') ? (
         <>
           <DIHomePage storeId={storeId}></DIHomePage>
@@ -297,56 +297,64 @@ const Home = (props) => {
                     'container_left_padding' in componentValue.selectedVal
                   ) {
                     innerDivClass +=
-                      ' '+ componentValue.selectedVal.container_left_padding.value;
+                      ' ' +
+                      componentValue.selectedVal.container_left_padding.value;
                   }
                   if (
                     componentValue.selectedVal &&
                     'container_top_padding' in componentValue.selectedVal
                   ) {
                     innerDivClass +=
-                      ' ' + componentValue.selectedVal.container_top_padding.value;
+                      ' ' +
+                      componentValue.selectedVal.container_top_padding.value;
                   }
                   if (
                     componentValue.selectedVal &&
                     'container_right_padding' in componentValue.selectedVal
                   ) {
                     innerDivClass +=
-                      ' ' + componentValue.selectedVal.container_right_padding.value;
+                      ' ' +
+                      componentValue.selectedVal.container_right_padding.value;
                   }
                   if (
                     componentValue.selectedVal &&
                     'container_bottom_padding' in componentValue.selectedVal
                   ) {
                     innerDivClass +=
-                      ' ' +  componentValue.selectedVal.container_bottom_padding.value;
+                      ' ' +
+                      componentValue.selectedVal.container_bottom_padding.value;
                   }
                   if (
                     componentValue.selectedVal &&
                     'container_left_margin' in componentValue.selectedVal
                   ) {
                     innerDivClass +=
-                      ' ' + componentValue.selectedVal.container_left_margin.value;
+                      ' ' +
+                      componentValue.selectedVal.container_left_margin.value;
                   }
                   if (
                     componentValue.selectedVal &&
                     'container_top_margin' in componentValue.selectedVal
                   ) {
                     innerDivClass +=
-                      ' ' + componentValue.selectedVal.container_top_margin.value;
+                      ' ' +
+                      componentValue.selectedVal.container_top_margin.value;
                   }
                   if (
                     componentValue.selectedVal &&
                     'container_right_margin' in componentValue.selectedVal
                   ) {
                     innerDivClass +=
-                      ' ' + componentValue.selectedVal.container_right_margin.value;
+                      ' ' +
+                      componentValue.selectedVal.container_right_margin.value;
                   }
                   if (
                     componentValue.selectedVal &&
                     'container_bottom_margin' in componentValue.selectedVal
                   ) {
                     innerDivClass +=
-                      ' ' + componentValue.selectedVal.container_bottom_margin.value;
+                      ' ' +
+                      componentValue.selectedVal.container_bottom_margin.value;
                   }
 
                   return (
