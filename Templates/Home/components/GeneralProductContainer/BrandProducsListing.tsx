@@ -33,7 +33,7 @@ const BrandProductListing: React.FC<_props> = ({
     useState<_carouselProps>({
       sliderSettings: {
         dots: false,
-        infinite: false,
+        infinite: true,
         speed: 500,
         slidesToShow: 4,
         slidesToScroll: 1,

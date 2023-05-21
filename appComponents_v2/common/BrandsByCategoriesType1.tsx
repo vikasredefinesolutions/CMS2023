@@ -425,7 +425,7 @@ const BrandsByCategoriesType1: React.FC<_Props> = ({ brands }) => {
                             return (
                               <div
                                 key={index}
-                                className='w-full lg:w-1/4 pl-[12px] pr-[12px] mt-[12px] mb-[12px] flex'
+                                className='w-full lg:w-1/4 px-3 mt-3 mb-3'
                               >
                                 <div
                                   className={`border border-gray-border ${activeTabColor()} hover:${activeTabColor()}-hover relative font-light w-full h-full flex items-center justify-center`}
