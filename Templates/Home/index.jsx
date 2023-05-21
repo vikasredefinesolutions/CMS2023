@@ -233,7 +233,7 @@ const Home = (props) => {
   const storeTypeId = useTypedSelector_v2((state) => state.store.storeTypeId);
   return (
     <>
-      {storeId === 22 &&
+      {storeId === 4 &&
       (props.props.slug === '/' || props.props.slug === '') ? (
         <>
           <DIHomePage storeId={storeId}></DIHomePage>
