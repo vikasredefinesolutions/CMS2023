@@ -2,7 +2,7 @@ import React from 'react';
 const Br_Faq: React.FC = () => {
   return (
     <section
-      className='relative overflow-hidden pt-[80px] mt-[0px] mb-[20px] sm:h-[800px] max-h-[6400px] h-auto bg-cover'
+      className='relative overflow-hidden pt-[80px] mt-[0px] mb-[20px] sm:h-[800px] max-h-[640px] h-auto bg-cover'
       style={{
         backgroundImage: `url(/faq-bg.png)`,
         backgroundAttachment: 'fixed',
