@@ -281,9 +281,9 @@ export const updateSetProperties = (element) => {
       
       if (value.type == 'btn_letter_spacing') {
         buttonId = key.replace('_letter_spacing', '');
-        if (buttonId === 'Button') Button_className += ' ' + value.value;
-        else if (buttonId === 'Button1') Button1_className += ' ' + value.value;
-        else if (buttonId === 'Button2') Button2_className += ' ' + value.value;
+        if (buttonId === 'Button') Button_className += ' tracking-[' + value.value+']';
+        else if (buttonId === 'Button1') Button1_className += ' tracking-[' + value.value+']';
+        else if (buttonId === 'Button2') Button2_className += ' tracking-[' + value.value+']';
       }
     });
 
