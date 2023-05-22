@@ -111,8 +111,8 @@ export const numberdescriptionblock = (dataArr, selectedObj) => {
       count++;
       let hclassNameName = '';
 
-      if (selectedObj.selectedVal.Headline_final_className != undefined) {
-        hclassNameName = selectedObj.selectedVal.Headline_final_className.value;
+      if (selectedObj.selectedVal.Headline_final_class != undefined) {
+        hclassNameName = selectedObj.selectedVal.Headline_final_class.value;
       } else {
         hclassNameName = 'text-box-h4 mt-4';
       }
@@ -217,12 +217,12 @@ export const boximage = (dataArr, selectedObj) => {
         item.Button_text != '' &&
         item.Button_text != null
       ) {
-        let btnclassName = item.Button_className;
+        let btnclassName = item.Button_class;
         buttonHTML += '<div class="mt-5 mb-5 ' + item.Button_alignment + '">';
         buttonHTML +=
           '<a target="" href="' +
           item.Button_link +
-          '" className="' +
+          '" class="' +
           btnclassName +
           '">';
         buttonHTML += item.Button_text;
@@ -245,8 +245,8 @@ export const boximage = (dataArr, selectedObj) => {
       }
       let themeclassName = '';
       let fontColor = '';
-      if (selectedObj.selectedVal.Headline_final_className != undefined) {
-        themeclassName = selectedObj.selectedVal.Headline_final_className.value;
+      if (selectedObj.selectedVal.Headline_final_class != undefined) {
+        themeclassName = selectedObj.selectedVal.Headline_final_class.value;
       }
       if (selectedObj.selectedVal.Headline_font_color != undefined) {
         fontColor = selectedObj.selectedVal.Headline_font_color.value;
@@ -380,12 +380,12 @@ export const multipleImages = (dataArr, selectedObj) => {
         item.Button_text !== '' &&
         item.Button_text !== null
       ) {
-        let btnclassName = item.Button_className;
+        let btnclassName = item.Button_class;
         buttonHTML += '<div class="mt-5 mb-5 ' + item.Button_alignment + '">';
         buttonHTML +=
           '<a target="" href="' +
           item.Button_link +
-          '" className="' +
+          '" class="' +
           btnclassName +
           '">';
         buttonHTML += item.Button_text;
@@ -407,8 +407,8 @@ export const multipleImages = (dataArr, selectedObj) => {
 
       let themeclassName = '';
       let fontColor = '';
-      if (selectedObj.selectedVal.Headline_final_className != undefined) {
-        themeclassName = selectedObj.selectedVal.Headline_final_className.value;
+      if (selectedObj.selectedVal.Headline_final_class != undefined) {
+        themeclassName = selectedObj.selectedVal.Headline_final_class.value;
       }
       if (selectedObj.selectedVal.Headline_font_color != undefined) {
         fontColor = selectedObj.selectedVal.Headline_font_color.value;
