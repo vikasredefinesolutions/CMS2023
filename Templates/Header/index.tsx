@@ -1,8 +1,10 @@
+import { paths } from '@constants/paths.constant';
 import {
   _HeaderPropsWithTemplateid,
   _HeaderTemplates,
 } from '@definations/header.type';
 import { NextPage } from 'next';
+import { useRouter } from 'next/router';
 import LowerHeader from './Components/LowerHeader';
 import UpperHeader from './Components/UpperHeader';
 import Header_Type1 from './header_Type1';
@@ -29,15 +31,17 @@ const Header: NextPage<_HeaderPropsWithTemplateid> = ({
     ? (('type' + headerTemplateId) as 'type1' | 'type2' | 'type3' | 'type4')
     : 'type1';
   const HeaderTemplate = HeaderTemplates[templateTypeToShow];
-
+  const router = useRouter();
   return (
     <div
       className='sticky md:top-7 z-40 shadow-[0_0px_5px_rgba(0,0,0,0.12)]'
       id='MainHeader'
     >
-      {announcementRow && announcementRow[0]?.isVisible && (
-        <UpperHeader headerContent={announcementRow[0]} />
-      )}
+      {router.pathname !== paths.CHECKOUT &&
+        announcementRow &&
+        announcementRow[0]?.isVisible && (
+          <UpperHeader headerContent={announcementRow[0]} />
+        )}
       <HeaderTemplate
         storeCode={storeCode}
         logoUrl={logoUrl}

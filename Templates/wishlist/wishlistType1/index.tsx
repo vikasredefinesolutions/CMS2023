@@ -28,7 +28,7 @@ const WishlistType1: React.FC<_Wishlist> = ({
             key={`${list.id}`}
             className='w-full sm:w-1/2 lg:w-1/4 px-[15px]'
           >
-            <div className='border border-[#f0f0f0] text-default-text'>
+            <div className='border border-[#f0f0f0] text-default-text mb-[20px]'>
               <div className='pt-[10px] pb-[5px] flex items-center justify-center'>
                 <Link
                   key={list.productId}
@@ -54,7 +54,7 @@ const WishlistType1: React.FC<_Wishlist> = ({
                     key={list.productId}
                     href={`${origin}/${list.seName}.html?v=product-detail&altview=1`}
                   >
-                    <a className='text-anchor h-[40px] block'>
+                    <a className='text-anchor h-[40px] block overflow-hidden'>
                       {list.productName}
                     </a>
                   </Link>
@@ -76,12 +76,12 @@ const WishlistType1: React.FC<_Wishlist> = ({
                     key={list.productId}
                     href={`${origin}/${list.seName}.html?v=product-detail&altview=1`}
                   >
-                    <a className='btn btn-normal btn-secondary'>View</a>
+                    <a className='btn btn-sm btn-secondary'>View</a>
                   </Link>
 
                   <button
                     title='Remove'
-                    className='btn btn-normal btn-secondary'
+                    className='btn btn-sm btn-secondary'
                     onClick={() => removeWishlistHandler(list.id)}
                   >
                     Remove

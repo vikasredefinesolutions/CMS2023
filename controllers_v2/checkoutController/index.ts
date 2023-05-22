@@ -340,6 +340,7 @@ const CheckoutController = () => {
 
     if (totalPrice > 0) {
       if (paymentEnum.creditCard === paymentMethod) {
+        setPurchaseOrder('');
         if (
           (cardDetails &&
             Object.values(cardDetails).some((x) => x === null || x === '')) ||
@@ -356,6 +357,13 @@ const CheckoutController = () => {
           return;
         }
       } else if (paymentEnum.purchaseOrder === paymentMethod) {
+        setCardDetails({
+          cardNumber: '',
+          cardVarificationCode: '',
+          cardExpirationMonth: '',
+          cardExpirationYear: '',
+        });
+
         if (purchaseOrder.length <= 0) {
           showModal({
             message: 'Invalid Purchase Order Details',

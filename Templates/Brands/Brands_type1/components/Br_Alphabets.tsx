@@ -100,7 +100,11 @@ const Br_Alphabets: React.FC<_Props> = ({
                           <div className='mr-[20px] mb-[8px]'>
                             <Link
                               title={brand.brandName}
-                              href={`${brand.brandCollectionUrl}.html` || '/'}
+                              href={
+                                brand.brandCollectionUrl
+                                  ? `${brand.brandCollectionUrl}.html`
+                                  : `${brand.seName}.html?v=product-list` || '/'
+                              }
                             >
                               <a className='text-[18px] mb-[4px] text-anchor-hover hover:text-anchor'>
                                 {brand.brandName}
