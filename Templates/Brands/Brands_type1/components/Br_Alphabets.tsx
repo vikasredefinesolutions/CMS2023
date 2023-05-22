@@ -68,7 +68,7 @@ const Br_Alphabets: React.FC<_Props> = ({
                         highlightBrands(al);
                       }
                     }}
-                    className={`ml-[8px] mr-[8px] border-b border-b-solid border-[#ffffff] pb-[12px] inline-block font-[600] hover:text-anchor hover:border-anchor-hover ${
+                    className={` ml-[8px] mr-[8px] border-b border-b-solid border-[#ffffff] pb-[12px] inline-block font-[600] hover:text-anchor hover:border-anchor-hover ${
                       activeAlphabet ? '' : 'text-[#a7a8a9] cursor-not-allowed'
                     }`}
                   >
@@ -106,7 +106,7 @@ const Br_Alphabets: React.FC<_Props> = ({
                                   : `${brand.seName}.html?v=product-list` || '/'
                               }
                             >
-                              <a className='text-[18px] mb-[4px] text-anchor-hover hover:text-anchor'>
+                              <a className='text-[18px] mb-[4px] text-anchor-hover hover:text-anchor' title={brand.brandName}>
                                 {brand.brandName}
                               </a>
                             </Link>
