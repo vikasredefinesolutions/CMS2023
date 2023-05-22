@@ -60,12 +60,18 @@ export const getServerSideProps: GetServerSideProps = async (
             .localeCompare(b.brandName.toLowerCase());
         },
       );
-
       if (brands) {
         brands = removeDuplicates(brands);
+        brands = brands.map((brd) => {
+          const firstLetter = brd.brandName.charAt(0).toUpperCase();
+          const remainingLetter = brd.brandName.slice(1);
+          return { ...brd, brandName: firstLetter + remainingLetter };
+        });
       }
 
-      alphabets = Array.from(albhabetSet) as string[];
+      alphabets = albhabetSet?.size
+        ? (Array.from(albhabetSet) as string[])
+        : [];
     });
   }
 
