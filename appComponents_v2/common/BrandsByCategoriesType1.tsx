@@ -428,7 +428,7 @@ const BrandsByCategoriesType1: React.FC<_Props> = ({ brands }) => {
                                 className='w-full lg:w-1/4 pl-[12px] pr-[12px] mt-[12px] mb-[12px] flex'
                               >
                                 <div
-                                  className={`border border-gray-border ${activeTabColor()} hover:${activeTabColor()}-hover relative font-light w-full h-full flex items-center justify-center`}
+                                  className={`border border-gray-border ${activeTabColor()} hover:${activeTabColor()}-hover relative font-light w-full h-full flex items-center justify-center  mt-[50px] mb-[50px]`}
                                 >
                                   <div className='flex justify-center items-center brand-listing-logo cursor-pointer'>
                                     <Link
@@ -454,7 +454,7 @@ const BrandsByCategoriesType1: React.FC<_Props> = ({ brands }) => {
                     </div>
                   </div>
                 </div>
-                <div className='text-medium-text text-center mx-auto max-w-3xl pb-[30px]'>
+                <div className='text-medium-text text-center mx-auto max-w-3xl pb-[30px] pt-[50px]'>
                   Jumpstart your creativity and shop by brand category. Browse
                   your favorite brands for corporate apparel and gear. From
                   company jackets, polos, custom longsleeve shirts to brand logo
