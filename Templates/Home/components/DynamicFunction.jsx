@@ -421,7 +421,7 @@ export const multipleImages = (dataArr, selectedObj) => {
       ) {
         // if(textPos != 'top' && textPos != 'bottom' && textPos != '')
         // {
-        //   clName = 'flex relative w-full text-white';
+          clName = 'flex relative w-full text-white';
         headLine +=
           '<div class="flex absolute inset-0 p-1 lg:p-4 text-white ' +
           textHPos +
