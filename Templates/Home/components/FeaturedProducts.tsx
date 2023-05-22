@@ -25,7 +25,7 @@ const FeaturedProducts: React.FC<_props> = (props) => {
             customMessage={dataArr?.featuredproducts_custom_message?.value}
           />
         ) : (
-          <div className='relative pt-5 bg-gray-100  pb-10'>
+          <div className='relative pt-5'>
             <BrandProductListing
               showBorder={dataArr?.featuredproducts_show_border?.value}
               productsData={dataArr?.featuredproducts?.value[0]?.data}
