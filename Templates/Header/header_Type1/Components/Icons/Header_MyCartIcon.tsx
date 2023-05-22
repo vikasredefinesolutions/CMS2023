@@ -132,7 +132,7 @@ const MyCartIcon: React.FC = () => {
                 </div>
               </div>
               <div className=''>
-                <Link href={paths.CHECKOUT} className=''>
+                <Link href={paths.CART} className=''>
                   <a className='btn btn-secondary w-full text-center'>
                     {__pagesText.Headers.checkoutNow}
                   </a>

@@ -1,19 +1,37 @@
 import { __pagesText } from '@constants/pages.text';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
 import Link from 'next/link';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 interface _props {
   title: string;
   content: string;
   url: string;
+  openTab: string;
+  setOpenTab: (arg: string) => void;
 }
 
-const Custom: React.FC<_props> = ({ content, title, url }) => {
+const Custom: React.FC<_props> = ({
+  content,
+  title,
+  url,
+  openTab,
+  setOpenTab,
+}) => {
   const { view } = useTypedSelector_v2((state) => state.store);
   const { toggleSideMenu } = useActions_v2();
   const [focus, setFocus] = useState(false);
   const [showAllItems, setShowAllItems] = useState<boolean>(false);
+  const [showtab, setShowTab] = useState<boolean>(false);
+  useEffect(() => {
+    if (openTab == title) {
+      setShowTab(true);
+      setShowAllItems(true);
+    } else {
+      setShowTab(false);
+      setShowAllItems(false);
+    }
+  }, [openTab]);
 
   if (view === 'MOBILE') {
     return (
@@ -21,14 +39,17 @@ const Custom: React.FC<_props> = ({ content, title, url }) => {
         <div className='relative flex border-b border-b-gray-border items-center justify-between'>
           <button
             className='relative text-[14px] pl-[25px] mr-[5px] flex items-center pt-[15px] pb-[15px] grow'
-            onClick={() => setShowAllItems((show) => !show)}
+            onClick={() => {
+              setOpenTab(title);
+              setShowAllItems((show) => !show);
+            }}
             title={title}
           >
             <span
               className='material-icons-outlined text-[16px] font-[600] mr-[5px] absolute left-[5px] top-1/2 -translate-y-1/2'
               x-html="open1 == true ? 'remove' : 'add'"
             >
-              {showAllItems == true ? 'remove' : 'add'}
+              {showAllItems == true && showtab ? 'remove' : 'add'}
             </span>
             <div className=''>{title}</div>
           </button>
@@ -36,12 +57,12 @@ const Custom: React.FC<_props> = ({ content, title, url }) => {
             className='text-[12px] mr-[5px] underline'
             onClick={() => toggleSideMenu('CLOSE')}
           >
-            <Link href={`${url}.html`}>
-              {__pagesText.Headers.mobileViewAll}
+            <Link href={`${url}.html`} passHref>
+              <a>{__pagesText.Headers.mobileViewAll}</a>
             </Link>
           </a>
         </div>
-        {showAllItems && (
+        {showAllItems && showtab && (
           <div className='bg-gray-100'>
             <div
               className='border-t first:border-t-0 py-5 px-6'

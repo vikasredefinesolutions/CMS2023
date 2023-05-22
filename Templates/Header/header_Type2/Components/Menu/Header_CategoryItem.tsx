@@ -40,7 +40,9 @@ const Header_Category: React.FC<_props> = ({ content, title, url }) => {
             className='text-[12px] mr-[5px] underline'
             onClick={() => toggleSideMenu('CLOSE')}
           >
-            <Link href={`${url}`}>{__pagesText.Headers.mobileViewAll}</Link>
+            <Link href={`${url}`}>
+              <a>{__pagesText.Headers.mobileViewAll}</a>
+            </Link>
           </div>
           {/* </div> */}
         </div>

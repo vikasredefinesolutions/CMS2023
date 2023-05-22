@@ -1,21 +1,21 @@
 import {
-  PaymentMethod,
   checkoutPages,
+  PaymentMethod,
   paymentMethodCustom as paymentEnum,
   UserAddressType,
 } from '@constants/enum';
 import { __Cookie, __Cookie_Expiry } from '@constants/global.constant';
 import { paths } from '@constants/paths.constant';
-import { AddOrderDefault, addAddress } from '@constants/payloads/checkout';
+import { addAddress, AddOrderDefault } from '@constants/payloads/checkout';
 import { signup_payload } from '@constants/payloads/signup';
 import { commonMessage } from '@constants/successError.text';
 import { CreditCardDetailsType } from '@definations/checkout';
 import {
-  KlaviyoScriptTag,
-  TrackGTMEvent,
   deleteCookie,
   extractCookies,
+  KlaviyoScriptTag,
   setCookie,
+  TrackGTMEvent,
 } from '@helpers/common.helper';
 import getLocation from '@helpers/getLocation';
 import {
@@ -179,12 +179,20 @@ const CheckoutController = () => {
             setShowAddAddress(false);
           }
           customer.customerAddress.map((res) => {
-            if (res.addressType == UserAddressType.SHIPPINGADDRESS) {
+            if (
+              res.addressType == UserAddressType.SHIPPINGADDRESS &&
+              res.isDefault
+            ) {
+              setShippingAdress(res as AddressType);
+            } else if (res.addressType == UserAddressType.SHIPPINGADDRESS) {
               setShippingAdress(res as AddressType);
             } else if (
               res.addressType == UserAddressType.BILLINGADDRESS &&
               res.isDefault
             ) {
+              setBillingAdress(res as AddressType);
+              billAddress && setBillingAdress(billAddress);
+            } else if (res.addressType == UserAddressType.BILLINGADDRESS) {
               setBillingAdress(res as AddressType);
               billAddress && setBillingAdress(billAddress);
             }

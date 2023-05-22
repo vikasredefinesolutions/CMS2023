@@ -45,9 +45,11 @@ const Brand: React.FC<_props> = ({ url, title, content }) => {
             <span className=''>{title}</span>
           </button>
           <div className='' onClick={() => toggleSideMenu('CLOSE')}>
-            <a href={url} className='text-[12px] mr-[5px] underline'>
-              {__pagesText.Headers.mobileViewAll}
-            </a>
+            <Link href={url} passHref>
+              <a className='text-[12px] mr-[5px] underline'>
+                {__pagesText.Headers.mobileViewAll}
+              </a>
+            </Link>
             {/* </div> */}
           </div>
         </div>

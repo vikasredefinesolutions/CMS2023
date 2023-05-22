@@ -44,7 +44,8 @@ const AddressForm = (props: AddressFormRefType) => {
       FetchStatesList(obj.id).then((res) => {
         if (res) {
           setState(res);
-          setFieldValue('state', res[0]?.name);
+          !values.state && setFieldValue('state', res[0]?.name);
+          res.length == 0 && setFieldValue('state', '');
         }
       });
     }

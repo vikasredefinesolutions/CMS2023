@@ -12,6 +12,8 @@ interface _props {
   type: 'BRAND' | 'CATEGORY';
   view: 'DESKTOP' | 'MOBILE';
   itemId?: number;
+  setSubTab?: (args: string) => void;
+  Subtab?: string;
 }
 
 const SubMenuItem: React.FC<_props> = ({
@@ -20,10 +22,13 @@ const SubMenuItem: React.FC<_props> = ({
   itemUrl,
   view,
   itemId,
+  setSubTab,
+  Subtab,
 }) => {
   const [showAllItems, setShowAllItems] = useState<boolean>(false);
   const { toggleSideMenu } = useActions_v2();
   const [subCategories, setSubCategories] = useState<_MenuCategory[] | null>();
+  const [showtab, setShowTab] = useState<boolean>(false);
   const storeId = useTypedSelector_v2((state) => state.store.id);
   useEffect(() => {
     if (itemId) {
@@ -35,6 +40,15 @@ const SubMenuItem: React.FC<_props> = ({
       setSubCategories([]);
     }
   }, [itemId]);
+  useEffect(() => {
+    if (Subtab == itemLabel) {
+      setShowTab(true);
+      setShowAllItems(true);
+    } else {
+      setShowTab(false);
+      setShowAllItems(false);
+    }
+  }, [Subtab]);
 
   if (type === 'BRAND') {
     if (view === 'MOBILE') {
@@ -45,6 +59,7 @@ const SubMenuItem: React.FC<_props> = ({
         >
           <Link
             href={`/${itemUrl}`}
+            passHref
             className='text-anchor hover:text-anchor-hover '
           >
             <a
@@ -86,13 +101,16 @@ const SubMenuItem: React.FC<_props> = ({
                 title={itemLabel}
                 type='button'
                 className='relative text-[14px] pl-[25px] mr-[5px] flex items-center pt-[15px] pb-[15px] grow'
-                onClick={() => setShowAllItems((show) => !show)}
+                onClick={() => {
+                  setSubTab && setSubTab(itemLabel);
+                  setShowAllItems((show) => !show);
+                }}
               >
                 <span
                   className='material-icons-outlined text-[16px] font-[600] mr-[5px] absolute left-[5px] top-1/2 -translate-y-1/2'
                   x-html="subopen1 == true ? 'remove' : 'add'"
                 >
-                  {showAllItems == true ? 'remove' : 'add'}
+                  {showAllItems == true && Subtab ? 'remove' : 'add'}
                 </span>
                 <div className=''>{itemLabel}</div>
               </button>
@@ -106,7 +124,7 @@ const SubMenuItem: React.FC<_props> = ({
               </div>
             </div>
 
-            {showAllItems && (
+            {showAllItems && showtab && (
               <div className='text-[14px]' x-show='subopen1'>
                 <div className='relative bg-light-gray'>
                   <div className=''>
@@ -115,9 +133,11 @@ const SubMenuItem: React.FC<_props> = ({
                         return (
                           <Fragment key={`${index}_${subCat.id}`}>
                             <SubCategoryItem
+                              key={`${index}_${subCat.id}`}
                               itemLabel={subCat.categoryName}
                               type={'CATEGORY'}
                               view={'MOBILE'}
+                              sename={subCat.seName}
                             />
                           </Fragment>
                         );

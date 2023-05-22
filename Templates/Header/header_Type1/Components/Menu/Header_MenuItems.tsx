@@ -14,6 +14,8 @@ const MenuItems: React.FC<_props> = ({
   menuItems: menuItemsFromRoot,
   showSideMenu,
 }) => {
+  const [openTab, setOpenTab] = useState<string>('');
+
   const [menuItems, setMenuItems] = useState<null | _MenuItems>(null);
   useEffect(() => {
     if (menuItemsFromRoot) {
@@ -39,7 +41,6 @@ const MenuItems: React.FC<_props> = ({
               if (menu === null) {
                 return <Fragment key={index}>null</Fragment>;
               }
-
               return (
                 <Fragment key={index}>
                   <MenuItem
@@ -47,6 +48,8 @@ const MenuItems: React.FC<_props> = ({
                     type={menu.type}
                     content={menu.items}
                     url={menu.seName}
+                    openTab={openTab}
+                    setOpenTab={setOpenTab}
                   />
                 </Fragment>
               );
@@ -72,6 +75,8 @@ const MenuItems: React.FC<_props> = ({
                     type={menu.type}
                     content={menu.items}
                     url={menu.seName}
+                    openTab={openTab}
+                    setOpenTab={setOpenTab}
                   />
                 </Fragment>
               );

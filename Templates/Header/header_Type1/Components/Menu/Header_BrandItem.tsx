@@ -7,15 +7,23 @@ import SubMenuItem from '@header/header_Type1/Components/Menu/Header_SubMenuItem
 import { capitalizeFirstLetter } from '@helpers/common.helper';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
 import Link from 'next/link';
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 
 interface _props {
   url: string;
   title: string;
   content: _Brand[] | null;
+  openTab: string;
+  setOpenTab: (arg: string) => void;
 }
 
-const Brand: React.FC<_props> = ({ url, title, content }) => {
+const Brand: React.FC<_props> = ({
+  url,
+  title,
+  content,
+  openTab,
+  setOpenTab,
+}) => {
   const { toggleSideMenu } = useActions_v2();
 
   // -------------------------------------------------------------------
@@ -24,7 +32,16 @@ const Brand: React.FC<_props> = ({ url, title, content }) => {
   // -------------------------------------------------------------------
   const [focus, setFocus] = useState<boolean>(false);
   const [showAllItems, setShowAllItems] = useState<boolean>(false);
-
+  const [showtab, setShowTab] = useState<boolean>(false);
+  useEffect(() => {
+    if (openTab == title) {
+      setShowTab(true);
+      setShowAllItems(true);
+    } else {
+      setShowTab(false);
+      setShowAllItems(false);
+    }
+  }, [openTab]);
   if (view === 'MOBILE') {
     return (
       <>
@@ -37,21 +54,26 @@ const Brand: React.FC<_props> = ({ url, title, content }) => {
           >
             <span
               className='material-icons-outlined text-[16px] font-[600] mr-[5px] absolute left-[5px] top-1/2 -translate-y-1/2'
-              onClick={() => setShowAllItems((show) => !show)}
+              onClick={() => {
+                setOpenTab(title);
+                setShowAllItems((show) => !show);
+              }}
               x-html="open == true ? 'remove' : 'add'"
             >
-              {showAllItems == true ? 'remove' : 'add'}
+              {showAllItems == true && showtab ? 'remove' : 'add'}
             </span>
             <span className=''>{title}</span>
           </button>
           <div className='' onClick={() => toggleSideMenu('CLOSE')}>
-            <a href={`${url}.html`} className='text-[12px] mr-[5px] underline'>
-              {__pagesText.Headers.mobileViewAll}
-            </a>
+            <Link href={`${url}`} passHref>
+              <a className='text-[12px] mr-[5px] underline'>
+                {__pagesText.Headers.mobileViewAll}
+              </a>
+            </Link>
             {/* </div> */}
           </div>
         </div>
-        {showAllItems && (
+        {showAllItems && showtab && (
           <div className='text-[14px]' x-show='open' x-cloak>
             <div className='relative bg-light-gray'>
               <div className=''>
@@ -154,7 +176,7 @@ const Brand: React.FC<_props> = ({ url, title, content }) => {
                   <div className='flex flex-wrap'>
                     <ul className='w-full lg:w-1/3 text-[13px] pl-[20px] pr-[20px]'>
                       {content?.map((brand, index) => {
-                        if (index > content.length / 3 ) return <></>;
+                        if (index > content.length / 3) return <></>;
                         return (
                           <SubMenuItem
                             view={view}

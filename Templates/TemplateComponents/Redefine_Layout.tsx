@@ -61,6 +61,8 @@ const Layout: React.FC<_props & _StoreCache> = ({
   const [announcementRow, setAnnouncementRow] = useState<_AnnouncementRow[]>(
     [],
   );
+  const [footerData, SetFooterData] =
+    useState<_FetchStoreConfigurations | null>(null);
   const router = useRouter();
 
   const [showFooter, setshowFooter] = useState<boolean>(true);
@@ -114,6 +116,9 @@ const Layout: React.FC<_props & _StoreCache> = ({
     } else {
       setshowFooter(true);
     }
+    if (configs.footer != null) {
+      SetFooterData(configs.footer);
+    }
   }, [router.asPath]);
 
   const isbreadcrumbShow = pageMetaData?.isbreadcrumbShow;
@@ -138,7 +143,7 @@ const Layout: React.FC<_props & _StoreCache> = ({
       {(pageMetaData &&
       pageMetaData.type &&
       pageMetaData.type.toLowerCase() === 'topic'
-        ? isbreadcrumbShow
+        ? isbreadcrumbShow && isbreadcrumbShow == 'Y'
         : true) &&
         showBreadcrumb && <BreadCrumb breadCrumbid={breadCrumbTemplateId} />}
       <SuccessErrorModal />
@@ -154,7 +159,9 @@ const Layout: React.FC<_props & _StoreCache> = ({
         <div style={{ flexGrow: 1 }}>{children}</div>
       )}
 
-      {showFooter && <Footer data={configs.footer} />}
+      {showFooter && (
+        <Footer data={configs.footer ? configs.footer : footerData} />
+      )}
     </>
   );
 };
