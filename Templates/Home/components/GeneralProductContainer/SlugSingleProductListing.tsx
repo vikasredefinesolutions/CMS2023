@@ -33,15 +33,14 @@ const SlugSingleProductListing: React.FC<_props> = (props) => {
               </div>
               <div className='mt-6'>
                 <div className='mt-[4px] text-center h-[35px] cursor-pointer'>
-                  {product?.ProductBrandLogo}
+                  {product?.productBrandLogo}
                 </div>
                 <div className='text-base p-2 text-blue-700 tetx-center isinput overflow-hidden'>
                   <Link
                     key={product.productId}
                     href={`${encodeURIComponent(product.productSEName)}.html`}
-                    className='text-anchor hover:text-anchor-hover underline  text-ellipsis line-clamp-2 text-small-text bloc'
                   >
-                    <a>{product.productName}</a>
+                    <a className='h-[46px]'>{product.productName}</a>
                   </Link>
                 </div>
                 <div className='mb-2 font-semibold uppercase isinput'>
