@@ -5,7 +5,7 @@ import { _HeaderProps } from '@definations/header.type';
 import {
   useActions_v2,
   useTypedSelector_v2,
-  useWindowDimensions_v2,
+  useWindowDimensions_v2
 } from '@hooks_v2/index';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
@@ -16,7 +16,7 @@ import {
   LoginIcon,
   Logo,
   MenuIcon,
-  MyCartIcon,
+  MyCartIcon
 } from './Components/Icons';
 import Header_MenuItems from './Components/Menu/Header_MenuItems';
 import SearchBar from './Components/Menu/Header_SearchBar';
@@ -73,7 +73,7 @@ const Header_Type3: NextPage<_HeaderProps> = ({
 
         <div className='fixed z-40 lg:hidden'></div>
         <header className='relative trancking-[1px]'>
-          <nav aria-label='container mx-auto'>
+          <nav className='container mx-auto'>
             <div
               className={`${headerBgColor ? '' : 'bg-[#ffffff]'}]`}
               style={{ backgroundColor: headerBgColor }}
