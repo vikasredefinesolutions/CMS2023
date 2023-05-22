@@ -810,6 +810,39 @@ export const updateSetProperties = (element) => {
                   '<a href="' + link + '"class="inline-block group ';
                 var endTag = '/> </a>';
               }
+              if(Object.keys(element.selectedVal).includes(key+"_left_padding"))
+              {
+                Object.entries(element.selectedVal).map(([keyq, valueq]) => { if(keyq == key+"_left_padding") { classAlign += ' ' + valueq.value; } }) 
+              }
+              if(Object.keys(element.selectedVal).includes(key+"_right_padding"))
+              {
+                Object.entries(element.selectedVal).map(([keyq, valueq]) => { if(keyq == key+"_right_padding") { classAlign += ' ' + valueq.value; } }) 
+              }
+              if(Object.keys(element.selectedVal).includes(key+"_top_padding"))
+              {
+                Object.entries(element.selectedVal).map(([keyq, valueq]) => { if(keyq == key+"_top_padding") { classAlign += ' ' + valueq.value; } }) 
+              }
+              if(Object.keys(element.selectedVal).includes(key+"_bottom_padding"))
+              {
+                Object.entries(element.selectedVal).map(([keyq, valueq]) => { if(keyq == key+"_bottom_padding") { classAlign += ' ' + valueq.value; } }) 
+              }
+              if(Object.keys(element.selectedVal).includes(key+"_left_margin"))
+              {
+                Object.entries(element.selectedVal).map(([keyq, valueq]) => { if(keyq == key+"_left_margin") { classAlign += ' ' + valueq.value; } }) 
+              }
+              if(Object.keys(element.selectedVal).includes(key+"_right_margin"))
+              {
+                Object.entries(element.selectedVal).map(([keyq, valueq]) => { if(keyq == key+"_right_margin") { classAlign += ' ' + valueq.value; } }) 
+              }
+              if(Object.keys(element.selectedVal).includes(key+"_top_margin"))
+              {
+                Object.entries(element.selectedVal).map(([keyq, valueq]) => { if(keyq == key+"_top_margin") { classAlign += ' ' + valueq.value; } }) 
+              }
+              if(Object.keys(element.selectedVal).includes(key+"_bottom_margin"))
+              {
+                Object.entries(element.selectedVal).map(([keyq, valueq]) => { if(keyq == key+"_bottom_margin") { classAlign += ' ' + valueq.value; } }) 
+              }
+
               // if(imageSize == '')
               //   imageSize = 'max-w-none';
               x.querySelectorAll('#' + key)[0].className = classAlign;
