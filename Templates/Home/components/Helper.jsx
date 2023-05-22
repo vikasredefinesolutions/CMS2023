@@ -1280,8 +1280,15 @@ export const updateSetProperties = (element) => {
       if (
         element.selectedVal.ElementConfiguration_final_class.value.trim() !== ''
       )
-        x.querySelectorAll('#right-section')[0].className =
+      {
+        if(!imgDisplay)
+          x.querySelectorAll('#right-section')[0].className =
+          element.selectedVal.ElementConfiguration_final_class.value.trim() + ' w-full';
+        else
+            x.querySelectorAll('#right-section')[0].className =
           element.selectedVal.ElementConfiguration_final_class.value.trim();
+
+      }
     }
 
     if (
