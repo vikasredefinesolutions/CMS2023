@@ -127,7 +127,7 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
       >
         <div className='w-full h-full bg-[#000000] bg-opacity-[0.50] flex items-center justify-center'>
           <div className='relative px-[16px] w-full max-w-xl h-full md:h-auto'>
-            <div className='relative bg-[#ffffff] shadow max-h-screen overflow-y-auto h-full'>
+            <div className='relative bg-[#ffffff] shadow max-h-screen overflow-y-auto h-full rounded-md'>
               <div className='flex justify-between items-center p-[15px] rounded-t border-b sticky top-0 left-0 bg-[#ffffff] z-50'>
                 <div className='font-[600] text-medium-text'>
                   {__pagesText.productInfo.loginModal.signIn}
@@ -288,13 +288,16 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
                           </div>
                           <div className='mt-[10px] text-extra-small-text text-center'>
                             {__pagesText.productInfo.loginModal.clickMessage}{' '}
-                            <Link href={'terms-and-conditions.html'}>
-                              <a className='text-anchor'>
+                            <Link href={paths.TERMS_OF_USE}>
+                              <a
+                                className='text-anchor'
+                                onClick={() => modalHandler(null)}
+                              >
                                 {__pagesText.productInfo.loginModal.termsOfUse}
                               </a>
-                            </Link>
+                            </Link>{' '}
                             {__pagesText.productInfo.loginModal.and}{' '}
-                            <Link href={'privacy-policy'}>
+                            <Link href={paths.PRIVACY_POLICY}>
                               <a
                                 className='text-anchor'
                                 onClick={() => modalHandler(null)}
@@ -305,6 +308,7 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
                                 }
                               </a>
                             </Link>
+                            .
                           </div>
                         </div>
                       </>

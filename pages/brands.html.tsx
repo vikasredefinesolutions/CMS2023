@@ -46,6 +46,7 @@ export const getServerSideProps: GetServerSideProps = async (
   }
 
   if (storeId) {
+    const albhabetSet = new Set();
     await FetchBrands({ storeId: storeId }).then((result) => {
       if (!result?.brands) {
         return;
@@ -53,13 +54,10 @@ export const getServerSideProps: GetServerSideProps = async (
 
       brands = result.brands.sort(
         (a: { brandName: string }, b: { brandName: string }) => {
-          alphabets.push(a.brandName[0].toLowerCase());
-          if (a.brandName > b.brandName) {
-            return 1;
-          } else if (a.brandName < b.brandName) {
-            return -1;
-          }
-          return 0;
+          albhabetSet.add(a.brandName[0].toLowerCase());
+          return a.brandName
+            .toLowerCase()
+            .localeCompare(b.brandName.toLowerCase());
         },
       );
 
@@ -67,9 +65,7 @@ export const getServerSideProps: GetServerSideProps = async (
         brands = removeDuplicates(brands);
       }
 
-      alphabets = alphabets.filter(
-        (item, index) => alphabets.indexOf(item) === index,
-      );
+      alphabets = Array.from(albhabetSet) as string[];
     });
   }
 

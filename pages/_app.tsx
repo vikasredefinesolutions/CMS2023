@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { storeBuilderTypeId, __domain } from '@configs/page.config';
+import { __domain, storeBuilderTypeId } from '@configs/page.config';
 import * as _AppController from '@controllers/_AppController.async';
 import { TrackFile } from '@services/tracking.service';
 import App, { AppContext, AppInitialProps, AppProps } from 'next/app';
@@ -31,14 +30,14 @@ import Spinner from '@appComponents/ui/spinner';
 import { PageResponseType } from '@definations/app.type';
 import { _MenuItems } from '@definations/header.type';
 import {
+  _PropsToStoreAndGetFromCookies,
+  _templateIds,
   callConfigsAndRemainingStoreAPIsAndSetURls,
   configsToCallEveryTime,
   expectedProps,
   extractAndfillCookiesIntoProps,
   passPropsToDocumentFile,
   storeCookiesToDecreaseNoOfAPIRecalls,
-  _PropsToStoreAndGetFromCookies,
-  _templateIds,
 } from '@helpers/app.extras';
 import { FetchSbStoreConfiguration } from '@services/app.service';
 import { GetStoreCustomer } from '@services/user.service';
@@ -50,7 +49,6 @@ type AppOwnProps = {
   menuItems: _MenuItems | null;
   footerHTML: _FetchStoreConfigurations | null;
   // Husain - added any for now - 20-3-23
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   pageProps: any | null;
   sbStore: _SbStoreConfiguration | null;
   headerConfig: _FetchStoreConfigurations | null;
