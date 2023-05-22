@@ -1,5 +1,6 @@
 import NxtImage from '@appComponents/reUsable/Image';
 import { newFetauredItemResponse } from '@definations/productList.type';
+import { useTypedSelector_v2 } from '@hooks_v2/index';
 import Link from 'next/link';
 import React from 'react';
 import 'react-loading-skeleton/dist/skeleton.css';
@@ -11,6 +12,7 @@ interface _props {
 
 const SlugSingleProductListing: React.FC<_props> = (props) => {
   const { product, customMessage } = props;
+  const store = useTypedSelector_v2((state) => state.store);
 
   return (
     <>
@@ -33,7 +35,10 @@ const SlugSingleProductListing: React.FC<_props> = (props) => {
               </div>
               <div className='mt-6'>
                 <div className='mt-[4px] text-center h-[35px] cursor-pointer'>
-                  <img src={product?.productBrandLogo} alt='' />
+                  <img
+                    src={store.mediaBaseUrl + product?.productBrandLogo}
+                    alt=''
+                  />
                 </div>
                 <div className='text-base p-2 text-blue-700 tetx-center isinput overflow-hidden'>
                   <Link
