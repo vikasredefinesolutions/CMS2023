@@ -103,11 +103,9 @@ const ManageLogoType1: NextPage<_ManageLogoProps> = ({ logoList }) => {
                       </td>
                       <td className='border-b border-r border-[#ddd] p-[16px]'>
                         <div className=''>
-                          {logo.logoSize ? logo.logoSize : 'Null'}
+                          {/* {logo.logoSize ? logo.logoSize : 'Null'} */}
+                          {logo.logoSize}
                         </div>
-                      </td>
-                      <td className='border-b border-r border-[#ddd] p-[16px]'>
-                        <div className=''>{logo.productType}</div>
                       </td>
                       <td className='border-b border-r border-[#ddd] p-[16px]'>
                         <div className='overflow-hidden'>
@@ -117,6 +115,9 @@ const ManageLogoType1: NextPage<_ManageLogoProps> = ({ logoList }) => {
                             className='max-h-[100px]'
                           />{' '}
                         </div>
+                      </td>
+                      <td className='border-b border-r border-[#ddd] p-[16px]'>
+                        <div className=''>{logo.logoLocation}</div>
                       </td>
                       <td className='border-b border-r border-[#ddd] p-[16px]'>
                         {logo.status === __pagesText.ManageLogo.Waiting ? (

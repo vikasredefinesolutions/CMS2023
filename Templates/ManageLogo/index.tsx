@@ -1,8 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { LogoList } from '@definations/APIs/logo.res';
-import { useTypedSelector_v2 } from '@hooks_v2/index';
-import { getLogoDetailsList } from '@services/logo.service';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import AccountTabs from './AccountTabs';
 import ManageLogoType1 from './ManageLogoType1';
 import ManageLogoType2 from './ManageLogoType2';
@@ -12,50 +10,11 @@ const ManageLogoTemplates: _ManageLogoTemplates = {
   type1: ManageLogoType1,
   type2: ManageLogoType2,
 };
-const ManageLogo: React.FC<{ id: string }> = ({ id }) => {
-  const storeId = useTypedSelector_v2((state) => state.store.id);
-  const customerId = useTypedSelector_v2((state) => state.user.id);
-  const [logoList, setLogoList] = useState<LogoList | null>(null);
-  const [currentPage, setCurrentPage] = useState(0);
-  const pageSize = 25;
-
-  const fetchLogoDetails = async () => {
-    try {
-      if (storeId && customerId) {
-        const filter = {
-          args: {
-            pageIndex: currentPage,
-            pageSize,
-            pagingStrategy: 0,
-            sortingOptions: [],
-            filteringOptions: [],
-          },
-          customerId: customerId,
-          storeId: storeId,
-        };
-
-        await getLogoDetailsList(filter).then((res) => {
-          if (res) {
-            setLogoList(res);
-          }
-        });
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const loadMore = async () => {
-    setCurrentPage((prevState) => prevState + 1);
-  };
-
-  useEffect(() => {
-    if (storeId && customerId) {
-      fetchLogoDetails();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [storeId, customerId, currentPage]);
-
+interface _props {
+  id: string;
+  logoList: LogoList | null;
+}
+const ManageLogo: React.FC<_props> = ({ id, logoList }) => {
   const ManagelogoDeatils =
     ManageLogoTemplates[
       (`type${id}` as 'type1') || 'type2' || 'type3' || 'type4'

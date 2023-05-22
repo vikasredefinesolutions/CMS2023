@@ -77,10 +77,10 @@ const BannerType1: React.FC<_BannerComponentProps> = ({
               </div>
               <div className='w-full lg:w-1/2 text-gray-900 px-5'>
                 <div className='font-normal text-2xl-text pb-[10px]'>
-                  {banner[0].h1}
+                  <h1> {banner[0].h1}</h1>
                 </div>
                 <div className='font-normal text-sub-text pb-[5px]'>
-                  {banner[0].h2}
+                  <h2> {banner[0].h2}</h2>
                 </div>
                 <div
                   className='text-default-text font-default-text text-color-default-text'
