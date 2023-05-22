@@ -33,10 +33,7 @@ const SlugSingleProductListing: React.FC<_props> = (props) => {
               </div>
               <div className='mt-6'>
                 <div className='mt-[4px] text-center h-[35px] cursor-pointer'>
-                  <img
-                    src={product?.productBrandLogo}
-                    alt={product?.productName}
-                  />
+                  <img src={product?.productBrandLogo} alt='' />
                 </div>
                 <div className='text-base p-2 text-blue-700 tetx-center isinput overflow-hidden'>
                   <Link
