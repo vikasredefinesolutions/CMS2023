@@ -7,7 +7,9 @@ interface _props {
   dataArr: _SelectedBrands;
 }
 
-const FeaturedProducts: React.FC<_props> = ({ dataArr }) => {
+const FeaturedProducts: React.FC<_props> = (props) => {
+  const { dataArr } = props;
+
   return (
     <section className='mainsection featured_items text-center'>
       <div className='peter-millar-promotional-embroidered-clothing-nw'>

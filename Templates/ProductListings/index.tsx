@@ -51,6 +51,7 @@ const ProductListing: React.FC<_ProductListingProps & { id: string }> = ({
     setShowFilter,
     clearFilters,
     sorting,
+    clearFilterSection,
   } = ProductListController(pageData, slug, checkedFilters, pageData?.brandId);
   const Component =
     productListingTemplates[
@@ -92,6 +93,7 @@ const ProductListing: React.FC<_ProductListingProps & { id: string }> = ({
       seType={seType}
       brandId={pageData?.brandId}
       sortingType={sorting}
+      clearFilterSection={clearFilterSection}
     />
   );
 };

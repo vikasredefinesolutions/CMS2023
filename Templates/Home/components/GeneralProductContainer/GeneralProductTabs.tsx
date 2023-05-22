@@ -1,5 +1,4 @@
 // ** React Imports
-import { useTypedSelector_v2 } from '@hooks_v2/index';
 import React, { Fragment, useEffect, useState } from 'react';
 
 // ** MUI Imports
@@ -11,8 +10,6 @@ import MuiTab from '@mui/material/Tab';
 import { styled } from '@mui/material/styles';
 import { _SelectedTab } from '@templates/ProductDetails/productDetailsTypes/storeDetails.res';
 import BrandProductListing from './BrandProducsListing';
-
-// import BrandProductListing from './BrandProducsListing';
 
 interface _props {
   data: _SelectedTab[];
@@ -30,17 +27,11 @@ const Tab = styled(MuiTab)(({ theme }) => ({
   },
 }));
 
-const ProductsInfoTabs: React.FC<_props> = ({
-  data,
-  showBorder,
-  customMessage,
-}) => {
+const ProductsInfoTabs: React.FC<_props> = (props) => {
+  const { data, showBorder, customMessage } = props;
+
   // ** State
   const [value, setValue] = useState<string>(data[0]?.index);
-
-  // ** redux
-  const storeId = useTypedSelector_v2((state) => state.store.id);
-  const cacheData = useTypedSelector_v2((state) => state?.cache.cacheData);
   const [featuredProducts, setFeaturedProducts] = useState<
     _SelectedTab[] | null
   >(null);
@@ -80,6 +71,7 @@ const ProductsInfoTabs: React.FC<_props> = ({
             })}
         </TabList>
       </div>
+
       <Box sx={{ marginTop: 0 }}>
         {featuredProducts &&
           featuredProducts.map((product: any, index: number) => {

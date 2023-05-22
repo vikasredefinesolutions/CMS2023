@@ -18,15 +18,16 @@ const SideFilter = ({
   filters,
   handleChange,
   checkedFilters,
+  clearFilterSection,
 }: {
   filters: FilterType;
   handleChange: FilterChangeHandler;
   checkedFilters: Array<_CheckedFilter>;
+  clearFilterSection: (value: string) => void;
 }) => {
   const router = useRouter();
   const [openFilters, setOpenFilters] = useState<boolean>(false);
   let route = router.asPath.split('.')[0].replace('.html', '').replace('/', '');
-
   return (
     <div>
       <div
@@ -66,7 +67,7 @@ const SideFilter = ({
                           }
                           aria-controls='panel1a-content'
                           id='panel1a-header'
-                          className='flex items-center justify-between w-full h-5 group !mb-[10] min-h-[auto]'
+                          className='flex items-center justify-between w-full h-5 group !mb-[10px] min-h-[auto]'
                         >
                           <div className='text-medium-text font-semibold text-[#000000] block uppercase'>
                             {filter.label === 'Color' || filter.label === 'Size'
@@ -236,12 +237,23 @@ const SideFilter = ({
         </div>
       )}
       <div className='hidden lg:block'>
-        <div className={'pt-[16px] pb-[16px] bg-light-gray'}>
+        <div className={'pt-[16px] pb-[16px] bg-light-gray '}>
           <div className={'mt-[0px] filter-box filter-type'}>
             <div>
               {filters &&
                 filters.map((filter, index) => (
-                  <div key={index} className={'pt-[16px] first:pt-[0px]'}>
+                  <div
+                    key={index}
+                    className={'mt-[16px] first:mt-[0px] relative'}
+                  >
+                    <a
+                      href='javascript:void(0);'
+                      className='absolute z-10 p-[7px] top-4 right-10 text-[12px] text-anchor hover:text-anchor-hover'
+                      onClick={() => clearFilterSection(filter.label)}
+                    >
+                      {' '}
+                      RESET
+                    </a>
                     <Accordion
                       defaultExpanded={true}
                       style={{
@@ -268,6 +280,7 @@ const SideFilter = ({
                             : filter.label}
                         </div>
                       </AccordionSummary>
+
                       <AccordionDetails className='text-[15px] tracking-[.1em]'>
                         <ul
                           className={

@@ -30,6 +30,7 @@ export interface _ListingProps {
   seType: string;
   brandId: number | null;
   sortingType?: number;
+  clearFilterSection: (value: string) => void;
 }
 
 export interface _PageData {

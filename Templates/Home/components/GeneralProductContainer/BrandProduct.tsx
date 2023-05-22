@@ -25,20 +25,28 @@ let mediaBaseUrl = _globalStore.blobUrl;
 
 const BrandProduct: React.FC<_props> = (props) => {
   const { product, colorChangeHandler, style } = props;
+
   const { currentProduct, origin, setCurrentProduct } = ProductBoxController({
     product,
     colorChangeHandler,
   });
+
+  // state
   const [mainImageUrl, setMainImageUrl] = useState<string>('');
+
+  // redux
   const store = useTypedSelector_v2((state) => state.store);
-  mediaBaseUrl = mediaBaseUrl || store.mediaBaseUrl;
   const customerId = useTypedSelector_v2((state) => state.user.id);
-  let flag: boolean = false;
+
   useEffect(() => {
     if (currentProduct && currentProduct?.imageUrl) {
       setMainImageUrl(currentProduct.imageUrl);
     }
   }, []);
+
+  let flag: boolean = false;
+  mediaBaseUrl = mediaBaseUrl || store.mediaBaseUrl;
+
   return (
     <li
       className={`w-full ${

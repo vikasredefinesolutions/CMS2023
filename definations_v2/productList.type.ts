@@ -163,6 +163,7 @@ export interface GetProductImageOptionList {
 
 export interface newFetauredItemResponse {
   productId: number;
+  ProductBrandLogo: string;
   productName: string;
   productSEName: string;
   ourCost: number;

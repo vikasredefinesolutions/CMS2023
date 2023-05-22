@@ -3,6 +3,7 @@
 import { __length, __messages } from '@constants/form.config';
 import { __Cookie, __Cookie_Expiry } from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
+import { __SuccessErrorText } from '@constants/successError.text';
 import { fetchCartDetails } from '@redux/asyncActions/cart.async';
 import { updateCartByNewUserId } from '@services/cart.service';
 import { fetchThirdpartyservice } from '@services/thirdparty.service';
@@ -61,7 +62,7 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
     })
       .then((user) => {
         if (user.credentials === 'INVALID') {
-          setErrorMsg(user.message);
+          setErrorMsg(__SuccessErrorText.invalidCrendentials);
         }
         if (user.credentials === 'VALID') {
           modalHandler(null);

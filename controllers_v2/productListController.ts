@@ -143,6 +143,12 @@ const ProductListController = (
     updateFilter(newArray);
   };
 
+  const clearFilterSection = (name: string) => {
+    const modifiedFilters = filterOption.filter((opt) => opt.name !== name);
+    setFilterOption(modifiedFilters);
+    updateFilter(modifiedFilters);
+  };
+
   const colorChangeHandler = (
     productId: number | undefined,
     seName: string | undefined,
@@ -239,6 +245,7 @@ const ProductListController = (
     setShowFilter,
     clearFilters,
     sorting,
+    clearFilterSection,
   };
 };
 

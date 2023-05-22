@@ -11,6 +11,7 @@ export const __SuccessErrorText = {
     valid: 'Coupon Code Successfully Updated!',
     invalid: `Enter a valid Promo code.`,
   },
+  invalidCrendentials: 'The username or password is incorrect.',
 };
 
 export const commonMessage = {

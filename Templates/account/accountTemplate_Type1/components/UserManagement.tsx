@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import AddUserModal from '@appComponents/modals/addUserModal';
+import { __pagesConstant } from '@constants/pages.constant';
 import {
   CommanMessage,
   UserManagement as UserMessage,
@@ -20,6 +21,7 @@ import {
   CustomerAddResponse,
   CustomerUsersObject,
 } from '@services/responses/customerUser';
+import moment from 'moment';
 import { useEffect, useState } from 'react';
 
 export type User = {
@@ -173,7 +175,10 @@ const UserManagement = () => {
                     <div className='w-full lg:w-1/3'>
                       Created on:{' '}
                       {customer && customer.createdDate
-                        ? new Date(customer.createdDate).toLocaleDateString()
+                        ? moment(customer.createdDate).format(
+                            __pagesConstant._myAccount.userManagement
+                              .dateFormat,
+                          )
                         : '-'}
                     </div>
                     <div className='w-full lg:w-1/3'>
@@ -187,7 +192,10 @@ const UserManagement = () => {
                   <div className='flex flex-wrap'>
                     <div className='w-full lg:w-1/3'>{customer?.email}</div>
                     <div className='w-full lg:w-1/3'>
-                      Last log on: {new Date().toLocaleDateString()}
+                      Last log on:{' '}
+                      {moment().format(
+                        __pagesConstant._myAccount.userManagement.dateFormat,
+                      )}
                     </div>
                     <div className='w-full lg:w-1/3'>
                       <button onClick={logoutHandler}>Logout</button>
@@ -227,7 +235,10 @@ const UserManagement = () => {
                             {user.email}
                           </td>
                           <td className='border-b border-r border-gray-border px-[12px] py-[12px]'>
-                            {new Date(user.createdDate).toLocaleDateString()}
+                            {moment(user.createdDate).format(
+                              __pagesConstant._myAccount.userManagement
+                                .dateFormat,
+                            )}
                           </td>
                           <td className='border-b border-r border-gray-border px-[12px] py-[12px]'>
                             <div className='flex flex-wrap gap-x-0 md:gap-x-4'>

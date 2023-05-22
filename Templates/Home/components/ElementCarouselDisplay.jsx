@@ -253,7 +253,7 @@ const ElementCarouselDisplay = ({ bannerArr }) => {
           showArrows={showArrow}
           showIndicators={showIndicators}
           showThumbs={false}
-          animationHandler='fade'
+          //animationHandler='fade'
           transitionTime='700'
         >
           {bannerArr.images.map((image) => {
@@ -350,7 +350,7 @@ const ElementCarouselDisplay = ({ bannerArr }) => {
                       {image.button_display == 'Yes' && (
                         <>
                           <div
-                            className={`pt-5 ${image?.button_text_alignment}`}
+                            className={`pt-0 lg:pt-5 ${image?.button_text_alignment}`}
                             title={image.button_text}
                           >
                             <a

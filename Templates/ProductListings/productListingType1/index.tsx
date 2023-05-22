@@ -33,6 +33,7 @@ const ProductListingType1: React.FC<_ListingProps> = ({
   seType,
   brandId,
   sortingType,
+  clearFilterSection,
 }) => {
   return (
     <>
@@ -52,6 +53,7 @@ const ProductListingType1: React.FC<_ListingProps> = ({
                 <div className={'w-full lg:w-3/12 pl-[16px] pr-[16px]'}>
                   {filters.length > 0 && (
                     <SideFilter
+                      clearFilterSection={clearFilterSection}
                       filters={filters}
                       handleChange={handleChange}
                       checkedFilters={checkedFilters}

@@ -25,12 +25,12 @@ const InfoButton: React.FC<_props> = () => {
                 Your password must have :
               </span>
               <span className='w-full pt-1 pb-1 block'>
-                8 Or more character
+                6 Or more character
               </span>
-              <span className='w-full pt-1 pb-1 block'>
+              {/* <span className='w-full pt-1 pb-1 block'>
                 Upper and lowercase letters
               </span>
-              <span className='w-full pt-1 pb-1 block'>At list one number</span>
+              <span className='w-full pt-1 pb-1 block'>At list one number</span> */}
             </div>
           </div>
         </div>

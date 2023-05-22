@@ -94,6 +94,9 @@ export const __pagesConstant = {
       dateFormat: 'DD-MM-YYYY',
       dFormat: 'DD/MM/YYYY',
     },
+    userManagement: {
+      dateFormat: 'MM/DD/YYYY',
+    },
   },
   checkoutPage: {
     orderStatus: 'new',

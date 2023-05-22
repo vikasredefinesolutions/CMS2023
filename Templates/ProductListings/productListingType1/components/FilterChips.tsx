@@ -16,13 +16,13 @@ const FilterChips = ({
 }) => {
   return checkedFilters.length > 0 ? (
     <div className='mt-4 flex gap-2 text-sm leading-none items-center pl-2'>
-      <div className='font-semibold whitespace-nowrap mt-1.5'>Filters :</div>
+      <div className='font-semibold whitespace-nowrap'>Filters :</div>
       <div className=''>
         <ul className='flex flex-wrap gap-2'>
           {checkedFilters.map((filter, index) => (
-            <li key={index} className=''>
+            <li key={index} className='rounded-md overflow-hidden'>
               <a
-                className='btn btn-sm btn-primary !inline-flex items-center !rounded-md gap-x-1 !py-0.5 !text-sm'
+                className='btn-sm btn-primary !inline-flex items-center !rounded-md gap-x-1 !py-0.5 !text-sm'
                 href='javascript:void(0);'
               >
                 <span>{capitalizeFirstLetter(filter.value)}</span>
@@ -38,7 +38,7 @@ const FilterChips = ({
           ))}
         </ul>
       </div>
-      <div className='whitespace-nowrap mt-1.5'>
+      <div className='whitespace-nowrap'>
         <button onClick={clearFilters} className='inline-block font-semibold'>
           {__pagesText.productListing.clearAllButton}
         </button>

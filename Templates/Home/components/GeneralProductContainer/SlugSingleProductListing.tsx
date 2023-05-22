@@ -9,10 +9,9 @@ interface _props {
   customMessage: string;
 }
 
-const SlugSingleProductListing: React.FC<_props> = ({
-  product,
-  customMessage,
-}) => {
+const SlugSingleProductListing: React.FC<_props> = (props) => {
+  const { product, customMessage } = props;
+
   return (
     <>
       <div key={product?.productId} className='slide-item'>
@@ -33,40 +32,46 @@ const SlugSingleProductListing: React.FC<_props> = ({
                 </Link>
               </div>
               <div className='mt-6'>
+                <div className='mt-[4px] text-center h-[35px] cursor-pointer'>
+                  {product?.ProductBrandLogo}
+                </div>
                 <div className='text-base p-2 text-blue-700 tetx-center isinput overflow-hidden'>
                   <Link
                     key={product.productId}
                     href={`${encodeURIComponent(product.productSEName)}.html`}
                     className='text-anchor hover:text-anchor-hover underline  text-ellipsis line-clamp-2 text-small-text bloc'
                   >
-                    {product.productName}
+                    <a>{product.productName}</a>
                   </Link>
                 </div>
                 <div className='mb-2 font-semibold uppercase isinput'>
                   {customMessage ?? 'No Custom Message'}
                 </div>
-                <a
-                  style={{
-                    marginTop: '1.5rem',
-                    backgroundColor: '#ffa400',
-                    color: '#000',
-                  }}
-                  target=''
-                  className='btn-lg btn btn-secondary rounded-0 hrefurl changebtn isinput'
-                  data-nofollow='N'
-                  data-acsb-clickable='true'
-                  data-acsb-navigable='true'
-                  data-acsb-now-navigable='true'
+                <Link
+                  href={`${encodeURIComponent(product.productSEName)}.html`}
                 >
-                  <span
-                    className='acsb-sr-only'
-                    data-acsb-sr-only='true'
-                    data-acsb-force-visible='true'
-                    aria-hidden='false'
-                    data-acsb-hidden='false'
-                  ></span>
-                  DETAILS
-                </a>
+                  <a
+                    style={{
+                      marginTop: '1.5rem',
+                      backgroundColor: '#ffa400',
+                      color: '#000',
+                    }}
+                    className='btn-lg btn btn-secondary rounded-0 hrefurl changebtn isinput'
+                    data-nofollow='N'
+                    data-acsb-clickable='true'
+                    data-acsb-navigable='true'
+                    data-acsb-now-navigable='true'
+                  >
+                    <span
+                      className='acsb-sr-only'
+                      data-acsb-sr-only='true'
+                      data-acsb-force-visible='true'
+                      aria-hidden='false'
+                      data-acsb-hidden='false'
+                    ></span>
+                    DETAILS
+                  </a>
+                </Link>
               </div>
             </div>
           </div>

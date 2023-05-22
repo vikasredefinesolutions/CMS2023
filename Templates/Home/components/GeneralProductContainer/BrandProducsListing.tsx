@@ -24,23 +24,23 @@ interface _carouselProps {
   carouselCounter: number;
 }
 
-const BrandProductListing: React.FC<_props> = ({
-  productsData,
-  showBorder,
-  customMessage,
-}) => {
+const BrandProductListing: React.FC<_props> = (props) => {
+  const { productsData, showBorder, customMessage } = props;
+
+  const Settings = {
+    sliderSettings: {
+      dots: false,
+      infinite: true,
+      speed: 500,
+      slidesToShow: 4,
+      slidesToScroll: 1,
+      arrows: false,
+    },
+    carouselCounter: 4,
+  };
+
   const [featuredProductCarouselSetting, setFeaturedProductCarouselSetting] =
-    useState<_carouselProps>({
-      sliderSettings: {
-        dots: false,
-        infinite: true,
-        speed: 500,
-        slidesToShow: 4,
-        slidesToScroll: 1,
-        arrows: false,
-      },
-      carouselCounter: 4,
-    });
+    useState<_carouselProps>(Settings);
 
   const { width } = useWindowDimensions_v2();
 
@@ -79,6 +79,26 @@ const BrandProductListing: React.FC<_props> = ({
       });
     }
   }, [width]);
+
+  useEffect(() => {
+    if (productsData.length < 4) {
+      setFeaturedProductCarouselSetting({
+        sliderSettings: {
+          ...featuredProductCarouselSetting?.sliderSettings,
+          infinite: false,
+        },
+        carouselCounter: featuredProductCarouselSetting?.carouselCounter,
+      });
+    } else {
+      setFeaturedProductCarouselSetting({
+        sliderSettings: {
+          ...featuredProductCarouselSetting?.sliderSettings,
+          infinite: true,
+        },
+        carouselCounter: featuredProductCarouselSetting?.carouselCounter,
+      });
+    }
+  }, [productsData]);
 
   const sliderRef = useRef<null | Slider>(null);
 
@@ -120,7 +140,7 @@ const BrandProductListing: React.FC<_props> = ({
                   ref={(c) => (sliderRef.current = c)}
                   {...featuredProductCarouselSetting.sliderSettings}
                 >
-                  {productsData.map((product) => {
+                  {productsData?.map((product) => {
                     return (
                       <>
                         {showBorder == __pagesConstant?.showBorder?.Yes ? (
@@ -141,7 +161,7 @@ const BrandProductListing: React.FC<_props> = ({
                 </Slider>
                 <div
                   className={`${
-                    productsData.length >
+                    productsData?.length >
                     featuredProductCarouselSetting?.carouselCounter
                       ? 'absolute'
                       : 'hidden'
