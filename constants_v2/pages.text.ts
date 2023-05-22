@@ -185,7 +185,7 @@ export const __pagesText = {
         'with a link to reset your password. It may take a few minutes to arrive. If you dont see it in your inbox, please check your spam folder.',
     },
     loginModal: {
-      signIn: 'SIGN IN',
+      signIn: 'Sign In',
       shopNow: 'SHOP NOW',
       keepMeLoggedIn: 'Keep me logged in',
       infoButton: {

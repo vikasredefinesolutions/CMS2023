@@ -47,10 +47,10 @@ const ForgotModal: React.FC<_ModalProps> = ({ modalHandler }) => {
         className='overflow-y-auto overflow-x-hidden fixed z-50 justify-center items-center h-modal inset-0 text-default-text'
       >
         <div className='w-full h-full bg-[#000000] bg-opacity-[0.50] flex items-center justify-center'>
-          <div className='relative px-[16px] w-full max-w-4xl h-full md:h-auto'>
-            <div className='relative bg-[#ffffff] shadow max-h-screen overflow-y-auto h-full'>
-              <div className='flex justify-between items-start p-[25px] rounded-t border-b sticky top-0 left-0 bg-[#ffffff] z-50'>
-                <div className='font-[600] text-large-text'>
+          <div className='relative px-[16px] w-full max-w-xl h-full md:h-auto'>
+            <div className='relative bg-[#ffffff] shadow max-h-screen overflow-y-auto h-full rounded-md'>
+              <div className='flex justify-between items-start p-[15px] rounded-t border-b sticky top-0 left-0 bg-[#ffffff] z-50'>
+                <div className='font-[600] text-medium-text leading-[20px] pt-[10px]'>
                   {__pagesText.productInfo.forgotModal.forgotPassword}
                 </div>
 
@@ -84,7 +84,7 @@ const ForgotModal: React.FC<_ModalProps> = ({ modalHandler }) => {
               </div>
 
               <div className='p-[25px]'>
-                <div className='mb-[10px] medium-text text-center uppercase'>
+                <div className='mb-[10px] font-[700] text-lg text-center uppercase'>
                   {__pagesText.productInfo.forgotModal.forgotPassword}
                 </div>
 
@@ -127,7 +127,7 @@ const ForgotModal: React.FC<_ModalProps> = ({ modalHandler }) => {
                   ) : (
                     <div className=''>
                       <button
-                        className='btn btn-xl btn-secondary w-full'
+                        className='btn btn-md btn-secondary w-full'
                         onClick={() => forgotPassword(Email)}
                       >
                         {__pagesText.productInfo.forgotModal.forgotPassword}{' '}

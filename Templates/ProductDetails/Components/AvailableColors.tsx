@@ -55,7 +55,7 @@ const AvailableColors: React.FC = () => {
               onClick={() => handleChooseColor(product)}
             >
               <div
-                className={`w-[80px] h-[80px] mx-auto border-2 border-secondary hover:border-secondary mb-[6px] cursor-pointer ${highlight}`}
+                className={`w-[80px] h-[80px] mx-auto border-2 hover:border-secondary mb-[6px] cursor-pointer ${highlight}`}
               >
                 <Image
                   title={`${product.name}`}
