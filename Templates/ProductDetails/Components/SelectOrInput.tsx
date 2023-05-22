@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { __pagesConstant } from '@constants/pages.constant';
 import { __pagesText } from '@constants/pages.text';
 import { __ValidationText } from '@constants/validation.text';
@@ -231,21 +230,20 @@ const SelectOrInput: React.FC<_SelectOrInputProps> = ({
                   <input
                     type='number'
                     name='itemCount'
-                    
                     min={0}
-                    defaultValue={''}
                     max={isEmployeeLoggedIn ? '' : qty}
-                    // value={Math.ceil(values.itemCount)}
-                    onFocus={() =>
+                    value={values.itemCount ? Math.ceil(values.itemCount) : ''}
+                    onBlur={(e) =>
                       setInputOrSelect((state) => ({
                         ...state,
+                        choosedValue: parseInt(e.target.value),
                         focus: true,
                       }))
                     }
                     onChange={handleChange}
                     className='block w-full border border-gray-600 shadow-sm py-1 px-2 text-default-text max-w-[100px]'
                   />
-                  {inputOrSelect.focus && (
+                  {inputOrSelect.focus && values.itemCount <= qty && (
                     <>
                       <button
                         type='submit'
@@ -278,6 +276,11 @@ const SelectOrInput: React.FC<_SelectOrInputProps> = ({
                         }
                       </button>
                     </>
+                  )}
+                  {values.itemCount > qty && inputOrSelect.focus && (
+                    <span className='text-rose-500 text-sm'>
+                      Only {qty} Available!
+                    </span>
                   )}
                 </div>
               </Form>
