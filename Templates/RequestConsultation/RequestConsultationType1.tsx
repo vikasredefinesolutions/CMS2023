@@ -62,7 +62,7 @@ const RequestConsultationType1: React.FC<_RequestConsultationProps> = ({
                       title={details.name}
                     />
                   </div>
-                  <div className=''>
+                  <div className='pt-[10px]'>
                     <button
                       className='text-medium-text font-bold'
                       onClick={() => router.back()}
