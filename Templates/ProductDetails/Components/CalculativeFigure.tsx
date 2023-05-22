@@ -9,6 +9,7 @@ const CalculativeFigure: React.FC = () => {
     totalQty,
     price,
     logo,
+    firstLogoPrice,
     additionalLogoCharge,
     additionalSewOutCharges,
   } = useTypedSelector_v2((state) => state.product.toCheckout);
@@ -47,11 +48,7 @@ const CalculativeFigure: React.FC = () => {
           </span>
           <span className='font-[600] text-sub-text'>
             {' '}
-            {`${
-              logo.price?.length && logo.price[0] !== 'FREE'
-                ? `$${logo.price[0]}`
-                : 'FREE'
-            }`}
+            {`${firstLogoPrice === 0 ? 'FREE' : `$${firstLogoPrice}`}`}
           </span>
         </div>
         <div className='py-[7px]'>

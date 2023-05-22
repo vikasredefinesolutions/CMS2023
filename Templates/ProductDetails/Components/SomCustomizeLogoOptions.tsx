@@ -12,16 +12,41 @@ import NextLogoButton from './NextLogoButton';
 import SomLogoOption from './SomLogoOption';
 import { logoDetailsAr } from './productDetailsComponents';
 
+interface logocharges {
+  isFirstLogoFree: boolean;
+  isLogoSetupCharges: boolean;
+  logoSetupCharges: number;
+  isLinepersonalization: boolean;
+  firstLineCharges: number;
+  secondLineCharges: number;
+  isSmallRun: boolean;
+  smallRunLimit: number;
+  smallRunFeesCharges: number;
+  productId: number;
+}
+
 const SomCustomizeLogoOptions: React.FC<{
   editDetails: _CI_ShoppingCartLogoPersonViewModel[] | undefined;
   totalQty: number;
 }> = ({ editDetails, totalQty }) => {
-  const { product_updateLogoDetails } = useActions_v2();
+  const { product_updateLogoDetails, product_updateFirstLogoPrice } =
+    useActions_v2();
   const { getDetailsLogo } = LogoSetterToStore();
   const { som_logos } = useTypedSelector_v2((state) => state.product);
 
   const [nowOrLater, setNowOrLater] = useState<'later' | 'now'>('later');
-  const [firstLogoFree, setFirstLogoFree] = useState<Boolean>(true);
+  const [logoCharges, setLogoCharges] = useState<logocharges>({
+    isFirstLogoFree: false,
+    isLogoSetupCharges: false,
+    logoSetupCharges: 0,
+    isLinepersonalization: false,
+    firstLineCharges: 0,
+    secondLineCharges: 0,
+    isSmallRun: false,
+    smallRunLimit: 0,
+    smallRunFeesCharges: 0,
+    productId: 0,
+  });
   const { currency } = useTypedSelector_v2((state) => state.store);
   const [logoLocation, setLogoLocation] = useState<_LogoLocationDetail[] | []>(
     [],
@@ -35,7 +60,23 @@ const SomCustomizeLogoOptions: React.FC<{
     if (id) {
       FetchLogoLocationByProductId({ productId: id }).then((res) => {
         if (res) {
-          setFirstLogoFree(res?.isFirstLogoFree);
+          setLogoCharges({
+            isFirstLogoFree: res.isFirstLogoFree,
+            isLogoSetupCharges: res.isLogoSetupCharges,
+            logoSetupCharges: res.logoSetupCharges,
+            isLinepersonalization: res.isLinepersonalization,
+            firstLineCharges: res.firstLineCharges,
+            secondLineCharges: res.secondLineCharges,
+            isSmallRun: res.isSmallRun,
+            smallRunLimit: res.smallRunLimit,
+            smallRunFeesCharges: res.smallRunFeesCharges,
+            productId: res.productId,
+          });
+
+          product_updateFirstLogoPrice({
+            firstLogoPrice: res.isFirstLogoFree ? 0 : res.logoSetupCharges,
+          });
+
           res?.subRow && res?.subRow?.length > 0
             ? setLogoLocation(res?.subRow)
             : setLogoLocation(logoPositions);
@@ -171,10 +212,11 @@ const SomCustomizeLogoOptions: React.FC<{
                                 index={index}
                                 textIndex={values.logos.length}
                                 price={
-                                  firstLogoFree && index === 0
+                                  logoCharges.isFirstLogoFree && index === 0
                                     ? 'FREE'
-                                    : logoLocation[index]
-                                    ? logoLocation[index].price
+                                    : logoCharges.isLogoSetupCharges &&
+                                      logoCharges.logoSetupCharges
+                                    ? logoCharges.logoSetupCharges
                                     : 0
                                 }
                                 onRemove={() => {
@@ -191,11 +233,12 @@ const SomCustomizeLogoOptions: React.FC<{
                                 title={`${numberToOrdinalString(
                                   index + 1,
                                 )} Logo (${
-                                  firstLogoFree && index === 0
+                                  logoCharges.isFirstLogoFree && index === 0
                                     ? 'FREE'
                                     : showPrice(
-                                        logoLocation[index]
-                                          ? logoLocation[index].price
+                                        logoCharges.isLogoSetupCharges &&
+                                          logoCharges.logoSetupCharges
+                                          ? logoCharges.logoSetupCharges
                                           : 0,
                                       )
                                 })`}
@@ -217,7 +260,13 @@ const SomCustomizeLogoOptions: React.FC<{
                                     ),
                                     value: values.logos.length + 1,
                                     price:
-                                      values.logos.length === 0 ? 'FREE' : 0,
+                                      values.logos.length === 0 &&
+                                      logoCharges.isFirstLogoFree
+                                        ? 'FREE'
+                                        : logoCharges.isLogoSetupCharges &&
+                                          logoCharges.logoSetupCharges
+                                        ? logoCharges.logoSetupCharges
+                                        : 0,
                                   }}
                                   arrayHelpers={arrayHelpers}
                                 />

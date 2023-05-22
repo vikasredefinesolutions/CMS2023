@@ -13,8 +13,8 @@ export const CustomizationPrice = (billing: _MyAcc_OrderBillingDetails) => {
   }
 
   return (
-    <>
-      <div className='text-lg font-medium border-t border-gray-200 pt-2'>
+    <div className='px-4'>
+      <div className=' font-semibold border-t border-gray-200 pt-2'>
         Customizations Price
       </div>
       {logoTotal > 0 && (
@@ -39,7 +39,7 @@ export const CustomizationPrice = (billing: _MyAcc_OrderBillingDetails) => {
           <Price value={customizationTotal} />
         </dd>
       </div>
-    </>
+    </div>
   );
 };
 
@@ -65,8 +65,8 @@ export const TotalSavings = (billing: _MyAcc_OrderBillingDetails) => {
   }
 
   return (
-    <>
-      <div className='text-lg font-medium border-t border-gray-200 pt-2'>
+    <div className='px-4'>
+      <div className='font-semibold border-t border-gray-200 pt-2'>
         Total Saving
       </div>
       {shipPromotionDiscount > 0 && (
@@ -116,7 +116,7 @@ export const TotalSavings = (billing: _MyAcc_OrderBillingDetails) => {
           <Price value={totalSavings} />
         </dd>
       </div>
-    </>
+    </div>
   );
 };
 
@@ -134,8 +134,8 @@ export const ShippingEstimationPrice = (
   }
 
   return (
-    <>
-      <div className='text-lg font-medium border-t border-gray-200 pt-2'>
+    <div className='px-4'>
+      <div className='font-semibold border-t border-gray-200 pt-2'>
         Estimated Shipping
       </div>
       {orderShippingCosts > 0 && (
@@ -176,7 +176,7 @@ export const ShippingEstimationPrice = (
           </dd>
         </div>
       )}
-    </>
+    </div>
   );
 };
 
@@ -194,8 +194,8 @@ export const AdditionalCosts = (billing: _MyAcc_OrderBillingDetails) => {
   }
 
   return (
-    <>
-      <div className='text-lg font-medium border-t border-gray-200 pt-2'>
+    <div className='px-4'>
+      <div className='font-semibold border-t border-gray-200 pt-2'>
         Additional Services
       </div>
       {sewOutTotal > 0 && (
@@ -242,7 +242,7 @@ export const AdditionalCosts = (billing: _MyAcc_OrderBillingDetails) => {
         </div>
       )}
 
-      <div className='flex items-center justify-between'>
+      <div className='flex items-center justify-between border-t border-gray-200 pt-2'>
         <dt className=''>
           <span>Subtotal</span>
         </dt>
@@ -250,7 +250,7 @@ export const AdditionalCosts = (billing: _MyAcc_OrderBillingDetails) => {
           <Price value={additionalCostsTotal} />
         </dd>
       </div>
-    </>
+    </div>
   );
 };
 
@@ -258,15 +258,15 @@ export const ProductsPrice = (billing: _MyAcc_OrderBillingDetails) => {
   const productsTotal = billing?.orderSubtotal || 0;
 
   return (
-    <>
-      <div className='text-lg font-medium'>Products Price</div>
+    <div className='px-4'>
+      <div className=' font-semibold'>Products Price</div>
       <div className='flex items-center justify-between border-t border-gray-200 pt-2'>
         <dt className=''>Subtotal</dt>
         <dd className='font-medium text-gray-900'>
           <Price value={productsTotal} />
         </dd>
       </div>
-    </>
+    </div>
   );
 };
 

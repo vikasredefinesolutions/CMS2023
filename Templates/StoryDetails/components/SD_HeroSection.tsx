@@ -36,10 +36,10 @@ const SD_HeroSection: React.FC<_Props> = ({ banner, story, page }) => {
             backgroundImage: `url(${__StaticImg.petternBanner})`,
           }}
         >
-          <div className='container px-[16px] mx-auto text-center' role='main'>
+          <div className='container p-[16px] mx-auto text-center' role='main'>
             <div className='mb-[16px]'>
               <Link href={story.category.url}>
-                <span className='btn btn-secondary py-[8px] px-10 text-title-text btn-md'>
+                <span className='btn btn-secondary py-[8px] px-10 text-title-text btn-md '>
                   {story.category.name}
                 </span>
               </Link>
@@ -59,30 +59,27 @@ const SD_HeroSection: React.FC<_Props> = ({ banner, story, page }) => {
               </p>
             </div> */}
             <div className='flex flex-wrap justify-center'>
-              <Link
-                className='uppercase btn btn-tertiary text-default-text mr-[10px]'
-                href={story.prev}
-              >
-                Previous
+              <Link href={story.prev}>
+                <a className='uppercase btn btn-tertiary text-default-text mr-[10px]'>
+                  Previous
+                </a>
               </Link>{' '}
-              <Link
-                className='uppercase btn btn-tertiary text-default-text mr-[10px]'
-                href={story.next}
-              >
-                Next
+              <Link href={story.next}>
+                <a className='uppercase btn btn-tertiary text-default-text mr-[10px]'>
+                  Next
+                </a>
               </Link>
             </div>
           </div>
-          <div className='absolute bottom-0 w-full p-[16px] bg-default'>
-            <div className='container px-[16px] mx-auto text-center'>
+          <div className='absolute p-[16px]  w-full  bg-default'>
+            <div className='container px-[16px]  mx-auto text-center'>
               {banner.map((ban, index) => {
                 return (
                   <span key={index} className='mr-[8px]'>
-                    <Link
-                      href={ban.url}
-                      className='text-[#ffffff] text-medium-text'
-                    >
-                      {ban.name}
+                    <Link href={ban.url}>
+                      <a className='text-[#ffffff] text-medium-text'>
+                        {ban.name}
+                      </a>
                     </Link>
                   </span>
                 );

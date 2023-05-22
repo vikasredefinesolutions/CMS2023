@@ -2,6 +2,7 @@ import Price from '@appComponents/Price';
 import NxtImage from '@appComponents/reUsable/Image';
 import { CustomizeLaterMain } from '@constants/common.constant';
 import { CustomizeLater } from '@constants/global.constant';
+import { __pagesText } from '@constants/pages.text';
 import { paths } from '@constants/paths.constant';
 import { _MyAcc_OrderProductDetails } from '@definations/APIs/user.res';
 import Link from 'next/link';
@@ -167,38 +168,60 @@ const OrD_ItemDetails: React.FC<_props> = ({
             ))}
           </div>
           <div className='mt-4 border-[#d2d2d2] pt-1'>
-            {item.shoppingCartLogoPersonViewModels.map((logo, index) => (
-              <div key={index} className='flex flex-wrap justify-between -mx-3'>
-                <div className='w-1/3 px-3'>
-                  <div className='font-[600] mb-4'>Your Logo</div>
-                  {HtmlForShowLogo(
-                    logo.logoName,
-                    logo.logoPositionImage,
-                    logo.logoImagePath,
-                    logo.id,
-                  )}
-                </div>
-                <div className='w-1/3 px-3'>
-                  <div className='font-[600] mb-4'>PRICE</div>
-                  <div className='mb-4'>
-                    {' '}
-                    <Price value={logo.logoPrice} />
+            {item.shoppingCartLogoPersonViewModels.length > 0 &&
+              item.shoppingCartLogoPersonViewModels.map((logo, index) =>
+                logo.logoName === CustomizeLaterMain ? (
+                  <div className='flex justify-start items-center mt-3'>
+                    <div>
+                      <span className='material-icons text-[60px] mr-3'>
+                        support_agent
+                      </span>
+                    </div>
+                    <div>
+                      <div className='text-lg font-semibold'>
+                        {CustomizeLaterMain}
+                      </div>
+                      <div className='text-base'>
+                        {__pagesText.CustomizeLater}
+                      </div>
+                    </div>
                   </div>
-                </div>
-                <div className='w-1/3 px-3'>
-                  <div className='font-[600] mb-4'>Location</div>
-                  <div className='w-20 h-20 mb-4'>{logo.logoLocation}</div>
-                </div>
-                {showModal === 'uploadImage' && (
-                  <OrD_UploadImagePopup
-                    onClose={() => setShowModal(null)}
-                    orderedCartLogoDetailId={selectedLogoId || 0}
-                    orderLogoPositionImage={logo.logoPositionImage}
-                    updateOrderItems={updateOrderItems}
-                  />
-                )}
-              </div>
-            ))}
+                ) : (
+                  <div
+                    key={index}
+                    className='flex flex-wrap justify-between -mx-3'
+                  >
+                    <div className='w-1/3 px-3'>
+                      <div className='font-[600] mb-4'>Your Logo</div>
+                      {HtmlForShowLogo(
+                        logo.logoName,
+                        logo.logoPositionImage,
+                        logo.logoImagePath,
+                        logo.id,
+                      )}
+                    </div>
+                    <div className='w-1/3 px-3'>
+                      <div className='font-[600] mb-4'>PRICE</div>
+                      <div className='mb-4'>
+                        {' '}
+                        <Price value={logo.logoPrice} />
+                      </div>
+                    </div>
+                    <div className='w-1/3 px-3'>
+                      <div className='font-[600] mb-4'>Location</div>
+                      <div className='w-20 h-20 mb-4'>{logo.logoLocation}</div>
+                    </div>
+                    {showModal === 'uploadImage' && (
+                      <OrD_UploadImagePopup
+                        onClose={() => setShowModal(null)}
+                        orderedCartLogoDetailId={selectedLogoId || 0}
+                        orderLogoPositionImage={logo.logoPositionImage}
+                        updateOrderItems={updateOrderItems}
+                      />
+                    )}
+                  </div>
+                ),
+              )}
           </div>
           <div className='flex border-t border-[#d2d2d2] mt-6 pt-4 flex-wrap justify-start -mx-3'>
             <div className='w-1/3 px-3'>

@@ -9,6 +9,7 @@ import {
   _LogoDetail,
   _ProductStore,
   _Product_SetValues_Action,
+  _Product_UpdateFirstLogoPrice,
   _Product_UpdateLogoDetails_Actions,
   _Product_UpdateSelectedValeus_Action,
   _Product_UpdateSewOutCharges,
@@ -64,6 +65,7 @@ const initialState: _ProductStore = {
   },
   toCheckout: {
     minQty: 1,
+    firstLogoPrice: 0,
     allowAddToCart: false,
     totalQty: 0,
     price: 0,
@@ -161,6 +163,12 @@ export const productSlice = createSlice({
       }
     },
 
+    product_updateFirstLogoPrice: (
+      state,
+      { payload }: _Product_UpdateFirstLogoPrice,
+    ) => {
+      state.toCheckout.firstLogoPrice = payload.firstLogoPrice;
+    },
     product_updateSewOutCharges: (
       state,
       { payload }: _Product_UpdateSewOutCharges,
@@ -233,9 +241,8 @@ export const productSlice = createSlice({
           state.toCheckout.additionalSewOutCharges =
             state.toCheckout.additionalSewOutCharges -
             logos[payload.logoIndex]?.sewOutAmount;
-          state.toCheckout.totalPrice =
-            state.toCheckout.totalPrice -
-            logos[payload.logoIndex]?.sewOutAmount;
+          // state.toCheckout.totalPrice =
+          //   state.toCheckout.totalPrice - logos[payload.logoIndex]?.price;
           logos.splice(payload.logoIndex, 1);
           state.som_logos.details = logos;
         }
@@ -469,6 +476,7 @@ export const productSlice = createSlice({
       state.toCheckout = {
         ...state.toCheckout,
         logos: null,
+        additionalLogoCharge: 0,
         totalQty: 0,
         price: 0,
         allowAddToCart: false,

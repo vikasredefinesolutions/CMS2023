@@ -106,11 +106,11 @@ const OrderDetails_type1: React.FC = () => {
                       {BillingAddress(order.billing, '1')}
                       {ShippingAddress(order.billing, '1')}
                       <div className='w-full lg:w-1/3 px-2'>
-                        <div className='border border-[#d2d2d2] h-full bg-[#ffffff]'>
-                          <div className='bg-gray-100 p-4 font-[600]'>
+                        <div className='border border-gray-200 h-full bg-white'>
+                          <div className='bg-gray-100 p-2 font-semibold'>
                             PAYMENT METHOD
                           </div>
-                          <div className='p-2 leading-5'>
+                          <div className='p-2'>
                             {order?.billing?.paymentMethod}
                           </div>
                         </div>
@@ -129,13 +129,13 @@ const OrderDetails_type1: React.FC = () => {
                     ))}
                   </ul>
                 </div>
-                <div className='w-full lg:w-1/4'>
+                <div className='w-full lg:w-1/4 p-4'>
                   <div className='lg:border-l lg:border-slate-200 bg-[#ffffff] h-full text-default-text'>
                     <div className='w-full font-[700] bg-gray-100 px-4 py-4 uppercase'>
-                      Cart Summary
+                      Order Summary
                     </div>
-                    <div className='px-4 text-default-text'>
-                      <dl className=''>
+                    <div className=' text-default-text'>
+                      <dl className='bg-gray-100 py-4'>
                         {ProductsPrice(order.billing)}
                         {CustomizationPrice(order.billing)}
                         {ShippingEstimationPrice(order.billing)}
@@ -143,7 +143,7 @@ const OrderDetails_type1: React.FC = () => {
                         {TotalSavings(order.billing)}
                       </dl>
                     </div>
-                    <div className='flex justify-between items-center bg-gray-100 w-full text-default-text font-[700] uppercase px-4 py-4'>
+                    <div className='flex justify-between items-center bg-gray-100 w-full font-[700] uppercase px-4 py-4'>
                       <div>Estimated Total:</div>
                       <div>
                         <Price value={order?.billing?.orderTotal || 0} />

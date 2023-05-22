@@ -7,7 +7,7 @@ import { getLogoDetailsList } from '@services/logo.service';
 import ManageLogo from '@templates/ManageLogo';
 import { useEffect, useState } from 'react';
 
-const index = () => {
+const Index = () => {
   const [seType, setSeType] = useState<string>('');
   const { id: storeId } = useTypedSelector_v2((state) => state.store);
   const customerId = useTypedSelector_v2((state) => state.user.id);
@@ -74,4 +74,4 @@ const index = () => {
   );
 };
 export { getServerSideProps };
-export default index;
+export default Index;

@@ -91,7 +91,7 @@ export const singleColor_addToCart_PayloadGenerator = async (
           {
             ...personalization.defaultLogoDetail,
             colorImagePath: item.product.color.imagePath,
-            logoNames: 'Customize Logo',
+            logoNames: 'Customize Later',
           },
         ];
       } else {
@@ -105,7 +105,7 @@ export const singleColor_addToCart_PayloadGenerator = async (
             logoLocation: logo.positionImage.name,
             colorImagePath: item.product.color.imagePath,
             logoNames:
-              logo.filePathUrl === '' ? 'Add Logo Later' : 'Customize Logos',
+              logo.filePathUrl === '' ? 'Add Logo Later' : 'Customize Logo',
             price: logo.price,
             logoDate: new Date(logo.date),
             logoPositionImage: logo.positionImage.path,

@@ -187,7 +187,7 @@ const TemplateOneListing = ({
               <div className='mt-[14px] text-anchor hover:text-anchor-hover h-[44px] text-ellipsis overflow-hidden line-clamp-2 text-small-text tracking-[1.4px]'>
                 <Link key={product.id} href={`/${product.sename}.html`}>
                   <a
-                    className='relative underline text-[#006cd1] leading-[20px]'
+                    className='relative underline text-anchor hover:text-anchor-hover leading-[20px]'
                     title={product.name}
                     onClick={(e) => captureViewItemList(e)}
                   >
@@ -195,7 +195,7 @@ const TemplateOneListing = ({
                   </a>
                 </Link>
               </div>
-              <div className='mt-[12px] text-[#000000] text-medium-text tracking-wider'>
+              <div className='mt-[12px] text-medium-text tracking-wider'>
                 <span className='font-semibold'>
                   {customerId
                     ? __pagesText.productListing.PRICE

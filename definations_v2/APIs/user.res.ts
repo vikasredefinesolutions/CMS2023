@@ -257,6 +257,8 @@ export interface _MyAcc_OrderBillingDetails {
   location: null;
   ipAddress: null;
   macAddress: null;
+  orderLogoSetupFee: number;
+  orderSmallRunFee: number;
 }
 
 export interface _MyAcc_OrderProductDetails {
@@ -299,7 +301,7 @@ export interface ShoppingCartLogoPersonViewModel {
   qty: number;
   isSewOut: boolean;
   sewOutAmount: number;
-  logoName: 'Customize Logo' | 'Add Logo Later';
+  logoName: 'Customize Logo' | 'Add Logo Later' | 'Customize Later';
 }
 
 export interface _UpdatePasswordForGuestEmail {

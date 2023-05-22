@@ -21,6 +21,18 @@ const ThankYouSubTotal: React.FC<_props> = ({ billing }) => {
                 <Price value={billing?.orderSubtotal} />
               </dd>
             </div>
+            {billing?.couponDiscountAmount &&
+            billing?.couponDiscountAmount > 0 ? (
+              <div className='flex justify-between pt-[8px]'>
+                <dt className='font-[600]'>
+                  {__pagesText.ThankYouPage.TotalSummary.couponDiscountAmount}
+                </dt>
+                <dd>
+                  -<Price value={billing?.couponDiscountAmount} />
+                </dd>
+              </div>
+            ) : null}
+
             <div className='flex justify-between pt-[8px]'>
               <dt className='font-[600]'>
                 {__pagesText.ThankYouPage.TotalSummary.LinePersonalization}
@@ -53,16 +65,7 @@ const ThankYouSubTotal: React.FC<_props> = ({ billing }) => {
                 <Price value={billing?.orderTax} />
               </dd>
             </div>
-            {billing?.couponCode && (
-              <div className='flex justify-between pt-[8px]'>
-                <dt className='font-[600]'>
-                  {__pagesText.ThankYouPage.TotalSummary.couponDiscountAmount}
-                </dt>
-                <dd>
-                  <Price value={billing?.couponDiscountAmount} />
-                </dd>
-              </div>
-            )}
+
             <div className='flex justify-between pt-[8px]'>
               <dt className='font-[600]'>
                 {__pagesText.ThankYouPage.TotalSummary.SewOut}
@@ -71,6 +74,27 @@ const ThankYouSubTotal: React.FC<_props> = ({ billing }) => {
                 <Price value={billing?.sewoutTotal} />
               </dd>
             </div>
+            {billing?.orderSmallRunFee && billing?.orderSmallRunFee > 0 ? (
+              <div className='flex justify-between pt-[8px]'>
+                <dt className='font-[600]'>
+                  {__pagesText.ThankYouPage.TotalSummary.smallRunningFee}
+                </dt>
+                <dd>
+                  <Price value={billing?.orderSmallRunFee} />
+                </dd>
+              </div>
+            ) : null}
+            {billing?.orderLogoSetupFee && billing?.orderLogoSetupFee > 0 ? (
+              <div className='flex justify-between pt-[8px]'>
+                <dt className='font-[600]'>
+                  {__pagesText.ThankYouPage.TotalSummary.smallRunningFee}
+                </dt>
+                <dd>
+                  <Price value={billing?.orderLogoSetupFee} />
+                </dd>
+              </div>
+            ) : null}
+
             <div className='flex justify-between border-t mt-[8px] border-gray-border pt-[8px]'>
               <dt className='font-[600] pt-[8px]'>
                 {__pagesText.ThankYouPage.TotalSummary.GrandTotal}

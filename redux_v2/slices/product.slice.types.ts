@@ -99,7 +99,11 @@ export interface _Product_UpdateLogoDetails_Actions {
         logoIndex: number;
       };
 }
-
+export interface _Product_UpdateFirstLogoPrice {
+  payload: {
+    firstLogoPrice: number;
+  };
+}
 export interface _Product_UpdateSewOutCharges {
   payload:
     | {
@@ -166,6 +170,7 @@ export interface _state_productToCheckout {
   logo: {
     price: Array<number | 'FREE'> | null;
   };
+  firstLogoPrice: number;
   logos: null | _LogoDetail[];
   allowNextLogo: boolean;
   lines:

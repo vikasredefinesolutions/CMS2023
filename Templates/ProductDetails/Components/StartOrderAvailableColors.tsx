@@ -1,20 +1,29 @@
 import Image from '@appComponents/reUsable/Image';
 import { __pagesText } from '@constants/pages.text';
+import { _ProductColor } from '@definations/APIs/colors.res';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
-import React, { useEffect } from 'react';
+import { useRouter } from 'next/router';
+import React from 'react';
 
 const StartOrderAvailableColors: React.FC = () => {
+  const router = useRouter();
   const { colors } = useTypedSelector_v2((state) => state.product.product);
   const { setColor } = useActions_v2();
   const selectedColor = useTypedSelector_v2(
     (state) => state.product.selected.color.name,
   );
 
-  useEffect(() => {
-    if (colors === null) return;
-    setColor(colors[0]);
-  }, []);
-
+  // useEffect(() => {
+  //   if (colors === null) return;
+  //   setColor(colors[0]);
+  // }, []);
+  const handleChooseColor = (product: _ProductColor) => {
+    if (!product.productSEName || product.productSEName === '') {
+      setColor(product);
+      return;
+    }
+    router.push(`${product.productSEName}.html`);
+  };
   return (
     <div>
       <div className='text-gray-600 bg-primary flex flex-wrap justify-between items-center pl-[10px] pr-[10px] pt-[6px] pb-[6px] mt-[13px] mb-[10px] text-default-text'>
@@ -28,7 +37,7 @@ const StartOrderAvailableColors: React.FC = () => {
           <div
             className='mr-[20px] mb-[10px] w-[80px]'
             key={color.productId}
-            onClick={() => setColor(color)}
+            onClick={() => handleChooseColor(color)}
           >
             <div
               className={`w-[80px] h-[80px] border ${

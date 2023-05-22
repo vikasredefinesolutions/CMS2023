@@ -32,6 +32,7 @@ const AvailableInventoryModal: React.FC<_ModalProps> = ({ modalHandler }) => {
       });
     });
   };
+
   useEffect(() => {
     fetchInventory();
   }, []);

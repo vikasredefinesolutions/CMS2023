@@ -57,7 +57,7 @@ const ThankYouHeader: React.FC<_ThankYouProps> = ({ order }) => {
                     <span className='text-[#ffffff] block text-default-text pb-[8px]'>
                       <button
                         onClick={() => window.print()}
-                        title='Print Reciept'
+                        title='Print Receipt'
                         className='underline hover:no-underline'
                       >
                         {__pagesText.ThankYouPage.PrintReciept}

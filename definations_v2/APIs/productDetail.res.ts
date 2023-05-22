@@ -55,6 +55,14 @@ export interface _LogoLocationDetail {
 
 export interface _LogoLocation {
   isFirstLogoFree: boolean;
+  isLogoSetupCharges: boolean;
+  logoSetupCharges: number;
+  isLinepersonalization: boolean;
+  firstLineCharges: number;
+  secondLineCharges: number;
+  isSmallRun: boolean;
+  smallRunLimit: number;
+  smallRunFeesCharges: number;
   productId: number;
   subRow: _LogoLocationDetail[] | [];
 }
