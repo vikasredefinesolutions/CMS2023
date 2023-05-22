@@ -54,7 +54,7 @@ const Br_Alphabets: React.FC<_Props> = ({
               </div>
               <button
                 title='##'
-                className='leading-[30px] text-title-text ml-[8px] mr-[8px] border-b border-b-solid border-[#ffffff] pb-[12px] inline-block font-[600] hover:text-anchor hover:border-anchor-hover text-[#a7a8a9] cursor-not-allowed'
+                className=' ml-[8px] mr-[8px] border-b border-b-solid border-[#ffffff] pb-[12px] inline-block font-[600] hover:text-anchor hover:border-anchor-hover text-[#a7a8a9] cursor-not-allowed'
               >
                 #
               </button>
