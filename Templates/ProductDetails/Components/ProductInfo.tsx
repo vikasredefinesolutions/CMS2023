@@ -222,7 +222,7 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
           }`}
         >
           <div
-            className='pb-3'
+            className='pb-10'
             dangerouslySetInnerHTML={{
               __html: product.description,
             }}
