@@ -36,6 +36,7 @@ const SlugSingleProductListing: React.FC<_props> = (props) => {
               <div className='mt-6'>
                 <div className='mt-[4px] text-center h-[35px] cursor-pointer'>
                   <img
+                    className='inline-block'
                     src={store.mediaBaseUrl + product?.productBrandLogo}
                     alt=''
                   />
