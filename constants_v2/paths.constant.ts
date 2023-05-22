@@ -51,6 +51,8 @@ export const paths = {
   Contact: '/Contact',
   ThankYou: '/Thankyou',
   STORIES: '/stories',
+  PRIVACY_POLICY: '/privacy-policy.html',
+  TERMS_OF_USE: '/terms-and-conditions.html',
 };
 
 export const __SpecialBreadCrumbsPaths = [
