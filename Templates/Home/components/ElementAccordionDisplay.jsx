@@ -148,7 +148,7 @@ const ElementAccordionDisplay = ({ selected_Values, acValues }) => {
             return (
               <li
                 key={index}
-                className={`mb-4 overflow-hidden last:mb-0 ${liClass}`}
+                className={`mb-4 overflow-hidden last:mb-0 cursor-pointer ${liClass}`}
                 style={{ borderColor: tmpTitleBorderColor }}
                 onClick={showHideAccordion}
               >
