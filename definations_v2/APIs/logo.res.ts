@@ -55,6 +55,7 @@ export interface Item {
   approvedDate?: Date;
   status: string;
   logoLocationImage: string;
+  approvedLogo?: string;
 }
 
 export interface ApprovedLogoItem {
