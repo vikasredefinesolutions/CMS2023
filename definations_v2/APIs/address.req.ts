@@ -71,7 +71,7 @@ export interface _GetShippingmethod {
     state: string;
     country: string;
     zipCode: string;
-    customerID: null | number;
+    customerID: number | string | null;
     storeId: string | number;
     ordertotalwithoutshipppingcharge: number | string;
     shippingType: number;

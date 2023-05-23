@@ -1,8 +1,9 @@
 import Price from '@appComponents/reUsable/Price';
 import { __pagesText } from '@constants/pages.text';
+import CheckoutController from '@controllers/checkoutController';
 import SummarryController from '@controllers/summarryController';
 import { GetCartTotals, useTypedSelector_v2 } from 'hooks_v2';
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 
 const CartSummarryType1: FC = () => {
   const couponDetails = useTypedSelector_v2((state) => state.cart.discount);
@@ -17,6 +18,14 @@ const CartSummarryType1: FC = () => {
   } = SummarryController();
   const { totalPrice, subTotal, logoSetupCharges, smallRunFee, salesTax } =
     GetCartTotals();
+
+  const { cartQty } = useTypedSelector_v2((state) => state.cart);
+  const { fetchShipping, shippingMethod } = CheckoutController();
+  useEffect(() => {
+    if (cartQty) {
+      fetchShipping(totalPrice);
+    }
+  }, [totalPrice]);
 
   const addBottomPadding = couponDetails?.amount ? '' : 'pb-[20px]';
 
@@ -48,6 +57,7 @@ const CartSummarryType1: FC = () => {
     }
     return false;
   };
+
   return (
     <div className='border border-slate-400 bg-[#ffffff] mb-[20px]'>
       <div className='bg-light-gray w-full text-sub-text font-medium pl-[16px] pr-[16px] pt-[8px] pb-[8px]'>
@@ -139,7 +149,9 @@ const CartSummarryType1: FC = () => {
             <dt className='text-normal-text flex items-center'>
               <span>Shipping</span>
             </dt>
-            <dd className='text-normal-text'>FREE</dd>
+            <dd className='text-normal-text'>{`$${shippingMethod[0].price.toFixed(
+              2,
+            )}`}</dd>
           </div>
           <div className='border-t border-gray-200 flex items-center justify-between pt-[10px]'>
             <dt className='text-normal-text flex items-center'>
@@ -154,7 +166,7 @@ const CartSummarryType1: FC = () => {
       <div className='flex justify-between items-center bg-light-gray w-full text-sub-text font-[600] pl-[16px] pr-[16px] pt-[8px] pb-[8px]'>
         <div>Total:</div>
         <div>
-          <Price value={totalPrice} />
+          <Price value={totalPrice + shippingMethod[0].price} />
         </div>
       </div>
     </div>

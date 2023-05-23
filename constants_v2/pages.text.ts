@@ -1,4 +1,6 @@
 export const __pagesText = {
+  dst: 'digital logo',
+  jpg: 'jpeg logo',
   msrp: 'MSRP',
   adaCorporateGear: {
     header: `Our Commitment to Accessibility`,
@@ -138,6 +140,8 @@ export const __pagesText = {
     somLogoOption: {
       addLogoLater: 'Add Logo Later',
       logoToBeSubmitted: 'Logo to be submitted after order is placed',
+      logoToBe: 'Logo to be submitted',
+      submitted: 'after order is placed',
       remove: 'Remove',
       selectYourLogo: 'Select your logo :',
       upload: 'Upload',
@@ -205,7 +209,7 @@ export const __pagesText = {
       privacyPolicy: 'Privacy policy',
     },
     startOrderModal: {
-      color: 'Color :',
+      color: 'Color : ',
       notes: 'Notes :',
       itemTotal: 'Item Total :',
       productInformation: 'Product information',
@@ -249,7 +253,7 @@ export const __pagesText = {
       exclusivePricingAvailable: 'EXCLUSIVE PRICING AVAILABLE',
       exclusivePricing: 'EXCLUSIVE PRICING',
       selectSizeAndQuantity: 'Select Size & Quantity:',
-      minimumOrder: 'MINIMUM ORDER :',
+      minimumOrder: 'MINIMUM ORDER : ',
       price: 'Price:',
       MSRP: 'MSRP: ',
       showMsgStartingText:
@@ -569,6 +573,7 @@ export const __pagesText = {
     orderSummary: {
       tax: 'Tax:',
       OrderSummary: 'Order Summary',
+      cartSummary: 'Cart Summary',
       Merchandise: 'Merchandise',
       Discount: 'Discount',
       Subtotal: 'Subtotal',
@@ -624,7 +629,8 @@ export const __pagesText = {
     successMessage: 'Added to cart Successfully',
     removeItem: 'Remove Item',
     remove: 'Remove',
-    personalizeItem: 'Personalize Your Item',
+    personalize: 'Personalize ',
+    yourItem: 'Your Item',
     emptyCart: 'Your Cart is Empty.',
     emptyCartMessage1: `There's nothing in your cart.`,
     emptyCartMessage2: '  Not to worry: we have lots of other great finds.',
