@@ -1,114 +1,65 @@
-import { __Error } from '@constants/global.constant';
+import { __Error, __pageTypeConstant } from '@constants/global.constant';
 import { paths } from '@constants/paths.constant';
-import { getPageComponents } from '@services/home.service';
-import {
-  FetchFiltersJsonByBrand,
-  FetchFiltersJsonByCategory,
-  FetchPageThemeConfigs,
-} from '@services/product.service';
-import { FetchPageType } from '@services/slug.service';
-
-import { getProductDetailProps } from './ProductController.async';
-
-import { extractSlugName } from '@helpers/common.helper';
-
-import { __console_v2 } from '@configs/console.config';
-import { _ProductDetailsProps } from '@definations/APIs/productDetail.res';
-import {
-  BrandFilter,
-  CategoryFilter,
-  Product,
-} from '@definations/productList.type';
-import { conditionalLog_V2, highLightError } from '@helpers/console.helper';
-import { _FeaturedProduct } from '@templates/ProductDetails/productDetailsTypes/storeDetails.res';
-
+import { BrandFilter, CategoryFilter } from '@definations/productList.type';
 import { _GetPageType } from '@definations/slug.type';
+import { extractSlugName } from '@helpers/common.helper';
+import { highLightError } from '@helpers/console.helper';
+import { getPageComponents } from '@services/home.service';
+import { FetchFiltersJSON } from '@services/product.service';
+import { FetchPageType } from '@services/slug.service';
 import { GetServerSideProps, GetServerSidePropsResult } from 'next';
 import {
-  Filter,
-  FilterOption,
-  _ProductListProps,
-  _SlugServerSideProps,
-  _SlugServerSide_WentWrong,
-} from 'pages/[slug]/slug';
+  _Slug_ProductDetails_Props,
+  _Slug_ProductListing_Props,
+} from 'pages/[...slug-id]';
+import { getProductDetailProps } from './ProductController.async';
+
+import { GetlAllProductList } from '@templates/ProductListings/ProductListingType';
+import { _Slug_CMS_Props } from 'pages';
 import { _globalStore } from 'store.global';
+import {
+  _FetchPageThemeConfigs_ProductListing,
+  _Filter,
+  _FilterOption,
+  _NameValuePairs,
+  getConfigs,
+} from './slug.extras';
 
-export interface _ExpectedSlugProps {
-  store: {
-    storeId: null | number;
-    isAttributeSaparateProduct: boolean;
-    storeCode: null | string;
-    storeTypeId: null | number;
-  };
-  pageMetaData: _GetPageType | null;
-  page: {
-    productDetails: _ProductDetailsProps | null;
-    productListing: _ProductListProps | null;
-    topicHome: {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      components: any;
+type _SlugSearchProps =
+  | _Slug_ProductListing_Props
+  | _Slug_ProductDetails_Props
+  | _Slug_CMS_Props
+  | {
+      error: __Error.noPageTypeFound | __Error.storeIdMissing;
     };
-    slug: string | null;
-    home: {
-      featuredItems: null | Array<_FeaturedProduct[] | null>;
-    };
-  };
-}
-
-const _expectedSlugProps: _ExpectedSlugProps = {
-  store: {
-    storeId: null,
-    storeCode: null,
-    storeTypeId: null,
-    isAttributeSaparateProduct: false,
-  },
-  pageMetaData: null,
-  page: {
-    productDetails: null,
-    productListing: null,
-    slug: null,
-    topicHome: {
-      components: null,
-    },
-    home: {
-      featuredItems: null,
-    },
-  },
-};
 
 export const getServerSideProps: GetServerSideProps = async (
   context,
-): Promise<
-  GetServerSidePropsResult<_SlugServerSideProps | _SlugServerSide_WentWrong>
-> => {
-  const { slug, slugID } = extractSlugName(context.params);
-  let { store, pageMetaData, page } = _expectedSlugProps;
-  // ---------------------------------------------------------------
-  if (_globalStore.storeId) {
-    store = {
-      storeCode: _globalStore.code,
-      storeTypeId: _globalStore.storeTypeId,
-      storeId: _globalStore.storeId,
-      isAttributeSaparateProduct: _globalStore.isAttributeSaparateProduct,
-    };
-  }
+): Promise<GetServerSidePropsResult<_SlugSearchProps>> => {
+  let { seName, otherParams } = extractSlugName(context.params);
 
-  if (store.storeId === null) {
+  let store = {
+    storeCode: _globalStore.code,
+    storeTypeId: _globalStore.storeTypeId,
+    storeId: _globalStore.storeId,
+    isAttributeSaparateProduct: _globalStore.isAttributeSaparateProduct,
+  };
+  // ---------------------------------------------------------------
+
+  if (store.storeId === 0) {
     highLightError({
       error: `No Store found. Can't proceed further`,
       component: 'slug: getServerSideProps.tsx',
     });
     return {
-      props: {
-        error: __Error.storeIdMissing,
-      },
+      props: { error: __Error.storeIdMissing },
     };
   }
 
   // ---------------------------------------------------------------
-  pageMetaData = await FetchPageType({
+  const pageMetaData: _GetPageType | null = await FetchPageType({
     storeId: store.storeId,
-    slug,
+    slug: seName,
   });
 
   // pageMetaData!.type = 'brand'; // DUMMY VALUE FOR TEST
@@ -118,13 +69,11 @@ export const getServerSideProps: GetServerSideProps = async (
       component: 'slug: getServerSideProps.tsx',
     });
     return {
-      props: {
-        error: __Error.noPageTypeFound,
-      },
+      props: { error: __Error.noPageTypeFound },
     };
   }
 
-  if (slug !== pageMetaData.slug) {
+  if (seName !== pageMetaData.slug) {
     return {
       redirect: {
         destination: `${pageMetaData.slug}.html`,
@@ -137,107 +86,109 @@ export const getServerSideProps: GetServerSideProps = async (
   ////////////////////////////////////////////////
   /////////// Page Type Checks
   ////////////////////////////////////////////////
-  try {
-    if (pageMetaData.type === 'topic') {
-      page.topicHome.components = await getPageComponents({
-        pageId: pageMetaData.id,
-        type: '',
-      });
-      page.slug = slug;
-      page.home.featuredItems = [];
-    }
 
-    if (pageMetaData.type === 'product') {
-      let res = await FetchPageThemeConfigs(
-        '' + store.storeId,
-        'productDetail',
-      );
-      let productDetailTypes = res.config_value
-        ? JSON.parse(res.config_value)
-        : {};
+  if (pageMetaData.type === __pageTypeConstant.notFound) {
+    return {
+      notFound: true,
+    };
+  }
 
-      let view: string[] = [];
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      productDetailTypes.sectionDisplay &&
-        Object.entries(productDetailTypes.sectionDisplay).forEach(
-          (val: any) => {
-            if (val[1].isVisible) {
-              view[view.length] = val[0];
-            }
-          },
-        );
-      const productDetails = await getProductDetailProps({
-        storeId: store.storeId,
-        seName: slug,
-        isAttributeSaparateProduct: store.isAttributeSaparateProduct,
-      });
+  ///////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////
+  //////////         ALL CMS PAGES
+  ///////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////
 
-      if (
-        productDetails.details === null ||
-        productDetails.details.id === null
-      ) {
-        conditionalLog_V2({
-          data: productDetails,
-          show: __console_v2.allCatch,
-          type: 'CATCH',
-          name: `Slug: ${
-            productDetails.details?.productDoNotExist?.info ||
-            'Product not found'
-          }`,
-        });
-        return {
-          redirect: {
-            destination:
-              productDetails.details?.productDoNotExist
-                ?.retrunUrlOrCategorySename || paths.NOT_FOUND,
-            permanent: true,
-          },
-        };
-      }
+  if (pageMetaData.type === __pageTypeConstant.cmsPages) {
+    const components = await getPageComponents({
+      pageId: pageMetaData.id,
+      type: '',
+    });
 
-      page.productDetails = {
-        ...productDetails,
-        details: productDetails.details,
-        sectionView: view,
-        productDetailsTemplateId: productDetailTypes.productDetailTemplateId,
+    return {
+      props: {
+        page: 'ALL_CMS_PAGES',
+        data: {
+          components: components,
+          featuredItems: [],
+        },
+        metaData: pageMetaData,
+      },
+    };
+  }
+
+  ///////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////
+  //////////         PRODUCT DETAILS
+  ///////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////
+
+  if (pageMetaData.type === __pageTypeConstant.productDetails) {
+    let productDetails = await getProductDetailProps({
+      storeId: store.storeId,
+      seName: seName,
+      isAttributeSaparateProduct: store.isAttributeSaparateProduct,
+    });
+
+    if (productDetails.details === null || productDetails.details.id === null) {
+      return {
+        redirect: {
+          destination:
+            productDetails.details?.productDoNotExist
+              ?.retrunUrlOrCategorySename || paths.NOT_FOUND,
+          permanent: true,
+        },
       };
     }
 
-    if ('brand,category'.includes(pageMetaData.type)) {
-      let FilterOptions: Array<{
-        name: string;
-        value: string;
-      }> = [];
-      let filterOptionforfaceteds: Array<{
-        name: string;
-        value: string;
-      }> = [];
-      if (slugID) {
-        // @ts-ignore: Unreachable code error
-        const keys = [...context.params.slug.split(',')];
-        const values = slugID[0].split(',');
-        keys.forEach((res: string, index: number) =>
-          values[index].split('~').forEach((val) => {
-            FilterOptions.push({
-              name: res,
-              value: val,
-            });
-            filterOptionforfaceteds.push({
-              name: res.replace(' ', '-').toLowerCase(),
-              value: val,
-            });
-          }),
-        );
-      }
-      let res = await FetchPageThemeConfigs(
-        '' + store.storeId,
-        'productListing',
-      );
-      let productListingTypes = res.config_value
-        ? JSON.parse(res.config_value)
-        : {};
+    return {
+      props: {
+        page: 'PRODUCT_DETAILS',
+        data: productDetails,
+        metaData: pageMetaData,
+        configs: {
+          templateId: productDetails.templateId,
+        },
+      },
+    };
+  }
 
-      let product: Product[] = [];
+  ///////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////
+  //////////         BRANDS - CATEGORY - PRODUCT LISTING
+  ///////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////
+
+  if (
+    pageMetaData.type === __pageTypeConstant.brand ||
+    pageMetaData.type === __pageTypeConstant.category
+  ) {
+    let FilterOptions: Array<_NameValuePairs> = [];
+    let filterOptionforfaceteds: Array<_NameValuePairs> = [];
+
+    if (otherParams) {
+      const keys = otherParams[0].split(',');
+      const values = otherParams[1].split(',');
+
+      keys.forEach((res: string, index: number) =>
+        values[index].split('~').forEach((val) => {
+          FilterOptions.push({
+            name: res,
+            value: val,
+          });
+          filterOptionforfaceteds.push({
+            name: res.replace(' ', '-').toLowerCase(),
+            value: val,
+          });
+        }),
+      );
+    }
+
+    const _filters: _Filter[] = [];
+    let product: GetlAllProductList[] = [];
+    let configs: _FetchPageThemeConfigs_ProductListing | null = null;
+
+    try {
       const filter = {
         storeID: store.storeId,
         [pageMetaData.type === 'brand' ? 'brandId' : 'categoryId']:
@@ -245,78 +196,65 @@ export const getServerSideProps: GetServerSideProps = async (
         customerId: 0,
         filterOptionforfaceteds: filterOptionforfaceteds,
       };
-      let ProductFilt: BrandFilter | CategoryFilter;
-      if (pageMetaData.type === 'brand') {
-        ProductFilt = await FetchFiltersJsonByBrand(filter);
-      } else {
-        ProductFilt = await FetchFiltersJsonByCategory(filter);
-      }
-      const _filters: Filter[] = [];
-      for (const key in ProductFilt) {
-        const element = ProductFilt[key];
-        if (element.length > 0 && key !== 'getlAllProductList') {
-          _filters.push({
-            label:
-              key === 'storeCategoryProductCategoryListViewModel'
-                ? 'Category'
-                : element[0].label || element[0].name || '',
-            options: element as FilterOption[],
-          });
-        } else if (key === 'getlAllProductList') {
-          product = element as unknown as Product[];
+
+      let ProductFilt: BrandFilter | CategoryFilter | null = {} as BrandFilter;
+
+      await Promise.allSettled([
+        getConfigs<_FetchPageThemeConfigs_ProductListing>(
+          store.storeId,
+          'productListing',
+        ),
+        FetchFiltersJSON(pageMetaData.type, filter),
+      ]).then((values) => {
+        configs = values[0].status === 'fulfilled' ? values[0].value : null;
+        ProductFilt = values[1].status === 'fulfilled' ? values[1].value : null;
+      });
+
+      if (ProductFilt) {
+        for (const key in ProductFilt) {
+          const element = ProductFilt[key];
+          if (element.length > 0 && key !== 'getlAllProductList') {
+            _filters.push({
+              label:
+                key === 'storeCategoryProductCategoryListViewModel'
+                  ? 'Category'
+                  : element[0].label || element[0].name || '',
+              options: element as _FilterOption[],
+            });
+          } else if (key === 'getlAllProductList') {
+            product = element as unknown as GetlAllProductList[];
+          }
         }
       }
-      page.productListing = {
-        brandSEO: {
-          seTitle: pageMetaData.meta_Title,
-          seDescription: pageMetaData.meta_Description,
-          seKeyWords: pageMetaData.meta_Keywords,
-          brandName: pageMetaData.slug,
-          brandId: pageMetaData.id,
-          seName: pageMetaData.slug,
-        },
-        filters: _filters,
-        product: product,
-        checkedFilters: FilterOptions,
-        brandId: pageMetaData.id,
-        bannerType: productListingTypes.bannertype,
-        templateId: productListingTypes.templateID,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } as any;
+    } catch (error) {
+      console.log('ERRROR ===>', error);
     }
-    conditionalLog_V2({
-      data: {
-        store: store,
-        pageMetaData: pageMetaData,
-        // page: page,
-      },
-      show: __console_v2.serverMethod.slug,
-      type: 'SERVER_METHOD',
-      name: 'Slug: getServerSide sending Props',
-    });
-  } catch (error) {
-    conditionalLog_V2({
-      data: error,
-      show: __console_v2.allCatch,
-      type: 'CATCH',
-      name: 'Slug: getServerSideProps - Something went wrong',
-    });
-  }
 
-  if (!store.storeCode || !store.storeTypeId || !pageMetaData || !page) {
     return {
-      notFound: true,
+      props: {
+        page: 'PRODUCT_LISTING',
+        listingData: {
+          filters: _filters,
+          product: product,
+          checkedFilters: FilterOptions,
+          brandId: pageMetaData.id,
+        },
+        metaData: pageMetaData,
+        configs: {
+          templateId: configs!.templateID.toString(),
+          bannerType: configs!.bannertype,
+        },
+      },
     };
   }
 
+  ///////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////
+  //////////         NO MATCHES FOUND
+  ///////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////
+
   return {
-    props: {
-      _store: {
-        storeCode: store.storeCode,
-        storeTypeId: store.storeTypeId,
-      },
-      pageMetaData: pageMetaData,
-      page: page,
-    },
+    notFound: true,
   };
 };

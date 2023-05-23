@@ -9,11 +9,12 @@ const ThankYouAccordian: React.FC<_ThankYouProps> = ({ order }) => {
   return (
     <>
       <div className='accordion w-full mb-[30px]' id='accordionExample'>
-        <div
-          className='accordion-item !rounded-none bg-[#ffffff] border border-gray-border '
-          onClick={() => setshowAccordian(!showAccordian)}
-        >
-          <h2 className='accordion-header mb-0' id='headingOne'>
+        <div className='accordion-item !rounded-none bg-[#ffffff] border border-gray-border '>
+          <h2
+            className='accordion-header mb-0'
+            id='headingOne'
+            onClick={() => setshowAccordian(!showAccordian)}
+          >
             <button
               className='accordion relative flex items-center w-full py-4 px-5 !text-primary text-left bg-white border rounded-none transition focus:outline-none text-2xl '
               type='button'

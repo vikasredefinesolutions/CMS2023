@@ -1,4 +1,3 @@
-import { getServerSideProps } from '@controllers/getServerSideProps';
 import { getPageType } from '@helpers/common.helper';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import ManageAddressSetting from '@templates/account/ManageAddressIndex';
@@ -17,5 +16,4 @@ const index = () => {
   }, [storeId]);
   return <>{seType && <ManageAddressSetting id={seType} />}</>;
 };
-export { getServerSideProps };
 export default index;

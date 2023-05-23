@@ -3,7 +3,7 @@ import Price from '@appComponents/reUsable/Price';
 import { showcolors } from '@constants/global.constant';
 import {
   newFetauredItemResponse,
-  splitproductList,
+  splitproductList
 } from '@definations/productList.type';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import Link from 'next/link';
@@ -60,6 +60,7 @@ const BrandProduct: React.FC<_props> = (props) => {
           className='relative'
         >
           <div className='w-full overflow-hidden aspect-w-1 aspect-h-1'>
+            <a style={{ display: "block"}}>
             <ImageComponent
               src={store.mediaBaseUrl + mainImageUrl}
               alt='no image'
@@ -68,6 +69,7 @@ const BrandProduct: React.FC<_props> = (props) => {
               width={350}
               key={currentProduct?.id}
             />
+            </a>
           </div>
         </Link>
         <div className='mt-2.5'>

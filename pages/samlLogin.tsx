@@ -1,13 +1,11 @@
 import { __Cookie, __Cookie_Expiry } from '@constants/global.constant';
-import { getServerSideProps } from '@controllers/getServerSideProps';
-import { _SlugServerSideProps } from '@definations/slug.type';
 import {
+  KlaviyoScriptTag,
   deleteCookie,
   extractCookies,
-  KlaviyoScriptTag,
   setCookie,
 } from '@helpers/common.helper';
-import { useActions_v2 } from '@hooks_v2/index';
+import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import { updateCartByNewUserId } from '@services/cart.service';
 import { FetchSAMPLProfile } from '@services/saml.service';
 import { GetStoreCustomer } from '@services/user.service';
@@ -16,10 +14,9 @@ import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
-const SSOLoginPage: NextPage<_SlugServerSideProps> = (props) => {
-  const { pageMetaData, page, _store } = props;
+const SSOLoginPage: NextPage = () => {
   const [showErroMsg, setErrorMsg] = useState<null | string>(null);
-  const storeId = pageMetaData?.storeId;
+  const storeId = useTypedSelector_v2((state) => state.store.id);
   const router = useRouter();
   const query = router.query;
   const { logInUser, setShowLoader, updateCustomer, updateWishListData } =
@@ -96,5 +93,3 @@ const SSOLoginPage: NextPage<_SlugServerSideProps> = (props) => {
   );
 };
 export default SSOLoginPage;
-
-export { getServerSideProps };

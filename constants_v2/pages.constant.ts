@@ -92,7 +92,7 @@ export const __pagesConstant = {
     },
     orderDetails: {
       dateFormat: 'DD-MM-YYYY',
-      dFormat: 'DD/MM/YYYY',
+      dFormat: 'MM/DD/YYYY',
     },
     userManagement: {
       dateFormat: 'MM/DD/YYYY',

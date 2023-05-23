@@ -3,11 +3,9 @@ import { useTypedSelector_v2 } from '@hooks_v2/index';
 import CheckLogoApproved from '@templates/CheckLogoApproved';
 import { useEffect, useState } from 'react';
 
-const index = () => {
+const Index = () => {
   const [seType, setSeType] = useState<string>('');
-  const storeId = useTypedSelector_v2((state) => {
-    return state.store.id;
-  });
+  const storeId = useTypedSelector_v2((state) => state.store.id);
 
   useEffect(() => {
     if (storeId) {
@@ -17,7 +15,7 @@ const index = () => {
       });
     }
   }, [storeId]);
-  return seType ? <CheckLogoApproved id={seType} /> : null;
+  return <>{seType ? <CheckLogoApproved id={seType} /> : null}</>;
 };
 
-export default index;
+export default Index;

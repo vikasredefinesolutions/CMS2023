@@ -1,6 +1,6 @@
 import { _ProductDetailsProps } from '@definations/APIs/productDetail.res';
+import { _StoreCache } from '@definations/slug.type';
 import { NextPage } from 'next';
-import { _StoreCache } from 'pages/[slug]/slug';
 
 export interface _RecentlyViewedProps {
   product: _ProductDetailsProps & _StoreCache;

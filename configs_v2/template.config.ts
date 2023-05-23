@@ -20,8 +20,8 @@ export const _defaultTemplates: _DefaultTemplatesType = {
   notificationBar: 'type1',
   order: 'type1',
   orderDetails: 'type1',
-  productDetails: 'type2',
-  productListings: 'type1',
+  productDetails: '1',
+  productListings: '1',
   recentlyViewedProducts: 'type1',
   requestConsultation: 'type1',
   resetPassword: 'type1',
@@ -59,8 +59,8 @@ interface _DefaultTemplatesType {
   notificationBar: 'type1';
   order: 'type1';
   orderDetails: 'type1';
-  productDetails: 'type1' | 'type2';
-  productListings: 'type1' | 'type2';
+  productDetails: '1' | '2';
+  productListings: '1' | '2';
   recentlyViewedProducts: 'type1';
   requestConsultation: 'type1';
   resetPassword: 'type1';

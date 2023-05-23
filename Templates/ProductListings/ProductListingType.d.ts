@@ -34,7 +34,6 @@ export interface _ListingProps {
 }
 
 export interface _PageData {
-  brandSEO: _BrandSEO;
   filters: _Filter[];
   product: GetlAllProductList[];
   checkedFilters: _CheckedFilter[];
@@ -59,15 +58,6 @@ export interface _Filter {
 export interface _CheckedFilter {
   name: string;
   value: string;
-}
-
-export interface _BrandSEO {
-  brandId: number;
-  brandName: string;
-  seName: string;
-  seTitle: string;
-  seKeyWords: string;
-  seDescription: string;
 }
 
 export interface _ProductListingTemplates {

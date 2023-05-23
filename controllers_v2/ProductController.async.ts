@@ -1,4 +1,5 @@
 import { __console_v2 } from '@configs/console.config';
+import { _defaultTemplates } from '@configs/template.config';
 import { _ProductColor } from '@definations/APIs/colors.res';
 import {
   _ProductDetails,
@@ -15,6 +16,10 @@ import {
   FetchSimilartProducts,
   FetchSizeChartById,
 } from '@services/product.service';
+import {
+  _FetchPageThemeConfigs_ProductDetails,
+  getConfigs,
+} from './slug.extras';
 
 //////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////
@@ -22,12 +27,14 @@ import {
 //////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////
 
-interface _FetchProductDetails {
+export interface _FetchProductDetails {
   details: null | _ProductDetails | _ProductDoNotExist;
   colors: null | _ProductColor[];
   sizes: null | _SizeChartTransformed;
   SEO: null | _ProductSEO;
   alike: null | _ProductsAlike[];
+  views: string[];
+  templateId: string;
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -54,7 +61,10 @@ export const FetchProductDetails = async (payload: {
   let productSizeChart: null | _SizeChartTransformed = null;
   let productSEOtags: null | _ProductSEO = null;
   let productsAlike: null | _ProductsAlike[] = null;
-  // let productReviews: null;
+  let productConfigs: null | _FetchPageThemeConfigs_ProductDetails = {
+    productDetailTemplateId: _defaultTemplates.productDetails,
+  } as _FetchPageThemeConfigs_ProductDetails;
+  let views: string[] = [];
 
   try {
     // Request - 1
@@ -65,7 +75,7 @@ export const FetchProductDetails = async (payload: {
     });
 
     if (productDetails?.id) {
-      // Request - 2,3,4 based on 1
+      // Request - 2,3,4,5,6 based on 1
       await Promise.allSettled([
         FetchColors({
           productId: productDetails.id,
@@ -81,6 +91,10 @@ export const FetchProductDetails = async (payload: {
           productId: productDetails.id,
           storeId: payload.storeId,
         }),
+        getConfigs<_FetchPageThemeConfigs_ProductDetails>(
+          payload.storeId,
+          'productDetail',
+        ),
       ]).then((values) => {
         productColors =
           values[0].status === 'fulfilled' ? values[0].value : null;
@@ -90,11 +104,19 @@ export const FetchProductDetails = async (payload: {
           values[2].status === 'fulfilled' ? values[2].value : null;
         productsAlike =
           values[3].status === 'fulfilled' ? values[3].value : null;
+        productConfigs =
+          values[4].status === 'fulfilled' ? values[4].value : null;
       });
     }
 
-    // Request - 5
-    // await  ---> Fetch Product Reviews
+    if (productConfigs) {
+      productConfigs.sectionDisplay &&
+        Object.entries(productConfigs.sectionDisplay).forEach((val: any) => {
+          if (val[1].isVisible) {
+            views[views.length] = val[0];
+          }
+        });
+    }
   } catch (error) {
     conditionalLog_V2({
       data: error,
@@ -110,5 +132,7 @@ export const FetchProductDetails = async (payload: {
     sizes: productSizeChart,
     SEO: productSEOtags,
     alike: productsAlike,
+    views: views,
+    templateId: productConfigs.productDetailTemplateId,
   };
 };

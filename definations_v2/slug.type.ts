@@ -1,24 +1,13 @@
-import { __Error, __pageTypeConstant } from '@constants/global.constant';
-import { _ProductDetailsProps } from './APIs/productDetail.res';
-import { _FeaturedProduct } from './APIs/storeDetails.res';
+import { __pageTypeConstant } from '@constants/global.constant';
 
 export type _PageTypesAvailable =
-  | 'topic'
-  | 'category'
-  | 'product'
-  | 'collection'
-  | 'brand'
-  | '404'
+  | __pageTypeConstant.cmsPages
+  | __pageTypeConstant.category
+  | __pageTypeConstant.productDetails
+  | __pageTypeConstant.brand
+  | __pageTypeConstant.notFound
   | __pageTypeConstant.stories // ===> All story categories
   | __pageTypeConstant.blog; // ===> Individual Story
-
-export interface _TopicHomeProps {
-  pageData: {
-    components: any;
-  };
-  pageType: 'topic';
-  slug: string;
-}
 
 export interface _GetPageType {
   name: string;
@@ -33,45 +22,9 @@ export interface _GetPageType {
   isbreadcrumbShow: string;
 }
 
-export interface _SlugServerSide_WentWrong {
-  error: __Error.storeIdMissing | __Error.noPageTypeFound;
-}
-
 export interface _StoreCache {
   storeCode: string;
   storeTypeId: number;
-}
-
-export interface _SlugServerSideProps {
-  _store: _StoreCache | null;
-  pageMetaData: _GetPageType | null;
-  page: {
-    productDetails: _ProductDetailsProps | null;
-    productListing: _ProductListProps | null;
-    topicHome: {
-      components: any;
-    };
-    home: {
-      featuredItems: null | Array<_FeaturedProduct[] | null>;
-    };
-  } | null;
-}
-
-export interface _ProductListProps {
-  brandSEO: _BrandSEO;
-  filters: Filter[];
-  product: Product[];
-  checkedFilters: CheckedFilter[];
-  brandId: number;
-}
-
-export interface _BrandSEO {
-  brandId: number;
-  brandName: string;
-  seName: string;
-  seTitle: string;
-  seKeyWords: string;
-  seDescription: string;
 }
 
 export interface FilterOption {

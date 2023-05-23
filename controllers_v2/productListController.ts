@@ -179,14 +179,10 @@ const ProductListController = (
   };
 
   const loadMore = () => {
-    setShowLoader(true);
     const count = currentCount + perPageCount;
     const products = allProduct.slice(currentCount, count);
     setCurrentCount(count);
     setProduct((prev) => [...prev, ...products]);
-    setTimeout(() => {
-      setShowLoader(false);
-    }, 2000);
   };
 
   const clearFilters = () => {

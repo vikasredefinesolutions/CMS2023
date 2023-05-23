@@ -71,6 +71,11 @@ export const cartQuantityUpdateConfirmMessage =
 export enum __pageTypeConstant {
   blog = 'blog',
   stories = 'stories',
+  brand = 'brand',
+  category = 'category',
+  notFound = '404',
+  productDetails = 'product',
+  cmsPages = 'topic',
 }
 
 //Regex for multiple phone number pattern test

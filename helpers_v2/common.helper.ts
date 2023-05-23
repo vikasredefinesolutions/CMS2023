@@ -422,23 +422,39 @@ export const c_getSeName = (
   return slug;
 };
 
-export const extractSlugName = (contextParam?: ParsedUrlQuery) => {
-  let slug = '';
-  let slugID: string[] = [];
+export const extractSlugName = (
+  contextParam?: ParsedUrlQuery,
+): { seName: string; otherParams: string[] | null } => {
   if (contextParam) {
-    slugID = contextParam['slug-id'] as string[];
-    if (slugID) {
-      slug = slugID.at(-1)?.replace('.html', '') || '';
-    } else {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      const paramsSlug = contextParam!;
+    let params = contextParam['slug-id'] as string[];
 
-      slug = paramsSlug
-        ? (paramsSlug?.slug as string).replace('.html', '')
-        : '';
+    if (params && params.length > 0) {
+      const lastElementIndex = params.length - 1;
+      params[lastElementIndex] = params[lastElementIndex].replace('.html', '');
+      const seName = params[lastElementIndex];
+
+      if (seName.includes('.svg') || seName.includes('.png')) {
+        return {
+          seName: '/',
+          otherParams: null,
+        };
+      }
+
+      if (params.length === 1) {
+        return {
+          seName: seName,
+          otherParams: null,
+        };
+      }
+
+      return { seName: seName, otherParams: params };
     }
   }
-  return { slug, slugID };
+
+  return {
+    seName: '/',
+    otherParams: null,
+  };
 };
 
 interface _ParamsReturn {
@@ -727,7 +743,10 @@ export const _Logout = (
   return;
 };
 
-export const getPageType = async (storeid: number, configname: string) => {
+export const getPageType = async (
+  storeid: number,
+  configname: 'productListing' | 'productDetail' | 'cartPage' | 'myAccountPage',
+) => {
   let res = await FetchPageThemeConfigs('' + storeid, configname);
   return res;
 };

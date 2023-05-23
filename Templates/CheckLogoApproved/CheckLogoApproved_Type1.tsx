@@ -130,6 +130,9 @@ const CheckLogoApproved1 = () => {
       console.log(error);
     }
   };
+
+  // const state = useTypedSelector_v2((state) => console.log(state.user.id));
+
   const checklogoType = (name: string) => {
     if (name == __pagesText.dst) {
       return 1;
@@ -140,6 +143,8 @@ const CheckLogoApproved1 = () => {
     }
   };
   const reverse = logoDetails && [...logoDetails].reverse();
+  // console.log('logodeatisl reverse', reverse);
+
   return (
     <>
       <MyAccountTabs />

@@ -1,4 +1,5 @@
 import { __console_v2 } from '@configs/console.config';
+import { __pageTypeConstant } from '@constants/global.constant';
 import { CategoriesByPid } from '@definations/APIs/category.res';
 import { _ProductColor } from '@definations/APIs/colors.res';
 import { _ProductDiscountTable } from '@definations/APIs/discountTable.res';
@@ -12,8 +13,8 @@ import {
   _ProductBySku,
   _ProductDetails,
   _ProductDoNotExist,
-  _ProductsAlike,
   _ProductSEO,
+  _ProductsAlike,
   _ProductsRecentlyViewed,
   _ProductsRecentlyViewedPayload,
   _ProductsRecentlyViewedResponse,
@@ -177,6 +178,17 @@ export const FetchFeaturedProducts = async (payload: {
 
 /*---------------------------Product List --------------------------*/
 
+export const FetchFiltersJSON = async (
+  filterBy: __pageTypeConstant.brand | __pageTypeConstant.category,
+  filterRequest: FilterApiRequest,
+): Promise<BrandFilter | CategoryFilter> => {
+  if (filterBy === __pageTypeConstant.brand) {
+    return await FetchFiltersJsonByBrand(filterRequest);
+  }
+
+  return await FetchFiltersJsonByCategory(filterRequest);
+};
+
 export const FetchFiltersJsonByBrand = async (
   filterRequest: FilterApiRequest,
 ) => {
@@ -191,7 +203,7 @@ export const FetchFiltersJsonByBrand = async (
 };
 export const FetchPageThemeConfigs = async (
   storeId: string,
-  configName: string,
+  configName: 'productListing' | 'productDetail' | 'cartPage' | 'myAccountPage',
 ): Promise<_FetchPageThemeConfigs> => {
   const url = `CmsStoreThemeConfigs/getstorethemeconfigs/${storeId}/${configName}.json`;
   const res = await SendAsync<_FetchPageThemeConfigs>({

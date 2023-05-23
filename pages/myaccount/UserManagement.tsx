@@ -1,4 +1,3 @@
-import { getServerSideProps } from '@controllers/getServerSideProps';
 import { getPageType } from '@helpers/common.helper';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import UserManagementAccountSetting from '@templates/account/UserManage';
@@ -27,6 +26,5 @@ const index = () => {
     <>{seType && !showLoader && <UserManagementAccountSetting id={seType} />}</>
   );
 };
-export { getServerSideProps };
 
 export default index;

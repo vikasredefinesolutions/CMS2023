@@ -4,7 +4,7 @@ import { showcolors } from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
 import {
   newFetauredItemResponse,
-  splitproductList,
+  splitproductList
 } from '@definations/productList.type';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import Link from 'next/link';
@@ -45,15 +45,15 @@ const SingleProductListing: React.FC<_props> = (props) => {
                 className='relative'
               >
                 <div className='w-full overflow-hidden aspect-w-1 aspect-h-1'>
-                  <a style={{ display: 'block' }}>
-                    <ImageComponent
-                      src={store.mediaBaseUrl + mainImageUrl}
-                      alt='no image'
-                      className='w-auto h-auto m-auto max-h-[348px]'
-                      height={350}
-                      width={350}
-                      key={currentProduct?.productId}
-                    />
+                  <a style={{ display: "block"}}>
+                  <ImageComponent
+                    src={store.mediaBaseUrl + mainImageUrl}
+                    alt='no image'
+                    className='w-auto h-auto m-auto max-h-[348px]'
+                    height={350}
+                    width={350}
+                    key={currentProduct?.productId}
+                  />
                   </a>
                 </div>
               </Link>

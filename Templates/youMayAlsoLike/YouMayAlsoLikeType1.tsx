@@ -97,9 +97,9 @@ const YouMayAlsoLikeType1: React.FC<_TemplateProps> = ({ productsData }) => {
                                 <div className='mt-3 text-[#000000] text-base tracking-wider'>
                                   <span className='font-[600]'>
                                     {' '}
-                                    {customerId && product.isSpecialBrand
-                                      ? 'Price'
-                                      : 'MSRP'}{' '}
+                                    {customerId
+                                      ? __pagesText.productListing.PRICE
+                                      : __pagesText.productListing.MSRP}
                                     <Price value={product.msrp} />
                                   </span>
                                 </div>

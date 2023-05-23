@@ -8,7 +8,7 @@ export const _StoreDomains = {
   // domain1: 'corporategear',
   // domain1: 'cg.headlessmart.com',
   domain1: 'cg.redefinecommerdddce.info',
-  domain2: 'gg.headlessmart.com',
+  domain2: 'gg.redefinecommerce.info',
   domain3: 'pkhealthgear.redefinecommerce.info',
   domain4: 'di.redefinecommerce.info',
   domain5: 'https://bacardi.headlessmart.com',

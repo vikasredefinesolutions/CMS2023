@@ -198,7 +198,7 @@ const RcForm: React.FC<{ productId: number; attriubteOptionId: number }> = ({
     >
       {({ values, handleChange, setFieldValue, errors }) => {
         return (
-          <div className='w-full lg:w-4/12  md:w-full pl-[15px] pr-[15px] mb-[30px]'>
+          <div className='w-full lg:w-4/12 md:w-full pl-[15px] pr-[15px] mb-[30px]'>
             <Form>
               <div className='flex flex-wrap gap-y-4 pl-[15px] pr-[15px]'>
                 <div className='w-full'>

@@ -1,3 +1,15 @@
+import getLocation from '@helpers/getLocation';
+import { TextField } from '@mui/material';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { ErrorMessage, Form, Formik } from 'formik';
+import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
+import { useRouter } from 'next/router';
+import React, { useState } from 'react';
+import ReCAPTCHA from 'react-google-recaptcha';
+import * as Yup from 'yup';
+
 import {
   phonePattern1,
   phonePattern2,
@@ -7,18 +19,7 @@ import {
 import { __pagesText } from '@constants/pages.text';
 import { __ValidationText } from '@constants/validation.text';
 import { _SubmitConsultationPayload } from '@definations/requestConsultation.type';
-import getLocation from '@helpers/getLocation';
-import { TextField } from '@mui/material';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { SumbitRequestConsultationDetails } from '@services/product.service';
-import { ErrorMessage, Form, Formik } from 'formik';
-import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
-import { useRouter } from 'next/router';
-import React, { useState } from 'react';
-import ReCAPTCHA from 'react-google-recaptcha';
-import * as Yup from 'yup';
 import Ecommerce_RequestSubmitted from './Ecommerce_RequestSubmitted';
 import RequestInput from './RequestInput';
 import RequestSelect from './RequestSelect';
@@ -40,6 +41,7 @@ const _RequestConsulationSchema = Yup.object().shape({
     .required(__ValidationText.requestConsultation.firstName.required)
     .min(__ValidationText.requestConsultation.firstName.minLength)
     .max(__ValidationText.requestConsultation.firstName.maxLength),
+
   lastName: Yup.string()
     .trim()
     .required(__ValidationText.requestConsultation.lastName.required)
@@ -77,9 +79,9 @@ const _RequestConsulationSchema = Yup.object().shape({
     .typeError(__ValidationText.requestConsultation.inHandDate.typeError)
     .required(__ValidationText.requestConsultation.inHandDate.required)
     .min(new Date(), __ValidationText.requestConsultation.inHandDate.min),
+
   message: Yup.string(),
 });
-
 const _RequestConsultationInitials: _RequestConsultation = {
   firstName: '',
   lastName: '',

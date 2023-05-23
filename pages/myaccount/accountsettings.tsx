@@ -1,4 +1,3 @@
-import { getServerSideProps } from '@controllers/getServerSideProps';
 import { getPageType } from '@helpers/common.helper';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import AccountSetting from '@templates/account';
@@ -25,7 +24,5 @@ const AccountSettingPage = () => {
 
   return <>{seType && !showLoader && <AccountSetting id={seType} />}</>;
 };
-
-export { getServerSideProps };
 
 export default AccountSettingPage;

@@ -1,5 +1,4 @@
 import Spinner from '@appComponents/ui/spinner';
-import { getServerSideProps } from '@controllers/getServerSideProps';
 import { LogoList } from '@definations/APIs/logo.res';
 import { getPageType } from '@helpers/common.helper';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
@@ -73,5 +72,4 @@ const Index = () => {
     </>
   );
 };
-export { getServerSideProps };
 export default Index;

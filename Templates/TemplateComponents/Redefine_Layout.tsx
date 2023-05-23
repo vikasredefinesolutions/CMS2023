@@ -3,7 +3,7 @@ import CloseStore from '@appComponents/reUsable/CloseStore';
 import { storeBuilderTypeId } from '@configs/page.config';
 import { paths } from '@constants/paths.constant';
 import { _AnnouncementRow, _MenuItems } from '@definations/header.type';
-import { _GetPageType } from '@definations/slug.type';
+import { _GetPageType, _StoreCache } from '@definations/slug.type';
 import { _FetchStoreConfigurations } from '@definations/store.type';
 import { _templateIds } from '@helpers/app.extras';
 import { addCustomEvents } from '@helpers/common.helper';
@@ -12,7 +12,6 @@ import Footer from '@templates/Footer';
 import * as _AppController from 'controllers_v2/_AppController.async';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
 import { useRouter } from 'next/router';
-import { _StoreCache } from 'pages/[slug]/slug';
 import React, { useEffect, useMemo, useState } from 'react';
 import Header from 'Templates/Header';
 

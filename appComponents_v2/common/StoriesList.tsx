@@ -112,12 +112,15 @@ const StoriesList: React.FC<_Props> = ({
               <div className='w-full sm:w-1/2 xl:w-1/4 px-[15px] md:w-1/3 mt-6 mb-14'>
                 <div className='border border-gray-border bg-[#ffffff] relative'>
                   <div className='flex justify-center max-h-[450px] overflow-hidden'>
-                    <Link href='custom-nike-dri-fit-shirts.html'>
-                      <NxtImage
-                        alt=''
-                        className='w-full mx-auto'
-                        src={story.storiesImage}
-                      />
+                    <Link href={`${paths.STORIES}/${story.slug}`}>
+                      <a>
+                        <NxtImage
+                          alt=''
+                          className='w-full mx-auto'
+                          src={story.storiesImage}
+                          useNextImage={false}
+                        />
+                      </a>
                     </Link>
                   </div>
                   <div className='absolute left-5 top-5'>

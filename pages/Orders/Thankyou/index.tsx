@@ -75,7 +75,7 @@ const ThankYou: React.FC = () => {
     if (!orderId) {
       router.push(paths.HOME);
     }
-  }, []);
+  }, [orderId, order]);
 
   // if (!showThankYou) {
   //   return <></>;

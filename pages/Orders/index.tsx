@@ -1,4 +1,3 @@
-import { getServerSideProps } from '@controllers/getServerSideProps';
 import { getPageType } from '@helpers/common.helper';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import OrdersTemplate from '@templates/Orders';
@@ -20,6 +19,5 @@ const Orders: NextPage = () => {
 
   return <>{seType && <OrdersTemplate id={seType} />}</>;
 };
-export { getServerSideProps };
 
 export default Orders;
