@@ -41,7 +41,7 @@ const ThankYouProductTable: React.FC<_props> = ({ product }) => {
         <div className='text-base w-28'>{__pagesText.ThankYouPage.Total} </div>
         <div className='text-base w-16 text-center'>{product.totalQty}</div>
         <div className='text-base w-20 text-right'>
-          <Price value={product.totalPrice} />
+          <Price value={product.productTotal} />
         </div>
       </div>
 

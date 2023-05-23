@@ -196,6 +196,7 @@ export const fetchStoreDetails = async (
     thirdPartyLogin: false,
     bothLogin: false,
     logoUrl: '',
+    isLinepersonalization: false,
   };
   const adminConfigs: {
     blobUrlRootDirectory: string;
@@ -233,6 +234,7 @@ export const fetchStoreDetails = async (
           store.shippingChargeType = res.shippingChargeType;
           store.thirdPartyLogin = res.thirdPartyLogin;
           store.bothLogin = res.bothLogin;
+          store.isLinepersonalization = res.isLinepersonalization;
         }
         if (response[1].status === 'fulfilled' && response[1].value) {
           adminConfigs.blorUrl = response[1].value['azure:BlobUrl'];

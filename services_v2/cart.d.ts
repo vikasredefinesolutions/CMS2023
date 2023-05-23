@@ -67,6 +67,9 @@ export interface CartObject {
   cartLinePersonModels?: unknown[];
   categoryName?: string;
   brandName?: string;
+  logoTotalPrice: number;
+  lineTotalPrice: number;
+  productTotal: number;
 }
 
 export type CartList = CartObject[];

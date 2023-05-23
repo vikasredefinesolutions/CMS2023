@@ -108,12 +108,11 @@ const SomCustomizeLogoOptions: React.FC<{
 
   const logoNowOrLaterHandler = (action: 'now' | 'later') => {
     if (action === 'later') {
+      setNowOrLater('later');
       product_updateLogoDetails({
         type: 'Upload_Logo',
         logo: 'Customize Later',
       });
-      setNowOrLater('later');
-
       return;
     }
 

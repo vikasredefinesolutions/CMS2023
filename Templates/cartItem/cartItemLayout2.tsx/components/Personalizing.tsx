@@ -3,8 +3,7 @@ import {
   maximumWordsUnderSleeveLogo,
 } from '@constants/common.constant';
 import { __pagesText } from '@constants/pages.text';
-import { useTypedSelector_v2 } from '@hooks_v2/index';
-import { fetchCartDetails } from '@redux/asyncActions/cart.async';
+import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import {
   PersonalizationColor,
   PersonalizationFont,
@@ -33,6 +32,7 @@ const Personalizing: FC<any> = ({
   const clientSideMediaBaseUrl = useTypedSelector_v2(
     (state) => state.store.mediaBaseUrl,
   );
+  const { showModal, setShowLoader, fetchCartDetails } = useActions_v2();
   const { id } = useTypedSelector_v2((state) => state.user);
   const isEmployeeLoggedIn = useTypedSelector_v2(
     (state) => state.employee.loggedIn,
@@ -53,18 +53,23 @@ const Personalizing: FC<any> = ({
   );
 
   const save = async () => {
+    setShowLoader(true);
     updateCartPersonalization({
       cartLinePersonDetailModel: cartLinePersonModels,
     }).then((res) => {
-      setKeepPersonalizing({
-        show: false,
-        index: 0,
-      });
-      setCartLinePersonModels([]);
-      fetchCartDetails({
-        customerId: id ? id : 0,
-        isEmployeeLoggedIn,
-      });
+      if (res) {
+        setShowLoader(false);
+        showModal({ message: 'Successfully updated', title: 'Success' });
+        setKeepPersonalizing({
+          show: false,
+          index: 0,
+        });
+        setCartLinePersonModels([]);
+        fetchCartDetails({
+          customerId: id ? id : 0,
+          isEmployeeLoggedIn,
+        });
+      }
     });
   };
 

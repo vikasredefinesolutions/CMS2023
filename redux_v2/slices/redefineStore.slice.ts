@@ -37,6 +37,7 @@ export interface _RedesignStore {
   company_address: string;
   thirdPartyLogin: boolean;
   bothLogin: boolean;
+  isLinepersonalization: boolean;
 }
 
 // Define the initial state using that type
@@ -66,6 +67,7 @@ const initialState: _RedesignStore = {
   company_address: '',
   thirdPartyLogin: false,
   bothLogin: false,
+  isLinepersonalization: false,
 };
 
 export const storeSlice = createSlice({
@@ -102,6 +104,8 @@ export const storeSlice = createSlice({
       state.logoUrl = store.urls.logo;
       state.favIcon = store.urls.favicon;
       state.thirdPartyLogin = store.thirdPartyLogin;
+      state.shippingChargeType = store.shippingChargeType;
+      state.isLinepersonalization = store.isLinepersonalization;
     },
 
     store_setAppView: (

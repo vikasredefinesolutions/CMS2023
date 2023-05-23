@@ -5,7 +5,7 @@ import {
   paymentMethodCustom as paymentEnum,
 } from '@constants/enum';
 import { __Cookie, __Cookie_Expiry } from '@constants/global.constant';
-import { paths } from '@constants/paths.constant';
+
 import { AddOrderDefault, addAddress } from '@constants/payloads/checkout';
 import { signup_payload } from '@constants/payloads/signup';
 import { commonMessage } from '@constants/successError.text';
@@ -32,16 +32,17 @@ import { CreateNewAccount, GetStoreCustomer } from '@services/user.service';
 
 import {
   CreateUserAddress,
+  GetShippingmethod,
   UpdateUserAddress,
 } from '@services/address.service';
 import { updateCartByNewUserId } from '@services/cart.service';
-import { Klaviyo_PlaceOrder } from '@services/klaviyo.service';
 import { signInUser } from '@services/user.service';
 import { getWishlist } from '@services/wishlist.service';
 import _ from 'lodash';
 import { ChangeEvent, useEffect, useState } from 'react';
 
 import { __pagesConstant } from '@constants/pages.constant';
+import { paths } from '@constants/paths.constant';
 import { PaymentOptions } from '@definations/APIs/cart.req';
 import { CustomerAddress } from '@definations/APIs/user.res';
 import {
@@ -49,11 +50,13 @@ import {
   _ProductDetails,
   _ProductPolicy,
 } from '@definations/startOrderModal';
+import { Klaviyo_PlaceOrder } from '@services/klaviyo.service';
 import {
   getCustomerAllowBalance,
   getPaymentOption,
 } from '@services/payment.service';
 import { FetchProductById } from '@services/product.service';
+import { useRouter } from 'next/router';
 import CheckoutAddressForm, {
   AddressFormRefType,
   AddressType,
@@ -66,6 +69,7 @@ export interface _shippingMethod {
 [];
 
 const CheckoutController = () => {
+  const router = useRouter();
   const [endUserNameS, setEndUserName] = useState<string>('');
   const [endUserDisplay, setEndUserDisplay] = useState<boolean>(false);
   const [productPolicy, setproductPolicy] = useState<_ProductPolicy[]>();
@@ -129,6 +133,8 @@ const CheckoutController = () => {
   const { discount: cartDiscountDetails } = useTypedSelector_v2(
     (state) => state.cart,
   );
+
+  const cartCharges = useTypedSelector_v2((state) => state.store.cartCharges);
   const { loggedIn: isEmployeeLoggedIn, isLoadingComplete } =
     useTypedSelector_v2((state) => state.employee);
   const useBalance = useTypedSelector_v2(
@@ -140,8 +146,15 @@ const CheckoutController = () => {
   const couponCode = useTypedSelector_v2(
     (state) => state.cart.discount?.coupon,
   );
-  const { totalPrice, subTotal, salesTax, discount, creditBalance } =
-    GetCartTotals();
+  const {
+    totalPrice,
+    subTotal,
+    salesTax,
+    discount,
+    creditBalance,
+    totalLineCharges,
+    totalLogoCharges,
+  } = GetCartTotals();
 
   const billingForm = CheckoutAddressForm({});
   const shippingForm = CheckoutAddressForm({});
@@ -217,6 +230,10 @@ const CheckoutController = () => {
       });
     }
   }, [customer]);
+
+  const blockInvalidChar = (e: any) =>
+    ['e', 'E', '+', '-'].includes(e.key) && e.preventDefault();
+
   const checkEmail = async (values: { email: string }) => {
     const response = await checkCustomerAlreadyExist(values.email, storeId);
     if (response) {
@@ -512,8 +529,36 @@ const CheckoutController = () => {
       }
     }
   };
+  const { shippingChargeType } = useTypedSelector_v2((state) => state.store);
 
-  const placeOrder = async () => {
+  const fetchShipping = async (totalPrice: number) => {
+    try {
+      if (storeId && shippingChargeType) {
+        const data = await GetShippingmethod({
+          shippingMethodModel: {
+            city: '',
+            state: '',
+            country: '',
+            zipCode: '',
+            customerID: userId,
+            storeId: storeId,
+            ordertotalwithoutshipppingcharge: totalPrice,
+            shippingType: shippingChargeType,
+          },
+        });
+        if (data) {
+          setShippingMethod(data);
+        }
+        return data;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const placeOrder = async (price: number) => {
+    const shippingData = await fetchShipping(price);
+
     setShowLoader(true);
     if (createAccountPassword.password && billingAdress && shippingAdress) {
       const location = await getLocation();
@@ -624,9 +669,17 @@ const CheckoutController = () => {
         couponDiscountAmount: discount,
         orderStatus: __pagesConstant.checkoutPage.orderStatus,
         transactionStatus: __pagesConstant.checkoutPage.transactionStatus,
-        shippingMethod: shippingMethod[0].name,
+        shippingMethod: shippingData[0].name,
         endUserName: endUserNameS,
+        logoFinalTotal: totalLogoCharges,
+        lineFinalTotal: totalLineCharges,
         orderShippingCosts: shippingMethod[0].price,
+        orderSmallRunFee: cartCharges?.smallRunFeesCharges
+          ? cartCharges.smallRunFeesCharges
+          : 0,
+        orderLogoSetupFee: cartCharges?.logoSetupCharges
+          ? cartCharges.logoSetupCharges
+          : 0,
       };
       const order = {
         orderModel,
@@ -643,8 +696,8 @@ const CheckoutController = () => {
             orderNumber: res.id,
           });
 
-          // router.push(`${paths.THANK_YOU}?orderNumber=${res.id}`);
-          window.location.assign(`${paths.THANK_YOU}?orderNumber=${res.id}`);
+          router.push(`${paths.THANK_YOU}?orderNumber=${res.id}`);
+          // window.location.assign(`${paths.THANK_YOU}?orderNumber=${res.id}`);
           setShowLoader(false);
         }
       } catch (error) {
@@ -662,13 +715,17 @@ const CheckoutController = () => {
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const { name, value } = e.target;
-
-    switch (paymentMethod) {
-      case paymentEnum.creditCard:
-        setCardDetails((prev) => ({ ...prev, [name]: value }));
-        break;
-      case paymentEnum.purchaseOrder:
-        setPurchaseOrder(value);
+    const date = new Date().getMonth() + 1;
+    if (name == 'cardExpirationMonth' && Number(value) < date) {
+      setCardDetails((prev) => ({ ...prev, [name]: '' }));
+    } else {
+      switch (paymentMethod) {
+        case paymentEnum.creditCard:
+          setCardDetails((prev) => ({ ...prev, [name]: value }));
+          break;
+        case paymentEnum.purchaseOrder:
+          setPurchaseOrder(value);
+      }
     }
   };
 
@@ -788,6 +845,8 @@ const CheckoutController = () => {
     setShowAddAddress,
     setShippingAdress,
     setBillingAdress,
+    blockInvalidChar,
+    fetchShipping,
   };
 };
 

@@ -65,7 +65,6 @@ const ThankYouSubTotal: React.FC<_props> = ({ billing }) => {
                 <Price value={billing?.orderTax} />
               </dd>
             </div>
-
             <div className='flex justify-between pt-[8px]'>
               <dt className='font-[600]'>
                 {__pagesText.ThankYouPage.TotalSummary.SewOut}
@@ -87,7 +86,7 @@ const ThankYouSubTotal: React.FC<_props> = ({ billing }) => {
             {billing?.orderLogoSetupFee && billing?.orderLogoSetupFee > 0 ? (
               <div className='flex justify-between pt-[8px]'>
                 <dt className='font-[600]'>
-                  {__pagesText.ThankYouPage.TotalSummary.smallRunningFee}
+                  {__pagesText.ThankYouPage.TotalSummary.orderLogoSetupFee}
                 </dt>
                 <dd>
                   <Price value={billing?.orderLogoSetupFee} />

@@ -207,6 +207,14 @@ const SomLogoOption: React.FC<_SOMLogoOptionProps> = ({
           reUsableCustomerLogo: 0,
         },
       });
+      product_updateLogoDetails({
+        type: 'Update_TotalPrice_ByLogo',
+        logo: {
+          addOrSubtract: 'add',
+          price: logoPrice,
+          index,
+        },
+      });
 
       setFileToUpload(file);
       setLogoStatus('submitted');
@@ -244,10 +252,19 @@ const SomLogoOption: React.FC<_SOMLogoOptionProps> = ({
             reUsableCustomerLogo: 0,
           },
         });
+        product_updateLogoDetails({
+          type: 'Update_TotalPrice_ByLogo',
+          logo: {
+            addOrSubtract: 'add',
+            price: logoPrice,
+            index,
+          },
+        });
         return;
       }
       if (action === 'submitted') {
         setLogoStatus('submitted');
+
         return;
       }
       if (action === null) {
@@ -271,8 +288,14 @@ const SomLogoOption: React.FC<_SOMLogoOptionProps> = ({
         break;
       case 'later':
         text = (
-          <div className='cursor-pointer w-full text-anchor font-[600]'>
-            {__pagesText.productInfo.somLogoOption.logoToBeSubmitted}
+          <div className='flex items-center'>
+            <div className=''>
+              <img src={dummyLogoImage} alt='' />
+            </div>
+            <div className='cursor-pointer w-full font-[600] ml-5'>
+              <div>{__pagesText.productInfo.somLogoOption.logoToBe}</div>
+              <div>{__pagesText.productInfo.somLogoOption.submitted}</div>
+            </div>
           </div>
         );
         break;
@@ -343,28 +366,19 @@ const SomLogoOption: React.FC<_SOMLogoOptionProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [logoStatus]);
 
-  useEffect(() => {
-    product_updateLogoDetails({
-      type: 'Update_TotalPrice_ByLogo',
-      logo: {
-        addOrSubtract: 'add',
-        price: logoPrice,
-        index,
-      },
-    });
-
-    return () => {
-      product_updateLogoDetails({
-        type: 'Update_TotalPrice_ByLogo',
-        logo: {
-          addOrSubtract: 'subtract',
-          price: logoPrice,
-          index,
-        },
-      });
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // useEffect(() => {
+  //   return () => {
+  //     product_updateLogoDetails({
+  //       type: 'Update_TotalPrice_ByLogo',
+  //       logo: {
+  //         addOrSubtract: 'subtract',
+  //         price: logoPrice,
+  //         index,
+  //       },
+  //     });
+  //   };
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
   return (
     <div className='p-2 mb-2 border bg-gray-50 border-slate-200'>
@@ -375,7 +389,17 @@ const SomLogoOption: React.FC<_SOMLogoOptionProps> = ({
             <button
               className='text-rose-600'
               type='button'
-              onClick={removeHandler}
+              onClick={() => {
+                removeHandler();
+                product_updateLogoDetails({
+                  type: 'Update_TotalPrice_ByLogo',
+                  logo: {
+                    addOrSubtract: 'subtract',
+                    price: logoPrice,
+                    index,
+                  },
+                });
+              }}
             >
               {__pagesText.productInfo.somLogoOption.remove}
             </button>
@@ -418,11 +442,11 @@ const SomLogoOption: React.FC<_SOMLogoOptionProps> = ({
         {selectedLocation && (
           <div className='flex flex-wrap items-center justify-between border border-gray-600 shadow-sm text-sm p-2'>
             {logoStatus === null && <div className=''>Upload Your Logo</div>}
-            {logoStatus === 'later' && (
+            {/* {logoStatus === 'later' && (
               <div className=''>
                 <img src={dummyLogoImage} alt='' />
               </div>
-            )}
+            )} */}
             {logoStatus === 'submitted' && (
               <div className=''>
                 <img

@@ -116,4 +116,6 @@ export interface AddOrderRequest {
   isCreditLimit: boolean;
   endUserName: string;
   decorationDate: Date;
+  orderSmallRunFee: number;
+  orderLogoSetupFee: number;
 }

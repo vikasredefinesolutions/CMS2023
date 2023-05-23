@@ -10,10 +10,12 @@ import { __pagesText } from '@constants/pages.text';
 import CheckoutController from '@controllers/checkoutController';
 import { isNumberKey } from '@helpers/common.helper';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
-import { CartObject } from '@services/cart';
+import { CartObject, ShoppingCartItemDetailsViewModel } from '@services/cart';
+import { _CartLinePersonDetailModel } from '@services/product.service.type';
 import Link from 'next/link';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { _globalStore } from 'store.global';
+import Personalizing from './cartItemLayout2.tsx/components/Personalizing';
 // import { CI_Props } from './cartItem';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const CIlayout1: FC<any> = ({
@@ -24,10 +26,15 @@ const CIlayout1: FC<any> = ({
   employeeAmtChangeHandler,
   amtQtyBlurHandler,
   loadProduct,
+  availableFont,
+  availableLocation,
+  availableColor,
 }) => {
   const { loggedIn: empLoggedIn } = useTypedSelector_v2(
     (state) => state.employee,
   );
+
+  const { isLinepersonalization } = useTypedSelector_v2((state) => state.store);
   const { setShowLoader } = useActions_v2();
 
   let mediaBaseUrl = _globalStore.blobUrl; // for server side
@@ -37,6 +44,19 @@ const CIlayout1: FC<any> = ({
 
   const storeCode = useTypedSelector_v2((state) => state.store.code);
   mediaBaseUrl = mediaBaseUrl || clientSideMediaBaseUrl;
+
+  const [keepPersonalizing, setKeepPersonalizing] = useState<{
+    show: boolean;
+    index: number;
+  }>({ show: false, index: 0 });
+
+  const [personalizationArray, setPersonalizationArray] = useState<
+    ShoppingCartItemDetailsViewModel[] | []
+  >([]);
+
+  const [cartLinePersonModels, setCartLinePersonModels] = useState<
+    _CartLinePersonDetailModel[] | []
+  >([]);
 
   const { currentPage } = CheckoutController();
 
@@ -206,7 +226,7 @@ const CIlayout1: FC<any> = ({
                         <div className='text-normal-text w-16 text-center'></div>
                       )}
                       <div className='text-normal-text w-20 text-right'>
-                        <Price value={item.totalPrice} />
+                        <Price value={item.productTotal} />
                       </div>
                     </div>
 
@@ -271,7 +291,7 @@ const CIlayout1: FC<any> = ({
                                       submitted
                                     </span>
                                   ) : (
-                                    <span className='font-semibold ml-3'>
+                                    <span className='font-semibold ml-3 invisible'>
                                       Logo
                                       <br />
                                       submitted
@@ -323,10 +343,46 @@ const CIlayout1: FC<any> = ({
                         Remove
                       </button>
                     </div>
+                    {isLinepersonalization && (
+                      <div className='mt-[12px] lg:ml-[20px] mb-[20px] text-center p-[2px] text-sm cursor-pointer'>
+                        <span
+                          className='!w-full btn btn-sm btn-secondary uppercase text-md'
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setPersonalizationArray(
+                              item.shoppingCartItemDetailsViewModels,
+                            );
+                            setKeepPersonalizing({
+                              show: !keepPersonalizing.show,
+                              index: cartItemIndex,
+                            });
+                          }}
+                        >
+                          {__pagesText.cart.personalize}
+                          <br />
+                          {__pagesText.cart.yourItem}
+                        </span>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
             </div>
+            {keepPersonalizing.show &&
+              keepPersonalizing.index === cartItemIndex && (
+                <Personalizing
+                  item={item}
+                  setKeepPersonalizing={setKeepPersonalizing}
+                  availableLocation={availableLocation}
+                  availableFont={availableFont}
+                  availableColor={availableColor}
+                  personalizationArray={personalizationArray}
+                  cartLinePersonModels={cartLinePersonModels}
+                  setCartLinePersonModels={setCartLinePersonModels}
+                  setPersonalizationArray={setPersonalizationArray}
+                  shoppingCartItemsId={item.shoppingCartItemsId}
+                />
+              )}
           </li>
         ))}
     </ul>

@@ -220,6 +220,10 @@ export const productSlice = createSlice({
             additionalLogoCharge: state.som_logos.additionalLogoCharge,
             choosedLogoCompletionPending: null,
           };
+
+          state.toCheckout.totalPrice =
+            state.toCheckout.totalPrice - state.toCheckout.additionalLogoCharge;
+          state.toCheckout.additionalLogoCharge = 0;
           return;
         }
 

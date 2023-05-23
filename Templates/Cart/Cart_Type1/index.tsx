@@ -1,13 +1,23 @@
 import { SpinnerComponent } from '@appComponents/ui/spinner';
 import { paths } from '@constants/paths.constant';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
+import {
+  PersonalizationColor,
+  PersonalizationFont,
+  PersonalizationLocation,
+} from '@services/cart';
+import {
+  getPersonalizationColor,
+  getPersonalizationFont,
+  getPersonalizationLocation,
+} from '@services/cart.service';
 import CartSummarry from '@templates/cartSummarry';
 import CartItem from 'Templates/cartItem';
 import Link from 'next/link';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { _CartProps } from '../Cart';
 import EmptyCart from '../components/emptyCart';
-import CT1_EmployeeLoginCart from './components/CT1_EL_Cart';
+import CT1_EmployeeLoginCart from './Components/CT1_EL_Cart';
 
 const CartType1: React.FC<_CartProps> = ({
   cartData,
@@ -23,6 +33,30 @@ const CartType1: React.FC<_CartProps> = ({
   const isEmployeeLoggedIn = useTypedSelector_v2(
     (state) => state.employee.loggedIn,
   );
+
+  const storeId = useTypedSelector_v2((state) => state.store.id);
+  const [availableFont, setAvailableFont] = useState<
+    PersonalizationFont[] | []
+  >([]);
+  const [availableLocation, setAvailableLocation] = useState<
+    PersonalizationLocation[] | []
+  >([]);
+  const [availableColor, setAvailableColor] = useState<
+    PersonalizationColor[] | []
+  >([]);
+  useEffect(() => {
+    if (storeId) {
+      getPersonalizationFont(storeId).then((res) => {
+        setAvailableFont(res);
+      });
+      getPersonalizationColor(storeId).then((res) => {
+        setAvailableColor(res);
+      });
+      getPersonalizationLocation(storeId).then((res) => {
+        setAvailableLocation(res);
+      });
+    }
+  }, [storeId]);
 
   if (showLoaderOrEmptyText === 'loader') {
     return (
@@ -86,6 +120,9 @@ const CartType1: React.FC<_CartProps> = ({
                     amtQtyBlurHandler,
                     loadProduct,
                     cartType,
+                    availableFont,
+                    availableLocation,
+                    availableColor,
                   }}
                 />
               </div>

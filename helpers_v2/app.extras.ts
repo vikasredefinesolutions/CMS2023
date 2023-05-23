@@ -40,6 +40,7 @@ export const expectedProps: _Expected_AppProps = {
     thirdPartyLogin: false,
     bothLogin: false,
     logoUrl: '',
+    isLinepersonalization: false,
   },
   menuItems: null,
   sbStore: {

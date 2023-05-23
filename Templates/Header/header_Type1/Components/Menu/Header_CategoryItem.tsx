@@ -102,23 +102,25 @@ const Header_Category: React.FC<_props> = ({
   if (view === 'DESKTOP') {
     return (
       <>
-        <Link href={`${url}.html?v=product-list`} className='flex'>
-          <div className='relative flex'>
-            <button
-              title={title}
-              type='button'
-              onMouseOver={() => setFocus(true)}
-              onMouseLeave={() => setFocus(false)}
-              className={`relative text-[12px] xl:text-[14px] mt-[5px] xl:ml-[10px] xl:mr-[10px] ml-[5px] mr-[5px] tracking-[1px] z-10 flex items-center font-[600] border-0 border-b-2 pt-[10px] pb-[10px] border-transparent hover:border-primary text-primary`}
-            >
-              <span
-                className='uppercase text-primary'
-                style={{ textTransform: 'uppercase' }}
+        <Link href={`${url}.html?v=product-list`} passHref className='flex'>
+          <a>
+            <div className='relative flex'>
+              <button
+                title={title}
+                type='button'
+                onMouseOver={() => setFocus(true)}
+                onMouseLeave={() => setFocus(false)}
+                className={`relative text-[12px] xl:text-[14px] mt-[5px] xl:ml-[10px] xl:mr-[10px] ml-[5px] mr-[5px] tracking-[1px] z-10 flex items-center font-[600] border-0 border-b-2 pt-[10px] pb-[10px] border-transparent hover:border-primary text-primary`}
               >
-                {title}
-              </span>
-            </button>
-          </div>
+                <span
+                  className='uppercase text-primary'
+                  style={{ textTransform: 'uppercase' }}
+                >
+                  {title}
+                </span>
+              </button>
+            </div>
+          </a>
         </Link>
 
         {focus && (

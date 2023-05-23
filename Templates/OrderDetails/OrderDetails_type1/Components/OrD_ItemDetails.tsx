@@ -227,13 +227,13 @@ const OrD_ItemDetails: React.FC<_props> = ({
             <div className='w-1/3 px-3'>
               <div className='font-[600] mb-4'>UNIT TOTAL</div>
               <div className='mb-4'>
-                <Price value={item.totalPrice} />
+                <Price value={item.productTotal} />
               </div>
             </div>
             <div className='w-1/3 px-3'>
               <div className='font-[600] mb-4'>ESTIMATED PRICE</div>
               <div className='mb-4'>
-                <Price value={item.totalPrice} />
+                <Price value={item.productTotal} />
               </div>
             </div>
           </div>

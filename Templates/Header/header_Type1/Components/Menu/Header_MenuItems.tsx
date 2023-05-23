@@ -1,5 +1,6 @@
 import { _MenuItems } from '@definations/header.type';
 import MenuItem from '@header/header_Type1/Components/Menu//Header_MenuItem';
+import { useRouter } from 'next/router';
 import React, { Fragment, useEffect, useState } from 'react';
 import Backdrop from '../Backdrop';
 
@@ -15,13 +16,16 @@ const MenuItems: React.FC<_props> = ({
   showSideMenu,
 }) => {
   const [openTab, setOpenTab] = useState<string>('');
-
+  const router = useRouter();
   const [menuItems, setMenuItems] = useState<null | _MenuItems>(null);
   useEffect(() => {
     if (menuItemsFromRoot) {
       setMenuItems(menuItemsFromRoot);
     }
   }, [menuItemsFromRoot]);
+  useEffect(() => {
+    setOpenTab('');
+  }, [router.asPath]);
 
   if (!menuItems) return <></>;
 

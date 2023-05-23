@@ -29,6 +29,7 @@ export interface _StoreReturnType {
   company_address: string;
   thirdPartyLogin: boolean;
   bothLogin: boolean;
+  isLinepersonalization: boolean;
 }
 
 export interface _FetchStoreConfigurations {

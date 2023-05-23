@@ -185,9 +185,16 @@ export const AdditionalCosts = (billing: _MyAcc_OrderBillingDetails) => {
   const orderTaxTotal = billing?.orderTax || 0;
   const giftWrapPrice = billing?.giftWrapPrice || 0;
   const giftWrapAmt = billing?.giftWrapAmt || 0;
+  const logoSetupCharges = billing?.orderLogoSetupFee || 0;
+  const smallRunFeesCharges = billing?.orderSmallRunFee || 0;
 
   const additionalCostsTotal =
-    sewOutTotal + orderTaxTotal + giftWrapAmt + giftWrapPrice;
+    sewOutTotal +
+    orderTaxTotal +
+    giftWrapAmt +
+    giftWrapPrice +
+    logoSetupCharges +
+    smallRunFeesCharges;
 
   if (additionalCostsTotal === 0) {
     return <></>;
@@ -205,6 +212,24 @@ export const AdditionalCosts = (billing: _MyAcc_OrderBillingDetails) => {
           </dt>
           <dd className='font-medium text-gray-900'>
             <Price value={sewOutTotal} />
+          </dd>
+        </div>
+      )}
+
+      {smallRunFeesCharges > 0 && (
+        <div className='flex items-center justify-between border-t border-gray-200 pt-2'>
+          <dt className=''>Small Run Fee</dt>
+          <dd className='font-medium text-gray-900'>
+            <Price value={smallRunFeesCharges} />
+          </dd>
+        </div>
+      )}
+
+      {logoSetupCharges > 0 && (
+        <div className='flex items-center justify-between border-t border-gray-200 pt-2'>
+          <dt className=''>Logo Setup Charges</dt>
+          <dd className='font-medium text-gray-900'>
+            <Price value={logoSetupCharges} />
           </dd>
         </div>
       )}

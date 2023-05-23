@@ -107,7 +107,7 @@ const OL_ItemDetails: React.FC<_props> = ({ item }) => {
                 {__pagesText.OrderPage.unitTotal}
               </div>
               <div className='mb-4'>
-                <Price value={item.totalPrice} />
+                <Price value={item.productTotal} />
               </div>
             </div>
             <div className='w-full md:w-1/3 lg:w-1/4 px-3'>
@@ -116,7 +116,7 @@ const OL_ItemDetails: React.FC<_props> = ({ item }) => {
                 {__pagesText.OrderPage.estimatedPrice}
               </div>
               <div className='mb-4'>
-                <Price value={item.totalPrice} />
+                <Price value={item.productTotal} />
               </div>
             </div>
           </div>

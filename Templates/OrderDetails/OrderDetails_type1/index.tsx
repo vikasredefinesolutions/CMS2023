@@ -86,7 +86,7 @@ const OrderDetails_type1: React.FC = () => {
                       TOTAL PRICE
                     </dt>
                     <dd className='mt-2 text-sub-text'>
-                      <Price value={order.billing?.orderSubtotal} />
+                      <Price value={order.billing?.orderTotal} />
                     </dd>
                   </div>
                 </div>

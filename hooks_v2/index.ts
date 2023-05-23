@@ -85,12 +85,16 @@ export const GetCartTotals = () => {
     discount: couponDiscount,
     creditBalance: allowedBalance,
     totalQty: 0,
+    totalLineCharges: 0,
+    totalLogoCharges: 0,
   };
   if (cart && cart.length > 0) {
     cart.forEach((res) => {
       priceObject.totalPrice += res.totalPrice;
-      priceObject.subTotal += res.totalPrice;
+      priceObject.subTotal += res.productTotal;
       priceObject.totalQty += res.totalQty;
+      priceObject.totalLineCharges += res.lineTotalPrice;
+      priceObject.totalLogoCharges += res.logoTotalPrice;
     });
 
     if (store.cartCharges) {

@@ -419,7 +419,7 @@ const CIlayout2: FC<any> = ({
                   </div>
                 </div>
                 <div className='mt-[20px] mb-[20px] text-center w-full pl-[12px] pr-[12px]'>
-                  <button
+                  <span
                     className='btn btn-lg btn-secondary uppercase'
                     onClick={(e) => {
                       e.preventDefault();
@@ -432,8 +432,10 @@ const CIlayout2: FC<any> = ({
                       });
                     }}
                   >
-                    {__pagesText.cart.personalizeItem}
-                  </button>
+                    {__pagesText.cart.personalize}
+                    <br />
+                    {__pagesText.cart.yourItem}
+                  </span>
                 </div>
                 {keepPersonalizing.show &&
                   keepPersonalizing.index === cartItemIndex && (
