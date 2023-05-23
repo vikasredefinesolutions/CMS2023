@@ -32,6 +32,7 @@ import { conditionalLog_V2 } from './console.helper';
 declare global {
   interface Window {
     dataLayer: any;
+    openWidget: any;
   }
 }
 

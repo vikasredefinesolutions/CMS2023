@@ -19,6 +19,10 @@ const LoggedInMenu: React.FC = () => {
     Logout(logInUser);
   };
 
+  const handleHelp = () => {
+    window.openWidget();
+  };
+
   if (!loggedIn) return <></>;
 
   return (
@@ -85,22 +89,22 @@ const LoggedInMenu: React.FC = () => {
                   </a>
                 </Link>
               </li>
-              <li className='border-t border-t-gray-300'>
-                <Link href={paths.loggedInMenu.help}>
-                  <a className='flex items-center p-2 gap-2.5 text-primary hover:text-primary-hover'>
-                    <span className=''>
-                      <NxtImage
-                        src={__StaticImg.loggedInMenu.help.src}
-                        alt={''}
-                        className={''}
-                        isStatic={true}
-                        useNextImage={false}
-                        title={__pagesText.Headers.help}
-                      />
-                    </span>
-                    <span className=''> {__pagesText.Headers.help}</span>
-                  </a>
-                </Link>
+              <li onClick={handleHelp} className='border-t border-t-gray-300'>
+                {/* <Link href={paths.loggedInMenu.help}> */}
+                <div className='flex items-center p-2 gap-2.5 text-primary hover:text-primary-hover cursor-pointer'>
+                  <span className=''>
+                    <NxtImage
+                      src={__StaticImg.loggedInMenu.help.src}
+                      alt={''}
+                      className={''}
+                      isStatic={true}
+                      useNextImage={false}
+                      title={__pagesText.Headers.help}
+                    />
+                  </span>
+                  <span className=''> {__pagesText.Headers.help}</span>
+                </div>
+                {/* </Link> */}
               </li>
               <li className='border-t border-t-gray-300'>
                 <div

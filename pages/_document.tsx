@@ -151,6 +151,14 @@ class MyDocument extends Document {
             </>
           )}
         </body>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+            window.openWidget = function() {
+              window.fcWidget.open()
+            }`,
+          }}
+        />
       </Html>
     );
   }
