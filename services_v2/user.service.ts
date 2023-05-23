@@ -82,14 +82,14 @@ export const CreateNewAccount = async (
     }
 
     return res;
-  } catch (error) {
+  } catch (error: any) {
     conditionalLog_V2({
       data: error,
       show: __console_v2.user.service.CreateNewAccount,
       type: 'API-ERROR',
       name: 'CreateNewAccount',
     });
-    return null;
+    return { data: null, ...error };
   }
 };
 

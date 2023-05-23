@@ -18,5 +18,6 @@ export interface _SubmitConsultationPayload {
     logoUrl: string;
     message: string;
     recStatus: 'A';
+    status: string;
   };
 }

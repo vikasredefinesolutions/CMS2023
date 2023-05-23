@@ -8,10 +8,10 @@ import * as Yup from 'yup';
 import { paths } from '@constants/paths.constant';
 import { __ValidationText } from '@constants/validation.text';
 import {
-  createNewAccount_payload,
   _CNA_StoreCustomerAddress,
   _CNA_StoreCustomerModel,
   _CreateNewAccount_Payload,
+  createNewAccount_payload,
 } from '@payloads/createNewAccount.payload';
 import {
   CreateNewAccount,
@@ -23,20 +23,20 @@ import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
 
 import { UserAddressType } from '@constants/enum';
 import {
+  __Cookie,
+  __Cookie_Expiry,
+  __UserMessages,
   phonePattern1,
   phonePattern2,
   phonePattern3,
   phonePattern4,
-  __Cookie,
-  __Cookie_Expiry,
-  __UserMessages,
 } from '@constants/global.constant';
 import {
+  KlaviyoScriptTag,
+  TrackGTMEvent,
   deleteCookie,
   extractCookies,
-  KlaviyoScriptTag,
   setCookie,
-  TrackGTMEvent,
 } from '@helpers/common.helper';
 import { updateCartByNewUserId } from '@services/cart.service';
 import { getWishlist } from '@services/wishlist.service';
@@ -154,11 +154,15 @@ const SignUp_type1: React.FC = () => {
       },
     };
 
-    CreateNewAccount(payload).then((res) => {
-      if (res === null) {
+    CreateNewAccount(payload).then((res: any) => {
+      const keyRes = Object.keys(res).find((obj) =>
+        obj.includes('storeCustomerModel.'),
+      );
+      if (res?.data === null) {
         setShowLoader(false);
         showModal({
-          message: res || __UserMessages.signUpPage.SomethingWentWrong,
+          message:
+            res[keyRes || ''] || __UserMessages.signUpPage.SomethingWentWrong,
           title: 'Error',
         });
 

@@ -52,5 +52,6 @@ export interface _SubmitConsultationPayload {
     gclid: string;
     productattributeoptionid: number;
     recStatus: 'A';
+    status: string;
   };
 }

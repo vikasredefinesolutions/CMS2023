@@ -59,7 +59,6 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
   const showExtraButton =
     product.description.length >=
     __pagesConstant._productDetails.descriptionLength;
-
   return (
     <div className='col-span-1 mt-[15px] pl-[8px] pr-[8px] md:pl-[15px] md:pr-[15px] sm:pl-[0px] sm:pr-[0px] lg:mt-[0px]'>
       <div className='hidden md:flex flex-wrap'>
@@ -213,9 +212,9 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
       )}
 
       <div className='m-[10px] mt-[18px]'>
-        <h3 className='mb-[12px] text-title-text'>
+        <div className='mb-[12px] text-title-text'>
           {__pagesText.productInfo.description}
-        </h3>
+        </div>
         <div
           className={`relative text-sm text-default-text div_description transition-all pb-[32px] ${
             !showExtra && 'h-32 overflow-hidden'

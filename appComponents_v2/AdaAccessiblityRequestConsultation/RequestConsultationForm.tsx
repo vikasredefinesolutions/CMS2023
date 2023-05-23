@@ -138,6 +138,7 @@ const RequestConsultationForm: React.FC<{
         logoUrl: '',
         message: value.message,
         recStatus: 'A',
+        status: '',
       },
     };
 
