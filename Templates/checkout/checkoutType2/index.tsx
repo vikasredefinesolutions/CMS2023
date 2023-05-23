@@ -20,6 +20,7 @@ const ChekoutType2: FC<_Props> = ({ cartTemplateId }) => {
   const { shippingChargeType, id: storeId } = useTypedSelector_v2(
     (state) => state.store,
   );
+  const { totalPrice } = GetCartTotals();
 
   const {
     currentPage,
@@ -42,7 +43,7 @@ const ChekoutType2: FC<_Props> = ({ cartTemplateId }) => {
   const { id } = useTypedSelector_v2((state) => state.user);
   const { subTotal } = GetCartTotals();
 
-  const fetchShiiping = async (id: number | null) => {
+  const fetchShiiping = async (id: number | string | null) => {
     try {
       if (storeId && shippingChargeType) {
         await GetShippingmethod({
@@ -345,7 +346,10 @@ const ChekoutType2: FC<_Props> = ({ cartTemplateId }) => {
               )}
             </section>
 
-            <OrderSummary currentpage={currentPage} placeorder={placeOrder} />
+            <OrderSummary
+              currentpage={currentPage}
+              placeorder={() => placeOrder(totalPrice)}
+            />
           </div>
         </div>
       </div>

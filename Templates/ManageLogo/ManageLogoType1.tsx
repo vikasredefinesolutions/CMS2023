@@ -7,8 +7,6 @@ import Link from 'next/link';
 import { _ManageLogoProps } from './managelogo';
 
 const ManageLogoType1: NextPage<_ManageLogoProps> = ({ logoList }) => {
-  // console.log('logo list', logoList);
-
   return (
     <>
       <MyAccountTabs />
@@ -78,7 +76,7 @@ const ManageLogoType1: NextPage<_ManageLogoProps> = ({ logoList }) => {
                       <td className='border-b border-r border-[#ddd] p-[16px]'>
                         <div className='w-24 h-24 mx-auto'>
                           <NxtImage
-                            src={logo.logo}
+                            src={`/${logo.logo}`}
                             alt=''
                             className='img-responsive max-h-[100px]'
                           />
@@ -87,7 +85,7 @@ const ManageLogoType1: NextPage<_ManageLogoProps> = ({ logoList }) => {
                       <td className='border-b border-r border-[#ddd] p-[16px]'>
                         <div className='w-24 h-24'>
                           <NxtImage
-                            src={''}
+                            src={`/${logo.approvedLogo}`}
                             alt=''
                             className='img-responsive max-h-[100px]'
                           />
@@ -110,7 +108,7 @@ const ManageLogoType1: NextPage<_ManageLogoProps> = ({ logoList }) => {
                       <td className='border-b border-r border-[#ddd] p-[16px]'>
                         <div className='overflow-hidden'>
                           <NxtImage
-                            src={logo.logoLocationImage}
+                            src={`/${logo.logoLocationImage}`}
                             alt=''
                             className='max-h-[100px]'
                           />{' '}

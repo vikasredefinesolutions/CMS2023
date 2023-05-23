@@ -14,7 +14,7 @@ import ChangeAddressModal from '@appComponents/modals/ChangeAddressModal';
 import NxtImage from '@appComponents/reUsable/Image';
 import { cardType } from '@constants/common.constant';
 import CheckoutController from '@controllers/checkoutController';
-import { useTypedSelector_v2 } from '@hooks_v2/index';
+import { GetCartTotals, useTypedSelector_v2 } from '@hooks_v2/index';
 import { useEffect } from 'react';
 
 interface _Props {
@@ -69,7 +69,7 @@ const ChekoutType1: React.FC<_Props> = ({ cartTemplateId }) => {
       setShowAddAddress(false);
     }
   }, [shippingAdress]);
-
+  const { totalPrice } = GetCartTotals();
   return (
     <>
       {' '}
@@ -252,6 +252,15 @@ const ChekoutType1: React.FC<_Props> = ({ cartTemplateId }) => {
                             <br />
                             {billingAdress?.address1}
                             <br />
+                            {billingAdress?.address2 &&
+                            billingAdress?.address2.trim() != '' ? (
+                              <>
+                                {billingAdress?.address2}
+                                <br />
+                              </>
+                            ) : (
+                              <></>
+                            )}
                             {[
                               billingAdress?.city,
                               billingAdress?.state,
@@ -394,7 +403,7 @@ const ChekoutType1: React.FC<_Props> = ({ cartTemplateId }) => {
                 <button
                   className='btn btn-lg !w-full text-center btn-secondary mb-[8px]'
                   id='btn-review-order'
-                  onClick={placeOrder}
+                  onClick={() => placeOrder(totalPrice)}
                 >
                   PLACE ORDER
                 </button>{' '}

@@ -65,8 +65,7 @@ const DiscountPricing: React.FC<
               onClick={() => setShowMsg((show) => !show)}
               className='text-[#ffffff] hover:text-[#ffffff] pt-[6px] pb-[2px] flex flex-wrap uppercase items-center text-small-text'
             >
-              <span>
-                {' '}
+              <span className='mr-1'>
                 {__pagesText.productInfo.discountPricing.minimumOrder}
               </span>
               {title === 'selectsizeandquanity'

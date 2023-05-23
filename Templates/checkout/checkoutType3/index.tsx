@@ -1,6 +1,7 @@
 import Price from '@appComponents/Price';
 import { checkoutPages, UserAddressType } from '@constants/enum';
 import CheckoutController from '@controllers/checkoutController';
+import { GetCartTotals } from '@hooks_v2/index';
 import CartItem from '@templates/cartItem';
 import CartSummarry from '@templates/cartSummarry';
 import { ChangeEvent, FC } from 'react';
@@ -16,6 +17,7 @@ interface _Props {
 }
 
 const ChekoutType3: FC<_Props> = ({ cartTemplateId }) => {
+  const { totalPrice } = GetCartTotals();
   const {
     currentPage,
     checkEmail,
@@ -214,7 +216,7 @@ const ChekoutType3: FC<_Props> = ({ cartTemplateId }) => {
               <button
                 className='btn btn-lg !w-full text-center btn-secondary mb-[8px]'
                 id='btn-review-order'
-                onClick={placeOrder}
+                onClick={() => placeOrder(totalPrice)}
               >
                 PLACE ORDER
               </button>{' '}

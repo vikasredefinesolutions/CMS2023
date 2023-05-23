@@ -2,6 +2,7 @@ import NxtImage from '@appComponents/reUsable/Image';
 import { cardType } from '@constants/common.constant';
 import { paymentMethodCustom } from '@constants/enum';
 import { __pagesText } from '@constants/pages.text';
+import CheckoutController from '@controllers/checkoutController';
 import { useEffect, useState } from 'react';
 import { paymentProps } from '..';
 
@@ -14,6 +15,7 @@ const CardPaymentType1: paymentProps = ({
   const [checkCard, setcardCheck] = useState(false);
   const [input, setInput] = useState<number | string>('');
   const [cvv, setcvv] = useState<number | string>('');
+  const { blockInvalidChar } = CheckoutController();
 
   const handleCard = (e: any) => {
     if (!Number(e.target.value) || e.target.value.length == 0) {
@@ -45,8 +47,17 @@ const CardPaymentType1: paymentProps = ({
   });
 
   const handledefault = (e: any) => {
+    const d = new Date().getMonth() + 1;
     e.target.setAttribute('value', e.target.value);
-    setyearMonth({ ...yearMonth, [e.target.name]: e.target.value });
+    if (e.target.value >= d) {
+      e.target.classList.remove('border', 'border-solid', 'border-red-700');
+      e.target.classList.add('border-0');
+      setyearMonth({ ...yearMonth, [e.target.name]: e.target.value });
+    } else {
+      e.target.classList.remove('border-0');
+      e.target.classList.add('border', 'border-red-700', 'border-solid');
+      console.log('non');
+    }
   };
 
   useEffect(() => {
@@ -78,6 +89,7 @@ const CardPaymentType1: paymentProps = ({
       <div className='relative z-0 w-full mb-[20px] border border-gray-border rounded'>
         <input
           onBlur={changeHandler}
+          onKeyDown={blockInvalidChar}
           onChange={handleCard}
           name='cardNumber'
           placeholder=' '
@@ -180,6 +192,7 @@ const CardPaymentType1: paymentProps = ({
               onBlur={changeHandler}
               onChange={handleCVV}
               name='cardVarificationCode'
+              onKeyDown={blockInvalidChar}
               placeholder=' '
               required={true}
               maxLength={3}

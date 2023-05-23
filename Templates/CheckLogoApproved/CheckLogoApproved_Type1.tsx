@@ -130,12 +130,21 @@ const CheckLogoApproved1 = () => {
       console.log(error);
     }
   };
-
+  const checklogoType = (name: string) => {
+    if (name == __pagesText.dst) {
+      return 1;
+    } else if (name == __pagesText.jpg) {
+      return 0;
+    } else {
+      return 2;
+    }
+  };
+  const reverse = logoDetails && [...logoDetails].reverse();
   return (
     <>
       <MyAccountTabs />
-      {logoDetails?.length
-        ? logoDetails.map((logoDetail, index) => (
+      {reverse?.length
+        ? reverse.map((logoDetail, index) => (
             <section
               className='container mx-auto mt-[50px] mb-[50px] text-[#000000]'
               key={`${logoDetail.logoDate}__${index}`}
@@ -242,7 +251,7 @@ const CheckLogoApproved1 = () => {
                             initialValues={{
                               comment: '',
                               logoImageName: logoDetail?.imageUrl,
-                              logoType: index,
+                              logoType: checklogoType(logoDetail.name),
                               logoSize: logoDetail?.logoSize,
                               embroideryColor: logoDetail?.embroideryColor,
                               parentId:
@@ -273,7 +282,7 @@ const CheckLogoApproved1 = () => {
                                   <input
                                     type='hidden'
                                     name='logoType'
-                                    value={index}
+                                    value={checklogoType(logoDetail.name)}
                                   />
                                   <input
                                     type='hidden'
@@ -308,7 +317,9 @@ const CheckLogoApproved1 = () => {
                                       onClick={() =>
                                         Approve_Fn({
                                           logoImageName: logoDetail?.imageUrl,
-                                          logoType: index,
+                                          logoType: checklogoType(
+                                            logoDetail.name,
+                                          ),
                                           logoSize: logoDetail?.logoSize,
                                           embroideryColor:
                                             logoDetail?.embroideryColor,
