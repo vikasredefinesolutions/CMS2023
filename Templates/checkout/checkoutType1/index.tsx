@@ -117,6 +117,15 @@ const ChekoutType1: React.FC<_Props> = ({ cartTemplateId }) => {
                             <br />
                             {shippingAdress?.address1}
                             <br />
+                            {shippingAdress?.address2 &&
+                            shippingAdress?.address2.trim() != '' ? (
+                              <>
+                                {shippingAdress?.address2}
+                                <br />
+                              </>
+                            ) : (
+                              <></>
+                            )}
                             {[
                               shippingAdress?.city,
                               shippingAdress?.state,

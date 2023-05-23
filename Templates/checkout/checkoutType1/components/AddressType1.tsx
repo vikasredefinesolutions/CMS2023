@@ -62,6 +62,14 @@ const CheckoutAddress = ({
           <br />
           {address?.address1}
           <br />
+          {address?.address2 && address?.address2.trim() != '' ? (
+            <>
+              {address?.address2}
+              <br />
+            </>
+          ) : (
+            <></>
+          )}
           {[address?.city, address?.state, address?.postalCode].join(', ')}
           <br />
           {address?.countryName}

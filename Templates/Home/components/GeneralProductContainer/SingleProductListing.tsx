@@ -45,14 +45,16 @@ const SingleProductListing: React.FC<_props> = (props) => {
                 className='relative'
               >
                 <div className='w-full overflow-hidden aspect-w-1 aspect-h-1'>
-                  <ImageComponent
-                    src={store.mediaBaseUrl + mainImageUrl}
-                    alt='no image'
-                    className='w-auto h-auto m-auto max-h-[348px]'
-                    height={350}
-                    width={350}
-                    key={currentProduct?.productId}
-                  />
+                  <a style={{ display: 'block' }}>
+                    <ImageComponent
+                      src={store.mediaBaseUrl + mainImageUrl}
+                      alt='no image'
+                      className='w-auto h-auto m-auto max-h-[348px]'
+                      height={350}
+                      width={350}
+                      key={currentProduct?.productId}
+                    />
+                  </a>
                 </div>
               </Link>
             </div>
