@@ -7,7 +7,7 @@ import Link from 'next/link';
 import React from 'react';
 import { _CartProps } from '../Cart';
 import EmptyCart from '../components/emptyCart';
-import CT1_EmployeeLoginCart from './Components/CT1_EL_Cart';
+import CT1_EmployeeLoginCart from './components/CT1_EL_Cart';
 
 const CartType1: React.FC<_CartProps> = ({
   cartData,
