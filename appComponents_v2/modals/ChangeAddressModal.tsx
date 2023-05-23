@@ -17,7 +17,7 @@ type props = {
   closeModalHandler: () => void;
   addAddressButtonHandler: () => void;
   // eslint-disable-next-line no-unused-vars
-  setAddressEditData: (arg: CustomerAddress) => void;
+  setAddressEditData: (arg: CustomerAddress | null) => void;
 };
 const ChangeAddressModal: FC<props> = ({
   addressArray,
@@ -135,7 +135,10 @@ const ChangeAddressModal: FC<props> = ({
                 data-modal-toggle='addshippingaddressModal'
                 type='button'
                 className='btn  btn-secondary w-full '
-                onClick={addAddressButtonHandler}
+                onClick={() => {
+                  setAddressEditData(null);
+                  addAddressButtonHandler();
+                }}
               >
                 Add New Address
               </button>

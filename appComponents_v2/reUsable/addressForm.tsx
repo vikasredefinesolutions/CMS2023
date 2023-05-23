@@ -49,7 +49,9 @@ const AddressForm = (props: AddressFormRefType) => {
         }
       });
     }
-
+    if (values.companyName == null) {
+      setFieldValue('companyName', '');
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [values.countryName, country]);
 
