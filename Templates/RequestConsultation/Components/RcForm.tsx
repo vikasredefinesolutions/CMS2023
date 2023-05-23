@@ -176,6 +176,7 @@ const RcForm: React.FC<{ productId: number; attriubteOptionId: number }> = ({
         gclid: '',
         productattributeoptionid: attriubteOptionId,
         recStatus: 'A',
+        status: '',
       },
     };
 
