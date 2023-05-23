@@ -1,11 +1,12 @@
 import { __pagesText } from '@constants/pages.text';
+import { editAccountMessage } from '@constants/validation.text';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import {
   UpdateUserData,
   UpdateUserPassword,
   getDecryptPassword,
 } from '@services/user.service';
-import { Form, Formik } from 'formik';
+import { ErrorMessage, Form, Formik } from 'formik';
 import { useEffect, useState } from 'react';
 import * as Yup from 'yup';
 
@@ -70,9 +71,10 @@ const AccountSetting = () => {
   };
 
   const validationSchema = Yup.object().shape({
-    firstName: Yup.string().required(),
-    lastName: Yup.string().required(),
-    companyName: Yup.string().required(),
+    firstName: Yup.string().required(editAccountMessage.firstName),
+    lastName: Yup.string().required(editAccountMessage.lastName),
+    companyName: Yup.string().required(editAccountMessage.companyName),
+    password: Yup.string().required(editAccountMessage.password),
   });
 
   useEffect(() => {
@@ -119,7 +121,7 @@ const AccountSetting = () => {
               onSubmit={submitHandler}
               validationSchema={validationSchema}
             >
-              {({ values, handleChange, handleBlur }) => (
+              {({ values, handleChange, handleBlur, errors }) => (
                 <Form>
                   <div className='mb-[24px] mt-[24px]'>
                     <div className='mt-[20px] flex flex-wrap items-center gap-[8px] max-w-3xl'>
@@ -142,6 +144,11 @@ const AccountSetting = () => {
                           onChange={handleChange}
                           onBlur={handleBlur}
                         />
+                        <ErrorMessage
+                          name={'firstName'}
+                          className='text-rose-500'
+                          component={'p'}
+                        />
                       </div>
                     </div>
                     <div className='mt-[20px] flex flex-wrap items-center gap-[8px] max-w-3xl'>
@@ -163,6 +170,11 @@ const AccountSetting = () => {
                           disabled={!activeEditBox}
                           onChange={handleChange}
                           onBlur={handleBlur}
+                        />
+                        <ErrorMessage
+                          name={'lastName'}
+                          className='text-rose-500'
+                          component={'p'}
                         />
                       </div>
                     </div>
@@ -207,6 +219,11 @@ const AccountSetting = () => {
                           onChange={handleChange}
                           onBlur={handleBlur}
                         />
+                        <ErrorMessage
+                          name={'companyName'}
+                          className='text-rose-500'
+                          component={'p'}
+                        />
                       </div>
                     </div>
                     <hr className='mt-[20px]'></hr>
@@ -219,6 +236,7 @@ const AccountSetting = () => {
                         <div className='relative grow'>
                           <input
                             id='password'
+                            name='password'
                             className='form-input'
                             style={
                               !activeEditBox ? { backgroundColor: '#eee' } : {}
@@ -231,6 +249,11 @@ const AccountSetting = () => {
                               setNewPassword(e.target.value);
                             }}
                             disabled={!activeEditBox}
+                          />
+                          <ErrorMessage
+                            name={'password'}
+                            className='text-rose-500'
+                            component={'p'}
                           />
                           <button
                             onClick={() => setShowPassword(!showPassword)}

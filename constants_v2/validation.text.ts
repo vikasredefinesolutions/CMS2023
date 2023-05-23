@@ -125,3 +125,9 @@ export const addReviewMessages = {
     required: 'Heading is required',
   },
 };
+export const editAccountMessage = {
+  firstName: 'Please enter first name.',
+  lastName: 'Please enter last name.',
+  companyName: 'Please enter company name.',
+  password: 'Please enter password.',
+};
