@@ -87,8 +87,8 @@ const ChangeAddressModal: FC<props> = ({
                           <div className='mb-3 '>
                             {address.firstname} {address.lastName}
                             <br />
-                            {/* {address.companyName} */}
-                            {/* <br /> */}
+                            {address.companyName}
+                            <br />
                             {address.address1}
                             <br />
                             {[

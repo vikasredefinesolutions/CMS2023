@@ -37,10 +37,17 @@ const CartController = () => {
     setColor,
     product_storeData,
   } = useActions_v2();
-  const cartData = useTypedSelector_v2((state) => state.cart.cart);
+  const { cart: cartData, lastUpdate: lastUpdatedAt } = useTypedSelector_v2(
+    (state) => state.cart,
+  );
 
   const { loggedIn: isEmployeeLoggedIn, isLoadingComplete } =
     useTypedSelector_v2((state) => state.employee);
+
+  const [cartApiLoadedOnce, setCartApiLoadedOnce] = useState<{
+    show: null | 'loader' | 'emptyCart' | 'dataFound';
+    lastUpdatedAt: number;
+  }>({ show: 'loader', lastUpdatedAt: lastUpdatedAt });
   const {
     id: storeId,
     sewOutCharges,
@@ -66,17 +73,6 @@ const CartController = () => {
           })),
         )
       : [];
-
-  useEffect(() => {
-    if (isLoadingComplete) {
-      if (!cartData) {
-        fetchCartData().finally(() => setShowLoader(false));
-      } else if (cartData.length > 0) {
-        setEmpCustomQtyPrice(getNewOptionAr());
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cartData, customerId]);
 
   const fetchCartData = async () => {
     const response = await fetchCartDetails({
@@ -432,6 +428,38 @@ const CartController = () => {
     }
   };
 
+  useEffect(() => {
+    if (isLoadingComplete) {
+      if (cartData && cartData.length > 0) {
+        setEmpCustomQtyPrice(getNewOptionAr());
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cartData, customerId]);
+
+  useEffect(() => {
+    if (cartApiLoadedOnce.show === null) {
+      setCartApiLoadedOnce({ show: 'loader', lastUpdatedAt: 0 });
+      fetchCartData();
+      return;
+    }
+
+    if (lastUpdatedAt === cartApiLoadedOnce.lastUpdatedAt) {
+      return;
+    }
+
+    if (cartData && cartData?.length > 0) {
+      setCartApiLoadedOnce({
+        show: 'dataFound',
+        lastUpdatedAt: lastUpdatedAt,
+      });
+      return;
+    }
+
+    setCartApiLoadedOnce({ show: 'emptyCart', lastUpdatedAt: lastUpdatedAt });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lastUpdatedAt]);
+
   return {
     cartData,
     removeCartItem,
@@ -444,6 +472,7 @@ const CartController = () => {
     amtQtyBlurHandler,
     loadProduct,
     showAddOtf,
+    showLoaderOrEmptyText: cartApiLoadedOnce.show,
     setShowAddOtf,
   };
 };

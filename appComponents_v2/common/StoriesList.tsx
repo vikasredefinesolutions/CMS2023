@@ -123,7 +123,7 @@ const StoriesList: React.FC<_Props> = ({
                   <div className='absolute left-5 top-5'>
                     <div className='mb-4'>
                       <Link href={story.categoryUrl}>
-                        <span className='btn btn-primary pl-[20px] pr-[20px] pt-[10px] pb-[10px] !uppercase text-default-text'>
+                        <span className='btn bg-white hover:bg-tertiary-hover hover:text-anchor-hover text-anchor pl-[20px] pr-[20px] pt-[10px] pb-[10px] !uppercase text-default-text'>
                           {story.categoryName}
                         </span>
                       </Link>

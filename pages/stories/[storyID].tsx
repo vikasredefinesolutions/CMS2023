@@ -4,6 +4,7 @@ import { __SuccessErrorText } from '@constants/successError.text';
 import { _GetPageType } from '@definations/slug.type';
 import { _Story } from '@definations/story';
 import { highLightError } from '@helpers/console.helper';
+import { useActions_v2 } from '@hooks_v2/index';
 import { getPageComponents } from '@services/home.service';
 import { FetchPageType } from '@services/slug.service';
 import {
@@ -14,40 +15,46 @@ import {
 import StoryCategoryTemplate from '@templates/StoryCategory';
 import StoryDetailsTemplate from '@templates/StoryDetails';
 import { GetServerSideProps, GetServerSidePropsResult } from 'next';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { _globalStore } from 'store.global';
 interface _StoryCategoryProps {
-  id: string;
-  pageType: __pageTypeConstant.stories;
-  list: _Story[] | null;
+  data: {
+    id: string;
+    pageType: __pageTypeConstant.stories;
+    list: _Story[] | null;
+  };
+  metaData: _GetPageType;
 }
 
 interface _StoryDetailsProps {
-  id: string;
-  pageType: __pageTypeConstant.blog;
-  list: _Story[] | null;
-  story: {
-    title: string;
-    category: {
-      name: string;
-      url: string;
-    };
-    prev: string;
-    next: string;
-  };
-  banner:
-    | {
+  data: {
+    id: string;
+    pageType: __pageTypeConstant.blog;
+    list: _Story[] | null;
+    story: {
+      title: string;
+      category: {
         name: string;
-        urlType: string;
         url: string;
-      }[]
-    | null;
-  page: {
-    // @ts-ignore: Unreachable code error
-    accordionContent: any;
-    type: __pageTypeConstant.blog;
-    slug: string;
+      };
+      prev: string;
+      next: string;
+    };
+    banner:
+      | {
+          name: string;
+          urlType: string;
+          url: string;
+        }[]
+      | null;
+    page: {
+      // @ts-ignore: Unreachable code error
+      accordionContent: any;
+      type: __pageTypeConstant.blog;
+      slug: string;
+    };
   };
+  metadata: _GetPageType;
 }
 
 interface _Something_WentWrong {
@@ -57,28 +64,43 @@ interface _Something_WentWrong {
 const Story: React.FC<
   _StoryCategoryProps | _StoryDetailsProps | _Something_WentWrong
 > = (props) => {
+  const { topic_set_isCMS, updatePageType } = useActions_v2();
+
+  useEffect(() => {
+    if ('metadata' in props) {
+      updatePageType(props.metadata);
+    }
+  }, []);
+
+  useEffect(() => {
+    topic_set_isCMS(true);
+    return () => {
+      topic_set_isCMS(false);
+    };
+  }, []);
+
   if ('error' in props) {
     const { error } = props;
     return <>{error}</>;
   }
 
-  if (props.pageType === __pageTypeConstant.stories) {
+  if (props.data.pageType === __pageTypeConstant.stories) {
     return (
       <StoryCategoryTemplate
-        list={props.list || []}
+        list={props.data.list || []}
         id={_defaultTemplates.storyCategory}
       />
     );
   }
 
-  if (props.pageType === __pageTypeConstant.blog) {
+  if (props.data.pageType === __pageTypeConstant.blog) {
     return (
       <StoryDetailsTemplate
-        list={props.list || []}
+        list={props.data.list || []}
         id={_defaultTemplates.storyDetails}
-        banner={props.banner || []}
-        story={props.story}
-        page={props.page}
+        banner={props.data.banner || []}
+        story={props.data.story}
+        page={props.data.page}
       />
     );
   }
@@ -135,80 +157,85 @@ export const getServerSideProps: GetServerSideProps = async (
 
   // -----------------------Props Initialization--------------------------
   const categoryProps: _StoryCategoryProps = {
-    id: _defaultTemplates.storyCategory,
-    pageType: __pageTypeConstant.stories,
-    list: null,
+    data: {
+      id: _defaultTemplates.storyCategory,
+      pageType: __pageTypeConstant.stories,
+      list: null,
+    },
+    metaData: pageMetaData,
   };
 
   const detailsProps: _StoryDetailsProps = {
-    id: _defaultTemplates.storyDetails,
-    pageType: __pageTypeConstant.blog,
-    list: null,
-    story: {
-      category: {
-        url: '',
-        name: '',
+    data: {
+      id: _defaultTemplates.storyDetails,
+      pageType: __pageTypeConstant.blog,
+      list: null,
+      story: {
+        category: {
+          url: '',
+          name: '',
+        },
+        title: '',
+        prev: '',
+        next: '',
       },
-      title: '',
-      prev: '',
-      next: '',
+      banner: null,
+      page: {
+        accordionContent: '',
+        type: __pageTypeConstant.blog,
+        slug: pageMetaData.slug,
+      },
     },
-    banner: null,
-    page: {
-      accordionContent: '',
-      type: __pageTypeConstant.blog,
-      slug: pageMetaData.slug,
-    },
+    metadata: pageMetaData,
   };
 
   // ------------------------Page check --------------------------------------
   if (pageMetaData.type === __pageTypeConstant.stories) {
     // stories ===>  category Page
-    categoryProps.list = await GetStoriesByCategoryURL({
+    categoryProps.data.list = await GetStoriesByCategoryURL({
       storeId: _globalStore.storeId!,
       pageType: __pageTypeConstant.stories,
       categoryurl: storySlug,
     });
+
+    return { props: categoryProps };
   }
 
   if (pageMetaData.type === __pageTypeConstant.blog) {
     // Blog ===> Individual Story page
-    detailsProps.list = await GetStoryList({
+    detailsProps.data.list = await GetStoryList({
       pageType: __pageTypeConstant.blog,
       storeId: _globalStore.storeId!,
     });
 
-    detailsProps.page.accordionContent = await getPageComponents({
+    detailsProps.data.page.accordionContent = await getPageComponents({
       pageId: pageMetaData.id,
       type: __pageTypeConstant.blog,
     });
 
-    const { banner, prevNext } = await GetNextStoryByStoryID({
+    const { banner, prevNext, category } = await GetNextStoryByStoryID({
       storiesId: pageMetaData.id,
     });
 
-    detailsProps.page = {
-      ...detailsProps.page,
+    detailsProps.data.page = {
+      ...detailsProps.data.page,
       type: pageMetaData.type,
       slug: pageMetaData.slug,
     };
-    detailsProps.banner = banner;
-    detailsProps.story = {
+    detailsProps.data.banner = banner;
+    detailsProps.data.story = {
       ...prevNext,
       title: pageMetaData.name,
       category: {
-        name: 'missing',
-        url: 'missing',
+        name: category.name,
+        url: category.url,
       },
     };
+
+    return { props: detailsProps };
   }
 
-  const props =
-    pageMetaData.type === __pageTypeConstant.stories
-      ? categoryProps
-      : detailsProps;
-
   return {
-    props: props,
+    notFound: true,
   };
 };

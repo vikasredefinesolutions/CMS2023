@@ -476,7 +476,7 @@ const Home = (props) => {
                                           ).includes('FullAccordion') ? (
                                             <>
                                               {componentValue?.selectedVal
-                                                ?.Title && (
+                                                ?.Title?.value && (
                                                 <div
                                                   class='text-box-h2 mb-4'
                                                   id='Title'

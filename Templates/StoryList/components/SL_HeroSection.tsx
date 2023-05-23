@@ -50,7 +50,7 @@ const SL_HeroSection: React.FC<_Props> = ({ firstTwo }) => {
                   </div>
                   <div className='mb-[10px] text-default-text'>
                     <Link href='/' title='' className=''>
-                      <span className='btn btn-primary pl-[20px] pr-[20px] pt-[10px] pb-[10px] !uppercase text-default-text'>
+                      <span className='btn bg-light-gray hover:bg-tertiary-hover hover:text-anchor-hover text-anchor pl-[20px] pr-[20px] pt-[10px] pb-[10px] !uppercase text-default-text'>
                         {firstStory.categoryName}
                       </span>
                     </Link>
@@ -59,11 +59,10 @@ const SL_HeroSection: React.FC<_Props> = ({ firstTwo }) => {
                     {firstStory.name}
                   </div>
                   <div className='text-base mt-[20px]'>
-                    <Link
-                      className='btn btn-secondary'
-                      href={`${paths.STORIES}/${firstStory.slug}`}
-                    >
-                      LEARN MORE
+                    <Link href={`${paths.STORIES}/${firstStory.slug}`}>
+                      <a className='custbtn-secondary pb-[10px] pr-[20px] pl-[20px] pt-[10px]'>
+                        LEARN MORE
+                      </a>
                     </Link>
                   </div>
                 </div>
@@ -102,7 +101,7 @@ const SL_HeroSection: React.FC<_Props> = ({ firstTwo }) => {
                         title=''
                         className=''
                       >
-                        <span className='btn btn-primary pl-[20px] pr-[20px] pt-[10px] pb-[10px] !uppercase text-default-text'>
+                        <span className='btn bg-light-gray hover:bg-tertiary-hover hover:text-anchor-hover text-anchor pl-[20px] pr-[20px] pt-[10px] pb-[10px] !uppercase text-default-text'>
                           {secondStory.categoryUrl}
                         </span>
                       </Link>
@@ -111,11 +110,10 @@ const SL_HeroSection: React.FC<_Props> = ({ firstTwo }) => {
                       {secondStory.name}
                     </div>
                     <div className='text-base mt-[20px]'>
-                      <Link
-                        className='btn btn-secondary'
-                        href={`${paths.STORIES}/${secondStory.slug}`}
-                      >
-                        LEARN MORE
+                      <Link href={`${paths.STORIES}/${secondStory.slug}`}>
+                        <a className='custbtn-secondary pb-[10px] pr-[20px] pl-[20px] pt-[10px]'>
+                          LEARN MORE
+                        </a>
                       </Link>
                     </div>
                   </div>

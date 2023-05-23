@@ -3,8 +3,8 @@ import { _FeaturedProduct } from '@definations/APIs/storeDetails.res';
 import { useActions_v2 } from 'hooks_v2';
 import Link from 'next/link';
 import React, { Fragment, useEffect, useState } from 'react';
-import FeatureDisplayImage from './FeatureDisplayImage';
 import FeaturedImageOptions from './FeaturedImageOptions';
+import FeatureDisplayImage from './FeatureDisplayImage';
 
 interface _props {
   brands: { name: string; id: number }[] | null;

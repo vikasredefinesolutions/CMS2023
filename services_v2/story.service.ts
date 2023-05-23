@@ -60,6 +60,10 @@ interface _t_GetNextStoryByStoryID {
     prev: string;
     next: string;
   };
+  category: {
+    name: string;
+    url: string;
+  };
   banner: {
     name: string;
     urlType: string;
@@ -67,22 +71,25 @@ interface _t_GetNextStoryByStoryID {
   }[];
 }
 
+export enum URLType {
+  External = 'external',
+  Internal = 'internal',
+}
+
+export interface _GetNextStoryByStoryID_Response {
+  next: string;
+  previous: string;
+  categoryName: string;
+  categoryUrl: string;
+  getStoriesBannerModels: { name: string; urlType: URLType; url: string }[];
+}
+
 export const GetNextStoryByStoryID = async (payload: {
   storiesId: number;
 }): Promise<_t_GetNextStoryByStoryID> => {
   const url = `/CmsTopicsPublish/geturl/${payload.storiesId}.json`;
 
-  const response = await CallAPI_v2<
-    {
-      next: string;
-      previous: string;
-      getStoriesBannerModels: {
-        name: string;
-        urlType: string;
-        url: string;
-      }[];
-    }[]
-  >({
+  const response = await CallAPI_v2<_GetNextStoryByStoryID_Response[]>({
     name: {
       service: 'story',
       api: 'GetNextStoryByStoryID',
@@ -97,6 +104,10 @@ export const GetNextStoryByStoryID = async (payload: {
     prevNext: {
       prev: (response && response[0]?.previous) || '',
       next: (response && response[0]?.next) || '',
+    },
+    category: {
+      name: (response && response[0].categoryName) || '',
+      url: (response && response[0].categoryUrl) || '',
     },
     banner: (response && response[0]?.getStoriesBannerModels) || [],
   };

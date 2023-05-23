@@ -12,9 +12,12 @@ const FeaturedProducts: React.FC<_props> = (props) => {
 
   return (
     <section className='mainsection featured_items text-center'>
-      <div className='peter-millar-promotional-embroidered-clothing-nw'>
-        {dataArr.featuredproducts_section_title.value ?? ''}
-      </div>
+      {dataArr.featuredproducts_section_title.value && (
+        <div className='peter-millar-promotional-embroidered-clothing-nw'>
+          {dataArr.featuredproducts_section_title.value ?? ''}
+        </div>
+      )}
+
       <div>
         {dataArr?.featuredproducts_tabing_display &&
         dataArr?.featuredproducts_tabing_display?.value === 'Yes' &&
@@ -25,7 +28,7 @@ const FeaturedProducts: React.FC<_props> = (props) => {
             customMessage={dataArr?.featuredproducts_custom_message?.value}
           />
         ) : (
-          <div className='relative pt-5'>
+          <div className='relative pt-[30px] '>
             <BrandProductListing
               showBorder={dataArr?.featuredproducts_show_border?.value}
               productsData={dataArr?.featuredproducts?.value[0]?.data}

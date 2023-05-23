@@ -2,12 +2,13 @@ import AddOTFItemNo from '@appComponents/modals/addOtfItem';
 import StartOrderModal from '@appComponents/modals/startOrderModal/StartOrderModal';
 import CartController from '@controllers/cartController';
 import { TrackGTMEvent } from '@helpers/common.helper';
-import { useTypedSelector_v2 } from '@hooks_v2/index';
+import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import { FetchPageThemeConfigs } from '@services/product.service';
 import CartTemplate from '@templates/Cart';
 import { useEffect, useState } from 'react';
 const Cart = () => {
   const [cartType, setCartType] = useState<number>(1);
+  const { setShowLoader } = useActions_v2();
   const { id } = useTypedSelector_v2((state) => state.store);
   const {
     cartData,
@@ -22,19 +23,23 @@ const Cart = () => {
     loadProduct,
     showAddOtf,
     setShowAddOtf,
+    showLoaderOrEmptyText,
   } = CartController();
   const { id: customerId } = useTypedSelector_v2((state) => state.user);
 
   useEffect(() => {
     if (id) {
-      FetchPageThemeConfigs('' + id, 'cartPage').then((res) => {
-        if (res.config_value) {
-          let type: { cartPageTemplateId: number } = JSON.parse(
-            res.config_value,
-          );
-          setCartType(type.cartPageTemplateId);
-        }
-      });
+      setShowLoader(true);
+      FetchPageThemeConfigs('' + id, 'cartPage')
+        .then((res) => {
+          if (res.config_value) {
+            let type: { cartPageTemplateId: number } = JSON.parse(
+              res.config_value,
+            );
+            setCartType(type.cartPageTemplateId);
+          }
+        })
+        .finally(() => setShowLoader(false));
     }
   }, [id]);
 
@@ -79,6 +84,7 @@ const Cart = () => {
           loadProduct,
           setShowAddOtf,
           cartType,
+          showLoaderOrEmptyText,
         }}
       />
       {showEdit && product && (

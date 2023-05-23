@@ -1,7 +1,7 @@
 import { __Cookie, __LocalStorage } from '@constants/global.constant';
 import { paths } from '@constants/paths.constant';
 import { _AnnouncementRow } from '@definations/header.type';
-import { deleteCookie } from '@helpers/common.helper';
+import { deleteCookie, setCookie } from '@helpers/common.helper';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -34,6 +34,7 @@ const UpperHeader: React.FC<_props> = (headerContent) => {
     logoutClearCart();
     logInUser('CLEAN_UP');
 
+    setCookie(__Cookie.userId, '', 'EPOCH');
     deleteCookie(__Cookie.tempCustomerId);
     localStorage.removeItem(__LocalStorage.empData);
     router.push(paths.HOME);
@@ -51,7 +52,7 @@ const UpperHeader: React.FC<_props> = (headerContent) => {
                   {employeeDetails.empId ? (
                     <>
                       <span className='text-center text-capitalize cursor-pointer text-[#ffffff]'>
-                        Employee logged in
+                        Employee Logged In
                         <button
                           className='ml-1'
                           style={{ color: '#7BC24E' }}

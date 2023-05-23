@@ -81,7 +81,7 @@ const CartSummarryType1: FC = () => {
             </div>
           )}
 
-          {couponDetails?.amount && (
+          {!!couponDetails?.amount && (
             <div className='flex items-center justify-between pt-[10px] pb-[20px]'>
               <dt className='text-base'>
                 Promo{' '}
@@ -122,7 +122,7 @@ const CartSummarryType1: FC = () => {
               </label>{' '}
               {showUpdateBtn() ? (
                 <button
-                  onClick={applyCouponHandler}
+                  onClick={() => applyCouponHandler(coupon)}
                   className='coupon-code-Apply text-sm absolute right-0 top-2 curosr-pointer z-40 btn btn-secondary btn-sm '
                 >
                   UPDATE

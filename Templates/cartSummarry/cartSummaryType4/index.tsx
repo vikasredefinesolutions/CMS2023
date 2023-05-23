@@ -62,7 +62,7 @@ const CartSummarryType4: FC = () => {
                   </label>{' '}
                   {coupon ? (
                     <button
-                      onClick={applyCouponHandler}
+                      onClick={() => applyCouponHandler(coupon)}
                       className='coupon-code-Apply text-sm absolute right-0 top-2 curosr-pointer z-40'
                     >
                       Apply

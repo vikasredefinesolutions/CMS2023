@@ -392,11 +392,15 @@ export const updateSetProperties = (element) => {
         let iconBottomPadding;
         let iconType;
         let bgPropertyName = key;
+        let imageOrIcon = 'Icon';
 
         if (Object.keys(element.selectedVal).includes(key)) {
           Object.entries(element.selectedVal).map(([keyq, valueq]) => {
             if (keyq == bgPropertyName) {
               icon = valueq.value;
+            }
+            if (keyq == bgPropertyName+'_image_or_icon') {
+              imageOrIcon = valueq.value;
             }
             if (keyq == bgPropertyName + '_type') {
               iconType = valueq.value;
@@ -440,19 +444,23 @@ export const updateSetProperties = (element) => {
           });
           // console.log(element.selected_Values, 'KE', iconType);
           let className = '';
-          if (iconType == 'fontawesome') {
-            className += '';
-          } else if (iconType == 'googlematerial') {
-            className += 'material-icons-outlined';
-          } else if (iconType == 'googlesymbol') {
-            className += 'material-symbol-outlined';
+          if(imageOrIcon === 'Icon')
+          {
+            if (iconType == 'fontawesome') {
+              className += '';
+            } else if (iconType == 'googlematerial') {
+              className += 'material-icons-outlined';
+            } else if (iconType == 'googlesymbol') {
+              className += 'material-symbol-outlined';
+            }
+            if (iconFontSize) {
+              className += ' ' + iconFontSize;
+            }
+            if (iconFontWeight) {
+              className += ' ' + iconFontWeight;
+            }
           }
-          if (iconFontSize) {
-            className += ' ' + iconFontSize;
-          }
-          if (iconFontWeight) {
-            className += ' ' + iconFontWeight;
-          }
+
 
           if (iconLeftPadding) {
             className += ' ' + iconLeftPadding;
@@ -479,10 +487,19 @@ export const updateSetProperties = (element) => {
             className += ' ' + iconBottomMargin;
           }
 
-          let iconStr = '<span class="' + className + '"';
-          if (iconFontColor)
-            iconStr += ' style="color: ' + iconFontColor + ';"';
-          iconStr += '>' + icon + '</span>';
+          let iconStr = '';
+          if(imageOrIcon === 'Icon')
+          {
+              iconStr = '<span class="'+className+'"';
+              if(iconFontColor)
+                  iconStr += ' style="color: '+iconFontColor+';"';
+              iconStr += '>'+icon+'</span>';    
+          }
+          else
+          {
+              iconStr = '<span class="'+className+'"';
+              iconStr += '><img src="'+icon+'" /></span>';   
+          }
           //let x = ReactDOM.findDOMNode(props.refArray.current[props.currentComponent]);
           if (x && x.querySelectorAll('#' + key).length > 0)
             x.querySelectorAll('#' + key)[0].innerHTML = iconStr;
@@ -1290,6 +1307,14 @@ export const updateSetProperties = (element) => {
 
       }
     }
+
+    if(Object.keys(element.selectedVal).includes('ElementConfiguration_text_section_bg'))
+        {
+            if(element.selectedVal.ElementConfiguration_text_section_bg.value)
+            {
+                x.querySelectorAll('#right-section')[0].style = 'background: ' + element.selectedVal.ElementConfiguration_text_section_bg.value;
+            }
+        }
 
     if (
       Object.keys(element.selectedVal).includes(

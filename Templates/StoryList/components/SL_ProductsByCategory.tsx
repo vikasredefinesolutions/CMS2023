@@ -36,7 +36,7 @@ const SL_ProductsByCategory: React.FC = () => {
               <div className='bg-white w-full lg:p-20 mx-auto py-10 px-5 lg:px-20 lg:py-20'>
                 <div className='mb-[10px]'>
                   <a href='/' title=''>
-                    <span className='btn btn-primary pl-[20px] pr-[20px] pt-[10px] pb-[10px] !uppercase text-default-text'>
+                    <span className='btn bg-white hover:bg-tertiary-hover hover:text-anchor-hover text-anchor pl-[20px] pr-[20px] pt-[10px] pb-[10px] !uppercase text-default-text'>
                       Shop Products by category
                     </span>
                   </a>
@@ -58,13 +58,11 @@ const SL_ProductsByCategory: React.FC = () => {
                           onClick={() => setActiveCateogory(cate)}
                         >
                           <button
-                            className={
-                              'inline-block px-[10px] py-[10px] border-b-2 ' +
-                                activeCategory ===
-                              cate
-                                ? 'border-b-anchor'
-                                : 'border-b-transparent'
-                            }
+                            className={`inline-block px-[10px] py-[10px] border-b-2 ${
+                              activeCategory === cate
+                                ? 'border-anchor'
+                                : 'border-transparent'
+                            }`}
                           >
                             {cate}
                           </button>

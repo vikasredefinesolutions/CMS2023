@@ -1,3 +1,4 @@
+import { SpinnerComponent } from '@appComponents/ui/spinner';
 import { paths } from '@constants/paths.constant';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import CartSummarry from '@templates/cartSummarry';
@@ -6,7 +7,7 @@ import Link from 'next/link';
 import React from 'react';
 import { _CartProps } from '../Cart';
 import EmptyCart from '../components/emptyCart';
-import CT1_EmployeeLoginCart from './components/CT1_EL_Cart';
+import CT1_EmployeeLoginCart from './Components/CT1_EL_Cart';
 
 const CartType1: React.FC<_CartProps> = ({
   cartData,
@@ -17,12 +18,27 @@ const CartType1: React.FC<_CartProps> = ({
   loadProduct,
   setShowAddOtf,
   cartType,
+  showLoaderOrEmptyText,
 }) => {
   const isEmployeeLoggedIn = useTypedSelector_v2(
     (state) => state.employee.loggedIn,
   );
 
-  if (!cartData || cartData.length === 0) {
+  if (showLoaderOrEmptyText === 'loader') {
+    return (
+      <div className=''>
+        <section className='container mx-auto text-center'>
+          <div className='py-[12%]'>
+            <div className='text-2xl-text'>
+              <SpinnerComponent />
+            </div>
+          </div>
+        </section>
+      </div>
+    );
+  }
+
+  if (showLoaderOrEmptyText === 'emptyCart' || !cartData) {
     return <EmptyCart />;
   }
 

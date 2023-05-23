@@ -31,15 +31,18 @@ const SD_HeroSection: React.FC<_Props> = ({ banner, story, page }) => {
     <section className='mt-[20px]'>
       <div>
         <section
-          className='bg-cover bg-no-repeat relative py-[128px]'
+          className='bg-cover bg-no-repeat relative '
           style={{
             backgroundImage: `url(${__StaticImg.petternBanner})`,
           }}
         >
-          <div className='container p-[16px] mx-auto text-center' role='main'>
+          <div
+            className='container pl-[16px] pr-[16px] mx-auto text-center pt-[30px] sm:pt-[40px] lg:pt-[120px] pb-[30px] sm:pb-[40px] lg:pb-[120px]'
+            role='main'
+          >
             <div className='mb-[16px]'>
               <Link href={story.category.url}>
-                <span className='btn btn-secondary py-[8px] px-10 text-title-text btn-md '>
+                <span className='btn bg-white hover:bg-tertiary-hover hover:text-anchor-hover text-anchor py-[8px] px-10 text-title-text btn-md'>
                   {story.category.name}
                 </span>
               </Link>
@@ -59,7 +62,7 @@ const SD_HeroSection: React.FC<_Props> = ({ banner, story, page }) => {
               </p>
             </div> */}
             <div className='flex flex-wrap justify-center'>
-              <Link href={story.prev}>
+              <Link className='' href={story.prev}>
                 <a className='uppercase btn btn-tertiary text-default-text mr-[10px]'>
                   Previous
                 </a>
@@ -71,8 +74,8 @@ const SD_HeroSection: React.FC<_Props> = ({ banner, story, page }) => {
               </Link>
             </div>
           </div>
-          <div className='absolute p-[16px]  w-full  bg-default'>
-            <div className='container px-[16px]  mx-auto text-center'>
+          <div className='w-full p-[16px] bg-default'>
+            <div className='container px-[16px] mx-auto text-center'>
               {banner.map((ban, index) => {
                 return (
                   <span key={index} className='mr-[8px]'>

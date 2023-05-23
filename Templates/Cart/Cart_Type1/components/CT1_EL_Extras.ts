@@ -12,7 +12,7 @@ export interface _SetState_Details {
     id: number;
     size: string;
     qty: number;
-    unitPrice: number;
+    unitPrice: string;
     totalPrice: number;
     attributeOptionId: number;
   }[];
@@ -26,13 +26,13 @@ export const initialSizeWithPriceNQtyGetter = (
   id: number;
   size: string;
   qty: number;
-  unitPrice: number;
+  unitPrice: string;
   totalPrice: number;
   attributeOptionId: number;
 }[] => {
   const extraction = items.map((item) => ({
     id: item.id,
-    unitPrice: item.price / item.qty,
+    unitPrice: (item.price / item.qty).toFixed(2),
     totalPrice: item.price,
     qty: item.qty,
     size: item.attributeOptionValue,
@@ -76,7 +76,7 @@ export const create_cartLogoPersonModel = (args: {
     id: number;
     size: string;
     qty: number;
-    unitPrice: number;
+    unitPrice: string;
     totalPrice: number;
     attributeOptionId: number;
   }[];
@@ -86,9 +86,9 @@ export const create_cartLogoPersonModel = (args: {
     attributeOptionId: item.attributeOptionId,
     attributeOptionValue: item.size,
     code: '', //
-    price: item.unitPrice,
+    price: +item.unitPrice,
     quantity: item.qty,
     estimateDate: new Date(),
-    isEmployeeLoginPrice: item.unitPrice, //
+    isEmployeeLoginPrice: +item.unitPrice, //
   }));
 };

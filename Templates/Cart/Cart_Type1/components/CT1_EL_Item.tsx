@@ -203,11 +203,11 @@ const CT1_EL_Item: React.FC<CartObject> = (item) => {
                 Item Details
               </div>
               <div className='flex justify-between py-2'>
-                <div className='text-normal-text font-semibold w-28'>Size</div>
-                <div className='text-normal-text font-semibold w-16 text-center'>
+                <div className='text-normal-text font-semibold w-16'>Size</div>
+                <div className='text-normal-text font-semibold w-20 text-center'>
                   Qty
                 </div>
-                <div className='text-base font-semibold w-18 text-center'>
+                <div className='text-normal-text font-semibold w-20 text-center'>
                   Unit Price
                 </div>
                 <div className='text-normal-text font-semibold w-20 text-right'>
@@ -289,7 +289,7 @@ const CT1_EL_Item: React.FC<CartObject> = (item) => {
                               submitted
                             </span>
                           ) : (
-                            <span className='font-semibold ml-3'>
+                            <span className='font-semibold ml-3 invisible'>
                               Logo
                               <br />
                               submitted

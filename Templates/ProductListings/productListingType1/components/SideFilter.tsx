@@ -48,7 +48,22 @@ const SideFilter = ({
               <div>
                 {filters &&
                   filters.map((filter, index) => (
-                    <div key={index} className={'pt-[16px] first:pt-[0px]'}>
+                    <div
+                      key={index}
+                      className={'pt-[16px] first:pt-[0px] relative'}
+                    >
+                      {checkedFilters.find(
+                        (flt) => flt.name === filter.label,
+                      ) && (
+                        <a
+                          href='javascript:void(0);'
+                          className='absolute z-10 p-[7px] top-4 right-10 text-[12px] text-anchor hover:text-anchor-hover'
+                          onClick={() => clearFilterSection(filter.label)}
+                        >
+                          {' '}
+                          RESET
+                        </a>
+                      )}
                       <Accordion
                         defaultExpanded={true}
                         style={{
@@ -246,14 +261,19 @@ const SideFilter = ({
                     key={index}
                     className={'mt-[16px] first:mt-[0px] relative'}
                   >
-                    <a
-                      href='javascript:void(0);'
-                      className='absolute z-10 p-[7px] top-4 right-10 text-[12px] text-anchor hover:text-anchor-hover'
-                      onClick={() => clearFilterSection(filter.label)}
-                    >
-                      {' '}
-                      RESET
-                    </a>
+                    {checkedFilters.find(
+                      (flt) => flt.name === filter.label,
+                    ) && (
+                      <a
+                        href='javascript:void(0);'
+                        className='absolute z-10 p-[7px] top-4 right-10 text-[12px] text-anchor hover:text-anchor-hover'
+                        onClick={() => clearFilterSection(filter.label)}
+                      >
+                        {' '}
+                        RESET
+                      </a>
+                    )}
+
                     <Accordion
                       defaultExpanded={true}
                       style={{

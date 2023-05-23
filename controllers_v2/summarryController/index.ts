@@ -1,7 +1,4 @@
-import {
-  __SuccessErrorText,
-  commonMessage,
-} from '@constants/successError.text';
+import { __SuccessErrorText } from '@constants/successError.text';
 import {
   GetCustomerId,
   useActions_v2,
@@ -12,6 +9,8 @@ import { useEffect, useState } from 'react';
 
 const SummarryController = () => {
   const storeId = useTypedSelector_v2((state) => state.store.id);
+  const { discount: appliedCoupon, lastUpdate: cartUpdatedAt } =
+    useTypedSelector_v2((state) => state.cart);
   const [coupon, setCoupon] = useState<string>('');
   const showTextFor3Sec = useTypedSelector_v2(
     (state) => state.cart.discount?.showTextFor3Sec,
@@ -51,10 +50,6 @@ const SummarryController = () => {
     cart_promoCode('REMOVE_PROMO_CODE');
 
     if ('promotionsModel.CustomerId' in errors) {
-      showModal({
-        message: objToArr[0],
-        title: commonMessage.failed,
-      });
       setCoupon(objToArr[0]);
       setTimeout(() => {
         setCoupon('');
@@ -63,19 +58,16 @@ const SummarryController = () => {
     }
 
     // if No errors matched
-    showModal({
-      message: __SuccessErrorText.promoCode.invalid,
-      title: commonMessage.failed,
-    });
+    setCoupon(__SuccessErrorText.promoCode.invalid);
     setCoupon('');
   };
 
-  const applyCouponHandler = async () => {
+  const applyCouponHandler = async (couponCode: string) => {
     setShowLoader(true);
     const couponObject = {
       promotionsModel: {
         customerId: +customerId || 0,
-        couponCode: coupon,
+        couponCode: couponCode,
         storeId: storeId || 0,
         taxCost: 0,
         shippingCost: 0,
@@ -94,6 +86,12 @@ const SummarryController = () => {
       .catch((errors) => handleIfCouponIsNotValid(errors))
       .finally(() => setShowLoader(false));
   };
+
+  useEffect(() => {
+    if (appliedCoupon?.coupon) {
+      applyCouponHandler(appliedCoupon.coupon);
+    }
+  }, [cartUpdatedAt]);
 
   useEffect(() => {
     if (showTextFor3Sec) {

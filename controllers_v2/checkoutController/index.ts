@@ -1,21 +1,21 @@
 import {
-  checkoutPages,
   PaymentMethod,
-  paymentMethodCustom as paymentEnum,
   UserAddressType,
+  checkoutPages,
+  paymentMethodCustom as paymentEnum,
 } from '@constants/enum';
 import { __Cookie, __Cookie_Expiry } from '@constants/global.constant';
 import { paths } from '@constants/paths.constant';
-import { addAddress, AddOrderDefault } from '@constants/payloads/checkout';
+import { AddOrderDefault, addAddress } from '@constants/payloads/checkout';
 import { signup_payload } from '@constants/payloads/signup';
 import { commonMessage } from '@constants/successError.text';
 import { CreditCardDetailsType } from '@definations/checkout';
 import {
+  KlaviyoScriptTag,
+  TrackGTMEvent,
   deleteCookie,
   extractCookies,
-  KlaviyoScriptTag,
   setCookie,
-  TrackGTMEvent,
 } from '@helpers/common.helper';
 import getLocation from '@helpers/getLocation';
 import {
@@ -137,6 +137,9 @@ const CheckoutController = () => {
   const customer = user.customer;
   const userId = useTypedSelector_v2((state) => state.user.id);
   const customerId = GetCustomerId();
+  const couponCode = useTypedSelector_v2(
+    (state) => state.cart.discount?.coupon,
+  );
   const { totalPrice, subTotal, salesTax, discount, creditBalance } =
     GetCartTotals();
 
@@ -617,6 +620,7 @@ const CheckoutController = () => {
         orderTax: salesTax,
         orderTotal: totalPrice,
         orderNotes: orderNote,
+        couponCode: couponCode || '',
         couponDiscountAmount: discount,
         orderStatus: __pagesConstant.checkoutPage.orderStatus,
         transactionStatus: __pagesConstant.checkoutPage.transactionStatus,

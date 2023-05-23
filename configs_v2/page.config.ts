@@ -14,8 +14,8 @@ export const _StoreDomains = {
   domain5: 'https://bacardi.headlessmart.com',
   domain6: 'bacarditogo.headlessmart.com', // CLOSED
   domain7: 'bbcprod.redefinecommerce.info',
-  domain8: 'bcorp',
-  domain9: 'betahumana', // CLOSED
+  domain8: 'bain.redefinecommerce.info',
+  domain9: 'bcorp.redefinecommerce.info', // CLOSED
   domain10: 'gilbaneco',
   domain11: 'https://cyxtera.redefinecommerce.info',
   domain12: 'healthyPoints', // DUPLICATE

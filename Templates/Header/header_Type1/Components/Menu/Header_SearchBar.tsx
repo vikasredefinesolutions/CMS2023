@@ -13,17 +13,36 @@ const SearchBar: React.FC<_props> = ({
   onSearchInput = () => {},
 }) => {
   const searchRef = useRef<HTMLInputElement>(null);
-  const searchHandler = (value: { text: string }) => {
+  const searchHandler = (values: any) => {
     // SearchFor(value);
-    onSearchInput(value.text as string);
-    // .then().catch().finally;
+    onSearchInput(values.text as string);
+
+    if (
+      values.text == '' ||
+      values.text == 'Enter Search here' ||
+      values.text.toString().toLowerCase().indexOf('enter search') > -1
+    ) {
+      alert('Please enter something to search');
+    }
+    var str = values.text.replace(/^\s+|\s+$/g, '');
+    while (str.substring(str.length - 1, str.length) == ' ') {
+      str = str.substring(0, str.length - 1);
+    }
+    if (str.length < 3) {
+      alert('Please enter at least 3 characters to search');
+      values.focus();
+    }
+
+    window.location.href =
+      '/home/Search?q=' +
+      encodeURIComponent(values.text.replace(/^\s+|\s+$/g, ''));
   };
 
   if (screen === 'MOBILE') {
     return (
       <>
         <Formik initialValues={{ text: '' }} onSubmit={searchHandler}>
-          {({ handleSubmit, handleChange, handleReset }) => {
+          {({ values, handleSubmit, handleChange, handleReset }) => {
             return (
               <Form>
                 <div className='sm:hidden'>
@@ -40,13 +59,11 @@ const SearchBar: React.FC<_props> = ({
                         className='outline-none w-full border-0 focus:ring-0 text-[14px] tracking-[1px] text-primary h-[26px]'
                         autoComplete='off'
                         maxLength={255}
+                        value={values.text}
                       />
                       <button
+                        type='submit'
                         className='w-[24px] h-[24px] absolute right-[6px] top-[6px]'
-                        onClick={() => {
-                          handleSubmit();
-                          handleReset();
-                        }}
                       >
                         <span
                           className='material-icons text-primary font-[900]'
@@ -68,7 +85,7 @@ const SearchBar: React.FC<_props> = ({
   if (screen === 'DESKTOP') {
     return (
       <Formik initialValues={{ text: '' }} onSubmit={searchHandler}>
-        {({ handleSubmit, handleChange, handleReset }) => {
+        {({ values, handleSubmit, handleChange, handleReset }) => {
           return (
             <Form>
               <div className='hidden sm:flex max-w-[140px] xl:max-w-[190px] ml-[8px]'>
@@ -85,13 +102,11 @@ const SearchBar: React.FC<_props> = ({
                       className='outline-none w-full border-0 focus:ring-0 text-[14px] tracking-[1px] text-primary h-[26px]'
                       autoComplete='off'
                       maxLength={255}
+                      value={values.text}
                     />
                     <button
+                      type='submit'
                       className='w-[24px] h-[24px] absolute right-[6px] top-[6px]'
-                      onClick={() => {
-                        handleSubmit();
-                        handleReset();
-                      }}
                     >
                       <span
                         className='material-icons text-primary font-[900]'

@@ -18,6 +18,7 @@ export interface _CartProps {
   loadProduct: (product: _CartItem) => void;
   setShowAddOtf: (arg: boolean) => void;
   cartType: number;
+  showLoaderOrEmptyText: null | 'loader' | 'emptyCart' | 'dataFound';
 }
 
 export interface _CartTemplates {
