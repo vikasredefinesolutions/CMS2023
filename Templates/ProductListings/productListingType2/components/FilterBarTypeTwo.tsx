@@ -28,7 +28,7 @@ const FilterBarTypeTwo: React.FC<props> = ({
             onClick={() => setProductView('grid')}
           >
             <span className='sr-only'>Grid View</span>
-            <span className='material-icons-outlined text-medium-text text-anchor hover:text-anchor-hover'>
+            <span className='material-icons-outlined text-anchor hover:text-anchor-hover'>
               grid_view
             </span>
           </button>
@@ -38,7 +38,7 @@ const FilterBarTypeTwo: React.FC<props> = ({
             onClick={() => setProductView('list')}
           >
             <span className='sr-only'>List View</span>
-            <span className='material-icons-outlined text-medium-text text-anchor hover:text-anchor-hover'>
+            <span className='material-icons-outlined text-anchor hover:text-anchor-hover'>
               view_agenda
             </span>
           </button>
@@ -60,7 +60,7 @@ const FilterBarTypeTwo: React.FC<props> = ({
                   }
                 </span>
               </span>
-              <span className='material-icons-outlined text-sub-text leading-none font-[900]'>
+              <span className='material-icons-outlined leading-none font-[900]'>
                 expand_{showSortMenu ? 'less' : 'more'}
               </span>
             </button>
