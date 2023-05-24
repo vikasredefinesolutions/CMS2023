@@ -41,6 +41,7 @@ export const __console_v2: __Console = {
       UpdatePasswordForGuestEmail: false,
       GetCustomerUsersByCustomerId: false,
       GetDecryptPass: false,
+      GetCityStateCountryWithZip: false,
     },
   },
   product: {

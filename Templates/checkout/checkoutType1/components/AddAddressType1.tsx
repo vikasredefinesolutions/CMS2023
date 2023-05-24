@@ -4,6 +4,7 @@ import {
 } from '@controllers/checkoutController/CheckoutAddressForm';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import { FetchCountriesList, FetchStatesList } from '@services/general.service';
+import { getLocationWithZipCode } from '@services/user.service';
 import { useEffect, useState } from 'react';
 
 const AddAddress = ({
@@ -29,6 +30,7 @@ const AddAddress = ({
     touched,
     handleSubmit,
     values,
+    setFieldValue,
     isSubmitting,
   } = refrence;
   const customerId = useTypedSelector_v2((state) => state.user.id);
@@ -53,6 +55,26 @@ const AddAddress = ({
   useEffect(() => {
     FetchCountriesList().then((res) => res && setCountry(res));
   }, []);
+
+  const getStateCountryCityWithZipCode = async (zipCode: string) => {
+    const res = await getLocationWithZipCode(zipCode);
+    return res;
+  };
+
+  const customBlur = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
+    handleBlur(e);
+    const locationObj = getStateCountryCityWithZipCode(e.target.value).then(
+      (res) => {
+        if (res?.countryId) {
+          setFieldValue('state', res?.stateName);
+          setFieldValue('countryName', res?.countryName);
+          setFieldValue('city', res?.cityName);
+        }
+      },
+    );
+  };
 
   useEffect(() => {
     if (!values.countryName) {
@@ -284,7 +306,7 @@ const AddAddress = ({
               <div className='relative z-0 w-full border border-gray-border rounded'>
                 <input
                   value={values.postalCode}
-                  onBlur={handleBlur}
+                  onBlur={customBlur}
                   onChange={handleChange}
                   name='postalCode'
                   placeholder=' '

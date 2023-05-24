@@ -1,6 +1,7 @@
 import { defaultCountry } from '@configs/page.config';
 import { AddressFormRefType } from '@controllers/checkoutController/CheckoutAddressForm';
 import { FetchCountriesList, FetchStatesList } from '@services/general.service';
+import { getLocationWithZipCode } from '@services/user.service';
 import { useEffect, useState } from 'react';
 const AddressForm = (props: AddressFormRefType) => {
   const {
@@ -29,6 +30,26 @@ const AddressForm = (props: AddressFormRefType) => {
   useEffect(() => {
     FetchCountriesList().then((res) => res && setCountry(res));
   }, []);
+
+  const getStateCountryCityWithZipCode = async (zipCode: string) => {
+    const res = await getLocationWithZipCode(zipCode);
+    return res;
+  };
+
+  const customBlur = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
+    handleBlur(e);
+    const locationObj = getStateCountryCityWithZipCode(e.target.value).then(
+      (res) => {
+        if (res?.countryId) {
+          setFieldValue('state', res?.stateName);
+          setFieldValue('countryName', res?.countryName);
+          setFieldValue('city', res?.cityName);
+        }
+      },
+    );
+  };
 
   useEffect(() => {}, [country]);
 
@@ -190,7 +211,10 @@ const AddressForm = (props: AddressFormRefType) => {
         <div className='w-full pl-[12px] pr-[12px] mb-[20px]'>
           <div className='relative z-0 w-full border border-gray-border rounded'>
             <input
-              onBlur={handleBlur}
+              onBlur={(e) => {
+                handleBlur(e);
+                customBlur(e);
+              }}
               onChange={handleChange}
               name='postalCode'
               value={values.postalCode}

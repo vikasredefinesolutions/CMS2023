@@ -16,6 +16,7 @@ import {
 import {
   CreateNewAccount,
   GetStoreCustomer,
+  getLocationWithZipCode,
   signInUser,
 } from '@services/user.service';
 import getLocation from 'helpers_v2/getLocation';
@@ -247,6 +248,12 @@ const SignUp_type1: React.FC = () => {
     });
   };
 
+  const getStateCountry = async (zipCode: string) => {
+    const res = await getLocationWithZipCode(zipCode);
+
+    return res;
+  };
+
   if (userId) {
     router.push(paths.HOME);
     return <></>;
@@ -287,6 +294,21 @@ const SignUp_type1: React.FC = () => {
             handleBlur,
             setFieldError,
           }) => {
+            const customHandleBlur = (
+              e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+            ) => {
+              handleBlur(e);
+              getStateCountry(e.target.value).then((res) => {
+                if (res?.countryId) {
+                  setFieldValue('storeCustomerAddress[0].city', res.cityName);
+                  setFieldValue(
+                    'storeCustomerAddress[0].countryName',
+                    res.countryId,
+                  );
+                  setFieldValue('storeCustomerAddress[0].state', res.stateId);
+                }
+              });
+            };
             return (
               <Form>
                 <div className='container mx-auto mb-6'>
@@ -445,7 +467,7 @@ const SignUp_type1: React.FC = () => {
                         label={'Zip Code'}
                         onChange={handleChange}
                         placeHolder='Enter Your Zip Code'
-                        onBlur={handleBlur}
+                        onBlur={customHandleBlur}
                         touched={
                           touched.storeCustomerAddress
                             ? !!touched.storeCustomerAddress[0].postalCode

@@ -394,3 +394,13 @@ export interface _GetAdminCustomerUser {
   ipAddress: string;
   macAddress: string;
 }
+
+export interface _GetCityStateCountryWithZip {
+  countryId: number;
+  countryName: string;
+  stateId: number;
+  stateName: string;
+  cityId: number;
+  cityName: string;
+  zipCode: string;
+}

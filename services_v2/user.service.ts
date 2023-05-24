@@ -7,6 +7,7 @@ import {
   UserCreateResponse,
   UserType,
   _GetAdminCustomerUser,
+  _GetCityStateCountryWithZip,
   _Invalid,
   _MyAcc_OrderBillingDetails,
   _MyAcc_OrderProductDetails,
@@ -35,6 +36,7 @@ export type _UserAPIs_V2 =
   | 'GetDecryptPass'
   | 'CheckIfEmailIsAlreadyRegistered'
   | 'ResetPassword'
+  | 'GetCityStateCountryWithZip'
   | 'FetchUserOrderIds';
 
 export interface _UserServices_V2 {
@@ -452,6 +454,25 @@ export const getDecryptPassword = async (payload: {
     request: {
       url: url,
       method: 'POST',
+    },
+  });
+
+  return response;
+};
+
+export const getLocationWithZipCode = async (
+  zipCode: string,
+): Promise<_GetCityStateCountryWithZip | null> => {
+  const url = `City/getcitystatecountrybyzipCode/${zipCode}.json`;
+
+  const response = await CallAPI_v2<_GetCityStateCountryWithZip>({
+    name: {
+      service: 'user',
+      api: 'GetCityStateCountryWithZip',
+    },
+    request: {
+      url: url,
+      method: 'GET',
     },
   });
 
