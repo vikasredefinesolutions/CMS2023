@@ -386,6 +386,7 @@ const Home = (props) => {
                                   : 'none',
                             }
                       }
+                      name={`div${componentValue.no}`}
                       id={`div${componentValue.no}`}
                       // ref={ref => {
                       //     refArray.current[componentValue.uid] = ref; // took this from your guide's example.
