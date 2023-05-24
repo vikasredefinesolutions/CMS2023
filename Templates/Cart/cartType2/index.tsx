@@ -20,11 +20,8 @@ import EmptyCart from '../components/emptyCart';
 const CartType2: React.FC<_CartProps> = ({
   cartData,
   removeCartItem,
-  empCustomQtyPrice,
-  employeeAmtChangeHandler,
-  amtQtyBlurHandler,
+
   loadProduct,
-  setShowAddOtf,
   cartType,
 }) => {
   const storeId = useTypedSelector_v2((state) => state.store.id);
@@ -73,9 +70,7 @@ const CartType2: React.FC<_CartProps> = ({
                   cartData,
                   isEditable: true,
                   removeCartItem,
-                  empCustomQtyPrice,
-                  employeeAmtChangeHandler,
-                  amtQtyBlurHandler,
+
                   loadProduct,
                   setAvailableColor,
                   availableFont,

@@ -7,7 +7,6 @@ import DiscountPricing from '@templates/ProductDetails/Components/DiscountPricin
 import SizePriceQtyTable from '@templates/ProductDetails/Components/SizePriceQtyTable';
 import SomActionsHandler from '@templates/ProductDetails/Components/SomActionsHandler';
 import SomCustomizeLogoOptions from '@templates/ProductDetails/Components/SomCustomizeLogoOptions';
-import StartOrderAvailableColors from '@templates/ProductDetails/Components/StartOrderAvailableColors';
 import Inventory from '@templates/ProductDetails/productDetailType4/component/ProductInventory';
 import Price from 'appComponents_v2/reUsable/Price';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
@@ -147,7 +146,7 @@ const StartOrderModal: React.FC<_startOrderModalProps> = (props) => {
                 </div>
 
                 <div className='mb-[25px]'>
-                  {storeCode !== _Store.type4 && (
+                  {/* {storeCode !== _Store.type4 && (
                     <div className=''>
                       <button
                         type='button'
@@ -159,9 +158,9 @@ const StartOrderModal: React.FC<_startOrderModalProps> = (props) => {
                           : `See All ${colors?.length} Colors`}
                       </button>
                     </div>
-                  )}
+                  )} */}
 
-                  {allColors && <StartOrderAvailableColors />}
+                  {/* {allColors && <StartOrderAvailableColors />} */}
                   <div className='mt-3'>
                     <h2 className='sr-only'>
                       {

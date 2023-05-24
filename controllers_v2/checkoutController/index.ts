@@ -1,21 +1,21 @@
 import {
-  PaymentMethod,
-  UserAddressType,
   checkoutPages,
+  PaymentMethod,
   paymentMethodCustom as paymentEnum,
+  UserAddressType,
 } from '@constants/enum';
 import { __Cookie, __Cookie_Expiry } from '@constants/global.constant';
-
-import { AddOrderDefault, addAddress } from '@constants/payloads/checkout';
+import { paths } from '@constants/paths.constant';
+import { addAddress, AddOrderDefault } from '@constants/payloads/checkout';
 import { signup_payload } from '@constants/payloads/signup';
 import { commonMessage } from '@constants/successError.text';
 import { CreditCardDetailsType } from '@definations/checkout';
 import {
-  KlaviyoScriptTag,
-  TrackGTMEvent,
   deleteCookie,
   extractCookies,
+  KlaviyoScriptTag,
   setCookie,
+  TrackGTMEvent,
 } from '@helpers/common.helper';
 import getLocation from '@helpers/getLocation';
 import {
@@ -42,7 +42,6 @@ import _ from 'lodash';
 import { ChangeEvent, useEffect, useState } from 'react';
 
 import { __pagesConstant } from '@constants/pages.constant';
-import { paths } from '@constants/paths.constant';
 import { PaymentOptions } from '@definations/APIs/cart.req';
 import { CustomerAddress } from '@definations/APIs/user.res';
 import {
@@ -176,6 +175,33 @@ const CheckoutController = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cartData, isLoadingComplete]);
+  useEffect(() => {
+    if (useShippingAddress && customer) {
+      setBillingAdress(shippingAdress);
+    } else {
+      if (customer?.customerAddress) {
+        for (
+          let index = 0;
+          index < customer?.customerAddress?.length;
+          index++
+        ) {
+          if (
+            customer?.customerAddress[index].isDefault == true &&
+            customer?.customerAddress[index].addressType ==
+              UserAddressType.BILLINGADDRESS
+          ) {
+            setBillingAdress(customer?.customerAddress[index]);
+            break;
+          } else if (
+            customer?.customerAddress[index].addressType ==
+            UserAddressType.BILLINGADDRESS
+          ) {
+            setBillingAdress(customer?.customerAddress[index]);
+          }
+        }
+      }
+    }
+  }, [shippingAdress, useShippingAddress]);
 
   useEffect(() => {
     if (storeId) {
@@ -200,19 +226,23 @@ const CheckoutController = () => {
               res.isDefault
             ) {
               setShippingAdress(res as AddressType);
-            } else if (res.addressType == UserAddressType.SHIPPINGADDRESS) {
-              setShippingAdress(res as AddressType);
             } else if (
               res.addressType == UserAddressType.BILLINGADDRESS &&
               res.isDefault
             ) {
               setBillingAdress(res as AddressType);
               billAddress && setBillingAdress(billAddress);
-            } else if (res.addressType == UserAddressType.BILLINGADDRESS) {
-              setBillingAdress(res as AddressType);
-              billAddress && setBillingAdress(billAddress);
             }
           });
+          (!shippingAdress || !billingAdress) &&
+            customer.customerAddress.map((res) => {
+              if (res.addressType == UserAddressType.SHIPPINGADDRESS) {
+                setShippingAdress(res as AddressType);
+              } else if (res.addressType == UserAddressType.BILLINGADDRESS) {
+                setBillingAdress(res as AddressType);
+                billAddress && setBillingAdress(billAddress);
+              }
+            });
         }
       }
     }
@@ -232,7 +262,7 @@ const CheckoutController = () => {
   }, [customer]);
 
   const blockInvalidChar = (e: any) =>
-    ['e', 'E', '+', '-'].includes(e.key) && e.preventDefault();
+    ['e', 'E', '+', '-', '.'].includes(e.key) && e.preventDefault();
 
   const checkEmail = async (values: { email: string }) => {
     const response = await checkCustomerAlreadyExist(values.email, storeId);
@@ -696,8 +726,8 @@ const CheckoutController = () => {
             orderNumber: res.id,
           });
 
-          router.push(`${paths.THANK_YOU}?orderNumber=${res.id}`);
-          // window.location.assign(`${paths.THANK_YOU}?orderNumber=${res.id}`);
+          // router.push(`${paths.THANK_YOU}?orderNumber=${res.id}`);
+          window.location.assign(`${paths.THANK_YOU}?orderNumber=${res.id}`);
           setShowLoader(false);
         }
       } catch (error) {

@@ -2,15 +2,15 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import SeoHead from '@appComponents/reUsable/SeoHead';
 import { __Error } from '@constants/global.constant';
-import { _FetchProductDetails } from '@controllers/ProductController.async';
 import { getServerSideProps } from '@controllers/getServerSideProps';
+import { _FetchProductDetails } from '@controllers/ProductController.async';
 import { _ProductList_PropsData } from '@controllers/slug.extras';
 import { _GetPageType, _StoreCache } from '@definations/slug.type';
 import { useActions_v2 } from '@hooks_v2/index';
+import Banner from '@templates/banner';
 import Home from '@templates/Home';
 import ProductDetails from '@templates/ProductDetails';
 import ProductListing from '@templates/ProductListings';
-import Banner from '@templates/banner';
 import { NextPage } from 'next';
 import { _Slug_CMS_Props } from 'pages';
 import { useEffect } from 'react';
@@ -35,7 +35,7 @@ export interface _Slug_ProductListing_Props {
   };
 }
 
-type _Props =
+export type _Slug_Props =
   | _Slug_ProductDetails_Props
   | _Slug_ProductListing_Props
   | _Slug_CMS_Props
@@ -43,7 +43,7 @@ type _Props =
       error: __Error.noPageTypeFound | __Error.storeIdMissing;
     };
 
-const SlugSearch: NextPage<_Props, _Props> = (props) => {
+const SlugSearch: NextPage<_Slug_Props, _Slug_Props> = (props) => {
   const { updatePageType } = useActions_v2();
 
   useEffect(() => {
@@ -146,3 +146,4 @@ const SlugSearch: NextPage<_Props, _Props> = (props) => {
 
 export default SlugSearch;
 export { getServerSideProps };
+

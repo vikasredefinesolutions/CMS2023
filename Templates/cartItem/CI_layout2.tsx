@@ -12,9 +12,7 @@ const CIlayout2: FC<any> = ({
   cartData,
   isEditable,
   removeCartItem,
-  empCustomQtyPrice,
-  employeeAmtChangeHandler,
-  amtQtyBlurHandler,
+
   loadProduct,
 }) => {
   const { loggedIn: empLoggedIn } = useTypedSelector_v2(
@@ -91,13 +89,6 @@ const CIlayout2: FC<any> = ({
                           <div className=''>
                             {item.shoppingCartItemDetailsViewModels.map(
                               (view, viewIndex) => {
-                                const viewObject =
-                                  empCustomQtyPrice &&
-                                  empCustomQtyPrice[cartItemIndex]
-                                    ? empCustomQtyPrice[cartItemIndex][
-                                        viewIndex
-                                      ]
-                                    : null;
                                 return (
                                   <div
                                     key={view.id}
@@ -107,55 +98,8 @@ const CIlayout2: FC<any> = ({
                                       {view.attributeOptionValue}
                                     </div>
                                     <div className='text-normal-text w-16 text-center'>
-                                      {empLoggedIn ? (
-                                        <input
-                                          className='block w-full border border-gray-600 shadow-sm text-sm py-1 px-2'
-                                          value={
-                                            viewObject ? viewObject.qty : 0
-                                          }
-                                          name='qty'
-                                          onChange={(event) =>
-                                            employeeAmtChangeHandler(
-                                              event,
-                                              viewIndex,
-                                              cartItemIndex,
-                                            )
-                                          }
-                                          onBlur={() =>
-                                            amtQtyBlurHandler(
-                                              cartItemIndex,
-                                              mediaBaseUrl,
-                                            )
-                                          }
-                                        />
-                                      ) : (
-                                        view.qty
-                                      )}
+                                      {view.qty}
                                     </div>
-                                    {empLoggedIn && (
-                                      <div className='text-base w-16 text-center'>
-                                        <input
-                                          className='block w-full border border-gray-600 shadow-sm text-sm py-1 px-2'
-                                          value={
-                                            viewObject ? viewObject.price : 0
-                                          }
-                                          name='price'
-                                          onChange={(event) =>
-                                            employeeAmtChangeHandler(
-                                              event,
-                                              viewIndex,
-                                              cartItemIndex,
-                                            )
-                                          }
-                                          onBlur={() =>
-                                            amtQtyBlurHandler(
-                                              cartItemIndex,
-                                              mediaBaseUrl,
-                                            )
-                                          }
-                                        />
-                                      </div>
-                                    )}
                                     <div className='text-normal-text w-20 text-right'>
                                       <Price value={view.price} />
                                     </div>

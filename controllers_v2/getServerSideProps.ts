@@ -8,34 +8,22 @@ import { getPageComponents } from '@services/home.service';
 import { FetchFiltersJSON } from '@services/product.service';
 import { FetchPageType } from '@services/slug.service';
 import { GetServerSideProps, GetServerSidePropsResult } from 'next';
-import {
-  _Slug_ProductDetails_Props,
-  _Slug_ProductListing_Props,
-} from 'pages/[...slug-id]';
+import { _Slug_Props } from 'pages/[...slug-id]';
 import { getProductDetailProps } from './ProductController.async';
 
 import { GetlAllProductList } from '@templates/ProductListings/ProductListingType';
-import { _Slug_CMS_Props } from 'pages';
 import { _globalStore } from 'store.global';
 import {
+  getConfigs,
   _FetchPageThemeConfigs_ProductListing,
   _Filter,
   _FilterOption,
   _NameValuePairs,
-  getConfigs,
 } from './slug.extras';
-
-type _SlugSearchProps =
-  | _Slug_ProductListing_Props
-  | _Slug_ProductDetails_Props
-  | _Slug_CMS_Props
-  | {
-      error: __Error.noPageTypeFound | __Error.storeIdMissing;
-    };
 
 export const getServerSideProps: GetServerSideProps = async (
   context,
-): Promise<GetServerSidePropsResult<_SlugSearchProps>> => {
+): Promise<GetServerSidePropsResult<_Slug_Props>> => {
   let { seName, otherParams } = extractSlugName(context.params);
 
   let store = {

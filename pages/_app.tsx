@@ -44,14 +44,13 @@ import { FetchSbStoreConfiguration } from '@services/app.service';
 import { GetStoreCustomer } from '@services/user.service';
 import Redefine_Layout from '@templates//TemplateComponents/Redefine_Layout';
 import AuthGuard from 'Guard/AuthGuard';
+import { _Slug_Props } from './[...slug-id]';
 
 type AppOwnProps = {
   store: _StoreReturnType | null;
   menuItems: _MenuItems | null;
   footerHTML: _FetchStoreConfigurations | null;
-  // Husain - added any for now - 20-3-23
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  pageProps: any | null;
+  pageProps: _Slug_Props | null;
   sbStore: _SbStoreConfiguration | null;
   headerConfig: _FetchStoreConfigurations | null;
   templateIDs: _templateIds;
@@ -192,13 +191,15 @@ const RedefineCustomApp = ({
   if (!store) {
     return <>Store Details not found</>;
   }
-
+  if ('error' in pageProps) {
+    return <>{pageProps.error}</>;
+  }
   return (
     <>
       <Spinner>
         <Metatags
           storeName={store.storeName}
-          pageMetaData={pageProps?.pageMetaData}
+          pageMetaData={pageProps?.metaData}
           routepath={router.asPath}
         />
         <Redefine_Layout
@@ -210,7 +211,7 @@ const RedefineCustomApp = ({
           sbStore={sbStore}
           headerConfig={headerConfig}
           templateIDs={templateIDs}
-          pageMetaData={pageProps?.pageMetaData}
+          pageMetaData={pageProps.metaData}
         >
           <Component {...pageProps} />
         </Redefine_Layout>

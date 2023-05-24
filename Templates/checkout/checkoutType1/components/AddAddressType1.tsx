@@ -78,23 +78,30 @@ const AddAddress = ({
         </div>
       </div>
       {isBillingForm && (
-        <div className='mb-3 font-semibold text-lg'>
-          <div>
-            <input
-              type='checkbox'
-              id='UseShippingAddress'
-              name='UseShippingAddress'
-              data-modal-toggle='billingaddressModal'
-              onChange={(e) =>
-                setShippingAddress &&
-                !billingAddress &&
-                setShippingAddress(e.target.checked)
-              }
-              checked={useShippingAddress}
-            />{' '}
-            <label htmlFor='UseShippingAddress'>Use Shipping Address</label>
+        <>
+          <div className='mb-3 font-semibold text-lg'>
+            <div className='flex items-center'>
+              <div className='input_checkbox'>
+                <input
+                  type='checkbox'
+                  id='UseShippingAddress'
+                  name='UseShippingAddress'
+                  className='checkbox'
+                  data-modal-toggle='billingaddressModal'
+                  onChange={(e) =>
+                    setShippingAddress &&
+                    !billingAddress &&
+                    setShippingAddress(e.target.checked)
+                  }
+                  checked={useShippingAddress}
+                />
+              </div>
+              <label htmlFor='UseShippingAddress' className='ml-2'>
+                Use Shipping Address
+              </label>
+            </div>
           </div>
-        </div>
+        </>
       )}
       {!useShippingAddress && (
         <form onSubmit={handleSubmit}>

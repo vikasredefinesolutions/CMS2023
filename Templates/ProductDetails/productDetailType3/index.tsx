@@ -1,10 +1,6 @@
-import { CategoriesByPid } from '@definations/APIs/category.res';
 import { KlaviyoScriptTag } from '@helpers/common.helper';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
-import {
-  FetchCategoryByproductId,
-  FetchInventoryById,
-} from '@services/product.service';
+import { FetchInventoryById } from '@services/product.service';
 import ProductRecentlyViewed from '@templates/recentlyViewedProducts';
 import Reviews from '@templates/Review';
 import YouMayAlsoLike from '@templates/youMayAlsoLike';
@@ -23,17 +19,21 @@ const ProductDetails_Type3: React.FC<_Props> = (product) => {
   } = useActions_v2();
   const { id: storeId, pageType } = useTypedSelector_v2((state) => state.store);
 
-  const getCategoriesArr = (): string[] => {
-    let categories: CategoriesByPid = [];
-    let categoryArr: string[] = [];
-    FetchCategoryByproductId(+pageType.id, storeId).then((res) => {
-      categories = res;
-    });
-    if (categories.length > 0) {
-      categoryArr = categories[0].name.split(' > ');
-    }
-    return categoryArr;
-  };
+  // const getCategoriesArr = (): string[] => {
+  //   let categories: CategoriesByPid = [];
+  //   let categoryArr: string[] = [];
+  //   FetchCategoryByproductId(+pageType.id, storeId).then((res) => {
+  //     categories = res;
+  //   });
+  //   if (categories.length > 0) {
+  //     categoryArr = categories[0].name.split(' > ');
+  //   }
+  //   return categoryArr;
+  // };
+
+  const categoriesArr = useTypedSelector_v2(
+    (state) => state.product.categoryArr,
+  );
 
   useEffect(() => {
     if (product.details && storeId && pageType.id) {
@@ -44,12 +44,12 @@ const ProductDetails_Type3: React.FC<_Props> = (product) => {
         },
       });
 
-      const categories = getCategoriesArr();
+      // const categories = getCategoriesArr();
       const item = {
         ProductName: product.details.name,
         ProductID: product.details.id,
         SKU: product.details.sku,
-        Categories: categories,
+        Categories: categoriesArr,
         ImageURL: product.colors && product.colors[0].imageUrl,
         URL: window.location.href,
         Brand: product.details.brandName,

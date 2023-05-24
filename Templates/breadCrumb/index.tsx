@@ -1,23 +1,23 @@
-import { __SpecialBreadCrumbsPaths, paths } from '@constants/paths.constant';
+import { paths, __SpecialBreadCrumbsPaths } from '@constants/paths.constant';
 import { capitalizeFirstLetter } from '@helpers/common.helper';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import {
-  FetchCategoryByproductId,
   fetchCategoryByCategoryId,
+  FetchCategoryByproductId,
 } from '@services/product.service';
 
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import {
+  _breadCrumbs,
+  _BreadCrumbTemplates,
+  __BreadCrumbTemplatesProps,
+} from './breadcrumb';
 import BreadCrumb_Type1 from './breadCrumb_Type1';
 import BreadCrumb_Type2 from './breadCrumb_Type2';
 import BreadCrumb_Type3 from './breadCrumb_Type3';
 import BreadCrumb_Type4 from './breadCrumb_Type4';
-import {
-  _BreadCrumbTemplates,
-  __BreadCrumbTemplatesProps,
-  _breadCrumbs,
-} from './breadcrumb';
 
 const BreadCrumbTemplates: _BreadCrumbTemplates = {
   type1: BreadCrumb_Type1,

@@ -6,7 +6,6 @@ import Price from '@appComponents/reUsable/Price';
 import { _Store } from '@configs/page.config';
 import { CustomizeLaterMain } from '@constants/common.constant';
 import { __pagesText } from '@constants/pages.text';
-import CheckoutController from '@controllers/checkoutController';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import { CartObject, ShoppingCartItemDetailsViewModel } from '@services/cart';
 import { _CartLinePersonDetailModel } from '@services/product.service.type';
@@ -20,16 +19,11 @@ const CIlayout1: FC<any> = ({
   cartData,
   isEditable,
   removeCartItem,
-  empCustomQtyPrice,
   loadProduct,
   availableFont,
   availableLocation,
   availableColor,
 }) => {
-  const { loggedIn: empLoggedIn } = useTypedSelector_v2(
-    (state) => state.employee,
-  );
-
   const { isLinepersonalization } = useTypedSelector_v2((state) => state.store);
   const { setShowLoader } = useActions_v2();
 
@@ -53,8 +47,6 @@ const CIlayout1: FC<any> = ({
   const [cartLinePersonModels, setCartLinePersonModels] = useState<
     _CartLinePersonDetailModel[] | []
   >([]);
-
-  const { currentPage } = CheckoutController();
 
   return (
     <ul role='list' className='overflow-hidden'>
@@ -125,30 +117,24 @@ const CIlayout1: FC<any> = ({
                         Price
                       </div>
                     </div>
-                    {item.shoppingCartItemDetailsViewModels.map(
-                      (view, viewIndex) => {
-                        const viewObject =
-                          empCustomQtyPrice && empCustomQtyPrice[cartItemIndex]
-                            ? empCustomQtyPrice[cartItemIndex][viewIndex]
-                            : null;
-                        return (
-                          <div
-                            key={view.id}
-                            className='flex justify-between py-2'
-                          >
-                            <div className='text-normal-text w-28'>
-                              {view.attributeOptionValue}
-                            </div>
-                            <div className='text-normal-text w-16 text-center'>
-                              {view.qty}
-                            </div>
-                            <div className='text-normal-text w-20 text-right'>
-                              <Price value={view.price} />
-                            </div>
+                    {item.shoppingCartItemDetailsViewModels.map((view) => {
+                      return (
+                        <div
+                          key={view.id}
+                          className='flex justify-between py-2'
+                        >
+                          <div className='text-normal-text w-28'>
+                            {view.attributeOptionValue}
                           </div>
-                        );
-                      },
-                    )}
+                          <div className='text-normal-text w-16 text-center'>
+                            {view.qty}
+                          </div>
+                          <div className='text-normal-text w-20 text-right'>
+                            <Price value={view.price} />
+                          </div>
+                        </div>
+                      );
+                    })}
                     <div className='flex justify-between py-3 border-t border-b'>
                       <div className='text-normal-text w-30'>
                         Product Total:

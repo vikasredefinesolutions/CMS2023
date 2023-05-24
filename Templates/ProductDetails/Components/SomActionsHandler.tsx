@@ -2,7 +2,6 @@ import { __Cookie } from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
 import { paths } from '@constants/paths.constant';
 import { AddItemsToTheCart } from '@services/cart.service';
-import { FetchCategoryByproductId } from '@services/product.service';
 import {
   logoCartItems_Generator,
   singleColor_addToCart_PayloadGenerator,
@@ -10,8 +9,8 @@ import {
 import MsgContainer from 'appComponents_v2/modals/msgContainer/MsgContainer';
 import {
   CaptureGTMEvent,
-  KlaviyoScriptTag,
   extractCookies,
+  KlaviyoScriptTag,
   setCookie,
 } from 'helpers_v2/common.helper';
 import { highLightError } from 'helpers_v2/console.helper';
@@ -44,14 +43,18 @@ const SomActionsHandler: React.FC<_SOMActionHandlerProps> = ({
     (state) => state.employee.loggedIn,
   );
 
-  const getCategoriesArr = async (productId: number): Promise<string[]> => {
-    let categoriesArr: string[] = [];
-    const categories = await FetchCategoryByproductId(productId, storeId);
-    if (categories.length > 0) {
-      categoriesArr = categories[0].name.split(' > ');
-    }
-    return categoriesArr;
-  };
+  // const getCategoriesArr = async (productId: number): Promise<string[]> => {
+  //   let categoriesArr: string[] = [];
+  //   const categories = await FetchCategoryByproductId(productId, storeId);
+  //   if (categories.length > 0) {
+  //     categoriesArr = categories[0].name.split(' > ');
+  //   }
+  //   return categoriesArr;
+  // };
+
+  const categoriesArr = useTypedSelector_v2(
+    (state) => state.product.categoryArr,
+  );
 
   const tempCustId = extractCookies(
     __Cookie.tempCustomerId,
@@ -76,14 +79,14 @@ const SomActionsHandler: React.FC<_SOMActionHandlerProps> = ({
   };
 
   const addItemToKlaviyo = async (productId: number) => {
-    const categories = await getCategoriesArr(productId);
+    // const categories = await getCategoriesArr(productId);
     const item = {
       $value: toCheckout.totalPrice,
       AddedItemProductName: product.name,
       AddedItemColorName: selected.color.name,
       AddedItemProductID: product.id,
       AddedItemSKU: product.sku,
-      AddedItemCategories: categories,
+      AddedItemCategories: categoriesArr,
       AddedItemImageURL: `${store.mediaBaseUrl}${selected.color.imageUrl}`,
       AddedItemURL: window.location.href,
       AddedItemPrice: toCheckout.price,
@@ -99,7 +102,7 @@ const SomActionsHandler: React.FC<_SOMActionHandlerProps> = ({
         RowTotal: toCheckout.totalPrice,
         ProductURL: window.location.href,
         ImageURL: selected.color.imageUrl,
-        ProductCategories: categories,
+        ProductCategories: categoriesArr,
         ColorName: selected.color.name,
         Sizes: toCheckout.sizeQtys,
       },

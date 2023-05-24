@@ -2,8 +2,9 @@ import { UserAddressType } from '@constants/enum';
 import { __pagesConstant } from '@constants/pages.constant';
 import { AddressType } from '@controllers/checkoutController/CheckoutAddressForm';
 import { CustomerAddress } from '@definations/APIs/user.res';
-import { useTypedSelector_v2 } from '@hooks_v2/index';
+import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import { udpateIsDefaultAddress } from '@services/address.service';
+import { GetStoreCustomer } from '@services/user.service';
 import { FC } from 'react';
 
 type props = {
@@ -28,6 +29,7 @@ const ChangeAddressModal: FC<props> = ({
   setAddressEditData,
 }) => {
   const customerId = useTypedSelector_v2((state) => state.user.id);
+  const { updateCustomer } = useActions_v2();
   const addressUpdateHandler = async (address: CustomerAddress) => {
     changeAddresHandler(address);
     const obj = {
@@ -38,6 +40,10 @@ const ChangeAddressModal: FC<props> = ({
     };
 
     await udpateIsDefaultAddress(obj);
+    await GetStoreCustomer(customerId || 0).then((res) => {
+      if (res === null) return;
+      updateCustomer({ customer: res });
+    });
   };
   return (
     <div

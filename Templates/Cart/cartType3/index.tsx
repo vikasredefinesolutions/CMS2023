@@ -12,11 +12,7 @@ import EmptyCart from '../components/emptyCart';
 const CartType3: React.FC<_CartProps> = ({
   cartData,
   removeCartItem,
-  empCustomQtyPrice,
-  employeeAmtChangeHandler,
-  amtQtyBlurHandler,
   loadProduct,
-  setShowAddOtf,
   cartType,
 }) => {
   if (!cartData || cartData.length === 0) {
@@ -71,9 +67,7 @@ const CartType3: React.FC<_CartProps> = ({
                   cartData,
                   isEditable: true,
                   removeCartItem,
-                  empCustomQtyPrice,
-                  employeeAmtChangeHandler,
-                  amtQtyBlurHandler,
+
                   loadProduct,
                   cartType,
                 }}

@@ -127,6 +127,9 @@ export const cartSlice = createSlice({
     customerCreditBalanceUpdate: (state, { payload }) => {
       state.userCreditBalance = payload;
     },
+    cart_PageClosed: (state) => {
+      state.lastUpdate = 0;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchCartDetails.fulfilled, (state, { payload }) => {
@@ -154,7 +157,7 @@ export const cartSlice = createSlice({
         state.cartQty = payload.cart.length;
       } else {
         state.isCartLoading = false;
-        state.cart = null;
+        state.cart = [];
         state.cartQty = 0;
       }
     });

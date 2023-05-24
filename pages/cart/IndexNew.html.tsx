@@ -2,20 +2,20 @@ import AddOTFItemNo from '@appComponents/modals/addOtfItem';
 import StartOrderModal from '@appComponents/modals/startOrderModal/StartOrderModal';
 import CartController from '@controllers/cartController';
 import { TrackGTMEvent } from '@helpers/common.helper';
-import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
+import {
+  GetCustomerId,
+  useActions_v2,
+  useTypedSelector_v2,
+} from '@hooks_v2/index';
 import { FetchPageThemeConfigs } from '@services/product.service';
 import CartTemplate from '@templates/Cart';
 import { useEffect, useState } from 'react';
 const Cart = () => {
   const [cartType, setCartType] = useState<number>(1);
-  const { setShowLoader } = useActions_v2();
-  const { id } = useTypedSelector_v2((state) => state.store);
+  const { setShowLoader, cart_PageClosed, fetchCartDetails } = useActions_v2();
+  const { id: storeId } = useTypedSelector_v2((state) => state.store);
   const {
-    cartData,
     removeCartItem,
-    empCustomQtyPrice,
-    employeeAmtChangeHandler,
-    amtQtyBlurHandler,
     showEdit,
     product,
     setShowEdit,
@@ -23,14 +23,29 @@ const Cart = () => {
     loadProduct,
     showAddOtf,
     setShowAddOtf,
-    showLoaderOrEmptyText,
   } = CartController();
-  const { id: customerId } = useTypedSelector_v2((state) => state.user);
 
+  // global states
+  const { id: customerId } = useTypedSelector_v2((state) => state.user);
+  const employeeId = useTypedSelector_v2((state) => state.employee.empId);
+  const { lastUpdate: lastUpdatedAt, cart: cartData } = useTypedSelector_v2(
+    (state) => state.cart,
+  );
+
+  // Local states
+  const [cartApiLoadedOnce, setCartApiLoadedOnce] = useState<{
+    show: null | 'loader' | 'emptyCart' | 'dataFound';
+    lastUpdatedAt: number;
+  }>({ show: null, lastUpdatedAt: 0 });
+
+  // imported Functions
+  const localCustomerId = GetCustomerId();
+
+  // All useEffects
   useEffect(() => {
-    if (id) {
+    if (storeId) {
       setShowLoader(true);
-      FetchPageThemeConfigs('' + id, 'cartPage')
+      FetchPageThemeConfigs('' + storeId, 'cartPage')
         .then((res) => {
           if (res.config_value) {
             let type: { cartPageTemplateId: number } = JSON.parse(
@@ -41,7 +56,7 @@ const Cart = () => {
         })
         .finally(() => setShowLoader(false));
     }
-  }, [id]);
+  }, []);
 
   useEffect(() => {
     //GTM event for view_cart
@@ -72,19 +87,57 @@ const Cart = () => {
     TrackGTMEvent(viewCartEventPayload);
   }, []);
 
+  useEffect(() => {
+    // to call on initial loading
+    if (cartApiLoadedOnce.show === null) {
+      setCartApiLoadedOnce({
+        show: 'loader',
+        lastUpdatedAt: new Date().getTime(),
+      });
+      fetchCartDetails({
+        customerId: localCustomerId,
+        isEmployeeLoggedIn: !!employeeId,
+      });
+      return;
+    }
+
+    if (cartData && cartData?.length > 0) {
+      setCartApiLoadedOnce({
+        show: 'dataFound',
+        lastUpdatedAt: lastUpdatedAt,
+      });
+      return;
+    }
+
+    if (lastUpdatedAt > cartApiLoadedOnce.lastUpdatedAt) {
+      // to call if Cart API is updated.
+      if (cartData && cartData.length === 0) {
+        setCartApiLoadedOnce({
+          show: 'emptyCart',
+          lastUpdatedAt: lastUpdatedAt,
+        });
+      }
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lastUpdatedAt]);
+
+  useEffect(() => {
+    return () => {
+      cart_PageClosed();
+    };
+  }, []);
+
   return (
     <>
       <CartTemplate
         {...{
           cartData,
           removeCartItem,
-          empCustomQtyPrice,
-          employeeAmtChangeHandler,
-          amtQtyBlurHandler,
           loadProduct,
           setShowAddOtf,
           cartType,
-          showLoaderOrEmptyText,
+          showLoaderOrEmptyText: cartApiLoadedOnce.show,
         }}
       />
       {showEdit && product && (

@@ -2,8 +2,8 @@ import { default as Image } from '@appComponents/reUsable/Image';
 import Price from '@appComponents/reUsable/Price';
 import { cartQuantityUpdateConfirmMessage } from '@constants/global.constant';
 import {
-  commonMessage,
   __SuccessErrorText,
+  commonMessage,
 } from '@constants/successError.text';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import { CartObject } from '@services/cart';
@@ -17,9 +17,7 @@ const CIlayout3: FC<any> = ({
   cartData,
   isEditable,
   removeCartItem,
-  empCustomQtyPrice,
-  employeeAmtChangeHandler,
-  amtQtyBlurHandler,
+
   loadProduct,
 }) => {
   const { loggedIn: empLoggedIn } = useTypedSelector_v2(
@@ -158,10 +156,6 @@ const CIlayout3: FC<any> = ({
                     </div>
                     {item.shoppingCartItemDetailsViewModels.map(
                       (view, viewIndex) => {
-                        const viewObject =
-                          empCustomQtyPrice && empCustomQtyPrice[cartItemIndex]
-                            ? empCustomQtyPrice[cartItemIndex][viewIndex]
-                            : null;
                         return (
                           <div
                             key={view.id}
@@ -171,26 +165,7 @@ const CIlayout3: FC<any> = ({
                               {view.attributeOptionValue}
                             </div>
                             <div className='text-default-text w-16 text-center'>
-                              {empLoggedIn ? (
-                                <input
-                                  className='block w-full border border-gray-600 shadow-sm text-sm py-1 px-2'
-                                  value={viewObject ? viewObject.qty : 0}
-                                  name='qty'
-                                  onChange={(event) =>
-                                    employeeAmtChangeHandler(
-                                      event,
-                                      viewIndex,
-                                      cartItemIndex,
-                                    )
-                                  }
-                                  onBlur={() =>
-                                    amtQtyBlurHandler(
-                                      cartItemIndex,
-                                      mediaBaseUrl,
-                                    )
-                                  }
-                                />
-                              ) : isEditable ? (
+                              {isEditable ? (
                                 <form>
                                   <div className='flex'>
                                     <input
@@ -234,28 +209,6 @@ const CIlayout3: FC<any> = ({
                                 view.qty
                               )}
                             </div>
-                            {empLoggedIn && (
-                              <div className='text-base w-16 text-center'>
-                                <input
-                                  className='block w-full border border-gray-600 shadow-sm text-sm py-1 px-2'
-                                  value={viewObject ? viewObject.price : 0}
-                                  name='price'
-                                  onChange={(event) =>
-                                    employeeAmtChangeHandler(
-                                      event,
-                                      viewIndex,
-                                      cartItemIndex,
-                                    )
-                                  }
-                                  onBlur={() =>
-                                    amtQtyBlurHandler(
-                                      cartItemIndex,
-                                      mediaBaseUrl,
-                                    )
-                                  }
-                                />
-                              </div>
-                            )}
                             <div className='text-default-text w-16 text-center'>
                               <Price value={view.price} />
                             </div>

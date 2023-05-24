@@ -142,38 +142,6 @@ const ChekoutType1: React.FC<_Props> = ({ cartTemplateId }) => {
 
                     <div className=' flex-1 w-full md:w-6/12 mt-[15px] ml-[15px] mr-[15px] mb-[30px]'>
                       <div className='pl-[15px] pr-[15px] pt-[15px] pb-[15px] '>
-                        {/* <div className='flex flex-wrap items-center justify-between pt-[10px] border-b border-[#ececec]'>
-                          <div className='pb-[10px] text-title-text'>
-                            {__pagesText.CheckoutPage.BillingInformation}
-                          </div>
-                          <div className='text-default-text'>
-                            <div
-                              onClick={() => setAddressType('B')}
-                              className='!text-anchor hover:!text-anchor-hover '
-                            >
-                              {__pagesText.CheckoutPage.Edit}
-                            </div>
-                          </div>
-                        </div>
-                        {billingAdress && (
-                          <div className='text-default-text mt-[10px]'>
-                            {billingAdress?.firstname} {billingAdress?.lastName}
-                            <br />
-                            {billingAdress?.companyName}
-                            <br />
-                            {billingAdress?.address1}
-                            <br />
-                            {[
-                              billingAdress?.city,
-                              billingAdress?.state,
-                              billingAdress?.postalCode,
-                            ].join(', ')}
-                            <br />
-                            {billingAdress?.countryName}
-                            <br />
-                            {billingAdress?.phone}
-                          </div>
-                        )} */}
                         <div className='flex flex-wrap items-center justify-between pt-[10px] border-b border-[#ececec]'>
                           <div className='pb-[10px] text-title-text'>
                             {__pagesText.CheckoutPage.PaymentMethod}
@@ -244,7 +212,38 @@ const ChekoutType1: React.FC<_Props> = ({ cartTemplateId }) => {
                             </div>
                           </div>
                         </div>
-                        {billingAdress && (
+                        <div className='mb-3 font-semibold text-lg'>
+                          <div className='flex items-center'>
+                            <div className='input_checkbox'>
+                              <input
+                                type='checkbox'
+                                id='UseShippingAddress'
+                                name='UseShippingAddress'
+                                className='checkbox'
+                                data-modal-toggle='billingaddressModal'
+                                onChange={(e) => {
+                                  if (!userId) {
+                                    setShippingAddress(false);
+                                    setShowAddAddress(true);
+                                    setBillingAdress(null);
+                                    useShippingAddress &&
+                                      setCurrentPage(checkoutPages.address);
+                                  }
+                                  setShippingAddress &&
+                                    setShippingAddress(e.target.checked);
+                                }}
+                                checked={useShippingAddress}
+                              />
+                            </div>
+                            <label
+                              htmlFor='UseShippingAddress'
+                              className='ml-2'
+                            >
+                              Use Shipping Address
+                            </label>
+                          </div>
+                        </div>
+                        {!useShippingAddress && billingAdress && (
                           <div className='text-default-text mt-[10px]'>
                             {billingAdress?.firstname} {billingAdress?.lastName}
                             <br />
@@ -381,11 +380,15 @@ const ChekoutType1: React.FC<_Props> = ({ cartTemplateId }) => {
                 ></textarea>
               </div>
             </div>
-            <div className='text-medium-text text-rose-500 font-semibold mb-[20px]'>
-              {__pagesText.CheckoutPageCardNote1.note}
+            <div className='text-medium-text font-semibold mb-[20px]'>
+              <div className='text-rose-500'>
+                {__pagesText.CheckoutPageCardNote1.note}
+              </div>
             </div>
-            <div className='text-medium-text text-rose-500 font-semibold mb-[20px]'>
-              {__pagesText.CheckoutPageCardNote2.note}
+            <div className='text-medium-text font-semibold mb-[20px]'>
+              <div className='text-rose-500'>
+                {__pagesText.CheckoutPageCardNote2.note}
+              </div>
             </div>
             {currentPage === checkoutPages.address && (
               <div className=''>
