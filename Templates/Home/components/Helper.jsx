@@ -599,6 +599,27 @@ export const updateSetProperties = (element) => {
             });
           }
 
+          if (Object.keys(element.selectedVal).includes(key + '_is_centered')) {
+            Object.entries(element.selectedVal).map(([keyq, valueq]) => {
+              if (keyq == key + '_is_centered') {
+                if(x.querySelectorAll('#is_centered').length > 0)
+                {
+                    if(valueq.value)
+                    {
+                      x.querySelectorAll('#is_centered')[0].classList.add('items-center');
+                      x.querySelectorAll('#right-section')[0].classList.remove('items-center');
+                    }
+                    else
+                    {
+                      x.querySelectorAll('#is_centered')[0].classList.remove('items-center');
+                      x.querySelectorAll('#right-section')[0].classList.add('items-center');
+
+                    }
+                }
+              }
+            });
+          }
+
           if (
             Object.keys(element.selectedVal).includes(
               key + '_transition_duration',
