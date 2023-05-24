@@ -16,9 +16,9 @@ const DiscountPricing: React.FC<
     <>
       {showMinQuantity ? (
         <div className='pt-[15px] text-default-text' x-data='{open : false}'>
-          <div className='flex flex-wrap items-center cursor-pointer'>
+          <div className='flex flex-wrap items-center cursor-pointer text-default-text'>
             <span
-              className='material-icons-outlined text-default-text'
+              className='material-icons-outlined'
               onClick={() => {
                 setShowMsg(!showMsg);
               }}

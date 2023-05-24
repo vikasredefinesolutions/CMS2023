@@ -9,8 +9,7 @@ import { splitproductList } from '@definations/productList.type';
 import { _modals } from '@definations/startOrderModal';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import {
-  GetProductImageOptionList,
-  GetlAllProductList,
+  GetlAllProductList, GetProductImageOptionList
 } from '@templates/ProductListings/ProductListingType';
 import ProductBoxController from '@templates/ProductListings/productListingType1/components/productBoxController';
 import Link from 'next/link';
@@ -83,7 +82,7 @@ const TemplateFiveListing = ({
   return (
     <li className='text-center'>
       <div className='h-full'>
-        <div className='flex text-center lg:w-auto h-full'>
+        <div className='text-center lg:w-auto h-full'>
           {/* <div className='relative w-full mb-[20px]'> */}
           <div className=' relative border border-gray-200 pb-4'>
             <div className='w-full  rounded-md overflow-hidden'>
@@ -212,10 +211,10 @@ const TemplateFiveListing = ({
                       (subRow: GetProductImageOptionList, index: number) =>
                         index < listing_max_showcolors ? (
                           <li
-                            className={`w-7 h-7 border-2 border-primary hover:border-primary ${
+                            className={`w-7 h-7 border-2 hover:border-primary ${
                               subRow.id === currentProduct.id
-                                ? ' border-secondary'
-                                : 'border-light-gray'
+                                ? ' border-primary'
+                                : 'border-secondary'
                             }`}
                             onClick={() => {
                               colorChangeHandler(

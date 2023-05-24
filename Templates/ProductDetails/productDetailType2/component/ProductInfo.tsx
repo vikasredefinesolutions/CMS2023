@@ -1,8 +1,8 @@
-import Price from '@appComponents/Price';
-import PersonalizeFontModal from '@appComponents/modals/PersonalizeFontModal/PersonalizeFontModal';
 import LoginModal from '@appComponents/modals/loginModal';
 import { _modals } from '@appComponents/modals/modal';
+import PersonalizeFontModal from '@appComponents/modals/PersonalizeFontModal/PersonalizeFontModal';
 import SizeChartModal from '@appComponents/modals/sizeChartModal/SizeChartModal';
+import Price from '@appComponents/Price';
 import { storeBuilderTypeId } from '@configs/page.config';
 import { __pagesText } from '@constants/pages.text';
 import { paths } from '@constants/paths.constant';
@@ -14,8 +14,8 @@ import { useEffect, useState } from 'react';
 import AvailableColors from './AvailableColors';
 import DiscountPrice from './DiscountPrice';
 import DiscountPricing from './DiscountPricing';
-import Inventory from './ProductInventory';
 import { _ProductInfoProps } from './productDetailsComponents';
+import Inventory from './ProductInventory';
 
 const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
   const [openModal, setOpenModal] = useState<null | _modals>(null);
@@ -120,10 +120,10 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
             <div className='md:flex justify-center'>
               <div className='w-full md:w-auto inline-block p-[20px] md:pt-0 md:pb-0 border-b md:border-b-0 md:border-r last:border-r-0 last:border-b-0 border-white'>
                 <div className='w-full md:w-auto flex flex-wrap justify-center items-center'>
-                  <span className='material-icons text-2xl-text leading-[15px] text-tertiary'>
+                  <span className='material-icons leading-[15px] text-tertiary'>
                     {__pagesText.productListing.Banner.shippingIcon}
                   </span>
-                  <div className='ml-[8px] text-left text-extra-small-text leading-[15px] tracking-[1px] text-white'>
+                  <div className='ml-[8px] text-left text-extra-small-text leading-[15px] tracking-[1px] text-[#ffffff]'>
                     <div>{__pagesText.productListing.Banner.shiping}</div>
                     <div> {__pagesText.productListing.Banner.location}</div>
                   </div>
@@ -131,10 +131,10 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
               </div>
               <div className='w-full md:w-auto inline-block p-[20px] md:pt-0 md:pb-0 border-b md:border-b-0 md:border-r last:border-r-0 last:border-b-0 border-white'>
                 <div className='w-full md:w-auto flex flex-wrap justify-center items-center'>
-                  <span className='material-icons text-2xl-text leading-[15px] text-secondary'>
+                  <span className='material-icons leading-[15px] text-secondary'>
                     {__pagesText.productListing.Banner.drawIcon}
                   </span>
-                  <div className='ml-[8px] text-left text-extra-small-text leading-[15px] tracking-[1px] text-white'>
+                  <div className='ml-[8px] text-left text-extra-small-text leading-[15px] tracking-[1px] text-[#ffffff]'>
                     <div>{__pagesText.productListing.Banner.firstLogoFree}</div>
                     <div>
                       {__pagesText.productListing.Banner.uptoTenThousandStiches}
@@ -144,10 +144,10 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
               </div>
               <div className='w-full md:w-auto inline-block p-[20px] md:pt-0 md:pb-0 border-b md:border-b-0 md:border-r last:border-r-0 last:border-b-0 border-white'>
                 <div className='w-full md:w-auto flex flex-wrap justify-center items-center'>
-                  <span className='material-icons text-2xl-text leading-[15px] text-primary'>
+                  <span className='material-icons leading-[15px] text-primary'>
                     {__pagesText.productListing.Banner.verifyIcon}
                   </span>
-                  <div className='ml-[8px] text-left text-extra-small-text leading-[15px] tracking-[1px] text-white'>
+                  <div className='ml-[8px] text-left text-extra-small-text leading-[15px] tracking-[1px] text-[#ffffff]'>
                     <div>{__pagesText.productListing.Banner.freeProof}</div>
                     <div>{__pagesText.productListing.Banner.onAllOrders}</div>
                   </div>

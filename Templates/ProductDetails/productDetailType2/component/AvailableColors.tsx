@@ -14,7 +14,8 @@ const AvailableColors: React.FC = () => {
   const [showAllColors, setShowAllColors] = useState(false);
   const colors = useTypedSelector_v2((state) => state.product.product.colors);
   const handleChooseColor = (product: _ProductColor) => {
-    if (!product.productSEName || product.productSEName === '') {
+  
+    if (!product.splitproductList) {
       setColor(product);
       return;
     }
@@ -25,12 +26,12 @@ const AvailableColors: React.FC = () => {
   const showAllColorsButton =
     colorsCount > __pagesConstant._productDetails.imagesInRow;
 
-  return (
+  return ( <>
     <div className='flex flex-wrap items-center pt-[15px]'>
       <div className='text-default-text w-[90px]'>
         <span className=''>
           {' '}
-          {__pagesText.productInfo.availableColors.availableColors}
+          {__pagesText.productInfo.availableColors.onlycolor}
         </span>
       </div>
       <div className='flex flex-wrap text-center available-colors text-default-text ml-[4px] gap-[5px]'>
@@ -89,6 +90,11 @@ const AvailableColors: React.FC = () => {
         </div>
       )}
     </div>
+
+    <div className="pt-[15px] text-default-text">
+      <span className="inline-block w-[90px]">Color Name</span> <span>:</span> <span className="ml-[4px]">{selectedColor.name}</span>
+      </div>
+      </>
   );
 };
 

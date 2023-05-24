@@ -18,7 +18,7 @@ const DiscountPricing: React.FC<
       {showMinQuantity ? (
         <div className='pt-[15px] text-default-text' x-data='{open : false}'>
           <div className='flex flex-wrap items-center cursor-pointer'>
-            <span className='material-icons-outlined text-default-text'>
+            <span className='material-icons-outlined'>
               add
             </span>{' '}
             {__pagesText.productInfo.discountPricing.minimumOrder}

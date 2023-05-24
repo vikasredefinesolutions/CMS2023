@@ -43,7 +43,7 @@ const TemplateFiveFilterBar: React.FC<props> = ({
                   <button
                     type='button'
                     onClick={() => sortOpenHandler(showSortMenu ? false : true)}
-                    className='group inline-flex items-center justify-between bg-[#ffffff] border border-[#000000] w-full pl-[8px] pt-[4px] pb-[4px] pr-[4px]'
+                    className='text-sub-text group inline-flex items-center justify-between bg-[#ffffff] border border-[#000000] w-full pl-[8px] pt-[4px] pb-[4px] pr-[4px]'
                     id='menu-button'
                   >
                     <span>
@@ -53,7 +53,7 @@ const TemplateFiveFilterBar: React.FC<props> = ({
                         )?.name
                       }
                     </span>
-                    <span className='material-icons-outlined text-sub-text font-[800]'>
+                    <span className='material-icons-outlined font-[800]'>
                       {/* {!showSortMenu ? 'add' : 'remove'} */}
                       add
                     </span>

@@ -4,7 +4,7 @@ import Document, {
   Head,
   Html,
   Main,
-  NextScript,
+  NextScript
 } from 'next/document';
 import { _globalStore } from 'store.global';
 import DcTags from 'tags/DcTags';
@@ -35,9 +35,9 @@ class MyDocument extends Document {
         />
         <Head>
           {_globalStore.googleFonts && (
-            <script
+            <code
               dangerouslySetInnerHTML={{ __html: _globalStore.googleFonts }}
-            ></script>
+            ></code>
           )}
           {_globalStore.customHeadScript && (
             <script

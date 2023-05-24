@@ -14,7 +14,7 @@ import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import {
   FetchColors,
   FetchProductById,
-  SbStore_fn,
+  SbStore_fn
 } from '@services/product.service';
 import { _sbsStore_props } from '@templates/ProductDetails/productDetails';
 import ProductCompanion from '@templates/ProductDetails/productDetailType5/component/ProductCompanion';
@@ -225,9 +225,10 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
           showLogin={product ? !product.isDiscontinue : false}
           modalHandler={modalHandler}
         />
+        
         <AvailableColors />
 
-        <div className='pt-[15px] text-default-text text-right'>
+        {/* <div className='pt-[15px] text-default-text text-right'>
           <a
             className='text-anchor hover:text-anchor-hover '
             data-modal-toggle='FitandSize'
@@ -235,7 +236,7 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
           >
             <img src={'/assets/images/size-chart.jpg'} alt={'Fit and Size'} />
           </a>{' '}
-        </div>
+        </div> */}
 
         <Inventory
           attributeOptionId={selectedColor.attributeOptionId}
@@ -281,7 +282,7 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
             pricePerItem={pricePerItem}
           />
         )}
-        <div className='pt-[15px] text-default-text flex flex-wrap items-center gap-[10px]'>
+        <div className='mt-[10px] p-[15px] text-default-text flex flex-wrap items-center gap-[10px] bg-light-gray'>
           <DiscountPrice
             storeCode={storeCode}
             ourCost={product?.ourCost || 0}

@@ -21,7 +21,7 @@ const SizeChart: React.FC = () => {
             <tbody>
               <tr className='bg-light-gray'>
                 <td className='border border-gray-border p-[5px]'>&nbsp;</td>
-                {sizeChart?.measurements.map((piece: string) => {
+                {sizeChart?.measurements?.map((piece: string) => {
                   return (
                     <td className='border border-gray-border p-[5px]'>
                       {piece}
@@ -29,7 +29,7 @@ const SizeChart: React.FC = () => {
                   );
                 })}
               </tr>
-              {sizeChart?.sizeChartRange.map((piece: string) => (
+              {sizeChart?.sizeChartRange?.map((piece: string) => (
                 <tr className=' ' key={piece}>
                   <td className='border border-gray-border p-[5px]'>{piece}</td>
                   {sizeChart?.measurements.map((size: string) => (

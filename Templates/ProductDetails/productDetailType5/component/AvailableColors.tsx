@@ -31,68 +31,80 @@ const AvailableColors: React.FC = () => {
         <span className='inline-block w-[130px]'>Color Name</span>
         <span>:</span> <span className='ml-[8px]'>{selectedColor.name}</span>
       </div>
-      <div className='flex flex-wrap items-center'>
-        <div className='flex flex-wrap items-center pt-[15px] grow'>
-          <div className='text-default-text w-[130px]'>
-            <span className=''>Select Color</span>
-          </div>
-          <span>:</span>
-        </div>
-        <div className='flex flex-wrap text-center available-colors text-default-text ml-[8px] gap-[3px]'>
-          {colors.map((product, index) => {
-            const show =
-              showAllColors ||
-              index < __pagesConstant._productDetails.imagesInRow;
-            const highlight =
-              product.attributeOptionId === selectedColor?.attributeOptionId
-                ? 'border-primary'
-                : 'border-secondary';
-            return (
-              <div
-                className=''
-                key={product.attributeOptionId}
-                onClick={() => handleChooseColor(product)}
-              >
-                <div
-                  className={`w-[32px] h-[32px] p-[1px] border-2  hover:border-primary cursor-pointer ${highlight}`}
-                >
-                  {/* <NxtImage
-                  title={`${product.name}`}
-                  src={product.imageUrl}
-                  alt={product.altTag}
-                  className='w-full object-center object-cover cursor-pointer'
-                /> */}
-                  <ColorImage product={product} />
-                </div>
+      <div className='pt-[15px] flex flex-wrap items-end justify-between'>
+
+          <div className='flex flex-wrap items-center'>
+            <div className='flex flex-wrap items-center pt-[15px]'>
+              <div className='text-default-text w-[130px]'>
+                <span className=''>Select Color</span>
               </div>
-            );
-          })}
-        </div>
-        {/* {showAllColorsButton && (
-          <div className='text-right text-anchor hover:text-anchor-hover'>
-            <button
-              onClick={() => setShowAllColors((showAll) => !showAll)}
-              className=' underline'
-            >
-              {showAllColors ? (
-                <span className='span1'>
-                  {__pagesText.productInfo.availableColors.showless}
-                </span>
-              ) : (
-                <>
-                  <span className='span1'>
-                    {__pagesText.productInfo.availableColors.seeAll}
-                  </span>
-                  <span className='span2'> {colorsCount} </span>
-                  <span className='span3'>
-                    {__pagesText.productInfo.availableColors.colors}
-                  </span>
-                </>
-              )}
-            </button>
+              <span>:</span>
+            </div>
+            <div className='flex flex-wrap text-center available-colors text-default-text ml-[8px] gap-[3px]'>
+              {colors.map((product, index) => {
+                const show =
+                  showAllColors ||
+                  index < __pagesConstant._productDetails.imagesInRow;
+                const highlight =
+                  product.attributeOptionId === selectedColor?.attributeOptionId
+                    ? 'border-primary'
+                    : 'border-secondary';
+                return (
+                  <div
+                    className=''
+                    key={product.attributeOptionId}
+                    onClick={() => handleChooseColor(product)}
+                  >
+                    <div
+                      className={`w-[32px] h-[32px] p-[1px] border-2  hover:border-primary cursor-pointer ${highlight}`}
+                    >
+                      {/* <NxtImage
+                      title={`${product.name}`}
+                      src={product.imageUrl}
+                      alt={product.altTag}
+                      className='w-full object-center object-cover cursor-pointer'
+                    /> */}
+                      <ColorImage product={product} />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            {/* {showAllColorsButton && (
+              <div className='text-right text-anchor hover:text-anchor-hover'>
+                <button
+                  onClick={() => setShowAllColors((showAll) => !showAll)}
+                  className=' underline'
+                >
+                  {showAllColors ? (
+                    <span className='span1'>
+                      {__pagesText.productInfo.availableColors.showless}
+                    </span>
+                  ) : (
+                    <>
+                      <span className='span1'>
+                        {__pagesText.productInfo.availableColors.seeAll}
+                      </span>
+                      <span className='span2'> {colorsCount} </span>
+                      <span className='span3'>
+                        {__pagesText.productInfo.availableColors.colors}
+                      </span>
+                    </>
+                  )}
+                </button>
+              </div>
+            )} */}
           </div>
-        )} */}
-      </div>
+          <div className='pt-[15px] text-default-text text-right'>
+              <a
+                className='text-anchor hover:text-anchor-hover '
+                data-modal-toggle='FitandSize'
+                onClick={() => modalHandler('sizeChart')}
+              >
+                <img src={'/assets/images/size-chart.jpg'} alt={'Fit and Size'} />
+              </a>
+            </div>
+          </div>
     </>
   );
 };

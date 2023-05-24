@@ -21,7 +21,7 @@ const DiscountPrice: React.FC<_props & { storeCode: string }> = ({
     return (
       <>
         <div className=''>{__pagesText.productInfo.pricePerItem}</div>
-        <div className='text-title-text'>
+        <div className='text-large-text font-semibold'>
           <Price value={salePrice} />
         </div>
       </>
@@ -31,7 +31,7 @@ const DiscountPrice: React.FC<_props & { storeCode: string }> = ({
   return (
     <>
       <div className=''>{__pagesText.productInfo.pricePerItem}</div>
-      <div className='text-title-text'>
+      <div className='text-large-text font-semibold'>
         <Price value={salePrice} />
       </div>
       <div className='line-through'>

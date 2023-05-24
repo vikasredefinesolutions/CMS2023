@@ -52,7 +52,7 @@ const ElementAccordionDisplay = ({ selected_Values, acValues }) => {
 
      // if (el !== symbolobj) el.innerHTML = iconArr.remove_circle_outline;
     });
-    console.log(existH);
+   
     if (symbolobj) {
       if (existH === iconArr.remove_circle_outline) {
         event.target

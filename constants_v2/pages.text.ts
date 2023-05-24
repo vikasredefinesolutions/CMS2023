@@ -179,6 +179,7 @@ export const __pagesText = {
       showless: 'Show Less',
       seeAll: 'See All',
       colors: 'Colors:',
+      onlycolor: 'Color'
     },
     forgotModal: {
       forgotPassword: 'Forgot Password',
