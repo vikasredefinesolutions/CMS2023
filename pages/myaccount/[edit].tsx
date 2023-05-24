@@ -29,7 +29,7 @@ export const _initialValues = {
   isDefault: false,
 };
 
-const index = () => {
+const Index = () => {
   const [country, setCountry] = useState<Array<_Country>>([]);
   const [editData, setEditData] = useState<CustomerAddress | null>(null);
   const [state, setState] = useState<Array<_State>>([]);
@@ -469,4 +469,4 @@ const index = () => {
   );
 };
 
-export default index;
+export default Index;

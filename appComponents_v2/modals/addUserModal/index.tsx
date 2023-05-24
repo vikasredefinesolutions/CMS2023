@@ -179,6 +179,7 @@ const AddUserModal = ({
                             className='form-input'
                             onChange={handleChange}
                             onBlur={handleBlur}
+                            disabled={editData ? true : false}
                           />
                         </div>
                         {touched.email && errors.email && (

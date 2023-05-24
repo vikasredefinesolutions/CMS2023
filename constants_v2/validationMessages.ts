@@ -135,3 +135,57 @@ export const contactPageMessage = {
   companyName: { required: 'Enter your Company name / ASI# or PPAI# .' },
   message: { required: 'Enter your name.' },
 };
+
+export const CustomRequestMessage = {
+  firstName: {
+    required: 'First name is required',
+  },
+  lastName: {
+    required: 'Last name is required',
+  },
+  organizationName: {
+    required: 'Organization name is required',
+  },
+  phone: {
+    required: 'Phone number is required',
+  },
+  email: {
+    required: 'Email is required',
+  },
+  firstNameAddress: {
+    required: 'First name is required',
+  },
+  lastNameAddress: {
+    required: 'Last name is required',
+  },
+  address1: {
+    required: 'Address is required',
+  },
+  address2: {
+    required: 'Address is required',
+  },
+  zipCode: {
+    required: 'Zip code is required',
+  },
+  city: {
+    required: 'City is required',
+  },
+  country: {
+    required: 'Country is required',
+  },
+  state: {
+    required: 'State is required',
+  },
+  itemName: {
+    required: 'Item name is required',
+  },
+  itemColor: {
+    required: 'Item color is required',
+  },
+  sizeQty: {
+    required: 'Size and quantity is required',
+  },
+  needByDate: {
+    required: 'Need by date is required',
+  },
+};

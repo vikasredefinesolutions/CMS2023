@@ -32,9 +32,9 @@ export type _UserAPIs_V2 =
   | 'GetEmailByResetToken'
   | 'ResetPassword'
   | 'GetCustomerUsersByCustomerId'
+  | 'GetDecryptPass'
   | 'CheckIfEmailIsAlreadyRegistered'
   | 'ResetPassword'
-  | 'DecryptPassword'
   | 'FetchUserOrderIds';
 
 export interface _UserServices_V2 {
@@ -439,20 +439,21 @@ export const GetAdminCustomerUsers = async (payload: {
   return response;
 };
 
-export const getDecryptPassword = async (password: string | null) => {
-  const requestOptions = {
-    method: 'POST',
-  };
+export const getDecryptPassword = async (payload: {
+  password: string;
+}): Promise<string | null> => {
+  const url = `DataProtectServices/decrypt.json?password=${payload.password}`;
 
-  let response = await fetch(
-    `https://redefine-front-staging.redefinecommerce.io/DataProtectServices/decrypt.json?password=${password}`,
-    {
-      method: 'POST',
-      headers: requestOptions,
+  const response = await CallAPI_v2<string>({
+    name: {
+      service: 'user',
+      api: 'GetDecryptPass',
     },
-  );
+    request: {
+      url: url,
+      method: 'POST',
+    },
+  });
 
-  let data = await response.json();
-
-  return data;
+  return response;
 };

@@ -26,7 +26,7 @@ const AccountSetting = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordUpdate, setShowPasswordUpdate] = useState(false);
   const [newPassword, setNewPassword] = useState('');
-  const [getPass, setGetPass] = useState('');
+  const [currentPass, setCurrentPass] = useState('');
   const [initialValues, setInitialValues] = useState<SettingForm>(initValue);
   useEffect(() => {
     if (activeEditBox) {
@@ -37,11 +37,20 @@ const AccountSetting = () => {
   }, [activeEditBox]);
 
   const passDecryptFuc = async () => {
-    const response = await getDecryptPassword(
-      customer?.password ? customer.password : '',
-    );
-
+    const response = await getDecryptPassword({
+      password: customer?.password ? customer.password : '',
+    });
     return response;
+  };
+
+  const setFormInitialValue = (setFieldValue: any) => {
+    setFieldValue('firstName', customer?.firstname ? customer.firstname : ''),
+      setFieldValue('lastName', customer?.lastName ? customer.lastName : ''),
+      setFieldValue(
+        'companyName',
+        customer?.companyName ? customer.companyName : '',
+      ),
+      setFieldValue('password', currentPass ? currentPass : '');
   };
 
   const updatePassword = async () => {
@@ -80,11 +89,12 @@ const AccountSetting = () => {
   useEffect(() => {
     if (customer) {
       passDecryptFuc().then((res) => {
+        setCurrentPass(res ? res : '');
         setInitialValues({
           firstName: customer.firstname,
           lastName: customer.lastName,
           companyName: customer.companyName,
-          password: res,
+          password: res ? res : '',
         });
       });
     }
@@ -94,7 +104,7 @@ const AccountSetting = () => {
     try {
       const res = await UpdateUserData({
         ...value,
-        password: newPassword,
+        password: currentPass,
         customerId: customer?.id || 0,
         gender: customer?.gender || 'Male',
       });
@@ -121,7 +131,15 @@ const AccountSetting = () => {
               onSubmit={submitHandler}
               validationSchema={validationSchema}
             >
-              {({ values, handleChange, handleBlur, errors }) => (
+              {({
+                values,
+                handleChange,
+                handleBlur,
+                errors,
+                setErrors,
+                setFieldValue,
+                handleReset,
+              }) => (
                 <Form>
                   <div className='mb-[24px] mt-[24px]'>
                     <div className='mt-[20px] flex flex-wrap items-center gap-[8px] max-w-3xl'>
@@ -338,9 +356,14 @@ const AccountSetting = () => {
                             >
                               {__pagesText.accountPage.saveBtn}
                             </button>
+
                             <button
                               type='button'
-                              onClick={() => setActiveEditBox(false)}
+                              onClick={() => {
+                                setActiveEditBox(false);
+                                handleReset();
+                                setTimeout(() => setErrors({}), 1000);
+                              }}
                               className='ml-2 btn btn-secondary'
                             >
                               {__pagesText.accountPage.cancelBtn}

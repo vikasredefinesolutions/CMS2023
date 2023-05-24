@@ -32,7 +32,10 @@ import { CallAPI_v2 } from '@helpers/api.helper';
 import { conditionalLog_V2 } from '@helpers/console.helper';
 import { _FeaturedProduct } from '@templates/ProductDetails/productDetailsTypes/storeDetails.res';
 import { SendAsync } from '@utils/axios.util';
-import { _SubmitRequestConsultationPayload } from './product';
+import {
+  _CustomerOrderPayload,
+  _SubmitRequestConsultationPayload,
+} from './product';
 import { _FetchPageThemeConfigs } from './product.service.type';
 
 export type _ProducDetailAPIs_V2 =
@@ -149,7 +152,7 @@ export const SumbitRequestConsultationDetails = async (
       data: payload,
     },
   });
-
+  console.log(response, '<-----response is here');
   return response;
 };
 
@@ -533,5 +536,18 @@ export const SbStore_fn = async (payload: {
     method: 'POST',
     data: payload,
   });
+  return res;
+};
+
+/*---------------------CUSTOM ORDER API--------------------------*/
+
+export const CustomerProductOrder = async (payload: _CustomerOrderPayload) => {
+  const url = `Customer/customerproductorder`;
+  const res = await SendAsync({
+    url: url,
+    method: 'POST',
+    data: payload,
+  });
+
   return res;
 };
