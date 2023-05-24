@@ -84,7 +84,7 @@ const SideFilter = ({
                           id='panel1a-header'
                           className='flex items-center justify-between w-full h-5 group !mb-[10px] min-h-[auto]'
                         >
-                          <div className='text-medium-text font-semibold text-[#000000] block uppercase'>
+                          <div className='text-medium-text !font-semibold text-[#000000] block uppercase'>
                             {filter.label === 'Color' || filter.label === 'Size'
                               ? `Select ${filter.label}`
                               : filter.label}
@@ -294,7 +294,7 @@ const SideFilter = ({
                         id='panel1a-header'
                         className='flex items-center justify-between w-full h-5 group !mb-[10px] min-h-[auto]'
                       >
-                        <div className='text-medium-text font-semibold text-[#000000] block uppercase'>
+                        <div className='text-medium-text !font-semibold text-[#000000] block uppercase'>
                           {filter.label === 'Color' || filter.label === 'Size'
                             ? `Select ${filter.label}`
                             : filter.label}
