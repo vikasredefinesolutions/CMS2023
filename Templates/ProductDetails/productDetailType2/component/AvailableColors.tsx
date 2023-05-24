@@ -18,6 +18,7 @@ const AvailableColors: React.FC = () => {
       setColor(product);
       return;
     }
+
     // router.push(product.productSEName);
   };
   if (colors === null) return <></>;
