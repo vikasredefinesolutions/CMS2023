@@ -5,10 +5,8 @@ import {
 import Price from '@appComponents/reUsable/Price';
 import { _Store } from '@configs/page.config';
 import { CustomizeLaterMain } from '@constants/common.constant';
-import { checkoutPages } from '@constants/enum';
 import { __pagesText } from '@constants/pages.text';
 import CheckoutController from '@controllers/checkoutController';
-import { isNumberKey } from '@helpers/common.helper';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import { CartObject, ShoppingCartItemDetailsViewModel } from '@services/cart';
 import { _CartLinePersonDetailModel } from '@services/product.service.type';
@@ -23,8 +21,6 @@ const CIlayout1: FC<any> = ({
   isEditable,
   removeCartItem,
   empCustomQtyPrice,
-  employeeAmtChangeHandler,
-  amtQtyBlurHandler,
   loadProduct,
   availableFont,
   availableLocation,
@@ -125,11 +121,6 @@ const CIlayout1: FC<any> = ({
                       <div className='text-normal-text font-semibold w-16 text-center'>
                         Qty
                       </div>
-                      {empLoggedIn && (
-                        <div className='text-base font-semibold w-18 text-center'>
-                          Unit Price
-                        </div>
-                      )}
                       <div className='text-normal-text font-semibold w-20 text-right'>
                         Price
                       </div>
@@ -149,65 +140,8 @@ const CIlayout1: FC<any> = ({
                               {view.attributeOptionValue}
                             </div>
                             <div className='text-normal-text w-16 text-center'>
-                              {empLoggedIn ? (
-                                <input
-                                  className='block w-full border border-gray-600 shadow-sm text-sm py-1 px-2'
-                                  value={viewObject ? viewObject.qty : 0}
-                                  name='qty'
-                                  disabled={
-                                    currentPage === checkoutPages.reviewOrder
-                                      ? true
-                                      : false
-                                  }
-                                  onChange={(event) => {
-                                    if (isNumberKey(event)) {
-                                      employeeAmtChangeHandler(
-                                        event,
-                                        viewIndex,
-                                        cartItemIndex,
-                                      );
-                                    }
-                                  }}
-                                  onBlur={() =>
-                                    amtQtyBlurHandler(
-                                      cartItemIndex,
-                                      mediaBaseUrl,
-                                    )
-                                  }
-                                />
-                              ) : (
-                                view.qty
-                              )}
+                              {view.qty}
                             </div>
-                            {empLoggedIn && (
-                              <div className='text-base w-16 text-center'>
-                                <input
-                                  className='block w-full border border-gray-600 shadow-sm text-sm py-1 px-2'
-                                  value={viewObject ? viewObject.price : 0}
-                                  name='price'
-                                  disabled={
-                                    currentPage === checkoutPages.reviewOrder
-                                      ? true
-                                      : false
-                                  }
-                                  onChange={(event) => {
-                                    if (isNumberKey(event)) {
-                                      employeeAmtChangeHandler(
-                                        event,
-                                        viewIndex,
-                                        cartItemIndex,
-                                      );
-                                    }
-                                  }}
-                                  onBlur={() =>
-                                    amtQtyBlurHandler(
-                                      cartItemIndex,
-                                      mediaBaseUrl,
-                                    )
-                                  }
-                                />
-                              </div>
-                            )}
                             <div className='text-normal-text w-20 text-right'>
                               <Price value={view.price} />
                             </div>
@@ -222,9 +156,6 @@ const CIlayout1: FC<any> = ({
                       <div className='text-normal-text w-16 text-center'>
                         {item.totalQty}
                       </div>
-                      {empLoggedIn && (
-                        <div className='text-normal-text w-16 text-center'></div>
-                      )}
                       <div className='text-normal-text w-20 text-right'>
                         <Price value={item.productTotal} />
                       </div>

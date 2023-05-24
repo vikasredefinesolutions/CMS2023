@@ -381,10 +381,10 @@ const ChekoutType1: React.FC<_Props> = ({ cartTemplateId }) => {
                 ></textarea>
               </div>
             </div>
-            <div className='text-medium-text text-[#ff0000] font-semibold mb-[20px]'>
+            <div className='text-medium-text text-rose-500 font-semibold mb-[20px]'>
               {__pagesText.CheckoutPageCardNote1.note}
             </div>
-            <div className='text-medium-text text-[#ff0000] font-semibold mb-[20px]'>
+            <div className='text-medium-text text-rose-500 font-semibold mb-[20px]'>
               {__pagesText.CheckoutPageCardNote2.note}
             </div>
             {currentPage === checkoutPages.address && (
