@@ -25,13 +25,14 @@ const SlugSingleProductListing: React.FC<_props> = (props) => {
                   key={product?.productId}
                   href={`${encodeURIComponent(product?.productSEName)}.html`}
                   className='hrefurl'
-                ><a style={{ display: "block"}}>
-                  <NxtImage
-                    src={product?.imageUrl}
-                    alt={product?.productName}
-                    title={product?.productName}
-                    className='w-full mx-auto isinput img-editable alttitle'
-                  />
+                >
+                  <a style={{ display: 'block' }}>
+                    <NxtImage
+                      src={product?.imageUrl}
+                      alt={product?.productName}
+                      title={product?.productName}
+                      className='w-full mx-auto isinput img-editable alttitle'
+                    />
                   </a>
                 </Link>
               </div>
@@ -48,7 +49,10 @@ const SlugSingleProductListing: React.FC<_props> = (props) => {
                     key={product.productId}
                     href={`${encodeURIComponent(product.productSEName)}.html`}
                   >
-                    <a className='h-[46px]' title={product.productName}>
+                    <a
+                      className='h-[46px] overflow-hidden'
+                      title={product.productName}
+                    >
                       {product.productName}
                     </a>
                   </Link>
