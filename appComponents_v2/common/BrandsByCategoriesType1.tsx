@@ -464,7 +464,7 @@ const BrandsByCategoriesType1: React.FC<_Props> = ({ brands }) => {
                 </div>
               </div>
 
-              <ul className='w-full flex justify-center flex-wrap'>
+              <ul className='container mx-auto w-full flex justify-center flex-wrap'>
                 {categories.map((cate, index) => {
                   return (
                     <li key={index} className='lg:w-1/5 w-full'>
