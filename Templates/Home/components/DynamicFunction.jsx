@@ -209,7 +209,7 @@ export const boximage = (dataArr, selectedObj) => {
       let textHPos = '';
       let textVPos = '';
       let sectionWidth = '';
-
+      let onBottom = false;
       var buttonHTML = '';
       if (
         item.Button_display != undefined &&
@@ -243,6 +243,12 @@ export const boximage = (dataArr, selectedObj) => {
         sectionWidth = aprData.section_width ?? '';
         if (sectionWidth === '') sectionWidth = 'max-w-3xl';
       }
+
+      if(selectedObj.selectedVal.TextAppearance_on_bottom)
+      {
+          onBottom = selectedObj.selectedVal.TextAppearance_on_bottom.value;
+      }
+
       let themeclassName = '';
       let fontColor = '';
       if (selectedObj.selectedVal.Headline_final_class != undefined) {
@@ -257,35 +263,29 @@ export const boximage = (dataArr, selectedObj) => {
         item.Headline !== '' &&
         item.Headline !== null
       ) {
-        clName = 'flex relative w-full text-white';
-        headLine +=
-          '<div class="flex absolute ' +
-          sectionWidth +
-          ' ' +
-          textHPos +
-          ' ' +
-          textVPos +
-          ' inset-0 p-1 lg:p-4 text-white">';
-        headLine +=
-          '<div class="" style="background: rgba(' +
-          bgColor +
-          ',' +
-          bgOpacity +
-          '); padding: 20px;">';
-        headLine +=
-          '<div class="' +
-          themeclassName +
-          '" style="color:' +
-          fontColor +
-          '">' +
-          item.Headline +
-          '</div>';
-        headLine += '<div>';
-        headLine += buttonHTML;
-        headLine += '</div>';
-        headLine += '</div>';
-        headLine += '</div>';
+
+        let abClass = '';
+                if(!onBottom)
+                {
+                    clName = 'flex relative w-full text-white';
+                    abClass = 'flex absolute ';
+                }
+                else
+                {
+                    clName = 'w-full text-white';
+                }
+                    
+                headLine += '<div class="'+abClass+' inset-0 p-1 lg:p-4 text-white'+sectionWidth+' ' +textHPos +' '+textVPos+'">';
+                headLine += '<div class="" style="background: rgba('+bgColor+','+bgOpacity+'); padding: 20px;">';
+                headLine += '<div class="'+themeclassName+'" style="color:'+fontColor+'">'+item.Headline+'</div>';
+                headLine += '<div>';
+                headLine += buttonHTML;
+                headLine += '</div>';
+                headLine += '</div>';
+                headLine += '</div>';
+        
       } else {
+        
         clName = 'flex relative w-full text-white';
         headLine +=
           '<div class="flex absolute ' +
