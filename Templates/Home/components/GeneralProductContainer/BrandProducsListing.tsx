@@ -81,7 +81,7 @@ const BrandProductListing: React.FC<_props> = (props) => {
   }, [width]);
 
   useEffect(() => {
-    if (productsData.length < 4) {
+    if (productsData?.length < 4) {
       setFeaturedProductCarouselSetting({
         sliderSettings: {
           ...featuredProductCarouselSetting?.sliderSettings,
