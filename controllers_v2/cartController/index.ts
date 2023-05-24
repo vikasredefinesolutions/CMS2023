@@ -56,6 +56,9 @@ const CartController = () => {
   const customerId = GetCustomerId();
   const [empCustomQtyPrice, setEmpCustomQtyPrice] =
     useState<EmpCustomQtyPriceType>([]);
+  const isAttributeSaparateProduct = useTypedSelector_v2(
+    (state) => state.store.isAttributeSaparateProduct,
+  );
   const [showEdit, setShowEdit] = useState(false);
   const [product, setProduct] = useState<_ProductDetails>();
   const [currentCartProduct, setCurrentCartProduct] = useState<_CartItem>();
@@ -387,7 +390,7 @@ const CartController = () => {
           FetchColors({
             productId: res.id,
             storeId: ~~storeId,
-            isAttributeSaparateProduct: false,
+            isAttributeSaparateProduct: isAttributeSaparateProduct,
           }).then((res) => {
             if (res) {
               const allColorAttributes = res?.map(
@@ -444,19 +447,19 @@ const CartController = () => {
       return;
     }
 
-    if (lastUpdatedAt === cartApiLoadedOnce.lastUpdatedAt) {
-      return;
-    }
-
     if (cartData && cartData?.length > 0) {
       setCartApiLoadedOnce({
         show: 'dataFound',
         lastUpdatedAt: lastUpdatedAt,
       });
       return;
+    } else {
+      if (lastUpdatedAt === cartApiLoadedOnce.lastUpdatedAt) {
+        return;
+      }
+      setCartApiLoadedOnce({ show: 'emptyCart', lastUpdatedAt: lastUpdatedAt });
     }
 
-    setCartApiLoadedOnce({ show: 'emptyCart', lastUpdatedAt: lastUpdatedAt });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lastUpdatedAt]);
 
