@@ -7,7 +7,7 @@ const FreeBanner = () => {
           <div className='md:flex justify-center'>
             <div className='w-full md:w-auto inline-block p-[20px] md:pt-0 md:pb-0 border-b md:border-b-0 md:border-r last:border-r-0 last:border-b-0 border-[#ffffff]'>
               <div className='w-full md:w-auto flex flex-wrap justify-center items-center'>
-                <span className='material-icons text-2xl-text leading-[15px] text-tertiary'>
+                <span className='material-icons text-[40px] leading-[15px] text-tertiary'>
                   {__pagesText.productListing.Banner.shippingIcon}
                 </span>
                 <div className='ml-[8px] text-left text-extra-small-text leading-[15px] tracking-[1px] text-[#ffffff]'>
@@ -18,7 +18,7 @@ const FreeBanner = () => {
             </div>
             <div className='w-full md:w-auto inline-block p-[20px] md:pt-0 md:pb-0 border-b md:border-b-0 md:border-r last:border-r-0 last:border-b-0 border-[#ffffff]'>
               <div className='w-full md:w-auto flex flex-wrap justify-center items-center'>
-                <span className='material-icons text-2xl-text leading-[15px] text-secondary'>
+                <span className='material-icons text-[40px] leading-[15px] text-secondary'>
                   draw
                 </span>
                 <div className='ml-[8px] text-left text-extra-small-text leading-[15px] tracking-[1px] text-[#ffffff]'>
@@ -31,7 +31,7 @@ const FreeBanner = () => {
             </div>
             <div className='w-full md:w-auto inline-block p-[20px] md:pt-0 md:pb-0 border-b md:border-b-0 md:border-r last:border-r-0 last:border-b-0 border-[#ffffff]'>
               <div className='w-full md:w-auto flex flex-wrap justify-center items-center'>
-                <span className='material-icons text-2xl-text leading-[15px] text-primary'>
+                <span className='material-icons text-[40px] leading-[15px] text-primary'>
                   verified
                 </span>
                 <div className='ml-[8px] text-left text-extra-small-text leading-[15px] tracking-[1px] text-[#ffffff]'>
