@@ -99,7 +99,7 @@ const AvailableColors: React.FC = () => {
               <a
                 className='text-anchor hover:text-anchor-hover '
                 data-modal-toggle='FitandSize'
-                onClick={() => modalHandler('sizeChart')}
+                // onClick={() => modalHandler('sizeChart')}
               >
                 <img src={'/assets/images/size-chart.jpg'} alt={'Fit and Size'} />
               </a>
