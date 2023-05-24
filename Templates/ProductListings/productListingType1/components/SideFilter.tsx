@@ -139,7 +139,7 @@ const SideFilter = ({
                                           id={option.name}
                                           className={`flex items-center !text-black !no-underline cursor-pointer ${
                                             route === option.sename
-                                              ? 'font-bold'
+                                              ? '!font-bold'
                                               : ''
                                           }`}
                                           href={`/${option.sename}.html`}
@@ -170,7 +170,7 @@ const SideFilter = ({
                                                     href={`/${subrow.sename}.html`}
                                                     className={`flex items-center !text-black !no-underline cursor-pointer ${
                                                       route === subrow.sename
-                                                        ? 'font-bold'
+                                                        ? '!font-bold'
                                                         : ''
                                                     }`}
                                                   >
@@ -351,7 +351,7 @@ const SideFilter = ({
                                         id={option.name}
                                         className={`flex items-center !text-black !no-underline cursor-pointer ${
                                           route === option.sename
-                                            ? 'font-bold'
+                                            ? '!font-bold'
                                             : ''
                                         }`}
                                         href={`/${option.sename}.html`}
