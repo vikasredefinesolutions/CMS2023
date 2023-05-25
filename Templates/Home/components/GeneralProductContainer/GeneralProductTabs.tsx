@@ -15,6 +15,11 @@ interface _props {
   data: _SelectedTab[];
   showBorder: string;
   customMessage: string;
+  showProductName: string;
+  showSplitProducts: string;
+  showButton: string;
+  showPrice: string;
+  showBrandLogo: string;
 }
 
 // ** Styled Tab component
@@ -28,7 +33,16 @@ const Tab = styled(MuiTab)(({ theme }) => ({
 }));
 
 const ProductsInfoTabs: React.FC<_props> = (props) => {
-  const { data, showBorder, customMessage } = props;
+  const {
+    data,
+    showBorder,
+    customMessage,
+    showProductName,
+    showSplitProducts,
+    showButton,
+    showPrice,
+    showBrandLogo,
+  } = props;
 
   // ** State
   const [value, setValue] = useState<string>(data[0]?.index);
@@ -81,6 +95,11 @@ const ProductsInfoTabs: React.FC<_props> = (props) => {
                   <BrandProductListing
                     customMessage={customMessage}
                     showBorder={showBorder}
+                    showProductName={showProductName}
+                    showSplitProducts={showSplitProducts}
+                    showButton={showButton}
+                    showPrice={showPrice}
+                    showBrandLogo={showBrandLogo}
                     productsData={product?.data}
                   />
                 </TabPanel>

@@ -11,6 +11,11 @@ interface _props {
   productsData: newFetauredItemResponse[] | [];
   showBorder: string;
   customMessage: string;
+  showProductName: string;
+  showSplitProducts: string;
+  showButton: string;
+  showPrice: string;
+  showBrandLogo: string;
 }
 interface _carouselProps {
   sliderSettings: {
@@ -25,7 +30,16 @@ interface _carouselProps {
 }
 
 const BrandProductListing: React.FC<_props> = (props) => {
-  const { productsData, showBorder, customMessage } = props;
+  const {
+    productsData,
+    showBorder,
+    customMessage,
+    showProductName,
+    showSplitProducts,
+    showButton,
+    showPrice,
+    showBrandLogo,
+  } = props;
 
   const Settings = {
     sliderSettings: {
@@ -143,15 +157,28 @@ const BrandProductListing: React.FC<_props> = (props) => {
                   {productsData?.map((product) => {
                     return (
                       <>
-                        {showBorder == __pagesConstant?.showBorder?.Yes ? (
+                        {showBorder == __pagesConstant?.show?.Yes ? (
                           <div key={product.productId} className='slide-item'>
-                            <SingleProductListing product={product} />
+                            <SingleProductListing
+                              product={product}
+                              customMessage={customMessage}
+                              showProductName={showProductName}
+                              showSplitProducts={showSplitProducts}
+                              showButton={showButton}
+                              showPrice={showPrice}
+                              showBrandLogo={showBrandLogo}
+                            />
                           </div>
                         ) : (
                           <div key={product.productId} className='slide-item'>
                             <SlugSingleProductListing
                               product={product}
                               customMessage={customMessage}
+                              showProductName={showProductName}
+                              showSplitProducts={showSplitProducts}
+                              showButton={showButton}
+                              showPrice={showPrice}
+                              showBrandLogo={showBrandLogo}
                             />
                           </div>
                         )}

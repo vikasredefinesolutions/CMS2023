@@ -33,23 +33,25 @@ class MyDocument extends Document {
           href={`${_globalStore.blobUrl}${_globalStore.favicon}`}
         />
         <Head>
-          {_globalStore.topHeaderScriptGTM && (
-            <script
-              type='text/javascript'
-              dangerouslySetInnerHTML={{
-                __html: _globalStore.topHeaderScriptGTM,
-              }}
-            ></script>
-          )}
+          {_globalStore.topHeaderScriptGTM &&
+            _globalStore.storeId === CG_STORE_CODE && (
+              <script
+                type='text/javascript'
+                dangerouslySetInnerHTML={{
+                  __html: _globalStore.topHeaderScriptGTM,
+                }}
+              ></script>
+            )}
 
-          {_globalStore.homePageScriptGTM && (
-            <script
-              type='text/javascript'
-              dangerouslySetInnerHTML={{
-                __html: _globalStore.homePageScriptGTM,
-              }}
-            ></script>
-          )}
+          {_globalStore.homePageScriptGTM &&
+            _globalStore.storeId === CG_STORE_CODE && (
+              <script
+                type='text/javascript'
+                dangerouslySetInnerHTML={{
+                  __html: _globalStore.homePageScriptGTM,
+                }}
+              ></script>
+            )}
 
           {_globalStore.googleFonts && (
             <code
@@ -126,23 +128,25 @@ class MyDocument extends Document {
             async={true}
           ></script>
 
-          {_globalStore.bottomHeaderScriptGTM && (
-            <script
-              type='text/javascript'
-              dangerouslySetInnerHTML={{
-                __html: _globalStore.bottomHeaderScriptGTM,
-              }}
-            ></script>
-          )}
+          {_globalStore.bottomHeaderScriptGTM &&
+            _globalStore.storeId === CG_STORE_CODE && (
+              <script
+                type='text/javascript'
+                dangerouslySetInnerHTML={{
+                  __html: _globalStore.bottomHeaderScriptGTM,
+                }}
+              ></script>
+            )}
         </Head>
         <body className='font-Outfit bg-white'>
-          {_globalStore.topBodySnippetGTM && (
-            <noscript
-              dangerouslySetInnerHTML={{
-                __html: _globalStore.topBodySnippetGTM,
-              }}
-            ></noscript>
-          )}
+          {_globalStore.topBodySnippetGTM &&
+            _globalStore.storeId === CG_STORE_CODE && (
+              <noscript
+                dangerouslySetInnerHTML={{
+                  __html: _globalStore.topBodySnippetGTM,
+                }}
+              ></noscript>
+            )}
           {_globalStore.storeId !== CG_STORE_CODE && (
             <noscript
               dangerouslySetInnerHTML={{

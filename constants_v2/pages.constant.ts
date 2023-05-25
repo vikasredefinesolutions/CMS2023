@@ -110,7 +110,7 @@ export const __pagesConstant = {
     Bill: 'BILL ',
     Ship: 'SHIP ',
   },
-  showBorder: {
+  show: {
     Yes: 'Yes',
     No: 'No',
   },

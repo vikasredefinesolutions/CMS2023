@@ -83,6 +83,11 @@ export interface _SelectedBrands {
   featuredproducts_section_title: _Value;
   featuredproducts_show_border: _Value;
   featuredproducts_custom_message: _Value;
+  featuredproducts_show_product_name: _Value;
+  featuredproducts_show_price: _Value;
+  featuredproducts_show_button: _Value;
+  featuredproducts_show_brand_logo: _Value;
+  featuredproducts_show_split_products: _Value;
   featuredproducts: {
     type: string;
     value: {
