@@ -1,4 +1,5 @@
 import { SpinnerComponent } from '@appComponents/ui/spinner';
+import CheckoutController from '@controllers/checkoutController';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import {
   PersonalizationColor,
@@ -11,7 +12,7 @@ import {
   getPersonalizationLocation,
 } from '@services/cart.service';
 import CartItem from '@templates/cartItem';
-import CartSummary from '@templates/cartSummarry';
+import CartSummarry from '@templates/cartSummarry';
 import React, { useEffect, useState } from 'react';
 import { _CartProps } from '../Cart';
 import EmptyCart from '../components/emptyCart';
@@ -31,6 +32,8 @@ const CartType4: React.FC<_CartProps> = ({
   const [availableColor, setAvailableColor] = useState<
     PersonalizationColor[] | []
   >([]);
+  const { fetchShipping, shippingAdress, selectedShipping, shippingMethod } =
+    CheckoutController();
   useEffect(() => {
     if (storeId) {
       getPersonalizationFont(storeId).then((res) => {
@@ -86,7 +89,7 @@ const CartType4: React.FC<_CartProps> = ({
                 aria-labelledby='summary-heading'
                 className='w-full lg:w-3/12 px-[10px] mt-[15px]'
               >
-                <CartSummary />
+                <CartSummarry selectedShippingModel={selectedShipping} />
               </section>
             </form>
           </div>
