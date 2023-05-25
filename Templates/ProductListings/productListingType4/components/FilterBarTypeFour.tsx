@@ -29,7 +29,7 @@ const FilterBarTypeFour: React.FC<props> = ({
             onClick={() => setProductView('grid')}
           >
             <span className='sr-only'>Grid View</span>
-            <span className='material-icons-outlined text-medium-text text-anchor hover:text-anchor-hover'>
+            <span className='material-icons-outlined text-anchor hover:text-anchor-hover'>
               {__pagesText.productListing.gridViewIcon}
             </span>
           </button>
@@ -63,7 +63,7 @@ const FilterBarTypeFour: React.FC<props> = ({
                   }
                 </span>
               </span>
-              <span className='material-icons-outlined text-sub-text leading-none font-[900]'>
+              <span className='material-icons-outlined font-[900]'>
                 {showSortMenu ? 'remove' : 'add'}
               </span>
             </button>

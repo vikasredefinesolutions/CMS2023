@@ -87,8 +87,8 @@ const TemplateFourListing = ({
               <Link href={product.brandUrl}>
                 <img
                   className='inline-block max-h-full'
-                  src={`${mediaBaseUrl}${product.brandlogo}`}
-                  alt={product.brandlogo}
+                  src={`${mediaBaseUrl}${product.blackBrandlogo}`}
+                  alt={product.brandName}
                   title={product.brandName || ''}
                 />
               </Link>

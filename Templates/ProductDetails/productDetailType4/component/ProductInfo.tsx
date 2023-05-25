@@ -1,6 +1,6 @@
-import Price from '@appComponents/Price';
 import LoginModal from '@appComponents/modals/loginModal';
 import { _modals } from '@appComponents/modals/modal';
+import Price from '@appComponents/Price';
 import { storeBuilderTypeId } from '@configs/page.config';
 import { __Cookie } from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
@@ -8,7 +8,7 @@ import { _Selectedproduct_v2 } from '@definations/product.type';
 import {
   CaptureGTMEvent,
   getAddToCartObject,
-  setCookie,
+  setCookie
 } from '@helpers/common.helper';
 import { highLightError } from '@helpers/console.helper';
 import getLocation from '@helpers/getLocation';
@@ -212,7 +212,7 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
             } catch (error) {
               highLightError({ error, component: 'StartOrderModal' });
             }
-            router.push('/cart/IndexNew');
+            router.push('/cart/IndexNew.html');
           }
         }
       };

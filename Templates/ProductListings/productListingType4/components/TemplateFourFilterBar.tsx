@@ -51,7 +51,7 @@ const TemplateFourFilterBar: React.FC<props> = ({
                           (method) => method.type === sortingType,
                         )?.name
                       }
-                      <span className='material-icons-outlined text-sub-text font-[800]'>
+                      <span className='material-icons-outlined font-[800]'>
                         add
                       </span>
                     </button>
