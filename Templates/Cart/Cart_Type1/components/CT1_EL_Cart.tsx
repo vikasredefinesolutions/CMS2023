@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import AddOTFItemNo from '@appComponents/modals/addOtfItem';
 import { paths } from '@constants/paths.constant';
 import { _CartItem } from '@services/cart';
 import Link from 'next/link';
 
+import CheckoutController from '@controllers/checkoutController';
+import { GetCartTotals } from '@hooks_v2/index';
 import CartSummary from '@templates/cartSummarry';
 import CT1_EL_Item from './CT1_EL_Item';
 
@@ -14,7 +16,12 @@ interface _Props {
 
 const CT1_EmployeeLoginCart: React.FC<_Props> = ({ cartItems }) => {
   const [showOTF, setShowOTF] = useState<'OTF' | null>(null);
-
+  const { subTotal } = GetCartTotals();
+  const { fetchShipping, shippingAdress, selectedShipping, shippingMethod } =
+    CheckoutController();
+  useEffect(() => {
+    fetchShipping(subTotal);
+  }, [subTotal, shippingAdress]);
   return (
     <>
       <div className='flex-grow-0'>
@@ -53,7 +60,7 @@ const CT1_EmployeeLoginCart: React.FC<_Props> = ({ cartItems }) => {
                   aria-labelledby='summary-heading'
                   className='w-full sticky overflow-auto lg:w-4/12 pl-[12px] pr-[12px] mt-3'
                 >
-                  <CartSummary />
+                  <CartSummary selectedShippingModel={selectedShipping} />
                   <div className='mt-4'>
                     <Link href={paths.CHECKOUT}>
                       <a className='btn btn-lg btn-secondary !flex items-center justify-center w-full'>
