@@ -1,5 +1,7 @@
 import Price from '@appComponents/Price';
+import NxtImage from '@appComponents/reUsable/Image';
 import { paths } from '@constants/paths.constant';
+import { numberToOrdinalString } from '@helpers/common.helper';
 import { CartObject } from '@services/cart';
 import Link from 'next/link';
 import React from 'react';
@@ -57,6 +59,35 @@ const RcOrderSummary: React.FC<_props> = ({ item }) => {
               <Price value={item.totalPrice} />
             </div>
           </div>
+          {item.shoppingCartLogoPersonViewModels &&
+            item?.shoppingCartLogoPersonViewModels.map((el: any, index) => {
+              return (
+                <div className='flex flex-wrap justify-between border-b last:border-b-0 border-gray-border mb-[10px] last:mb-0 text-normal-text'>
+                  <div className='w-7/12 mb-[10px]'>
+                    {`${numberToOrdinalString(index + 1)} Logo:`}
+                  </div>
+                  <div className='w-5/12 mb-[10px] font-semibold text-right'>
+                    ${el.logoPrice}
+                  </div>
+                  <div className='w-full mb-[10px] text-center'>
+                    <div className='w-24 h-24 flex items-center justify-center mx-auto'>
+                      <img className='inline-block max-h-full' src='' alt='' />
+                      <NxtImage
+                        className='inline-block max-h-full'
+                        src={el?.logoImagePath}
+                        title={el?.logoLocation}
+                        alt={el.logoLocation}
+                      />
+                    </div>
+                  </div>
+                  <div className='w-7/12 mb-[10px]'>Location:</div>
+                  <div className='w-5/12 mb-[10px] font-semibold text-right'>
+                    {el.logoLocation}
+                  </div>
+                </div>
+              );
+            })}
+
           {/* <div className='flex flex-wrap justify-between border-b border-b-gray-200 mb-2.5 last:border-b-0 last:mb-0'>
             <div className='w-7/12 mb-[5px]'>Shipping:</div>
             <div className='w-5/12 mb-[5px] font-semibold text-right'>FREE</div>

@@ -1,4 +1,4 @@
-import { __Cookie } from '@constants/global.constant';
+import { CG_STORE_CODE, __Cookie } from '@constants/global.constant';
 import * as _AppController from '@controllers/_AppController.async';
 import { _Expected_AppProps } from '@definations/app.type';
 import { _MenuItems } from '@definations/header.type';
@@ -298,10 +298,14 @@ export const passPropsToDocumentFile = ({
       key: 'customGlobalBodyScript',
       value: customScripts.customGlobalBodyScript,
     });
-    _globalStore.set({
-      key: 'customGoogleVerification',
-      value: customScripts.customGoogleVerification,
-    });
+
+    //For not including google script for CG store
+    if (Number(store.id) !== CG_STORE_CODE) {
+      _globalStore.set({
+        key: 'customGoogleVerification',
+        value: customScripts.customGoogleVerification,
+      });
+    }
   }
 
   if (gTags) {

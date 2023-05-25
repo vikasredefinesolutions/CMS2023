@@ -1,4 +1,7 @@
-import { cartRemoveConfirmMessage } from '@constants/global.constant';
+import {
+  CG_STORE_CODE,
+  cartRemoveConfirmMessage,
+} from '@constants/global.constant';
 import { commonMessage } from '@constants/successError.text';
 import { _CartItem, _ProductDetails } from '@definations/startOrderModal';
 import { deleteItemCart } from '@services/cart.service';
@@ -7,7 +10,7 @@ import {
   FetchInventoryById,
   FetchProductById,
 } from '@services/product.service';
-import { CaptureGTMEvent } from 'helpers_v2/common.helper';
+import { GoogleAnalyticsTrackerForCG } from 'helpers_v2/common.helper';
 import { GetCustomerId, useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
 import { useState } from 'react';
 
@@ -48,38 +51,28 @@ const CartController = () => {
 
   //GTM event for remove_from_cart
   const captureRemoveItemEvent = (removedProductId: number) => {
-    const removedProduct = cartData?.find(
-      (item) => item.shoppingCartItemsId === removedProductId,
-    );
-    const eventPayload = {
-      pageTitle: document?.title || 'Cart',
-      pageCategory: 'Remove From Cart',
-      visitorType: isEmployeeLoggedIn ? 'high-value' : 'low-value',
-      customProperty1: '',
-      event: 'remove_from_cart',
-      ecommerce: {
-        value: removedProduct?.totalPrice,
-        currency: 'USD', // USD
-        items: [
-          {
-            item_name: removedProduct?.productName,
-            item_id: removedProduct?.sku,
-            item_brand: removedProduct?.brandName,
-            item_category: '',
-            item_category2: '',
-            item_category3: '',
-            item_category4: '',
-            item_variant: '',
-            item_list_name: removedProduct?.productName,
-            item_list_id: removedProduct?.productId,
-            index: removedProduct?.productId,
-            quantity: removedProduct?.totalQty,
-            price: removedProduct?.totalPrice,
-          },
-        ],
-      },
-    };
-    CaptureGTMEvent(eventPayload);
+    if (storeId === CG_STORE_CODE) {
+      const remainingProducts = cartData?.filter(
+        (item) => item.shoppingCartItemsId !== removedProductId,
+      );
+      const payload = {
+        storeId: storeId,
+        customerId: customerId,
+        shoppingCartItemsModel: remainingProducts?.map((item) => ({
+          productId: item.productId,
+          productName: item?.productName,
+          colorVariants: item?.attributeOptionValue,
+          price: item.totalPrice,
+          quantity: item.totalQty,
+        })),
+      };
+
+      GoogleAnalyticsTrackerForCG(
+        'GoogleRemoveFromCartScript',
+        storeId,
+        payload,
+      );
+    }
   };
 
   const removeCartItem = async (itemId: number) => {

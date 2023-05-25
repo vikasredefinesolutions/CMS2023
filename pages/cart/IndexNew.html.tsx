@@ -1,17 +1,20 @@
 import AddOTFItemNo from '@appComponents/modals/addOtfItem';
 import StartOrderModal from '@appComponents/modals/startOrderModal/StartOrderModal';
 import CartController from '@controllers/cartController';
-import { TrackGTMEvent } from '@helpers/common.helper';
+import { GoogleAnalyticsTrackerForCG } from '@helpers/common.helper';
 import {
   GetCustomerId,
   useActions_v2,
   useTypedSelector_v2,
 } from '@hooks_v2/index';
+
 import { FetchPageThemeConfigs } from '@services/product.service';
 import CartTemplate from '@templates/Cart';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 const Cart = () => {
   const [cartType, setCartType] = useState<number>(1);
+  const isCaptured = useRef(false);
+
   const { setShowLoader, cart_PageClosed, fetchCartDetails } = useActions_v2();
   const { id: storeId } = useTypedSelector_v2((state) => state.store);
   const {
@@ -60,32 +63,23 @@ const Cart = () => {
 
   useEffect(() => {
     //GTM event for view_cart
-    const viewCartEventPayload = {
-      pageTitle: document?.title || 'Cart',
-      pageCategory: 'View cart',
-      customProperty1: '',
-      visitorType: customerId ? 'high-value' : 'low-value',
-      event: 'view_cart',
-      ecommerce: {
-        items: cartData?.map((item) => ({
-          item_name: item?.productName,
-          item_id: item?.sku,
-          item_brand: item?.brandName,
-          item_category: '',
-          item_category2: '',
-          item_category3: '',
-          item_category4: '',
-          item_variant: item.attributeOptionValue,
-          item_list_name: item?.productName,
-          item_list_id: item?.productId,
-          index: item?.productId,
-          quantity: item?.totalQty,
+    if (cartData?.length && storeId && !isCaptured.current) {
+      isCaptured.current = true;
+      const payload = {
+        storeId: storeId,
+        customerId: customerId,
+        shoppingCartItemsModel: cartData?.map((item) => ({
+          productId: item.productId,
+          productName: item?.productName,
+          colorVariants: item?.attributeOptionValue,
           price: item.totalPrice,
+          quantity: item.totalQty,
         })),
-      },
-    };
-    TrackGTMEvent(viewCartEventPayload);
-  }, []);
+      };
+
+      GoogleAnalyticsTrackerForCG('GoogleViewCartScript', storeId, payload);
+    }
+  }, [cartData]);
 
   useEffect(() => {
     // to call on initial loading

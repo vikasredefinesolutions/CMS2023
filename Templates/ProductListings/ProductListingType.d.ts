@@ -38,6 +38,7 @@ export interface _PageData {
   product: GetlAllProductList[];
   checkedFilters: _CheckedFilter[];
   brandId: number;
+  googleTagManagerResponseCommonData?: any | null;
 }
 export interface _FilterOption {
   label: string;

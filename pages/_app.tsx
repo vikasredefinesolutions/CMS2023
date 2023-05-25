@@ -1,11 +1,10 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { storeBuilderTypeId, __domain } from '@configs/page.config';
+import { __domain, storeBuilderTypeId } from '@configs/page.config';
 import * as _AppController from '@controllers/_AppController.async';
 import { TrackFile } from '@services/tracking.service';
 import App, { AppContext, AppInitialProps, AppProps } from 'next/app';
 import { useRouter } from 'next/router';
 import 'public/assets/css/custom.css';
-import GoogleTagManager from 'react-gtm-module';
 // import 'public/assets/css/main.css';
 import 'public/assets/css/accordian_pkhg.css';
 import 'public/assets/css/spinner.css';
@@ -31,19 +30,21 @@ import Spinner from '@appComponents/ui/spinner';
 import { PageResponseType } from '@definations/app.type';
 import { _MenuItems } from '@definations/header.type';
 import {
+  _PropsToStoreAndGetFromCookies,
+  _templateIds,
   callConfigsAndRemainingStoreAPIsAndSetURls,
   configsToCallEveryTime,
   expectedProps,
   extractAndfillCookiesIntoProps,
   passPropsToDocumentFile,
   storeCookiesToDecreaseNoOfAPIRecalls,
-  _PropsToStoreAndGetFromCookies,
-  _templateIds,
 } from '@helpers/app.extras';
 import { FetchSbStoreConfiguration } from '@services/app.service';
 import { GetStoreCustomer } from '@services/user.service';
 import Redefine_Layout from '@templates//TemplateComponents/Redefine_Layout';
 import AuthGuard from 'Guard/AuthGuard';
+import DcTags from 'tags/DcTags';
+import TwitterTags from 'tags/TwitterTags';
 import { _Slug_Props } from './[...slug-id]';
 
 type AppOwnProps = {
@@ -145,11 +146,6 @@ const RedefineCustomApp = ({
   }, [router]);
 
   useEffect(() => {
-    //Initializing Google Tag Manager
-    GoogleTagManager.initialize({
-      gtmId: process.env.NEXT_PUBLIC_GTM_ID || '',
-    });
-
     const cookies = extractCookies('', 'browserCookie');
     const tempCustomerId = extractCookies(
       __Cookie.tempCustomerId,
@@ -201,6 +197,12 @@ const RedefineCustomApp = ({
           storeName={store.storeName}
           pageMetaData={pageProps?.metaData}
           routepath={router.asPath}
+        />
+        <DcTags />
+        <TwitterTags
+          pageMetaData={pageProps?.metaData}
+          routepath={router.asPath}
+          logoUrl={store.urls.logo}
         />
         <Redefine_Layout
           logoUrl={store.urls.logo}

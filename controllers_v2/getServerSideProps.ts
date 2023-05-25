@@ -1,8 +1,12 @@
-import { __Error, __pageTypeConstant } from '@constants/global.constant';
+import {
+  CG_STORE_CODE,
+  __Error,
+  __pageTypeConstant,
+} from '@constants/global.constant';
 import { paths } from '@constants/paths.constant';
 import { BrandFilter, CategoryFilter } from '@definations/productList.type';
 import { _GetPageType } from '@definations/slug.type';
-import { extractSlugName } from '@helpers/common.helper';
+import { extractCookies, extractSlugName } from '@helpers/common.helper';
 import { highLightError } from '@helpers/console.helper';
 import { getPageComponents } from '@services/home.service';
 import { FetchFiltersJSON } from '@services/product.service';
@@ -11,19 +15,22 @@ import { GetServerSideProps, GetServerSidePropsResult } from 'next';
 import { _Slug_Props } from 'pages/[...slug-id]';
 import { getProductDetailProps } from './ProductController.async';
 
+import { getGTMScript } from '@services/header.service';
 import { GetlAllProductList } from '@templates/ProductListings/ProductListingType';
 import { _globalStore } from 'store.global';
 import {
-  getConfigs,
   _FetchPageThemeConfigs_ProductListing,
   _Filter,
   _FilterOption,
   _NameValuePairs,
+  getConfigs,
 } from './slug.extras';
 
 export const getServerSideProps: GetServerSideProps = async (
   context,
 ): Promise<GetServerSidePropsResult<_Slug_Props>> => {
+  const req = context.req;
+  const { loggedIN } = extractCookies(req.headers.cookie);
   let { seName, otherParams } = extractSlugName(context.params);
 
   let store = {
@@ -70,6 +77,66 @@ export const getServerSideProps: GetServerSideProps = async (
     };
   }
   // ------------------------------------------------------------------
+
+  ////////////////////////////////////////////////
+  /////////// GTM integration using API start for CG only
+  ////////////////////////////////////////////////
+  if (Number(store.storeId) === CG_STORE_CODE) {
+    const topHeaderScriptGTM = await getGTMScript(
+      store.storeId,
+      'GetTopHeadScript',
+    );
+    _globalStore.set({
+      key: 'topHeaderScriptGTM',
+      value: topHeaderScriptGTM
+        ? topHeaderScriptGTM?.replace('<script>', '').replace('</script>', '')
+        : '',
+    });
+
+    const bottomHeaderScriptGTM = await getGTMScript(
+      store.storeId,
+      'GetBottomHeadScript',
+    );
+    _globalStore.set({
+      key: 'bottomHeaderScriptGTM',
+      value: bottomHeaderScriptGTM
+        ? bottomHeaderScriptGTM
+            ?.replace('<script>', '')
+            .replace('</script>', '')
+        : '',
+    });
+
+    const topBodySnippetGTM = await getGTMScript(
+      store.storeId,
+      'GetTopBodySnippet',
+    );
+    _globalStore.set({
+      key: 'topBodySnippetGTM',
+      value: topBodySnippetGTM
+        ? topBodySnippetGTM
+            ?.replace('<!-- Google Tag Manager (noscript) --><noscript>', '')
+            .replace(
+              '</noscript><!-- End Google Tag Manager (noscript) -->',
+              '',
+            )
+        : '',
+    });
+
+    // ONLY FOR HOME PAGE
+    if (!pageMetaData.slug) {
+      const homePageScriptGTM = await getGTMScript(
+        store.storeId,
+        'HomePage',
+        loggedIN ? 1 : 0,
+      );
+      _globalStore.set({
+        key: 'homePageScriptGTM',
+        value: homePageScriptGTM
+          ? homePageScriptGTM?.replace('<script>', '').replace('</script>', '')
+          : '',
+      });
+    }
+  }
 
   ////////////////////////////////////////////////
   /////////// Page Type Checks
@@ -175,6 +242,7 @@ export const getServerSideProps: GetServerSideProps = async (
     const _filters: _Filter[] = [];
     let product: GetlAllProductList[] = [];
     let configs: _FetchPageThemeConfigs_ProductListing | null = null;
+    let googleTagManagerResponseCommonData: any | null = null;
 
     try {
       const filter = {
@@ -211,6 +279,8 @@ export const getServerSideProps: GetServerSideProps = async (
             });
           } else if (key === 'getlAllProductList') {
             product = element as unknown as GetlAllProductList[];
+          } else if (key === 'googleTagManagerResponseCommonData') {
+            googleTagManagerResponseCommonData = element;
           }
         }
       }
@@ -226,6 +296,7 @@ export const getServerSideProps: GetServerSideProps = async (
           product: product,
           checkedFilters: FilterOptions,
           brandId: pageMetaData.id,
+          googleTagManagerResponseCommonData,
         },
         metaData: pageMetaData,
         configs: {

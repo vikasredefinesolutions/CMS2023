@@ -1,4 +1,4 @@
-import { __Cookie } from '@constants/global.constant';
+import { CG_STORE_CODE, __Cookie } from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
 import { paths } from '@constants/paths.constant';
 import { AddItemsToTheCart } from '@services/cart.service';
@@ -8,9 +8,9 @@ import {
 } from '@services/product.service.helper';
 import MsgContainer from 'appComponents_v2/modals/msgContainer/MsgContainer';
 import {
-  CaptureGTMEvent,
-  extractCookies,
+  GoogleAnalyticsTrackerForCG,
   KlaviyoScriptTag,
+  extractCookies,
   setCookie,
 } from 'helpers_v2/common.helper';
 import { highLightError } from 'helpers_v2/console.helper';
@@ -176,39 +176,25 @@ const SomActionsHandler: React.FC<_SOMActionHandlerProps> = ({
     });
 
     //GTM event for add-to-cart
-    const eventPayload = {
-      pageTitle: document?.title ? document?.title : '',
-      pageCategory: 'Add to Cart',
-      visitorType: loggedIN_userId ? 'high-value' : 'low-value',
-      customProperty1: '',
-      event: 'add_to_cart',
-      ecommerce: {
-        value: toCheckout?.totalPrice,
-        currency: 'USD', // USD,
-        coupon: '',
-        items: [
-          {
-            item_name: product?.name,
-            item_id: product?.sku,
-            item_brand: product?.brand?.name,
-            item_category: '',
-            item_category2: '',
-            item_category3: '',
-            item_category4: '',
-            item_variant: product?.colors?.length
-              ? product?.colors?.find((clr) => clr.productId === product.id)
-                  ?.name
-              : '',
-            item_list_name: product?.name,
-            item_list_id: product?.id,
-            index: product.id,
-            quantity: toCheckout?.totalQty,
-            price: toCheckout?.totalPrice,
-          },
-        ],
-      },
-    };
-    CaptureGTMEvent(eventPayload);
+    if (storeId === CG_STORE_CODE) {
+      const payload = {
+        storeId: storeId,
+        customerId: loggedIN_userId,
+        productId: product?.id,
+        productName: product?.name,
+        colorName: product?.colors?.length
+          ? product?.colors?.find((clr) => clr.productId === product.id)?.name
+          : '',
+        price: toCheckout?.totalPrice,
+        salesPrice: toCheckout?.price,
+        sku: product?.sku,
+        brandName: product?.brand?.name,
+        quantity: toCheckout.totalQty,
+      };
+
+      GoogleAnalyticsTrackerForCG('GoogleAddToCartScript', storeId, payload);
+    }
+
     try {
       const guestId: number = await AddItemsToTheCart(cartPayload);
       setShowLoader(false);

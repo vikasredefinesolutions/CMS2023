@@ -1,5 +1,14 @@
 import ProductQuoteRequestInput from '@appComponents/reUsable/ProductQuoteRequestInput';
-import { __QuoteRequestMessages } from '@constants/validation.text';
+import {
+  phonePattern1,
+  phonePattern2,
+  phonePattern3,
+  phonePattern4,
+} from '@constants/global.constant';
+import {
+  __QuoteRequestMessages,
+  __ValidationText,
+} from '@constants/validation.text';
 import { _modals } from '@definations/startOrderModal';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import { Form, Formik } from 'formik';
@@ -29,6 +38,23 @@ const __QuoteRequestInitials: __QuoteRequest = {
 const __QuoteRequestSchema = Yup.object().shape({
   name: Yup.string().required(__QuoteRequestMessages.name.required),
   email: Yup.string().required(__QuoteRequestMessages.email.required),
+  phoneNumber: Yup.string()
+    .required(__ValidationText.signUp.storeCustomerAddress.phone.required)
+    .test(
+      'phone-test',
+      __ValidationText.signUp.storeCustomerAddress.phone.valid,
+      (value) => {
+        if (
+          phonePattern1.test(value || '') ||
+          phonePattern2.test(value || '') ||
+          phonePattern3.test(value || '') ||
+          phonePattern4.test(value || '')
+        )
+          return true;
+        return false;
+      },
+    ),
+
   organization: Yup.string().required(
     __QuoteRequestMessages.organization.required,
   ),

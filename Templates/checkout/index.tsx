@@ -1,9 +1,10 @@
 import { _defaultTemplates } from '@configs/template.config';
+import { CG_STORE_CODE } from '@constants/global.constant';
 import { paths } from '@constants/paths.constant';
-import { TrackGTMEvent } from '@helpers/common.helper';
+import { GoogleAnalyticsTrackerForCG } from '@helpers/common.helper';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import { useRouter } from 'next/router';
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useRef } from 'react';
 import CheckoutType1 from './checkoutType1';
 import CheckoutType2 from './checkoutType2';
 import CheckoutType3 from './checkoutType3';
@@ -34,43 +35,37 @@ const CheckoutTemplate: FC<_Props> = ({ cartTemplateId }) => {
     discount: cartDiscountDetails,
     isCartLoading,
   } = useTypedSelector_v2((state) => state.cart);
+  const { id: storeId } = useTypedSelector_v2((state) => state.store);
+  const { id: customerId } = useTypedSelector_v2((state) => state.user);
+  const isCaptured = useRef(false);
+
   useEffect(() => {
     let totalPrice = 0;
     cartData?.forEach((item) => (totalPrice += item.totalPrice));
-    const checkoutEventPayload = {
-      pageTitle: document?.title || 'Checkout',
-      pageCategory: 'Checkout page',
-      visitorType: 'high-value',
-      customProperty1: '',
-      namedItem: '',
-      event: 'begin_checkout',
-      ecommerce: {
-        value: totalPrice,
-        currency: 'USD',
-        coupon: cartDiscountDetails?.coupon || '',
-        items: cartData?.map((item) => ({
-          item_name: item?.productName,
-          item_id: item?.sku,
-          item_brand: item?.brandName,
-          item_category: '',
-          item_category2: '',
-          item_category3: '',
-          item_category4: '',
-          item_variant: item?.attributeOptionValue,
-          item_list_name: item?.productName,
-          item_list_id: item?.productId,
-          index: item?.productId,
-          quantity: item?.totalQty,
-          price: item?.totalPrice,
+    if (cartData?.length && storeId === CG_STORE_CODE && !isCaptured.current) {
+      isCaptured.current = true;
+      const payload = {
+        storeId: storeId,
+        customerId: customerId,
+        shoppingCartItemsModel: cartData?.map((item) => ({
+          productId: item.productId,
+          productName: item?.productName,
+          colorVariants: item?.attributeOptionValue,
+          price: item.totalPrice,
+          quantity: item.totalQty,
         })),
-      },
-    };
-    TrackGTMEvent(checkoutEventPayload);
-  }, []);
+      };
+
+      GoogleAnalyticsTrackerForCG(
+        'GoogleBeginCheckOutScript',
+        storeId,
+        payload,
+      );
+    }
+  }, [cartData]);
 
   useEffect(() => {
     if (!isCartLoading && (!cartData?.length || cartData === null)) {
-      // console.log('---reaching condition---');
       router.push(paths.CART);
     }
   }, [cartData, isCartLoading]);

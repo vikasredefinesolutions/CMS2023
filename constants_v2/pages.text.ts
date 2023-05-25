@@ -179,7 +179,7 @@ export const __pagesText = {
       showless: 'Show Less',
       seeAll: 'See All',
       colors: 'Colors:',
-      onlycolor: 'Color'
+      onlycolor: 'Color',
     },
     forgotModal: {
       forgotPassword: 'Forgot Password',
@@ -283,6 +283,7 @@ export const __pagesText = {
     currentPassword: 'Current Password',
     youtPasswordMustHave: 'Your password must have :',
     eightMore: '8 Or more character',
+    sixMore: '6 Or more character',
     upperOrLowerCase: 'Upper and lowercase letters',
     atLeastOneNumber: 'At least one number',
     passwordUpdate: 'Update Password',

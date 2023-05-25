@@ -5,6 +5,7 @@ import { addReviewMessages } from '@constants/validation.text';
 import { _ProductColor } from '@definations/APIs/colors.res';
 import getLocation from '@helpers/getLocation';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { UploadImage } from '@services/file.service';
 import { FetchColors } from '@services/product.service';
 import { AddProductReview } from '@services/review.service';
@@ -12,6 +13,7 @@ import { Formik } from 'formik';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { ChangeEvent, useEffect, useState } from 'react';
+import InnerImageZoom from 'react-inner-image-zoom';
 import uuid from 'react-uuid';
 import * as Yup from 'yup';
 import { ReviewFormValues } from './WriteReview';
@@ -47,6 +49,7 @@ const WriteReviewTemplate_1 = () => {
   const [productcolorDetail, setProductcolorDetail] = useState<
     _ProductColor[] | null
   >();
+
   useEffect(() => {
     if (storeId && productId) {
       FetchColors({
@@ -56,7 +59,6 @@ const WriteReviewTemplate_1 = () => {
       }).then((res) => setProductcolorDetail(res));
     }
   }, [productId, storeId, attributeId]);
-
   const productdata = productcolorDetail?.filter((color) => {
     if (attributeId && color.attributeOptionId == +attributeId) {
       return color;
@@ -168,6 +170,8 @@ const WriteReviewTemplate_1 = () => {
       return __pagesText.review.loveIt;
     }
   };
+
+  const [hover, sethover] = useState(false);
 
   return (
     <>
@@ -402,12 +406,30 @@ const WriteReviewTemplate_1 = () => {
                                 </div>
                                 <div className='flex flex-wrap'>
                                   {files.map((file, index) => (
-                                    <div key={index} className='h-24 w-24 m-2'>
-                                      <NxtImage
+                                    <div
+                                      key={index}
+                                      className='h-24 w-24 m-2'
+                                      onMouseEnter={() => sethover(true)}
+                                      onMouseLeave={() => sethover(false)}
+                                    >
+                                      <InnerImageZoom
+                                        key={file.preview}
+                                        src={file.preview}
+                                        zoomType='hover'
+                                        hideHint={true}
+                                        className='w-full object-center object-cover sm:rounded-lg main_image max-h'
+                                      />
+                                      {hover && (
+                                        <DeleteIcon
+                                          onClick={() => setFilesFn([])}
+                                          className='svg-inline--fa fa-trash-can text-red-500 h-[16px] w-[16px] inline-block'
+                                        />
+                                      )}
+                                      {/* <NxtImage
                                         src={file.preview}
                                         alt='preview'
                                         className=''
-                                      />
+                                      /> */}
                                     </div>
                                   ))}
                                 </div>

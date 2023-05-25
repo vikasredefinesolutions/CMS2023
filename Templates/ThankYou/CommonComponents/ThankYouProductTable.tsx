@@ -79,7 +79,7 @@ const ThankYouProductTable: React.FC<_props> = ({ product }) => {
                   ) : (
                     <NxtImage
                       className='w-14 h-12'
-                      src={`${mediaBaseUrl}${item.logoPositionImage}`}
+                      src={`${mediaBaseUrl}/${item.logoPositionImage}`}
                       title=''
                       alt={item.logoImagePath}
                     />

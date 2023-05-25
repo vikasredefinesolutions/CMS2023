@@ -3,10 +3,12 @@ import { __Error, __pageTypeConstant } from '@constants/global.constant';
 import { _FeaturedProduct } from '@definations/APIs/storeDetails.res';
 import { _GetPageType } from '@definations/slug.type';
 import { highLightError } from '@helpers/console.helper';
+import { useActions_v2 } from '@hooks_v2/index';
 import { getPageComponents } from '@services/home.service';
 import { FetchPageType } from '@services/slug.service';
 import Home from '@templates/Home';
 import { GetServerSideProps, GetServerSidePropsResult, NextPage } from 'next';
+import { useEffect } from 'react';
 import { _globalStore } from 'store.global';
 
 export interface _Slug_CMS_Props {
@@ -25,6 +27,15 @@ type _HomeProps =
     };
 
 const DefaultHomePage: NextPage<_HomeProps> = (props) => {
+  const { updatePageType } = useActions_v2();
+
+  useEffect(() => {
+    if ('metaData' in props) {
+      updatePageType(props.metaData);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   if ('error' in props) {
     return <>{props.error}</>;
   }

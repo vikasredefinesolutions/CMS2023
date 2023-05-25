@@ -41,6 +41,7 @@ export interface _ProductList_PropsData {
   product: GetlAllProductList[];
   checkedFilters: _CheckedFilter[];
   brandId: number;
+  googleTagManagerResponseCommonData: any | null;
 }
 
 export interface _BrandSEO {

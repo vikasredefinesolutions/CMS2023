@@ -1,9 +1,3 @@
-// export const metatagsdata = [
-//   {
-//     tagName: 'twitter',
-//     tagSite: '@corporategear_usa',
-//   },
-// ];
 export const TwitterTagsData = {
   tagName: 'twitter',
   tagSite: '@corporategear_usa',

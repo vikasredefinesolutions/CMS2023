@@ -1,25 +1,25 @@
 import { __domain } from '@configs/page.config';
-import { __Cookie, __Params } from '@constants/global.constant';
+import { CG_STORE_CODE, __Cookie, __Params } from '@constants/global.constant';
 import { _ProductInventoryTransfomed } from '@definations/APIs/inventory.res';
 import { ActionCreatorWithPayload } from '@reduxjs/toolkit/dist/createAction';
 import { CartLogoPersonDetailModel, CartLogoPersonModel } from '@services/cart';
 import {
   _CartLogoPersonDetailModel,
-  _CartLogoPersonModel
+  _CartLogoPersonModel,
 } from '@services/product.service.type';
 import { IncomingMessage, ServerResponse } from 'http';
 import { StaticImageData } from 'next/image';
 import router from 'next/router';
 import { __StaticImg } from 'public/assets/images.asset';
 import { ParsedUrlQuery } from 'querystring';
-import GoogleTagManager from 'react-gtm-module';
 
 import { logoLocation } from '@constants/enum';
 import { CartReq } from '@definations/APIs/cart.req';
 import {
   _LogoDetail,
-  _Product_SizeQtys
+  _Product_SizeQtys,
 } from '@redux/slices/product.slice.types';
+import { postGTMScript } from '@services/header.service';
 import { FetchPageThemeConfigs } from '@services/product.service';
 import { conditionalLog_V2 } from './console.helper';
 
@@ -753,17 +753,56 @@ export const getPageType = async (
 
 //Track event using google tag manager script
 export const CaptureGTMEvent = (payload: any) => {
-  const dataLayer = window?.dataLayer || null;
-  if (dataLayer) {
-    dataLayer.push({ ecommerce: null });
-    dataLayer.push({ ...payload });
-  }
+  return payload;
+  // const dataLayer = window?.dataLayer || null;
+  // if (dataLayer) {
+  //   dataLayer.push({ ecommerce: null });
+  //   dataLayer.push({ ...payload });
+  // }
 };
 
 //Track event using Google tag manager Library
 export const TrackGTMEvent = (payload: any) => {
-  GoogleTagManager.dataLayer({ dataLayer: { ecommerce: null } });
-  GoogleTagManager.dataLayer({
-    dataLayer: payload,
-  });
+  return payload;
+  // GoogleTagManager.dataLayer({ dataLayer: { ecommerce: null } });
+  // GoogleTagManager.dataLayer({
+  //   dataLayer: payload,
+  // });
+};
+
+//Track GA event using APIs for CG
+export const GoogleAnalyticsTrackerForCG = async (
+  eventScript: string,
+  storeId: string | number,
+  payload: Record<string, any>,
+) => {
+  if (Number(storeId) !== CG_STORE_CODE) return;
+  const dataLayer = window?.dataLayer || null;
+  if (!eventScript) {
+    if (payload) {
+      if (payload?.pageDataLayer)
+        dataLayer.push({ ...JSON.parse(payload?.pageDataLayer) });
+      if (payload?.pageDataLayer2)
+        dataLayer.push({ ...JSON.parse(payload?.pageDataLayer2) });
+      if (payload?.pageDataLayer3)
+        dataLayer.push({ ...JSON.parse(payload?.pageDataLayer3) });
+      if (payload?.pageItemDetails)
+        dataLayer.push({ ...JSON.parse(payload?.pageItemDetails) });
+    }
+    return;
+  }
+  if (dataLayer) {
+    dataLayer.push({ ecommerce: null });
+    const eventResponse = await postGTMScript(eventScript, payload);
+    if (eventResponse) {
+      if (eventResponse?.pageDataLayer)
+        dataLayer.push({ ...JSON.parse(eventResponse?.pageDataLayer) });
+      if (eventResponse?.pageDataLayer2)
+        dataLayer.push({ ...JSON.parse(eventResponse?.pageDataLayer2) });
+      if (eventResponse?.pageDataLayer3)
+        dataLayer.push({ ...JSON.parse(eventResponse?.pageDataLayer3) });
+      if (eventResponse?.pageItemDetails)
+        dataLayer.push({ ...JSON.parse(eventResponse?.pageItemDetails) });
+    }
+  }
 };

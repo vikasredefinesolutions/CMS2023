@@ -2,8 +2,9 @@ import {
   _MyAcc_OrderBillingDetails,
   _MyAcc_OrderProductDetails,
 } from '@definations/APIs/user.res';
-import { TrackGTMEvent } from '@helpers/common.helper';
-import React, { useEffect } from 'react';
+import { GoogleAnalyticsTrackerForCG } from '@helpers/common.helper';
+import { useTypedSelector_v2 } from '@hooks_v2/index';
+import React, { useEffect, useRef } from 'react';
 import { _ThankYouTemplates } from './ThankYou';
 import ThankYouType1 from './ThankYouType1/ThankYou_Type1';
 import ThankYouType2 from './ThankYouType2/ThankYou_Type2';
@@ -26,43 +27,32 @@ const ThankYouTemplates: _ThankYouTemplates = {
 };
 
 const ThankYouTemplate: React.FC<_props> = ({ order, id }) => {
+  const { id: storeId } = useTypedSelector_v2((state) => state.store);
+  const { id: customerId } = useTypedSelector_v2((state) => state.user);
+  const isCaptured = useRef(false);
   useEffect(() => {
     // GTM for purchase event
-    const purchaseEventPayload = {
-      pageTitle: document?.title || 'Receipt',
-      pageCategory: 'Thank you page',
-      visitorType: 'high-value',
-      customProperty1: '',
-      namedItem: '',
-      event: 'purchase',
-      ecommerce: {
-        transaction_id: `T_${order?.billing?.id}`,
-        affiliation: '',
-        value: order?.billing?.orderTotal,
-        lifetimeValue: '',
-        tax: order?.billing?.orderTax,
-        shipping: order?.billing?.orderShippingCosts,
-        currency: 'USD',
-        coupon: order?.billing?.couponCode,
-        discount: order?.billing?.digitalTotal,
-        items: order?.product?.map((item) => ({
-          item_name: item?.productName,
-          item_id: item?.sku,
-          item_brand: item?.brandName,
-          item_category: '',
-          item_category2: '',
-          item_category3: '',
-          item_category4: '',
-          item_list_name: item?.productName,
-          item_list_id: item?.productId,
-          index: item?.productId,
-          quantity: item?.totalQty,
-          price: item?.totalPrice,
+    if (order?.product?.length && order?.billing && !isCaptured.current) {
+      isCaptured.current = true;
+      const eventPayload = {
+        storeId: storeId,
+        customerId: customerId,
+        orderId: order?.billing?.id,
+        orderedShoppingCartItems: order?.product.map((item) => ({
+          productId: item.productId,
+          productName: item.productName,
+          colorVariants: item.attributeOptionValue,
+          price: item.productTotal,
+          quantity: item.totalQty,
         })),
-      },
-    };
-    TrackGTMEvent(purchaseEventPayload);
-  }, []);
+      };
+      GoogleAnalyticsTrackerForCG(
+        'GoogleGetPurchaseJsonScript',
+        storeId,
+        eventPayload,
+      );
+    }
+  }, [order, id]);
 
   const ThankYouSelected = ThankYouTemplates[id];
   return (

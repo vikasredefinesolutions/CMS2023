@@ -1,8 +1,9 @@
 import ProductListController from '@controllers/productListController';
-import { useActions_v2 } from '@hooks_v2/index';
-import React, { useEffect } from 'react';
+import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
+import React, { useEffect, useRef } from 'react';
 
 import { __pagesText } from '@constants/pages.text';
+import { GoogleAnalyticsTrackerForCG } from '@helpers/common.helper';
 import {
   _ProductListingProps,
   _ProductListingTemplates,
@@ -27,6 +28,7 @@ const ProductListing: React.FC<_ProductListingProps & { id: string }> = ({
   seType,
   slug,
 }) => {
+  const isCaptured = useRef(false);
   const { updateBrandId } = useActions_v2();
 
   useEffect(() => {
@@ -53,6 +55,17 @@ const ProductListing: React.FC<_ProductListingProps & { id: string }> = ({
     sorting,
     clearFilterSection,
   } = ProductListController(pageData, slug, checkedFilters, pageData?.brandId);
+  const { id: storeId } = useTypedSelector_v2((state) => state.store);
+  useEffect(() => {
+    if (pageData?.googleTagManagerResponseCommonData && !isCaptured.current) {
+      isCaptured.current = true;
+      GoogleAnalyticsTrackerForCG(
+        '',
+        storeId,
+        pageData.googleTagManagerResponseCommonData,
+      );
+    }
+  }, [pageData?.googleTagManagerResponseCommonData]);
   const Component =
     productListingTemplates[
       (`type${id}` as 'type1') || 'type2' || 'type3' || 'type4'
@@ -70,6 +83,7 @@ const ProductListing: React.FC<_ProductListingProps & { id: string }> = ({
       </section>
     );
   }
+
   return (
     <Component
       showSortMenu={showSortMenu}

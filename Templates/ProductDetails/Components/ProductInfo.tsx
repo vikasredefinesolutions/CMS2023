@@ -27,6 +27,9 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
   const isEmployeeLoggedIn = useTypedSelector_v2(
     (state) => state.employee.loggedIn,
   );
+  const { price, inventory } = useTypedSelector_v2(
+    (state) => state.product.product,
+  );
 
   const router = useRouter();
 
@@ -59,6 +62,33 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
   const showExtraButton =
     product.description.length >=
     __pagesConstant._productDetails.descriptionLength;
+  const initialValue = 0;
+  const inv = inventory?.inventory.reduce(
+    (accumulator, currentValue) => accumulator + currentValue.inventory,
+    initialValue,
+  );
+  // const { attributeOptionId } = useTypedSelector_v2(
+  //   (state) => state.product.selected.color,
+  // );
+  // const [email, setEmail] = useState<string>('');
+
+  // const sendEmailHandler = async (values: { email: string }) => {
+  //   console.log('I am here');
+  //   await Klaviyo_BackInStock({
+  //     email: values.email,
+  //     a: __pagesConstant._document.klaviyoKey,
+  //     variant: '' + attributeOptionId,
+  //     platform: 'api',
+  //   }).then((res) => {
+  //     console.log(res, 'res');
+  //     if (res.success) {
+  //       setEmail('SENT');
+  //     }
+  //   });
+  // };
+  // const validationSchema = Yup.object().shape({
+  //   email: Yup.string().email().required(__ValidationText.email.required),
+  // });
   return (
     <div className='col-span-1 mt-[15px] pl-[8px] pr-[8px] md:pl-[15px] md:pr-[15px] sm:pl-[0px] sm:pr-[0px] lg:mt-[0px]'>
       <div className='hidden md:flex flex-wrap'>
@@ -275,21 +305,83 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
         </div>
       </div> */}
 
-      <form className='mt-[24px]'>
-        <div className='m-3 mt-6'>
-          <button
-            type='button'
-            disabled={product.isDiscontinue}
-            onClick={() => {
-              setOpenModal('startOrder');
-              setShowLoader(true);
-            }}
-            className='btn btn-xl btn-secondary !flex items-center justify-center lg:!text-3xl w-full uppercase'
-          >
-            {startOrderBtnText()}
-          </button>
-        </div>
-        {/* <div className='m-[12px] mt-[24px]'>
+      {inv && inv > 0 ? (
+        <form className='mt-[24px]'>
+          <div className='m-3 mt-6'>
+            <button
+              type='button'
+              disabled={product.isDiscontinue}
+              onClick={() => {
+                setOpenModal('startOrder');
+                setShowLoader(true);
+              }}
+              className='btn btn-xl btn-secondary !flex items-center justify-center lg:!text-3xl w-full uppercase'
+            >
+              {startOrderBtnText()}
+            </button>
+          </div>
+        </form>
+      ) : (
+        <>
+          <div className='m-3 mt-6'>
+            <button
+              type='button'
+              disabled={true}
+              className='btn btn-xl bg-light-gray !flex items-center justify-center lg:!text-3xl w-full uppercase'
+            >
+              Out of Stock
+            </button>
+          </div>
+          {/* {email === 'SENT' ? (
+            <div className='text-center text-medium-text font-bold px-2 py-4'>
+              {
+                __pagesText.productInfo.startOrderModal.sizePriceQty
+                  .selectOrInput.thanksForSigningUp
+              }
+            </div>
+          ) : (
+            <Formik
+              initialValues={{ email: '' }}
+              onSubmit={(values) => sendEmailHandler(values)}
+              validationSchema={validationSchema}
+            >
+              {({ values, handleChange }) => {
+                return (
+                  <Form className='flex flex-wrap mt-[2px]'>
+                    <input
+                      type='text'
+                      name='email'
+                      autoComplete='off'
+                      value={values.email}
+                      onChange={handleChange}
+                      className='grow border border-gray-600 shadow-sm text-sm py-1 px-2'
+                    />
+
+                    <button
+                      type='submit'
+                      className='btn btn-sm btn-quaternary whitespace-nowrap'
+                    >
+                      {
+                        __pagesText.productInfo.startOrderModal.sizePriceQty
+                          .selectOrInput.notify
+                      }
+                    </button>
+
+                    <ErrorMessage
+                      name={'email'}
+                      className='text-rose-500'
+                      component={'p'}
+                    />
+                  </Form>
+                );
+              }}
+            </Formik>
+          )} */}
+          <div></div>
+        </>
+      )}
+
+      {/* <div className='m-[12px] mt-[24px]'>
           <button
             type='button'
             disabled={product.isDiscontinue}
@@ -303,24 +395,24 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
           </button>
         </div> */}
 
-        {/* {product.isDiscontinue && (
+      {/* {product.isDiscontinue && (
           <TopRatedProducts
             title={'Top Rated Alternatives'}
             suggestedProducts={product.suggestedProducts}
           />
         )} */}
 
-        <div className='mt-[20px] text-center'>
-          <a
-            href='javascript:void(0);'
-            onClick={() => router.push(consultationURL)}
-            className='text-anchor text-lg font-semibold underline leading-[20px]'
-          >
-            {__pagesText.productInfo.requestAFreeConsulation}
-          </a>
-        </div>
+      <div className='mt-[20px] text-center'>
+        <a
+          href='javascript:void(0);'
+          onClick={() => router.push(consultationURL)}
+          className='text-anchor text-lg font-semibold underline leading-[20px]'
+        >
+          {__pagesText.productInfo.requestAFreeConsulation}
+        </a>
+      </div>
 
-        {/* <div className='mt-[20px] text-center'>
+      {/* <div className='mt-[20px] text-center'>
           <a
             href='javascript:void(0);'
             onClick={() => router.push(consultationURL)}
@@ -329,7 +421,6 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
             {__pagesText.productInfo.requestAFreeConsulation}
           </a>
         </div> */}
-      </form>
 
       <ProductFeatures />
 

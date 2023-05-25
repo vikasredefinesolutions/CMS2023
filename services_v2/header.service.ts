@@ -1,4 +1,6 @@
 import { _Brand } from '@definations/brand';
+import { SendAsync } from '@utils/axios.util';
+
 import {
   _MenuCategory,
   _StoreMenu,
@@ -110,4 +112,32 @@ export const FetchMenuCategories = async (payload: {
   };
 
   return transformed;
+};
+
+export const getGTMScript = async (
+  storeId: number,
+  scriptType: string,
+  isLoggedIn?: number,
+): Promise<string | null> => {
+  const url = `ga4cg/DataLayer/${scriptType}/${storeId}${
+    isLoggedIn ? '/' + isLoggedIn : ''
+  }.json`;
+  const resposne = await SendAsync<string>({
+    url: url,
+    method: 'GET',
+  });
+  return resposne;
+};
+
+export const postGTMScript = async (
+  scriptName: string,
+  payload: Record<string, any>,
+) => {
+  const url = `ga4cg/DataLayer/${scriptName}.json`;
+  const response = await SendAsync<any>({
+    url,
+    method: 'POST',
+    data: payload,
+  });
+  return response;
 };

@@ -1,14 +1,13 @@
+import { CG_STORE_CODE } from '@constants/global.constant';
 import Document, {
   DocumentContext,
   DocumentInitialProps,
   Head,
   Html,
   Main,
-  NextScript
+  NextScript,
 } from 'next/document';
 import { _globalStore } from 'store.global';
-import DcTags from 'tags/DcTags';
-import TwitterTags from 'tags/TwitterTags';
 
 class MyDocument extends Document {
   static async getInitialProps(
@@ -34,6 +33,24 @@ class MyDocument extends Document {
           href={`${_globalStore.blobUrl}${_globalStore.favicon}`}
         />
         <Head>
+          {_globalStore.topHeaderScriptGTM && (
+            <script
+              type='text/javascript'
+              dangerouslySetInnerHTML={{
+                __html: _globalStore.topHeaderScriptGTM,
+              }}
+            ></script>
+          )}
+
+          {_globalStore.homePageScriptGTM && (
+            <script
+              type='text/javascript'
+              dangerouslySetInnerHTML={{
+                __html: _globalStore.homePageScriptGTM,
+              }}
+            ></script>
+          )}
+
           {_globalStore.googleFonts && (
             <code
               dangerouslySetInnerHTML={{ __html: _globalStore.googleFonts }}
@@ -46,15 +63,14 @@ class MyDocument extends Document {
               }}
             ></script>
           )}
-          {_globalStore.customGoogleVerification && (
-            <script
-              dangerouslySetInnerHTML={{
-                __html: _globalStore.customGoogleVerification,
-              }}
-            ></script>
-          )}
-          <DcTags />
-          <TwitterTags />
+          {_globalStore.customGoogleVerification &&
+            _globalStore.storeId !== CG_STORE_CODE && (
+              <script
+                dangerouslySetInnerHTML={{
+                  __html: _globalStore.customGoogleVerification,
+                }}
+              ></script>
+            )}
           <link
             rel='stylesheet'
             type='text/css'
@@ -110,34 +126,30 @@ class MyDocument extends Document {
             async={true}
           ></script>
 
-          {/* ---------------------Google Tag Manager--------------------- */}
-          {/* <script
-            async
-            src={`https://www.googletagmanager.com/gtm.js?id=${process.env.NEXT_PUBLIC_GTM_ID}`}
-          /> */}
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `
-          window.dataLayer = window.dataLayer || [];
-              
-        function gtag(){
-          dataLayer.push(arguments);
-        }
-        gtag('js', new Date());
-        gtag('config', '${process.env.NEXT_PUBLIC_GA_TRACKING_ID}', {
-          page_path: window.location.pathname
-        });
-        `,
-            }}
-          />
-          {/* ---------------------End Google Tag Manager---------------------  */}
+          {_globalStore.bottomHeaderScriptGTM && (
+            <script
+              type='text/javascript'
+              dangerouslySetInnerHTML={{
+                __html: _globalStore.bottomHeaderScriptGTM,
+              }}
+            ></script>
+          )}
         </Head>
         <body className='font-Outfit bg-white'>
-          <noscript
-            dangerouslySetInnerHTML={{
-              __html: _globalStore.customGlobalBodyScript,
-            }}
-          ></noscript>
+          {_globalStore.topBodySnippetGTM && (
+            <noscript
+              dangerouslySetInnerHTML={{
+                __html: _globalStore.topBodySnippetGTM,
+              }}
+            ></noscript>
+          )}
+          {_globalStore.storeId !== CG_STORE_CODE && (
+            <noscript
+              dangerouslySetInnerHTML={{
+                __html: _globalStore.customGlobalBodyScript,
+              }}
+            ></noscript>
+          )}
           <Main />
           <NextScript />
 

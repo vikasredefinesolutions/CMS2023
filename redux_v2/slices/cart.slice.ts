@@ -1,4 +1,3 @@
-import { Product } from '@definations/productList.type';
 import { fetchCartDetails } from '@redux/asyncActions/cart.async';
 import { createSlice } from '@reduxjs/toolkit';
 import { CartList } from '@services/cart';
@@ -133,30 +132,12 @@ export const cartSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(fetchCartDetails.fulfilled, (state, { payload }) => {
+      state.isCartLoading = false;
       state.lastUpdate = new Date().getTime();
-      if (payload.cart && payload.cart.length > 0) {
-        //Adding missing key brandName and categoryName that is required for GTM event payload
-        if (payload?.productdetails?.length) {
-          const contructedCart = payload.cart.map((item) => {
-            const currProduct = payload?.productdetails?.find(
-              (prod: Product) => `${prod?.id}` === `${item.productId}`,
-            );
-            if (currProduct)
-              return {
-                ...item,
-                categoryName: currProduct?.categoryName,
-                brandName: currProduct?.brandName,
-              };
-            return item;
-          });
-          state.cart = contructedCart;
-        } else {
-          state.cart = payload.cart;
-        }
-        state.isCartLoading = false;
-        state.cartQty = payload.cart.length;
+      if (payload && payload.length > 0) {
+        state.cart = payload;
+        state.cartQty = payload.length;
       } else {
-        state.isCartLoading = false;
         state.cart = [];
         state.cartQty = 0;
       }

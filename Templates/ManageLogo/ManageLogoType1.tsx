@@ -1,12 +1,19 @@
 import MyAccountTabs from '@appComponents/common/MyAccountTabsType1';
 import NxtImage from '@appComponents/reUsable/Image';
 import { __pagesText } from '@constants/pages.text';
+import { useTypedSelector_v2 } from '@hooks_v2/index';
 import moment from 'moment';
 import { NextPage } from 'next';
 import Link from 'next/link';
+import { _globalStore } from 'store.global';
 import { _ManageLogoProps } from './managelogo';
 
+let mediaBaseUrl = _globalStore.blobUrl;
 const ManageLogoType1: NextPage<_ManageLogoProps> = ({ logoList }) => {
+  const clientSideMediaUrl = useTypedSelector_v2(
+    (state) => state.store.mediaBaseUrl,
+  );
+  mediaBaseUrl = mediaBaseUrl || clientSideMediaUrl;
   return (
     <>
       <MyAccountTabs />
@@ -76,7 +83,7 @@ const ManageLogoType1: NextPage<_ManageLogoProps> = ({ logoList }) => {
                       <td className='border-b border-r border-[#ddd] p-[16px]'>
                         <div className='w-24 h-24 mx-auto'>
                           <NxtImage
-                            src={`/${logo.logo}`}
+                            src={`${mediaBaseUrl + logo.logo}`}
                             alt=''
                             className='img-responsive max-h-[100px]'
                           />
@@ -85,7 +92,7 @@ const ManageLogoType1: NextPage<_ManageLogoProps> = ({ logoList }) => {
                       <td className='border-b border-r border-[#ddd] p-[16px]'>
                         <div className='w-24 h-24'>
                           <NxtImage
-                            src={`/${logo.approvedLogo}`}
+                            src={`${mediaBaseUrl + logo.approvedLogo}`}
                             alt=''
                             className='img-responsive max-h-[100px]'
                           />
@@ -108,7 +115,7 @@ const ManageLogoType1: NextPage<_ManageLogoProps> = ({ logoList }) => {
                       <td className='border-b border-r border-[#ddd] p-[16px]'>
                         <div className='overflow-hidden'>
                           <NxtImage
-                            src={`/${logo.logoLocationImage}`}
+                            src={`${logo.logoLocationImage}`}
                             alt=''
                             className='max-h-[100px]'
                           />{' '}

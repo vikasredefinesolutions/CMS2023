@@ -21,6 +21,7 @@ const RequestConsultationType1: React.FC<_RequestConsultationProps> = ({
   const router = useRouter();
   const cartItems = useTypedSelector_v2((state) => state.cart.cart);
   const [itemInCart, setItemInCart] = useState<null | CartObject>(null);
+  const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
 
   useEffect(() => {
     const product = cartItems?.find(
@@ -74,9 +75,11 @@ const RequestConsultationType1: React.FC<_RequestConsultationProps> = ({
                 <RcForm
                   productId={details.id}
                   attriubteOptionId={color?.attributeOptionId || 0}
+                  formSubmit={formSubmitted}
+                  setFormSubmit={setFormSubmitted}
                 />
                 <div className='w-full lg:w-4/12 px-[15px]'>
-                  {itemInCart ? (
+                  {itemInCart && !formSubmitted ? (
                     <RcOrderSummary item={itemInCart} />
                   ) : (
                     <RcFeatures />

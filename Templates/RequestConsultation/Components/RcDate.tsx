@@ -15,6 +15,7 @@ interface _props {
 }
 
 const RcDate: React.FC<_props> = ({ value, setFieldValue }) => {
+  const [open, setOpen] = React.useState(false);
   return (
     <div className='w-full '>
       <div className='flex flex-wrap items-center justify-between'>
@@ -28,7 +29,18 @@ const RcDate: React.FC<_props> = ({ value, setFieldValue }) => {
             }}
             disableHighlightToday={true}
             disablePast={true}
-            renderInput={(params) => <TextField {...params} error={false} />}
+            open={open}
+            onOpen={() => setOpen(true)}
+            onClose={() => setOpen(false)}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                error={false}
+                onClick={() => setOpen(true)}
+                inputProps={{ ...params.inputProps, readOnly: true }}
+                disabled={true}
+              />
+            )}
           />
         </LocalizationProvider>
       </div>

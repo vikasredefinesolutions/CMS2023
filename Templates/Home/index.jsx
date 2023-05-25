@@ -358,15 +358,15 @@ const Home = (props) => {
                   }
 
                   let componentName = 'div' + componentValue.no;
-                  console.log('D', componentValue.selectedVal);
+                  console.log("D", componentValue.selectedVal);
                   if (
                     componentValue.selectedVal &&
                     'componentname' in componentValue.selectedVal
-                  ) {
-                    componentName =
-                      componentValue.selectedVal.componentname.value;
-                  }
-
+                  )
+                    {
+                       componentName = componentValue.selectedVal.componentname.value;
+                    }
+                    
                   return (
                     <div
                       key={index}

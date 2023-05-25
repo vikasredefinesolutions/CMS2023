@@ -79,7 +79,7 @@ const _RequestConsulationSchema = Yup.object().shape({
   preferedContactMethod: Yup.string().required(
     __ValidationText.requestConsultation.preferedContactMethod,
   ),
-  desiredQty: Yup.number()
+  desiredQty: Yup.string()
     .min(
       __ValidationText.requestConsultation.desiredQty.minQty,
       __ValidationText.requestConsultation.desiredQty.minText,
@@ -90,10 +90,12 @@ const _RequestConsulationSchema = Yup.object().shape({
 });
 let mediaBaseUrl = _globalStore.blobUrl;
 
-const RcForm: React.FC<{ productId: number; attriubteOptionId: number }> = ({
-  productId,
-  attriubteOptionId,
-}) => {
+const RcForm: React.FC<{
+  productId: number;
+  attriubteOptionId: number;
+  formSubmit: boolean;
+  setFormSubmit: (value: boolean) => void;
+}> = ({ productId, attriubteOptionId, formSubmit, setFormSubmit }) => {
   const router = useRouter();
   const [captchaVerified, setverifiedRecaptch] = useState<
     'NOT_VALID' | null | 'VALID'
@@ -101,7 +103,6 @@ const RcForm: React.FC<{ productId: number; attriubteOptionId: number }> = ({
   const [showLogo, setShowLogo] = useState<boolean>(false);
   const [fileUploded, setFileUploded] = useState<boolean>(false);
   const { setShowLoader, showModal } = useActions_v2();
-  const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
   const { id: storeId, imageFolderPath } = useTypedSelector_v2(
     (state) => state.store,
   );
@@ -181,13 +182,13 @@ const RcForm: React.FC<{ productId: number; attriubteOptionId: number }> = ({
     };
 
     SumbitRequestConsultationDetails(payload).then(() => {
-      setFormSubmitted(true);
+      setFormSubmit(true);
     });
     // .finally(() => setShowLoader(false));
-    setFormSubmitted(true);
+    setFormSubmit(true);
   };
 
-  if (formSubmitted) {
+  if (formSubmit) {
     return <RcRequestDone />;
   }
 
@@ -246,7 +247,11 @@ const RcForm: React.FC<{ productId: number; attriubteOptionId: number }> = ({
                   required={true}
                 />
                 <RcInput
-                  onChange={handleChange}
+                  onChange={(event) => {
+                    if (/^[0-9]*$/.test(event.target.value)) {
+                      handleChange(event);
+                    }
+                  }}
                   value={values.phone}
                   type={'text'}
                   id='Phone Number'
@@ -265,9 +270,13 @@ const RcForm: React.FC<{ productId: number; attriubteOptionId: number }> = ({
                   name={'preferedContactMethod'}
                 />
                 <RcInput
-                  onChange={handleChange}
+                  onChange={(event) => {
+                    if (/^[0-9]*$/.test(event.target.value)) {
+                      handleChange(event);
+                    }
+                  }}
                   value={values.desiredQty || ''}
-                  type={'number'}
+                  type={'text'}
                   id='Desired Quantity'
                   name={'desiredQty'}
                   placeholder='Desired Quantity'

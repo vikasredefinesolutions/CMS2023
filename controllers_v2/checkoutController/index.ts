@@ -1,21 +1,21 @@
 import {
-  checkoutPages,
   PaymentMethod,
-  paymentMethodCustom as paymentEnum,
   UserAddressType,
+  checkoutPages,
+  paymentMethodCustom as paymentEnum,
 } from '@constants/enum';
 import { __Cookie, __Cookie_Expiry } from '@constants/global.constant';
 import { paths } from '@constants/paths.constant';
-import { addAddress, AddOrderDefault } from '@constants/payloads/checkout';
+import { AddOrderDefault, addAddress } from '@constants/payloads/checkout';
 import { signup_payload } from '@constants/payloads/signup';
 import { commonMessage } from '@constants/successError.text';
 import { CreditCardDetailsType } from '@definations/checkout';
 import {
+  GoogleAnalyticsTrackerForCG,
+  KlaviyoScriptTag,
   deleteCookie,
   extractCookies,
-  KlaviyoScriptTag,
   setCookie,
-  TrackGTMEvent,
 } from '@helpers/common.helper';
 import getLocation from '@helpers/getLocation';
 import {
@@ -452,34 +452,22 @@ const CheckoutController = () => {
   };
 
   // GTM event for "add_shipping_info" and "add_payment_info’"
-  const addShippingInfoEventHandle = (eventName: string) => {
+  const addShippingPaymentInfoEventHandle = (eventName: string) => {
     const eventPayload = {
-      event: eventName,
-      ecommerce: {
-        value: totalPrice,
-        currency: 'USD',
-        coupon: cartDiscountDetails?.coupon || '',
-        ...(eventName === 'add_payment_info'
-          ? { payment_type: paymentMethod }
-          : { shipping_tier: 'Ground' }),
-        items: cartData?.map((item) => ({
-          item_name: item?.productName,
-          item_id: item?.sku,
-          item_brand: item?.brandName,
-          item_category: '',
-          item_category2: '',
-          item_category3: '',
-          item_category4: '',
-          item_variant: item?.attributeOptionValue,
-          item_list_name: item?.productName,
-          item_list_id: item?.productId,
-          index: item?.productId,
-          quantity: item?.totalQty,
-          price: item?.totalPrice,
-        })),
-      },
+      storeId: storeId,
+      customerId: customerId,
+      ...(eventName === 'GoogleAddShippingInfoScript'
+        ? { shippingTier: 'Free Shipping' }
+        : { paymentType: paymentMethod }),
+      shoppingCartItemsModel: cartData?.map((item) => ({
+        productId: item.productId,
+        productName: item?.productName,
+        colorVariants: item?.attributeOptionValue,
+        price: item.totalPrice,
+        quantity: item.totalQty,
+      })),
     };
-    TrackGTMEvent(eventPayload);
+    GoogleAnalyticsTrackerForCG(eventName, storeId, eventPayload);
   };
 
   const reviewOrder = async () => {
@@ -540,8 +528,8 @@ const CheckoutController = () => {
             setBillAddress(shippingForm.values);
             setBillingAdress(shippingForm.values);
           }
-          addShippingInfoEventHandle('add_shipping_info');
-          addShippingInfoEventHandle('add_payment_info');
+          addShippingPaymentInfoEventHandle('GoogleAddShippingInfoScript');
+          addShippingPaymentInfoEventHandle('GoogleGetPurchaseJsonScript');
 
           setCurrentPage(checkoutPages.reviewOrder);
         }
@@ -553,8 +541,8 @@ const CheckoutController = () => {
 
           setBillingAdress(shippingAdress);
         }
-        addShippingInfoEventHandle('add_shipping_info');
-        addShippingInfoEventHandle('add_payment_info');
+        addShippingPaymentInfoEventHandle('GoogleAddShippingInfoScript');
+        addShippingPaymentInfoEventHandle('GoogleGetPurchaseJsonScript');
         setCurrentPage(checkoutPages.reviewOrder);
       }
     }

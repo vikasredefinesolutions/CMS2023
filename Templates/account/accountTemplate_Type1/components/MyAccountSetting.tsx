@@ -308,13 +308,7 @@ const AccountSetting = () => {
                                     }
                                   </span>
                                   <span className='w-full pt-[4px] pb-[4px] block'>
-                                    {__pagesText.accountPage.eightMore}
-                                  </span>
-                                  <span className='w-full pt-[4px] pb-[4px] block'>
-                                    {__pagesText.accountPage.upperOrLowerCase}
-                                  </span>
-                                  <span className='w-full pt-[4px] pb-[4px] block'>
-                                    {__pagesText.accountPage.atLeastOneNumber}
+                                    {__pagesText.accountPage.sixMore}
                                   </span>
                                 </div>
                               </div>
