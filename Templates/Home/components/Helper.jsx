@@ -346,6 +346,16 @@ export const updateSetProperties = (element) => {
             x.querySelectorAll('#leftContent')[0].classList.remove('lg:w-1/2');
             x.querySelectorAll('#rightContent')[0].classList.remove('lg:w-1/2');
           }
+          if(x && x.querySelectorAll('#centerContentNew').length > 0)
+          {
+              x.querySelectorAll('#centerContentNew')[0].classList.remove('hidden');
+              x.querySelectorAll('#leftContent')[0].classList.add('lg:w-1/3');
+              x.querySelectorAll('#rightContent')[0].classList.add('lg:w-1/3');
+  
+              x.querySelectorAll('#leftContent')[0].classList.remove('lg:w-1/2');
+              x.querySelectorAll('#rightContent')[0].classList.remove('lg:w-1/2');
+
+          }
           if (x && x.querySelectorAll('#centerBox').length > 0) {
             x.querySelectorAll('#centerBox')[0].classList.remove('hidden');
             x.querySelectorAll('#leftBox')[0].classList.add('lg:w-1/3');
@@ -363,6 +373,31 @@ export const updateSetProperties = (element) => {
             x.querySelectorAll('#leftContent')[0].classList.remove('lg:w-1/3');
             x.querySelectorAll('#rightContent')[0].classList.remove('lg:w-1/3');
           }
+          if(x && x.querySelectorAll('#centerContentNew').length > 0)
+                  {
+                    x.querySelectorAll('#centerContentNew')[0].classList.add('hidden');
+                    let largeImage = "Left";
+                    if(element.selectedVal.columnCount_large_image)
+                      largeImage = element.selectedVal.columnCount_large_image.value;
+
+                    
+
+                   
+
+                    x.querySelectorAll('#leftContent')[0].classList.remove('lg:w-1/3');
+                    x.querySelectorAll('#rightContent')[0].classList.remove('lg:w-1/3');
+
+                    if(largeImage === 'Left')
+                    {
+                      x.querySelectorAll('#leftContent')[0].classList.add('lg:w-2/3');
+                      x.querySelectorAll('#rightContent')[0].classList.add('lg:w-1/3');
+                    }
+                    else
+                    {
+                      x.querySelectorAll('#leftContent')[0].classList.add('lg:w-1/3');
+                      x.querySelectorAll('#rightContent')[0].classList.add('lg:w-2/3');
+                    }
+                  }
           if (x && x.querySelectorAll('#centerBox').length > 0) {
             x.querySelectorAll('#centerBox')[0].classList.add('hidden');
             x.querySelectorAll('#leftBox')[0].classList.add('lg:w-1/2');
@@ -881,29 +916,64 @@ export const updateSetProperties = (element) => {
                 Object.entries(element.selectedVal).map(([keyq, valueq]) => { if(keyq == key+"_bottom_margin") { classAlign += ' ' + valueq.value; } }) 
               }
 
+              if(x.querySelectorAll('#'+key+'Position').length > 0)
+              {
+                  let strText = x.querySelectorAll('#Text'+key+'Position')[0].innerHTML;
+                  let imageTextPosition = 'Top';
+                  if(Object.keys(element.selectedVal).includes(key+'_image_text_position'))
+                  {
+                    Object.entries(element.selectedVal).map(([keyq, valueq]) => { if(keyq == key+'_image_text_position') { imageTextPosition = valueq.value; } }) 
+                  }
+                  let finalHTML = '';
+                  //console.log("CC",key, element.selected_Values);
+                  let imgStr = starttag +
+                        imageSize +
+                        '" id="' +
+                        key +
+                        '_img_link"><img id="' +
+                        key +
+                        '_img" class="' +
+                        effectClass +
+                        ' ' +
+                        imgClass +
+                        '" src="' +
+                        value.value +
+                        '" alt="' +
+                        alt +
+                        '" title="' +
+                        alt +
+                        '"' +
+                        endTag;
+                  if(imageTextPosition === 'Top')
+                  {
+                      finalHTML += '<div class="p-[15px]" id="Text'+key+'Position">';
+                      finalHTML += strText;
+                      finalHTML += '</div>';
+                      finalHTML += '<div class="'+classAlign+'" id="'+key+'">';
+                      finalHTML += imgStr;
+                      finalHTML += '</div>';
+                  }
+                  else
+                  {
+                      finalHTML += '<div class="'+classAlign+'" id="'+key+'">';
+                      finalHTML += imgStr;
+                      finalHTML += '</div>';
+                      finalHTML += '<div class="p-[15px]" id="Text'+key+'Position">';
+                      finalHTML += strText;
+                      finalHTML += '</div>';
+                  }
+                  x.querySelectorAll('#'+key+'Position')[0].innerHTML = finalHTML;
+              }
+              else
+              {
+                x.querySelectorAll('#' + key)[0].className = classAlign;
+              
+                x.querySelectorAll('#' + key)[0].innerHTML = imgStr;
+              }
+
               // if(imageSize == '')
               //   imageSize = 'max-w-none';
-              x.querySelectorAll('#' + key)[0].className = classAlign;
               
-              x.querySelectorAll('#' + key)[0].innerHTML =
-                starttag +
-                imageSize +
-                '" id="' +
-                key +
-                '_img_link"><img id="' +
-                key +
-                '_img" class="' +
-                effectClass +
-                ' ' +
-                imgClass +
-                '" src="' +
-                value.value +
-                '" alt="' +
-                alt +
-                '" title="' +
-                alt +
-                '"' +
-                endTag;
             }
           }
         }
@@ -1136,7 +1206,7 @@ export const updateSetProperties = (element) => {
         // loop for accordion ittem
         let ourComponetiNString = ReactDOMServer.renderToStaticMarkup(
           <ElementAccordionDisplay
-            selected_Values={element.selected_Values}
+            selected_Values={element.selectedVal}
             acValues={value.value}
           />,
         );
