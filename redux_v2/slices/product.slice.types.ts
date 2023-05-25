@@ -248,14 +248,33 @@ export interface _updateInventoryList {
   data: null | _ProductInventoryTransfomed;
 }
 
+export interface _updateDiscountTablePrices_cleanUp {
+  type: 'DISOCUNT_TABLE_PRICES_CLEANUP';
+}
+
+export interface _updateInventoryList_cleanUp {
+  type: 'INVENTORY_LIST_CLEANUP';
+}
+
 export interface _UpdateProperties_Action {
-  payload: _updateDiscountTablePrices | _updateInventoryList;
+  payload:
+    | _updateInventoryList
+    | _updateInventoryList_cleanUp
+    | _updateDiscountTablePrices
+    | _updateDiscountTablePrices_cleanUp;
 }
 
 export interface _SetValue_MinQty {
   type: 'MINIMUM_QTY';
   data: {
     qty: number;
+  };
+}
+
+export interface _SetValue_ProductPrice_OnEdit {
+  type: 'PRICE_ON_EDIT';
+  data: {
+    unitPrice: number;
   };
 }
 
@@ -292,5 +311,5 @@ export interface _Product_UpdateSelectedValeus_Action {
 }
 
 export interface _Product_SetValues_Action {
-  payload: _SetValue_MinQty;
+  payload: _SetValue_MinQty | _SetValue_ProductPrice_OnEdit;
 }

@@ -2,12 +2,12 @@ import Price from '@appComponents/Price';
 import NxtImage from '@appComponents/reUsable/Image';
 import { paths } from '@constants/paths.constant';
 import { numberToOrdinalString } from '@helpers/common.helper';
-import { CartObject } from '@services/cart';
+import { _CartItem } from '@services/cart';
 import Link from 'next/link';
 import React from 'react';
 
 interface _props {
-  item: CartObject;
+  item: _CartItem;
 }
 
 const RcOrderSummary: React.FC<_props> = ({ item }) => {

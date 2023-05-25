@@ -1,6 +1,7 @@
 import { logoLocation as LOGOlocation } from '@constants/enum';
-import { _CI_ShoppingCartLogoPersonViewModel } from '@definations/APIs/cart.res';
+
 import { _LogoLocationDetail } from '@definations/APIs/productDetail.res';
+import { _CartItem } from '@services/cart';
 import {
   FileToUpload,
   LogoStatus,
@@ -19,7 +20,7 @@ const LogoSetterToStore = () => {
   mediaBaseUrl = mediaBaseUrl || clientSideMediaBaseUrl;
 
   const getDetailsLogo = (
-    editDetails: _CI_ShoppingCartLogoPersonViewModel[] | null,
+    editDetails: _CartItem['shoppingCartLogoPersonViewModels'] | null,
     logoLocation: _LogoLocationDetail[],
     totalQty: number,
   ) => {

@@ -13,10 +13,10 @@ import LoginPassword from './components/LoginPasswordType1';
 import PaymentType1 from './components/PaymentType1';
 
 interface _Props {
-  cartTemplateId: number;
+  templateId: number;
 }
 
-const ChekoutType3: FC<_Props> = ({ cartTemplateId }) => {
+const ChekoutType3: FC<_Props> = ({ templateId }) => {
   const { totalPrice } = GetCartTotals();
   const {
     currentPage,
@@ -32,7 +32,6 @@ const ChekoutType3: FC<_Props> = ({ cartTemplateId }) => {
     shippingForm,
     billingForm,
     useShippingAddress,
-    cartData,
     paymentFieldUpdateHandler,
     paymentMethod,
     updatePaymentMethod,
@@ -74,11 +73,12 @@ const ChekoutType3: FC<_Props> = ({ cartTemplateId }) => {
                 <hr />
               </div>
               <CartItem
-                {...{
-                  isRemovable: false,
-                  cartData: cartData,
-                  cartType: cartTemplateId,
-                }}
+                isRemovable={false}
+                isEditable={false}
+                availableFont={[]}
+                availableLocation={[]}
+                availableColor={[]}
+                templateId={templateId}
               />
             </div>
           ) : (

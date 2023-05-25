@@ -18,10 +18,10 @@ import { GetCartTotals, useTypedSelector_v2 } from '@hooks_v2/index';
 import { useEffect } from 'react';
 
 interface _Props {
-  cartTemplateId: number;
+  templateId: number;
 }
 
-const ChekoutType1: React.FC<_Props> = ({ cartTemplateId }) => {
+const ChekoutType1: React.FC<_Props> = ({ templateId }) => {
   const {
     currentPage,
     checkEmail,
@@ -60,6 +60,8 @@ const ChekoutType1: React.FC<_Props> = ({ cartTemplateId }) => {
     setShowAddAddress,
     setShippingAdress,
     setBillingAdress,
+    selectedShipping,
+    fetchShipping,
   } = CheckoutController();
   const userId = useTypedSelector_v2((state) => state.user.id);
   useEffect(() => {
@@ -69,7 +71,14 @@ const ChekoutType1: React.FC<_Props> = ({ cartTemplateId }) => {
       setShowAddAddress(false);
     }
   }, [shippingAdress]);
-  const { totalPrice } = GetCartTotals();
+  const { subTotal } = GetCartTotals();
+
+  useEffect(() => {
+    fetchShipping(subTotal);
+  }, [subTotal]);
+
+  console.log(cardDetails);
+
   return (
     <>
       {' '}
@@ -279,11 +288,12 @@ const ChekoutType1: React.FC<_Props> = ({ cartTemplateId }) => {
                   <hr />
                 </div>
                 <CartItem
-                  {...{
-                    isRemovable: false,
-                    cartData: cartData,
-                    cartType: cartTemplateId,
-                  }}
+                  isRemovable={false}
+                  isEditable={false}
+                  availableFont={[]}
+                  availableLocation={[]}
+                  availableColor={[]}
+                  templateId={templateId}
                 />
               </div>
             ) : (
@@ -406,7 +416,7 @@ const ChekoutType1: React.FC<_Props> = ({ cartTemplateId }) => {
                 <button
                   className='btn btn-lg !w-full text-center btn-secondary mb-[8px]'
                   id='btn-review-order'
-                  onClick={() => placeOrder(totalPrice)}
+                  onClick={() => placeOrder(selectedShipping)}
                 >
                   PLACE ORDER
                 </button>{' '}

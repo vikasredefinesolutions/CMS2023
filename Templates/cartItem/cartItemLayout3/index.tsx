@@ -6,7 +6,7 @@ import {
   commonMessage,
 } from '@constants/successError.text';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
-import { CartObject } from '@services/cart';
+import { _CartItem } from '@services/cart';
 import { updateCartQuantity } from '@services/cart.service';
 import Link from 'next/link';
 import { FC, useRef, useState } from 'react';
@@ -91,7 +91,7 @@ const CIlayout3: FC<any> = ({
   return (
     <ul role='list' className='overflow-hidden'>
       {cartData &&
-        cartData.map((item: CartObject, cartItemIndex: number) => (
+        cartData.map((item: _CartItem, cartItemIndex: number) => (
           <li
             key={item.attributeOptionId}
             className='flex flex-wrap py-[20px] -mx-[10px]'

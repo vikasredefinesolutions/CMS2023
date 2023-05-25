@@ -2,7 +2,7 @@ import NxtImage from '@appComponents/reUsable/Image';
 import { _defaultTemplates } from '@configs/template.config';
 import { __pagesText } from '@constants/pages.text';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
-import { CartObject } from '@services/cart';
+import { _CartItem } from '@services/cart';
 import YouMayAlsoLike from '@templates/youMayAlsoLike';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -20,7 +20,7 @@ const RequestConsultationType1: React.FC<_RequestConsultationProps> = ({
 }) => {
   const router = useRouter();
   const cartItems = useTypedSelector_v2((state) => state.cart.cart);
-  const [itemInCart, setItemInCart] = useState<null | CartObject>(null);
+  const [itemInCart, setItemInCart] = useState<null | _CartItem>(null);
   const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
 
   useEffect(() => {

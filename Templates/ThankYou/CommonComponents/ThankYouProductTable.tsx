@@ -46,9 +46,8 @@ const ThankYouProductTable: React.FC<_props> = ({ product }) => {
       </div>
 
       {product.shoppingCartLogoPersonViewModels.map(
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (item: any, index: number) => {
-          return item.logoName === 'Customize Logo' ? (
+          return item.logoName === 'Customize Later' ? (
             <div className='flex justify-start items-center mt-3'>
               <div>
                 <span className='material-icons text-[60px] mr-3'>
@@ -69,17 +68,17 @@ const ThankYouProductTable: React.FC<_props> = ({ product }) => {
             >
               <div className='text-base'>
                 <div className='mb-3 flex'>
-                  {item.logoPositionImage === '' ? (
-                    <NxtImage
+                  {item.logoImagePath === '' ? (
+                    <img
                       className='w-14 h-12'
-                      src='/images/logo-to-be-submitted.webp'
+                      src={`/assets/images/logo-to-be-submitted.webp`}
                       title=''
                       alt={item.logoPositionImage}
                     />
                   ) : (
                     <NxtImage
                       className='w-14 h-12'
-                      src={`${mediaBaseUrl}/${item.logoPositionImage}`}
+                      src={`${mediaBaseUrl}${item.logoImagePath}`}
                       title=''
                       alt={item.logoImagePath}
                     />

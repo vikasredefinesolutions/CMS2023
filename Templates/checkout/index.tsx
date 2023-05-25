@@ -11,7 +11,7 @@ import CheckoutType3 from './checkoutType3';
 import CheckoutType4 from './checkoutType4';
 
 interface _Props {
-  cartTemplateId: number;
+  templateId: number;
 }
 
 export interface CTTemplates {
@@ -28,7 +28,7 @@ const checkoutTemplates: CTTemplates = {
   type4: CheckoutType4,
 };
 
-const CheckoutTemplate: FC<_Props> = ({ cartTemplateId }) => {
+const CheckoutTemplate: FC<_Props> = ({ templateId }) => {
   const router = useRouter();
   const {
     cart: cartData,
@@ -73,7 +73,7 @@ const CheckoutTemplate: FC<_Props> = ({ cartTemplateId }) => {
   const CheckoutSelectedTemplate =
     checkoutTemplates[_defaultTemplates.checkout];
 
-  return <CheckoutSelectedTemplate cartTemplateId={cartTemplateId} />;
+  return <CheckoutSelectedTemplate templateId={templateId} />;
 };
 
 export default CheckoutTemplate;

@@ -1,9 +1,8 @@
 import NxtImage from '@appComponents/reUsable/Image';
-import { _CartItem } from '@definations/startOrderModal';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
+import { _CartItem } from '@services/cart';
 import { useEffect } from 'react';
 import InventoryAvailability from './InventoryAvailability';
-
 const Inventory: React.FC<{
   storeCode: string;
   productId: undefined | number;

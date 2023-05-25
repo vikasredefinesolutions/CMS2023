@@ -5,7 +5,7 @@ import {
   commonMessage,
 } from '@constants/successError.text';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
-import { CartObject } from '@services/cart';
+import { _CartItem } from '@services/cart';
 import { updateCartQuantity } from '@services/cart.service';
 import Link from 'next/link';
 import { FC, useRef, useState } from 'react';
@@ -74,7 +74,7 @@ const CIlayout4: FC<any> = ({ cartData, removeCartItem }) => {
     <>
       <ul className='overflow-hidden border border-gray-border p-[15px] md:p-[30px]'>
         {cartData &&
-          cartData.map((item: CartObject, cartItemIndex: number) => {
+          cartData.map((item: _CartItem, cartItemIndex: number) => {
             return (
               <li
                 className=' pt-0'

@@ -5,8 +5,8 @@ import NxtImage from '@appComponents/reUsable/Image';
 import Price from '@appComponents/reUsable/Price';
 import WishlistButton from '@appComponents/ui/Wishlist';
 import { listing_max_showcolors, zeroValue } from '@constants/global.constant';
+import { _modals } from '@definations/product.type';
 import { splitproductList } from '@definations/productList.type';
-import { _modals } from '@definations/startOrderModal';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import {
   GetlAllProductList, GetProductImageOptionList

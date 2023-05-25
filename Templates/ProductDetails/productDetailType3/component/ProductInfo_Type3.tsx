@@ -1,13 +1,13 @@
 import LoginModal from '@appComponents/modals/loginModal';
 import { __pagesText } from '@constants/pages.text';
 import { paths } from '@constants/paths.constant';
-import { _modals } from '@definations/startOrderModal';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import AvailableColors_Type3 from './AvailableColors_Type3';
 // import SizeChart_Type3 from './ProductSizeChart_Type3';
 import SizeChartModal from '@appComponents/modals/sizeChartModal/SizeChartModal';
+import { _modals } from '@definations/product.type';
 import BuyNowHandler from './BuyNowHandler';
 import Inventory_Type3 from './ProductInventory_Type3';
 import SizeQtyInput from './SizeQtyInput';

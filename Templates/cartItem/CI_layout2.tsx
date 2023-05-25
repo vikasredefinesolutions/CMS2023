@@ -2,7 +2,7 @@ import { default as NxtImage } from '@appComponents/reUsable/Image';
 import Price from '@appComponents/reUsable/Price';
 import { __pagesText } from '@constants/pages.text';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
-import { CartObject } from '@services/cart';
+import { _CartItem } from '@services/cart';
 import Link from 'next/link';
 import { FC } from 'react';
 import { _globalStore } from 'store.global';
@@ -38,7 +38,7 @@ const CIlayout2: FC<any> = ({
             <div className='bg-[#ffffff] pl-[15px] pr-[15px] pt-[15px] pb-[15px] mt-[15px]'>
               <ul className='overflow-hidden border border-gray-border p-[15px] md:p-[30px]'>
                 {cartData &&
-                  cartData.map((item: CartObject, cartItemIndex: number) => (
+                  cartData.map((item: _CartItem, cartItemIndex: number) => (
                     <li
                       key={item.attributeOptionId}
                       className='border-b border-b-gray-300 mb-[30px]'

@@ -1,6 +1,6 @@
 import { __pagesText } from '@constants/pages.text';
 import { _LogoLocationDetail } from '@definations/APIs/productDetail.res';
-import { _CI_ShoppingCartLogoPersonViewModel } from '@definations/startOrderModal';
+import { _CartItem } from '@services/cart';
 import { FetchLogoLocationByProductId } from '@services/product.service';
 import { FieldArray, Form, Formik } from 'formik';
 import { numberToOrdinalString } from 'helpers_v2/common.helper';
@@ -26,9 +26,10 @@ interface logocharges {
 }
 
 const SomCustomizeLogoOptions: React.FC<{
-  editDetails: _CI_ShoppingCartLogoPersonViewModel[] | undefined;
+  editSizes: _CartItem['shoppingCartLogoPersonViewModels'] | null;
+
   totalQty: number;
-}> = ({ editDetails, totalQty }) => {
+}> = ({ editSizes, totalQty }) => {
   const { product_updateLogoDetails, product_updateFirstLogoPrice } =
     useActions_v2();
   const { getDetailsLogo } = LogoSetterToStore();
@@ -56,6 +57,7 @@ const SomCustomizeLogoOptions: React.FC<{
   const [logoEditDetails, setLogoEditDetails] =
     useState<logoDetailsAr | null>();
   const [initialValues, setInitialValues] = useState(['']);
+
   useEffect(() => {
     if (id) {
       FetchLogoLocationByProductId({ productId: id }).then((res) => {
@@ -86,9 +88,9 @@ const SomCustomizeLogoOptions: React.FC<{
   }, []);
 
   useEffect(() => {
-    if (editDetails && logoLocation) {
+    if (editSizes && logoLocation) {
       const { isLater, details } = getDetailsLogo(
-        editDetails,
+        editSizes,
         logoLocation,
         totalQty,
       );
@@ -100,7 +102,8 @@ const SomCustomizeLogoOptions: React.FC<{
         setLogoEditDetails(details);
       }
     }
-  }, [editDetails, logoLocation]);
+  }, [editSizes, logoLocation]);
+
   const showPrice = (price: 'FREE' | number) => {
     if (price === 'FREE') return `FREE`;
     return `${currency}${price.toFixed(2)}`;

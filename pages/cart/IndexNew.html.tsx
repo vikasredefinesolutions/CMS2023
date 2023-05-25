@@ -1,6 +1,5 @@
-import AddOTFItemNo from '@appComponents/modals/addOtfItem';
-import StartOrderModal from '@appComponents/modals/startOrderModal/StartOrderModal';
-import CartController from '@controllers/cartController';
+import SeoHead from '@appComponents/reUsable/SeoHead';
+import { _defaultTemplates } from '@configs/template.config';
 import { GoogleAnalyticsTrackerForCG } from '@helpers/common.helper';
 import {
   GetCustomerId,
@@ -10,26 +9,16 @@ import {
 
 import { FetchPageThemeConfigs } from '@services/product.service';
 import CartTemplate from '@templates/Cart';
+import { GetServerSideProps, GetServerSidePropsResult, NextPage } from 'next';
 import { useEffect, useRef, useState } from 'react';
-const Cart = () => {
-  const [cartType, setCartType] = useState<number>(1);
+import { _globalStore } from 'store.global';
+const Cart: NextPage<{ templateId: number }> = ({ templateId }) => {
   const isCaptured = useRef(false);
-
-  const { setShowLoader, cart_PageClosed, fetchCartDetails } = useActions_v2();
-  const { id: storeId } = useTypedSelector_v2((state) => state.store);
-  const {
-    removeCartItem,
-    showEdit,
-    product,
-    setShowEdit,
-    currentCartProduct,
-    loadProduct,
-    showAddOtf,
-    setShowAddOtf,
-  } = CartController();
+  const { cart_PageClosed, fetchCartDetails, cleanUp_productSlice } =
+    useActions_v2();
 
   // global states
-  const { id: customerId } = useTypedSelector_v2((state) => state.user);
+  const storeId = useTypedSelector_v2((state) => state.store.id);
   const employeeId = useTypedSelector_v2((state) => state.employee.empId);
   const { lastUpdate: lastUpdatedAt, cart: cartData } = useTypedSelector_v2(
     (state) => state.cart,
@@ -42,25 +31,9 @@ const Cart = () => {
   }>({ show: null, lastUpdatedAt: 0 });
 
   // imported Functions
-  const localCustomerId = GetCustomerId();
+  const customerId = GetCustomerId();
 
   // All useEffects
-  useEffect(() => {
-    if (storeId) {
-      setShowLoader(true);
-      FetchPageThemeConfigs('' + storeId, 'cartPage')
-        .then((res) => {
-          if (res.config_value) {
-            let type: { cartPageTemplateId: number } = JSON.parse(
-              res.config_value,
-            );
-            setCartType(type.cartPageTemplateId);
-          }
-        })
-        .finally(() => setShowLoader(false));
-    }
-  }, []);
-
   useEffect(() => {
     //GTM event for view_cart
     if (cartData?.length && storeId && !isCaptured.current) {
@@ -89,7 +62,7 @@ const Cart = () => {
         lastUpdatedAt: new Date().getTime(),
       });
       fetchCartDetails({
-        customerId: localCustomerId,
+        customerId: customerId,
         isEmployeeLoggedIn: !!employeeId,
       });
       return;
@@ -118,32 +91,47 @@ const Cart = () => {
 
   useEffect(() => {
     return () => {
+      cleanUp_productSlice();
       cart_PageClosed();
     };
   }, []);
 
   return (
     <>
+      <SeoHead title={'Cart'} keywords={''} description={''} />
       <CartTemplate
-        {...{
-          cartData,
-          removeCartItem,
-          loadProduct,
-          setShowAddOtf,
-          cartType,
-          showLoaderOrEmptyText: cartApiLoadedOnce.show,
-        }}
+        templateId={templateId}
+        showLoaderOrEmptyText={cartApiLoadedOnce.show}
       />
-      {showEdit && product && (
-        <StartOrderModal
-          modalHandler={() => setShowEdit(false)}
-          product={product}
-          editDetails={currentCartProduct}
-        />
-      )}
-      {showAddOtf && <AddOTFItemNo closeModal={() => setShowAddOtf(false)} />}
     </>
   );
 };
 
 export default Cart;
+
+//////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
+//////// SERVER SIDE METHOD ---------------------------------------
+//////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
+
+export const getServerSideProps: GetServerSideProps = async (): Promise<
+  GetServerSidePropsResult<{ templateId: number }>
+> => {
+  let cartPageTemplateId = _defaultTemplates.cart;
+
+  await FetchPageThemeConfigs('' + _globalStore.storeId, 'cartPage').then(
+    (res) => {
+      if (res.config_value) {
+        let type: { cartPageTemplateId: number } = JSON.parse(res.config_value);
+        cartPageTemplateId = type.cartPageTemplateId;
+      }
+    },
+  );
+
+  return {
+    props: {
+      templateId: cartPageTemplateId,
+    },
+  };
+};

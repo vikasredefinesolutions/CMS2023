@@ -1,26 +1,23 @@
 /* eslint-disable no-unused-vars */
-import { CartList } from '@services/cart';
 import { FC } from 'react';
 
-type cartProps = {
-  isRemovable: true;
-  cartData: CartList | null;
-  isEditable?: boolean;
-  removeCartItem: (cartId: number) => void;
-  cartType: number;
+type _CartProps = {
+  isRemovable: boolean;
+  isEditable: boolean;
+  availableFont: [] | PersonalizationFont[];
+  availableLocation: [] | PersonalizationLocation[];
+  availableColor: [] | PersonalizationColor[];
 };
 
 type checkoutProps = {
   isRemovable: false;
-  cartData: CartList | null;
-  cartType: number;
 };
 
-export type CI_Props = cartProps | checkoutProps;
+export type CI_Props = _CartProps | checkoutProps;
 
 export interface CI_Templates {
-  type1: FC<CI_Props>;
-  type2: FC<CI_Props>;
-  type3: FC<CI_Props>;
-  type4: FC<CI_Props>;
+  type1: FC<_CartProps>;
+  type2: FC<_CartProps>;
+  type3: FC<_CartProps>;
+  type4: FC<_CartProps>;
 }

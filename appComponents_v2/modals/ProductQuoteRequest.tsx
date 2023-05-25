@@ -9,12 +9,12 @@ import {
   __QuoteRequestMessages,
   __ValidationText,
 } from '@constants/validation.text';
-import { _modals } from '@definations/startOrderModal';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import { Form, Formik } from 'formik';
 import React, { useState } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
 import * as Yup from 'yup';
+import { _modals } from './modal';
 // import ProductQuoteRequestInput from './ProductQuoteRequestInput';
 
 type __QuoteRequest = {

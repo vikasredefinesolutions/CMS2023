@@ -10,7 +10,6 @@ import {
 import NxtImage from '@appComponents/reUsable/Image';
 import Price from '@appComponents/reUsable/Price';
 import { __pagesText } from '@constants/pages.text';
-import CartController from '@controllers/cartController';
 import { fetchThirdpartyservice } from '@services/thirdparty.service';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -25,9 +24,9 @@ const MyCartIcon: React.FC = () => {
   const isEmployeeLoggedIn = useTypedSelector_v2(
     (state) => state.employee.loggedIn,
   );
+  const cartData = useTypedSelector_v2((state) => state.cart.cart);
 
   //
-  const { cartData } = CartController();
   const { totalPrice, totalQty } = GetCartTotals();
   const [Focus, setFocus] = useState(false);
   const { id: loggedIn } = useTypedSelector_v2((state) => state.user);

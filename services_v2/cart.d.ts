@@ -39,13 +39,14 @@ export interface ShoppingCartLogoPersonViewModel {
   logoPositionImage: string;
   isSewOut: boolean;
   sewOutAmount: number;
-  sku?: string;
-  size?: string;
-  name?: string;
+  reUsableCustomerLogo: number;
+  sku: string;
+  size: string;
+  name: string;
   qty: number;
 }
 
-export interface CartObject {
+export interface _CartItem {
   itemNote: string;
   colorImage: string;
   productName: string;
@@ -63,17 +64,40 @@ export interface CartObject {
   totalQty: number;
   totalPrice: number;
   txtcode: string;
-  itemNote: string;
   seName: string;
-  itemNote: string;
-  cartLinePersonModels?: unknown[];
+  cartLinePersonModels?: unknown[]; // dobutful
+  categoryName?: string; // dobutful
+  brandName?: string; // dobutful
   logoTotalPrice: number;
   lineTotalPrice: number;
   productTotal: number;
-  displayLineAttributeOptions: displayLineAtrributeOptions[];
+  shoppingCartItemsCustomFieldViewModel: ShoppingCartItemsCustomFieldViewModel[];
+  isBrandPersonalization: boolean;
+  displayLineAttributeOptions: DisplayLineAttributeOption[];
 }
 
-export interface displayLineAtrributeOptions {
+export type DeleteCartItemResponse = {
+  success: boolean;
+  data: Object;
+  otherData: null;
+  errors: Object;
+};
+
+export interface ShoppingCartItemsCustomFieldViewModel {
+  id: number;
+  cartItemsId: number;
+  storeProductCustomFieldName: string;
+  storeProductCustomFieldValue: string;
+  customizationCharges: number;
+  isRequired: boolean;
+  isExclusive: boolean;
+  isChargePerCharacter: boolean;
+  quantity: number;
+  subTotal: number;
+  productId: number;
+}
+
+export interface DisplayLineAttributeOption {
   attributeOptionName: string;
   linePersonalizeDetails: linePersonalizeDetails[];
 }
@@ -85,17 +109,6 @@ export interface linePersonalizeDetails {
   line1Text: string;
   line2Text: string;
 }
-
-export type CartList = CartObject[];
-
-export type getCartListResponse = CartList;
-
-export type DeleteCartItemResponse = {
-  success: boolean;
-  data: Object;
-  otherData: null;
-  errors: Object;
-};
 
 export type AddPromoCodeReq = {
   promotionsModel: {

@@ -6,7 +6,7 @@ import {
 import { paths } from '@constants/paths.constant';
 import { BrandFilter, CategoryFilter } from '@definations/productList.type';
 import { _GetPageType } from '@definations/slug.type';
-import { extractCookies, extractSlugName } from '@helpers/common.helper';
+import { extractSlugName } from '@helpers/common.helper';
 import { highLightError } from '@helpers/console.helper';
 import { getPageComponents } from '@services/home.service';
 import { FetchFiltersJSON } from '@services/product.service';
@@ -29,8 +29,6 @@ import {
 export const getServerSideProps: GetServerSideProps = async (
   context,
 ): Promise<GetServerSidePropsResult<_Slug_Props>> => {
-  const req = context.req;
-  const { loggedIN } = extractCookies(req.headers.cookie);
   let { seName, otherParams } = extractSlugName(context.params);
 
   let store = {
@@ -121,21 +119,6 @@ export const getServerSideProps: GetServerSideProps = async (
             )
         : '',
     });
-
-    // ONLY FOR HOME PAGE
-    if (!pageMetaData.slug) {
-      const homePageScriptGTM = await getGTMScript(
-        store.storeId,
-        'HomePage',
-        loggedIN ? 1 : 0,
-      );
-      _globalStore.set({
-        key: 'homePageScriptGTM',
-        value: homePageScriptGTM
-          ? homePageScriptGTM?.replace('<script>', '').replace('</script>', '')
-          : '',
-      });
-    }
   }
 
   ////////////////////////////////////////////////

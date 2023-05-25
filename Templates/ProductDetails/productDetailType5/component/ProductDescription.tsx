@@ -1,4 +1,4 @@
-import { _ProductDetails } from '@definations/startOrderModal';
+import { _ProductDetails } from '@definations/APIs/productDetail.res';
 import React from 'react';
 
 interface _props {

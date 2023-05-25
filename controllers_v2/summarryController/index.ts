@@ -20,7 +20,7 @@ const SummarryController = () => {
     ? __SuccessErrorText.promoCode.valid
     : null;
 
-  const { setShowLoader, showModal, cart_promoCode } = useActions_v2();
+  const { setShowLoader, cart_promoCode } = useActions_v2();
 
   const removeCouponCodeHandler = () => {
     cart_promoCode('REMOVE_PROMO_CODE');
@@ -58,8 +58,9 @@ const SummarryController = () => {
     }
 
     // if No errors matched
-    setCoupon(__SuccessErrorText.promoCode.invalid);
-    setCoupon('');
+    setTimeout(() => {
+      setCoupon(objToArr[0]);
+    }, 1500);
   };
 
   const applyCouponHandler = async (couponCode: string) => {

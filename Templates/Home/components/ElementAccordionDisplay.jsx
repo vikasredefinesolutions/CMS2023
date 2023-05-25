@@ -14,8 +14,7 @@ const ElementAccordionDisplay = ({ selected_Values, acValues }) => {
     remove_circle_outline: 'add_circle_outline',
     add_circle_outline: 'remove_circle_outline',
     add_circle: 'remove_circle',
-    remove_circle: 'add_circle'
-
+    remove_circle: 'add_circle',
   };
 
   const showHideAccordion = (event) => {
@@ -29,17 +28,15 @@ const ElementAccordionDisplay = ({ selected_Values, acValues }) => {
     let existH = symbolobj.innerHTML;
     const accordionButtons = document.querySelectorAll('.pointer-class');
     accordionButtons?.forEach((el) => {
-      console.log(symbolobj, el);
-      if (symbolobj && symbolobj != el)
-      {
-        if(el.innerHTML === 'remove_circle_outline') {
+      if (symbolobj && symbolobj != el) {
+        if (el.innerHTML === 'remove_circle_outline') {
           el.innerHTML = iconArr.remove_circle_outline;
-        } 
+        }
         // else if (el.innerHTML === 'add_circle_outline') {
         //   el.innerHTML = iconArr.add_circle_outline;
         // } else if (el.innerHTML === 'add_circle') {
         //   el.innerHTML = iconArr.add_circle;
-        // } 
+        // }
         else if (el.innerHTML === 'remove_circle') {
           el.innerHTML = iconArr.remove_circle;
         } else if (el.innerHTML === 'keyboard_arrow_down') {
@@ -50,9 +47,9 @@ const ElementAccordionDisplay = ({ selected_Values, acValues }) => {
         // }
       }
 
-     // if (el !== symbolobj) el.innerHTML = iconArr.remove_circle_outline;
+      // if (el !== symbolobj) el.innerHTML = iconArr.remove_circle_outline;
     });
-   
+
     if (symbolobj) {
       if (existH === iconArr.remove_circle_outline) {
         event.target
@@ -65,9 +62,7 @@ const ElementAccordionDisplay = ({ selected_Values, acValues }) => {
           .classList.remove('hidden');
         symbolobj.innerHTML = iconArr.add_circle;
       } else if (existH === iconArr.add_circle) {
-        event.target
-          .querySelector('.ac-description')
-          .classList.add('hidden');
+        event.target.querySelector('.ac-description').classList.add('hidden');
         symbolobj.innerHTML = iconArr.remove_circle;
       } else {
         event.target.querySelector('.ac-description').classList.add('hidden');

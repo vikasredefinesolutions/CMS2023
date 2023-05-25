@@ -1,8 +1,8 @@
 import {
   CartLogoPersonDetailModel,
   CartLogoPersonModel,
-  CartObject,
   ShoppingCartLogoPersonViewModel,
+  _CartItem,
 } from '@services/cart';
 
 export interface _SetState_Details {
@@ -21,7 +21,7 @@ export interface _SetState_Details {
 }
 
 export const initialSizeWithPriceNQtyGetter = (
-  items: CartObject['shoppingCartItemDetailsViewModels'],
+  items: _CartItem['shoppingCartItemDetailsViewModels'],
 ): {
   id: number;
   size: string;

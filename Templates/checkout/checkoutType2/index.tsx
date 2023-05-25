@@ -2,31 +2,31 @@ import NxtImage from '@appComponents/reUsable/Image';
 import { checkoutPages, UserAddressType } from '@constants/enum';
 import { __pagesText } from '@constants/pages.text';
 import { GetCartTotals, useTypedSelector_v2 } from '@hooks_v2/index';
-import { GetShippingmethod } from '@services/address.service';
 import CartItem from '@templates/cartItem';
+import _ from 'lodash';
 import Link from 'next/link';
 import { FC, useEffect, useState } from 'react';
 import OrderSummary from './components/OrderSummary';
 import PaymentType from './components/Payment';
 // import { GetShippingmethod } from '@services/address.service';
 
-import CheckoutController from '@controllers/checkoutController';
+import CheckoutController, {
+  _shippingMethod,
+} from '@controllers/checkoutController';
 
 interface _Props {
-  cartTemplateId: number;
+  templateId: number;
 }
 
-const ChekoutType2: FC<_Props> = ({ cartTemplateId }) => {
+const ChekoutType2: FC<_Props> = ({ templateId }) => {
   const { shippingChargeType, id: storeId } = useTypedSelector_v2(
     (state) => state.store,
   );
-  const { totalPrice } = GetCartTotals();
 
   const {
     currentPage,
     placeOrder,
     reviewOrder,
-    cartData,
     paymentFieldUpdateHandler,
     paymentMethod,
     updatePaymentMethod,
@@ -36,41 +36,23 @@ const ChekoutType2: FC<_Props> = ({ cartTemplateId }) => {
     setAddressType,
     setShippingMethod,
     shippingMethod,
+    selectedShipping,
+    setSelectedShipping,
+    fetchShipping,
   } = CheckoutController();
+
+  // console.log('all shippingmethod', shippingMethod);
+  // console.log('slected shippingmethod', selectedShipping);
+  // console.log('value', _.isEmpty(selectedShipping));
 
   const [showPayment, setshowPayment] = useState<boolean>(false);
 
   const { id } = useTypedSelector_v2((state) => state.user);
   const { subTotal } = GetCartTotals();
 
-  const fetchShiiping = async (id: number | string | null) => {
-    try {
-      if (storeId && shippingChargeType) {
-        await GetShippingmethod({
-          shippingMethodModel: {
-            city: '',
-            state: '',
-            country: '',
-            zipCode: '',
-            customerID: id,
-            storeId: storeId,
-            ordertotalwithoutshipppingcharge: subTotal,
-            shippingType: shippingChargeType,
-          },
-        }).then((res) => {
-          if (res) {
-            setShippingMethod(res);
-          }
-        });
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   useEffect(() => {
-    fetchShiiping(id);
-  }, []);
+    fetchShipping(subTotal);
+  }, [subTotal]);
 
   return (
     <section className='mt-[20px]'>
@@ -136,10 +118,11 @@ const ChekoutType2: FC<_Props> = ({ cartTemplateId }) => {
                       <span>
                         {__pagesText.CheckoutPage.ShippingMethod}
                         {':'}
-                        {shippingMethod &&
-                          `${
-                            shippingMethod[0].name
-                          }($${shippingMethod[0].price.toPrecision(2)})`}
+                        {!_.isEmpty(selectedShipping) && (
+                          <span>{`${
+                            selectedShipping.name
+                          } $(${selectedShipping.price.toPrecision(2)})`}</span>
+                        )}
                       </span>
                     </div>
                     <div className='pt-[10px] border-b border-[#ececec]'>
@@ -162,11 +145,12 @@ const ChekoutType2: FC<_Props> = ({ cartTemplateId }) => {
               </div>
               {currentPage === checkoutPages.reviewOrder ? (
                 <CartItem
-                  {...{
-                    isRemovable: false,
-                    cartData: cartData,
-                    cartType: cartTemplateId,
-                  }}
+                  isRemovable={false}
+                  isEditable={false}
+                  availableFont={[]}
+                  availableLocation={[]}
+                  availableColor={[]}
+                  templateId={templateId}
                 />
               ) : (
                 <>
@@ -227,8 +211,8 @@ const ChekoutType2: FC<_Props> = ({ cartTemplateId }) => {
                       <div className='text-default-text mb-[5px] mt-[10px]'>
                         {__pagesText.CheckoutPage.ChooseShippingMethod}
                       </div>
-                      <div className='flex items-center mb-[30px]'>
-                        <input
+                      <div className='flex items-center flex-wrap mb-[30px]'>
+                        {/* <input
                           type='radio'
                           name='shippingMethod'
                           id=''
@@ -243,7 +227,33 @@ const ChekoutType2: FC<_Props> = ({ cartTemplateId }) => {
                             `${
                               shippingMethod[0].name
                             }($${shippingMethod[0].price.toPrecision(2)})`}
-                        </label>
+                        </label> */}
+                        {shippingMethod &&
+                          shippingMethod.map(
+                            (el: _shippingMethod, index: number) => (
+                              <div className='w-full block' key={index}>
+                                <input
+                                  type='radio'
+                                  name='shippingMethod'
+                                  id={`shippingMethod${index}`}
+                                  onChange={() => setSelectedShipping(el)}
+                                  checked={
+                                    selectedShipping.name == el.name
+                                      ? true
+                                      : false
+                                  }
+                                  className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600'
+                                />
+                                <label
+                                  htmlFor={`shippingMethod${index}`}
+                                  className='ml-2 text-default-text'
+                                >
+                                  {shippingMethod &&
+                                    `${el.name}($${el.price.toPrecision(2)})`}
+                                </label>
+                              </div>
+                            ),
+                          )}
                       </div>
                       <div className=''>
                         <button
@@ -348,7 +358,8 @@ const ChekoutType2: FC<_Props> = ({ cartTemplateId }) => {
 
             <OrderSummary
               currentpage={currentPage}
-              placeorder={() => placeOrder(totalPrice)}
+              selectedShipModel={selectedShipping}
+              placeorder={() => placeOrder(selectedShipping)}
             />
           </div>
         </div>

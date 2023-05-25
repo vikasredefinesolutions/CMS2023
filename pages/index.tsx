@@ -2,9 +2,12 @@ import SeoHead from '@appComponents/reUsable/SeoHead';
 import { __Error, __pageTypeConstant } from '@constants/global.constant';
 import { _FeaturedProduct } from '@definations/APIs/storeDetails.res';
 import { _GetPageType } from '@definations/slug.type';
-import { GTMHomeScriptForAllStores } from '@helpers/common.helper';
+import {
+  GTMHomeScriptForAllStores,
+  GTMHomeScriptForCG,
+} from '@helpers/common.helper';
 import { highLightError } from '@helpers/console.helper';
-import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
+import { useTypedSelector_v2 } from '@hooks_v2/index';
 import { getPageComponents } from '@services/home.service';
 import { FetchPageType } from '@services/slug.service';
 import Home from '@templates/Home';
@@ -28,23 +31,15 @@ type _HomeProps =
     };
 
 const DefaultHomePage: NextPage<_HomeProps> = (props) => {
-  const { updatePageType } = useActions_v2();
   const { id: customerId } = useTypedSelector_v2((state) => state.user);
   const { id: storeId } = useTypedSelector_v2((state) => state.store);
   const isCaptured = useRef(false);
 
   useEffect(() => {
-    if ('metaData' in props) {
-      updatePageType(props.metaData);
-    }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
     if (storeId && !isCaptured.current) {
       isCaptured.current = true;
       GTMHomeScriptForAllStores('HomePage', storeId, customerId || 0);
+      GTMHomeScriptForCG('HomePage', storeId, customerId || 0);
     }
   }, [storeId, customerId]);
 

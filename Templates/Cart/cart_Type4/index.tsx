@@ -1,3 +1,4 @@
+import { SpinnerComponent } from '@appComponents/ui/spinner';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import {
   PersonalizationColor,
@@ -16,12 +17,11 @@ import { _CartProps } from '../Cart';
 import EmptyCart from '../components/emptyCart';
 
 const CartType4: React.FC<_CartProps> = ({
-  cartData,
-  removeCartItem,
-  loadProduct,
-  cartType,
+  showLoaderOrEmptyText,
+  templateId,
 }) => {
   const storeId = useTypedSelector_v2((state) => state.store.id);
+  const cartData = useTypedSelector_v2((state) => state.cart.cart);
   const [availableFont, setAvailableFont] = useState<
     PersonalizationFont[] | []
   >([]);
@@ -44,10 +44,22 @@ const CartType4: React.FC<_CartProps> = ({
       });
     }
   }, [storeId]);
-  const isEmployeeLoggedIn = useTypedSelector_v2(
-    (state) => state.employee.loggedIn,
-  );
-  if (!cartData || cartData.length === 0) {
+
+  if (showLoaderOrEmptyText === 'loader') {
+    return (
+      <div className=''>
+        <section className='container mx-auto text-center'>
+          <div className='py-[12%]'>
+            <div className='text-2xl-text'>
+              <SpinnerComponent />
+            </div>
+          </div>
+        </section>
+      </div>
+    );
+  }
+
+  if (showLoaderOrEmptyText === 'emptyCart' || !cartData) {
     return <EmptyCart />;
   }
 
@@ -62,14 +74,12 @@ const CartType4: React.FC<_CartProps> = ({
                 className='w-full lg:w-9/12 px-[10px] mt-[15px]'
               >
                 <CartItem
-                  {...{
-                    isRemovable: true,
-                    cartData,
-                    isEditable: true,
-                    removeCartItem,
-                    loadProduct,
-                    cartType,
-                  }}
+                  isRemovable={true}
+                  isEditable={true}
+                  availableFont={availableFont}
+                  availableLocation={availableLocation}
+                  availableColor={availableColor}
+                  templateId={templateId}
                 />
               </section>
               <section

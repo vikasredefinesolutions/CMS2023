@@ -69,7 +69,7 @@ const SlugSearch: NextPage<_Slug_Props, _Slug_Props> = (props) => {
     return (
       <ProductDetails
         sectionView={data.views}
-        SEO={data.details}
+        SEO={data.SEO}
         alike={data.alike}
         colors={data.colors}
         sizes={data.sizes}

@@ -8,7 +8,7 @@ import {
   PersonalizationColor,
   PersonalizationFont,
   PersonalizationLocation,
-  getCartListResponse,
+  _CartItem,
   removeLogoRes,
   removeParticularSizeProductRes,
   sbsStore,
@@ -19,9 +19,9 @@ import { _AddToCart_Payload } from './product.service.type';
 export const getCartDetails = async (
   customerId: number,
   isEmpLoggedIn: boolean,
-): Promise<getCartListResponse> => {
+): Promise<_CartItem[]> => {
   const url = `Store/GetShoppingCartItemsDetail/${customerId}/${isEmpLoggedIn}.json`;
-  const response = await SendAsync<getCartListResponse>({
+  const response = await SendAsync<_CartItem[]>({
     url,
     method: 'GET',
   });

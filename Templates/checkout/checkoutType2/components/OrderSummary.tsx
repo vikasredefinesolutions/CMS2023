@@ -1,13 +1,18 @@
 import { checkoutPages } from '@constants/enum';
 import { __pagesText } from '@constants/pages.text';
-import CheckoutController from '@controllers/checkoutController';
+import { _shippingMethod } from '@controllers/checkoutController';
 import { GetCartTotals, useTypedSelector_v2 } from '@hooks_v2/index';
 
 interface _props {
   placeorder: () => void;
   currentpage: number;
+  selectedShipModel: _shippingMethod;
 }
-const OrderSummary: React.FC<_props> = ({ placeorder, currentpage }) => {
+const OrderSummary: React.FC<_props> = ({
+  placeorder,
+  currentpage,
+  selectedShipModel,
+}) => {
   const {
     totalPrice,
     subTotal,
@@ -18,9 +23,9 @@ const OrderSummary: React.FC<_props> = ({ placeorder, currentpage }) => {
     creditBalance,
   } = GetCartTotals();
 
-  const storeId = useTypedSelector_v2((state) => state.store.id);
+  // console.log('selectedShipModel', selectedShipModel);
 
-  const { shippingMethod } = CheckoutController();
+  const storeId = useTypedSelector_v2((state) => state.store.id);
 
   return (
     <section className='w-full lg:w-4/12 md:w-5/12 pl-[15px] pr-[15px] mt-[15px]'>
@@ -66,7 +71,7 @@ const OrderSummary: React.FC<_props> = ({ placeorder, currentpage }) => {
           )}
           <div className='flex items-center justify-between'>
             <dt>{__pagesText.CheckoutPage.orderSummary.ShippingHandling}</dt>
-            <dt>{shippingMethod[0].price}</dt>
+            <dt>{selectedShipModel.price}</dt>
           </div>
           <div className='flex items-center justify-between'>
             <dt>{__pagesText.CheckoutPage.orderSummary.Tax}</dt>

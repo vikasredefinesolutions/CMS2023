@@ -117,10 +117,18 @@ export const productSlice = createSlice({
         state.product.discounts = payload.data;
         return;
       }
+      if (payload.type === 'DISOCUNT_TABLE_PRICES_CLEANUP') {
+        state.product.discounts = null;
+        return;
+      }
 
       if (payload.type === 'INVENTORY_LIST') {
         state.product.inventory = null;
         state.product.inventory = payload.data;
+        return;
+      }
+      if (payload.type === 'INVENTORY_LIST_CLEANUP') {
+        state.product.inventory = null;
         return;
       }
     },
@@ -342,7 +350,6 @@ export const productSlice = createSlice({
         return;
       }
     },
-
     setColor: (
       state,
       action: {
@@ -452,6 +459,7 @@ export const productSlice = createSlice({
         ? action?.payload?.product?.categoryName
         : state.product.categoryName;
     },
+
     setOfflineProductSelected: (
       state,
       action: {
@@ -473,7 +481,25 @@ export const productSlice = createSlice({
         };
       },
     ) => {
-      state.toCheckout.price = action.payload.price;
+      const totalQty = state.toCheckout.totalQty;
+      let productPrice = action.payload.price;
+
+      const allDiscounts = state.product.discounts;
+      let foundThePrice = false;
+
+      allDiscounts?.subRows.forEach((discount) => {
+        if (foundThePrice) return;
+
+        const bulkQtyDiscount = +discount.displayQuantity.split('+')[0];
+        if (totalQty >= bulkQtyDiscount) {
+          productPrice = +discount.discountPrice;
+        } else {
+          foundThePrice = true;
+        }
+      });
+
+      // STATE UPDATES
+      state.toCheckout.price = productPrice;
     },
 
     clearToCheckout: (state) => {
@@ -761,6 +787,7 @@ export const productSlice = createSlice({
       state.toCheckout.totalQty = totalQty;
       state.toCheckout.totalPrice = totalPrice;
     },
+
     updateSbsStore: (
       state,
       actions: {
@@ -790,6 +817,7 @@ export const productSlice = createSlice({
         });
       }
     },
+
     updateQuantities: (
       state,
       action: {
@@ -1200,16 +1228,6 @@ export const productSlice = createSlice({
       state.product.name = action.payload.product.name;
       state.product.price = action.payload.product.price;
     },
-    storeProductColor: (
-      state,
-      action: {
-        payload: {
-          colors: _ProductColor[];
-        };
-      },
-    ) => {
-      state.product.colors = action.payload.colors;
-    },
     updateLogoEditDetails: (
       state,
       action: {
@@ -1220,6 +1238,9 @@ export const productSlice = createSlice({
       },
     ) => {
       state.som_logos.availableOptions = action.payload.availableOptions;
+    },
+    cleanUp_productSlice: (state) => {
+      state = JSON.parse(JSON.stringify(initialState)) as _ProductStore;
     },
   },
 });

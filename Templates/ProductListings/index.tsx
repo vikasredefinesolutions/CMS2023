@@ -70,7 +70,7 @@ const ProductListing: React.FC<_ProductListingProps & { id: string }> = ({
     productListingTemplates[
       (`type${id}` as 'type1') || 'type2' || 'type3' || 'type4'
     ];
-  if (product.length === 0) {
+  if (product.length === 0 && !pageData.product.length) {
     return (
       <section id=''>
         <div className='bg-[#ffffff]'>

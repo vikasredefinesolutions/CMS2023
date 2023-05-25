@@ -1,3 +1,4 @@
+import { SpinnerComponent } from '@appComponents/ui/spinner';
 import { paths } from '@constants/paths.constant';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import {
@@ -18,12 +19,10 @@ import { _CartProps } from '../Cart';
 import EmptyCart from '../components/emptyCart';
 
 const CartType2: React.FC<_CartProps> = ({
-  cartData,
-  removeCartItem,
-
-  loadProduct,
-  cartType,
+  templateId,
+  showLoaderOrEmptyText,
 }) => {
+  const cartData = useTypedSelector_v2((state) => state.cart.cart);
   const storeId = useTypedSelector_v2((state) => state.store.id);
   const [availableFont, setAvailableFont] = useState<
     PersonalizationFont[] | []
@@ -48,7 +47,21 @@ const CartType2: React.FC<_CartProps> = ({
     }
   }, [storeId]);
 
-  if (!cartData || cartData.length === 0) {
+  if (showLoaderOrEmptyText === 'loader') {
+    return (
+      <div className=''>
+        <section className='container mx-auto text-center'>
+          <div className='py-[12%]'>
+            <div className='text-2xl-text'>
+              <SpinnerComponent />
+            </div>
+          </div>
+        </section>
+      </div>
+    );
+  }
+
+  if (showLoaderOrEmptyText === 'emptyCart' || !cartData) {
     return <EmptyCart />;
   }
 
@@ -65,19 +78,12 @@ const CartType2: React.FC<_CartProps> = ({
                 Items in your shopping cart
               </h2>
               <CartItem
-                {...{
-                  isRemovable: true,
-                  cartData,
-                  isEditable: true,
-                  removeCartItem,
-
-                  loadProduct,
-                  setAvailableColor,
-                  availableFont,
-                  availableLocation,
-                  availableColor,
-                  cartType,
-                }}
+                isRemovable={true}
+                isEditable={true}
+                availableFont={availableFont}
+                availableLocation={availableLocation}
+                availableColor={availableColor}
+                templateId={templateId}
               />
               <div className='mt-[16px] mb-[16px]'>
                 <Link href={paths.HOME}>

@@ -280,6 +280,7 @@ export interface _MyAcc_OrderProductDetails {
   logoTotalPrice: number;
   lineTotalPrice: number;
   productTotal: number;
+  itemNote: string | null;
 }
 
 export interface ShoppingCartItemDetailsViewModel {

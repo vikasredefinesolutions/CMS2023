@@ -358,6 +358,7 @@ const Home = (props) => {
                   }
 
                   let componentName = 'div' + componentValue.no;
+
                   if (
                     componentValue.selectedVal &&
                     'componentname' in componentValue.selectedVal

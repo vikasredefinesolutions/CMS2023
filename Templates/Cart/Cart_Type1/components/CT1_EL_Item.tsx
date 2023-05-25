@@ -8,7 +8,7 @@ import {
   useActions_v2,
   useTypedSelector_v2,
 } from '@hooks_v2/index';
-import { CartObject, CartReq } from '@services/cart';
+import { CartReq, _CartItem } from '@services/cart';
 import { addToCart, deleteItemCart } from '@services/cart.service';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
@@ -20,7 +20,7 @@ import {
 } from './CT1_EL_Extras';
 import CT1_EL_SizeQtyPrice from './CT1_EL_SizeQtyPrice';
 
-const CT1_EL_Item: React.FC<CartObject> = (item) => {
+const CT1_EL_Item: React.FC<_CartItem> = (item) => {
   const { fetchCartDetails, setShowLoader, showModal } = useActions_v2();
   const isEmployeeLoggedIn = useTypedSelector_v2(
     (state) => state.employee.loggedIn,

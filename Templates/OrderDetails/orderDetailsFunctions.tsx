@@ -1,6 +1,6 @@
-import { _CI_ShoppingCartItemDetailsViewModel } from '@appComponents/modals/startOrderModal/startOrderModalType';
 import Price from '@appComponents/Price';
 import { _MyAcc_OrderBillingDetails } from '@definations/APIs/user.res';
+import { ShoppingCartItemDetailsViewModel } from '@services/cart';
 
 export const CustomizationPrice = (billing: _MyAcc_OrderBillingDetails) => {
   const logoTotal = billing?.logoFinalTotal || 0;
@@ -299,9 +299,7 @@ function removeDuplicates(arr: string[]) {
   return arr.filter((item, index) => arr.indexOf(item) === index);
 }
 
-export const mergeAllSizes = (
-  items: _CI_ShoppingCartItemDetailsViewModel[],
-) => {
+export const mergeAllSizes = (items: ShoppingCartItemDetailsViewModel[]) => {
   if (items.length === 0) return '';
 
   let sizes = '';

@@ -8,7 +8,7 @@ export const _defaultTemplates: _DefaultTemplatesType = {
   banner: 'type1',
   brands: 'type1',
   breadCrumb: 'type1',
-  cart: 'type1',
+  cart: 1,
   cartItem: 'type1',
   cartSummary: 'type1',
   checkLogoApproved: 'type1',
@@ -20,6 +20,7 @@ export const _defaultTemplates: _DefaultTemplatesType = {
   notificationBar: 'type1',
   order: 'type1',
   orderDetails: 'type1',
+  orderInvoice: 'type1',
   productDetails: '1',
   productListings: '1',
   recentlyViewedProducts: 'type1',
@@ -47,7 +48,7 @@ interface _DefaultTemplatesType {
   banner: 'type1';
   brands: 'type1';
   breadCrumb: 'type1';
-  cart: 'type1';
+  cart: number;
   cartItem: 'type1';
   cartSummary: 'type1';
   checkLogoApproved: 'type1';
@@ -59,6 +60,7 @@ interface _DefaultTemplatesType {
   notificationBar: 'type1';
   order: 'type1';
   orderDetails: 'type1';
+  orderInvoice: 'type1';
   productDetails: '1' | '2';
   productListings: '1' | '2';
   recentlyViewedProducts: 'type1';

@@ -1,5 +1,7 @@
 /* eslint-disable no-unused-vars */
 
+import { _CartItem } from '@services/cart';
+
 export type _modals =
   | 'requiredQty'
   | 'sizeChart'
@@ -12,6 +14,7 @@ export type _modals =
   | 'InventoryLimit';
 
 export interface _ProductDetails {
+  productBrandLogo: string | null;
   id: number;
   storeId: number;
   name: string;
@@ -42,7 +45,8 @@ export interface _ProductDetails {
   isPolicywithcheckbox: boolean;
   policyMessage: string;
   isEnduserDisplay: boolean;
-  productBrandLogo: string | null;
+  isSpecialBrand: boolean;
+  categoryName?: string;
   brandSEname: string | null;
 }
 
@@ -62,48 +66,8 @@ export interface _SuggestedProduct {
   storeId: number;
 }
 
-export interface _CI_ShoppingCartItemDetailsViewModel {
-  id: number;
-  attributeOptionId: number;
-  attributeOptionValue: string;
-  qty: number;
-  price: number;
-}
-
-export interface _CI_ShoppingCartLogoPersonViewModel {
-  logoImagePath: string;
-  logoPrice: number;
-  logoLocation: null;
-  logoName: string;
-  logoPositionImage: string;
-  sku: string;
-  size: string;
-  name: string;
-}
-
-export interface _CartItem {
-  colorImage: string;
-  productName: string;
-  productId: number;
-  sku: string;
-  attributeOptionId: string;
-  attributeOptionValue: string;
-  shoppingCartItemsId: number;
-  shoppingCartItemDetailsViewModels: _CI_ShoppingCartItemDetailsViewModel[];
-  shoppingCartLogoPersonViewModels: _CI_ShoppingCartLogoPersonViewModel[];
-  shoppingCartLinePersonViewModel: unknown[];
-  totalQty: number;
-  totalPrice: number;
-  txtcode: unknown;
-  seName: string;
-  cartLinePersonModels?: unknown[];
-  shoppingcartLinePersonModels: unknown[];
-}
-
-export type CartProducts = _CartItem[];
-
 export interface _startOrderModalProps {
   product: _ProductDetails;
   modalHandler: (val: null | _modals) => void;
-  editDetails?: _CartItem;
+  edit?: _CartItem;
 }

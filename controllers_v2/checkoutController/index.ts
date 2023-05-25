@@ -43,18 +43,16 @@ import { ChangeEvent, useEffect, useState } from 'react';
 
 import { __pagesConstant } from '@constants/pages.constant';
 import { PaymentOptions } from '@definations/APIs/cart.req';
+import { _ProductDetails } from '@definations/APIs/productDetail.res';
 import { CustomerAddress } from '@definations/APIs/user.res';
-import {
-  _CartItem,
-  _ProductDetails,
-  _ProductPolicy,
-} from '@definations/startOrderModal';
+import { _CartItem } from '@services/cart';
 import { Klaviyo_PlaceOrder } from '@services/klaviyo.service';
 import {
   getCustomerAllowBalance,
   getPaymentOption,
 } from '@services/payment.service';
 import { FetchProductById } from '@services/product.service';
+import { _ProductPolicy } from '@templates/ProductDetails/productDetailsTypes/productDetail.res';
 import { useRouter } from 'next/router';
 import CheckoutAddressForm, {
   AddressFormRefType,
@@ -114,7 +112,9 @@ const CheckoutController = () => {
       price: 0,
     },
   ]);
-
+  const [selectedShipping, setSelectedShipping] = useState<
+    _shippingMethod | { name: ''; price: 0 }
+  >({ name: '', price: 0 });
   const storeId = useTypedSelector_v2((state) => state.store.id);
   const {
     showModal,
@@ -395,7 +395,7 @@ const CheckoutController = () => {
 
   const checkPayment = () => {
     let { totalPrice } = { totalPrice: 200 };
-
+    console.log('------------------', cardDetails);
     if (totalPrice > 0) {
       if (paymentEnum.creditCard === paymentMethod) {
         setPurchaseOrder('');
@@ -471,6 +471,16 @@ const CheckoutController = () => {
   };
 
   const reviewOrder = async () => {
+    const givenDate = `${cardDetails.cardExpirationMonth}${cardDetails.cardExpirationYear}`;
+    const currentDate =
+      new Date().getMonth() + 1 + new Date().getFullYear().toString();
+
+    if (givenDate >= currentDate.toString()) {
+      showModal({
+        message: 'Invalid Expiration Date',
+        title: 'Warning',
+      });
+    }
     if (showAddAddress) {
       let isValid = true;
       if (shippingForm) {
@@ -566,6 +576,7 @@ const CheckoutController = () => {
         });
         if (data) {
           setShippingMethod(data);
+          setSelectedShipping(data[0]);
         }
         return data;
       }
@@ -574,8 +585,10 @@ const CheckoutController = () => {
     }
   };
 
-  const placeOrder = async (price: number) => {
-    const shippingData = await fetchShipping(price);
+  const placeOrder = async (selectedShippingMOodel: _shippingMethod) => {
+    // console.log('shipping seleceted', selectedShipping);
+
+    // const shippingData = await fetchShipping(price);
 
     setShowLoader(true);
     if (createAccountPassword.password && billingAdress && shippingAdress) {
@@ -681,17 +694,17 @@ const CheckoutController = () => {
         shippingPhone: shippingAdress.phone,
         orderSubtotal: subTotal,
         orderTax: salesTax,
-        orderTotal: totalPrice,
+        orderTotal: totalPrice + selectedShippingMOodel.price,
         orderNotes: orderNote,
         couponCode: couponCode || '',
         couponDiscountAmount: discount,
         orderStatus: __pagesConstant.checkoutPage.orderStatus,
         transactionStatus: __pagesConstant.checkoutPage.transactionStatus,
-        shippingMethod: shippingData[0].name,
+        shippingMethod: selectedShippingMOodel.name,
         endUserName: endUserNameS,
         logoFinalTotal: totalLogoCharges,
         lineFinalTotal: totalLineCharges,
-        orderShippingCosts: shippingMethod[0].price,
+        orderShippingCosts: selectedShippingMOodel.price,
         orderSmallRunFee: cartCharges?.smallRunFeesCharges
           ? cartCharges.smallRunFeesCharges
           : 0,
@@ -733,18 +746,20 @@ const CheckoutController = () => {
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const { name, value } = e.target;
-    const date = new Date().getMonth() + 1;
-    if (name == 'cardExpirationMonth' && Number(value) < date) {
-      setCardDetails((prev) => ({ ...prev, [name]: '' }));
-    } else {
-      switch (paymentMethod) {
-        case paymentEnum.creditCard:
-          setCardDetails((prev) => ({ ...prev, [name]: value }));
-          break;
-        case paymentEnum.purchaseOrder:
-          setPurchaseOrder(value);
-      }
+    const month = new Date().getMonth() + 1;
+    const year = new Date().getFullYear();
+    // if (name == 'cardExpirationMonth' && Number(value) < date) {
+    //   setCardDetails((prev) => ({ ...prev, [name]: '' }));
+    // } else {
+    switch (paymentMethod) {
+      case paymentEnum.creditCard:
+        setCardDetails((prev) => ({ ...prev, [name]: value }));
+        break;
+      case paymentEnum.purchaseOrder:
+        setPurchaseOrder(value);
     }
+
+    // }
   };
 
   const detectCardType = () => {
@@ -865,6 +880,8 @@ const CheckoutController = () => {
     setBillingAdress,
     blockInvalidChar,
     fetchShipping,
+    selectedShipping,
+    setSelectedShipping,
   };
 };
 

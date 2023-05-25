@@ -1,5 +1,5 @@
-import { _CartItem } from '@definations/startOrderModal';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
+import { _CartItem } from '@services/cart';
 import { useState } from 'react';
 interface _props {
   size: string;

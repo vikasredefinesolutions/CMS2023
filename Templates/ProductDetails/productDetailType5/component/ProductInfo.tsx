@@ -7,8 +7,10 @@ import { storeBuilderTypeId } from '@configs/page.config';
 import { __pagesText } from '@constants/pages.text';
 import { paths } from '@constants/paths.constant';
 import { _ProductColor } from '@definations/APIs/colors.res';
-import { _ProductDoNotExist } from '@definations/APIs/productDetail.res';
-import { _ProductDetails } from '@definations/startOrderModal';
+import {
+  _ProductDetails,
+  _ProductDoNotExist,
+} from '@definations/APIs/productDetail.res';
 // import { _ProductColor } from '@definations/APIs/colors.res';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import {

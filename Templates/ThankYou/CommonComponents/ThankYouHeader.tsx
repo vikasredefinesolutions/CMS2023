@@ -4,6 +4,7 @@ import { __pagesText } from '@constants/pages.text';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import { _ThankYouProps } from '@templates/ThankYou/ThankYou';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React from 'react';
 import ThankYouCreatePassword from './ThankYouCreatePassword';
 
@@ -16,6 +17,8 @@ const ThankYouHeader: React.FC<_ThankYouProps> = ({ order }) => {
   const isGuestCustomer = useTypedSelector_v2(
     (state) => state.cart.isGuestCustomer,
   );
+  const router = useRouter();
+  const orderId = router.query.orderNumber;
 
   return (
     <>
@@ -56,7 +59,11 @@ const ThankYouHeader: React.FC<_ThankYouProps> = ({ order }) => {
                     </span>
                     <span className='text-[#ffffff] block text-default-text pb-[8px]'>
                       <button
-                        onClick={() => window.print()}
+                        onClick={() =>
+                          router.push(
+                            `/Orders/OrderInvoice?orderNumber=${orderId}`,
+                          )
+                        }
                         title='Print Receipt'
                         className='underline hover:no-underline'
                       >

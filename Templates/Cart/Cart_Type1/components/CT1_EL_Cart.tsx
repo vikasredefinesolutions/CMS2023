@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 
 import AddOTFItemNo from '@appComponents/modals/addOtfItem';
 import { paths } from '@constants/paths.constant';
-import { CartObject } from '@services/cart';
+import { _CartItem } from '@services/cart';
 import Link from 'next/link';
 
 import CartSummary from '@templates/cartSummarry';
 import CT1_EL_Item from './CT1_EL_Item';
 
 interface _Props {
-  cartItems: CartObject[];
+  cartItems: _CartItem[];
 }
 
 const CT1_EmployeeLoginCart: React.FC<_Props> = ({ cartItems }) => {

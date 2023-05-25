@@ -15,7 +15,7 @@ const CartTemplates: _CartTemplates = {
 const CartTemplate: FC<_CartProps> = (props) => {
   const Cart =
     CartTemplates[
-      (`type${props.cartType}` as 'type1') || 'type2' || 'type3' || 'type4'
+      (`type${props.templateId}` as 'type1') || 'type2' || 'type3' || 'type4'
     ];
   return <Cart {...props} />;
 };

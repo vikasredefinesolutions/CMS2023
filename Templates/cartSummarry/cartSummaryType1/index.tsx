@@ -27,12 +27,12 @@ const CartSummarryType1: FC = () => {
   } = GetCartTotals();
 
   const { cartQty } = useTypedSelector_v2((state) => state.cart);
-  const { fetchShipping, shippingMethod } = CheckoutController();
+  const { fetchShipping, selectedShipping } = CheckoutController();
   useEffect(() => {
     if (cartQty) {
-      fetchShipping(totalPrice);
+      fetchShipping(subTotal);
     }
-  }, [totalPrice]);
+  }, [subTotal]);
 
   const addBottomPadding = couponDetails?.amount ? '' : 'pb-[20px]';
 
@@ -172,7 +172,7 @@ const CartSummarryType1: FC = () => {
             <dt className='text-normal-text flex items-center'>
               <span>Shipping</span>
             </dt>
-            <dd className='text-normal-text'>{`$${shippingMethod[0].price.toFixed(
+            <dd className='text-normal-text'>{`$${selectedShipping.price.toFixed(
               2,
             )}`}</dd>
           </div>
@@ -189,7 +189,7 @@ const CartSummarryType1: FC = () => {
       <div className='flex justify-between items-center bg-light-gray w-full text-sub-text font-[600] pl-[16px] pr-[16px] pt-[8px] pb-[8px]'>
         <div>Total:</div>
         <div>
-          <Price value={totalPrice + shippingMethod[0].price} />
+          <Price value={totalPrice + selectedShipping.price} />
         </div>
       </div>
     </div>

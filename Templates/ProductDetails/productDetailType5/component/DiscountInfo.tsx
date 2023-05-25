@@ -1,4 +1,4 @@
-import { _ProductDetails } from '@definations/startOrderModal';
+import { _ProductDetails } from '@definations/APIs/productDetail.res';
 import { c_getSeName } from '@helpers/common.helper';
 import { FetchDiscountTablePrices } from '@services/product.service';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';

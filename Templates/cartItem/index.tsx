@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import CIlayout1 from './CI_layout1';
-import { CI_Props, CI_Templates } from './cartItem';
+import { CI_Templates, _CartProps } from './cartItem';
 import CIlayout2 from './cartItemLayout2.tsx';
 import CIlayout3 from './cartItemLayout3';
 import CIlayout4 from './cartItemlayout4';
@@ -12,12 +12,16 @@ const CartTemplates: CI_Templates = {
   type4: CIlayout4,
 };
 
-const CartItem: FC<CI_Props> = (props) => {
+const CartItem: FC<_CartProps & { templateId: number }> = ({
+  templateId,
+  ...rest
+}) => {
   const CI_Template =
     CartTemplates[
-      (`type${props.cartType}` as 'type1') || 'type2' || 'type3' || 'type4'
+      (`type${templateId}` as 'type1') || 'type2' || 'type3' || 'type4'
     ];
-  return <CI_Template {...props} />;
+
+  return <CI_Template {...rest} />;
 };
 
 export default CartItem;

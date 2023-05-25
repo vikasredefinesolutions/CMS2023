@@ -1,23 +1,23 @@
 import { _Store } from '@configs/page.config';
 import { __pagesText } from '@constants/pages.text';
-import { _startOrderModalProps } from '@definations/startOrderModal';
 import { FetchInventoryById } from '@services/product.service';
 import CalculativeFigure from '@templates/ProductDetails/Components/CalculativeFigure';
 import DiscountPricing from '@templates/ProductDetails/Components/DiscountPricing';
 import SizePriceQtyTable from '@templates/ProductDetails/Components/SizePriceQtyTable';
 import SomActionsHandler from '@templates/ProductDetails/Components/SomActionsHandler';
 import SomCustomizeLogoOptions from '@templates/ProductDetails/Components/SomCustomizeLogoOptions';
+import StartOrderAvailableColors from '@templates/ProductDetails/Components/StartOrderAvailableColors';
 import Inventory from '@templates/ProductDetails/productDetailType4/component/ProductInventory';
 import Price from 'appComponents_v2/reUsable/Price';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { _startOrderModalProps } from './startOrderModalType';
 
 const StartOrderModal: React.FC<_startOrderModalProps> = (props) => {
-  const textRef = useRef<HTMLTextAreaElement | null>(null);
-  const { product, modalHandler, editDetails } = props;
+  const { product, modalHandler, edit } = props;
   const { clearToCheckout, setShowLoader, product_storeData, setColor } =
     useActions_v2();
-
+  const [ignoreFirstCleanUp, setIgnoreFirstCleanUp] = useState<boolean>(true);
   const [allColors, showAllColors] = useState<boolean>(false);
   const { code: storeCode } = useTypedSelector_v2((state) => state.store);
 
@@ -66,21 +66,30 @@ const StartOrderModal: React.FC<_startOrderModalProps> = (props) => {
   }, [selectedProduct.productId]);
 
   useEffect(() => {
-    if (editDetails && colors) {
-      const selectedColor = editDetails
-        ? colors.find(
-            (color) => color.name === editDetails?.attributeOptionValue,
-          )
+    if (edit && colors) {
+      const selectedColor = edit
+        ? colors.find((color) => color.name === edit?.attributeOptionValue)
         : null;
       if (selectedColor) {
         setColor(selectedColor);
       }
     }
-  }, [editDetails]);
+  }, [edit]);
+
+  useEffect(() => {
+    return () => {
+      if (ignoreFirstCleanUp) {
+        setIgnoreFirstCleanUp(false);
+        return;
+      }
+      product_storeData({ type: 'DISOCUNT_TABLE_PRICES_CLEANUP' });
+      product_storeData({ type: 'INVENTORY_LIST_CLEANUP' });
+    };
+  }, []);
 
   const getEditDetails = () => {
-    if (editDetails) {
-      return editDetails.shoppingCartItemDetailsViewModels.map((res) => ({
+    if (edit) {
+      return edit.shoppingCartItemDetailsViewModels.map((res) => ({
         qty: res.qty,
         price: res.price,
         optionValue: res.attributeOptionValue,
@@ -162,7 +171,7 @@ const StartOrderModal: React.FC<_startOrderModalProps> = (props) => {
                 </div>
 
                 <div className='mb-[25px]'>
-                  {/* {storeCode !== _Store.type4 && (
+                  {storeCode !== _Store.type4 && !edit && (
                     <div className=''>
                       <button
                         type='button'
@@ -174,9 +183,9 @@ const StartOrderModal: React.FC<_startOrderModalProps> = (props) => {
                           : `See All ${colors?.length} Colors`}
                       </button>
                     </div>
-                  )} */}
+                  )}
 
-                  {/* {allColors && <StartOrderAvailableColors />} */}
+                  {!edit && allColors && <StartOrderAvailableColors />}
                   <div className='mt-3'>
                     <h2 className='sr-only'>
                       {
@@ -204,15 +213,15 @@ const StartOrderModal: React.FC<_startOrderModalProps> = (props) => {
                 ) : (
                   <Inventory
                     storeCode={storeCode}
-                    productId={editDetails?.productId}
-                    editDetails={editDetails}
+                    productId={edit?.productId}
+                    editDetails={edit}
                   />
                 )}
 
                 {storeCode !== _Store.type4 && customizationEnable && (
                   <SomCustomizeLogoOptions
-                    editDetails={editDetails?.shoppingCartLogoPersonViewModels}
-                    totalQty={editDetails?.totalQty || 0}
+                    editSizes={edit?.shoppingCartLogoPersonViewModels || null}
+                    totalQty={edit?.totalQty || 0}
                   />
                 )}
 
@@ -235,8 +244,8 @@ const StartOrderModal: React.FC<_startOrderModalProps> = (props) => {
                   modalHandler(null);
                 }}
                 note={notevalue}
-                cartItemId={editDetails?.shoppingCartItemsId || 0}
-                isUpdate={Boolean(editDetails?.shoppingCartItemsId)}
+                cartItemId={edit?.shoppingCartItemsId || 0}
+                isUpdate={Boolean(edit?.shoppingCartItemsId)}
               />
             </div>
           )}

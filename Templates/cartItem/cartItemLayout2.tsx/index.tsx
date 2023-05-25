@@ -10,7 +10,7 @@ import {
   commonMessage,
 } from '@constants/successError.text';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
-import { CartObject, ShoppingCartItemDetailsViewModel } from '@services/cart';
+import { ShoppingCartItemDetailsViewModel, _CartItem } from '@services/cart';
 import {
   removeLogo,
   removeParticularSizeProduct,
@@ -187,7 +187,7 @@ const CIlayout2: FC<any> = ({
   return (
     <ul className='overflow-hidden border border-gray-border p-[15px] md:p-[30px]'>
       {cartData &&
-        cartData.map((item: CartObject, cartItemIndex: number) => {
+        cartData.map((item: _CartItem, cartItemIndex: number) => {
           return (
             <li
               key={`${item.shoppingCartItemsId}_${cartItemIndex}`}
