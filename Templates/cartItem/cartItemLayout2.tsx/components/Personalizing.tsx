@@ -117,21 +117,26 @@ const Personalizing: FC<any> = ({
     setShowLoader(true);
     updateCartPersonalization({
       cartLinePersonDetailModel: cartLinePersonModels,
-    }).then((res) => {
-      if (res) {
+    })
+      .then((res) => {
+        if (res) {
+          setShowLoader(false);
+          showModal({ message: 'Successfully updated', title: 'Success' });
+          setKeepPersonalizing({
+            show: false,
+            index: 0,
+          });
+          setCartLinePersonModels([]);
+          fetchCartDetails({
+            customerId: id ? id : 0,
+            isEmployeeLoggedIn,
+          });
+        }
+      })
+      .catch((err) => {
+        showModal({ message: 'Something Went Wrong', title: 'failed' });
         setShowLoader(false);
-        showModal({ message: 'Successfully updated', title: 'Success' });
-        setKeepPersonalizing({
-          show: false,
-          index: 0,
-        });
-        setCartLinePersonModels([]);
-        fetchCartDetails({
-          customerId: id ? id : 0,
-          isEmployeeLoggedIn,
-        });
-      }
-    });
+      });
   };
 
   const lineOneChangeHandler = (e: any, index: number, lineIndex: number) => {
