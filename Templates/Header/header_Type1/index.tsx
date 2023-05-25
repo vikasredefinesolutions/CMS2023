@@ -3,7 +3,7 @@ import { __pagesConstant } from '@constants/pages.constant';
 import {
   useActions_v2,
   useTypedSelector_v2,
-  useWindowDimensions_v2,
+  useWindowDimensions_v2
 } from 'hooks_v2';
 import { NextPage } from 'next';
 import { useEffect, useState } from 'react';
@@ -17,7 +17,7 @@ import {
   Logo,
   MenuIcon,
   MyCartIcon,
-  WishListIcon,
+  WishListIcon
 } from '@header/header_Type1/Components/Icons';
 import MenuItems from '@header/header_Type1/Components/Menu/Header_MenuItems';
 import SearchBar from '@header/header_Type1/Components/Menu/Header_SearchBar';
@@ -59,7 +59,7 @@ const Header_Type1: NextPage<_HeaderProps> = ({
       id={'header_with_navBar'}
     >
       {/* <NotificationBar /> */}
-      <div className={`bg-[${headerBgColor}]`}>
+      <div className={`bg-[${headerBgColor}]`} style={{ color: `${headerBgColor} !important;`}}>
         {isMobileView && router.asPath != paths.CHECKOUT && (
           <MenuItems
             showSideMenu={showSideMenu}
