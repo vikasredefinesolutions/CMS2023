@@ -45,41 +45,52 @@ const SizeChart: React.FC<
               </button>
             </div>
 
-            <div className=''>
-              <div className='overflow-x-auto max-h-screen p-5'>
-                <table
-                  cellPadding='0'
-                  cellSpacing='0'
-                  className='table-auto w-full text-sm text-center border border-neutral-200 text-[#191919]'
-                >
-                  <thead className='text-sm bg-gray-100 font-semibold uppercase border-b border-neutral-200'>
-                    <tr className='divide-x divide-slate-200'>
-                      <th className='px-2 py-4'>&nbsp;</th>
-                      {sizeChart?.sizeChartRange?.map((size: string) => (
-                        <th className='px-2 py-4' key={size}>
-                          <div className=''>{size}</div>
-                        </th>
-                      ))}
-                    </tr>
-                  </thead>
-
-                  <tbody className='divide-y divide-slate-200'>
-                    {sizeChart?.measurements?.map((piece: string) => (
-                      <tr className='divide-x divide-slate-200' key={piece}>
-                        <td className='px-2 py-3 text-left'>{piece}</td>
-                        {sizeChart?.sizeChartRange?.map((length: string) => (
-                          <td className='px-2 py-3' key={length}>
-                            <div className=''>
-                              {sizeChart?.sizeChartView[`${piece}${length}`]}
-                            </div>
-                          </td>
+            {sizeChart?.sizeChartView &&
+            Object.keys(sizeChart?.sizeChartView).length === 0 ? (
+              <div className=''>
+                <div className='overflow-x-auto max-h-screen p-5 flex justify-center'>
+                  <span className='text-center'>
+                    {sizeChart?.measurements[0]}
+                  </span>
+                </div>
+              </div>
+            ) : (
+              <div className=''>
+                <div className='overflow-x-auto max-h-screen p-5'>
+                  <table
+                    cellPadding='0'
+                    cellSpacing='0'
+                    className='table-auto w-full text-sm text-center border border-neutral-200 text-[#191919]'
+                  >
+                    <thead className='text-sm bg-gray-100 font-semibold uppercase border-b border-neutral-200'>
+                      <tr className='divide-x divide-slate-200'>
+                        <th className='px-2 py-4'>&nbsp;</th>
+                        {sizeChart?.sizeChartRange?.map((size: string) => (
+                          <th className='px-2 py-4' key={size}>
+                            <div className=''>{size}</div>
+                          </th>
                         ))}
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+
+                    <tbody className='divide-y divide-slate-200'>
+                      {sizeChart?.measurements?.map((piece: string) => (
+                        <tr className='divide-x divide-slate-200' key={piece}>
+                          <td className='px-2 py-3 text-left'>{piece}</td>
+                          {sizeChart?.sizeChartRange?.map((length: string) => (
+                            <td className='px-2 py-3' key={length}>
+                              <div className=''>
+                                {sizeChart?.sizeChartView[`${piece}${length}`]}
+                              </div>
+                            </td>
+                          ))}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </div>

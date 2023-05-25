@@ -72,7 +72,7 @@ const SlugSearch: NextPage<_Slug_Props, _Slug_Props> = (props) => {
         SEO={data.details}
         alike={data.alike}
         colors={data.colors}
-        sizes={data.details}
+        sizes={data.sizes}
         details={data.details}
         storeCode={_store.storeCode}
         storeTypeId={_store.storeTypeId}
@@ -146,4 +146,3 @@ const SlugSearch: NextPage<_Slug_Props, _Slug_Props> = (props) => {
 
 export default SlugSearch;
 export { getServerSideProps };
-

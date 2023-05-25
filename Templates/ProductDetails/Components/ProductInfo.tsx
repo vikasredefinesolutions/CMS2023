@@ -27,6 +27,9 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
   const isEmployeeLoggedIn = useTypedSelector_v2(
     (state) => state.employee.loggedIn,
   );
+  const sizeChart = useTypedSelector_v2(
+    (state) => state.product.product.sizeChart,
+  );
   const { price, inventory } = useTypedSelector_v2(
     (state) => state.product.product,
   );
@@ -170,7 +173,7 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
           <span> {__pagesText.productInfo.availableSizes}</span>
           <span className='ml-[5px]'>{` ${sizes}`}</span>
         </div>
-        {!sizes.includes('MISC') && (
+        {sizeChart?.sizeChartView && (
           <div className='pb-[0px]'>
             <button
               type='button'
