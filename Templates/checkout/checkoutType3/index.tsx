@@ -41,6 +41,7 @@ const ChekoutType3: FC<_Props> = ({ templateId }) => {
     setAddressType,
     setEndUserName,
     endUserDisplay,
+    selectedShipping,
   } = CheckoutController();
 
   const { paymentOptions, allowedBalance, checkHandler } = CheckoutController();
@@ -173,7 +174,7 @@ const ChekoutType3: FC<_Props> = ({ templateId }) => {
           )}
         </div>
         <div className='w-full md:w-4/12 lg:w-[27%] pl-[15px] pr-[15px]'>
-          <CartSummarry />
+          <CartSummarry selectedShippingModel={selectedShipping} />
           <div id='OrderNoteDiv mt-[20px]'>
             <div className='mt-[20px] font-[600] '>
               Patagonia end users are approved on a per project basis.
@@ -216,7 +217,7 @@ const ChekoutType3: FC<_Props> = ({ templateId }) => {
               <button
                 className='btn btn-lg !w-full text-center btn-secondary mb-[8px]'
                 id='btn-review-order'
-                // onClick={() => placeOrder(totalPrice)}
+                onClick={() => placeOrder(selectedShipping)}
               >
                 PLACE ORDER
               </button>{' '}

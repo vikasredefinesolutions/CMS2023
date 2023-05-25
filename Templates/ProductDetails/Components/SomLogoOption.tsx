@@ -13,7 +13,7 @@ import { IndexLabels } from 'mock_v2/startModal.mock';
 import React, { useEffect, useState } from 'react';
 import Select from 'react-select';
 
-const dummyLogoImage = 'logo-to-be-submitted.webp';
+const dummyLogoImage = '/assets/images/logo-to-be-submitted.webp';
 
 const SomLogoOption: React.FC<_SOMLogoOptionProps> = ({
   title,
@@ -290,7 +290,7 @@ const SomLogoOption: React.FC<_SOMLogoOptionProps> = ({
         text = (
           <div className='flex items-center'>
             <div className=''>
-              <img src={dummyLogoImage} alt='' />
+              <img src={dummyLogoImage} alt='' className='' />
             </div>
             <div className='cursor-pointer w-full font-[600] ml-5'>
               <div>{__pagesText.productInfo.somLogoOption.logoToBe}</div>

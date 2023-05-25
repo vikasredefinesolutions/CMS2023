@@ -13,7 +13,9 @@ import PaymentType1 from './components/PaymentType1';
 import ChangeAddressModal from '@appComponents/modals/ChangeAddressModal';
 import NxtImage from '@appComponents/reUsable/Image';
 import { cardType } from '@constants/common.constant';
-import CheckoutController from '@controllers/checkoutController';
+import CheckoutController, {
+  _shippingMethod,
+} from '@controllers/checkoutController';
 import { GetCartTotals, useTypedSelector_v2 } from '@hooks_v2/index';
 import { useEffect } from 'react';
 
@@ -62,6 +64,8 @@ const ChekoutType1: React.FC<_Props> = ({ templateId }) => {
     setBillingAdress,
     selectedShipping,
     fetchShipping,
+    shippingMethod,
+    setSelectedShipping,
   } = CheckoutController();
   const userId = useTypedSelector_v2((state) => state.user.id);
   useEffect(() => {
@@ -75,9 +79,7 @@ const ChekoutType1: React.FC<_Props> = ({ templateId }) => {
 
   useEffect(() => {
     fetchShipping(subTotal);
-  }, [subTotal]);
-
-  console.log(cardDetails);
+  }, [subTotal, shippingAdress]);
 
   return (
     <>
@@ -195,6 +197,43 @@ const ChekoutType1: React.FC<_Props> = ({ templateId }) => {
                                 </p>
                               </>
                             )}
+                          </div>
+                        </div>
+                        <div className='flex flex-wrap items-center justify-between pt-[10px] border-b border-[#ececec]'>
+                          <div className='pb-[10px] text-title-text'>
+                            {__pagesText.CheckoutPage.ShippingMethods}
+                          </div>
+                        </div>
+                        <div className='flex flex-wrap items-center justify-between pt-[10px]'>
+                          <div className='pb-[10px] text-default-text'>
+                            {shippingMethod &&
+                              shippingMethod.map(
+                                (el: _shippingMethod, index: number) => (
+                                  <div className='w-full block' key={index}>
+                                    <input
+                                      type='radio'
+                                      name='shippingMethod'
+                                      id={`shippingMethod${index}`}
+                                      onChange={() => setSelectedShipping(el)}
+                                      checked={
+                                        selectedShipping.name == el.name
+                                          ? true
+                                          : false
+                                      }
+                                      className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600'
+                                    />
+                                    <label
+                                      htmlFor={`shippingMethod${index}`}
+                                      className='ml-2 text-default-text'
+                                    >
+                                      {shippingMethod &&
+                                        `${el.name}($${el.price.toPrecision(
+                                          2,
+                                        )})`}
+                                    </label>
+                                  </div>
+                                ),
+                              )}
                           </div>
                         </div>
                         <div className='flex flex-wrap items-center justify-between pt-[10px] border-b border-[#ececec]'>
@@ -376,7 +415,7 @@ const ChekoutType1: React.FC<_Props> = ({ templateId }) => {
             )}
           </div>
           <div className='w-full md:w-4/12 lg:w-[27%] pl-[15px] pr-[15px]'>
-            <CartSummarry />
+            <CartSummarry selectedShippingModel={selectedShipping} />
             <div id='OrderNoteDiv mt-[20px]'>
               <div className='text-sub-text font-bold &nbsp;trsacking-normal mb-[5px]'>
                 <label>Add a note to your order</label>

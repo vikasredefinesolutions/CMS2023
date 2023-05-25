@@ -570,6 +570,7 @@ export const __pagesText = {
     BillingInformation: 'Billing Information',
     paymentInfo: 'Provide payment details below',
     ShippingMethod: 'Shipping Method',
+    ShippingMethods: 'Shipping Methods',
     PaymentMethod: 'Payment Method',
     ShippingAddress: 'Shipping Address',
     ChooseShippingMethod: 'Choose Shipping Method',

@@ -1,11 +1,15 @@
 import Price from '@appComponents/reUsable/Price';
 import { __pagesText } from '@constants/pages.text';
-import CheckoutController from '@controllers/checkoutController';
+import { _shippingMethod } from '@controllers/checkoutController';
 import SummarryController from '@controllers/summarryController';
 import { GetCartTotals, useTypedSelector_v2 } from 'hooks_v2';
-import { FC, useEffect } from 'react';
+import { FC } from 'react';
 
-const CartSummarryType1: FC = () => {
+interface _props {
+  selectedShippingModel: _shippingMethod;
+}
+
+const CartSummarryType1: FC<_props> = ({ selectedShippingModel }) => {
   const couponDetails = useTypedSelector_v2((state) => state.cart.discount);
 
   // Functions
@@ -26,13 +30,13 @@ const CartSummarryType1: FC = () => {
     totalLineCharges,
   } = GetCartTotals();
 
-  const { cartQty } = useTypedSelector_v2((state) => state.cart);
-  const { fetchShipping, selectedShipping } = CheckoutController();
-  useEffect(() => {
-    if (cartQty) {
-      fetchShipping(subTotal);
-    }
-  }, [subTotal]);
+  // const { cartQty } = useTypedSelector_v2((state) => state.cart);
+  // const { fetchShipping } = CheckoutController();
+  // useEffect(() => {
+  //   if (cartQty) {
+  //     fetchShipping(subTotal);
+  //   }
+  // }, [subTotal]);
 
   const addBottomPadding = couponDetails?.amount ? '' : 'pb-[20px]';
 
@@ -172,7 +176,7 @@ const CartSummarryType1: FC = () => {
             <dt className='text-normal-text flex items-center'>
               <span>Shipping</span>
             </dt>
-            <dd className='text-normal-text'>{`$${selectedShipping.price.toFixed(
+            <dd className='text-normal-text'>{`$${selectedShippingModel.price.toFixed(
               2,
             )}`}</dd>
           </div>
@@ -189,7 +193,7 @@ const CartSummarryType1: FC = () => {
       <div className='flex justify-between items-center bg-light-gray w-full text-sub-text font-[600] pl-[16px] pr-[16px] pt-[8px] pb-[8px]'>
         <div>Total:</div>
         <div>
-          <Price value={totalPrice + selectedShipping.price} />
+          <Price value={totalPrice + selectedShippingModel.price} />
         </div>
       </div>
     </div>

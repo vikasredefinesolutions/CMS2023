@@ -52,7 +52,7 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
 
   useEffect(() => {
     fetchShipping(subTotal);
-  }, [subTotal]);
+  }, [subTotal, shippingAdress]);
 
   return (
     <section className='mt-[20px]'>
@@ -212,22 +212,6 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
                         {__pagesText.CheckoutPage.ChooseShippingMethod}
                       </div>
                       <div className='flex items-center flex-wrap mb-[30px]'>
-                        {/* <input
-                          type='radio'
-                          name='shippingMethod'
-                          id=''
-                          checked={true}
-                          className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600'
-                        />
-                        <label
-                          htmlFor='shippingMethod'
-                          className='ml-2 text-default-text'
-                        >
-                          {shippingMethod &&
-                            `${
-                              shippingMethod[0].name
-                            }($${shippingMethod[0].price.toPrecision(2)})`}
-                        </label> */}
                         {shippingMethod &&
                           shippingMethod.map(
                             (el: _shippingMethod, index: number) => (

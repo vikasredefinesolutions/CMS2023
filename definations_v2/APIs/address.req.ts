@@ -67,10 +67,10 @@ export interface _DeleteCustomerAddressReq {
 
 export interface _GetShippingmethod {
   shippingMethodModel: {
-    city: string;
-    state: string;
-    country: string;
-    zipCode: string;
+    city: string | undefined;
+    state: string | undefined;
+    country: string | undefined;
+    zipCode: string | undefined;
     customerID: number | string | null;
     storeId: string | number;
     ordertotalwithoutshipppingcharge: number | string;

@@ -53,7 +53,6 @@ import {
 } from '@services/payment.service';
 import { FetchProductById } from '@services/product.service';
 import { _ProductPolicy } from '@templates/ProductDetails/productDetailsTypes/productDetail.res';
-import { useRouter } from 'next/router';
 import CheckoutAddressForm, {
   AddressFormRefType,
   AddressType,
@@ -66,7 +65,6 @@ export interface _shippingMethod {
 [];
 
 const CheckoutController = () => {
-  const router = useRouter();
   const [endUserNameS, setEndUserName] = useState<string>('');
   const [endUserDisplay, setEndUserDisplay] = useState<boolean>(false);
   const [productPolicy, setproductPolicy] = useState<_ProductPolicy[]>();
@@ -395,7 +393,7 @@ const CheckoutController = () => {
 
   const checkPayment = () => {
     let { totalPrice } = { totalPrice: 200 };
-    console.log('------------------', cardDetails);
+    // console.log('------------------', cardDetails);
     if (totalPrice > 0) {
       if (paymentEnum.creditCard === paymentMethod) {
         setPurchaseOrder('');
@@ -564,10 +562,10 @@ const CheckoutController = () => {
       if (storeId && shippingChargeType) {
         const data = await GetShippingmethod({
           shippingMethodModel: {
-            city: '',
-            state: '',
-            country: '',
-            zipCode: '',
+            city: shippingAdress?.city,
+            state: shippingAdress?.state,
+            country: shippingAdress?.countryName,
+            zipCode: shippingAdress?.postalCode,
             customerID: userId,
             storeId: storeId,
             ordertotalwithoutshipppingcharge: totalPrice,
