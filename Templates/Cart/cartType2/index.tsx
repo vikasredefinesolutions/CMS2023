@@ -1,5 +1,6 @@
 import { SpinnerComponent } from '@appComponents/ui/spinner';
 import { paths } from '@constants/paths.constant';
+import CheckoutController from '@controllers/checkoutController';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import {
   PersonalizationColor,
@@ -24,6 +25,8 @@ const CartType2: React.FC<_CartProps> = ({
 }) => {
   const cartData = useTypedSelector_v2((state) => state.cart.cart);
   const storeId = useTypedSelector_v2((state) => state.store.id);
+  const { fetchShipping, shippingAdress, selectedShipping, shippingMethod } =
+    CheckoutController();
   const [availableFont, setAvailableFont] = useState<
     PersonalizationFont[] | []
   >([]);
@@ -95,7 +98,7 @@ const CartType2: React.FC<_CartProps> = ({
               aria-labelledby='summary-heading'
               className='w-full lg:w-4/12 md:w-5/12 pl-[15px] pr-[15px] mt-[15px]'
             >
-              <CartSummarry />
+              <CartSummarry selectedShippingModel={selectedShipping} />
             </section>
           </div>
         </div>
