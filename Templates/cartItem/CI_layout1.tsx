@@ -54,16 +54,16 @@ const CIlayout1: FC<any> = ({
   >([]);
 
   const customer = useTypedSelector_v2((state) => state.user.customer);
-  const linesAvailable = (item: any) => {
-    let show = false;
-    item.forEach((lineModel: any) => {
-      if (lineModel.linePersonalizeDetails.length > 0) {
-        show = true;
-        return;
-      }
-    });
-    return show;
-  };
+  // const linesAvailable = (item: any) => {
+  //   let show = false;
+  //   item.forEach((lineModel: any) => {
+  //     if (lineModel.linePersonalizeDetails.length > 0) {
+  //       show = true;
+  //       return;
+  //     }
+  //   });
+  //   return show;
+  // };
 
   const { currentPage } = CheckoutController();
 
@@ -302,89 +302,86 @@ const CIlayout1: FC<any> = ({
                         </>
                       ),
                     )} */}
-                    {linesAvailable(item.displayLineAttributeOptions) &&
-                      item.displayLineAttributeOptions.length > 0 && (
-                        <div className='mt-10'>
-                          <div className='text-normal-text border-t pt-[10px] mt-[10px] first:mt-0'>
-                            <div className='font-semibold'>
-                              Personalise Text:
-                            </div>
-                            <div className='flex justify-between py-1 first:pt-0 last:pb-0'>
-                              <div className='font-semibold'>Font</div>
-                              <div className='text-right'>
-                                {
-                                  item.displayLineAttributeOptions[0]
-                                    .linePersonalizeDetails[0].font
-                                }
-                              </div>
-                            </div>
-                            <div className='flex justify-between py-1 first:pt-0 last:pb-0'>
-                              <div className='font-semibold'>Color</div>
-                              <div className='text-right'>
-                                {
-                                  item.displayLineAttributeOptions[0]
-                                    .linePersonalizeDetails[0].color
-                                }
-                              </div>
-                            </div>
-                            <div className='flex justify-between py-1 first:pt-0 last:pb-0'>
-                              <div className='font-semibold'>
-                                Personalization Location
-                              </div>
-                              <div className='text-right'>
-                                {
-                                  item.displayLineAttributeOptions[0]
-                                    .linePersonalizeDetails[0].location
-                                }
-                              </div>
+                    {item.displayLineAttributeOptions.length > 0 && (
+                      <div className='mt-10'>
+                        <div className='text-normal-text border-t pt-[10px] mt-[10px] first:mt-0'>
+                          <div className='font-semibold'>Personalise Text:</div>
+                          <div className='flex justify-between py-1 first:pt-0 last:pb-0'>
+                            <div className='font-semibold'>Font</div>
+                            <div className='text-right'>
+                              {
+                                item.displayLineAttributeOptions[0]
+                                  .linePersonalizeDetails[0].font
+                              }
                             </div>
                           </div>
-                          {item.displayLineAttributeOptions.map(
-                            (
-                              Lineitem: displayLineAtrributeOptions,
-                              index: number,
-                            ) => {
-                              return (
-                                <>
-                                  <div className='text-normal-text border-t pt-[10px] mt-[10px] first:mt-0'>
-                                    <div className='flex justify-between py-1 first:pt-0 last:pb-0'>
-                                      <div className='font-semibold'>Size</div>
-                                      <div className='text-right font-bold'>
-                                        {Lineitem.attributeOptionName}
-                                      </div>
-                                    </div>
-                                    {Lineitem.linePersonalizeDetails.map(
-                                      (line: any, ind: number) => (
-                                        <>
-                                          <div className='flex justify-between py-1 first:pt-0 last:pb-0'>
-                                            <div className='font-semibold'>
-                                              Line 1
-                                            </div>
-                                            <div className='text-right'>
-                                              {line.line1Text}
-                                            </div>
-                                          </div>
-                                          {line.line2Text &&
-                                            line.line2Text !== '' && (
-                                              <div className='flex justify-between py-1 first:pt-0 last:pb-0'>
-                                                <div className='font-semibold'>
-                                                  Line 2
-                                                </div>
-                                                <div className='text-right'>
-                                                  {line.line2Text}
-                                                </div>
-                                              </div>
-                                            )}
-                                        </>
-                                      ),
-                                    )}
-                                  </div>
-                                </>
-                              );
-                            },
-                          )}
+                          <div className='flex justify-between py-1 first:pt-0 last:pb-0'>
+                            <div className='font-semibold'>Color</div>
+                            <div className='text-right'>
+                              {
+                                item.displayLineAttributeOptions[0]
+                                  .linePersonalizeDetails[0].color
+                              }
+                            </div>
+                          </div>
+                          <div className='flex justify-between py-1 first:pt-0 last:pb-0'>
+                            <div className='font-semibold'>
+                              Personalization Location
+                            </div>
+                            <div className='text-right'>
+                              {
+                                item.displayLineAttributeOptions[0]
+                                  .linePersonalizeDetails[0].location
+                              }
+                            </div>
+                          </div>
                         </div>
-                      )}
+                        {item.displayLineAttributeOptions.map(
+                          (
+                            Lineitem: displayLineAtrributeOptions,
+                            index: number,
+                          ) => {
+                            return (
+                              <>
+                                <div className='text-normal-text border-t pt-[10px] mt-[10px] first:mt-0'>
+                                  <div className='flex justify-between py-1 first:pt-0 last:pb-0'>
+                                    <div className='font-semibold'>Size</div>
+                                    <div className='text-right font-bold'>
+                                      {Lineitem.attributeOptionName}
+                                    </div>
+                                  </div>
+                                  {Lineitem.linePersonalizeDetails.map(
+                                    (line: any, ind: number) => (
+                                      <>
+                                        <div className='flex justify-between py-1 first:pt-0 last:pb-0'>
+                                          <div className='font-semibold'>
+                                            Line 1
+                                          </div>
+                                          <div className='text-right'>
+                                            {line.line1Text}
+                                          </div>
+                                        </div>
+                                        {line.line2Text &&
+                                          line.line2Text !== '' && (
+                                            <div className='flex justify-between py-1 first:pt-0 last:pb-0'>
+                                              <div className='font-semibold'>
+                                                Line 2
+                                              </div>
+                                              <div className='text-right'>
+                                                {line.line2Text}
+                                              </div>
+                                            </div>
+                                          )}
+                                      </>
+                                    ),
+                                  )}
+                                </div>
+                              </>
+                            );
+                          },
+                        )}
+                      </div>
+                    )}
                   </div>
                 </div>
                 {isEditable && (
@@ -414,7 +411,7 @@ const CIlayout1: FC<any> = ({
                       item.shoppingCartLogoPersonViewModels.length >= 1 &&
                       item.shoppingCartLogoPersonViewModels[0].logoName !==
                         CustomizeLaterMain &&
-                      item.brandName !== 'Yeti' && (
+                      item.isBrandPersonalization && (
                         <div className='mt-[12px] lg:ml-[20px] mb-[20px] text-center p-[2px] text-sm cursor-pointer'>
                           <span
                             className='!w-full btn btn-sm btn-secondary uppercase text-md'

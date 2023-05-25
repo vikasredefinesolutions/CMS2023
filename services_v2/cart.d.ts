@@ -50,6 +50,7 @@ export interface CartObject {
   colorImage: string;
   productName: string;
   productId: number;
+  isBrandPersonalization: boolean;
   sku: string;
   attributeOptionId: string;
   discountPrice: number;
