@@ -176,7 +176,7 @@ const Brand: React.FC<_props> = ({
                   <div className='flex flex-wrap'>
                     <ul className='w-full lg:w-1/3 text-[13px] pl-[20px] pr-[20px]'>
                       {content?.map((brand, index) => {
-                        if (index > content.length / 3) return <></>;
+                        if (index > content.length / 3 ) return <></>;
                         return (
                           <SubMenuItem
                             view={view}
@@ -195,7 +195,7 @@ const Brand: React.FC<_props> = ({
                     <ul className='w-full lg:w-1/3 text-[13px] pl-[20px] pr-[20px]'>
                       {content?.map((brand, index) => {
                         if (
-                          index >= content.length / 3 + 1 &&
+                          index > content.length / 3  &&
                           index <= (content.length / 3) * 2 + 1
                         )
                           return (

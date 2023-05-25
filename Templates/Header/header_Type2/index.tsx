@@ -1,7 +1,7 @@
 import { storeBuilderTypeId } from '@configs/page.config';
 import { __pagesConstant } from '@constants/pages.constant';
 import { paths } from '@constants/paths.constant';
-import { _HeaderProps } from '@definations/header.type';
+import { _HeaderProps, _MenuItems } from '@definations/header.type';
 import {
   useActions_v2,
   useTypedSelector_v2,
@@ -64,7 +64,7 @@ const Header_Type2: NextPage<_HeaderProps> = ({
             showSideMenu={showSideMenu}
             // storeCode={storeCode}
             screen='MOBILE'
-            menuItems={menuItems}
+            menuItems={menuItems as _MenuItems}
           />
         )}
 
@@ -130,7 +130,7 @@ const Header_Type2: NextPage<_HeaderProps> = ({
                         <Header_MenuItems
                           showSideMenu={showSideMenu}
                           screen='DESKTOP'
-                          menuItems={menuItems}
+                          menuItems={menuItems as _MenuItems}
                         />
                       )}
                   <SearchBar screen={'MOBILE'} />

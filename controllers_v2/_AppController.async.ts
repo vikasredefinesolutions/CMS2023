@@ -56,7 +56,21 @@ const getCustomContent = async (
 const getDynamicContent = async (
   item: _StoreMenu,
   storeId: number,
+  storeCode?: string,
 ): Promise<_DynamicContent | null> => {
+  if (item.category === 'category' && storeCode == 'GG') {
+    const res = await HeaderService.FetchMenuCategoriesWithBrand({
+      categoryId: item.topic_Id,
+      storeId: storeId,
+    });
+
+    return {
+      title: item.title || 'Category',
+      seName: item.se_Name,
+      items: res?.dataType === 'CATEGORIES' ? res : null,
+      type: 'CATEGORY',
+    };
+  }
   if (item.category === 'category') {
     const res = await HeaderService.FetchMenuCategories({
       categoryId: item.topic_Id,
@@ -119,6 +133,7 @@ const getNoneContent = async (
 
 export const fetchMenuItems = async (
   storeId: number,
+  storeCode: string,
 ): Promise<_MenuItems | null> => {
   const menu: _menu_ = {
     items: null,
@@ -134,7 +149,7 @@ export const fetchMenuItems = async (
           return getCustomContent(item);
         }
         if (item.type === 'dynamic') {
-          return getDynamicContent(item, storeId);
+          return getDynamicContent(item, storeId, storeCode);
         }
         if (item.type === 'none') {
           return getNoneContent(item);

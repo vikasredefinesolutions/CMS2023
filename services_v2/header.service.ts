@@ -114,6 +114,32 @@ export const FetchMenuCategories = async (payload: {
   return transformed;
 };
 
+export const FetchMenuCategoriesWithBrand = async (payload: {
+  storeId: number;
+  categoryId: number;
+}): Promise<_t_MenuCategory | null> => {
+  const url = `/Category/getcategoryswithbrandbyparentid/${payload.categoryId}/${payload.storeId}/true.json`;
+
+  const response = await CallAPI_v2<_MenuCategory[]>({
+    name: {
+      api: 'FetchMenuCategories',
+      service: 'header',
+    },
+    request: {
+      url: url,
+      method: 'GET',
+    },
+  });
+
+  const transformed: _t_MenuCategory = {
+    categories: response,
+    dataType: 'CATEGORIES',
+  };
+
+  return transformed;
+};
+
+//For CG only
 export const getGTMScript = async (
   storeId: number,
   scriptType: string,
@@ -129,11 +155,43 @@ export const getGTMScript = async (
   return resposne;
 };
 
+//For CG only
 export const postGTMScript = async (
   scriptName: string,
   payload: Record<string, any>,
 ) => {
   const url = `ga4cg/DataLayer/${scriptName}.json`;
+  const response = await SendAsync<any>({
+    url,
+    method: 'POST',
+    data: payload,
+  });
+  return response;
+};
+
+//For all store
+export const getGTMScriptForAllStore = async (
+  storeId: number,
+  scriptType: string,
+  customerId?: number,
+): Promise<any | null> => {
+  const url = `ga4forallstore/${scriptType}/${storeId}/${customerId}.json`;
+  const resposne = await SendAsync<string>({
+    url: url,
+    method: 'GET',
+  });
+  return resposne;
+};
+
+//For all store
+export const postGTMScriptForAllStore = async (
+  scriptName: string,
+  payload: Record<string, any>,
+  customerId?: number | string | null,
+) => {
+  const url = `ga4forallstore/${scriptName}${
+    customerId ? '/' + customerId : ''
+  }.json`;
   const response = await SendAsync<any>({
     url,
     method: 'POST',

@@ -168,7 +168,7 @@ export const callConfigsAndRemainingStoreAPIsAndSetURls = async (
       storeId: storeDetails.storeId!,
       configNames: ['footer', 'contactInfo', 'header_config', 'productListing'],
     }),
-    _AppController.fetchMenuItems(storeDetails.storeId!),
+    _AppController.fetchMenuItems(storeDetails.storeId!, storeDetails.code),
   ])
     .then((values) => {
       companyId =

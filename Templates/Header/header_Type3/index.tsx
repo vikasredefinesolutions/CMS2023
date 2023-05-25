@@ -1,11 +1,11 @@
 import { storeBuilderTypeId } from '@configs/page.config';
 import { __pagesConstant } from '@constants/pages.constant';
 import { paths } from '@constants/paths.constant';
-import { _HeaderProps } from '@definations/header.type';
+import { _HeaderProps, _MenuItems } from '@definations/header.type';
 import {
   useActions_v2,
   useTypedSelector_v2,
-  useWindowDimensions_v2
+  useWindowDimensions_v2,
 } from '@hooks_v2/index';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
@@ -16,7 +16,7 @@ import {
   LoginIcon,
   Logo,
   MenuIcon,
-  MyCartIcon
+  MyCartIcon,
 } from './Components/Icons';
 import Header_MenuItems from './Components/Menu/Header_MenuItems';
 import SearchBar from './Components/Menu/Header_SearchBar';
@@ -67,7 +67,7 @@ const Header_Type3: NextPage<_HeaderProps> = ({
             showSideMenu={showSideMenu}
             // storeCode={storeCode}
             screen='MOBILE'
-            menuItems={menuItems}
+            menuItems={menuItems as _MenuItems}
           />
         )}
 
@@ -138,7 +138,7 @@ const Header_Type3: NextPage<_HeaderProps> = ({
                         <Header_MenuItems
                           showSideMenu={showSideMenu}
                           screen='DESKTOP'
-                          menuItems={menuItems}
+                          menuItems={menuItems as _MenuItems}
                         />
                       )}
                   <SearchBar screen={'MOBILE'} />

@@ -1,5 +1,8 @@
 import { CG_STORE_CODE } from '@constants/global.constant';
-import { GoogleAnalyticsTrackerForCG } from '@helpers/common.helper';
+import {
+  GoogleAnalyticsTrackerForAllStore,
+  GoogleAnalyticsTrackerForCG,
+} from '@helpers/common.helper';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -23,60 +26,79 @@ const Topic: React.FC<_props> = ({ title, url }) => {
   // --------------------------------------------------------------
   // const [focus, setFocus] = useState<boolean>(false);
   const captureGTMEvent = (type: string) => {
-    if (storeId === CG_STORE_CODE)
-      switch (type.toLowerCase()) {
-        case 'sale': {
-          const payload = {
-            storeId: storeId,
-            customerId: customerId,
-            contentGroup: 'SALE',
-            view: 'SALE',
-            pageTitle: 'SALE',
-            category: 'SALE',
-          };
-
+    switch (type.toLowerCase()) {
+      case 'sale': {
+        const payload = {
+          storeId: storeId,
+          customerId: customerId,
+          contentGroup: 'SALE',
+          view: 'SALE',
+          pageTitle: 'SALE',
+          category: 'SALE',
+        };
+        if (storeId === CG_STORE_CODE)
           GoogleAnalyticsTrackerForCG(
             'GetGTDynamicDataLayerForAnyPage',
             storeId,
             payload,
           );
-          break;
-        }
-        case 'faq': {
-          const payload = {
-            storeId: storeId,
-            customerId: customerId,
-            contentGroup: 'FAQ',
-            view: 'FAQ',
-            pageTitle: 'FAQ',
-            category: 'FAQ',
-          };
-          GoogleAnalyticsTrackerForCG(
+        else
+          GoogleAnalyticsTrackerForAllStore(
             'GetGTDynamicDataLayerForAnyPage',
             storeId,
             payload,
           );
-          break;
-        }
-        case 'consultation': {
-          const payload = {
-            storeId: storeId,
-            customerId: customerId,
-            contentGroup: 'Consultation',
-            view: 'Consultation',
-            pageTitle: 'Consultation',
-            category: 'Consultation',
-          };
-          GoogleAnalyticsTrackerForCG(
-            'GetGTDynamicDataLayerForAnyPage',
-            storeId,
-            payload,
-          );
-          break;
-        }
-        default:
-          return;
+        break;
       }
+      case 'faq': {
+        const payload = {
+          storeId: storeId,
+          customerId: customerId,
+          contentGroup: 'FAQ',
+          view: 'FAQ',
+          pageTitle: 'FAQ',
+          category: 'FAQ',
+        };
+        if (storeId === CG_STORE_CODE)
+          GoogleAnalyticsTrackerForCG(
+            'GetGTDynamicDataLayerForAnyPage',
+            storeId,
+            payload,
+          );
+        else
+          GoogleAnalyticsTrackerForAllStore(
+            'GetGTDynamicDataLayerForAnyPage',
+            storeId,
+            payload,
+          );
+        break;
+      }
+      case 'consultation': {
+        const payload = {
+          storeId: storeId,
+          customerId: customerId,
+          contentGroup: 'Consultation',
+          view: 'Consultation',
+          pageTitle: 'Consultation',
+          category: 'Consultation',
+        };
+        if (storeId === CG_STORE_CODE)
+          GoogleAnalyticsTrackerForCG(
+            'GetGTDynamicDataLayerForAnyPage',
+            storeId,
+            payload,
+          );
+        else
+          GoogleAnalyticsTrackerForAllStore(
+            'GetGTDynamicDataLayerForAnyPage',
+            storeId,
+            payload,
+          );
+        break;
+      }
+      default:
+        return;
+    }
   };
   if (view === 'MOBILE') {
     return (

@@ -28,10 +28,18 @@ export interface _MenuCategory {
   seName: string;
   customSEName: null;
 }
+export interface _MenuCategoryWithBrand {
+  brandDetails: _Brand[];
+  categoryDetails: _MenuCategory[];
+}
 
 export interface _t_MenuCategory {
   dataType: 'CATEGORIES';
   categories: _MenuCategory[] | null;
+}
+export interface _t_MenuCategoryWithBrand {
+  dataType: 'CATEGORIES';
+  categories: _MenuCategoryWithBrand[] | null;
 }
 
 export interface _MenuTopic {
@@ -80,6 +88,12 @@ export type _DynamicContent = {
   seName: string | null;
   items: _t_Brands | _t_MenuCategory | null;
 };
+export type _DynamicContentWithBrand = {
+  type: 'BRANDS' | 'CATEGORY';
+  title: string;
+  seName: string | null;
+  items: _t_Brands | _t_MenuCategoryWithBrand | null;
+};
 
 export type _NoneContent = {
   type: 'TOPIC' | 'CATEGORY';
@@ -102,13 +116,30 @@ export type _MenuItems = {
     | null;
 };
 
+export type _MenuItemsWithBrand = {
+  items: null | _StoreMenu[];
+  items_content:
+    | (_CustomContent | _DynamicContentWithBrand | _NoneContent | null)[]
+    | null;
+};
+
+export interface _HeaderPropsWithBrand {
+  // id: number;
+  storeCode: string;
+  logoUrl: {
+    desktop: string;
+  };
+  menuItems: _MenuItems | _MenuItemsWithBrand | null;
+  headerBgColor: string;
+  headerTextColor: string;
+}
 export interface _HeaderProps {
   // id: number;
   storeCode: string;
   logoUrl: {
     desktop: string;
   };
-  menuItems: _MenuItems | null;
+  menuItems: _MenuItems | null | _MenuItemsWithBrand;
   headerBgColor: string;
   headerTextColor: string;
 }
@@ -117,7 +148,7 @@ export interface _HeaderPropsWithTemplateid {
   logoUrl: {
     desktop: string;
   };
-  menuItems: _MenuItems | null;
+  menuItems: _MenuItems | null | _MenuItemsWithBrand;
   headerTemplateId: string;
   headerBgColor: string;
   headerTextColor: string;
@@ -138,4 +169,5 @@ export interface _HeaderTemplates {
   type2: NextPage<_HeaderProps, _HeaderProps>;
   type3: NextPage<_HeaderProps, _HeaderProps>;
   type4: NextPage<_HeaderProps, _HeaderProps>;
+  type5: NextPage<_HeaderProps, _HeaderProps>;
 }

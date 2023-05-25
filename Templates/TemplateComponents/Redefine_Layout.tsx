@@ -83,7 +83,7 @@ const Layout: React.FC<_props & _StoreCache> = ({
   };
   useEffect(() => {
     if (!header.menuItems && storeId) {
-      _AppController.fetchMenuItems(storeId).then((res) => {
+      _AppController.fetchMenuItems(storeId, storeCode).then((res) => {
         setHeader((last) => ({
           ...last,
           menuItems: res,

@@ -1,8 +1,10 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import ProductDetails_Type1 from './ProductDetailsType1';
 
-import { CG_STORE_CODE } from '@constants/global.constant';
-import { GoogleAnalyticsTrackerForCG } from '@helpers/common.helper';
+import {
+  GoogleAnalyticsTrackerForAllStore,
+  GoogleAnalyticsTrackerForCG,
+} from '@helpers/common.helper';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import ProductDetails_Type2 from './productDetailType2';
 import ProductDetails_Type3 from './productDetailType3';
@@ -21,6 +23,7 @@ const ProductDetailTemplates: _ProductDetailsTemplates = {
 const ProductDetails: React.FC<_Props> = (props) => {
   const { id: customerId } = useTypedSelector_v2((state) => state.user);
   const { id: storeId, pageType } = useTypedSelector_v2((state) => state.store);
+  const isCaptured = useRef(false);
 
   const { SEO, details, colors, storeCode } = props;
   const ProductDetails =
@@ -33,10 +36,11 @@ const ProductDetails: React.FC<_Props> = (props) => {
     ];
 
   useEffect(() => {
-    if (details && storeId === CG_STORE_CODE) {
+    if (details && storeId && !isCaptured.current) {
+      isCaptured.current = true;
       const payload = {
         storeId: storeId,
-        customerId: customerId,
+        customerId: customerId || 0,
         productId: details?.id,
         productName: details?.name,
         colorName: colors?.length
@@ -54,8 +58,13 @@ const ProductDetails: React.FC<_Props> = (props) => {
         storeId,
         payload,
       );
+      GoogleAnalyticsTrackerForAllStore(
+        'GoogleProductDetailScript',
+        storeId,
+        payload,
+      );
     }
-  }, [details?.id]);
+  }, [details?.id, storeId, customerId]);
 
   return <ProductDetails {...props} />;
 };

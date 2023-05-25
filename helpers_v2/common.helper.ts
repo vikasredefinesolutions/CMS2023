@@ -19,7 +19,11 @@ import {
   _LogoDetail,
   _Product_SizeQtys,
 } from '@redux/slices/product.slice.types';
-import { postGTMScript } from '@services/header.service';
+import {
+  getGTMScriptForAllStore,
+  postGTMScript,
+  postGTMScriptForAllStore,
+} from '@services/header.service';
 import { FetchPageThemeConfigs } from '@services/product.service';
 import { conditionalLog_V2 } from './console.helper';
 
@@ -777,32 +781,65 @@ export const GoogleAnalyticsTrackerForCG = async (
   payload: Record<string, any>,
 ) => {
   if (Number(storeId) !== CG_STORE_CODE) return;
-  const dataLayer = window?.dataLayer || null;
   if (!eventScript) {
     if (payload) {
-      if (payload?.pageDataLayer)
-        dataLayer.push({ ...JSON.parse(payload?.pageDataLayer) });
-      if (payload?.pageDataLayer2)
-        dataLayer.push({ ...JSON.parse(payload?.pageDataLayer2) });
-      if (payload?.pageDataLayer3)
-        dataLayer.push({ ...JSON.parse(payload?.pageDataLayer3) });
-      if (payload?.pageItemDetails)
-        dataLayer.push({ ...JSON.parse(payload?.pageItemDetails) });
+      pushToDataLayerUtil(payload);
     }
     return;
   }
+  const eventResponse = await postGTMScript(eventScript, payload);
+  if (eventResponse) {
+    pushToDataLayerUtil(eventResponse);
+  }
+};
+
+//Track GA event using APIs for all store expect CG
+export const GoogleAnalyticsTrackerForAllStore = async (
+  eventScript: string,
+  storeId: string | number,
+  payload: Record<string, any>,
+) => {
+  if (Number(storeId) === CG_STORE_CODE) return;
+  if (!eventScript) {
+    if (payload) {
+      pushToDataLayerUtil(payload);
+    }
+    return;
+  }
+  const eventResponse = await postGTMScriptForAllStore(eventScript, payload);
+  if (eventResponse) {
+    pushToDataLayerUtil(eventResponse);
+  }
+};
+
+export const GTMHomeScriptForAllStores = async (
+  eventScript: string,
+  storeId: number,
+  customerId: number,
+) => {
+  if (Number(storeId) === CG_STORE_CODE) return;
+
+  const eventResponse = await getGTMScriptForAllStore(
+    storeId,
+    eventScript,
+    customerId,
+  );
+  if (eventResponse) {
+    pushToDataLayerUtil(eventResponse);
+  }
+};
+
+const pushToDataLayerUtil = (payload: Record<string, any>) => {
+  const dataLayer = window?.dataLayer || null;
   if (dataLayer) {
     dataLayer.push({ ecommerce: null });
-    const eventResponse = await postGTMScript(eventScript, payload);
-    if (eventResponse) {
-      if (eventResponse?.pageDataLayer)
-        dataLayer.push({ ...JSON.parse(eventResponse?.pageDataLayer) });
-      if (eventResponse?.pageDataLayer2)
-        dataLayer.push({ ...JSON.parse(eventResponse?.pageDataLayer2) });
-      if (eventResponse?.pageDataLayer3)
-        dataLayer.push({ ...JSON.parse(eventResponse?.pageDataLayer3) });
-      if (eventResponse?.pageItemDetails)
-        dataLayer.push({ ...JSON.parse(eventResponse?.pageItemDetails) });
-    }
+    if (payload?.pageDataLayer)
+      dataLayer.push({ ...JSON.parse(payload?.pageDataLayer) });
+    if (payload?.pageDataLayer2)
+      dataLayer.push({ ...JSON.parse(payload?.pageDataLayer2) });
+    if (payload?.pageDataLayer3)
+      dataLayer.push({ ...JSON.parse(payload?.pageDataLayer3) });
+    if (payload?.pageItemDetails)
+      dataLayer.push({ ...JSON.parse(payload?.pageItemDetails) });
   }
 };

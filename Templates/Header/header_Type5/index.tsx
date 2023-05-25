@@ -1,29 +1,25 @@
 import { __pagesConstant } from '@constants/pages.constant';
-// import { _MenuItems } from '@src/show.type';
+import { paths } from '@constants/paths.constant';
+import { _HeaderProps, _MenuItemsWithBrand } from '@definations/header.type';
 import {
   useActions_v2,
   useTypedSelector_v2,
   useWindowDimensions_v2,
-} from 'hooks_v2';
+} from '@hooks_v2/index';
 import { NextPage } from 'next';
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-
-import { storeBuilderTypeId } from '@configs/page.config';
-import { paths } from '@constants/paths.constant';
-import { _HeaderProps, _MenuItems } from '@definations/header.type';
 import {
   LoggedInMenu,
   LoginIcon,
   Logo,
-  MenuIcon,
   MyCartIcon,
   WishListIcon,
-} from '@header/header_Type1/Components/Icons';
-import MenuItems from '@header/header_Type1/Components/Menu/Header_MenuItems';
-import SearchBar from '@header/header_Type1/Components/Menu/Header_SearchBar';
-import { useRouter } from 'next/router';
+} from '../header_Type5/Components/Icons';
+import Header_MenuItems from '../header_Type5/Components/Menu/Header_MenuItems';
+import SearchBar from '../header_Type5/Components/Menu/Header_SearchBar';
 
-const Header_Type1: NextPage<_HeaderProps> = ({
+const Header_Type5: NextPage<_HeaderProps> = ({
   logoUrl,
   menuItems,
   headerBgColor,
@@ -45,6 +41,7 @@ const Header_Type1: NextPage<_HeaderProps> = ({
   const [isMobileView, setIsMobileView] = useState<boolean>(
     width <= __pagesConstant._header.mobileBreakPoint,
   );
+
   useEffect(() => {
     const isMobile = width <= __pagesConstant._header.mobileBreakPoint;
     const showMobile = isMobile ? 'MOBILE' : 'DESKTOP';
@@ -55,30 +52,44 @@ const Header_Type1: NextPage<_HeaderProps> = ({
 
   return (
     <div
-      className={`bg-[${headerBgColor}] sticky md:top-7 z-40 shadow-[0_0px_5px_rgba(0,0,0,0.12)] `}
-      id={'header_with_navBar'}
+      className={`bg-[${headerBgColor}] sticky top-7 z-40  shadow-[0_0px_5px_rgba(0,0,0,0.12)]`}
+      id='mobile_menu_box'
     >
       {/* <NotificationBar /> */}
+
       <div className={`bg-[${headerBgColor}]`}>
         {isMobileView && router.asPath != paths.CHECKOUT && (
-          <MenuItems
+          <Header_MenuItems
             showSideMenu={showSideMenu}
             // storeCode={storeCode}
             screen='MOBILE'
-            menuItems={menuItems as _MenuItems}
+            menuItems={menuItems as _MenuItemsWithBrand}
           />
         )}
 
         <div className='fixed z-40 lg:hidden'></div>
         <header className='relative trancking-[1px]'>
           <nav aria-label='Top'>
-            <div className={`bg-[${headerBgColor}]`}>
-              <div className='container pl-[15px] pr-[15px] mx-auto'>
+            <div
+              className={`${headerBgColor ? '' : 'bg-[#ffffff]'}]`}
+              style={{ backgroundColor: headerBgColor }}
+            >
+              <div className='container  mx-auto '>
                 <div className='pt-[10px] pb-[10px]'>
                   <div className='flex items-center justify-between'>
-                    {storeTypeId == storeBuilderTypeId ? (
-                      islogo &&
-                      (isMobileView ? null : (
+                    {/* <div className='flex items-center w-1/2 sm:w-[50%] md:w-1/3 relative'>
+                      {storeTypeId == storeBuilderTypeId ? (
+                        islogo &&
+                        (isMobileView ? null : (
+                          <Logo
+                            // screen='DESKTOP'
+                            logo={{
+                              desktop: logoUrl.desktop,
+                              mobile: logoUrl.desktop,
+                            }}
+                          />
+                        ))
+                      ) : isMobileView ? null : (
                         <Logo
                           // screen='DESKTOP'
                           logo={{
@@ -86,8 +97,9 @@ const Header_Type1: NextPage<_HeaderProps> = ({
                             mobile: logoUrl.desktop,
                           }}
                         />
-                      ))
-                    ) : isMobileView ? null : (
+                      )}
+                    </div> */}
+                    {isMobileView ? null : (
                       <Logo
                         // screen='DESKTOP'
                         logo={{
@@ -97,15 +109,7 @@ const Header_Type1: NextPage<_HeaderProps> = ({
                       />
                     )}
 
-                    {isMobileView
-                      ? null
-                      : router.asPath != paths.CHECKOUT && (
-                          <MenuItems
-                            showSideMenu={showSideMenu}
-                            screen='DESKTOP'
-                            menuItems={menuItems as _MenuItems}
-                          />
-                        )}
+                    {isMobileView ? null : <SearchBar screen={'DESKTOP'} />}
 
                     {islogo &&
                       (isMobileView ? (
@@ -117,29 +121,30 @@ const Header_Type1: NextPage<_HeaderProps> = ({
                           }}
                         />
                       ) : null)}
-                    <div className='flex items-center justify-end'>
-                      <div className='flex items-center '>
-                        <div className='flex items-center '>
-                          {router.asPath != paths.CHECKOUT && (
-                            <SearchBar screen={'DESKTOP'} />
-                          )}
-
-                          {router.asPath != paths.CHECKOUT && <WishListIcon />}
-                          {router.asPath != paths.CHECKOUT && <LoginIcon />}
-                          {router.asPath != paths.CHECKOUT && <LoggedInMenu />}
-                          {/* {storeCode !== _Store.type1 && <CompareIcon />} */}
-                          {/* <!-- <span className="mx-4 h-6 w-px bg-gray-200 lg:mx-6" aria-hidden="true"></span> --> */}
-                          <MyCartIcon />
-                          <div className='lg:hidden pl-[15px]'>
-                            {router.asPath !== paths.CHECKOUT && <MenuIcon />}
-                          </div>
-                        </div>
+                    <div className='w-1/2 md:w-1/3 flex items-center justify-end'>
+                      <div className='flex items-center divide-x gap-[10px]'>
+                        {/* <div className='flex items-center '> */}
+                        <LoginIcon />
+                        <LoggedInMenu />
+                        <WishListIcon />
+                        <MyCartIcon />
+                        {/* </div> */}
                       </div>
                     </div>
                   </div>
-                  <SearchBar screen={'MOBILE'} />
                 </div>
+
+                {isMobileView && <SearchBar screen={'MOBILE'} />}
               </div>
+              {isMobileView
+                ? null
+                : router.asPath != paths.CHECKOUT && (
+                    <Header_MenuItems
+                      showSideMenu={showSideMenu}
+                      screen='DESKTOP'
+                      menuItems={menuItems as _MenuItemsWithBrand}
+                    />
+                  )}
             </div>
           </nav>
         </header>
@@ -148,4 +153,4 @@ const Header_Type1: NextPage<_HeaderProps> = ({
   );
 };
 
-export default Header_Type1;
+export default Header_Type5;
