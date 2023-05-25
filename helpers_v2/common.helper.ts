@@ -20,6 +20,7 @@ import {
   _Product_SizeQtys,
 } from '@redux/slices/product.slice.types';
 import {
+  getGTMHomeScript,
   getGTMScriptForAllStore,
   postGTMScript,
   postGTMScriptForAllStore,
@@ -788,6 +789,22 @@ export const GoogleAnalyticsTrackerForCG = async (
     return;
   }
   const eventResponse = await postGTMScript(eventScript, payload);
+  if (eventResponse) {
+    pushToDataLayerUtil(eventResponse);
+  }
+};
+
+export const GTMHomeScriptForCG = async (
+  eventScript: string,
+  storeId: number,
+  customerId: number,
+) => {
+  if (Number(storeId) !== CG_STORE_CODE) return;
+  const eventResponse = await getGTMHomeScript(
+    storeId,
+    eventScript,
+    customerId,
+  );
   if (eventResponse) {
     pushToDataLayerUtil(eventResponse);
   }

@@ -216,7 +216,7 @@ const ChekoutType3: FC<_Props> = ({ templateId }) => {
               <button
                 className='btn btn-lg !w-full text-center btn-secondary mb-[8px]'
                 id='btn-review-order'
-                onClick={() => placeOrder(totalPrice)}
+                // onClick={() => placeOrder(totalPrice)}
               >
                 PLACE ORDER
               </button>{' '}
