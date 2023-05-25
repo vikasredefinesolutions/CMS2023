@@ -27,6 +27,9 @@ const Personalizing: FC<any> = ({
   setCartLinePersonModels,
   setPersonalizationArray,
   shoppingCartItemsId,
+  earlierSelectedColor,
+  earlierSelectedFont,
+  earlierSelectedLocation,
 }) => {
   let mediaBaseUrl = _globalStore.blobUrl; // for server side
   const clientSideMediaBaseUrl = useTypedSelector_v2(
@@ -42,15 +45,73 @@ const Personalizing: FC<any> = ({
   );
   mediaBaseUrl = mediaBaseUrl || clientSideMediaBaseUrl;
   const [selectedLocation, setSelectedLocation] = useState<string>(
-    availableLocation[0]['name'],
+    earlierSelectedLocation !== ''
+      ? earlierSelectedLocation
+      : availableLocation[0]['name'],
   );
   const [showColorPelette, setShowColorPelette] = useState<boolean>(false);
   const [selectedFont, setSelectedFont] = useState<string>(
-    availableFont[0]['name'],
+    earlierSelectedFont !== '' ? earlierSelectedFont : availableFont[0]['name'],
   );
   const [selectedColor, setSelectedColor] = useState<string>(
-    availableColor[0]['name'],
+    earlierSelectedColor !== ''
+      ? earlierSelectedColor
+      : availableColor[1]['name'],
   );
+  const changeLocationForAll = (value: string, name: string) => {
+    let newArr = personalizationArray;
+    let changedArr: any = [];
+    newArr.forEach((element: ShoppingCartItemDetailsViewModel) => {
+      element.shoppingCartLineOnePersonViewModel.forEach(
+        (val: ShoppingCartLinePersonViewModel) => {
+          if (
+            val.linefont !== '' &&
+            val.linefont !== value &&
+            name === 'Font'
+          ) {
+            changedArr.push({ ...val, linefont: value });
+          }
+          if (
+            val.linecolor !== '' &&
+            val.linecolor !== value &&
+            name === 'color'
+          ) {
+            changedArr.push({ ...val, linecolor: value });
+          }
+          if (
+            val.personalizeLocation !== '' &&
+            val.personalizeLocation !== value &&
+            name === 'location'
+          ) {
+            changedArr.push({ ...val, personalizeLocation: value });
+          }
+        },
+      );
+      element.shoppingCartLineTwoPersonViewModel.forEach((val) => {
+        if (val.linefont !== '' && val.linefont !== value && name === 'Font') {
+          changedArr.push({ ...val, linefont: value });
+        }
+        if (
+          val.linecolor !== '' &&
+          val.linecolor !== value &&
+          name === 'color'
+        ) {
+          changedArr.push({ ...val, linecolor: value });
+        }
+        if (
+          val.personalizeLocation !== '' &&
+          val.personalizeLocation !== value &&
+          name === 'location'
+        ) {
+          changedArr.push({ ...val, personalizeLocation: value });
+        }
+      });
+    });
+    setCartLinePersonModels((prev: _CartLinePersonDetailModel[]) => [
+      ...prev,
+      ...changedArr,
+    ]);
+  };
 
   const save = async () => {
     setShowLoader(true);
@@ -182,7 +243,7 @@ const Personalizing: FC<any> = ({
               Name Personalization Font Examples :
             </div>
             <div className='text-default-text' x-text='fontname'>
-              Easy Script
+              {selectedFont}
             </div>
             <span
               data-modal-toggle='NamePersonalizeModal'
@@ -197,7 +258,10 @@ const Personalizing: FC<any> = ({
                 <div
                   key={`${item.name}_${index}`}
                   className='w-full lg:w-1/3 pl-[12px] pr-[12px] cursor-pointer'
-                  onClick={() => setSelectedFont(item.name)}
+                  onClick={() => {
+                    setSelectedFont(item.name);
+                    changeLocationForAll(item.name, 'Font');
+                  }}
                 >
                   <div
                     className={`border-2 ${
@@ -236,7 +300,10 @@ const Personalizing: FC<any> = ({
                       className={`w-[32px] h-[32px] border-2 pl-[4px] pr-[4px] pb-[4px] pt-[4px] ${
                         selectedColor === item.name ? 'border-secondary' : ''
                       } cursor-pointer`}
-                      onClick={() => setSelectedColor(item.name)}
+                      onClick={() => {
+                        changeLocationForAll(item.name, 'color');
+                        setSelectedColor(item.name);
+                      }}
                     >
                       <div
                         className={`bg-${item.name.toLowerCase()} w-full h-full`}
@@ -261,7 +328,12 @@ const Personalizing: FC<any> = ({
                     className='w-full h-full'
                     value={selectedColor}
                     type='color'
-                    onChange={(e) => setSelectedColor(e.target.value)}
+                    onChange={(e) => {
+                      setSelectedColor(e.target.value);
+                    }}
+                    onBlur={(e) =>
+                      changeLocationForAll(e.target.value, 'color')
+                    }
                   />
                 </div>
               )}
@@ -282,7 +354,10 @@ const Personalizing: FC<any> = ({
                         value={item.name}
                         checked={selectedLocation === item.name}
                         className='p-2'
-                        onChange={(e) => setSelectedLocation(e.target.value)}
+                        onChange={(e) => {
+                          changeLocationForAll(item.name, 'location');
+                          setSelectedLocation(e.target.value);
+                        }}
                       />
                       {item.name}
                     </label>

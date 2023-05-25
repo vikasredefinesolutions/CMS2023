@@ -213,6 +213,7 @@ export const __pagesText = {
       color: 'Color : ',
       notes: 'Notes :',
       itemTotal: 'Item Total :',
+      orderInMultipleOf: 'ORDER IN MULTIPLES OF ',
       productInformation: 'Product information',
       customizeLogoOption: {
         customizeYoutOrder: 'Customize Your Order:',

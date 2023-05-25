@@ -80,6 +80,7 @@ export interface UserType {
   ipAddress: string;
   customerRoleId: number;
   macAddress: string;
+  isCustomerPersonalization: null | boolean;
 }
 
 export interface EmployeeType {

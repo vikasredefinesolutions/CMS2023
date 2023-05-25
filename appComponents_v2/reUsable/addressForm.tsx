@@ -303,6 +303,9 @@ const AddressForm = (props: AddressFormRefType) => {
           </div>
         </div>
       </div>
+      <div className='w-full pr-[12px] mb-[20px]'>
+        <span className='font-semibold'>Used For Delivery Questions Only</span>
+      </div>
     </form>
   );
 };

@@ -27,6 +27,9 @@ const SelectOrInput: React.FC<_SelectOrInputProps> = ({
     (state) => state.product.selected.color,
   );
 
+  const { multipleQuantity } = useTypedSelector_v2(
+    (state) => state.product.selected.color,
+  );
   const [email, setEmail] = useState<string>('');
   const [inputOrSelect, setInputOrSelect] = useState<{
     type: 'input' | 'select' | 'saved';
@@ -44,6 +47,26 @@ const SelectOrInput: React.FC<_SelectOrInputProps> = ({
         ...input,
         type: 'input',
         focus: true,
+      }));
+      return;
+    }
+
+    if (
+      multipleQuantity !== 0 &&
+      multipleQuantity < qty &&
+      +event.target.value % multipleQuantity !== 0
+    ) {
+      updateQuantities({
+        attributeOptionId: sizeAttributeOptionId,
+        size: size,
+        qty:
+          Math.ceil(+event.target.value / multipleQuantity) * multipleQuantity,
+        price: price.msrp,
+      });
+      setInputOrSelect((input) => ({
+        ...input,
+        choosedValue:
+          Math.ceil(+event.target.value / multipleQuantity) * multipleQuantity,
       }));
       return;
     }
@@ -194,7 +217,14 @@ const SelectOrInput: React.FC<_SelectOrInputProps> = ({
         <div className=''>
           <select
             className='block w-full border border-gray-600 shadow-sm py-1 px-2 pr-10 text-default-text max-w-[100px]'
-            value={inputOrSelect.choosedValue}
+            value={
+              multipleQuantity !== 0 &&
+              inputOrSelect.choosedValue % multipleQuantity !== 0 &&
+              multipleQuantity < qty
+                ? Math.ceil(inputOrSelect.choosedValue / multipleQuantity) *
+                  multipleQuantity
+                : inputOrSelect.choosedValue
+            }
             name={size}
             onChange={selectQtyHandler}
           >
@@ -223,7 +253,7 @@ const SelectOrInput: React.FC<_SelectOrInputProps> = ({
           initialValues={{ itemCount: Math.ceil(inputOrSelect.choosedValue) }}
           onSubmit={enterQtyHandler}
         >
-          {({ values, handleChange }) => {
+          {({ values, handleChange, setFieldValue }) => {
             return (
               <Form>
                 <div className='flex items-center gap-2 flex-wrap'>
@@ -246,7 +276,31 @@ const SelectOrInput: React.FC<_SelectOrInputProps> = ({
                   {inputOrSelect.focus && values.itemCount <= qty && (
                     <>
                       <button
-                        type='submit'
+                        onClick={() => {
+                          enterQtyHandler({
+                            itemCount: +(values.itemCount
+                              ? multipleQuantity !== 0 &&
+                                values.itemCount % multipleQuantity !== 0 &&
+                                multipleQuantity < qty
+                                ? Math.ceil(
+                                    values.itemCount / multipleQuantity,
+                                  ) * multipleQuantity
+                                : Math.ceil(values.itemCount)
+                              : ''),
+                          });
+                          setFieldValue(
+                            'itemCount',
+                            +(values.itemCount
+                              ? multipleQuantity !== 0 &&
+                                values.itemCount % multipleQuantity !== 0 &&
+                                multipleQuantity < qty
+                                ? Math.ceil(
+                                    values.itemCount / multipleQuantity,
+                                  ) * multipleQuantity
+                                : Math.ceil(values.itemCount)
+                              : ''),
+                          );
+                        }}
                         className='btn btn-sm btn-secondary'
                       >
                         {

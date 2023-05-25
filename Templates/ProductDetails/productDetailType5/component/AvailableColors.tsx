@@ -1,10 +1,11 @@
+import { _ModalProps } from '@appComponents/modals/modal';
 import { __pagesConstant } from '@constants/pages.constant';
 import { _ProductColor } from '@definations/APIs/colors.res';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import ColorImage from './ColorImage';
-const AvailableColors: React.FC = () => {
+const AvailableColors: React.FC<_ModalProps> = ({ modalHandler }) => {
   const router = useRouter();
   const { setColor } = useActions_v2();
   const selectedColor = useTypedSelector_v2(
@@ -32,45 +33,44 @@ const AvailableColors: React.FC = () => {
         <span>:</span> <span className='ml-[8px]'>{selectedColor.name}</span>
       </div>
       <div className='pt-[15px] flex flex-wrap items-end justify-between'>
-
-          <div className='flex flex-wrap items-center'>
-            <div className='flex flex-wrap items-center pt-[15px]'>
-              <div className='text-default-text w-[130px]'>
-                <span className=''>Select Color</span>
-              </div>
-              <span>:</span>
+        <div className='flex flex-wrap items-center'>
+          <div className='flex flex-wrap items-center pt-[15px]'>
+            <div className='text-default-text w-[130px]'>
+              <span className=''>Select Color</span>
             </div>
-            <div className='flex flex-wrap text-center available-colors text-default-text ml-[8px] gap-[3px]'>
-              {colors.map((product, index) => {
-                const show =
-                  showAllColors ||
-                  index < __pagesConstant._productDetails.imagesInRow;
-                const highlight =
-                  product.attributeOptionId === selectedColor?.attributeOptionId
-                    ? 'border-primary'
-                    : 'border-secondary';
-                return (
+            <span>:</span>
+          </div>
+          <div className='flex flex-wrap text-center available-colors text-default-text ml-[8px] gap-[3px]'>
+            {colors.map((product, index) => {
+              const show =
+                showAllColors ||
+                index < __pagesConstant._productDetails.imagesInRow;
+              const highlight =
+                product.attributeOptionId === selectedColor?.attributeOptionId
+                  ? 'border-primary'
+                  : 'border-secondary';
+              return (
+                <div
+                  className=''
+                  key={product.attributeOptionId}
+                  onClick={() => handleChooseColor(product)}
+                >
                   <div
-                    className=''
-                    key={product.attributeOptionId}
-                    onClick={() => handleChooseColor(product)}
+                    className={`w-[32px] h-[32px] p-[1px] border-2  hover:border-primary cursor-pointer ${highlight}`}
                   >
-                    <div
-                      className={`w-[32px] h-[32px] p-[1px] border-2  hover:border-primary cursor-pointer ${highlight}`}
-                    >
-                      {/* <NxtImage
+                    {/* <NxtImage
                       title={`${product.name}`}
                       src={product.imageUrl}
                       alt={product.altTag}
                       className='w-full object-center object-cover cursor-pointer'
                     /> */}
-                      <ColorImage product={product} />
-                    </div>
+                    <ColorImage product={product} />
                   </div>
-                );
-              })}
-            </div>
-            {/* {showAllColorsButton && (
+                </div>
+              );
+            })}
+          </div>
+          {/* {showAllColorsButton && (
               <div className='text-right text-anchor hover:text-anchor-hover'>
                 <button
                   onClick={() => setShowAllColors((showAll) => !showAll)}
@@ -94,17 +94,17 @@ const AvailableColors: React.FC = () => {
                 </button>
               </div>
             )} */}
-          </div>
-          <div className='pt-[15px] text-default-text text-right'>
-              <a
-                className='text-anchor hover:text-anchor-hover '
-                data-modal-toggle='FitandSize'
-                // onClick={() => modalHandler('sizeChart')}
-              >
-                <img src={'/assets/images/size-chart.jpg'} alt={'Fit and Size'} />
-              </a>
-            </div>
-          </div>
+        </div>
+        <div className='pt-[15px] text-default-text text-right'>
+          <a
+            className='text-anchor hover:text-anchor-hover '
+            data-modal-toggle='FitandSize'
+            onClick={() => modalHandler('sizeChart')}
+          >
+            <img src={'/assets/images/size-chart.jpg'} alt={'Fit and Size'} />
+          </a>
+        </div>
+      </div>
     </>
   );
 };

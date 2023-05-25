@@ -31,6 +31,10 @@ const StartOrderModal: React.FC<_startOrderModalProps> = (props) => {
   const selectedProduct = useTypedSelector_v2(
     (state) => state.product.selected,
   );
+
+  const { multipleQuantity } = useTypedSelector_v2(
+    (state) => state.product.selected.color,
+  );
   const customizationEnable = useTypedSelector_v2(
     (state) => state.product.product.customization,
   );
@@ -133,6 +137,18 @@ const StartOrderModal: React.FC<_startOrderModalProps> = (props) => {
                       </span>
                       <span>{colorName}</span>
                     </div>
+
+                    {multipleQuantity > 1 && (
+                      <div className=''>
+                        <span className='text-medium-text'>
+                          {
+                            __pagesText.productInfo.startOrderModal
+                              .orderInMultipleOf
+                          }
+                          {multipleQuantity}
+                        </span>
+                      </div>
+                    )}
                   </div>
 
                   <div className='w-full lg:w-1/2 lg:text-right'>

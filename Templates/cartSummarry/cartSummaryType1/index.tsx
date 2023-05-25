@@ -16,8 +16,15 @@ const CartSummarryType1: FC = () => {
     applyCouponHandler,
     removeCouponCodeHandler,
   } = SummarryController();
-  const { totalPrice, subTotal, logoSetupCharges, smallRunFee, salesTax } =
-    GetCartTotals();
+  const {
+    totalPrice,
+    subTotal,
+    logoSetupCharges,
+    smallRunFee,
+    salesTax,
+    totalLogoCharges,
+    totalLineCharges,
+  } = GetCartTotals();
 
   const { cartQty } = useTypedSelector_v2((state) => state.cart);
   const { fetchShipping, shippingMethod } = CheckoutController();
@@ -72,6 +79,22 @@ const CartSummarryType1: FC = () => {
               <Price value={subTotal} />
             </dd>
           </div>
+          {totalLineCharges > 0 && (
+            <div className='flex items-center justify-between pt-[10px]'>
+              <dt className='text-base'>Line Charges</dt>
+              <dd className='text-base font-medium text-gray-900'>
+                <Price value={totalLineCharges} />
+              </dd>
+            </div>
+          )}
+          {totalLogoCharges > 0 && (
+            <div className='flex items-center justify-between pt-[10px]'>
+              <dt className='text-base'>Logo Charges</dt>
+              <dd className='text-base font-medium text-gray-900'>
+                <Price value={totalLogoCharges} />
+              </dd>
+            </div>
+          )}
           {smallRunFee > 0 && (
             <div className='flex items-center justify-between pt-[10px]'>
               <dt className='text-base'>Small Run Fee</dt>

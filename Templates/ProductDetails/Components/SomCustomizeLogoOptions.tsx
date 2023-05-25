@@ -103,7 +103,7 @@ const SomCustomizeLogoOptions: React.FC<{
   }, [editDetails, logoLocation]);
   const showPrice = (price: 'FREE' | number) => {
     if (price === 'FREE') return `FREE`;
-    return `${currency}${price}`;
+    return `${currency}${price.toFixed(2)}`;
   };
 
   const logoNowOrLaterHandler = (action: 'now' | 'later') => {

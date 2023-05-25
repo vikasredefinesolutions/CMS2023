@@ -26,6 +26,7 @@ export interface ShoppingCartLinePersonViewModel {
   size: null;
   name: null;
   parentId: number;
+  personalizeLocation: string;
 }
 
 export interface ShoppingCartLogoPersonViewModel {
@@ -70,6 +71,20 @@ export interface CartObject {
   logoTotalPrice: number;
   lineTotalPrice: number;
   productTotal: number;
+  displayLineAttributeOptions: displayLineAtrributeOptions[];
+}
+
+export interface displayLineAtrributeOptions {
+  attributeOptionName: string;
+  linePersonalizeDetails: linePersonalizeDetails[];
+}
+
+export interface linePersonalizeDetails {
+  font: string;
+  color: string;
+  location: string;
+  line1Text: string;
+  line2Text: string;
 }
 
 export type CartList = CartObject[];

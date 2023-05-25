@@ -555,7 +555,7 @@ const SomLogoOption: React.FC<_SOMLogoOptionProps> = ({
               }}
               className='mr-1 '
             />
-            SewOut (Extra {sewOutCharges}$ per Piece)
+            SewOut (Extra ${sewOutCharges.toFixed(2)} per Piece)
           </label>
         )}
       {setmodal === 'login' && (

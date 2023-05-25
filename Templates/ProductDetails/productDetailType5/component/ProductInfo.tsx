@@ -14,7 +14,7 @@ import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import {
   FetchColors,
   FetchProductById,
-  SbStore_fn
+  SbStore_fn,
 } from '@services/product.service';
 import { _sbsStore_props } from '@templates/ProductDetails/productDetails';
 import ProductCompanion from '@templates/ProductDetails/productDetailType5/component/ProductCompanion';
@@ -225,8 +225,8 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
           showLogin={product ? !product.isDiscontinue : false}
           modalHandler={modalHandler}
         />
-        
-        <AvailableColors />
+
+        <AvailableColors modalHandler={modalHandler} />
 
         {/* <div className='pt-[15px] text-default-text text-right'>
           <a

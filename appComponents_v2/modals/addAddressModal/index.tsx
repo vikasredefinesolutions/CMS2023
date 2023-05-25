@@ -95,8 +95,9 @@ const AddAddress = ({
           <div className='relative w-full max-w-2xl'>
             <div className='relative bg-white rounded-lg shadow max-h-screen overflow-y-auto'>
               <div className='flex justify-between items-start p-4 rounded-t border-b dark:border-gray-600'>
-                <h3 className='text-xl font-semibold text-gray-900 dark:text-white'>
-                  {editData ? 'Edit Address' : 'Add New Address'}
+                <div></div>
+                <h3 className='text-xl font-semibold text-gray-900 dark:text-white text-center'>
+                  {editData ? 'Edit Address' : 'New Shipping Address'}
                 </h3>
                 <button
                   type='button'

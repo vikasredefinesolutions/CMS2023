@@ -48,7 +48,9 @@ const CalculativeFigure: React.FC = () => {
           </span>
           <span className='font-[600] text-sub-text'>
             {' '}
-            {`${firstLogoPrice === 0 ? 'FREE' : `$${firstLogoPrice}`}`}
+            {`${
+              firstLogoPrice === 0 ? 'FREE' : `$${firstLogoPrice.toFixed(2)}`
+            }`}
           </span>
         </div>
         <div className='py-[7px]'>

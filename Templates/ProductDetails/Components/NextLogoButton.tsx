@@ -14,7 +14,7 @@ const NextLogoButton: React.FC<_NextLogoButtonProps> = ({
 
   const showPrice = (price: 'FREE' | number) => {
     if (price === 'FREE') return `FREE`;
-    return `${currency}${price}`;
+    return `${currency}${price.toFixed(2)}`;
   };
 
   return (
