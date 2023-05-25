@@ -176,7 +176,7 @@ const CartSummarryType1: FC<_props> = ({ selectedShippingModel }) => {
             <dt className='text-normal-text flex items-center'>
               <span>Shipping</span>
             </dt>
-            <dd className='text-normal-text'>{`$${selectedShippingModel.price.toFixed(
+            <dd className='text-normal-text'>{`$${selectedShippingModel?.price.toFixed(
               2,
             )}`}</dd>
           </div>

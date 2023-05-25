@@ -1,6 +1,7 @@
 import { SpinnerComponent } from '@appComponents/ui/spinner';
 import { paths } from '@constants/paths.constant';
-import { useTypedSelector_v2 } from '@hooks_v2/index';
+import CheckoutController from '@controllers/checkoutController';
+import { GetCartTotals, useTypedSelector_v2 } from '@hooks_v2/index';
 import {
   PersonalizationColor,
   PersonalizationFont,
@@ -17,7 +18,7 @@ import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import { _CartProps } from '../Cart';
 import EmptyCart from '../components/emptyCart';
-import CT1_EmployeeLoginCart from './components/CT1_EL_Cart';
+import CT1_EmployeeLoginCart from './Components/CT1_EL_Cart';
 
 const CartType1: React.FC<_CartProps> = ({
   templateId,
@@ -55,6 +56,13 @@ const CartType1: React.FC<_CartProps> = ({
     }
   }, [storeId]);
 
+  const { subTotal } = GetCartTotals();
+  const { fetchShipping, shippingAdress, selectedShipping, shippingMethod } =
+    CheckoutController();
+  useEffect(() => {
+    fetchShipping(subTotal);
+  }, [subTotal, shippingAdress]);
+
   if (showLoaderOrEmptyText === 'loader') {
     return (
       <div className=''>
@@ -76,6 +84,9 @@ const CartType1: React.FC<_CartProps> = ({
   if (isEmployeeLoggedIn) {
     return <CT1_EmployeeLoginCart cartItems={cartData} />;
   }
+
+  // console.log('shipping all', shippingMethod);
+  // console.log('slected', selectedShipping);
 
   return (
     <>
@@ -111,7 +122,7 @@ const CartType1: React.FC<_CartProps> = ({
                   className='w-full lg:w-4/12 pl-[12px] pr-[12px] mt-3'
                 >
                   <div className='sticky top-32'>
-                    <CartSummarry />
+                    <CartSummarry selectedShippingModel={selectedShipping} />
                     <div className='mt-4'>
                       <Link className='' href={paths.CHECKOUT}>
                         <a className='btn btn-lg btn-secondary !flex items-center justify-center w-full'>
