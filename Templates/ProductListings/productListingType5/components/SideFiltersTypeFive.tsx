@@ -3,12 +3,12 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
-  Link,
+  Link
 } from '@mui/material';
 import {
   FilterChangeHandler,
   FilterType,
-  _CheckedFilter,
+  _CheckedFilter
 } from '@templates/ProductListings/ProductListingType';
 
 import { Fragment } from 'react';
@@ -80,9 +80,9 @@ const SideFiltersTypeFive = ({
                                     checked &&
                                     'relative p-[2px]  border-secondary '
                                   }`}
-                                  style={{
-                                    background: option.colorCode,
-                                  }}
+                                  // style={{
+                                  //   background: option.colorCode,
+                                  // }}
                                   onClick={() => {
                                     handleChange(
                                       filter.label,
@@ -91,7 +91,14 @@ const SideFiltersTypeFive = ({
                                     );
                                   }}
                                   title={option.name}
-                                ></li>
+                                >
+                                  <div
+                                          className='w-full h-full'
+                                          style={{
+                                            background: option.colorCode,
+                                          }}
+                                        ></div>
+                                </li>
                               ) : filter.label === 'Category' ? (
                                 <li
                                   key={ind}

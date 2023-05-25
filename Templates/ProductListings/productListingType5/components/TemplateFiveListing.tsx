@@ -141,7 +141,7 @@ const TemplateFiveListing = ({
                   {product.name}
                 </a>
               </div>
-              <div className='mb-[10px] text-black text-base tracking-wider'>
+              <div className='mb-[10px] text-small-text'>
                 <span className='font-semibold'>
                   MSRP
                   <Price
@@ -178,7 +178,7 @@ const TemplateFiveListing = ({
             </div> */}
               <ul
                 role='list'
-                className='flex flex-wrap items-center mt-[5px] justify-center gap-[2px]'
+                className='relative inline-flex flex-wrap items-center mt-[5px] justify-center gap-[2px]'
               >
                 {isAttributeSaparateProduct
                   ? product.splitproductList &&
@@ -239,9 +239,9 @@ const TemplateFiveListing = ({
                     )}
                 {flag ? (
                   <Link key={product.id} href={`/${product.sename}.html`}>
-                    <li className='w-7 h-7 border-2 border-secondary hover:border-primary relative'>
+                    <li className='w-7 h-7 border-2 border-secondary hover:border-primary absolute right-0 top-0 bg-black bg-opacity-50'>
                       <span
-                        className='absolute inset-0 bg-primary text-xs bg-[#003a70] font-semibold flex items-center justify-center text-[#ffffff]'
+                        className='absolute inset-0 text-xs font-semibold flex items-center justify-center text-[#ffffff]'
                         title={` See Additional ${
                           product.getProductImageOptionList &&
                           product.getProductImageOptionList.length -

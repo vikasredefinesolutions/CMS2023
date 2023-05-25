@@ -357,6 +357,16 @@ const Home = (props) => {
                       componentValue.selectedVal.container_bottom_margin.value;
                   }
 
+                  let componentName = 'div' + componentValue.no;
+                  console.log("D", componentValue.selectedVal);
+                  if (
+                    componentValue.selectedVal &&
+                    'componentname' in componentValue.selectedVal
+                  )
+                    {
+                       componentName = componentValue.selectedVal.componentname.value;
+                    }
+                    
                   return (
                     <div
                       key={index}
@@ -386,6 +396,7 @@ const Home = (props) => {
                                   : 'none',
                             }
                       }
+                      name={componentName}
                       id={`div${componentValue.no}`}
                       // ref={ref => {
                       //     refArray.current[componentValue.uid] = ref; // took this from your guide's example.

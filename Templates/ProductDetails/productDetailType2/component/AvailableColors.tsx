@@ -14,89 +14,87 @@ const AvailableColors: React.FC = () => {
   const [showAllColors, setShowAllColors] = useState(false);
   const colors = useTypedSelector_v2((state) => state.product.product.colors);
   const handleChooseColor = (product: _ProductColor) => {
+  
     if (!product.splitproductList) {
       setColor(product);
       return;
     }
-
-    // router.push(product.productSEName);
+    //router.push(product.productSEName);
   };
   if (colors === null) return <></>;
   const colorsCount = colors.length;
   const showAllColorsButton =
     colorsCount > __pagesConstant._productDetails.imagesInRow;
 
-  return (
-    <>
-      <div className='flex flex-wrap items-center pt-[15px]'>
-        <div className='text-default-text w-[90px]'>
-          <span className=''>
-            {' '}
-            {__pagesText.productInfo.availableColors.onlycolor}
-          </span>
-        </div>
-        <div className='flex flex-wrap text-center available-colors text-default-text ml-[4px] gap-[5px]'>
-          {colors.map((product, index) => {
-            const show =
-              showAllColors ||
-              index < __pagesConstant._productDetails.imagesInRow;
-            const highlight =
-              product.attributeOptionId === selectedColor?.attributeOptionId
-                ? 'border-primary'
-                : 'border-slate-200';
-            return (
+  return ( <>
+    <div className='flex flex-wrap items-center pt-[15px]'>
+      <div className='text-default-text w-[90px]'>
+        <span className=''>
+          {' '}
+          {__pagesText.productInfo.availableColors.onlycolor}
+        </span>
+      </div>
+      <div className='flex flex-wrap text-center available-colors text-default-text ml-[4px] gap-[5px]'>
+        {colors.map((product, index) => {
+          const show =
+            showAllColors ||
+            index < __pagesConstant._productDetails.imagesInRow;
+          const highlight =
+            product.attributeOptionId === selectedColor?.attributeOptionId
+              ? 'border-primary'
+              : 'border-slate-200';
+          return (
+            <div
+              className=''
+              key={product.attributeOptionId}
+              onClick={() => handleChooseColor(product)}
+            >
               <div
-                className=''
-                key={product.attributeOptionId}
-                onClick={() => handleChooseColor(product)}
+                className={`w-[32px] h-[32px] p-[1px] border-2  hover:border-primary cursor-pointer ${highlight}`}
               >
-                <div
-                  className={`w-[32px] h-[32px] p-[1px] border-2  hover:border-primary cursor-pointer ${highlight}`}
-                >
-                  {/* <NxtImage
+                {/* <NxtImage
                   title={`${product.name}`}
                   src={product.imageUrl}
                   alt={product.altTag}
                   className='w-full object-center object-cover cursor-pointer'
                 /> */}
-                  <ColorImage product={product} />
-                </div>
+                <ColorImage product={product} />
               </div>
-            );
-          })}
-        </div>
-        {/* No CSS for this button in HTML files */}
-        {showAllColorsButton && (
-          <div className='text-right text-anchor hover:text-anchor-hover'>
-            <button
-              onClick={() => setShowAllColors((showAll) => !showAll)}
-              className=' underline'
-            >
-              {showAllColors ? (
+            </div>
+          );
+        })}
+      </div>
+      {/* No CSS for this button in HTML files */}
+      {showAllColorsButton && (
+        <div className='text-right text-anchor hover:text-anchor-hover'>
+          <button
+            onClick={() => setShowAllColors((showAll) => !showAll)}
+            className=' underline'
+          >
+            {showAllColors ? (
+              <span className='span1'>
+                {__pagesText.productInfo.availableColors.showless}
+              </span>
+            ) : (
+              <>
                 <span className='span1'>
-                  {__pagesText.productInfo.availableColors.showless}
+                  {__pagesText.productInfo.availableColors.seeAll}
                 </span>
-              ) : (
-                <>
-                  <span className='span1'>
-                    {__pagesText.productInfo.availableColors.seeAll}
-                  </span>
-                  <span className='span2'> {colorsCount} </span>
-                  <span className='span3'>
-                    {__pagesText.productInfo.availableColors.colors}
-                  </span>
-                </>
-              )}
-            </button>
-          </div>
-        )}
-      </div>
+                <span className='span2'> {colorsCount} </span>
+                <span className='span3'>
+                  {__pagesText.productInfo.availableColors.colors}
+                </span>
+              </>
+            )}
+          </button>
+        </div>
+      )}
+    </div>
 
-      <div className='pt-[15px] text-default-text'>
-        <span className='inline-block w-[90px]'>Color Name</span> <span>:</span>{' '}
-        <span className='ml-[4px]'>{selectedColor.name}</span>
+    <div className="pt-[15px] text-default-text">
+      <span className="inline-block w-[90px]">Color Name</span> <span className="ml-[4px]">{selectedColor.name}</span>
       </div>
-    </>
+      </>
   );
 };
 

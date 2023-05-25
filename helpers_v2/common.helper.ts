@@ -5,7 +5,7 @@ import { ActionCreatorWithPayload } from '@reduxjs/toolkit/dist/createAction';
 import { CartLogoPersonDetailModel, CartLogoPersonModel } from '@services/cart';
 import {
   _CartLogoPersonDetailModel,
-  _CartLogoPersonModel,
+  _CartLogoPersonModel
 } from '@services/product.service.type';
 import { IncomingMessage, ServerResponse } from 'http';
 import { StaticImageData } from 'next/image';
@@ -18,7 +18,7 @@ import { logoLocation } from '@constants/enum';
 import { CartReq } from '@definations/APIs/cart.req';
 import {
   _LogoDetail,
-  _Product_SizeQtys,
+  _Product_SizeQtys
 } from '@redux/slices/product.slice.types';
 import { FetchPageThemeConfigs } from '@services/product.service';
 import { conditionalLog_V2 } from './console.helper';
@@ -640,7 +640,7 @@ export const generateImageUrl = (
 };
 
 export const capitalizeFirstLetter = (text: string) => {
-  return text.charAt(0).toUpperCase() + text.slice(1);
+  return text?.charAt(0)?.toUpperCase() + text?.slice(1);
 };
 
 var special = [

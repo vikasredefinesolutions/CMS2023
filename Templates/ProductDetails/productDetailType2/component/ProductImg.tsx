@@ -20,11 +20,11 @@ const ProductImg: React.FC<_ProductImgProps> = ({ product }) => {
   const [wishlistPresent, setWishlistPresent] = useState<boolean>(false);
   const colors = useTypedSelector_v2((state) => state.product?.product.colors);
   const handleChooseColor = (product: _ProductColor) => {
-    if (!product.productSEName || product.productSEName === '') {
+    if (!product.splitproductList) {
       setColor(product);
       return;
     }
-    router.push(product.productSEName);
+    //router.push(product.productSEName);
   };
   const brandId = useTypedSelector_v2((state) => state.wishlist.brandId);
   const selectedColor = useTypedSelector_v2(

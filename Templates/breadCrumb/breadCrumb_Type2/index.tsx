@@ -1,4 +1,3 @@
-import NxtImage from '@appComponents/reUsable/Image';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import { NextPage } from 'next';
 import Link from 'next/link';
@@ -52,7 +51,7 @@ const BreadCrumb_Type2: NextPage<_BreadCrumbProps> = ({
               </>
             </ol>
           </nav>
-          {pageType === 'product' && (
+          {/* {pageType === 'product' && (
             <div className='text-center w-auto product-brand-logo'>
               <Link href={`/${product.brand?.name}.html`}>
                 <a>
@@ -68,7 +67,7 @@ const BreadCrumb_Type2: NextPage<_BreadCrumbProps> = ({
                 </a>
               </Link>
             </div>
-          )}
+          )} */}
         </div>
       </div>
     </>

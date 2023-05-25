@@ -194,15 +194,15 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
         />
         <AvailableColors />
 
-        <div className='pt-[15px] text-default-text text-right'>
-          <div
+        <div className='pt-[15px] text-default-text text-right items-end justify-between'>
+          <a href="javascript:void(0)"
             className='text-anchor hover:text-anchor-hover underline'
             data-modal-toggle='FitandSize'
             onClick={() => modalHandler('sizeChart')}
           >
             Fit and Size
-          </div>{' '}
-          <div
+          </a>{' '}
+          <a href="javascript:void(0)"
             className='text-anchor hover:text-anchor-hover underline'
             data-modal-toggle='Personalize'
             onClick={() => {
@@ -210,7 +210,7 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
             }}
           >
             Personalize
-          </div>
+          </a>
         </div>
         {userId && (
           <Inventory
