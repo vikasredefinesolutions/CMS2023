@@ -30,6 +30,13 @@ interface _Store {
       dcTagTextArea: string;
     };
   };
+
+  //GTM scripts
+  topHeaderScriptGTM: string;
+  bottomHeaderScriptGTM: string;
+  topBodySnippetGTM: string;
+  homePageScriptGTM: string;
+
   set: (
     pair: // Store
     | _StoreId
@@ -52,7 +59,11 @@ interface _Store {
       | _isAttributeSaparateProduct
 
       // Google Tags
-      | _GoogleTags,
+      | _GoogleTags
+      | _TopHeaderGTMScript
+      | _BottomHeaderGTMScript
+      | _TopBodySnippetGTM
+      | _HomePageGTMScript,
   ) => void;
 }
 
@@ -88,6 +99,11 @@ export let _globalStore: _Store = {
       dcTagTextArea: '',
     },
   },
+  //GTM scripts
+  topHeaderScriptGTM: '',
+  bottomHeaderScriptGTM: '',
+  topBodySnippetGTM: '',
+  homePageScriptGTM: '',
   set: (pair) => {
     _globalStore = { ..._globalStore, [pair.key]: pair.value };
   },
@@ -180,4 +196,23 @@ interface _GoogleTags {
       dcTagTextArea: string;
     };
   };
+}
+interface _TopHeaderGTMScript {
+  key: 'topHeaderScriptGTM';
+  value: string | null;
+}
+
+interface _BottomHeaderGTMScript {
+  key: 'bottomHeaderScriptGTM';
+  value: string | null;
+}
+
+interface _TopBodySnippetGTM {
+  key: 'topBodySnippetGTM';
+  value: string | null;
+}
+
+interface _HomePageGTMScript {
+  key: 'homePageScriptGTM';
+  value: string | null;
 }
