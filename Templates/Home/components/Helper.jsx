@@ -915,7 +915,24 @@ export const updateSetProperties = (element) => {
               {
                 Object.entries(element.selectedVal).map(([keyq, valueq]) => { if(keyq == key+"_bottom_margin") { classAlign += ' ' + valueq.value; } }) 
               }
-
+              let imgStr = starttag +
+              imageSize +
+              '" id="' +
+              key +
+              '_img_link"><img id="' +
+              key +
+              '_img" class="' +
+              effectClass +
+              ' ' +
+              imgClass +
+              '" src="' +
+              value.value +
+              '" alt="' +
+              alt +
+              '" title="' +
+              alt +
+              '"' +
+              endTag;
               if(x.querySelectorAll('#'+key+'Position').length > 0)
               {
                   let strText = x.querySelectorAll('#Text'+key+'Position')[0].innerHTML;
@@ -926,24 +943,7 @@ export const updateSetProperties = (element) => {
                   }
                   let finalHTML = '';
                   //console.log("CC",key, element.selected_Values);
-                  let imgStr = starttag +
-                        imageSize +
-                        '" id="' +
-                        key +
-                        '_img_link"><img id="' +
-                        key +
-                        '_img" class="' +
-                        effectClass +
-                        ' ' +
-                        imgClass +
-                        '" src="' +
-                        value.value +
-                        '" alt="' +
-                        alt +
-                        '" title="' +
-                        alt +
-                        '"' +
-                        endTag;
+                 
                   if(imageTextPosition === 'Top')
                   {
                       finalHTML += '<div class="p-[15px]" id="Text'+key+'Position">';
