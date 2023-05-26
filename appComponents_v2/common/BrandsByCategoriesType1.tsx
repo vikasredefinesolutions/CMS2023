@@ -153,7 +153,7 @@ const BrandsByCategoriesType1: React.FC<_Props> = ({ brands }) => {
 
               <ul
                 className={`${
-                  currentPage === 'BRANDS' ? 'container mx-auto' : ''
+                  currentPage === 'BRANDS' ? '' : 'container mx-auto'
                 } w-full flex justify-center flex-wrap`}
               >
                 {categories.map((cate, index) => {

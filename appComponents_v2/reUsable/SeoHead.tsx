@@ -11,8 +11,8 @@ const SeoHead: React.FC<_props> = (props) => {
   return (
     <Head>
       <title>{props.title}</title>
-      <meta name="description" content={props.description} key="desc" />
-      <meta name="keywords" content={props.keywords} />
+      <meta name='description' content={props.description} key='desc' />
+      <meta name='keywords' content={props.keywords} />
     </Head>
   );
 };
