@@ -228,9 +228,7 @@ const ChekoutType1: React.FC<_Props> = ({ templateId }) => {
                                       className='ml-2 text-default-text'
                                     >
                                       {shippingMethod &&
-                                        `${el.name}($${el.price.toPrecision(
-                                          2,
-                                        )})`}
+                                        `${el.name}($${el.price.toFixed(2)})`}
                                     </label>
                                   </div>
                                 ),

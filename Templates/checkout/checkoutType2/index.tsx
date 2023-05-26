@@ -27,6 +27,7 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
     currentPage,
     placeOrder,
     reviewOrder,
+    cartData,
     paymentFieldUpdateHandler,
     paymentMethod,
     updatePaymentMethod,

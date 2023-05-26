@@ -394,7 +394,6 @@ const CheckoutController = () => {
 
   const checkPayment = () => {
     let { totalPrice } = { totalPrice: 200 };
-    // console.log('------------------', cardDetails);
     if (totalPrice > 0) {
       if (paymentEnum.creditCard === paymentMethod) {
         setPurchaseOrder('');
@@ -474,16 +473,16 @@ const CheckoutController = () => {
     const givenDate = `${cardDetails.cardExpirationYear}${cardDetails.cardExpirationMonth}`;
     const currentYear = new Date().getFullYear().toString();
     const currentMonth = new Date().getMonth() + 1;
-
     const currentDate = currentYear + currentMonth.toString();
     // console.log('card ---------', cardDetails, +givenDate, +currentDate);
-
-    if (+currentDate > +givenDate) {
-      showModal({
-        message: 'Invalid Expiration Date',
-        title: 'Warning',
-      });
-      return;
+    if (paymentEnum.creditCard === paymentMethod) {
+      if (+currentDate > +givenDate) {
+        showModal({
+          message: 'Invalid Expiration Date',
+          title: 'Warning',
+        });
+        return;
+      }
     }
     if (showAddAddress) {
       let isValid = true;

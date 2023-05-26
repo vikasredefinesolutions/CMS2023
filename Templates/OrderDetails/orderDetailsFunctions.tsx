@@ -393,7 +393,7 @@ export const ShippingAddress = (
   }
   if (billing?.shippingZip) {
     address += ', ';
-    address += `${billing.billingZip}`;
+    address += `${billing.shippingZip}`;
   }
 
   if (type === '2') {
