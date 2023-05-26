@@ -473,11 +473,12 @@ const CheckoutController = () => {
     const currentDate =
       new Date().getMonth() + 1 + new Date().getFullYear().toString();
 
-    if (givenDate >= currentDate.toString()) {
+    if (+currentDate > +givenDate) {
       showModal({
         message: 'Invalid Expiration Date',
         title: 'Warning',
       });
+      return;
     }
     if (showAddAddress) {
       let isValid = true;
