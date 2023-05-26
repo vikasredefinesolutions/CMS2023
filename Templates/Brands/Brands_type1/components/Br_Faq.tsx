@@ -5,7 +5,6 @@ const Br_Faq: React.FC = () => {
       className='relative overflow-hidden pt-[80px] mt-[0px] mb-[20px] sm:h-[800px] max-h-[500px] h-auto bg-cover'
       style={{
         backgroundImage: `url(/faq-bg.png)`,
-        backgroundAttachment: 'fixed',
       }}
     >
       <div className='flex justify-center items-center flex-wrap'>
