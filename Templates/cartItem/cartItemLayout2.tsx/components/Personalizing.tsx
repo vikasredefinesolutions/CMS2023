@@ -108,7 +108,7 @@ const Personalizing: FC<any> = ({
       });
     });
     if (changedArr.length !== 0) {
-      let obj = [...cartLinePersonModels, ...changedArr];
+      let obj = [...changedArr];
       await save(obj);
     }
   };
@@ -122,7 +122,11 @@ const Personalizing: FC<any> = ({
         if (res) {
           setShowLoader(false);
           showModal({ message: 'Successfully updated', title: 'Success' });
-          setKeepPersonalizing(false);
+          if (obj) {
+            setKeepPersonalizing(true);
+          } else {
+            setKeepPersonalizing(false);
+          }
           setCartLinePersonModels([]);
           fetchCartDetails({
             customerId: id ? id : 0,
@@ -322,12 +326,6 @@ const Personalizing: FC<any> = ({
                   );
                 },
               )}
-              <div
-                className='h-[32px] border-2 pl-[4px] pr-[4px] pb-[4px] pt-[4px] text-default-text cursor-pointer'
-                onClick={() => setShowColorPelette(!showColorPelette)}
-              >
-                Custom
-              </div>
               {showColorPelette && (
                 <div
                   className={`w-[32px] h-[32px] border-2 pl-[4px] pr-[4px] pb-[4px] pt-[4px] ${
@@ -347,6 +345,12 @@ const Personalizing: FC<any> = ({
                   />
                 </div>
               )}
+              <div
+                className='h-[32px] border-2 pl-[4px] pr-[4px] pb-[4px] pt-[4px] text-default-text cursor-pointer'
+                onClick={() => setShowColorPelette(!showColorPelette)}
+              >
+                Custom
+              </div>
             </div>
           </div>
         </div>

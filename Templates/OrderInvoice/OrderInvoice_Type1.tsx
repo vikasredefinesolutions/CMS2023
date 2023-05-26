@@ -4,6 +4,7 @@ import { CustomizeLaterMain } from '@constants/common.constant';
 import { CustomizeLater } from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
+import { DisplayLineAttributeOption } from '@services/cart';
 import moment from 'moment';
 import Link from 'next/link';
 import React, { Fragment } from 'react';
@@ -366,6 +367,279 @@ const OrderInvoice_type1: React.FC<_propsOrder> = ({ order }) => {
                                                   </tr>
                                                 );
                                               },
+                                            )}
+                                            {product.displayLineAttributeOptions
+                                              .length > 0 && (
+                                              <div className='mt-10'>
+                                                <tr>
+                                                  <td
+                                                    colSpan={3}
+                                                    style={{
+                                                      fontFamily:
+                                                        "'open sans',Arial, Helvetica, sans-serif",
+                                                      fontSize: '14px',
+                                                      fontWeight: 'normal',
+                                                      lineHeight: '30px',
+                                                      color: '#000',
+                                                      padding:
+                                                        '0px 15px 0px 15px',
+                                                    }}
+                                                  >
+                                                    <strong>
+                                                      Personalization
+                                                      Instructions:
+                                                    </strong>
+                                                  </td>
+                                                </tr>
+                                                <tr>
+                                                  <td
+                                                    colSpan={3}
+                                                    style={{
+                                                      fontFamily:
+                                                        "'open sans',Arial, Helvetica, sans-serif",
+                                                      fontSize: '14px',
+                                                      fontWeight: 'normal',
+                                                      lineHeight: '30px',
+                                                      color: '#000',
+                                                      padding:
+                                                        '0px 15px 0px 15px',
+                                                    }}
+                                                  >
+                                                    Font :{' '}
+                                                    {
+                                                      product
+                                                        .displayLineAttributeOptions[0]
+                                                        .linePersonalizeDetails[0]
+                                                        .font
+                                                    }
+                                                  </td>
+                                                </tr>
+                                                <tr>
+                                                  <td
+                                                    colSpan={3}
+                                                    style={{
+                                                      fontFamily:
+                                                        "'open sans',Arial, Helvetica, sans-serif",
+                                                      fontSize: '14px',
+                                                      fontWeight: 'normal',
+                                                      lineHeight: '30px',
+                                                      color: '#000',
+                                                      padding:
+                                                        '0px 15px 0px 15px',
+                                                    }}
+                                                  >
+                                                    Color :
+                                                    {
+                                                      product
+                                                        .displayLineAttributeOptions[0]
+                                                        .linePersonalizeDetails[0]
+                                                        .color
+                                                    }
+                                                  </td>
+                                                </tr>
+                                                <tr>
+                                                  <td
+                                                    colSpan={3}
+                                                    style={{
+                                                      fontFamily:
+                                                        "'open sans',Arial, Helvetica, sans-serif",
+                                                      fontSize: '14px',
+                                                      fontWeight: 'normal',
+                                                      lineHeight: '30px',
+                                                      color: '#000',
+                                                      padding:
+                                                        '0px 15px 0px 15px',
+                                                    }}
+                                                  >
+                                                    Location :
+                                                    {
+                                                      product
+                                                        .displayLineAttributeOptions[0]
+                                                        .linePersonalizeDetails[0]
+                                                        .location
+                                                    }
+                                                  </td>
+                                                </tr>
+                                                <tr>
+                                                  <td
+                                                    colSpan={3}
+                                                    style={{
+                                                      fontFamily:
+                                                        'open sans,Arial, Helvetica, sans-serif',
+                                                      fontSize: '14px',
+                                                      fontWeight: 'normal',
+                                                      lineHeight: '20px',
+                                                      color: '#000',
+                                                      padding:
+                                                        '15px 0px 0px 15px',
+                                                    }}
+                                                  >
+                                                    <table
+                                                      width='100%'
+                                                      cellPadding='0'
+                                                      cellSpacing='0'
+                                                      style={{
+                                                        border:
+                                                          '1px solid #c2c2c2',
+                                                      }}
+                                                    >
+                                                      <tbody>
+                                                        <tr>
+                                                          <td
+                                                            style={{
+                                                              fontFamily:
+                                                                'open sans,Arial, Helvetica, sans-serif',
+                                                              fontSize: '14px',
+                                                              fontWeight:
+                                                                'normal',
+                                                              lineHeight:
+                                                                '20px',
+                                                              color: '#000',
+                                                              padding:
+                                                                '5px 5px 5px 5px',
+                                                              border:
+                                                                '1px solid #c2c2c2',
+                                                            }}
+                                                          >
+                                                            <strong>
+                                                              Size
+                                                            </strong>
+                                                          </td>
+                                                          <td
+                                                            style={{
+                                                              fontFamily:
+                                                                'open sans,Arial, Helvetica, sans-serif',
+                                                              fontSize: '14px',
+                                                              fontWeight:
+                                                                'normal',
+                                                              lineHeight:
+                                                                '20px',
+                                                              color: '#000',
+                                                              padding:
+                                                                '5px 5px 5px 5px',
+                                                              border:
+                                                                '1px solid #c2c2c2',
+                                                            }}
+                                                          >
+                                                            <strong>
+                                                              Line 1
+                                                            </strong>
+                                                          </td>
+                                                          <td
+                                                            style={{
+                                                              fontFamily:
+                                                                'open sans,Arial, Helvetica, sans-serif',
+                                                              fontSize: '14px',
+                                                              fontWeight:
+                                                                'normal',
+                                                              lineHeight:
+                                                                '20px',
+                                                              color: '#000',
+                                                              padding:
+                                                                '5px 5px 5px 5px',
+                                                              border:
+                                                                '1px solid #c2c2c2',
+                                                            }}
+                                                          >
+                                                            <strong>
+                                                              Line 2
+                                                            </strong>
+                                                          </td>
+                                                        </tr>
+                                                        {product.displayLineAttributeOptions.map(
+                                                          (
+                                                            Lineitem: DisplayLineAttributeOption,
+                                                            index: number,
+                                                          ) => {
+                                                            return (
+                                                              <>
+                                                                {Lineitem.linePersonalizeDetails.map(
+                                                                  (
+                                                                    line: any,
+                                                                    ind: number,
+                                                                  ) => (
+                                                                    <>
+                                                                      <tr>
+                                                                        <td
+                                                                          style={{
+                                                                            fontFamily:
+                                                                              'open sans,Arial, Helvetica, sans-serif',
+                                                                            fontSize:
+                                                                              '14px',
+                                                                            fontWeight:
+                                                                              'normal',
+                                                                            lineHeight:
+                                                                              '20px',
+                                                                            color:
+                                                                              '#000',
+                                                                            padding:
+                                                                              '5px 5px 5px 5px',
+                                                                            border:
+                                                                              '1px solid #c2c2c2',
+                                                                          }}
+                                                                        >
+                                                                          {
+                                                                            Lineitem.attributeOptionName
+                                                                          }
+                                                                        </td>
+                                                                        <td
+                                                                          style={{
+                                                                            fontFamily:
+                                                                              'open sans,Arial, Helvetica, sans-serif',
+                                                                            fontSize:
+                                                                              '14px',
+                                                                            fontWeight:
+                                                                              'normal',
+                                                                            lineHeight:
+                                                                              '20px',
+                                                                            color:
+                                                                              '#000',
+                                                                            padding:
+                                                                              '5px 5px 5px 5px',
+                                                                            border:
+                                                                              '1px solid #c2c2c2',
+                                                                          }}
+                                                                        >
+                                                                          {
+                                                                            line.line1Text
+                                                                          }
+                                                                        </td>
+                                                                        <td
+                                                                          style={{
+                                                                            fontFamily:
+                                                                              'open sans,Arial, Helvetica, sans-serif',
+                                                                            fontSize:
+                                                                              '14px',
+                                                                            fontWeight:
+                                                                              'normal',
+                                                                            lineHeight:
+                                                                              '20px',
+                                                                            color:
+                                                                              '#000',
+                                                                            padding:
+                                                                              '5px 5px 5px 5px',
+                                                                            border:
+                                                                              '1px solid #c2c2c2',
+                                                                          }}
+                                                                        >
+                                                                          {line.line2Text !==
+                                                                          ''
+                                                                            ? line.line2Text
+                                                                            : ''}
+                                                                        </td>
+                                                                      </tr>
+                                                                    </>
+                                                                  ),
+                                                                )}
+                                                              </>
+                                                            );
+                                                          },
+                                                        )}
+                                                      </tbody>
+                                                    </table>
+                                                  </td>
+                                                </tr>
+                                              </div>
                                             )}
                                             <tr>
                                               <td
