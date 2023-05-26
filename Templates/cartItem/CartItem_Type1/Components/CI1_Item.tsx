@@ -252,7 +252,7 @@ const CI1_Item: React.FC<_CartItem & _Props> = (props) => {
 
     if (userConfirmsToDelete) {
       setShowLoader(true);
-      captureRemoveItemEvent(cartData!, itemId, false);
+      captureRemoveItemEvent(cartData, itemId, customerId, storeId);
       deleteItemCart(itemId)
         .then(() => {
           refreshCartItems();

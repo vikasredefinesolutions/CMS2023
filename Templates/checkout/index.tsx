@@ -1,7 +1,10 @@
 import { _defaultTemplates } from '@configs/template.config';
 import { CG_STORE_CODE } from '@constants/global.constant';
 import { paths } from '@constants/paths.constant';
-import { GoogleAnalyticsTrackerForCG } from '@helpers/common.helper';
+import {
+  GoogleAnalyticsTrackerForAllStore,
+  GoogleAnalyticsTrackerForCG,
+} from '@helpers/common.helper';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import { useRouter } from 'next/router';
 import { FC, useEffect, useRef } from 'react';
@@ -57,6 +60,11 @@ const CheckoutTemplate: FC<_Props> = ({ templateId }) => {
       };
 
       GoogleAnalyticsTrackerForCG(
+        'GoogleBeginCheckOutScript',
+        storeId,
+        payload,
+      );
+      GoogleAnalyticsTrackerForAllStore(
         'GoogleBeginCheckOutScript',
         storeId,
         payload,

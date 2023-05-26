@@ -2,7 +2,10 @@ import {
   _MyAcc_OrderBillingDetails,
   _MyAcc_OrderProductDetails,
 } from '@definations/APIs/user.res';
-import { GoogleAnalyticsTrackerForCG } from '@helpers/common.helper';
+import {
+  GoogleAnalyticsTrackerForAllStore,
+  GoogleAnalyticsTrackerForCG,
+} from '@helpers/common.helper';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import React, { useEffect, useRef } from 'react';
 import { _ThankYouTemplates } from './ThankYou';
@@ -47,6 +50,11 @@ const ThankYouTemplate: React.FC<_props> = ({ order, id }) => {
         })),
       };
       GoogleAnalyticsTrackerForCG(
+        'GoogleGetPurchaseJsonScript',
+        storeId,
+        eventPayload,
+      );
+      GoogleAnalyticsTrackerForAllStore(
         'GoogleGetPurchaseJsonScript',
         storeId,
         eventPayload,

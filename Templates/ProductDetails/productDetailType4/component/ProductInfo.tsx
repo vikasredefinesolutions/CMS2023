@@ -6,7 +6,7 @@ import { __Cookie } from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
 import { _Selectedproduct_v2 } from '@definations/product.type';
 import {
-  CaptureGTMEvent,
+  GoogleAnalyticsTrackerForAllStore,
   getAddToCartObject,
   setCookie
 } from '@helpers/common.helper';
@@ -127,39 +127,26 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
           if (cartObject) {
             //GTM event for add-to-cart
             const eventPayload = {
-              pageTitle: document?.title ? document?.title : '',
-              pageCategory: 'Add to Cart',
-              visitorType: isLoggedIn ? 'high-value' : 'low-value',
-              customProperty1: '',
-              event: 'add_to_cart',
-              ecommerce: {
-                value: toCheckout?.totalPrice,
-                currency: 'USD', // USD,
-                coupon: '',
-                items: [
-                  {
-                    item_name: storeProduct?.name,
-                    item_id: storeProduct?.sku,
-                    item_brand: storeProduct?.brand?.name,
-                    item_category: '',
-                    item_category2: '',
-                    item_category3: '',
-                    item_category4: '',
-                    item_variant: storeProduct?.colors?.length
-                      ? storeProduct?.colors?.find(
-                          (clr) => clr.productId === storeProduct.id,
-                        )?.name
-                      : '',
-                    item_list_name: storeProduct?.name,
-                    item_list_id: storeProduct?.id,
-                    index: storeProduct.id,
-                    quantity: toCheckout?.totalQty,
-                    price: toCheckout?.totalPrice,
-                  },
-                ],
-              },
+              storeId: storeId,
+              customerId: isLoggedIn,
+              productId: storeProduct?.id,
+              productName: storeProduct?.name,
+              colorName: storeProduct?.colors?.length
+                ? storeProduct?.colors?.find(
+                    (clr) => clr.productId === product.id,
+                  )?.name
+                : '',
+              price: toCheckout?.totalPrice,
+              salesPrice: toCheckout?.price,
+              sku: storeProduct?.sku,
+              brandName: storeProduct?.brand?.name,
+              quantity: toCheckout.totalQty,
             };
-            CaptureGTMEvent(eventPayload);
+            GoogleAnalyticsTrackerForAllStore(
+              'GoogleAddToCartScript',
+              storeId,
+              eventPayload,
+            );
             try {
               let c_id = customerId;
               let res;

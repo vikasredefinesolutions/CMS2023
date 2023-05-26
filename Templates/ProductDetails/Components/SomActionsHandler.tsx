@@ -1,4 +1,4 @@
-import { CG_STORE_CODE, __Cookie } from '@constants/global.constant';
+import { __Cookie } from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
 import { paths } from '@constants/paths.constant';
 import { AddItemsToTheCart } from '@services/cart.service';
@@ -8,6 +8,7 @@ import {
 } from '@services/product.service.helper';
 import MsgContainer from 'appComponents_v2/modals/msgContainer/MsgContainer';
 import {
+  GoogleAnalyticsTrackerForAllStore,
   GoogleAnalyticsTrackerForCG,
   KlaviyoScriptTag,
   extractCookies,
@@ -176,24 +177,27 @@ const SomActionsHandler: React.FC<_SOMActionHandlerProps> = ({
     });
 
     //GTM event for add-to-cart
-    if (storeId === CG_STORE_CODE) {
-      const payload = {
-        storeId: storeId,
-        customerId: loggedIN_userId,
-        productId: product?.id,
-        productName: product?.name,
-        colorName: product?.colors?.length
-          ? product?.colors?.find((clr) => clr.productId === product.id)?.name
-          : '',
-        price: toCheckout?.totalPrice,
-        salesPrice: toCheckout?.price,
-        sku: product?.sku,
-        brandName: product?.brand?.name,
-        quantity: toCheckout.totalQty,
-      };
+    const payload = {
+      storeId: storeId,
+      customerId: loggedIN_userId,
+      productId: product?.id,
+      productName: product?.name,
+      colorName: product?.colors?.length
+        ? product?.colors?.find((clr) => clr.productId === product.id)?.name
+        : '',
+      price: toCheckout?.totalPrice,
+      salesPrice: toCheckout?.price,
+      sku: product?.sku,
+      brandName: product?.brand?.name,
+      quantity: toCheckout.totalQty,
+    };
 
-      GoogleAnalyticsTrackerForCG('GoogleAddToCartScript', storeId, payload);
-    }
+    GoogleAnalyticsTrackerForCG('GoogleAddToCartScript', storeId, payload);
+    GoogleAnalyticsTrackerForAllStore(
+      'GoogleAddToCartScript',
+      storeId,
+      payload,
+    );
 
     try {
       const guestId: number = await AddItemsToTheCart(cartPayload);

@@ -1,6 +1,9 @@
 import SeoHead from '@appComponents/reUsable/SeoHead';
 import { _defaultTemplates } from '@configs/template.config';
-import { GoogleAnalyticsTrackerForCG } from '@helpers/common.helper';
+import {
+  GoogleAnalyticsTrackerForAllStore,
+  GoogleAnalyticsTrackerForCG,
+} from '@helpers/common.helper';
 import {
   GetCustomerId,
   useActions_v2,
@@ -51,6 +54,11 @@ const Cart: NextPage<{ templateId: number }> = ({ templateId }) => {
       };
 
       GoogleAnalyticsTrackerForCG('GoogleViewCartScript', storeId, payload);
+      GoogleAnalyticsTrackerForAllStore(
+        'GoogleViewCartScript',
+        storeId,
+        payload,
+      );
     }
   }, [cartData]);
 

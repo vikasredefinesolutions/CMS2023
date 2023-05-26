@@ -1,44 +1,38 @@
 import { _CartItem } from '@services/cart';
-import { CaptureGTMEvent } from 'helpers_v2/common.helper';
+import {
+  GoogleAnalyticsTrackerForAllStore,
+  GoogleAnalyticsTrackerForCG,
+} from 'helpers_v2/common.helper';
 
 export const captureRemoveItemEvent = (
-  cartItems: _CartItem[],
+  cartItems: _CartItem[] | null,
   itemId: number,
-  isEmployeeLoggedIn: boolean,
+  customerId: number | string,
+  storeId: number,
 ) => {
-  const removedProduct = cartItems.find(
+  const removedProduct = cartItems?.find(
     (item) => item.shoppingCartItemsId === itemId,
   );
 
   if (removedProduct) {
-    const eventPayload = {
-      pageTitle: document?.title || 'Cart',
-      pageCategory: 'Remove From Cart',
-      visitorType: isEmployeeLoggedIn ? 'high-value' : 'low-value',
-      customProperty1: '',
-      event: 'remove_from_cart',
-      ecommerce: {
-        value: removedProduct?.totalPrice,
-        currency: 'USD', // USD
-        items: [
-          {
-            item_name: removedProduct?.productName,
-            item_id: removedProduct?.sku,
-            item_brand: removedProduct?.brandName,
-            item_category: '',
-            item_category2: '',
-            item_category3: '',
-            item_category4: '',
-            item_variant: '',
-            item_list_name: removedProduct?.productName,
-            item_list_id: removedProduct?.productId,
-            index: removedProduct?.productId,
-            quantity: removedProduct?.totalQty,
-            price: removedProduct?.totalPrice,
-          },
-        ],
-      },
+    const payload = {
+      storeId: storeId,
+      customerId: customerId || 0,
+      shoppingCartItemsModel: [
+        {
+          productId: removedProduct?.productId,
+          productName: removedProduct?.productName,
+          colorVariants: removedProduct?.attributeOptionValue,
+          price: removedProduct?.totalPrice,
+          quantity: removedProduct?.totalQty,
+        },
+      ],
     };
-    CaptureGTMEvent(eventPayload);
+    GoogleAnalyticsTrackerForCG('GoogleRemoveFromCartScript', storeId, payload);
+    GoogleAnalyticsTrackerForAllStore(
+      'GoogleRemoveFromCartScript',
+      storeId,
+      payload,
+    );
   }
 };

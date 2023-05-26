@@ -11,6 +11,7 @@ import { signup_payload } from '@constants/payloads/signup';
 import { commonMessage } from '@constants/successError.text';
 import { CreditCardDetailsType } from '@definations/checkout';
 import {
+  GoogleAnalyticsTrackerForAllStore,
   GoogleAnalyticsTrackerForCG,
   KlaviyoScriptTag,
   deleteCookie,
@@ -466,6 +467,7 @@ const CheckoutController = () => {
       })),
     };
     GoogleAnalyticsTrackerForCG(eventName, storeId, eventPayload);
+    GoogleAnalyticsTrackerForAllStore(eventName, storeId, eventPayload);
   };
 
   const reviewOrder = async () => {
@@ -541,7 +543,7 @@ const CheckoutController = () => {
             setBillingAdress(shippingForm.values);
           }
           addShippingPaymentInfoEventHandle('GoogleAddShippingInfoScript');
-          addShippingPaymentInfoEventHandle('GoogleGetPurchaseJsonScript');
+          addShippingPaymentInfoEventHandle('GoogleAddPaymentInfoScript');
 
           setCurrentPage(checkoutPages.reviewOrder);
         }
@@ -554,7 +556,7 @@ const CheckoutController = () => {
           setBillingAdress(shippingAdress);
         }
         addShippingPaymentInfoEventHandle('GoogleAddShippingInfoScript');
-        addShippingPaymentInfoEventHandle('GoogleGetPurchaseJsonScript');
+        addShippingPaymentInfoEventHandle('GoogleAddPaymentInfoScript');
         setCurrentPage(checkoutPages.reviewOrder);
       }
     }

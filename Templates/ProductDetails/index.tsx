@@ -25,7 +25,7 @@ const ProductDetails: React.FC<_Props> = (props) => {
   const { id: storeId, pageType } = useTypedSelector_v2((state) => state.store);
   const isCaptured = useRef(false);
 
-  const { SEO, details, colors, storeCode } = props;
+  const { details, colors } = props;
   const ProductDetails =
     ProductDetailTemplates[
       `type${props.productDetailsTemplateId}` as

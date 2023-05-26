@@ -18,7 +18,6 @@ const Topic: React.FC<_props> = ({ title, url }) => {
   const { toggleSideMenu } = useActions_v2();
   const { id: customerId } = useTypedSelector_v2((state) => state.user);
   const { id: storeId } = useTypedSelector_v2((state) => state.store);
-
   // --------------------------------------------------------------
   // const storeLayout = useTypedSelector_v2((state) => state.store.layout);
   const view = useTypedSelector_v2((state) => state.store.view);
@@ -124,7 +123,7 @@ const Topic: React.FC<_props> = ({ title, url }) => {
 
   if (view === 'DESKTOP') {
     return (
-      <Link href={`${url}.html`} className='flex'>
+      <Link href={`/${url}.html`} className='flex'>
         <div className=''>
           <button
             title={title}
