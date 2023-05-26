@@ -499,7 +499,7 @@ export const __pagesText = {
     ThankYouLabel: 'Thank You,',
     ForYourOrder: 'FOR YOUR ORDER',
     OrderNumber: 'YOUR ORDER NUMBER IS: ',
-    FirstEmailMessage: 'You will receive a confirmation shortly at',
+    FirstEmailMessage: 'You will receive a confirmation shortly at ',
     LastEmailMessage: ', You can access your account at your account ',
     PrintReciept: 'Print Receipt',
     Questions: 'Questions?',

@@ -5,6 +5,7 @@ import { CustomizeLater } from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
 import { paths } from '@constants/paths.constant';
 import { _MyAcc_OrderProductDetails } from '@definations/APIs/user.res';
+import { DisplayLineAttributeOption } from '@services/cart';
 import Link from 'next/link';
 import React, { useState } from 'react';
 import OrD_UploadImagePopup from './OrD_UploadImagePopup';
@@ -222,6 +223,78 @@ const OrD_ItemDetails: React.FC<_props> = ({
                   </div>
                 ),
               )}
+            {item.displayLineAttributeOptions.length > 0 && (
+              <div className='mt-10'>
+                <div className='text-normal-text border-t pt-[10px] mt-[10px] first:mt-0'>
+                  <div className='font-semibold'>Personalise Text:</div>
+                  <div className='flex justify-between py-1 first:pt-0 last:pb-0'>
+                    <div className='font-semibold'>Font</div>
+                    <div className='text-right'>
+                      {
+                        item.displayLineAttributeOptions[0]
+                          .linePersonalizeDetails[0].font
+                      }
+                    </div>
+                  </div>
+                  <div className='flex justify-between py-1 first:pt-0 last:pb-0'>
+                    <div className='font-semibold'>Color</div>
+                    <div className='text-right'>
+                      {
+                        item.displayLineAttributeOptions[0]
+                          .linePersonalizeDetails[0].color
+                      }
+                    </div>
+                  </div>
+                  <div className='flex justify-between py-1 first:pt-0 last:pb-0'>
+                    <div className='font-semibold'>
+                      Personalization Location
+                    </div>
+                    <div className='text-right'>
+                      {
+                        item.displayLineAttributeOptions[0]
+                          .linePersonalizeDetails[0].location
+                      }
+                    </div>
+                  </div>
+                </div>
+                {item.displayLineAttributeOptions.map(
+                  (Lineitem: DisplayLineAttributeOption, index: number) => {
+                    return (
+                      <>
+                        <div className='text-normal-text border-t pt-[10px] mt-[10px] first:mt-0'>
+                          <div className='flex justify-between py-1 first:pt-0 last:pb-0'>
+                            <div className='font-semibold'>Size</div>
+                            <div className='text-right font-bold'>
+                              {Lineitem.attributeOptionName}
+                            </div>
+                          </div>
+                          {Lineitem.linePersonalizeDetails.map(
+                            (line: any, ind: number) => (
+                              <>
+                                <div className='flex justify-between py-1 first:pt-0 last:pb-0'>
+                                  <div className='font-semibold'>Line 1</div>
+                                  <div className='text-right'>
+                                    {line.line1Text}
+                                  </div>
+                                </div>
+                                {line.line2Text && line.line2Text !== '' && (
+                                  <div className='flex justify-between py-1 first:pt-0 last:pb-0'>
+                                    <div className='font-semibold'>Line 2</div>
+                                    <div className='text-right'>
+                                      {line.line2Text}
+                                    </div>
+                                  </div>
+                                )}
+                              </>
+                            ),
+                          )}
+                        </div>
+                      </>
+                    );
+                  },
+                )}
+              </div>
+            )}
           </div>
           <div className='flex border-t border-[#d2d2d2] mt-6 pt-4 flex-wrap justify-start -mx-3'>
             <div className='w-1/3 px-3'>

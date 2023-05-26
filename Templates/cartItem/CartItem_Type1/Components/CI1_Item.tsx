@@ -26,6 +26,7 @@ import {
   useTypedSelector_v2,
 } from '@hooks_v2/index';
 import {
+  DisplayLineAttributeOption,
   PersonalizationColor,
   PersonalizationFont,
   PersonalizationLocation,
@@ -86,16 +87,15 @@ const CI1_Item: React.FC<_CartItem & _Props> = (props) => {
   const [productForSOM, setProductForSOM] = useState<_ProductDetails | null>(
     null,
   );
-  const [keepPersonalizing, setKeepPersonalizing] = useState<{
-    show: boolean;
-    index: number;
-  }>({ show: false, index: 0 });
+  const [keepPersonalizing, setKeepPersonalizing] = useState<boolean>(false);
   const [personalizationArray, setPersonalizationArray] = useState<
     ShoppingCartItemDetailsViewModel[] | []
   >([]);
   const [cartLinePersonModels, setCartLinePersonModels] = useState<
     _CartLinePersonDetailModel[] | []
   >([]);
+
+  const customer = useTypedSelector_v2((state) => state.user.customer);
 
   // Imported Functions
   const customerId = GetCustomerId();
@@ -445,6 +445,83 @@ const CI1_Item: React.FC<_CartItem & _Props> = (props) => {
                       );
                     },
                   )}
+                {props.displayLineAttributeOptions.length > 0 && (
+                  <div className='mt-10'>
+                    <div className='text-normal-text border-t pt-[10px] mt-[10px] first:mt-0'>
+                      <div className='font-semibold'>Personalise Text:</div>
+                      <div className='flex justify-between py-1 first:pt-0 last:pb-0'>
+                        <div className='font-semibold'>Font</div>
+                        <div className='text-right'>
+                          {
+                            props.displayLineAttributeOptions[0]
+                              .linePersonalizeDetails[0].font
+                          }
+                        </div>
+                      </div>
+                      <div className='flex justify-between py-1 first:pt-0 last:pb-0'>
+                        <div className='font-semibold'>Color</div>
+                        <div className='text-right'>
+                          {
+                            props.displayLineAttributeOptions[0]
+                              .linePersonalizeDetails[0].color
+                          }
+                        </div>
+                      </div>
+                      <div className='flex justify-between py-1 first:pt-0 last:pb-0'>
+                        <div className='font-semibold'>
+                          Personalization Location
+                        </div>
+                        <div className='text-right'>
+                          {
+                            props.displayLineAttributeOptions[0]
+                              .linePersonalizeDetails[0].location
+                          }
+                        </div>
+                      </div>
+                    </div>
+                    {props.displayLineAttributeOptions.map(
+                      (Lineitem: DisplayLineAttributeOption, index: number) => {
+                        return (
+                          <>
+                            <div className='text-normal-text border-t pt-[10px] mt-[10px] first:mt-0'>
+                              <div className='flex justify-between py-1 first:pt-0 last:pb-0'>
+                                <div className='font-semibold'>Size</div>
+                                <div className='text-right font-bold'>
+                                  {Lineitem.attributeOptionName}
+                                </div>
+                              </div>
+                              {Lineitem.linePersonalizeDetails.map(
+                                (line: any, ind: number) => (
+                                  <>
+                                    <div className='flex justify-between py-1 first:pt-0 last:pb-0'>
+                                      <div className='font-semibold'>
+                                        Line 1
+                                      </div>
+                                      <div className='text-right'>
+                                        {line.line1Text}
+                                      </div>
+                                    </div>
+                                    {line.line2Text &&
+                                      line.line2Text !== '' && (
+                                        <div className='flex justify-between py-1 first:pt-0 last:pb-0'>
+                                          <div className='font-semibold'>
+                                            Line 2
+                                          </div>
+                                          <div className='text-right'>
+                                            {line.line2Text}
+                                          </div>
+                                        </div>
+                                      )}
+                                  </>
+                                ),
+                              )}
+                            </div>
+                          </>
+                        );
+                      },
+                    )}
+                  </div>
+                )}
               </div>
             </div>
             {props.isEditable && (
@@ -453,59 +530,85 @@ const CI1_Item: React.FC<_CartItem & _Props> = (props) => {
                   <button
                     data-modal-toggle='startorderModal'
                     className='btn btn-secondary !w-full !pt-[0px] !pb-[0px] text-center uppercase'
-                    onClick={() => handleEditItem(props)}
+                    onClick={() => {
+                      handleEditItem(props);
+                      keepPersonalizing ? setKeepPersonalizing(false) : '';
+                    }}
                   >
                     EDIT ITEM
                   </button>
                 </div>
                 <div className='mt-[12px] lg:ml-[20px]'>
                   <button
-                    onClick={() => handleRemoveItem(props.shoppingCartItemsId)}
+                    onClick={() => {
+                      keepPersonalizing ? setKeepPersonalizing(false) : '';
+                      handleRemoveItem(props.shoppingCartItemsId);
+                    }}
                     className='btn btn-primary !w-full !pt-[0px] !pb-[0px] text-center uppercase'
                   >
                     Remove
                   </button>
                 </div>
-                {isLinepersonalization && (
-                  <div className='mt-[12px] lg:ml-[20px] mb-[20px] text-center p-[2px] text-sm cursor-pointer'>
-                    <span
-                      className='!w-full btn btn-sm btn-secondary uppercase text-md'
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setPersonalizationArray(
-                          props.shoppingCartItemDetailsViewModels,
-                        );
-                        setKeepPersonalizing({
-                          show: !keepPersonalizing.show,
-                          index: props.cartItemIndex,
-                        });
-                      }}
-                    >
-                      {__pagesText.cart.personalize}
-                      <br />
-                      {__pagesText.cart.yourItem}
-                    </span>
-                  </div>
-                )}
+                {isLinepersonalization &&
+                  customer?.isCustomerPersonalization &&
+                  props.shoppingCartLogoPersonViewModels.length >= 1 &&
+                  props.shoppingCartLogoPersonViewModels[0].logoName !==
+                    CustomizeLaterMain &&
+                  props.isBrandPersonalization && (
+                    <div className='mt-[12px] lg:ml-[20px] mb-[20px] text-center p-[2px] text-sm cursor-pointer'>
+                      <span
+                        className='!w-full btn btn-sm btn-secondary uppercase text-md'
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setPersonalizationArray(
+                            props.shoppingCartItemDetailsViewModels,
+                          );
+                          setCartLinePersonModels([]);
+                          setKeepPersonalizing(!keepPersonalizing);
+                        }}
+                      >
+                        {__pagesText.cart.personalize}
+                        <br />
+                        {__pagesText.cart.yourItem}
+                      </span>
+                    </div>
+                  )}
               </div>
             )}
           </div>
         </div>
-        {keepPersonalizing.show &&
-          keepPersonalizing.index === props.cartItemIndex && (
-            <Personalizing
-              item={props}
-              setKeepPersonalizing={setKeepPersonalizing}
-              availableLocation={props.availableLocation}
-              availableFont={props.availableFont}
-              availableColor={props.availableColor}
-              personalizationArray={personalizationArray}
-              cartLinePersonModels={cartLinePersonModels}
-              setCartLinePersonModels={setCartLinePersonModels}
-              setPersonalizationArray={setPersonalizationArray}
-              shoppingCartItemsId={props.shoppingCartItemsId}
-            />
-          )}
+        {keepPersonalizing && (
+          <Personalizing
+            item={props}
+            setKeepPersonalizing={setKeepPersonalizing}
+            availableLocation={props.availableLocation}
+            availableFont={props.availableFont}
+            availableColor={props.availableColor}
+            personalizationArray={personalizationArray}
+            cartLinePersonModels={cartLinePersonModels}
+            setCartLinePersonModels={setCartLinePersonModels}
+            setPersonalizationArray={setPersonalizationArray}
+            shoppingCartItemsId={props.shoppingCartItemsId}
+            earlierSelectedColor={
+              props.displayLineAttributeOptions[0]
+                ? props.displayLineAttributeOptions[0].linePersonalizeDetails[0]
+                    .color
+                : ''
+            }
+            earlierSelectedFont={
+              props.displayLineAttributeOptions[0]
+                ? props.displayLineAttributeOptions[0].linePersonalizeDetails[0]
+                    .font
+                : ''
+            }
+            earlierSelectedLocation={
+              props.displayLineAttributeOptions[0]
+                ? props.displayLineAttributeOptions[0].linePersonalizeDetails[0]
+                    .location
+                : ''
+            }
+          />
+        )}
       </li>
 
       {productForSOM && (

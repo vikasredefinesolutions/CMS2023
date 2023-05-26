@@ -1,3 +1,5 @@
+import { DisplayLineAttributeOption } from '@services/cart';
+
 export type UserCreateResponse = {
   data: UserType;
   errors: Object;
@@ -281,6 +283,8 @@ export interface _MyAcc_OrderProductDetails {
   lineTotalPrice: number;
   productTotal: number;
   itemNote: string | null;
+  isBrandPersonalization: boolean;
+  displayLineAttributeOptions: DisplayLineAttributeOption[];
 }
 
 export interface ShoppingCartItemDetailsViewModel {

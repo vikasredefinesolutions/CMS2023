@@ -58,7 +58,7 @@ const Personalizing: FC<any> = ({
       ? earlierSelectedColor
       : availableColor[1]['name'],
   );
-  const changeLocationForAll = (value: string, name: string) => {
+  const changeLocationForAll = async (value: string, name: string) => {
     let newArr = personalizationArray;
     let changedArr: any = [];
     newArr.forEach((element: ShoppingCartItemDetailsViewModel) => {
@@ -107,25 +107,22 @@ const Personalizing: FC<any> = ({
         }
       });
     });
-    setCartLinePersonModels((prev: _CartLinePersonDetailModel[]) => [
-      ...prev,
-      ...changedArr,
-    ]);
+    if (changedArr.length !== 0) {
+      let obj = [...cartLinePersonModels, ...changedArr];
+      await save(obj);
+    }
   };
 
-  const save = async () => {
+  const save = async (obj?: any) => {
     setShowLoader(true);
     updateCartPersonalization({
-      cartLinePersonDetailModel: cartLinePersonModels,
+      cartLinePersonDetailModel: obj ? obj : cartLinePersonModels,
     })
       .then((res) => {
         if (res) {
           setShowLoader(false);
           showModal({ message: 'Successfully updated', title: 'Success' });
-          setKeepPersonalizing({
-            show: false,
-            index: 0,
-          });
+          setKeepPersonalizing(false);
           setCartLinePersonModels([]);
           fetchCartDetails({
             customerId: id ? id : 0,
@@ -140,6 +137,14 @@ const Personalizing: FC<any> = ({
   };
 
   const lineOneChangeHandler = (e: any, index: number, lineIndex: number) => {
+    if (
+      e.target.value === '' &&
+      personalizationArray[index].shoppingCartLineTwoPersonViewModel[lineIndex]
+        .linetext !== ''
+    ) {
+      alert('Please Delete line Two First');
+      return;
+    }
     const newPersonalizationArr = personalizationArray.map(
       (p: ShoppingCartItemDetailsViewModel, i: number) => {
         if (i === index) {
