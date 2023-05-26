@@ -138,7 +138,7 @@ class MyDocument extends Document {
               ></script>
             )}
         </Head>
-        <body className='font-Outfit bg-white'>
+        <body className='font-Outfit'>
           {_globalStore.topBodySnippetGTM &&
             _globalStore.storeId === CG_STORE_CODE && (
               <noscript
