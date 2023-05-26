@@ -132,7 +132,14 @@ const Ecommerce_ProductDetails_View: React.FC<_Props> = (product) => {
   const HeadTag = (
     <Head>
       <title>{_SEO.title}</title>
-      <meta name='description' content={_SEO.desc} key='desc' />
+      <meta
+        name='description'
+        // dangerouslySetInnerHTML={{
+        //   __html: _SEO.desc,
+        // }}
+        content={_SEO.desc}
+        key='desc'
+      />
       <meta name='keywords' content={_SEO.keywords} />
     </Head>
   );

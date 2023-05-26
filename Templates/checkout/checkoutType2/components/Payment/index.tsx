@@ -1,7 +1,7 @@
 import { paymentMethodCustom } from '@constants/enum';
 import { ChangeEvent, FC } from 'react';
-import CardPaymentType from './components/CardPaymentType';
 import PaymentChange from './PaymentChange';
+import CardPaymentType from './components/CardPaymentType';
 import PurchaseOrderType from './components/PurchaseorderType';
 
 export type paymentProps = FC<{
@@ -51,6 +51,13 @@ const PaymentType: FC<{
       return (
         <>
           <PaymentChange
+            cardDetails={{
+              cardNumber: '',
+              cardExpirationMonth: '',
+              cardExpirationYear: '',
+              cardVarificationCode: '',
+            }}
+            purchaseOrder={''}
             {...{
               changeHandler,
               updatePaymentMethod,

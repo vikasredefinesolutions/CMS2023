@@ -4,6 +4,7 @@ import { paymentProps } from '..';
 const PurchaseOrderType1: paymentProps = ({
   changeHandler,
   updatePaymentMethod,
+  purchaseOrder,
 }) => {
   return (
     <div id='PurchaseOrder'>
@@ -28,6 +29,7 @@ const PurchaseOrderType1: paymentProps = ({
           placeholder=' '
           required={true}
           className='pt-[15px] pb-[0px] block w-full px-[8px] h-[48px] mt-[0px] text-sub-text text-[18px] text-[#000000] bg-transparent border-0 appearance-none focus:outline-none focus:ring-0'
+          defaultValue={purchaseOrder ? purchaseOrder : ''}
         />
         <label
           htmlFor='EnterPONumber'

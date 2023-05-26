@@ -54,6 +54,25 @@ const ProductImg: React.FC<_ProductImgProps> = ({ product }) => {
     <div className='col-span-1 grid grid-cols-12 gap-[24px] pr-[15px] pt-[8px]'>
       <div className='col-span-12 border border-gray-border relative'>
         <div className='main-image max-w-lg mx-auto'>
+          {/* TODO :  ADJUST SALE ICON ALIGNMENT IN PRODUCT DETAIL  */}
+          {product &&
+            product.productTagViewModel &&
+            product.productTagViewModel.length > 0 &&
+            (product.productTagViewModel[0].productTagName === 'sale' ? (
+              <div className='absolute top-1 left-2 text-gray-800 p-1 z-5"'>
+                <img
+                  src={`${mediaBaseUrl}${product?.productTagViewModel[0].imagename}`}
+                />
+              </div>
+            ) : (
+              <div className='absolute -top-2 -left-2 text-gray-800 p-1 z-5"'>
+                <img
+                  src={`${mediaBaseUrl}${product?.productTagViewModel[0].imagename}`}
+                  width={'60px'}
+                  height={'60px'}
+                />
+              </div>
+            ))}
           <InnerImageZoom
             key={selectedImage.imageUrl}
             src={selectedImage?.imageUrl}
@@ -62,7 +81,13 @@ const ProductImg: React.FC<_ProductImgProps> = ({ product }) => {
             className='w-full object-center object-cover sm:rounded-lg main_image max-h'
           />
         </div>
-        <div className='hidden md:block sub-image absolute left-[10px] top-[15px] w-[70px]'>
+        <div
+          className={`hidden md:block sub-image absolute left-[10px]  top-[15px] w-[70px] ${
+            product && product.productTagViewModel[0]?.productTagName === 'sale'
+              ? 'mt-[60px]'
+              : ''
+          }`}
+        >
           {selectedColor.moreImages.length > 1 &&
             selectedColor?.moreImages
               ?.map((img, index) => ({ ...img, id: index }))

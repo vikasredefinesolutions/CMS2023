@@ -102,6 +102,12 @@ export interface _ProductDetails {
   categoryName?: string;
   productBrandLogo: string | null;
   brandSEname: string | null;
+  productTagViewModel: Array<{
+    productId: number;
+    imagename: string;
+    productTagName: string;
+    tagPosition: string;
+  }>;
 }
 export interface _ProductPolicy {
   storeId: number;

@@ -92,7 +92,14 @@ export interface _ProductDetails {
   isSpecialBrand: boolean;
   categoryName?: string;
   brandSEname: string | null;
+  productTagViewModel: Array<{
+    productId: number;
+    imagename: string;
+    productTagName: string;
+    tagPosition: string;
+  }>;
 }
+
 export interface _ProductPolicy {
   storeId: number;
   brandID: number | null;

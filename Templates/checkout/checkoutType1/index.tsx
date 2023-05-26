@@ -68,6 +68,7 @@ const ChekoutType1: React.FC<_Props> = ({ templateId }) => {
     setSelectedShipping,
   } = CheckoutController();
   const userId = useTypedSelector_v2((state) => state.user.id);
+
   useEffect(() => {
     if (!shippingAdress) {
       setShowAddAddress(true);
@@ -386,6 +387,8 @@ const ChekoutType1: React.FC<_Props> = ({ templateId }) => {
                           paymentMethod={paymentMethod}
                           updatePaymentMethod={updatePaymentMethod}
                           detectCardType={detectCardType}
+                          cardDetails={cardDetails}
+                          purchaseOrder={purchaseOrder}
                         />
                         {showAddAddress && !billingAdress ? (
                           <AddAddress
@@ -495,7 +498,9 @@ const ChekoutType1: React.FC<_Props> = ({ templateId }) => {
                 <button
                   className='btn btn-lg !w-full text-center btn-secondary mb-[8px]'
                   id='btn-review-order'
-                  onClick={reviewOrder}
+                  onClick={() => {
+                    reviewOrder();
+                  }}
                 >
                   REVIEW ORDER
                 </button>{' '}

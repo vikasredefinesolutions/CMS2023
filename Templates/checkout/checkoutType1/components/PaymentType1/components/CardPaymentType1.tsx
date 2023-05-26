@@ -10,17 +10,23 @@ const CardPaymentType1: paymentProps = ({
   updatePaymentMethod,
   changeHandler,
   detectCardType,
+  cardDetails,
+  purchaseOrder,
 }) => {
   const [showCardHelp, setShowCardHelp] = useState(false);
   const [checkCard, setcardCheck] = useState(false);
-  const [input, setInput] = useState<number | string>('');
-  const [cvv, setcvv] = useState<number | string>('');
+  const [input, setInput] = useState<number | string>(
+    cardDetails?.cardNumber ? cardDetails?.cardNumber : '',
+  );
+  const [cvv, setcvv] = useState<number | string>(
+    cardDetails?.cardVarificationCode ? cardDetails?.cardVarificationCode : '',
+  );
   const { blockInvalidChar } = CheckoutController();
-
   const handleCard = (e: any) => {
     if (!Number(e.target.value) || e.target.value.length == 0) {
       setcardCheck(false);
       setInput('');
+
       return;
     } else {
       if (e.target.value.length < e.target.maxLength + 1) {
@@ -61,11 +67,19 @@ const CardPaymentType1: paymentProps = ({
   };
 
   useEffect(() => {
-    document.querySelectorAll('.selectFiled').forEach((el) => {
-      el.setAttribute('value', '');
-    });
-  }, []);
+    if (
+      cardDetails &&
+      Object.values(cardDetails).some((x) => x === null || x === '')
+    ) {
+      document.querySelectorAll('.selectFiled').forEach((el) => {
+        el.setAttribute('value', '');
+      });
+    }
 
+    if (cardDetails && cardDetails?.cardNumber.length > 14) {
+      setcardCheck(true);
+    }
+  }, []);
   return (
     <div id='PaymentCard'>
       {/* flex items-baseline mt-[12px] mb-[12px] pb-[18px] border-b border-gray-border */}
@@ -115,11 +129,12 @@ const CardPaymentType1: paymentProps = ({
           name='cardNumber'
           placeholder=' '
           required={true}
+          value={input}
           maxLength={
             +`${detectCardType && detectCardType() === 'AMEX' ? 15 : 16}`
           }
           type='number'
-          value={input}
+          // defaultValue={cardDetails?.cardNumber ? cardDetails.cardNumber : null}
           className='apperance pt-[15px] pb-[0px] block w-full px-[8px] h-[48px] mt-[0px] text-sub-text text-[18px] text-[#000000] bg-transparent border-0 appearance-none focus:outline-none focus:ring-0'
         />
         <label
@@ -166,11 +181,24 @@ const CardPaymentType1: paymentProps = ({
               className='selectFiled pt-[15px] pb-[0px] block w-full px-[8px] h-[48px] mt-[0px] text-sub-text text-[18px] text-[#000000] bg-transparent border-0 appearance-none focus:outline-none focus:ring-0'
             >
               <option value=''></option>
-              {new Array(12).fill('').map((_, index) => (
-                <option key={index} value={index + 1}>
-                  {index + 1}
-                </option>
-              ))}
+              {new Array(12).fill('').map((_, index) => {
+                const selected =
+                  cardDetails && index + 1 === +cardDetails.cardExpirationMonth
+                    ? true
+                    : false;
+                if (selected) {
+                  return (
+                    <option key={index} value={index + 1} selected>
+                      {index + 1}
+                    </option>
+                  );
+                }
+                return (
+                  <option key={index} value={index + 1}>
+                    {index + 1}
+                  </option>
+                );
+              })}
             </select>
             <label
               htmlFor='Month'
@@ -186,12 +214,28 @@ const CardPaymentType1: paymentProps = ({
               onBlur={changeHandler}
               onChange={handledefault}
               name='cardExpirationYear'
+              // value={
+              //   cardDetails.cardExpirationYear
+              //     ? cardDetails.cardExpirationYear
+              //     : ''
+              // }
               data-value={yearMonth.cardExpirationYear}
               className='selectFiled pt-[15px] pb-[0px] block w-full px-[8px] h-[48px] mt-[0px] text-sub-text text-[18px] text-[#000000] bg-transparent border-0 appearance-none focus:outline-none focus:ring-0'
             >
               <option value=''></option>
               {new Array(12).fill('').map((_, index) => {
                 const optin = new Date().getFullYear() + index;
+                const selected =
+                  cardDetails && optin === +cardDetails.cardExpirationYear
+                    ? true
+                    : false;
+                if (selected) {
+                  return (
+                    <option key={index} value={optin}>
+                      {optin}
+                    </option>
+                  );
+                }
                 return (
                   <option key={index} value={optin}>
                     {optin}
@@ -217,6 +261,7 @@ const CardPaymentType1: paymentProps = ({
               placeholder=' '
               required={true}
               maxLength={3}
+              // value={cvv}
               value={cvv}
               type='number'
               className='apperance  pt-[15px] pb-[0px] block w-full px-[8px] h-[48px] mt-[0px] text-sub-text text-[18px] text-[#000000] bg-transparent border-0 appearance-none focus:outline-none focus:ring-0'

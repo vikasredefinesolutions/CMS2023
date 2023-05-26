@@ -11,8 +11,12 @@ import { __pagesText } from '@constants/pages.text';
 import { paths } from '@constants/paths.constant';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 
+import { __ValidationText } from '@constants/validation.text';
+import { Klaviyo_BackInStock } from '@services/klaviyo.service';
+import { ErrorMessage, Form, Formik } from 'formik';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
+import * as Yup from 'yup';
 import AvailableColors from './AvailableColors';
 import DiscountPricing from './DiscountPricing';
 import ProductFeatures from './ProductFeatures';
@@ -70,34 +74,33 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
     (accumulator, currentValue) => accumulator + currentValue.inventory,
     initialValue,
   );
-  // const { attributeOptionId } = useTypedSelector_v2(
-  //   (state) => state.product.selected.color,
-  // );
-  // const [email, setEmail] = useState<string>('');
+  const { attributeOptionId } = useTypedSelector_v2(
+    (state) => state.product.selected.color,
+  );
+  const [email, setEmail] = useState<string>('');
 
-  // const sendEmailHandler = async (values: { email: string }) => {
-  //   console.log('I am here');
-  //   await Klaviyo_BackInStock({
-  //     email: values.email,
-  //     a: __pagesConstant._document.klaviyoKey,
-  //     variant: '' + attributeOptionId,
-  //     platform: 'api',
-  //   }).then((res) => {
-  //     console.log(res, 'res');
-  //     if (res.success) {
-  //       setEmail('SENT');
-  //     }
-  //   });
-  // };
-  // const validationSchema = Yup.object().shape({
-  //   email: Yup.string().email().required(__ValidationText.email.required),
-  // });
+  const sendEmailHandler = async (values: { email: string }) => {
+    console.log('I am here');
+    await Klaviyo_BackInStock({
+      email: values.email,
+      a: __pagesConstant._document.klaviyoKey,
+      variant: '' + attributeOptionId,
+      platform: 'api',
+    }).then((res) => {
+      console.log(res, 'res');
+      if (res.success) {
+        setEmail('SENT');
+      }
+    });
+  };
+  const validationSchema = Yup.object().shape({
+    email: Yup.string().email().required(__ValidationText.email.required),
+  });
   return (
     <div className='col-span-1 mt-[15px] pl-[8px] pr-[8px] md:pl-[15px] md:pr-[15px] sm:pl-[0px] sm:pr-[0px] lg:mt-[0px]'>
       <div className='hidden md:flex flex-wrap'>
         <div className='w-full md:w-2/3'>
           <h1 className='font-[600] text-large-text'>{product.name}</h1>
-
           <div className='pt-[3px] text-default-text'>
             <span className='font-[600] inline-block w-[43px]'>
               {__pagesText.productInfo.sku}
@@ -335,7 +338,7 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
               Out of Stock
             </button>
           </div>
-          {/* {email === 'SENT' ? (
+          {email === 'SENT' ? (
             <div className='text-center text-medium-text font-bold px-2 py-4'>
               {
                 __pagesText.productInfo.startOrderModal.sizePriceQty
@@ -343,43 +346,48 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
               }
             </div>
           ) : (
-            <Formik
-              initialValues={{ email: '' }}
-              onSubmit={(values) => sendEmailHandler(values)}
-              validationSchema={validationSchema}
-            >
-              {({ values, handleChange }) => {
-                return (
-                  <Form className='flex flex-wrap mt-[2px]'>
-                    <input
-                      type='text'
-                      name='email'
-                      autoComplete='off'
-                      value={values.email}
-                      onChange={handleChange}
-                      className='grow border border-gray-600 shadow-sm text-sm py-1 px-2'
-                    />
+            <>
+              <p className='font-bold text-medium-text mb-2 '>
+                Get Inventory Alert
+              </p>
+              <Formik
+                initialValues={{ email: '' }}
+                onSubmit={(values) => sendEmailHandler(values)}
+                validationSchema={validationSchema}
+              >
+                {({ values, handleChange }) => {
+                  return (
+                    <Form className='flex flex-wrap mt-[2px]'>
+                      <input
+                        type='text'
+                        name='email'
+                        autoComplete='off'
+                        value={values.email}
+                        onChange={handleChange}
+                        className='grow bg-light-gray shadow-sm text-md py-1 px-2'
+                      />
 
-                    <button
-                      type='submit'
-                      className='btn btn-sm btn-quaternary whitespace-nowrap'
-                    >
-                      {
-                        __pagesText.productInfo.startOrderModal.sizePriceQty
-                          .selectOrInput.notify
-                      }
-                    </button>
+                      <button
+                        type='submit'
+                        className='btn btn-xl btn-secondary whitespace-nowrap'
+                      >
+                        {
+                          __pagesText.productInfo.startOrderModal.sizePriceQty
+                            .selectOrInput.notify
+                        }
+                      </button>
 
-                    <ErrorMessage
-                      name={'email'}
-                      className='text-rose-500'
-                      component={'p'}
-                    />
-                  </Form>
-                );
-              }}
-            </Formik>
-          )} */}
+                      <ErrorMessage
+                        name={'email'}
+                        className='text-rose-500'
+                        component={'p'}
+                      />
+                    </Form>
+                  );
+                }}
+              </Formik>
+            </>
+          )}
           <div></div>
         </>
       )}

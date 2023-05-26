@@ -16,7 +16,6 @@ export const UploadImage = async ({
   files: File;
 }) => {
   const url = `/upload/image?folderPath=${folderPath}`;
-
   conditionalLog_V2({
     data: { folderPath, files },
     // show: __console_v2.files.service.UploadImage,

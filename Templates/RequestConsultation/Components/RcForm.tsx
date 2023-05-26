@@ -135,7 +135,6 @@ const RcForm: React.FC<{
         type: event.target.files[0].type,
         previewURL: URL.createObjectURL(event.target.files[0]),
       };
-
       setFileToUpload(file);
       setFileUploded(true);
     } catch (error) {
@@ -191,7 +190,6 @@ const RcForm: React.FC<{
   if (formSubmit) {
     return <RcRequestDone />;
   }
-
   return (
     <Formik
       initialValues={_RequestConsultationInitials}

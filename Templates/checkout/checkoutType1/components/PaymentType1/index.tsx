@@ -8,6 +8,13 @@ export type paymentProps = FC<{
   updatePaymentMethod: (arg: paymentMethodCustom) => void;
   changeHandler: (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
   detectCardType?: () => string;
+  cardDetails?: {
+    cardNumber: string;
+    cardExpirationMonth: string;
+    cardExpirationYear: string;
+    cardVarificationCode: string;
+  };
+  purchaseOrder?: string;
   /* eslint-enable no-unused-vars */
 }>;
 
@@ -19,12 +26,22 @@ const PaymentType1: FC<{
   paymentMethod: paymentMethodCustom;
   updatePaymentMethod: (arg: paymentMethodCustom) => void;
   detectCardType: () => string;
+  cardDetails: {
+    cardNumber: string;
+    cardExpirationMonth: string;
+    cardExpirationYear: string;
+    cardVarificationCode: string;
+  };
+  purchaseOrder: string;
+
   /* eslint-enable no-unused-vars */
 }> = ({
   changeHandler,
   paymentMethod,
   updatePaymentMethod,
   detectCardType,
+  cardDetails,
+  purchaseOrder,
 }) => {
   switch (paymentMethod) {
     case paymentMethodCustom.creditCard:
@@ -34,6 +51,8 @@ const PaymentType1: FC<{
             changeHandler,
             updatePaymentMethod,
             detectCardType,
+            cardDetails,
+            purchaseOrder,
           }}
         />
       );
@@ -43,6 +62,8 @@ const PaymentType1: FC<{
           {...{
             updatePaymentMethod,
             changeHandler,
+            cardDetails,
+            purchaseOrder,
           }}
         />
       );
