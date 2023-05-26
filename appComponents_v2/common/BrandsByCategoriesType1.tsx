@@ -111,12 +111,12 @@ const BrandsByCategoriesType1: React.FC<_Props> = ({ brands }) => {
                             return (
                               <div
                                 key={index}
-                                className='w-full lg:w-1/4 pl-[12px] pr-[12px] mt-[12px] mb-[12px] flex'
+                                className='w-full lg:w-1/4 px-3 mt-3 mb-3'
                               >
                                 <div
-                                  className={`border border-gray-border ${activeTabColor()} hover:${activeTabColor()}-hover relative font-light w-full h-full flex items-center justify-center  mt-[50px] mb-[50px]`}
+                                  className={`border border-gray-border ${activeTabColor()} hover:${activeTabColor()}-hover relative font-light`}
                                 >
-                                  <div className='flex justify-center items-center brand-listing-logo cursor-pointer'>
+                                  <div className='flex justify-center items-center cursor-pointer'>
                                     <Link
                                       title={brand.name}
                                       href={`${brand.seName}.html`}
