@@ -50,6 +50,9 @@ const CheckoutTemplate: FC<_Props> = ({ templateId }) => {
       const payload = {
         storeId: storeId,
         customerId: customerId,
+        ...(storeId !== CG_STORE_CODE
+          ? { value: totalPrice, coupon: cartDiscountDetails?.coupon }
+          : {}),
         shoppingCartItemsModel: cartData?.map((item) => ({
           productId: item.productId,
           productName: item?.productName,

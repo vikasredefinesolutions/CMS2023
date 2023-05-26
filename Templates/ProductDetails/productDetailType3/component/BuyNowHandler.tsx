@@ -74,6 +74,8 @@ const BuyNowHandler: React.FC<_Props> = (size) => {
         sku: product?.sku,
         brandName: product?.brand?.name,
         quantity: toCheckout.totalQty,
+        value: toCheckout.totalPrice,
+        coupon: '',
       };
       GoogleAnalyticsTrackerForAllStore(
         'GoogleAddToCartScript',

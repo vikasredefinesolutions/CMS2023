@@ -1,5 +1,6 @@
 import SeoHead from '@appComponents/reUsable/SeoHead';
 import { _defaultTemplates } from '@configs/template.config';
+import { CG_STORE_CODE } from '@constants/global.constant';
 import {
   GoogleAnalyticsTrackerForAllStore,
   GoogleAnalyticsTrackerForCG,
@@ -44,6 +45,7 @@ const Cart: NextPage<{ templateId: number }> = ({ templateId }) => {
       const payload = {
         storeId: storeId,
         customerId: customerId,
+        ...(storeId !== CG_STORE_CODE ? { value: '', coupon: '' } : {}),
         shoppingCartItemsModel: cartData?.map((item) => ({
           productId: item.productId,
           productName: item?.productName,
@@ -130,7 +132,7 @@ export const getServerSideProps: GetServerSideProps = async (): Promise<
 
   await FetchPageThemeConfigs('' + _globalStore.storeId, 'cartPage').then(
     (res) => {
-      if (res.config_value) {
+      if (res?.config_value) {
         let type: { cartPageTemplateId: number } = JSON.parse(res.config_value);
         cartPageTemplateId = type.cartPageTemplateId;
       }

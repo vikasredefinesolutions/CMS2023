@@ -4,7 +4,11 @@ import {
   checkoutPages,
   paymentMethodCustom as paymentEnum,
 } from '@constants/enum';
-import { __Cookie, __Cookie_Expiry } from '@constants/global.constant';
+import {
+  CG_STORE_CODE,
+  __Cookie,
+  __Cookie_Expiry,
+} from '@constants/global.constant';
 import { paths } from '@constants/paths.constant';
 import { AddOrderDefault, addAddress } from '@constants/payloads/checkout';
 import { signup_payload } from '@constants/payloads/signup';
@@ -457,6 +461,7 @@ const CheckoutController = () => {
       ...(eventName === 'GoogleAddShippingInfoScript'
         ? { shippingTier: 'Free Shipping' }
         : { paymentType: paymentMethod }),
+      ...(storeId !== CG_STORE_CODE ? { value: '', coupon: couponCode } : {}),
       shoppingCartItemsModel: cartData?.map((item) => ({
         productId: item.productId,
         productName: item?.productName,

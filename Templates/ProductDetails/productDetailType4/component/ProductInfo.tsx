@@ -6,7 +6,9 @@ import { __Cookie } from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
 import { _Selectedproduct_v2 } from '@definations/product.type';
 import {
-  getAddToCartObject, GoogleAnalyticsTrackerForAllStore, setCookie
+  getAddToCartObject,
+  GoogleAnalyticsTrackerForAllStore,
+  setCookie,
 } from '@helpers/common.helper';
 import { highLightError } from '@helpers/console.helper';
 import getLocation from '@helpers/getLocation';
@@ -139,6 +141,8 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
               sku: storeProduct?.sku,
               brandName: storeProduct?.brand?.name,
               quantity: toCheckout.totalQty,
+              value: toCheckout.totalPrice,
+              coupon: '',
             };
             GoogleAnalyticsTrackerForAllStore(
               'GoogleAddToCartScript',

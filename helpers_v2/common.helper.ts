@@ -852,10 +852,10 @@ const pushToDataLayerUtil = (payload: Record<string, any>) => {
     dataLayer.push({ ecommerce: null });
     if (payload?.pageDataLayer)
       dataLayer.push({ ...JSON.parse(payload?.pageDataLayer) });
-    if (payload?.pageDataLayer2)
-      dataLayer.push({ ...JSON.parse(payload?.pageDataLayer2) });
-    if (payload?.pageDataLayer3)
-      dataLayer.push({ ...JSON.parse(payload?.pageDataLayer3) });
+    // if (payload?.pageDataLayer2)
+    //   dataLayer.push({ ...JSON.parse(payload?.pageDataLayer2) });
+    // if (payload?.pageDataLayer3)
+    //   dataLayer.push({ ...JSON.parse(payload?.pageDataLayer3) });
     if (payload?.pageItemDetails)
       dataLayer.push({ ...JSON.parse(payload?.pageItemDetails) });
   }

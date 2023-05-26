@@ -1,4 +1,4 @@
-import { __Cookie } from '@constants/global.constant';
+import { CG_STORE_CODE, __Cookie } from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
 import { paths } from '@constants/paths.constant';
 import { AddItemsToTheCart } from '@services/cart.service';
@@ -190,6 +190,9 @@ const SomActionsHandler: React.FC<_SOMActionHandlerProps> = ({
       sku: product?.sku,
       brandName: product?.brand?.name,
       quantity: toCheckout.totalQty,
+      ...(storeId !== CG_STORE_CODE
+        ? { value: toCheckout.totalPrice, coupon: '' }
+        : {}),
     };
 
     GoogleAnalyticsTrackerForCG('GoogleAddToCartScript', storeId, payload);

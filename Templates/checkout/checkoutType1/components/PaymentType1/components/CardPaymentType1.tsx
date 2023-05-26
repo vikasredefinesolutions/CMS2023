@@ -214,11 +214,6 @@ const CardPaymentType1: paymentProps = ({
               onBlur={changeHandler}
               onChange={handledefault}
               name='cardExpirationYear'
-              // value={
-              //   cardDetails.cardExpirationYear
-              //     ? cardDetails.cardExpirationYear
-              //     : ''
-              // }
               data-value={yearMonth.cardExpirationYear}
               className='selectFiled pt-[15px] pb-[0px] block w-full px-[8px] h-[48px] mt-[0px] text-sub-text text-[18px] text-[#000000] bg-transparent border-0 appearance-none focus:outline-none focus:ring-0'
             >
@@ -226,12 +221,13 @@ const CardPaymentType1: paymentProps = ({
               {new Array(12).fill('').map((_, index) => {
                 const optin = new Date().getFullYear() + index;
                 const selected =
-                  cardDetails && optin === +cardDetails.cardExpirationYear
+                  cardDetails?.cardExpirationYear &&
+                  optin === +cardDetails.cardExpirationYear
                     ? true
                     : false;
                 if (selected) {
                   return (
-                    <option key={index} value={optin}>
+                    <option key={index} value={optin} selected>
                       {optin}
                     </option>
                   );

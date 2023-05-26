@@ -110,6 +110,8 @@ const LogosToPrint: React.FC<_props> = ({ setShowOrSelect }) => {
         sku: product?.sku,
         brandName: product?.brand?.name,
         quantity: toCheckout.totalQty,
+        value: toCheckout.totalQty,
+        coupon: '',
       };
       GoogleAnalyticsTrackerForAllStore(
         'GoogleAddToCartScript',
