@@ -1,6 +1,7 @@
 //import React, { useState, useEffect, useRef } from "react";
 import ElementAccordionDisplay from '@templates/Home/components/ElementAccordionDisplay';
 import ElementCarouselDisplay from '@templates/Home/components/ElementCarouselDisplay';
+
 import FeaturedProducts from '@templates/Home/components/FeaturedProducts';
 import SocialShare from '@templates/Home/components/SocialShare';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
@@ -358,7 +359,6 @@ const Home = (props) => {
                   }
 
                   let componentName = 'div' + componentValue.no;
-
                   if (
                     componentValue.selectedVal &&
                     'componentname' in componentValue.selectedVal

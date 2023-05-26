@@ -5,7 +5,7 @@ import { _HeaderProps, _MenuItems } from '@definations/header.type';
 import {
   useActions_v2,
   useTypedSelector_v2,
-  useWindowDimensions_v2,
+  useWindowDimensions_v2
 } from '@hooks_v2/index';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
@@ -114,6 +114,11 @@ const Header_Type4: NextPage<_HeaderProps> = ({
                           <LoginIcon />
                           <LoggedInMenu />
                           <MyCartIcon />
+                          <div className="pl-[15px] order-1 sm:order-4">
+                                                <a href="javascript:void(0);">
+                                                    <img src="/assets/images/di/for-the-planet.png" alt="" />
+                                                </a>
+                                            </div>
                           {/* <div className='lg:hidden pl-[15px]'>
                             {router.asPath !== paths.CHECKOUT && <MenuIcon />}
                           </div> */}

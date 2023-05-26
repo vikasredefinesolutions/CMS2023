@@ -30,7 +30,9 @@ const TemplateFiveFilterBar: React.FC<props> = ({
           <div className='w-full md:w-1/3 flex justify-center lg:justify-start flex-wrap items-center'>
             <span className='flex-1 flex flex-wrap items-center pr-[4px]'>
               Total
-              <span className='font-medium'>{totalCount} Results</span>
+              <span className='font-medium ml-[2px] inline-block'>
+                {totalCount} Results
+              </span>
             </span>
           </div>
 

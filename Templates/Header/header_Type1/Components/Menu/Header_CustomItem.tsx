@@ -65,7 +65,7 @@ const Custom: React.FC<_props> = ({
         {showAllItems && showtab && (
           <div className='bg-gray-100'>
             <div
-              className='border-t first:border-t-0 py-5 px-6'
+              className='border-t first:border-t-0'
               dangerouslySetInnerHTML={{ __html: content }}
             />
           </div>

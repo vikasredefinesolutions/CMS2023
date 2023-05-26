@@ -11,9 +11,9 @@ import EditIcon from '@mui/icons-material/Edit';
 import { FormControlLabel } from '@mui/material';
 import {
   CreateUserAddress,
+  UpdateUserAddress,
   deleteCustomerAddress,
   udpateIsDefaultAddress,
-  UpdateUserAddress,
 } from '@services/address.service';
 import { GetAdminCustomerUsers } from '@services/user.service';
 import { useRouter } from 'next/router';
@@ -149,7 +149,7 @@ const ManageAddress_Type2 = () => {
                     showTab === UserAddressType.BILLINGADDRESS ||
                     showTab === UserAddressType.OTHERUSERADDRESS
                       ? 'btn-secondary border-spacing-0'
-                      : 'text-black py-[15px] block text-center uppercase bg-secondary-hover'
+                      : 'text-black py-[15px] block text-center uppercase btn-primary'
                   } border-0 uppercase`}
                   style={{ borderWidth: '0px' }}
                 >
@@ -163,7 +163,7 @@ const ManageAddress_Type2 = () => {
                     showTab === UserAddressType.SHIPPINGADDRESS ||
                     showTab === UserAddressType.OTHERUSERADDRESS
                       ? 'btn-secondary border-spacing-0'
-                      : 'text-black py-[15px] block text-center uppercase bg-secondary-hover'
+                      : 'text-black py-[15px] block text-center uppercase btn-primary'
                   } uppercase`}
                   style={{ borderWidth: '0px' }}
                 >
@@ -179,7 +179,7 @@ const ManageAddress_Type2 = () => {
                       showTab === UserAddressType.SHIPPINGADDRESS ||
                       showTab === UserAddressType.BILLINGADDRESS
                         ? 'btn-secondary border-spacing-0'
-                        : 'text-black py-[15px] block text-center uppercase bg-secondary-hover'
+                        : 'text-black py-[15px] block text-center uppercase btn-primary'
                     } uppercase`}
                     style={{ borderWidth: '0px' }}
                   >

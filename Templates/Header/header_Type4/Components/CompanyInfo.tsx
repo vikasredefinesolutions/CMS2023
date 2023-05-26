@@ -26,7 +26,7 @@ const CompanyInfo: React.FC<_props> = ({ phoneNumber, email }) => {
     <div className='text-[#ffffff] text-[12px] pt-[10px] text-center lg:text-right'>
       <div className='text-[#ffffff] text-[12px] pt-[10px] text-center lg:text-right'>
         <div className=''>
-          {__pagesText.Headers.companyEmailQuestion}
+          {__pagesText.Headers.companyEmailQuestionOr}{': '}
           <a
             href={`mailto:${email}`}
             className='text-[#ffffff] hover:text-primary-hover'

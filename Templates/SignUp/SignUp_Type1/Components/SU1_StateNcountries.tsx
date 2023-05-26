@@ -37,9 +37,7 @@ const SU1_StateNcountries: React.FC<_props> = ({
       ...country,
       state: state,
     }));
-    if (state !== null) {
-      setFieldValue(stateName, state.length ? state[0]?.id : '');
-    }
+    // setFieldValue(stateName, state?.length ? state[0]?.id : '');
   };
 
   useEffect(() => {
@@ -54,6 +52,11 @@ const SU1_StateNcountries: React.FC<_props> = ({
       setFieldValue(countryName, defaultCountry);
     });
   }, []);
+
+  useEffect(() => {
+    callStatesAPI(+countryValue);
+    setFieldValue(stateName, +stateValue);
+  }, [countryValue]);
 
   return (
     <>
@@ -78,6 +81,7 @@ const SU1_StateNcountries: React.FC<_props> = ({
           value={stateValue}
           options={stateContries.state}
           onChange={(event) => {
+            // console.log(event.target.value, 'event triggers here');
             setFieldValue(stateName, +event.target.value);
           }}
         />

@@ -6,9 +6,7 @@ import { __Cookie } from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
 import { _Selectedproduct_v2 } from '@definations/product.type';
 import {
-  GoogleAnalyticsTrackerForAllStore,
-  getAddToCartObject,
-  setCookie
+  getAddToCartObject, GoogleAnalyticsTrackerForAllStore, setCookie
 } from '@helpers/common.helper';
 import { highLightError } from '@helpers/console.helper';
 import getLocation from '@helpers/getLocation';
@@ -235,17 +233,17 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
         </div>
         <div className=''>
           <div className='pt-[15px] text-default-text'>
-            <span className='inline-block w-[90px]'>
+            <span className='inline-block w-[90px] font-semibold'>
               {' '}
               {__pagesText.productInfo.sku}
             </span>
             <span>:</span> <span className='ml-[4px]'>{product?.sku}</span>
           </div>
           <div className='pt-[15px] text-default-text'>
-            <span className='inline-block w-[90px]'>
+            <span className='inline-block w-[90px] font-semibold'>
               {__pagesText.productInfo.msrp}
             </span>
-            <span>:</span>{' '}
+            <span>:</span>
             <span className='ml-[4px]'>
               <Price
                 value={undefined}
@@ -253,7 +251,7 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
                   msrp: product ? product.msrp : 0,
                   salePrice: product ? product.salePrice : 0,
                 }}
-                addColon={true}
+                addColon={false}
               />
             </span>
           </div>

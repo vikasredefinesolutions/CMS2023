@@ -10,6 +10,7 @@ import {
 import NxtImage from '@appComponents/reUsable/Image';
 import Price from '@appComponents/reUsable/Price';
 import { __pagesText } from '@constants/pages.text';
+// import CartController from '@controllers/cartController';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 
@@ -25,6 +26,7 @@ const MyCartIcon: React.FC = () => {
 
   //
   const cartData = useTypedSelector_v2((state) => state.cart.cart);
+
   const { totalPrice, totalQty } = GetCartTotals();
   const [Focus, setFocus] = useState(false);
 

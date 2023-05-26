@@ -9,7 +9,8 @@ import { _modals } from '@definations/product.type';
 import { splitproductList } from '@definations/productList.type';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import {
-  GetlAllProductList, GetProductImageOptionList
+  GetProductImageOptionList,
+  GetlAllProductList,
 } from '@templates/ProductListings/ProductListingType';
 import ProductBoxController from '@templates/ProductListings/productListingType1/components/productBoxController';
 import Link from 'next/link';
@@ -84,7 +85,7 @@ const TemplateFiveListing = ({
       <div className='h-full'>
         <div className='text-center lg:w-auto h-full'>
           {/* <div className='relative w-full mb-[20px]'> */}
-          <div className=' relative border border-gray-200 pb-4'>
+          <div className=' relative border border-gray-border p-[20px]'>
             <div className='w-full  rounded-md overflow-hidden'>
               <Link
                 href={`${origin}/${product.sename}.html`}

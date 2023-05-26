@@ -66,7 +66,7 @@ const QtyPriceTable: React.FC<{ storeCode: string }> = ({ storeCode }) => {
         //   </div>
         // </div>
         <div className='pt-[15px] text-default-text font-medium'>
-          <div className='bg-light-gray py-[5px] text-center'>
+          <div className='py-[5px] text-center bg-primary text-white'>
             {__pagesText.productInfo.quantity}
           </div>
           <div className='flex flex-wrap justify-center items-center border border-gray-border text-center p-[10px] md:divide-x md:divide-gray-border gap-y-[10px]'>

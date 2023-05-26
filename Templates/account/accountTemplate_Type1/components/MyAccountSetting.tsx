@@ -36,33 +36,27 @@ const AccountSetting = () => {
     }
   }, [activeEditBox]);
 
-  const passDecryptFuc = async () => {
+  const passDecryptFunction = async (pass: string) => {
     const response = await getDecryptPassword({
-      password: customer?.password ? customer.password : '',
+      password: pass ? pass : '',
     });
     return response;
-  };
-
-  const setFormInitialValue = (setFieldValue: any) => {
-    setFieldValue('firstName', customer?.firstname ? customer.firstname : ''),
-      setFieldValue('lastName', customer?.lastName ? customer.lastName : ''),
-      setFieldValue(
-        'companyName',
-        customer?.companyName ? customer.companyName : '',
-      ),
-      setFieldValue('password', currentPass ? currentPass : '');
   };
 
   const updatePassword = async () => {
     try {
       const res = await UpdateUserPassword({
         email: customer?.email || '',
-        password: newPassword,
+        password: newPassword ? newPassword : currentPass,
         customerId: customer?.id || 0,
       });
       if (res) {
         setNewPassword('');
+        await passDecryptFunction(res?.password).then((response) => {
+          setCurrentPass(response ? response : '');
+        });
         setShowPasswordUpdate(false);
+
         showModal({
           message: 'Password Updated Successfully',
           title: 'Updated',
@@ -88,7 +82,7 @@ const AccountSetting = () => {
 
   useEffect(() => {
     if (customer) {
-      passDecryptFuc().then((res) => {
+      passDecryptFunction(customer.password).then((res) => {
         setCurrentPass(res ? res : '');
         setInitialValues({
           firstName: customer.firstname,
@@ -273,7 +267,9 @@ const AccountSetting = () => {
                             className='text-rose-500'
                             component={'p'}
                           />
+
                           <button
+                            type='button'
                             onClick={() => setShowPassword(!showPassword)}
                             className='block w-7 h-7 text-center absolute top-2 right-2'
                           >
@@ -284,6 +280,7 @@ const AccountSetting = () => {
 
                           <div className='absolute top-2 right-10'>
                             <button
+                              type='button'
                               onMouseOver={() => setShowInfo(true)}
                               onMouseLeave={() => setShowInfo(false)}
                               className=''

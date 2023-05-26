@@ -19,7 +19,7 @@ const DiscountPricing: React.FC<
       {showMinQuantity ? (
         <div>
           <div className='pt-[15px] text-default-text'>
-            <div className='flex flex-wrap items-center cursor-pointer'>
+            <div className='flex flex-wrap items-center cursor-pointer font-semibold'>
               {__pagesText.productInfo.discountPricing.minimumOrder}
               <span className='pl-[5px]'>{` ${minQty} ${unitUnits} per color`}</span>
             </div>

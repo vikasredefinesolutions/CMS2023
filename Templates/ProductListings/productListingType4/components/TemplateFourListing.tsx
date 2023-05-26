@@ -57,12 +57,14 @@ const TemplateFourListing = ({
               href={`${origin}/${product.sename}.html`}
               className='relative'
             >
-              <NxtImage
-                src={currentProduct?.imageName ? currentProduct?.imageName : ''}
-                alt=''
-                className='w-auto h-auto m-auto max-h-[400px]'
-                key={currentProduct?.id}
-              />
+              <a style={{ display: "block"}}>
+                <NxtImage
+                  src={currentProduct?.imageName ? currentProduct?.imageName : ''}
+                  alt=''
+                  className='w-auto h-auto m-auto max-h-[400px]'
+                  key={currentProduct?.id}
+                />
+              </a>
             </Link>
             {product?.productTagViewModel?.length !== 0 ? (
               <div className='absolute right-[10px] top-[10px] h-8 flex gap-1 tanish'>
@@ -101,8 +103,8 @@ const TemplateFourListing = ({
                 {product.name}
               </Link>
             </div>
-            <div className='mb-[12px] text-default-text font-semibold'>
-              <span className=''>
+            <div className='mb-[12px] text-normal-text'>
+              <span className='font-semibold'>
                 MSRP{' '}
                 <Price
                   value={undefined}

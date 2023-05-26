@@ -18,5 +18,21 @@
   min-width: auto !important;
   min-height: auto !important;
 }
-
+.slider-container {
+  width: 100%;
+  height: 100%;
+  position:fixed; /* add this code for position fixed */
+  top:0px; /* set top and left 0 */
+  left:0px;
+}
+.slider-item-div {
+  padding: 20px;
+  background-color: white;
+  text-align: center;
+  height: 100%;
+  width: 100%;
+}
+.carousel-style {
+  height: 100% !important;
+}
 /* @import url('https://www.ystore.us/HTML/RedefineCommerce/Ecom-front/corporategear/main.css'); */

@@ -139,25 +139,12 @@ const ProductListingType4: React.FC<_ListingProps> = ({
                         <button
                           onClick={loadMore}
                           type='submit'
-                          className='mt-[16px] btn btn-md btn-secondary tracking-[1.4px] font-normal w-full max-w-[550px] mx-auto focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 pt-[19px] pb-[19px] md:pl-[70px] md:pr-[70px] pl-[16px] pr-[16px] bg-[#ffa400] hover:bg-[#f18a00]'
+                          className='mt-[16px] btn-primary block tracking-[1.4px] text-[20px] font-normal w-full max-w-[550px] mx-auto pt-[20px] pb-[20px] md:pl-[70px] md:pr-[70px] pl-[16px] pr-[16px]'
                         >
-                          <span className='inline-block w-[20px] h-[20px]'>
-                            <img
-                              className='max-h-full'
-                              src='assets/images/load-more-arrow.webp'
-                              alt=''
-                            />
-                          </span>
                           <span className=''>
                             {__pagesText.productListing.loadMoreButton}
                           </span>
-                          <span className='inline-block w-[20px] h-[20px]'>
-                            <img
-                              className='max-h-full'
-                              src='assets/images/load-more-arrow.webp'
-                              alt=''
-                            />
-                          </span>
+                          
                         </button>
                       )}
                     </div>

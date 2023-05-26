@@ -298,6 +298,7 @@ const SignUp_type1: React.FC = () => {
               e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
             ) => {
               handleBlur(e);
+
               getStateCountry(e.target.value).then((res) => {
                 if (res?.countryId) {
                   setFieldValue('storeCustomerAddress[0].city', res.cityName);

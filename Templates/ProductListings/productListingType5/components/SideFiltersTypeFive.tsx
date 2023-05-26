@@ -3,12 +3,12 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
-  Link
+  Link,
 } from '@mui/material';
 import {
   FilterChangeHandler,
   FilterType,
-  _CheckedFilter
+  _CheckedFilter,
 } from '@templates/ProductListings/ProductListingType';
 
 import { Fragment } from 'react';
@@ -53,7 +53,7 @@ const SideFiltersTypeFive = ({
                       {filter.label}
                     </div>
                   </AccordionSummary>
-                  <AccordionDetails className='text-normal-text !no-underline'>
+                  <AccordionDetails className='text-small-text !no-underline'>
                     <ul
                       className={
                         filter.label === 'Color'
@@ -76,9 +76,10 @@ const SideFiltersTypeFive = ({
                             {option.name || option.colorCode ? (
                               filter.label === 'Color' ? (
                                 <li
-                                  className={`w-[32px] h-[32px] border-2 border-secondary hover:border-primary  ${
-                                    checked &&
-                                    'relative p-[2px]  border-secondary '
+                                  className={`w-[32px] h-[32px] border-2  hover:border-primary p-[2px] ${
+                                    checked
+                                      ? 'relative border-primary'
+                                      : 'border-secondary'
                                   }`}
                                   // style={{
                                   //   background: option.colorCode,
@@ -93,11 +94,11 @@ const SideFiltersTypeFive = ({
                                   title={option.name}
                                 >
                                   <div
-                                          className='w-full h-full'
-                                          style={{
-                                            background: option.colorCode,
-                                          }}
-                                        ></div>
+                                    className='w-full h-full'
+                                    style={{
+                                      background: option.colorCode,
+                                    }}
+                                  ></div>
                                 </li>
                               ) : filter.label === 'Category' ? (
                                 <li

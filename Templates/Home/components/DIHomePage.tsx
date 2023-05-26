@@ -80,7 +80,7 @@ const DIHomePage: React.FC<_props> = ({ storeId }) => {
                   {!brandImage.isBrandOnline && 
                     <>
                     <Fragment key={brandImage.id}>
-                        <li className='w-1/2 md:w-1/3 lg:w-1/5 border-t border-l border-b border-r border-home-border -mt-[1px] flex items-center justify-center'>
+                        <li className='w-1/2 md:w-1/3 lg:w-1/6 border-t border-l border-b border-r border-home-border -mt-[1px] flex items-center justify-center'>
                           <Link href={`/${brandImage.seName}.html`}>
                             <a style={{display: "block"}}>
                             <ImageComponent

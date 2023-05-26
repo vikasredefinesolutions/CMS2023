@@ -20,7 +20,7 @@ const Inventory: React.FC<{
   }, [price?.msrp]);
   return (
     <div className='mt-[15px] text-default-text border border-gray-border'>
-      <div className='hidden md:flex flex-wrap gap-y-5 bg-light-gray'>
+      <div className='hidden md:flex flex-wrap gap-y-5 bg-primary text-white'>
         <div className='p-2 w-full md:w-2/12'>
           <div className='font-semibold'>Color</div>
         </div>
@@ -30,7 +30,7 @@ const Inventory: React.FC<{
           {inventory?.sizes.map((product) => {
             if (product.colorAttributeOptionId === color.attributeOptionId) {
               return product.sizeArr.map((size, index) => (
-                <div key={index} className={` p-2 w-full md:w-2/12`}>
+                <div key={index} className={` p-2 md:w-full w-2/12`}>
                   <div className='font-semibold'>{size}</div>
                 </div>
               ));

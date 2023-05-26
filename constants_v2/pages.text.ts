@@ -456,7 +456,7 @@ export const __pagesText = {
     accountSetting: 'Account Settings',
     help: 'Help',
     signOut: 'Sign Out',
-    login: 'login',
+    login: 'Login',
     loginIcon: 'account_circle',
     mycart: 'my cart',
     shoppingCartIcon: 'shopping_cart',
@@ -472,6 +472,7 @@ export const __pagesText = {
     myAccountTittle: 'My Account',
     companyPhoneQuestion: 'Questions? Call us at',
     companyEmailQuestion: 'or Email',
+    companyEmailQuestionOr: 'Email',
     samllogin: 'LOGIN VIA SAML',
   },
   Wishlist: {

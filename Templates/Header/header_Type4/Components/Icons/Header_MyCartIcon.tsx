@@ -4,7 +4,7 @@ import {
   GetCartTotals,
   GetCustomerId,
   useActions_v2,
-  useTypedSelector_v2,
+  useTypedSelector_v2
 } from 'hooks_v2';
 // import { useActions_v2, useTypedSelector_v2 } from '@src/hooks';
 import NxtImage from '@appComponents/reUsable/Image';
@@ -55,12 +55,12 @@ const MyCartIcon: React.FC = () => {
           <span className='mr-[8px] text-[14px] hidden xl:inline-block whitespace-nowrap tracking-[1.25px]'>
             My Cart
           </span>
-          <span className='material-icons'>
+          {/* <span className='material-icons'>
             {' '}
             {__pagesText.Headers.shoppingCartIcon}
-          </span>
+          </span> */}
 
-          <span className='absolute right-[-7px] top-[-4px] rounded-full flex items-center justify-center bg-[#dddddd] text-[9px] text-[#000000] pl-[4px] pr-[4px] pt-[2px] pb-[2px]'>
+          <span className='absolute right-[-7px] top-[-10px] rounded-full flex items-center justify-center bg-[#dddddd] text-[9px] text-[#000000] pl-[4px] pr-[4px] pt-[2px] pb-[2px]'>
             {totalCartQty}
           </span>
         </a>

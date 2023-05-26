@@ -2,13 +2,17 @@ import { SpinnerComponent } from '@appComponents/ui/spinner';
 import { __pagesText } from '@constants/pages.text';
 import { paths } from '@constants/paths.constant';
 import CheckoutController from '@controllers/checkoutController';
-import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
+import {
+  GetCartTotals,
+  useActions_v2,
+  useTypedSelector_v2,
+} from '@hooks_v2/index';
 import { fetchThirdpartyservice } from '@services/thirdparty.service';
 import CartSummarry from '@templates/cartSummarry';
 import CartItem from 'Templates/cartItem';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { _CartProps } from '../Cart';
 import EmptyCart from '../components/emptyCart';
 const CartType3: React.FC<_CartProps> = ({
@@ -23,8 +27,6 @@ const CartType3: React.FC<_CartProps> = ({
   );
   const { showModal } = useActions_v2();
   const { id: loggedIn } = useTypedSelector_v2((state) => state.user);
-  const { fetchShipping, shippingAdress, selectedShipping, shippingMethod } =
-    CheckoutController();
   const SamlloginHandler = () => {
     fetchThirdpartyservice({ storeId }).then((ThirdpartyServices) => {
       try {
@@ -40,6 +42,13 @@ const CartType3: React.FC<_CartProps> = ({
       }
     });
   };
+
+  const { subTotal } = GetCartTotals();
+  const { fetchShipping, shippingAdress, selectedShipping, shippingMethod } =
+    CheckoutController();
+  useEffect(() => {
+    fetchShipping(subTotal);
+  }, [subTotal, shippingAdress]);
 
   if (showLoaderOrEmptyText === 'loader') {
     return (
@@ -98,6 +107,7 @@ const CartType3: React.FC<_CartProps> = ({
               className='w-full lg:w-3/12 px-[10px] mt-[15px]'
             >
               <CartSummarry selectedShippingModel={selectedShipping} />
+
               {!loggedIn && thirdPartyLogin ? (
                 <div className='mt-[15px]'>
                   <button

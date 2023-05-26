@@ -51,9 +51,8 @@ const InventoryAvailability: React.FC<_props> = ({
 
   return (
     <>
-      <div className='mb-1'>{userId ? qty : 'Login to See Inventory'}</div>
-      <div className='flex flex-wrap items-center border-b border-b-gray-border pl-[10px]'>
-        <div className='w-1/3 pt-[10px] pb-[10px] text-right'>
+      <div className='mb-2'>{userId ? qty : 'Login to See Inventory'}</div>
+      <div className=''>
           <input
             type='number'
             className='form-input !px-[10px] !inline-block !w-[65px]'
@@ -64,7 +63,6 @@ const InventoryAvailability: React.FC<_props> = ({
             onChange={handleChange}
           />
         </div>
-      </div>
     </>
   );
 };

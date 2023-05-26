@@ -3,13 +3,13 @@ import { __pagesText } from '@constants/pages.text';
 import { paths } from '@constants/paths.constant';
 import {
   _MyAcc_OrderBillingDetails,
-  _MyAcc_OrderProductDetails,
+  _MyAcc_OrderProductDetails
 } from '@definations/APIs/user.res';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import {
   FetchOrderDetails,
   FetchOrdersIdByCustomerId,
-  FetchOrdersIdByCustomerUserId,
+  FetchOrdersIdByCustomerUserId
 } from '@services/user.service';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
@@ -94,8 +94,10 @@ const Orders_type1: React.FC = () => {
                 <li className=''>
                   <button
                     onClick={() => setShowTab('MyOwnOrders')}
-                    className={`tab block bg-secondary hover:bg-secondary-hover text-title-text uppercase font-[600] px-[30px] py-[15px] text-medium-text  ${
-                      showTab === 'MyOwnOrders' ? ' !bg-[#f18a00]' : ''
+                    className={`tab block btn uppercase font-[600] px-[30px] py-[15px] text-medium-text  ${
+                      showTab === 'MyOwnOrders'
+                        ? ' btn-primary'
+                        : ' btn-secondary'
                     } `}
                     style={{ borderWidth: '0px' }}
                   >
@@ -105,8 +107,10 @@ const Orders_type1: React.FC = () => {
                 <li className=''>
                   <button
                     onClick={() => setShowTab('OtherUsersOrders')}
-                    className={`tab block bg-secondary hover:bg-secondary-hover text-title-text uppercase font-[600] px-[30px] py-[15px] text-medium-text  ${
-                      showTab === 'OtherUsersOrders' ? ' !bg-[#f18a00]' : ''
+                    className={`tab block btn uppercase font-[600] px-[30px] py-[15px] text-medium-text  ${
+                      showTab === 'OtherUsersOrders'
+                        ? ' btn-primary'
+                        : ' btn-secondary'
                     } `}
                     style={{ borderWidth: '0px' }}
                   >

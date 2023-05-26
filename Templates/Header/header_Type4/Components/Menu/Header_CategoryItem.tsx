@@ -86,10 +86,7 @@ const Header_Category: React.FC<_props> = ({ content, title, url }) => {
               onMouseLeave={() => setFocus(false)}
               className={`relative text-[12px] xl:text-[14px] mt-[5px] xl:ml-[10px] xl:mr-[10px] ml-[5px] mr-[5px] tracking-[1.25px] z-10 flex items-center font-[600] border-0 border-b-2 pt-[10px] pb-[10px] border-transparent hover:border-primary-hover text-[#ffffff] hover:text-primary-hover`}
             >
-              <span
-                className='uppercase '
-                style={{ textTransform: 'uppercase' }}
-              >
+              <span>
                 {title}
               </span>
             </button>

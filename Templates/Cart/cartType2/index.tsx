@@ -1,7 +1,7 @@
 import { SpinnerComponent } from '@appComponents/ui/spinner';
 import { paths } from '@constants/paths.constant';
 import CheckoutController from '@controllers/checkoutController';
-import { useTypedSelector_v2 } from '@hooks_v2/index';
+import { GetCartTotals, useTypedSelector_v2 } from '@hooks_v2/index';
 import {
   PersonalizationColor,
   PersonalizationFont,
@@ -25,8 +25,6 @@ const CartType2: React.FC<_CartProps> = ({
 }) => {
   const cartData = useTypedSelector_v2((state) => state.cart.cart);
   const storeId = useTypedSelector_v2((state) => state.store.id);
-  const { fetchShipping, shippingAdress, selectedShipping, shippingMethod } =
-    CheckoutController();
   const [availableFont, setAvailableFont] = useState<
     PersonalizationFont[] | []
   >([]);
@@ -49,6 +47,14 @@ const CartType2: React.FC<_CartProps> = ({
       });
     }
   }, [storeId]);
+
+  const { subTotal } = GetCartTotals();
+
+  const { fetchShipping, shippingAdress, selectedShipping, shippingMethod } =
+    CheckoutController();
+  useEffect(() => {
+    fetchShipping(subTotal);
+  }, [subTotal, shippingAdress]);
 
   if (showLoaderOrEmptyText === 'loader') {
     return (
