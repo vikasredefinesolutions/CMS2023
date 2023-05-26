@@ -469,9 +469,12 @@ const CheckoutController = () => {
   };
 
   const reviewOrder = async () => {
-    const givenDate = `${cardDetails.cardExpirationMonth}${cardDetails.cardExpirationYear}`;
-    const currentDate =
-      new Date().getMonth() + 1 + new Date().getFullYear().toString();
+    const givenDate = `${cardDetails.cardExpirationYear}${cardDetails.cardExpirationMonth}`;
+    const currentYear = new Date().getFullYear().toString();
+    const currentMonth = new Date().getMonth() + 1;
+
+    const currentDate = currentYear + currentMonth.toString();
+    // console.log('card ---------', cardDetails, +givenDate, +currentDate);
 
     if (+currentDate > +givenDate) {
       showModal({
