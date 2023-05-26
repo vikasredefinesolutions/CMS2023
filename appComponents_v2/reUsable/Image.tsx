@@ -43,10 +43,8 @@ const NxtImage: React.FC<_Imageprops> = ({
 
   return (
     <div className={className}>
-      {
-        // eslint-disable-next-line @next/next/no-img-element
-        <img src={imageUrl as string} alt={alt || ''} title={title || ''} />
-      }
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={imageUrl as string} alt={alt || ''} title={title || ''} />
     </div>
   );
 };

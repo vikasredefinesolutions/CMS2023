@@ -56,7 +56,7 @@ const CardPaymentType1: paymentProps = ({
     } else {
       e.target.classList.remove('border-0');
       e.target.classList.add('border', 'border-red-700', 'border-solid');
-      console.log('non');
+      // console.log('non');
     }
   };
 
@@ -74,16 +74,37 @@ const CardPaymentType1: paymentProps = ({
           Payment
         </div>
         <div>
-          {/*  ml-3 text-anchor underline*/}
-          <button
-            className='!text-anchor hover:!text-anchor-hover underline'
-            id='btn-use-purchase-order'
-            onClick={() =>
-              updatePaymentMethod(paymentMethodCustom.purchaseOrder)
-            }
-          >
-            Use Purchase Order
-          </button>
+          <div className='w-full flex justify-end'>
+            <button
+              className='!text-anchor hover:!text-anchor-hover underline'
+              id='btn-use-purchase-order'
+              onClick={() =>
+                updatePaymentMethod(paymentMethodCustom.purchaseOrder)
+              }
+            >
+              Use Purchase Order
+            </button>
+          </div>
+          <div className='w-full flex flex-wrap'>
+            <label className='w-full flex justify-end cursor-pointer'>
+              <input
+                type='checkbox'
+                name='option'
+                id='option1'
+                className='mr-2'
+              />
+              <div className='font-bold'>Use PAYMENT PENDING</div>
+            </label>{' '}
+            <label className='w-full flex justify-end cursor-pointer'>
+              <input
+                type='checkbox'
+                name='option'
+                id='option2'
+                className='mr-2'
+              />
+              <div className='font-bold'>ALLOW PO</div>
+            </label>
+          </div>
         </div>
       </div>
       <div className='relative z-0 w-full mb-[20px] border border-gray-border rounded'>

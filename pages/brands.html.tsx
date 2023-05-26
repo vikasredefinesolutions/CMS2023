@@ -4,11 +4,13 @@ import { _defaultTemplates } from '@configs/template.config';
 import { _Brand } from '@definations/brand';
 import { _GetPageType } from '@definations/slug.type';
 import { removeDuplicates } from '@helpers/common.helper';
+import { useActions_v2 } from '@hooks_v2/index';
 import { FetchBrands } from '@services/header.service';
 import { getPageComponents } from '@services/home.service';
 import { FetchPageType } from '@services/slug.service';
 import BrandsListingTemplate from '@templates/Brands';
 import { GetServerSideProps, GetServerSidePropsResult } from 'next';
+import { useEffect } from 'react';
 import { _globalStore } from 'store.global';
 
 interface _Props {
@@ -18,6 +20,15 @@ interface _Props {
 }
 
 const Brands: NextPage<_Props> = (props) => {
+  const { store_CurrentPage } = useActions_v2();
+
+  useEffect(() => {
+    store_CurrentPage('BRANDS');
+    return () => {
+      store_CurrentPage(null);
+    };
+  }, []);
+
   return <BrandsListingTemplate id={_defaultTemplates.brands} {...props} />;
 };
 

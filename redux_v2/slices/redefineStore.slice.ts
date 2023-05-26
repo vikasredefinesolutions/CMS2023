@@ -38,6 +38,7 @@ export interface _RedesignStore {
   thirdPartyLogin: boolean;
   bothLogin: boolean;
   isLinepersonalization: boolean;
+  currentPage: 'CHECKOUT' | 'BRANDS' | null;
 }
 
 // Define the initial state using that type
@@ -68,6 +69,7 @@ const initialState: _RedesignStore = {
   thirdPartyLogin: false,
   bothLogin: false,
   isLinepersonalization: false,
+  currentPage: null,
 };
 
 export const storeSlice = createSlice({
@@ -119,6 +121,13 @@ export const storeSlice = createSlice({
 
     updatePageType: (state, { payload }) => {
       state.pageType = payload;
+    },
+
+    store_CurrentPage: (
+      state,
+      { payload }: { payload: null | 'CHECKOUT' | 'BRANDS' },
+    ) => {
+      state.currentPage = payload;
     },
   },
   extraReducers: (builder) => {
