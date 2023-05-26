@@ -103,7 +103,7 @@ const SideFiltersTypeFive = ({
                               ) : filter.label === 'Category' ? (
                                 <li
                                   key={ind}
-                                  className='w-full pt-[4px] pb-[4px]'
+                                  className='w-full pt-[2px] pb-[2px]'
                                 >
                                   <Link
                                     key={option.name}
@@ -111,7 +111,7 @@ const SideFiltersTypeFive = ({
                                     className='flex items-center !text-black font-bold !no-underline'
                                     href={`/${option.sename}.html`}
                                   >
-                                    <a className='font-semibold flex items-center text-tertiary text-normal-text !no-underline'>
+                                    <a className='font-semibold flex items-center text-tertiary text-small-text !no-underline'>
                                       <span className='material-icons-outlined'>
                                         {option.subrows
                                           ? 'chevron_right'
