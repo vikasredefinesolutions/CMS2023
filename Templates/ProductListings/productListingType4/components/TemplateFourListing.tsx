@@ -89,7 +89,7 @@ const TemplateFourListing = ({
               <Link href={product.brandUrl}>
                 <img
                   className='inline-block max-h-full'
-                  src={`${mediaBaseUrl}${product.blackBrandlogo}`}
+                  src={`${mediaBaseUrl}${product.productBrandlogo}`}
                   alt={product.brandName}
                   title={product.brandName || ''}
                 />
@@ -148,9 +148,7 @@ const TemplateFourListing = ({
                 <>
                   <Link key={product.id} href={`/${product.sename}.html`}>
                     <li
-                      className={`w-7 h-7 border-2  border-secondary
-                          
-           hover:border-secondary cursor-pointer`}
+                      className={`w-7 h-7 border-2  border-secondary hover:border-secondary cursor-pointer`}
                       key={product.id}
                     >
                       <NxtImage

@@ -4,7 +4,7 @@ import {
   GetCartTotals,
   GetCustomerId,
   useActions_v2,
-  useTypedSelector_v2,
+  useTypedSelector_v2
 } from 'hooks_v2';
 // import { useActions_v2, useTypedSelector_v2 } from '@src/hooks';
 import NxtImage from '@appComponents/reUsable/Image';

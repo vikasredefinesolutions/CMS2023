@@ -5,7 +5,7 @@ import { _HeaderProps, _MenuItems } from '@definations/header.type';
 import {
   useActions_v2,
   useTypedSelector_v2,
-  useWindowDimensions_v2,
+  useWindowDimensions_v2
 } from '@hooks_v2/index';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
@@ -15,7 +15,7 @@ import {
   LoggedInMenu,
   LoginIcon,
   Logo,
-  MyCartIcon,
+  MyCartIcon
 } from '../header_Type2/Components/Icons';
 import Header_MenuItems from '../header_Type2/Components/Menu/Header_MenuItems';
 import SearchBar from '../header_Type2/Components/Menu/Header_SearchBar';
@@ -76,7 +76,7 @@ const Header_Type2: NextPage<_HeaderProps> = ({
               style={{ backgroundColor: headerBgColor }}
             >
               <div className='container  mx-auto'>
-                <div className=''>
+                <div className='pt-[10px] pb-[10px]'>
                   <div className='flex items-center justify-between'>
                     <div className='flex items-center w-1/2 sm:w-[50%] md:w-1/3 relative'>
                       {storeTypeId == storeBuilderTypeId ? (
@@ -124,7 +124,11 @@ const Header_Type2: NextPage<_HeaderProps> = ({
                       </div>
                     </div>
                   </div>
-                  {isMobileView
+                  
+                  <SearchBar screen={'MOBILE'} />
+                </div>
+              </div>
+              {isMobileView
                     ? null
                     : router.asPath != paths.CHECKOUT && (
                         <Header_MenuItems
@@ -133,9 +137,6 @@ const Header_Type2: NextPage<_HeaderProps> = ({
                           menuItems={menuItems as _MenuItems}
                         />
                       )}
-                  <SearchBar screen={'MOBILE'} />
-                </div>
-              </div>
             </div>
           </nav>
         </header>

@@ -56,10 +56,10 @@ const MyCartIcon: React.FC = () => {
               {/*  img link  */}
               <span className='material-icons'>
                 {' '}
-                {__pagesText.Headers.shoppingCartIcon}
+                <img src="/assets/images/PKhealth/cart-icon-pkhg.png" />
               </span>
             </span>{' '}
-            <span className='absolute right-[-7px] top-[-1px] rounded-full flex items-center justify-center bg-secondary text-[9px] text-[#000000] pl-[4px] pr-[4px] pt-[2px] pb-[2px] leading-[10px]'>
+            <span className='absolute right-[-5px] top-[0px] rounded-full flex items-center justify-center bg-secondary text-[9px] text-[#000000] pl-[4px] pr-[4px] pt-[2px] pb-[2px] leading-[10px]'>
               {totalCartQty}
             </span>
           </a>
@@ -100,7 +100,7 @@ const MyCartIcon: React.FC = () => {
                         </div>
                         <div className='flex flex-wrap mt-[5px] text-center leading-none'>
                           <div className=''>
-                            <div className='text-slate-100	  font-[400]'>
+                            <div className='text-slate-100 font-[400]'>
                               {__pagesText.Headers.qty}
                             </div>
                             <div className='mt-[3px]'>{cartItem.totalQty}</div>

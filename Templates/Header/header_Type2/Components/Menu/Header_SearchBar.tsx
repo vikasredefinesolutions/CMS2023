@@ -27,7 +27,7 @@ const SearchBar: React.FC<_props> = ({
               <Form>
                 <div className='sm:hidden'>
                   <div className=''>
-                    <div className='border border-[#003a70] pt-[5px] pb-[4px] pl-[15px] pr-[24px] text-primary relative'>
+                    <div className='border rounded-full border-gray-border pt-[5px] pb-[4px] pl-[15px] pr-[24px] text-quaternary relative'>
                       <input
                         type='text'
                         name='text'

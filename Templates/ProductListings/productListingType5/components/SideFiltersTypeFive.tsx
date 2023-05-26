@@ -3,14 +3,14 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
-  Link,
+  Link
 } from '@mui/material';
 import {
   FilterChangeHandler,
   FilterType,
-  _CheckedFilter,
+  _CheckedFilter
 } from '@templates/ProductListings/ProductListingType';
-
+import { useRouter } from 'next/router';
 import { Fragment } from 'react';
 const SideFiltersTypeFive = ({
   filters,
@@ -21,6 +21,10 @@ const SideFiltersTypeFive = ({
   handleChange: FilterChangeHandler;
   checkedFilters: Array<_CheckedFilter>;
 }) => {
+  const router = useRouter();
+  let route = router.asPath.split('.')[0].replace('.html', '').replace('/', '');
+  console.log(route);
+
   return (
     // <div className='relative'>
     <div className={'pl-[16px] pr-[16px] pt-[16px] pb-[16px] bg-light-gray'}>
@@ -103,15 +107,18 @@ const SideFiltersTypeFive = ({
                               ) : filter.label === 'Category' ? (
                                 <li
                                   key={ind}
-                                  className='w-full pt-[2px] pb-[2px]'
+                                  className='w-full pt-[4px] pb-[4px]'
                                 >
                                   <Link
                                     key={option.name}
                                     id={option.name}
-                                    className='flex items-center !text-black font-bold !no-underline'
+                                    className={`flex items-center !text-black !no-underline cursor-pointer`}
                                     href={`/${option.sename}.html`}
                                   >
-                                    <a className='font-semibold flex items-center text-tertiary text-small-text !no-underline'>
+                                    <a className={`font-semibold flex items-center text-tertiary text-normal-text !no-underline ${route === option.sename
+                                        ? '!font-bold'
+                                        : ''
+                                    }`}>
                                       <span className='material-icons-outlined'>
                                         {option.subrows
                                           ? 'chevron_right'

@@ -1,7 +1,7 @@
 import { __pagesText } from '@constants/pages.text';
 import {
   _MenuCategory,
-  _MenuCategoryWithBrand,
+  _MenuCategoryWithBrand
 } from '@definations/header.type';
 import { FetchMenuCategories } from '@services/header.service';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';

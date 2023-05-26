@@ -91,17 +91,15 @@ const TemplateFiveListing = ({
                 href={`${origin}/${product.sename}.html`}
                 className='relative'
               >
-                <a>
-                  <NxtImage
-                    src={
-                      currentProduct?.imageName ? currentProduct?.imageName : ''
-                    }
-                    alt=''
-                    className='max-h-full'
-                    key={currentProduct?.id}
-                    title={product.name}
-                  />
-                </a>
+                <NxtImage
+                  src={
+                    currentProduct?.imageName ? currentProduct?.imageName : ''
+                  }
+                  alt=''
+                  className='max-h-full'
+                  key={currentProduct?.id}
+                  title={product.name}
+                />
               </Link>
               <div className='absolute top-2 right-2 text-gray-800 p-1 z-5'>
                 <WishlistButton
