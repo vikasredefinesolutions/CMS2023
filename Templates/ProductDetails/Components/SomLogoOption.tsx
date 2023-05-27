@@ -525,10 +525,9 @@ const SomLogoOption: React.FC<_SOMLogoOptionProps> = ({
       ) : (
         <></>
       )}
-
       {(logoStatus === 'later' || logoStatus === 'submitted') &&
         isSewOutEnable &&
-        totalQty && (
+        totalQty > 0 && (
           <label className='block mb-2'>
             <input
               type='checkbox'
