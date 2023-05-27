@@ -3,7 +3,10 @@ import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import React, { useEffect, useRef } from 'react';
 
 import { __pagesText } from '@constants/pages.text';
-import { GoogleAnalyticsTrackerForCG } from '@helpers/common.helper';
+import {
+  GoogleAnalyticsTrackerForAllStore,
+  GoogleAnalyticsTrackerForCG,
+} from '@helpers/common.helper';
 import {
   _ProductListingProps,
   _ProductListingTemplates,
@@ -60,6 +63,11 @@ const ProductListing: React.FC<_ProductListingProps & { id: string }> = ({
     if (pageData?.googleTagManagerResponseCommonData && !isCaptured.current) {
       isCaptured.current = true;
       GoogleAnalyticsTrackerForCG(
+        '',
+        storeId,
+        pageData.googleTagManagerResponseCommonData,
+      );
+      GoogleAnalyticsTrackerForAllStore(
         '',
         storeId,
         pageData.googleTagManagerResponseCommonData,

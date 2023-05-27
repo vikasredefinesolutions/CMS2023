@@ -487,7 +487,9 @@ const CheckoutController = () => {
       ...(eventName === 'GoogleAddShippingInfoScript'
         ? { shippingTier: 'Free Shipping' }
         : { paymentType: paymentMethod }),
-      ...(storeId !== CG_STORE_CODE ? { value: '', coupon: couponCode } : {}),
+      ...(storeId !== CG_STORE_CODE
+        ? { value: '', coupon: couponCode || '' }
+        : {}),
       shoppingCartItemsModel: cartData?.map((item) => ({
         productId: item.productId,
         productName: item?.productName,

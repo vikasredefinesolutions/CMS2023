@@ -45,13 +45,16 @@ const CheckoutTemplate: FC<_Props> = ({ templateId }) => {
   useEffect(() => {
     let totalPrice = 0;
     cartData?.forEach((item) => (totalPrice += item.totalPrice));
-    if (cartData?.length && storeId === CG_STORE_CODE && !isCaptured.current) {
+    if (cartData?.length && storeId && !isCaptured.current) {
       isCaptured.current = true;
       const payload = {
         storeId: storeId,
         customerId: customerId,
         ...(storeId !== CG_STORE_CODE
-          ? { value: totalPrice, coupon: cartDiscountDetails?.coupon }
+          ? {
+              value: totalPrice || '',
+              coupon: cartDiscountDetails?.coupon || '',
+            }
           : {}),
         shoppingCartItemsModel: cartData?.map((item) => ({
           productId: item.productId,
@@ -73,7 +76,7 @@ const CheckoutTemplate: FC<_Props> = ({ templateId }) => {
         payload,
       );
     }
-  }, [cartData]);
+  }, [cartData, storeId]);
 
   useEffect(() => {
     if (!isCartLoading && (!cartData?.length || cartData === null)) {

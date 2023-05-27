@@ -191,7 +191,7 @@ const SomActionsHandler: React.FC<_SOMActionHandlerProps> = ({
       brandName: product?.brand?.name,
       quantity: toCheckout.totalQty,
       ...(storeId !== CG_STORE_CODE
-        ? { value: toCheckout.totalPrice, coupon: '' }
+        ? { value: toCheckout.totalPrice || '', coupon: '' }
         : {}),
     };
 
