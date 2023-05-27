@@ -1,5 +1,5 @@
 export interface _Signup_Payload {
-  primarySport: string;
+  primarySport: number;
   gender: string;
   showIndustries: boolean;
   id: number;
@@ -132,6 +132,6 @@ export const signup_payload: _Signup_Payload = {
     postalCode: '',
     city: '',
   },
-  primarySport: '',
+  primarySport: 0,
   industryId: 0,
 };

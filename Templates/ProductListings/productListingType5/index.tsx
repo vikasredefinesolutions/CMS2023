@@ -118,10 +118,21 @@ const ProductListingType5: React.FC<_ListingProps> = ({
                       </ul>
                     </div>
                     <div className='py-20 border-t border-t-gray-300 text-center'>
-                      <div className='mb-8'>
-                        You've seen {products.length} Products out of{' '}
-                        {totalCount}
+                      <div className=''>
+                        <div className='mb-8'>
+                          You've seen {products.length} Products out of{' '}
+                          {totalCount}
+                        </div>
+                        <div className='h-[2px] w-full max-w-[250px] mx-auto bg-[#808080] mt-2'>
+                            <div
+                              className='bg-secondary h-full'
+                              style={{
+                                width: `${(products.length * 100) / totalCount}%`,
+                              }}
+                            ></div>
+                          </div>
                       </div>
+                      
                       {totalCount > products.length && (
                         <button
                           type='submit'

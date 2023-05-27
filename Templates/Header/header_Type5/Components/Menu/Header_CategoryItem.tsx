@@ -99,7 +99,7 @@ const Header_Category: React.FC<_props> = ({
               type='button'
               onMouseOver={() => setFocus(true)}
               onMouseLeave={() => setFocus(false)}
-              className={`relative text-[14px] xl:text-[17px] xl:ml-[10px] xl:mr-[10px] ml-[5px] mr-[5px] tracking-[2px] z-10 flex items-center font-[600] pt-[8px] pb-[8px] pl-[15px] pr-[15px] text-[#ffffff] hover:text-primary
+              className={`relative text-[14px] xl:text-[17px] xl:ml-[10px] xl:mr-[10px] ml-[5px] mr-[5px] tracking-[2px] z-10 flex items-center font-[600] pt-[8px] pb-[8px] pl-[15px] pr-[15px] text-[#ffffff] hover:primary-link
               `}
             >
               <span
@@ -172,7 +172,7 @@ const Header_Category: React.FC<_props> = ({
                                 itemLabel={capitalizeFirstLetter(
                                   item.brandName,
                                 )}
-                                itemUrl={`Brand/${item.seName}.html?v=product-list`}
+                                itemUrl={`Brand/${item.seName}/${item.brandId}/${url}.html`}
                                 type={'CATEGORY'}
                               />
                             );

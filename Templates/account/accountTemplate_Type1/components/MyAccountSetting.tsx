@@ -52,7 +52,7 @@ const AccountSetting = () => {
       });
       if (res) {
         setNewPassword('');
-        await passDecryptFunction(res?.errors?.password).then((response) => {
+        await passDecryptFunction(res?.password).then((response) => {
           setCurrentPass(response ? response : '');
         });
         setShowPasswordUpdate(false);

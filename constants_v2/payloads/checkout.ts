@@ -51,7 +51,6 @@ export const AddOrderDefault = {
   customDiscount: 0,
   orderSubtotal: 0,
   orderTax: 0,
-  orderShippingCosts: 0,
   orderTotal: 0,
   authorizationCode: '',
   authorizationResult: '',
@@ -59,7 +58,6 @@ export const AddOrderDefault = {
   transactionCommand: '',
   lastIPAddress: '',
   paymentGateway: '',
-  paymentMethod: '',
   orderStatus: '',
   transactionStatus: '',
   avsResult: '',
@@ -99,23 +97,29 @@ export const AddOrderDefault = {
   shippedByStamps: true,
   logoFinalTotal: 0,
   lineFinalTotal: 0,
-  isExport: true,
   inHandDate: new Date(),
   storeCredit: 0,
   chargeHostedPaymentID: '',
   sewout: true,
   sewoutTotal: 0,
   digitalTotal: 0,
-  empSourceName: '',
-  empSourceMedium: '',
   gclid: '',
   isPayLater: true,
   orderCheckoutNote: '',
-  empSalesRap: '',
-  employeeID: 0,
   isCreditLimit: false,
   endUserName: '',
   decorationDate: new Date(),
+
+  // EMPLOYEE LOGIN
+  orderShippingCosts: 0, // editable
+  paymentMethod: '', // PAYMENTPENDING
+  // EMPLOYEE LOGIN SPECIFIC
+  empSalesRap: '',
+  employeeID: 0,
+  salesRepName: '',
+  empSourceName: '',
+  empSourceMedium: '',
+  isExport: false, // true  => allow PO
 };
 
 export const addAddress = {

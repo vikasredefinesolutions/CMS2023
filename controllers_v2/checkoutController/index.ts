@@ -1,25 +1,28 @@
 import {
-  PaymentMethod,
-  UserAddressType,
   checkoutPages,
   paymentMethodCustom as paymentEnum,
+  PaymentMethod,
+  UserAddressType,
 } from '@constants/enum';
 import {
-  CG_STORE_CODE,
   __Cookie,
   __Cookie_Expiry,
+  __LocalStorage,
+  __UserMessages,
+  CG_STORE_CODE,
 } from '@constants/global.constant';
 import { paths } from '@constants/paths.constant';
-import { AddOrderDefault, addAddress } from '@constants/payloads/checkout';
+
+import { addAddress, AddOrderDefault } from '@constants/payloads/checkout';
 import { signup_payload } from '@constants/payloads/signup';
 import { commonMessage } from '@constants/successError.text';
 import { CreditCardDetailsType } from '@definations/checkout';
 import {
+  deleteCookie,
+  extractCookies,
   GoogleAnalyticsTrackerForAllStore,
   GoogleAnalyticsTrackerForCG,
   KlaviyoScriptTag,
-  deleteCookie,
-  extractCookies,
   setCookie,
 } from '@helpers/common.helper';
 import getLocation from '@helpers/getLocation';
@@ -58,6 +61,7 @@ import {
 } from '@services/payment.service';
 import { FetchProductById } from '@services/product.service';
 import { _ProductPolicy } from '@templates/ProductDetails/productDetailsTypes/productDetail.res';
+import { useRouter } from 'next/router';
 import CheckoutAddressForm, {
   AddressFormRefType,
   AddressType,
@@ -108,6 +112,7 @@ const CheckoutController = () => {
   const [showAddAddressModal, setShowAddAddressModal] = useState(false);
   const [addressEditData, setAddressEditData] =
     useState<CustomerAddress | null>(null);
+  const router = useRouter();
 
   const [shippingMethod, setShippingMethod] = useState<_shippingMethod[] | []>([
     {
@@ -128,7 +133,10 @@ const CheckoutController = () => {
     updateCustomer,
     updateWishListData,
     getStoreCustomer,
+    update_checkoutEmployeeLogin,
     customerCreditBalanceUpdate,
+    updateEmployeeV2,
+    product_employeeLogin,
   } = useActions_v2();
   const user = useTypedSelector_v2((state) => state.user);
   const cartData = useTypedSelector_v2((state) => state.cart.cart);
@@ -143,11 +151,12 @@ const CheckoutController = () => {
     (state) => state.cart.userCreditBalance.useBalance,
   );
   const customer = user.customer;
-  const userId = useTypedSelector_v2((state) => state.user.id);
+  const userId = GetCustomerId();
   const customerId = GetCustomerId();
   const couponCode = useTypedSelector_v2(
     (state) => state.cart.discount?.coupon,
   );
+  const { el: employeeLogin } = useTypedSelector_v2((state) => state.checkout);
   const {
     totalPrice,
     subTotal,
@@ -161,7 +170,7 @@ const CheckoutController = () => {
   const billingForm = CheckoutAddressForm({});
   const shippingForm = CheckoutAddressForm({});
   const isLoggedIn = Boolean(user.id);
-
+  const [isguestLogin, setIsguestLogin] = useState<boolean>(false);
   useEffect(() => {
     if (isLoggedIn) {
       setCurrentPage(checkoutPages.address);
@@ -329,6 +338,7 @@ const CheckoutController = () => {
   };
 
   const continueAsGuest = () => {
+    setIsguestLogin(true);
     setCurrentPage(checkoutPages.address);
   };
 
@@ -396,7 +406,23 @@ const CheckoutController = () => {
     }
   };
 
+  const logout_EmployeeLogin = () => {
+    updateEmployeeV2('CLEAN_UP');
+    product_employeeLogin('MinQtyToOne_CleanUp');
+    logoutClearCart();
+    logInUser('CLEAN_UP');
+
+    setCookie(__Cookie.userId, '', 'EPOCH');
+    deleteCookie(__Cookie.tempCustomerId);
+    localStorage.removeItem(__LocalStorage.empData);
+  };
+
   const checkPayment = () => {
+    if (employeeLogin.isPaymentPending) {
+      // don't check payment details if employee is logged IN and selected payment pending .
+      return true;
+    }
+
     let { totalPrice } = { totalPrice: 200 };
     if (totalPrice > 0) {
       if (paymentEnum.creditCard === paymentMethod) {
@@ -475,18 +501,20 @@ const CheckoutController = () => {
   };
 
   const reviewOrder = async () => {
-    const givenDate = `${cardDetails.cardExpirationYear}${cardDetails.cardExpirationMonth}`;
-    const currentYear = new Date().getFullYear().toString();
-    const currentMonth = new Date().getMonth() + 1;
-    const currentDate = currentYear + currentMonth.toString();
-    // console.log('card ---------', cardDetails, +givenDate, +currentDate);
-    if (paymentEnum.creditCard === paymentMethod) {
-      if (+currentDate > +givenDate) {
-        showModal({
-          message: 'Invalid Expiration Date',
-          title: 'Warning',
-        });
-        return;
+    if (!employeeLogin.isPaymentPending) {
+      const givenDate = `${cardDetails.cardExpirationYear}${cardDetails.cardExpirationMonth}`;
+      const currentYear = new Date().getFullYear().toString();
+      const currentMonth = new Date().getMonth() + 1;
+      const currentDate = currentYear + currentMonth.toString();
+      // console.log('card ---------', cardDetails, +givenDate, +currentDate);
+      if (paymentEnum.creditCard === paymentMethod) {
+        if (+currentDate > +givenDate) {
+          showModal({
+            message: 'Invalid Expiration Date',
+            title: 'Warning',
+          });
+          return;
+        }
       }
     }
     if (showAddAddress) {
@@ -510,10 +538,10 @@ const CheckoutController = () => {
                 location: `${data.city}, ${data.region}, ${data.country}, ${data.postal_code}`,
                 ipAddress: data.ip_address,
                 macAddress: '00-00-00-00-00-00',
-                customerId: userId ? userId : +customerId || 0,
+                customerId: +userId || +customerId || 0,
                 firstname: shippingForm.values.firstname,
                 lastName: shippingForm.values.lastName,
-                email: customer ? customer.email : '',
+                email: customer?.email || customerEmail,
                 address1: shippingForm.values.address1,
                 address2: shippingForm.values.address2 || ' ',
                 suite: ' ',
@@ -530,13 +558,16 @@ const CheckoutController = () => {
                 companyName: shippingForm.values.companyName || ' ',
               },
             };
-            userId &&
-              (await CreateUserAddress(obj).then(() => {
-                GetStoreCustomer(userId).then((res) => {
-                  if (res === null) return;
-                  updateCustomer({ customer: res });
-                });
-              }));
+
+            obj.storeCustomerAddressModel.email &&
+              (await CreateUserAddress(obj)
+                .then(() => {
+                  GetStoreCustomer(+userId).then((res) => {
+                    if (res === null) return;
+                    updateCustomer({ customer: res });
+                  });
+                })
+                .catch((error) => console.log(error)));
           }
 
           setShippingAdress(shippingForm.values);
@@ -585,6 +616,13 @@ const CheckoutController = () => {
         if (data) {
           setShippingMethod(data);
           setSelectedShipping(data[0]);
+
+          if (data && data.length > 0 && data[0]?.price) {
+            update_checkoutEmployeeLogin({
+              type: 'SHIPPING_PRICE',
+              value: data[0].price,
+            });
+          }
         }
         return data;
       }
@@ -593,11 +631,52 @@ const CheckoutController = () => {
     }
   };
 
+  const addPaymentDetails = () => {
+    if (employeeLogin.isPaymentPending) {
+      return {
+        paymentMethod: 'PAYMENTPENDING',
+      };
+    }
+
+    const card = {
+      cardType: detectCardType(),
+      cardNumber: cardDetails.cardNumber,
+      cardVarificationCode: cardDetails.cardVarificationCode,
+      cardExpirationMonth: cardDetails.cardExpirationMonth,
+      cardExpirationYear: cardDetails.cardExpirationYear,
+      isCreditLimit: false,
+      paymentMethod: PaymentMethod.CREDITCARD,
+      paymentGateway: PaymentMethod.CHARGELOGIC,
+    };
+
+    if (paymentMethod === paymentEnum.creditCard) {
+      return card;
+    }
+
+    const purchaseOrderObj = {
+      AuthorizationPNREF: purchaseOrder,
+      isCreditLimit: false,
+      paymentMethod: PaymentMethod.PREPAYMENT,
+      paymentGateway: PaymentMethod.PREPAYMENT,
+    };
+    if (paymentMethod === paymentEnum.purchaseOrder) {
+      return purchaseOrderObj;
+    }
+
+    return {};
+  };
+
+  const getNewShippingCost = (shippingCost: number): number => {
+    if (isEmployeeLoggedIn) {
+      return employeeLogin.shippingPrice;
+    }
+
+    return shippingCost;
+  };
+
   const placeOrder = async (selectedShippingMOodel: _shippingMethod) => {
-    // console.log('shipping seleceted', selectedShipping);
-
     // const shippingData = await fetchShipping(price);
-
+    let userNewId = 0;
     setShowLoader(true);
     if (createAccountPassword.password && billingAdress && shippingAdress) {
       const location = await getLocation();
@@ -607,7 +686,7 @@ const CheckoutController = () => {
           ...signup_payload,
           firstname: billingAdress.firstname,
           lastName: billingAdress.lastName,
-          email: billingAdress.email,
+          email: customerEmail,
           password: createAccountPassword.password,
           confirmPassword: createAccountPassword.confirmPassword,
           companyName: billingAdress.companyName,
@@ -626,38 +705,37 @@ const CheckoutController = () => {
           organizationName: '',
 
           storeCustomerAddress: [
-            { ...addAddress, ...shippingAdress },
-            { ...addAddress, ...billingAdress },
+            {
+              ...addAddress,
+              ...shippingAdress,
+              email: customerEmail,
+              addressType: UserAddressType.SHIPPINGADDRESS,
+            },
+            {
+              ...addAddress,
+              ...billingAdress,
+              email: customerEmail,
+              addressType: UserAddressType.BILLINGADDRESS,
+            },
           ],
         },
       };
-      await CreateNewAccount(addAccount);
+      const userDetail = await CreateNewAccount(addAccount);
+      if (userDetail == null) {
+        showModal({
+          message: userDetail || __UserMessages.signUpPage.SomethingWentWrong,
+          title: 'Error',
+        });
+        return;
+      } else {
+        userNewId = userDetail.item1.id;
+        await updateCartByNewUserId(~~customerId, userNewId);
+      }
     }
-
     if (billingAdress && shippingAdress) {
-      const card = {
-        cardType: detectCardType(),
-        cardNumber: cardDetails.cardNumber,
-        cardVarificationCode: cardDetails.cardVarificationCode,
-        cardExpirationMonth: cardDetails.cardExpirationMonth,
-        cardExpirationYear: cardDetails.cardExpirationYear,
-        isCreditLimit: false,
-        paymentMethod: PaymentMethod.CREDITCARD,
-        paymentGateway: PaymentMethod.CHARGELOGIC,
-      };
-
-      const purchaseOrderObj = {
-        AuthorizationPNREF: purchaseOrder,
-        isCreditLimit: false,
-        paymentMethod: PaymentMethod.PREPAYMENT,
-        paymentGateway: PaymentMethod.PREPAYMENT,
-      };
       const orderModel = {
         ...AddOrderDefault,
-        ...(paymentMethod === paymentEnum.creditCard ? card : {}),
-        ...(paymentMethod === paymentEnum.purchaseOrder
-          ? purchaseOrderObj
-          : {}),
+        ...addPaymentDetails(),
         ...(useBalance
           ? {
               isCreditLimit: true,
@@ -671,7 +749,7 @@ const CheckoutController = () => {
             }
           : {}),
         storeID: storeId,
-        customerID: customerId,
+        customerID: userNewId != 0 ? +userNewId : +customerId,
         firstName: customer?.firstname || billingAdress.firstname,
         lastName: customer?.lastName || billingAdress.lastName,
         email: customer?.email || customerEmail,
@@ -702,7 +780,8 @@ const CheckoutController = () => {
         shippingPhone: shippingAdress.phone,
         orderSubtotal: subTotal,
         orderTax: salesTax,
-        orderTotal: totalPrice + selectedShippingMOodel.price,
+        orderTotal:
+          totalPrice + getNewShippingCost(selectedShippingMOodel.price),
         orderNotes: orderNote,
         couponCode: couponCode || '',
         couponDiscountAmount: discount,
@@ -712,32 +791,41 @@ const CheckoutController = () => {
         endUserName: endUserNameS,
         logoFinalTotal: totalLogoCharges,
         lineFinalTotal: totalLineCharges,
-        orderShippingCosts: selectedShippingMOodel.price,
+        orderShippingCosts: getNewShippingCost(selectedShippingMOodel.price),
         orderSmallRunFee: cartCharges?.smallRunFeesCharges
           ? cartCharges.smallRunFeesCharges
           : 0,
         orderLogoSetupFee: cartCharges?.logoSetupCharges
           ? cartCharges.logoSetupCharges
           : 0,
-      };
-      const order = {
-        orderModel,
-      };
-      try {
-        setShowLoader(true);
 
+        // EMPLOYEE LOGIN SPECIFIC
+        empSourceName: employeeLogin.source.value,
+        empSourceMedium: employeeLogin.sourceMedium.value,
+        empSalesRap: employeeLogin.salesRep.label,
+        salesRepName: employeeLogin.salesRep.label,
+        salesAgentId: +employeeLogin.salesRep.value,
+        isExport: employeeLogin.allowPo, // ALLOW PO Value
+      };
+
+      try {
         logoutClearCart();
         deleteCookie(__Cookie.tempCustomerId);
 
-        const res = await placeOrderService(order);
+        const res = await placeOrderService({
+          orderModel,
+        });
         if (res) {
           await Klaviyo_PlaceOrder({
             orderNumber: res.id,
           });
 
-          // router.push(`${paths.THANK_YOU}?orderNumber=${res.id}`);
-          window.location.assign(`${paths.THANK_YOU}?orderNumber=${res.id}`);
-          setShowLoader(false);
+          if (isEmployeeLoggedIn) {
+            logout_EmployeeLogin();
+          }
+
+          router.push(`${paths.THANK_YOU}?orderNumber=${res.id}`);
+          // window.location.assign(`${paths.THANK_YOU}?orderNumber=${res.id}`);
         }
       } catch (error) {
         setShowLoader(false);

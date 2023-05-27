@@ -7,7 +7,6 @@ import {
   _CreateUserAddressRes,
   _CustomerAddressDefaultRes,
 } from '@definations/APIs/address.res';
-import getLocation from '@helpers/getLocation';
 import { SendAsync } from '@utils/axios.util';
 
 export const CreateUserAddress = async (request: AddressAPIRequest) => {

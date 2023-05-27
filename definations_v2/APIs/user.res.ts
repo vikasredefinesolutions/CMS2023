@@ -43,7 +43,7 @@ export interface CustomerAddress {
   location?: any;
   ipAddress?: any;
   macAddress?: any;
-  companyName?: string;
+  companyName: string;
   CompanyName: string;
 }
 

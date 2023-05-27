@@ -2,16 +2,24 @@ import Price from '@appComponents/reUsable/Price';
 import { __pagesText } from '@constants/pages.text';
 import { _shippingMethod } from '@controllers/checkoutController';
 import SummarryController from '@controllers/summarryController';
-import { GetCartTotals, useTypedSelector_v2 } from 'hooks_v2';
-import { FC } from 'react';
+import { isNumberKey } from '@helpers/common.helper';
+import { GetCartTotals, useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
+import { FC, useState } from 'react';
 
 interface _props {
   selectedShippingModel: _shippingMethod;
 }
 
 const CartSummarryType1: FC<_props> = ({ selectedShippingModel }) => {
+  const { update_checkoutEmployeeLogin } = useActions_v2();
   const couponDetails = useTypedSelector_v2((state) => state.cart.discount);
+  const isEmployeeLoggedIn = useTypedSelector_v2(
+    (state) => !!state.employee.empId,
+  );
 
+  const currentPage = useTypedSelector_v2((state) => state.store.currentPage);
+  const { el: employeeLogin } = useTypedSelector_v2((state) => state.checkout);
+  const [textOrNumber, setTextOrNumber] = useState<'number' | 'text'>('text');
   // Functions
   const {
     coupon,
@@ -37,6 +45,75 @@ const CartSummarryType1: FC<_props> = ({ selectedShippingModel }) => {
   //     fetchShipping(subTotal);
   //   }
   // }, [subTotal]);
+  const getNewShippingCost = (shippingCost: number): number => {
+    if (isEmployeeLoggedIn) {
+      return employeeLogin.shippingPrice;
+    }
+
+    return shippingCost;
+  };
+
+  const ShippingHTML = (userShippingPrice: number) => {
+    if (isEmployeeLoggedIn && currentPage === 'CHECKOUT') {
+      const price =
+        textOrNumber === 'text' && employeeLogin.shippingPrice === 0
+          ? 'FREE'
+          : employeeLogin.shippingPrice;
+
+      return (
+        <div className='border-t border-gray-200 flex items-center justify-between pt-[10px] pb-[10px]'>
+          <dt className='text-normal-text flex items-center tracking-normal pb-[10px]'>
+            <span>Shipping</span>
+          </dt>
+          <dd className='text-normal-text tracking-normal'>
+            <div className='form-group m-b-10 pl-[15px] relative max-w-[100px]'>
+              <span className='absolute left-[0px] top-[12px] text-normal-text flex items-center tracking-normal'>
+                $
+              </span>
+              <input
+                className='border border-gray-border text-right focus:border-gray-border rounded w-full px-2 py-2'
+                value={price}
+                onChange={(event) => {
+                  if (isNumberKey(event)) {
+                    if ('FREE'.includes(event.target.value[0])) {
+                      setTextOrNumber('number');
+                      update_checkoutEmployeeLogin({
+                        type: 'SHIPPING_PRICE',
+                        value: 0,
+                      });
+                      return;
+                    }
+
+                    update_checkoutEmployeeLogin({
+                      type: 'SHIPPING_PRICE',
+                      value: +event.target.value,
+                    });
+                  }
+                }}
+                onBlur={() => setTextOrNumber('text')}
+                placeholder=''
+              />
+            </div>
+          </dd>
+        </div>
+      );
+    }
+
+    return (
+      <div className='border-t border-gray-200 flex items-center justify-between pt-[10px] pb-[10px]'>
+        <dt className='text-normal-text flex items-center'>
+          <span>Shipping</span>
+        </dt>
+        <dd className='text-normal-text'>
+          {userShippingPrice === 0 ? (
+            'FREE'
+          ) : (
+            <Price value={userShippingPrice} />
+          )}
+        </dd>
+      </div>
+    );
+  };
 
   const addBottomPadding = couponDetails?.amount ? '' : 'pb-[20px]';
 
@@ -171,15 +248,7 @@ const CartSummarryType1: FC<_props> = ({ selectedShippingModel }) => {
               )}
             </dt>
           </div>
-
-          <div className='border-t border-gray-200 flex items-center justify-between pt-[10px] pb-[10px]'>
-            <dt className='text-normal-text flex items-center'>
-              <span>Shipping</span>
-            </dt>
-            <dd className='text-normal-text'>{`$${selectedShippingModel?.price.toFixed(
-              2,
-            )}`}</dd>
-          </div>
+          {ShippingHTML(selectedShippingModel?.price)}
           <div className='border-t border-gray-200 flex items-center justify-between pt-[10px]'>
             <dt className='text-normal-text flex items-center'>
               <span>{__pagesText.CheckoutPage.orderSummary.tax}</span>
@@ -193,7 +262,9 @@ const CartSummarryType1: FC<_props> = ({ selectedShippingModel }) => {
       <div className='flex justify-between items-center bg-light-gray w-full text-sub-text font-[600] pl-[16px] pr-[16px] pt-[8px] pb-[8px]'>
         <div>Total:</div>
         <div>
-          <Price value={totalPrice + selectedShippingModel.price} />
+          <Price
+            value={totalPrice + getNewShippingCost(selectedShippingModel.price)}
+          />
         </div>
       </div>
     </div>

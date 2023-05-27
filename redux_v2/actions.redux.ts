@@ -8,6 +8,7 @@ import { loaderActions } from './slices/loader.slice';
 import { successActions } from './slices/success.slice';
 import { wishlistActions } from './slices/wishlist.slice';
 
+import { checkoutActions } from './slices/checkout.slice';
 import { modalActions } from './slices/modals.slice';
 import { productActions } from './slices/product.slice';
 import { redefineStoreActions } from './slices/redefineStore.slice';
@@ -29,6 +30,7 @@ const actions = {
   ...wishlistActions,
   ...modalActions,
   ...sbStoreActions,
+  ...checkoutActions,
 };
 
 export default actions;

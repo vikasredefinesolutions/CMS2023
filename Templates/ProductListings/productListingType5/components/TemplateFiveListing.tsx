@@ -9,7 +9,8 @@ import { _modals } from '@definations/product.type';
 import { splitproductList } from '@definations/productList.type';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import {
-  GetlAllProductList, GetProductImageOptionList
+  GetlAllProductList,
+  GetProductImageOptionList,
 } from '@templates/ProductListings/ProductListingType';
 import ProductBoxController from '@templates/ProductListings/productListingType1/components/productBoxController';
 import Link from 'next/link';
@@ -85,21 +86,22 @@ const TemplateFiveListing = ({
         <div className='text-center lg:w-auto h-full'>
           {/* <div className='relative w-full mb-[20px]'> */}
           <div className=' relative border border-gray-border p-[20px]'>
-            <div className='w-full  rounded-md overflow-hidden'>
+            <div className='w-full rounded-md overflow-hidden'>
               <Link
                 href={`${origin}/${product.sename}.html`}
-                className='relative cursor-pointer'>
-                  <a>
-                <NxtImage
-                  src={
-                    currentProduct?.imageName ? currentProduct?.imageName : ''
-                  }
-                  alt=''
-                  className='max-h-full'
-                  key={currentProduct?.id}
-                  title={product.name}
-                />
-               </a>
+                className='relative cursor-pointer'
+              >
+                <a>
+                  <NxtImage
+                    src={
+                      currentProduct?.imageName ? currentProduct?.imageName : ''
+                    }
+                    alt=''
+                    className='max-h-full'
+                    key={currentProduct?.id}
+                    title={product.name}
+                  />
+                </a>
               </Link>
               <div className='absolute top-2 right-2 text-gray-800 p-1 z-5'>
                 <WishlistButton

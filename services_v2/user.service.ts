@@ -46,7 +46,7 @@ export interface _UserServices_V2 {
 
 export const CreateNewAccount = async (
   payload: _CreateNewAccount_Payload,
-): Promise<_AccCreated | string | null> => {
+): Promise<_AccCreated | null> => {
   const url = 'StoreCustomer/storecustomercreate.json';
 
   conditionalLog_V2({
@@ -62,9 +62,8 @@ export const CreateNewAccount = async (
       method: 'POST',
       data: payload,
     });
-
     // @ts-ignore: Unreachable code error
-    if (!res.data || res.success === false) {
+    if (!res || res.success === false) {
       let transformedRes: null | string = __SuccessErrorText.SomethingWentWrong;
 
       // @ts-ignore: Unreachable code error
@@ -80,7 +79,7 @@ export const CreateNewAccount = async (
         name: 'CreateNewAccount',
       });
 
-      return transformedRes;
+      return null;
     }
 
     return res;
@@ -364,18 +363,12 @@ export const UpdateUserPassword = async (payload: {
   password: string;
   customerId: number;
 }): Promise<{
-  success: boolean;
-  errors: {
-    password: string;
-  };
+  password: string;
 } | null> => {
   try {
     const url = '/StoreCustomer/updatestorecustomeremailpassword.json';
     const res = await SendAsync<{
-      success: boolean;
-      errors: {
-        password: string;
-      };
+      password: string;
     }>({
       url: url,
       method: 'POST',

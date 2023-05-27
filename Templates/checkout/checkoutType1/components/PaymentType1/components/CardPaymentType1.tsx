@@ -3,8 +3,10 @@ import { cardType } from '@constants/common.constant';
 import { paymentMethodCustom } from '@constants/enum';
 import { __pagesText } from '@constants/pages.text';
 import CheckoutController from '@controllers/checkoutController';
+import { useTypedSelector_v2 } from '@hooks_v2/index';
 import { useEffect, useState } from 'react';
 import { paymentProps } from '..';
+import CT1_EL_PaymentOption from '../../CO1_EL_PaymentOption';
 
 const CardPaymentType1: paymentProps = ({
   updatePaymentMethod,
@@ -22,6 +24,12 @@ const CardPaymentType1: paymentProps = ({
     cardDetails?.cardVarificationCode ? cardDetails?.cardVarificationCode : '',
   );
   const { blockInvalidChar } = CheckoutController();
+
+  const isEmployeeLoggedIn = useTypedSelector_v2(
+    (state) => !!state.employee.empId,
+  );
+  const { el: employeeLogin } = useTypedSelector_v2((state) => state.checkout);
+
   const handleCard = (e: any) => {
     if (!Number(e.target.value) || e.target.value.length == 0) {
       setcardCheck(false);
@@ -88,40 +96,27 @@ const CardPaymentType1: paymentProps = ({
           Payment
         </div>
         <div>
-          <div className='w-full flex justify-end'>
-            <button
-              className='!text-anchor hover:!text-anchor-hover underline'
-              id='btn-use-purchase-order'
-              onClick={() =>
-                updatePaymentMethod(paymentMethodCustom.purchaseOrder)
-              }
-            >
-              Use Purchase Order
-            </button>
-          </div>
-          <div className='w-full flex flex-wrap'>
-            <label className='w-full flex justify-end cursor-pointer'>
-              <input
-                type='checkbox'
-                name='option'
-                id='option1'
-                className='mr-2'
-              />
-              <div className='font-bold'>Use PAYMENT PENDING</div>
-            </label>{' '}
-            <label className='w-full flex justify-end cursor-pointer'>
-              <input
-                type='checkbox'
-                name='option'
-                id='option2'
-                className='mr-2'
-              />
-              <div className='font-bold'>ALLOW PO</div>
-            </label>
-          </div>
+          {!employeeLogin.isPaymentPending && (
+            <div className='w-full flex justify-end'>
+              <button
+                className='!text-anchor hover:!text-anchor-hover underline'
+                id='btn-use-purchase-order'
+                onClick={() =>
+                  updatePaymentMethod(paymentMethodCustom.purchaseOrder)
+                }
+              >
+                Use Purchase Order
+              </button>
+            </div>
+          )}
+          {isEmployeeLoggedIn && <CT1_EL_PaymentOption />}
         </div>
       </div>
-      <div className='relative z-0 w-full mb-[20px] border border-gray-border rounded'>
+      <div
+        className={`relative z-0 w-full mb-[20px] border border-gray-border rounded ${
+          employeeLogin.isPaymentPending ? 'opacity-50' : ''
+        }`}
+      >
         <input
           onBlur={changeHandler}
           onKeyDown={blockInvalidChar}
@@ -134,7 +129,7 @@ const CardPaymentType1: paymentProps = ({
             +`${detectCardType && detectCardType() === 'AMEX' ? 15 : 16}`
           }
           type='number'
-          // defaultValue={cardDetails?.cardNumber ? cardDetails.cardNumber : null}
+          disabled={employeeLogin.isPaymentPending}
           className='apperance pt-[15px] pb-[0px] block w-full px-[8px] h-[48px] mt-[0px] text-sub-text text-[18px] text-[#000000] bg-transparent border-0 appearance-none focus:outline-none focus:ring-0'
         />
         <label
@@ -170,13 +165,18 @@ const CardPaymentType1: paymentProps = ({
         </div>
       </div>
 
-      <div className='flex flex-wrap -mx-3 md:gap-y-6'>
+      <div
+        className={`flex flex-wrap -mx-3 md:gap-y-6 ${
+          employeeLogin.isPaymentPending ? 'opacity-50' : ''
+        }`}
+      >
         <div className='md:w-3/12 w-6/12 pl-[12px] pr-[12px]'>
           <div className='relative z-0 w-full mb-[20px] border border-gray-border rounded'>
             <select
               onBlur={changeHandler}
               onChange={handledefault}
               name='cardExpirationMonth'
+              disabled={employeeLogin.isPaymentPending}
               data-value={yearMonth.cardExpirationMonth}
               className='selectFiled pt-[15px] pb-[0px] block w-full px-[8px] h-[48px] mt-[0px] text-sub-text text-[18px] text-[#000000] bg-transparent border-0 appearance-none focus:outline-none focus:ring-0'
             >
@@ -214,6 +214,7 @@ const CardPaymentType1: paymentProps = ({
               onBlur={changeHandler}
               onChange={handledefault}
               name='cardExpirationYear'
+              disabled={employeeLogin.isPaymentPending}
               data-value={yearMonth.cardExpirationYear}
               className='selectFiled pt-[15px] pb-[0px] block w-full px-[8px] h-[48px] mt-[0px] text-sub-text text-[18px] text-[#000000] bg-transparent border-0 appearance-none focus:outline-none focus:ring-0'
             >
@@ -255,6 +256,7 @@ const CardPaymentType1: paymentProps = ({
               name='cardVarificationCode'
               onKeyDown={blockInvalidChar}
               placeholder=' '
+              disabled={employeeLogin.isPaymentPending}
               required={true}
               maxLength={3}
               // value={cvv}

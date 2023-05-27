@@ -35,6 +35,7 @@ export interface StoreCustomerAddressModel {
   fax: string;
   countryName: string;
   countryCode: string;
+  companyName: string;
   addressType: string;
   isDefault: boolean;
   recStatus: string;

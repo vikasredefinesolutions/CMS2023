@@ -28,8 +28,18 @@ export interface _MenuCategory {
   seName: string;
   customSEName: null;
 }
+export interface _BrandWithCategories {
+  id: number;
+  brandId?: number;
+  brandName: string;
+  seName: string;
+  brandColorImageUrl: string;
+  brandCollectionUrl: null;
+  brandBlackColorImageUrl: string;
+  isBrandOnline: boolean;
+}
 export interface _MenuCategoryWithBrand {
-  brandDetails: _Brand[];
+  brandDetails: _BrandWithCategories[];
   categoryDetails: _MenuCategory[];
 }
 

@@ -13,6 +13,7 @@ interface _props {
 }
 
 const MobileSubMenu: React.FC<_props> = ({ content, type, view, url }) => {
+  console.log(url, 'qwertyuiop');
   //   const { toggleSideMenu } = useActions_v2();
   const [showAllItemsCategories, setShowAllItemsCategories] =
     useState<boolean>(false);
@@ -121,7 +122,7 @@ const MobileSubMenu: React.FC<_props> = ({ content, type, view, url }) => {
                             <SubCategoryItem
                               key={`${index}_${subCat.id}`}
                               itemLabel={subCat.brandName}
-                              url={`Brand/${subCat.seName}/${url}.html`}
+                              url={`Brand/${subCat.seName}/${subCat.brandId}/${url}.html`}
                               type={'BRAND'}
                               view={'MOBILE'}
                             />

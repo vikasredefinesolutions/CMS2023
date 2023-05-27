@@ -39,3 +39,43 @@ export const placeOrder = async (orderObject: {
     return null;
   }
 };
+
+export interface _ValueLabelPair {
+  value: string;
+  label: string;
+}
+
+export const FetchEmpSourceList = async (): Promise<_ValueLabelPair[]> => {
+  const url = `/Source/getlist.json`;
+
+  const response = await SendAsync<_ValueLabelPair[]>({
+    url: url,
+    method: 'GET',
+  });
+
+  return response;
+};
+
+export const FetchEmpSourceMediumList = async (
+  sourceId: string,
+): Promise<_ValueLabelPair[]> => {
+  const url = `/Source/getlistbyid/${sourceId}.json`;
+
+  const response = await SendAsync<_ValueLabelPair[]>({
+    url: url,
+    method: 'GET',
+  });
+
+  return response;
+};
+
+export const FetchEmployeesList = async (): Promise<_ValueLabelPair[]> => {
+  const url = `EmployeeLogin/getallemployee.json`;
+
+  const response = await SendAsync<_ValueLabelPair[]>({
+    url: url,
+    method: 'POST',
+  });
+
+  return response;
+};

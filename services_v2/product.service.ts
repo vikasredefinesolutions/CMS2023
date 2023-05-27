@@ -152,7 +152,7 @@ export const SumbitRequestConsultationDetails = async (
       data: payload,
     },
   });
-  console.log(response, '<-----response is here');
+  // console.log(response, '<-----response is here');
   return response;
 };
 

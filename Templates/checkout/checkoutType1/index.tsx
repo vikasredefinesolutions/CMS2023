@@ -18,6 +18,7 @@ import CheckoutController, {
 } from '@controllers/checkoutController';
 import { GetCartTotals, useTypedSelector_v2 } from '@hooks_v2/index';
 import { useEffect } from 'react';
+import CT1_EL_Dropdowns from './components/CO1_EL_Dropdowns';
 
 interface _Props {
   templateId: number;
@@ -68,6 +69,19 @@ const ChekoutType1: React.FC<_Props> = ({ templateId }) => {
     setSelectedShipping,
   } = CheckoutController();
   const userId = useTypedSelector_v2((state) => state.user.id);
+  const isEmployeeLoggedIn = useTypedSelector_v2(
+    (state) => !!state.employee.empId,
+  );
+  const { el: employeeLogin } = useTypedSelector_v2((state) => state.checkout);
+
+  const disablePlaceOrder = (): boolean => {
+    let disable = false;
+    if (isEmployeeLoggedIn) {
+      disable = !!!employeeLogin.salesRep.value;
+    }
+
+    return disable;
+  };
 
   useEffect(() => {
     if (!shippingAdress) {
@@ -171,7 +185,7 @@ const ChekoutType1: React.FC<_Props> = ({ templateId }) => {
                         </div>
                         <div className='flex flex-wrap items-center justify-between pt-[10px]'>
                           <div className='pb-[10px] text-default-text'>
-                            {__pagesText.CheckoutPage.paymentInfo}
+                            {/* {__pagesText.CheckoutPage.paymentInfo} */}
                             {cardDetails.cardNumber && (
                               <>
                                 <div className='flex flex-wrap'>
@@ -430,57 +444,7 @@ const ChekoutType1: React.FC<_Props> = ({ templateId }) => {
                 ></textarea>
               </div>
             </div>
-            <div className='mb-[20px] checkoutpage'>
-              <div className='relative z-0 w-full mb-[20px] border border-gray-border rounded mb-[20px] last:mb-[0px]'>
-                <select
-                  name='Sourceselect'
-                  value=''
-                  className='pt-[15px] pb-[0px] block w-full px-[8px] h-[48px] mt-[0px] text-sub-text text-[18px] text-[#000000] bg-transparent border-0 appearance-none focus:outline-none focus:ring-0'
-                >
-                  <option value=''></option>
-                  <option value='1'></option>
-                </select>{' '}
-                <label
-                  htmlFor='Sourceselect'
-                  className='left-[8px] absolute duration-300 top-[11px] -z-1 origin-0 text-[#000000] text-[18px]'
-                >
-                  Source
-                </label>
-              </div>
-              <div className='relative z-0 w-full mb-[20px] border border-gray-border rounded mb-[20px] last:mb-[0px]'>
-                <select
-                  name='Sourcemediaselect'
-                  value=''
-                  className='pt-[15px] pb-[0px] block w-full px-[8px] h-[48px] mt-[0px] text-sub-text text-[18px] text-[#000000] bg-transparent border-0 appearance-none focus:outline-none focus:ring-0'
-                >
-                  <option value=''></option>
-                  <option value='1'></option>
-                </select>{' '}
-                <label
-                  htmlFor='Sourcemediaselect'
-                  className='left-[8px] absolute duration-300 top-[11px] -z-1 origin-0 text-[#000000] text-[18px]'
-                >
-                  Source Media
-                </label>
-              </div>
-              <div className='relative z-0 w-full mb-[20px] border border-gray-border rounded mb-[20px] last:mb-[0px]'>
-                <select
-                  name='salesrepselect'
-                  value=''
-                  className='pt-[15px] pb-[0px] block w-full px-[8px] h-[48px] mt-[0px] text-sub-text text-[18px] text-[#000000] bg-transparent border-0 appearance-none focus:outline-none focus:ring-0'
-                >
-                  <option value=''></option>
-                  <option value='1'></option>
-                </select>{' '}
-                <label
-                  htmlFor='salesrepselect'
-                  className='left-[8px] absolute duration-300 top-[11px] -z-1 origin-0 text-[#000000] text-[18px]'
-                >
-                  <sup className='flex w-full mt-[10px]'>Sales Rep*</sup> Select
-                  Sales Rep
-                </label>
-              </div>
-            </div>
+            {isEmployeeLoggedIn && <CT1_EL_Dropdowns />}
             <div className='text-medium-text font-semibold mb-[20px]'>
               <div className='text-rose-500'>
                 {__pagesText.CheckoutPageCardNote1.note}
@@ -507,8 +471,11 @@ const ChekoutType1: React.FC<_Props> = ({ templateId }) => {
             {currentPage === checkoutPages.reviewOrder && (
               <div className=''>
                 <button
-                  className='btn btn-lg !w-full text-center btn-secondary mb-[8px]'
+                  className={`btn btn-lg !w-full text-center btn-secondary mb-[8px] ${
+                    disablePlaceOrder() ? 'opacity-50' : ''
+                  }`}
                   id='btn-review-order'
+                  disabled={disablePlaceOrder()}
                   onClick={() => placeOrder(selectedShipping)}
                 >
                   PLACE ORDER

@@ -79,7 +79,7 @@ const CI1_Item: React.FC<_CartItem & _Props> = (props) => {
   } = useTypedSelector_v2((state) => state.store);
   const isUserLoggedIn = useTypedSelector_v2((state) => !!state.user.id);
   const isEmployeeLoggedIn = useTypedSelector_v2(
-    (state) => state.employee.loggedIn,
+    (state) => !!state.employee.empId,
   );
   mediaBaseUrl = mediaBaseUrl || clientSideMediaBaseUrl;
 
@@ -327,6 +327,11 @@ const CI1_Item: React.FC<_CartItem & _Props> = (props) => {
                   <div className='text-normal-text font-semibold w-16 text-center'>
                     Qty
                   </div>
+                  {isEmployeeLoggedIn && (
+                    <div className='text-normal-text font-semibold w-16 text-center'>
+                      Unit Price
+                    </div>
+                  )}
                   <div className='text-normal-text font-semibold w-20 text-right'>
                     Price
                   </div>
@@ -340,6 +345,11 @@ const CI1_Item: React.FC<_CartItem & _Props> = (props) => {
                       <div className='text-normal-text w-16 text-center'>
                         {view.qty}
                       </div>
+                      {isEmployeeLoggedIn && (
+                        <div className='text-normal-text w-16 text-center'>
+                          {view.price / view.qty}
+                        </div>
+                      )}
                       <div className='text-normal-text w-20 text-right'>
                         <Price value={view.price} />
                       </div>
@@ -351,6 +361,11 @@ const CI1_Item: React.FC<_CartItem & _Props> = (props) => {
                   <div className='text-normal-text w-16 text-center'>
                     {props.totalQty}
                   </div>
+                  {isEmployeeLoggedIn && (
+                    <div className='text-normal-text w-16 text-center'>
+                      {/* EMPTY */}
+                    </div>
+                  )}
                   <div className='text-normal-text w-20 text-right'>
                     <Price value={props.productTotal} />
                   </div>
