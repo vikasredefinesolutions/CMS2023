@@ -21,7 +21,11 @@ const Metatags: React.FC<_Props> = (props) => {
         pageMetaData={props.pageMetaData}
         routeUrl={routeUrl}
       />
-      <TwitterTags pageMetaData={props.pageMetaData} routeUrl={routeUrl} />
+      <TwitterTags
+        pageMetaData={props.pageMetaData}
+        routeUrl={routeUrl}
+        storeName={props.storeName}
+      />
     </>
   );
 };

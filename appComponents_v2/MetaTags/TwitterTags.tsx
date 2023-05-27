@@ -6,15 +6,16 @@ import React from 'react';
 interface _Props {
   pageMetaData: _GetPageType | null;
   routeUrl: string;
+  storeName: string | null;
 }
 const TwitterTags: React.FC<_Props> = (props) => {
-  const { pageMetaData, routeUrl } = props;
+  const { pageMetaData, routeUrl, storeName } = props;
   return (
     <Head>
       <meta name={`${TwitterTagsData?.tagName}:card`} content='Summary' />
       <meta
         name={`${TwitterTagsData?.tagName}:site`}
-        content={`${TwitterTagsData?.tagSite}`}
+        content={`${storeName}`}
       />
       <meta
         name={`${TwitterTagsData?.tagName}:description`}

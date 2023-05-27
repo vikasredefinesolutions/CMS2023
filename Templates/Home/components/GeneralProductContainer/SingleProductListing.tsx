@@ -10,7 +10,6 @@ import {
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import Link from 'next/link';
 import React, { Fragment, useEffect, useState } from 'react';
-import { _globalStore } from 'store.global';
 
 interface _props {
   product: newFetauredItemResponse;
@@ -21,18 +20,9 @@ interface _props {
   showPrice: string;
   showBrandLogo: string;
 }
-let mediaBaseUrl = _globalStore.blobUrl;
 
 const SingleProductListing: React.FC<_props> = (props) => {
-  const {
-    product,
-    customMessage,
-    showProductName,
-    showSplitProducts,
-    showButton,
-    showPrice,
-    showBrandLogo,
-  } = props;
+  const { product, showProductName, showSplitProducts, showPrice } = props;
 
   const [mainImageUrl, setMainImageUrl] = useState<string>('');
   const [currentProduct, setCurrentProduct] = useState<
