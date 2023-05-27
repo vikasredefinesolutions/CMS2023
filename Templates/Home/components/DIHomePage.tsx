@@ -21,7 +21,7 @@ const DIHomePage: React.FC<_props> = ({ storeId }) => {
 
   return (
     <>
-    <section className='pt-20 brand-logo-list white-title bg-primary'>
+    <section className='pt-[30px] md:pt-[50px] brand-logo-list white-title bg-primary'>
       <div className='container mx-auto '>
         <div className='text-center pb-[40px]'>
           <div className='text-large-text text-white mb-[10px]'>

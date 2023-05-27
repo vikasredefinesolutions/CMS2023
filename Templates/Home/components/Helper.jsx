@@ -562,7 +562,7 @@ export const updateSetProperties = (element) => {
         if (
           propName !== 'Button' &&
           propName !== 'Button1' &&
-          propName !== 'Button2'
+          propName !== 'Button2' && propName !== 'Image1'
         ) {
           if (
             value.value !== '' &&
@@ -933,6 +933,7 @@ export const updateSetProperties = (element) => {
               alt +
               '"' +
               endTag;
+              
               if(x.querySelectorAll('#'+key+'Position').length > 0)
               {
                   let strText = x.querySelectorAll('#Text'+key+'Position')[0].innerHTML;

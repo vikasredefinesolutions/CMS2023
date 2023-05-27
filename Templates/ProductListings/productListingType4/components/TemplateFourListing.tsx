@@ -61,7 +61,7 @@ const TemplateFourListing = ({
                 <NxtImage
                   src={currentProduct?.imageName ? currentProduct?.imageName : ''}
                   alt=''
-                  className='w-auto h-auto m-auto max-h-[400px]'
+                  className='w-auto h-auto m-auto max-h-full'
                   key={currentProduct?.id}
                 />
               </a>

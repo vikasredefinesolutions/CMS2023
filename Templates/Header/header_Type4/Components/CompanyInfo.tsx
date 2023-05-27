@@ -24,7 +24,6 @@ const CompanyInfo: React.FC<_props> = ({ phoneNumber, email }) => {
   // if (view == 'DESKTOP')
   return (
     <div className='text-[#ffffff] text-[12px] pt-[10px] text-center lg:text-right'>
-      <div className='text-[#ffffff] text-[12px] pt-[10px] text-center lg:text-right'>
         <div className=''>
           {__pagesText.Headers.companyEmailQuestionOr}{': '}
           <a
@@ -42,7 +41,6 @@ const CompanyInfo: React.FC<_props> = ({ phoneNumber, email }) => {
           </a>
         </div>
       </div>
-    </div>
   );
   // return <></>;
 };

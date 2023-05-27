@@ -3,7 +3,7 @@ import { capitalizeFirstLetter } from '@helpers/common.helper';
 import {
   FilterChangeHandler,
   FilterType,
-  _CheckedFilter,
+  _CheckedFilter
 } from '@templates/ProductListings/ProductListingType';
 import Link from 'next/link';
 import { Fragment } from 'react';

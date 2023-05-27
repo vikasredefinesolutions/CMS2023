@@ -60,7 +60,7 @@ const ProductListingType4: React.FC<_ListingProps> = ({
                   className='w-full lg:w-3/12 lg:pl-[16px] lg:pr-[16px]'
                   x-data='{ open: false }'
                 >
-                  <div className='lg:hidden border-b border-b-neutral-300 p-2 sticky top-0 left-0 bg-primary flex items-center justify-between text-[#ffffff] z-1'>
+                  {/* <div className='lg:hidden border-b border-b-neutral-300 p-2 sticky top-0 left-0 bg-primary flex items-center justify-between text-[#ffffff] z-1'>
                     <div className='text-lg font-semibold text-[#ffffff]'>
                       Filters
                     </div>
@@ -72,7 +72,7 @@ const ProductListingType4: React.FC<_ListingProps> = ({
                         {showFilter ? 'remove' : 'add'}
                       </span>
                     </div>
-                  </div>
+                  </div> */}
 
                   <div className='relative lg:block'>
                     <SideFilter
@@ -141,10 +141,23 @@ const ProductListingType4: React.FC<_ListingProps> = ({
                           type='submit'
                           className='mt-[16px] btn-primary block tracking-[1.4px] text-[20px] font-normal w-full max-w-[550px] mx-auto pt-[20px] pb-[20px] md:pl-[70px] md:pr-[70px] pl-[16px] pr-[16px]'
                         >
+                          <span className='inline-block w-[20px] h-[20px]'>
+                            <img
+                              className='max-h-full'
+                              src='assets/images/di/load-more-arrow.gif'
+                              alt=''
+                            />
+                          </span>
                           <span className=''>
                             {__pagesText.productListing.loadMoreButton}
                           </span>
-                          
+                          <span className='inline-block w-[20px] h-[20px]'>
+                            <img
+                              className='max-h-full'
+                              src='assets/images/di/load-more-arrow.gif'
+                              alt=''
+                            />
+                          </span>
                         </button>
                       )}
                     </div>

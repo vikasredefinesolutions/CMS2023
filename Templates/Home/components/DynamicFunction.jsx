@@ -24,21 +24,46 @@ export const dynamicHalfSizeBoxes = (dataArr, selectedObj) => {
         strHTML += '<img src="' + item.ImageNumber_image + '" />';
         strHTML += '</span>';
       } else {
-        strHTML +=
-          '<div class="inset-x-0 -mt-6 flex justify-center items-center w-12 h-12 mx-auto font-bold font-heading">';
-        if (item.ImageNumber_icon_type === 'googlematerial') {
-          strHTML +=
-            '<span class="material-icons-outlined">' +
-            item.ImageNumber_icon_symbol +
-            '</span>';
-        } else if (item.ImageNumber_icon_type === 'googlesymbol') {
-          strHTML +=
-            '<span class="material-symbols-outlined">' +
-            item.ImageNumber_icon_symbol +
-            '</span>';
-        }
+          let icon;
+          let iconFontSize;
+          let iconFontWeight;
+          let iconTextAlignment;
+          let iconFontColor;
+          let iconType;
 
-        strHTML += '</div>';
+          let className = '';
+          if(item.ImageNumber_icon_color)
+          {
+              iconFontColor = item.ImageNumber_icon_color;
+          }
+          if(item.ImageNumber_icon_font_size)
+          {
+              className += item.ImageNumber_icon_font_size;
+          }
+          if(item.ImageNumber_icon_font_weight)
+          {
+              className += item.ImageNumber_icon_font_weight;
+          }
+          if(item.ImageNumber_icon_alignment)
+          {
+              className += item.ImageNumber_icon_alignment;
+          }
+          if(item.ImageNumber_icon_type === 'googlematerial')
+          {
+              className += ' material-icons-outlined';
+          }
+          else if(item.ImageNumber_icon_type === 'fontawesome')
+          {
+              className += '';
+          }
+          else if (item.ImageNumber_icon_type === "googlesymbol") {
+              className += ' material-symbols-outlined';
+          }
+
+          
+          strHTML += '<div class="text-center h-full bg-gray-50 p-6 lg:py-12 lg:px-16 md:rounded-tl-lg">';
+          strHTML += '<span class="'+className+'" style="color: '+iconFontColor + '">'+item.ImageNumber_icon_symbol+'</span>';
+          strHTML += '</div>';
       }
       // strHTML += '<div class="inset-x-0 -mt-6 flex justify-center items-center w-12 h-12 mx-auto rounded-full bg-gray-500 text-gray-50 font-bold font-heading">';
       // if(item.ImageNumber === "Number")
@@ -88,19 +113,45 @@ export const numberdescriptionblock = (dataArr, selectedObj) => {
         strHTML += '<img src="' + item.ImageNumber_image + '" />';
         strHTML += '</div>';
       } else {
-        strHTML +=
-          '<div class="inset-x-0 -mt-6 flex justify-center items-center w-12 h-12 mx-auto font-bold font-heading">';
-        if (item.ImageNumber_icon_type === 'googlematerial') {
-          strHTML +=
-            '<span class="material-icons-outlined">' +
-            item.ImageNumber_icon_symbol +
-            '</span>';
-        } else if (item.ImageNumber_icon_type === 'googlesymbol') {
-          strHTML +=
-            '<span class="material-symbols-outlined">' +
-            item.ImageNumber_icon_symbol +
-            '</span>';
+        let icon;
+        let iconFontSize;
+        let iconFontWeight;
+        let iconTextAlignment;
+        let iconFontColor;
+        let iconType;
+
+        let className = '';
+        if(item.ImageNumber_icon_color)
+        {
+            iconFontColor = item.ImageNumber_icon_color;
         }
+        if(item.ImageNumber_icon_font_size)
+        {
+            className += item.ImageNumber_icon_font_size;
+        }
+        if(item.ImageNumber_icon_font_weight)
+        {
+            className += item.ImageNumber_icon_font_weight;
+        }
+        if(item.ImageNumber_icon_alignment)
+        {
+            className += item.ImageNumber_icon_alignment;
+        }
+        if(item.ImageNumber_icon_type === 'googlematerial')
+        {
+            className += ' material-icons-outlined';
+        }
+        else if(item.ImageNumber_icon_type === 'fontawesome')
+        {
+            className += '';
+        }
+        else if (item.ImageNumber_icon_type === "googlesymbol") {
+            className += ' material-symbols-outlined';
+        }
+
+        
+        strHTML += '<div class="text-center h-full bg-gray-50 p-6 lg:py-12 lg:px-16 md:rounded-tl-lg">';
+        strHTML += '<span class="'+className+'" style="color: '+iconFontColor + '">'+item.ImageNumber_icon_symbol+'</span>';
         strHTML += '</div>';
       }
       // strHTML += '<div class="inset-x-0 -mt-6 flex justify-center items-center w-12 h-12 mx-auto rounded-full bg-gray-500 text-gray-50 font-bold font-heading">';
@@ -477,7 +528,7 @@ export const multipleImages = (dataArr, selectedObj) => {
         headLine += '</div>';
       }
 
-      strHTML += '<div class="w-full lg:w-1/3">';
+      strHTML += '<div class="w-full lg:w-1/4">';
       cnt = cnt + 1;
       strHTML += '<div class="border border-gray-50 px-2 py-2">';
 
