@@ -5,7 +5,7 @@ import { _HeaderProps, _MenuItems } from '@definations/header.type';
 import {
   useActions_v2,
   useTypedSelector_v2,
-  useWindowDimensions_v2
+  useWindowDimensions_v2,
 } from '@hooks_v2/index';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
@@ -15,7 +15,7 @@ import {
   LoggedInMenu,
   LoginIcon,
   Logo,
-  MyCartIcon
+  MyCartIcon,
 } from '../header_Type2/Components/Icons';
 import Header_MenuItems from '../header_Type2/Components/Menu/Header_MenuItems';
 import SearchBar from '../header_Type2/Components/Menu/Header_SearchBar';
@@ -67,12 +67,11 @@ const Header_Type2: NextPage<_HeaderProps> = ({
             menuItems={menuItems as _MenuItems}
           />
         )}
-
         <div className='fixed z-40 lg:hidden'></div>
-        <header className='relative trancking-[1px]'>
+        <header className='relative tracking-[1px]'>
           <nav aria-label='Top'>
             <div
-              className={`${headerBgColor ? '' : 'bg-[#ffffff]'}]`}
+              className={`${headerBgColor ? '' : 'bg-[#ffffff]'}`}
               style={{ backgroundColor: headerBgColor }}
             >
               <div className='container  mx-auto'>
@@ -99,20 +98,23 @@ const Header_Type2: NextPage<_HeaderProps> = ({
                           }}
                         />
                       )}
+
+                      {islogo &&
+                        (isMobileView ? (
+                          <Logo
+                            // screen='MOBILE'
+                            logo={{
+                              desktop: logoUrl.desktop,
+                              mobile: logoUrl.desktop,
+                            }}
+                          />
+                        ) : null)}
                     </div>
-
-                    {isMobileView ? null : <SearchBar screen={'DESKTOP'} />}
-
-                    {islogo &&
-                      (isMobileView ? (
-                        <Logo
-                          // screen='MOBILE'
-                          logo={{
-                            desktop: logoUrl.desktop,
-                            mobile: logoUrl.desktop,
-                          }}
-                        />
-                      ) : null)}
+                    {isMobileView ? (
+                      <SearchBar screen={'DESKTOP'} />
+                    ) : (
+                      <SearchBar screen={'DESKTOP'} />
+                    )}
                     <div className='w-1/2 md:w-1/3 flex items-center justify-end'>
                       <div className='flex items-center '>
                         <div className='flex items-center '>
@@ -124,19 +126,18 @@ const Header_Type2: NextPage<_HeaderProps> = ({
                       </div>
                     </div>
                   </div>
-                  
-                  <SearchBar screen={'MOBILE'} />
+                  {isMobileView ? <SearchBar screen={'MOBILE'} /> : <></>}
                 </div>
               </div>
               {isMobileView
-                    ? null
-                    : router.asPath != paths.CHECKOUT && (
-                        <Header_MenuItems
-                          showSideMenu={showSideMenu}
-                          screen='DESKTOP'
-                          menuItems={menuItems as _MenuItems}
-                        />
-                      )}
+                ? null
+                : router.asPath != paths.CHECKOUT && (
+                    <Header_MenuItems
+                      showSideMenu={showSideMenu}
+                      screen='DESKTOP'
+                      menuItems={menuItems as _MenuItems}
+                    />
+                  )}
             </div>
           </nav>
         </header>
