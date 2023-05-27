@@ -85,3 +85,4 @@ export const phonePattern3 = /^\(?([0-9]{3})\)?[ ]([0-9]{3})[ ]([0-9]{4})$/; //M
 export const phonePattern4 = /^[0-9]{10}$/; //Matches xxxxxxxxxx
 
 export const CG_STORE_CODE = 21;
+export const GG_STORE_CODE = 2;

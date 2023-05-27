@@ -1,16 +1,30 @@
 import Price from '@appComponents/Price';
 import NxtImage from '@appComponents/reUsable/Image';
+import { CustomizeLaterMain } from '@constants/common.constant';
+import { logoLocation } from '@constants/enum';
+import { __pagesText } from '@constants/pages.text';
 import { paths } from '@constants/paths.constant';
+import CheckoutController from '@controllers/checkoutController';
 import { numberToOrdinalString } from '@helpers/common.helper';
+import { GetCartTotals } from '@hooks_v2/index';
 import { _CartItem } from '@services/cart';
 import Link from 'next/link';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 interface _props {
   item: _CartItem;
 }
 
 const RcOrderSummary: React.FC<_props> = ({ item }) => {
+  const { selectedShipping, fetchShipping, shippingAdress } =
+    CheckoutController();
+  const { totalPrice } = GetCartTotals();
+  useEffect(() => {
+    fetchShipping(totalPrice);
+  }, [shippingAdress, totalPrice]);
+
+  // console.log('item page', item.shoppingCartLogoPersonViewModels);
+
   return (
     <div className='w-full pl-0 pr-[15px]'>
       <div className=''>
@@ -71,13 +85,44 @@ const RcOrderSummary: React.FC<_props> = ({ item }) => {
                   </div>
                   <div className='w-full mb-[10px] text-center'>
                     <div className='w-24 h-24 flex items-center justify-center mx-auto'>
-                      <img className='inline-block max-h-full' src='' alt='' />
-                      <NxtImage
-                        className='inline-block max-h-full'
-                        src={el?.logoImagePath}
-                        title={el?.logoLocation}
-                        alt={el.logoLocation}
-                      />
+                      {el.logoName === logoLocation.addLater && (
+                        <>
+                          <img
+                            className='inline-block max-h-full'
+                            src={`/assets/images/logo-to-be-submitted.webp`}
+                            title={el?.logoLocation}
+                            alt={el.logoLocation}
+                          />
+                          <span className='font-semibold ml-3'>
+                            {__pagesText.ThankYouPage.LogoToBe}
+                            <br />
+                            {__pagesText.ThankYouPage.Submitted}
+                          </span>
+                        </>
+                      )}
+                      {el.logoName === logoLocation.customizeLater && (
+                        <div className='flex justify-start items-center mt-3'>
+                          <div>
+                            <span className='material-icons text-[60px] mr-3'>
+                              support_agent
+                            </span>
+                          </div>
+                          <div>
+                            <div className='text-lg font-semibold'>
+                              {CustomizeLaterMain}
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {el.logoImagePath != '' && (
+                        <NxtImage
+                          className='inline-block max-h-full'
+                          src={el?.logoImagePath}
+                          title={el?.logoLocation}
+                          alt={el.logoLocation}
+                        />
+                      )}
                     </div>
                   </div>
                   <div className='w-7/12 mb-[10px]'>Location:</div>
@@ -88,15 +133,17 @@ const RcOrderSummary: React.FC<_props> = ({ item }) => {
               );
             })}
 
-          {/* <div className='flex flex-wrap justify-between border-b border-b-gray-200 mb-2.5 last:border-b-0 last:mb-0'>
+          <div className='flex flex-wrap justify-between border-b border-b-gray-200 mb-2.5 last:border-b-0 last:mb-0'>
             <div className='w-7/12 mb-[5px]'>Shipping:</div>
-            <div className='w-5/12 mb-[5px] font-semibold text-right'>FREE</div>
-          </div> */}
+            <div className='w-5/12 mb-[5px] font-semibold text-right'>
+              {`$${selectedShipping.price.toFixed(2)}`}
+            </div>
+          </div>
         </div>
         <div className='bg-gray-100 py-2 flex flex-wrap justify-between text-lg font-bold'>
           <div className='w-1/4 px-[15px]'>Total:</div>
           <div className='w-3/4 px-[15px] text-right'>
-            <Price value={item.totalPrice} />
+            <Price value={item.totalPrice + selectedShipping.price} />
           </div>
         </div>
       </div>
