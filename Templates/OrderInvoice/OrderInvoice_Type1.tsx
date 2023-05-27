@@ -12,8 +12,10 @@ import { _propsOrder } from './orderInvoice';
 
 const OrderInvoice_type1: React.FC<_propsOrder> = ({ order }) => {
   // console.log('order value', order);
-  const { logoUrl, mediaBaseUrl } = useTypedSelector_v2((state) => state.store);
-  // console.log();
+  const { logoUrl, mediaBaseUrl, storeName } = useTypedSelector_v2(
+    (state) => state.store,
+  );
+  console.log(order.billing);
 
   return (
     <>
@@ -25,9 +27,13 @@ const OrderInvoice_type1: React.FC<_propsOrder> = ({ order }) => {
                 <tbody>
                   <tr>
                     <td className='text-right'>
-                      <button className='' title='Print Invoice'>
-                        <NxtImage
-                          src={'/images/print-invoice.png'}
+                      <button
+                        className=''
+                        title='Print Invoice'
+                        onClick={() => window.print()}
+                      >
+                        <img
+                          src={'/assets/images/print-invoice.png'}
                           className=''
                           alt={'print invoice'}
                         />
@@ -966,7 +972,7 @@ const OrderInvoice_type1: React.FC<_propsOrder> = ({ order }) => {
                                     )}
                                     {[
                                       order.billing?.shippingCity,
-                                      order.billing?.shippingCity,
+                                      order.billing?.shippingState,
                                       order.billing?.shippingZip,
                                     ].join(', ')}
                                     <br />
@@ -993,7 +999,7 @@ const OrderInvoice_type1: React.FC<_propsOrder> = ({ order }) => {
                           >
                             {__pagesText.ThankYouPage.ThankYouLabel}
                             <br />
-                            {'Corporate Gear'}
+                            {storeName}
                           </td>
                         </tr>
                         <tr>
@@ -1010,7 +1016,7 @@ const OrderInvoice_type1: React.FC<_propsOrder> = ({ order }) => {
                               backgroundColor: '#ececec',
                             }}
                           >
-                            © 2023 Corporate Gear All Rights Reserved
+                            © 2023 {storeName} All Rights Reserved
                           </td>
                         </tr>
                       </tbody>

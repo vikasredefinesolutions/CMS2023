@@ -90,11 +90,11 @@ const ChekoutType1: React.FC<_Props> = ({ templateId }) => {
       setShowAddAddress(false);
     }
   }, [shippingAdress]);
-  const { subTotal } = GetCartTotals();
+  const { totalPrice } = GetCartTotals();
 
   useEffect(() => {
-    fetchShipping(subTotal);
-  }, [subTotal, shippingAdress]);
+    fetchShipping(totalPrice);
+  }, [totalPrice, shippingAdress]);
 
   return (
     <>

@@ -57,7 +57,7 @@ const ThankYouHeader: React.FC<_ThankYouProps> = ({ order }) => {
                       {order.billing?.email}
                       {__pagesText.ThankYouPage.LastEmailMessage}
                     </span>
-                    <span className='text-[#ffffff] block text-default-text pb-[8px]'>
+                    <span className='text-[#ffffff] block text-default-text pb-[8px] hidden'>
                       <button
                         onClick={() =>
                           router.push(

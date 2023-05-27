@@ -48,13 +48,13 @@ const CartType2: React.FC<_CartProps> = ({
     }
   }, [storeId]);
 
-  const { subTotal } = GetCartTotals();
+  const { totalPrice } = GetCartTotals();
 
   const { fetchShipping, shippingAdress, selectedShipping, shippingMethod } =
     CheckoutController();
   useEffect(() => {
-    fetchShipping(subTotal);
-  }, [subTotal, shippingAdress]);
+    fetchShipping(totalPrice);
+  }, [totalPrice, shippingAdress]);
 
   if (showLoaderOrEmptyText === 'loader') {
     return (

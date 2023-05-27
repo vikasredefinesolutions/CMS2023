@@ -49,11 +49,11 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
   const [showPayment, setshowPayment] = useState<boolean>(false);
 
   const { id } = useTypedSelector_v2((state) => state.user);
-  const { subTotal } = GetCartTotals();
+  const { totalPrice } = GetCartTotals();
 
   useEffect(() => {
-    fetchShipping(subTotal);
-  }, [subTotal, shippingAdress]);
+    fetchShipping(totalPrice);
+  }, [totalPrice, shippingAdress]);
 
   return (
     <section className='mt-[20px]'>

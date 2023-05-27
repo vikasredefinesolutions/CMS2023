@@ -1,7 +1,7 @@
 import Price from '@appComponents/Price';
 import NxtImage from '@appComponents/reUsable/Image';
-import { __StaticImg } from '@constants/assets';
 import { CustomizeLaterMain } from '@constants/common.constant';
+import { logoLocation } from '@constants/enum';
 import { CustomizeLater } from '@constants/global.constant';
 import { _MyAcc_OrderProductDetails } from '@definations/APIs/user.res';
 import { StaticImageData } from 'next/image';
@@ -73,7 +73,7 @@ const OrD_InvoiceItem: React.FC<_props> = ({ item, mediaBaseUrl }) => {
             let logoToShow: string | StaticImageData = logo.logoImagePath;
 
             if (logo.logoName === 'Add Logo Later') {
-              logoToShow = __StaticImg.orderDetails.logoWillComeHere;
+              logoToShow = '/assets/images/logo-to-be-submitted.webp';
             } else {
               logoToShow = mediaBaseUrl + logo.logoImagePath;
             }
@@ -83,9 +83,13 @@ const OrD_InvoiceItem: React.FC<_props> = ({ item, mediaBaseUrl }) => {
                 key={logo.logoName}
                 className='flex flex-wrap justify-between -mx-3'
               >
-                <div className='w-1/3 px-3'>
+                <div
+                  className={`${
+                    logo.logoName == 'Customize Later' ? 'w-full' : 'w-1/3'
+                  } px-3`}
+                >
                   <div className='font-[600]'>Logo</div>
-                  {logo.logoName === 'Customize Logo' ? (
+                  {logo.logoName === 'Customize Later' ? (
                     <div className='flex justify-start items-center mt-3'>
                       <div>
                         <span className='material-icons text-[60px] mr-3'>
@@ -96,31 +100,44 @@ const OrD_InvoiceItem: React.FC<_props> = ({ item, mediaBaseUrl }) => {
                         <div className='text-lg font-semibold'>
                           {CustomizeLaterMain}
                         </div>
-                        <div className='text-base hidden'>{CustomizeLater}</div>
+                        <div className='text-base'>{CustomizeLater}</div>
                       </div>
                     </div>
                   ) : (
                     <div className='w-20 h-20 border flex items-center justify-center'>
-                      <NxtImage
-                        className='inline-block max-h-full w-full h-full'
-                        src={logoToShow}
-                        alt=''
-                        width={100}
-                        height={100}
-                      />
+                      {logo.logoName === logoLocation.addLater ? (
+                        <img
+                          className='w-14 h-12'
+                          src={`/assets/images/logo-to-be-submitted.webp`}
+                          title=''
+                          alt={logo.logoLocation}
+                        />
+                      ) : (
+                        <NxtImage
+                          className='inline-block max-h-full w-full h-full'
+                          src={logoToShow}
+                          alt=''
+                          width={100}
+                          height={100}
+                        />
+                      )}
                     </div>
                   )}
                 </div>
-                <div className='w-1/3 px-3'>
-                  <div className='font-[600]'>Location</div>
-                  <div className=''>{logo.logoLocation}</div>
-                </div>
-                <div className='w-1/3 px-3'>
-                  <div className='font-[600]'>Price</div>
-                  <div className=''>
-                    <Price value={logo.logoPrice} />
+                {logo.logoName !== 'Customize Later' && (
+                  <div className='w-1/3 px-3'>
+                    <div className='font-[600]'>Location</div>
+                    <div className=''>{logo.logoLocation}</div>
                   </div>
-                </div>
+                )}
+                {logo.logoName !== 'Customize Later' && (
+                  <div className='w-1/3 px-3'>
+                    <div className='font-[600]'>Price</div>
+                    <div className=''>
+                      <Price value={logo.logoPrice} />
+                    </div>
+                  </div>
+                )}
               </div>
             );
           })}

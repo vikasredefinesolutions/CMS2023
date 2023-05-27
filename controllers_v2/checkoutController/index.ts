@@ -96,9 +96,23 @@ const CheckoutController = () => {
   });
   const [allowedBalance, setAllowedBalance] = useState(0);
   const [purchaseOrder, setPurchaseOrder] = useState('');
-  const [shippingAdress, setShippingAdress] = useState<AddressType | null>(
-    null,
-  );
+  const [shippingAdress, setShippingAdress] = useState<AddressType | null>({
+    firstname: '',
+    lastName: '',
+    email: '',
+    address1: '',
+    address2: '',
+    suite: '',
+    city: '',
+    state: '',
+    postalCode: '',
+    phone: '',
+    fax: '',
+    countryName: '',
+    isDefault: true,
+    companyName: '',
+    countryCode: '',
+  });
 
   const [paymentOptions, setPaymentOption] = useState<PaymentOptions | null>(
     null,

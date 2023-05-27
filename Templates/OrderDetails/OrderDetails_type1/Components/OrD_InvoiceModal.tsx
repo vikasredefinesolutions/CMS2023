@@ -73,7 +73,7 @@ const OrD_InvoiceModal: React.FC<_Props> = ({
     }
     if (billing?.shippingZip) {
       address += ', ';
-      address += `\n${billing.billingZip}`;
+      address += `\n${billing.shippingZip}`;
     }
     return address;
   };
