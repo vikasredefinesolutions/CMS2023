@@ -128,7 +128,7 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
             //GTM event for add-to-cart
             const eventPayload = {
               storeId: storeId,
-              customerId: isLoggedIn,
+              customerId: userId,
               productId: storeProduct?.id,
               productName: storeProduct?.name,
               colorName: storeProduct?.colors?.length
