@@ -61,7 +61,7 @@ export const __pagesConstant = {
     },
   },
   _header: {
-    mobileBreakPoint: 1024,
+    mobileBreakPoint: 1025,
     imagesToShowInBrandDropdown: 5,
     brandImage: ['patagonia', 'nike', 'peter-millar', 'yeti'], // [49, 9, 28, 10], //[198, 11, 187, 27],
   },
