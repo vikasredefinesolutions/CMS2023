@@ -81,58 +81,242 @@ const Personalizing: FC<_Props> = ({
       : availableColor[1]['name'],
   );
   const changeLocationForAll = async (value: string, name: string) => {
-    let newArr = personalizationArray;
-    let changedArr: any = [];
-    newArr.forEach((element: ShoppingCartItemDetailsViewModel) => {
-      element.shoppingCartLineOnePersonViewModel.forEach(
-        (val: ShoppingCartLinePersonViewModel) => {
-          if (
-            val.linefont !== '' &&
-            val.linefont !== value &&
-            name === 'Font'
-          ) {
-            changedArr.push({ ...val, linefont: value });
-          }
-          if (
-            val.linecolor !== '' &&
-            val.linecolor !== value &&
-            name === 'color'
-          ) {
-            changedArr.push({ ...val, linecolor: value });
-          }
-          if (
-            val.personalizeLocation !== '' &&
-            val.personalizeLocation !== value &&
-            name === 'location'
-          ) {
-            changedArr.push({ ...val, personalizeLocation: value });
-          }
-        },
-      );
-      element.shoppingCartLineTwoPersonViewModel.forEach((val) => {
-        if (val.linefont !== '' && val.linefont !== value && name === 'Font') {
-          changedArr.push({ ...val, linefont: value });
-        }
-        if (
-          val.linecolor !== '' &&
-          val.linecolor !== value &&
-          name === 'color'
-        ) {
-          changedArr.push({ ...val, linecolor: value });
-        }
-        if (
-          val.personalizeLocation !== '' &&
-          val.personalizeLocation !== value &&
-          name === 'location'
-        ) {
-          changedArr.push({ ...val, personalizeLocation: value });
-        }
-      });
-    });
-    if (changedArr.length !== 0) {
-      let obj = [...changedArr];
-      await save(obj);
-    }
+    // let newArr = personalizationArray;
+    // let changedArr: any = [];
+    // newArr.forEach(
+    //   (element: ShoppingCartItemDetailsViewModel, index: number) => {
+    //     element.shoppingCartLineOnePersonViewModel.forEach(
+    //       (val: ShoppingCartLinePersonViewModel, ind: number) => {
+    //         if (
+    //           val.linefont !== '' &&
+    //           val.linefont !== value &&
+    //           name === 'Font'
+    //         ) {
+    //           changedArr.push({ ...val, linefont: value });
+    //         }
+    //         if (
+    //           val.linecolor !== '' &&
+    //           val.linecolor !== value &&
+    //           name === 'color'
+    //         ) {
+    //           changedArr.push({ ...val, linecolor: value });
+    //         }
+    //         if (
+    //           val.personalizeLocation !== '' &&
+    //           val.personalizeLocation !== value &&
+    //           name === 'location'
+    //         ) {
+    //           changedArr.push({ ...val, personalizeLocation: value });
+    //         }
+    //       },
+    //     );
+    //     element.shoppingCartLineTwoPersonViewModel.forEach(
+    //       (val: ShoppingCartLinePersonViewModel, ind: number) => {
+    //         if (
+    //           val.linefont !== '' &&
+    //           val.linefont !== value &&
+    //           name === 'Font'
+    //         ) {
+    //           changedArr.push({ ...val, linefont: value });
+    //         }
+    //         if (
+    //           val.linecolor !== '' &&
+    //           val.linecolor !== value &&
+    //           name === 'color'
+    //         ) {
+    //           changedArr.push({ ...val, linecolor: value });
+    //         }
+    //         if (
+    //           val.personalizeLocation !== '' &&
+    //           val.personalizeLocation !== value &&
+    //           name === 'location'
+    //         ) {
+    //           changedArr.push({ ...val, personalizeLocation: value });
+    //         }
+    //       },
+    //     );
+    //   },
+    // );
+    const newPersonalizationArr = personalizationArray.map(
+      (p: ShoppingCartItemDetailsViewModel, i: number) => {
+        return {
+          ...p,
+          shoppingCartLineOnePersonViewModel:
+            p.shoppingCartLineOnePersonViewModel.map(
+              (s: ShoppingCartLinePersonViewModel, i: number) => {
+                if (
+                  s.linefont !== '' &&
+                  s.linefont !== value &&
+                  name === 'Font'
+                ) {
+                  let newArr = cartLinePersonModels;
+                  let availableIndex = newArr.findIndex(
+                    (item) => item.id === s.id,
+                  );
+
+                  if (availableIndex !== -1) {
+                    newArr[availableIndex].lineFont = value;
+                    setCartLinePersonModels(newArr);
+                  } else {
+                    setCartLinePersonModels(
+                      (prev: _CartLinePersonDetailModel[]) => [
+                        ...prev,
+                        { ...s, lineFont: value },
+                      ],
+                    );
+                  }
+                  return {
+                    ...s,
+                    linefont: value,
+                  };
+                } else if (
+                  s.linecolor !== '' &&
+                  s.linecolor !== value &&
+                  name === 'color'
+                ) {
+                  let newArr = cartLinePersonModels;
+                  let availableIndex = newArr.findIndex(
+                    (item) => item.id === s.id,
+                  );
+
+                  if (availableIndex !== -1) {
+                    newArr[availableIndex].lineColor = value;
+                    setCartLinePersonModels(newArr);
+                  } else {
+                    setCartLinePersonModels(
+                      (prev: _CartLinePersonDetailModel[]) => [
+                        ...prev,
+                        { ...s, lineColor: value },
+                      ],
+                    );
+                  }
+                  return {
+                    ...s,
+                    linecolor: value,
+                  };
+                } else if (
+                  s.personalizeLocation !== '' &&
+                  s.personalizeLocation !== value &&
+                  name === 'location'
+                ) {
+                  let newArr = cartLinePersonModels;
+                  let availableIndex = newArr.findIndex(
+                    (item) => item.id === s.id,
+                  );
+
+                  if (availableIndex !== -1) {
+                    newArr[availableIndex].personalizeLocation = value;
+                    setCartLinePersonModels(newArr);
+                  } else {
+                    setCartLinePersonModels(
+                      (prev: _CartLinePersonDetailModel[]) => [
+                        ...prev,
+                        { ...s, personalizeLocation: value },
+                      ],
+                    );
+                  }
+                  return {
+                    ...s,
+                    personalizeLocation: value,
+                  };
+                }
+                return s;
+              },
+            ),
+
+          shoppingCartLineTwoPersonViewModel:
+            p.shoppingCartLineTwoPersonViewModel.map(
+              (s: ShoppingCartLinePersonViewModel) => {
+                if (
+                  s.linefont !== '' &&
+                  s.linefont !== value &&
+                  name === 'Font'
+                ) {
+                  let newArr = cartLinePersonModels;
+                  let availableIndex = newArr.findIndex(
+                    (item) => item.id === s.id,
+                  );
+
+                  if (availableIndex !== -1) {
+                    newArr[availableIndex].lineFont = value;
+                    setCartLinePersonModels(newArr);
+                  } else {
+                    setCartLinePersonModels(
+                      (prev: _CartLinePersonDetailModel[]) => [
+                        ...prev,
+                        { ...s, lineFont: value },
+                      ],
+                    );
+                  }
+                  return {
+                    ...s,
+                    linefont: value,
+                  };
+                } else if (
+                  s.linecolor !== '' &&
+                  s.linecolor !== value &&
+                  name === 'color'
+                ) {
+                  let newArr = cartLinePersonModels;
+                  let availableIndex = newArr.findIndex(
+                    (item) => item.id === s.id,
+                  );
+
+                  if (availableIndex !== -1) {
+                    newArr[availableIndex].lineColor = value;
+                    setCartLinePersonModels(newArr);
+                  } else {
+                    setCartLinePersonModels(
+                      (prev: _CartLinePersonDetailModel[]) => [
+                        ...prev,
+                        { ...s, lineColor: value },
+                      ],
+                    );
+                  }
+                  return {
+                    ...s,
+                    linecolor: value,
+                  };
+                } else if (
+                  s.personalizeLocation !== '' &&
+                  s.personalizeLocation !== value &&
+                  name === 'location'
+                ) {
+                  let newArr = cartLinePersonModels;
+                  let availableIndex = newArr.findIndex(
+                    (item) => item.id === s.id,
+                  );
+
+                  if (availableIndex !== -1) {
+                    newArr[availableIndex].lineColor = value;
+                    setCartLinePersonModels(newArr);
+                  } else {
+                    setCartLinePersonModels(
+                      (prev: _CartLinePersonDetailModel[]) => [
+                        ...prev,
+                        { ...s, personalizeLocation: value },
+                      ],
+                    );
+                  }
+                  return {
+                    ...s,
+                    personalizeLocation: value,
+                  };
+                }
+                return s;
+              },
+            ),
+        };
+        return p;
+      },
+    );
+    setPersonalizationArray(newPersonalizationArr);
+    //   if (changedArr.length !== 0) {
+    //     setPersonalizationArray(newArr);
+    //     let obj = [...changedArr];
+    //     await save(obj);
+    //   }
+    // };
   };
 
   const save = async (obj?: any) => {
@@ -237,6 +421,7 @@ const Personalizing: FC<_Props> = ({
     name: string,
     index: number,
     lineIndex: number,
+    id: number,
   ) => {
     let lineObject: ShoppingCartLinePersonViewModel =
       name === 'lineone'
@@ -249,27 +434,36 @@ const Personalizing: FC<_Props> = ({
     if (lineObject.linetext === '') {
       return;
     }
-    setCartLinePersonModels((prev: _CartLinePersonDetailModel[] | []) => [
-      ...prev,
-      {
-        id: lineObject.id,
-        cartLinePersonId: lineObject.cartLinePersonId,
-        shoppingCartItemsId: shoppingCartItemsId,
-        linePrice: name === 'lineone' ? firstLineCharges : secondLineCharges,
-        lineQty: 1,
-        lineAboveLogo: 0,
-        lineIndividually: 1,
-        lineNumber: name === 'lineone' ? 1 : 2,
-        lineText: lineObject.linetext,
-        lineTotal: name === 'lineone' ? firstLineCharges : secondLineCharges,
-        lineFont: lineObject.linefont,
-        lineColor: lineObject.linecolor,
-        linePriceDouble: 0,
-        logoCartId: 0,
-        personalizeLocation: selectedLocation,
-        parentId: lineObject.parentId,
-      },
-    ]);
+    let newArr: _CartLinePersonDetailModel[] | [] = cartLinePersonModels;
+
+    let availableIndex = newArr.findIndex((item) => item.id === id);
+
+    if (availableIndex !== -1) {
+      newArr[availableIndex].lineText = lineObject.linetext;
+      setCartLinePersonModels(newArr);
+    } else {
+      setCartLinePersonModels((prev: _CartLinePersonDetailModel[] | []) => [
+        ...prev,
+        {
+          id: lineObject.id,
+          cartLinePersonId: lineObject.cartLinePersonId,
+          shoppingCartItemsId: shoppingCartItemsId,
+          linePrice: name === 'lineone' ? firstLineCharges : secondLineCharges,
+          lineQty: 1,
+          lineAboveLogo: 0,
+          lineIndividually: 1,
+          lineNumber: name === 'lineone' ? 1 : 2,
+          lineText: lineObject.linetext,
+          lineTotal: name === 'lineone' ? firstLineCharges : secondLineCharges,
+          lineFont: lineObject.linefont,
+          lineColor: lineObject.linecolor,
+          linePriceDouble: 0,
+          logoCartId: 0,
+          personalizeLocation: selectedLocation,
+          parentId: lineObject.parentId,
+        },
+      ]);
+    }
   };
   return (
     <>
@@ -475,6 +669,7 @@ const Personalizing: FC<_Props> = ({
                                       'lineone',
                                       index,
                                       lineindex,
+                                      _item.id,
                                     )
                                   }
                                 />
@@ -502,6 +697,10 @@ const Personalizing: FC<_Props> = ({
                                       'linetwo',
                                       index,
                                       lineindex,
+                                      personalizationItem
+                                        .shoppingCartLineTwoPersonViewModel[
+                                        lineindex
+                                      ].id,
                                     )
                                   }
                                 />

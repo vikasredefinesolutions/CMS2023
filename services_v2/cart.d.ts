@@ -22,9 +22,6 @@ export interface ShoppingCartLinePersonViewModel {
   linetotal: number;
   linefont: string;
   linecolor: string;
-  sku: null;
-  size: null;
-  name: null;
   parentId: number;
   personalizeLocation: string;
 }
