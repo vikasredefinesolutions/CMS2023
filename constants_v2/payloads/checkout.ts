@@ -109,6 +109,7 @@ export const AddOrderDefault = {
   isCreditLimit: false,
   endUserName: '',
   decorationDate: new Date(),
+  isExport: false,
 
   // EMPLOYEE LOGIN
   orderShippingCosts: 0, // editable
@@ -119,7 +120,7 @@ export const AddOrderDefault = {
   salesRepName: '',
   empSourceName: '',
   empSourceMedium: '',
-  isExport: false, // true  => allow PO
+  isAllowPo: false,
 };
 
 export const addAddress = {

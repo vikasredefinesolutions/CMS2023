@@ -97,8 +97,8 @@ const PL1_BillingAddress: React.FC<_Props> = ({
       {({ values, handleBlur, handleChange, setFieldValue }) => {
         return (
           <Form>
-            <div className='p-[25px]'>
-              <div className='flex flex-wrap -mx-3 gap-y-6'>
+            <div className='pt-[15px]'>
+              <div className='flex flex-wrap -mx-3'>
                 {PL1_addEditInputFields.map((input) => {
                   if (input.type === 'select') {
                     let options: {

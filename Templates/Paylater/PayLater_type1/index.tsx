@@ -157,7 +157,9 @@ const PaylaterType1: React.FC<_Props> = ({ orderDetails }) => {
                     </div>
                   </div>
                   <div className=' flex-1 w-full md:w-6/12 mt-[15px] ml-[15px] mr-[15px] mb-[30px]'>
-                    <AvailablePaymentMethods />
+                    <AvailablePaymentMethods
+                      allowPO={orderDetails.billing?.isAllowPo || false}
+                    />
                   </div>
                 </div>
               </section>

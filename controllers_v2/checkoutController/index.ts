@@ -1,15 +1,15 @@
 import {
   checkoutPages,
-  PaymentMethod,
   paymentMethodCustom as paymentEnum,
+  PaymentMethod,
   UserAddressType,
 } from '@constants/enum';
 import {
-  CG_STORE_CODE,
   __Cookie,
   __Cookie_Expiry,
   __LocalStorage,
   __UserMessages,
+  CG_STORE_CODE,
 } from '@constants/global.constant';
 import { paths } from '@constants/paths.constant';
 
@@ -836,7 +836,7 @@ const CheckoutController = () => {
         empSalesRap: employeeLogin.salesRep.label,
         salesRepName: employeeLogin.salesRep.label,
         salesAgentId: +employeeLogin.salesRep.value,
-        isExport: employeeLogin.allowPo, // ALLOW PO Value
+        isAllowPo: employeeLogin.allowPo,
       };
 
       try {

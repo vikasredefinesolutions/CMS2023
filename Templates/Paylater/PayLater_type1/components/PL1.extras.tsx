@@ -236,14 +236,14 @@ export const PL1_addEditInputFields: Array<_Input | _Select> = [
   {
     required: false,
     label: 'First Name',
-    fullWidth: false,
+    fullWidth: true,
     name: 'firstName',
     type: 'text',
   },
   {
     required: false,
     label: `Last Name`,
-    fullWidth: false,
+    fullWidth: true,
     name: 'lastName',
     type: 'text',
   },
@@ -278,7 +278,7 @@ export const PL1_addEditInputFields: Array<_Input | _Select> = [
   {
     required: false,
     label: 'State / Province',
-    fullWidth: false,
+    fullWidth: true,
     name: 'state',
     type: 'select',
     noOptionFound: 'No State Found',
@@ -286,7 +286,7 @@ export const PL1_addEditInputFields: Array<_Input | _Select> = [
   {
     required: false,
     label: 'Zip Code',
-    fullWidth: false,
+    fullWidth: true,
     name: 'zipcode',
     type: 'text',
   },

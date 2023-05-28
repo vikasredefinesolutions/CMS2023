@@ -3,15 +3,21 @@ import { FC } from 'react';
 import PL1_CreditCard from './PL1_CreditCard';
 import PL1_PurchaseOrder from './PL1_PurchaseOrder';
 
-const AvailablePaymentMethods: FC = () => {
+interface _Props {
+  allowPO: boolean;
+}
+
+const AvailablePaymentMethods: FC<_Props> = ({ allowPO }) => {
   const paymentMethod = useTypedSelector_v2(
     (state) => state.checkout.payment.method,
   );
 
   return (
     <>
-      {paymentMethod === 'CREDIT_CARD' && <PL1_CreditCard />}
-      {paymentMethod === 'PURCHASE_ORDER' && <PL1_PurchaseOrder />}
+      {paymentMethod === 'CREDIT_CARD' && <PL1_CreditCard allowPO={allowPO} />}
+      {allowPO && paymentMethod === 'PURCHASE_ORDER' ? (
+        <PL1_PurchaseOrder />
+      ) : null}
     </>
   );
 };

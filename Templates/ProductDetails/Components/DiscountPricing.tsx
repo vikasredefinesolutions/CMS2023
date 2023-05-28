@@ -25,9 +25,19 @@ const DiscountPricing: React.FC<
   const minimumUnitsTotalPrice = useTypedSelector_v2(
     (state) => state.product.product.discounts?.minimumUnitsTotalPrice,
   );
+  const isEmployeeLoggedIn = useTypedSelector_v2(
+    (state) => state.employee.empId,
+  );
 
-  const showMinQuantity = minQty > 0;
   const unitUnits = minQty > 1 ? 'units' : 'unit';
+
+  const showMinQuantity = (): boolean => {
+    if (isEmployeeLoggedIn) {
+      return false;
+    }
+
+    return minQty > 0;
+  };
 
   return (
     <>
@@ -62,7 +72,7 @@ const DiscountPricing: React.FC<
               ? __pagesText.productInfo.discountPricing.selectSizeAndQuantity
               : __pagesText.productInfo.discountPricing.exclusivePricing}
           </span>
-          {showMinQuantity ? (
+          {showMinQuantity() ? (
             <a
               href='javascript:void(0);'
               onClick={() => setShowMsg((show) => !show)}
@@ -136,7 +146,7 @@ const DiscountPricing: React.FC<
                 </span>
                 {__pagesText.productInfo.discountPricing.perItem}
               </div>
-              {showMinQuantity ? (
+              {showMinQuantity() ? (
                 <a
                   href='javascript:void(0);'
                   className={
@@ -150,6 +160,7 @@ const DiscountPricing: React.FC<
                     __pagesText.productInfo.discountPricing
                       .exclusivePricingAvailable
                   }
+                  sdf
                 </a>
               ) : null}
             </div>

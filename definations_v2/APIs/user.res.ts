@@ -263,6 +263,7 @@ export interface _MyAcc_OrderBillingDetails {
   macAddress: null;
   orderLogoSetupFee: number;
   orderSmallRunFee: number;
+  isAllowPo: boolean;
 }
 
 export interface _MyAcc_OrderProductDetails {

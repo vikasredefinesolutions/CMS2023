@@ -19,10 +19,14 @@ const Checkout: NextPage<{ templateId: number }> = ({ templateId }) => {
   const router = useRouter();
   let orderNumber = router.query.OrderNumber;
 
-  const [orderDetails, setOrderDetails] = useState<{
-    billing: _MyAcc_OrderBillingDetails | null;
-    product: _MyAcc_OrderProductDetails[] | null;
-  } | null>(null);
+  const [orderDetails, setOrderDetails] = useState<
+    | {
+        billing: _MyAcc_OrderBillingDetails | null;
+        product: _MyAcc_OrderProductDetails[] | null;
+      }
+    | null
+    | 'SOMETHING_WENT_WRONG'
+  >(null);
 
   const handlePaymentPending = (details: {
     billing: _MyAcc_OrderBillingDetails;
@@ -47,11 +51,8 @@ const Checkout: NextPage<{ templateId: number }> = ({ templateId }) => {
           handleRedirect('PAYMENT_ALREADY_DONE');
         })
         .catch((error) => {
-          if ('message' in error) {
-            if (error.message === 'NO_DETAILS_FOUND') {
-              handleRedirect('UNEXPECTED_ERROR');
-            }
-          }
+          console.log('error ===>', error);
+          setOrderDetails('SOMETHING_WENT_WRONG');
         })
         .finally(() => {});
     }
@@ -72,6 +73,18 @@ const Checkout: NextPage<{ templateId: number }> = ({ templateId }) => {
           </div>
         </section>
       </div>
+    );
+  }
+
+  if (orderDetails === 'SOMETHING_WENT_WRONG') {
+    return (
+      <section id=''>
+        <div className='bg-[#ffffff]'>
+          <div className='h-80 flex items-center justify-center'>
+            <div className='text-2xl-text'>Something Went Wrong!!!</div>
+          </div>
+        </div>
+      </section>
     );
   }
 

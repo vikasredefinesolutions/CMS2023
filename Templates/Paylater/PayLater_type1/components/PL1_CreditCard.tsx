@@ -15,16 +15,16 @@ const creditCardValidationSchema = Yup.object().shape({
   securityCode: Yup.string().length(3).required(),
 });
 
-const PL1_CreditCard: React.FC = () => {
+const PL1_CreditCard: React.FC<{ allowPO: boolean }> = ({ allowPO }) => {
   const { update_paymentDetails } = useActions_v2();
   const [showCardHelp, setShowCardHelp] = useState(false);
 
   const handleCCSubmit = (inputs: {
-    type: '';
-    year: '';
-    ccNumber: '';
-    month: '';
-    securityCode: '';
+    type: string;
+    year: string;
+    ccNumber: string;
+    month: string;
+    securityCode: string;
   }) => {
     update_paymentDetails({
       method: 'individual_cards',
@@ -54,27 +54,29 @@ const PL1_CreditCard: React.FC = () => {
         validationSchema={creditCardValidationSchema}
         validateOnBlur
       >
-        {({ values, handleBlur, handleChange, submitForm }) => (
+        {({ values, handleBlur, handleChange, submitForm, setFieldValue }) => (
           <Form>
             <div className='flex justify-between items-center mt-[12px] mb-[12px] pb-[18px] border-b border-gray-border'>
               <div className='text-title-text font-semibold tracking-normal'>
                 Payment
               </div>
               <div>
-                <div className='w-full flex justify-end'>
-                  <button
-                    className='!text-anchor hover:!text-anchor-hover underline'
-                    id='btn-use-purchase-order'
-                    onClick={() => {
-                      update_paymentDetails({
-                        method: 'CHANGED',
-                        type: 'PURCHASE_ORDER',
-                      });
-                    }}
-                  >
-                    Use Purchase Order
-                  </button>
-                </div>
+                {allowPO && (
+                  <div className='w-full flex justify-end'>
+                    <button
+                      className='!text-anchor hover:!text-anchor-hover underline'
+                      id='btn-use-purchase-order'
+                      onClick={() => {
+                        update_paymentDetails({
+                          method: 'CHANGED',
+                          type: 'PURCHASE_ORDER',
+                        });
+                      }}
+                    >
+                      Use Purchase Order
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
             <div
@@ -162,7 +164,6 @@ const PL1_CreditCard: React.FC = () => {
                     }}
                     onChange={handleChange}
                     name='month'
-                    data-value={values.month}
                     value={values.month}
                     className='selectFiled pt-[15px] pb-[0px] block w-full px-[8px] h-[48px] mt-[0px] text-sub-text text-[18px] text-[#000000] bg-transparent border-0 appearance-none focus:outline-none focus:ring-0'
                   >
