@@ -1,6 +1,7 @@
 //////////////////////////////////////////////////////////////////////
 
 export const _Store = {
+  type1: 'CG',
   type2: 'GG',
   type4: 'DI',
 };
@@ -8,9 +9,9 @@ export const _Store = {
 export const _StoreDomains = {
   // domain1: 'corporategear',
   // domain1: 'cg.headlessmart.com',
-  domain1: 'cg.redefinecommerdddce.info',
+  domain1: 'cg.redefinecommerce.info',
   domain2: 'gg.redefinecommerce.info',
-  domain3: 'pkhealthgear.redefinecommerce.info',
+  domain3: 'pkhealthgear.online',
   domain4: 'di.redefinecommerce.info',
   domain5: 'https://bacardi.headlessmart.com',
   domain6: 'bacarditogo.headlessmart.com', // CLOSED
@@ -35,7 +36,7 @@ export const _StoreDomains = {
   domain25: 'wayFair', // CLOSED
   domain26: 'healthypoints',
   domain27: 'bainCapital',
-  domain28: 'sports2023.redefinecommerce.info',
+  domain28: 'bc.redefinecommerce.info',
 };
 
 ////////////////////////////////////////////////////////////////////// bb

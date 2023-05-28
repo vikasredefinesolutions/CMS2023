@@ -100,7 +100,13 @@ const YouMayAlsoLikeType1: React.FC<_TemplateProps> = ({ productsData }) => {
                                     {customerId
                                       ? __pagesText.productListing.PRICE
                                       : __pagesText.productListing.MSRP}
-                                    <Price value={product.msrp} />
+                                    <Price
+                                      value={
+                                        customerId
+                                          ? product.lowPrice
+                                          : product.msrp
+                                      }
+                                    />
                                   </span>
                                 </div>
                               </div>

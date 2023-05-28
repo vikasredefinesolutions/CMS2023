@@ -3,16 +3,16 @@
 import NxtImage from '@appComponents/reUsable/Image';
 import Price from '@appComponents/reUsable/Price';
 import { listing_max_showcolors } from '@constants/global.constant';
-import { splitproductList } from '@definations/productList.type';
+import { __pagesText } from '@constants/pages.text';
 import { getCompareLink } from '@helpers/compare.helper';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import {
-  GetProductImageOptionList,
   GetlAllProductList,
+  GetProductImageOptionList,
 } from '@templates/ProductListings/ProductListingType';
 import ProductBoxController from '@templates/ProductListings/productListingType1/components/productBoxController';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { _globalStore } from 'store.global';
 
 let mediaBaseUrl = _globalStore.blobUrl;
@@ -38,6 +38,7 @@ const TemplateTwoListing = ({
     product,
     colorChangeHandler,
   });
+  const customerId = useTypedSelector_v2((state) => state.user.id);
   const [mainImageUrl, setMainImageUrl] = useState<string>(
     currentProduct?.imageName ? currentProduct.imageName : '',
   );
@@ -46,6 +47,22 @@ const TemplateTwoListing = ({
     (state) => state.store,
   );
   mediaBaseUrl = mediaBaseUrl || store.mediaBaseUrl;
+
+  const getProductsColorCount = () => {
+    if (isAttributeSaparateProduct && product.splitproductList) {
+      return product.splitproductList?.length - listing_max_showcolors + 1;
+    } else if (product?.getProductImageOptionList) {
+      return product.getProductImageOptionList.length - listing_max_showcolors;
+    }
+    return '';
+  };
+
+  useEffect(() => {
+    setCurrentProduct(
+      product.getProductImageOptionList && product.getProductImageOptionList[0],
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [product]);
 
   // let flag:boolean = product.getProductImageOptionList.length > 4 ? true : false;
   // let countImage:Number = product.getProductImageOptionList.length - 4;
@@ -59,18 +76,16 @@ const TemplateTwoListing = ({
       <div className='flex justify-center w-full border border-gray-border hover:border-gray-border hover:shadow-md'>
         <div className='relative w-full mb-[20px]'>
           <div className='w-full px-[30px] pt-[10px] cursor-pointer'>
-            <Link
-              href={`${origin}/${product.sename}.html`}
-              className='relative'
-            >
-              <a>
+            <Link key={product.id} href={`/${product.sename}.html`}>
+              <div>
                 <NxtImage
                   src={mainImageUrl}
                   alt=''
-                  className='w-auto h-auto m-auto max-h-[400px]'
-                  key={currentProduct?.id}
+                  className='w-auto h-auto max-h-max cursor-pointer'
+                  cKey={currentProduct.id}
+                  title={product.name}
                 />
-              </a>
+              </div>
             </Link>
             <div className='absolute left-7 top-7 h-8 flex gap-1'>
               <div className='h-8'>
@@ -93,11 +108,13 @@ const TemplateTwoListing = ({
             </div>
             <div className='mb-[12px] text-[#000000] text-default-text'>
               <span className=''>
-                MSRP{' '}
+                {customerId
+                  ? __pagesText.productListing.PRICE
+                  : __pagesText.productListing.MSRP}
                 <Price
                   value={undefined}
                   prices={{
-                    msrp: product.msrp,
+                    msrp: customerId ? product?.lowPrice : product.msrp,
                     salePrice: product.salePrice,
                   }}
                 />
@@ -132,82 +149,90 @@ const TemplateTwoListing = ({
             >
               {isAttributeSaparateProduct &&
               product.splitproductList &&
-              product.splitproductList?.length > 0
-                ? product?.splitproductList.map(
-                    (subRow: splitproductList, index: number) =>
-                      index < listing_max_showcolors ? (
-                        <Link key={product.id} href={`/${subRow.seName}.html`}>
-                          <li
-                            className={`w-7 h-7 border-2 hover:border-secondary cursor-pointer`}
-                            key={subRow.prodcutId}
-                            onMouseOver={() => setMainImageUrl(subRow.imageurl)}
-                            onMouseLeave={() =>
-                              setMainImageUrl(
-                                currentProduct?.imageName
-                                  ? currentProduct?.imageName
-                                  : '',
-                              )
-                            }
-                          >
-                            <NxtImage
-                              src={`${mediaBaseUrl}${subRow.imageurl}`}
-                              alt=''
-                              className=''
-                              title={subRow.colorName}
-                            />
-                          </li>
-                        </Link>
-                      ) : (
-                        <>{(flag = true)}</>
-                      ),
-                  )
-                : product.getProductImageOptionList &&
-                  product.getProductImageOptionList.map(
-                    (subRow: GetProductImageOptionList, index: number) =>
-                      index < listing_max_showcolors ? (
+              product?.splitproductList?.length > 0 ? (
+                <>
+                  <Link key={product.id} href={`/${product.sename}.html`}>
+                    <li
+                      className={`w-[28px] h-[28px] border-2 border-primary hover:border-primary cursor-pointer`}
+                    >
+                      <NxtImage
+                        src={`${mediaBaseUrl}${currentProduct.imageName}`}
+                        alt=''
+                        className=''
+                        title={currentProduct.colorName}
+                      />
+                    </li>
+                  </Link>
+
+                  {product?.splitproductList?.map((subRow, index) =>
+                    index < listing_max_showcolors - 1 ? (
+                      <Link href={`/${subRow.seName}.html`}>
                         <li
-                          className={`w-7 h-7 border-2 hover:border-secondary cursor-pointer ${
-                            subRow.id === currentProduct.id
-                              ? ' border-secondary'
-                              : 'border-light-gray'
-                          }`}
-                          onClick={() => {
-                            colorChangeHandler(
-                              product.id,
-                              product.sename || '',
-                              subRow.colorName,
-                            );
-                            setCurrentProduct(subRow);
-                          }}
-                          key={subRow.id}
+                          className={`w-[28px] h-[28px]  border-2 hover:border-secondary cursor-pointer`}
+                          key={`${index}_${subRow.prodcutId}`}
+                          onMouseOver={() => setMainImageUrl(subRow.imageurl)}
+                          onMouseLeave={() =>
+                            setMainImageUrl(
+                              currentProduct?.imageName
+                                ? currentProduct?.imageName
+                                : '',
+                            )
+                          }
                         >
                           <NxtImage
-                            src={`${mediaBaseUrl}${subRow.imageName}`}
+                            src={`${mediaBaseUrl}${subRow.imageurl}`}
                             alt=''
                             className=''
                             title={subRow.colorName}
                           />
                         </li>
-                      ) : (
-                        <>{(flag = true)}</>
-                      ),
+                      </Link>
+                    ) : (
+                      <>{(flag = true)}</>
+                    ),
                   )}
+                </>
+              ) : (
+                product.getProductImageOptionList &&
+                product.getProductImageOptionList.map(
+                  (subRow: GetProductImageOptionList, index: number) =>
+                    index < listing_max_showcolors ? (
+                      <li
+                        className={`w-7 h-7 border-2 hover:border-secondary cursor-pointer ${
+                          subRow.id === currentProduct.id
+                            ? ' border-secondary'
+                            : 'border-light-gray'
+                        }`}
+                        onClick={() => {
+                          colorChangeHandler(
+                            product.id,
+                            product.sename || '',
+                            subRow.colorName,
+                          );
+                          setCurrentProduct(subRow);
+                        }}
+                        key={subRow.id}
+                      >
+                        <NxtImage
+                          src={`${mediaBaseUrl}${subRow.imageName}`}
+                          alt=''
+                          className=''
+                          title={subRow.colorName}
+                        />
+                      </li>
+                    ) : (
+                      <>{(flag = true)}</>
+                    ),
+                )
+              )}
               {flag ? (
                 <Link key={product.id} href={`/${product.sename}.html`}>
                   <li className='w-[28px] h-[28px] border-2 border-light-gray hover:border-secondary relative cursor-pointer'>
                     <span
-                      className='absolute inset-0 bg-primary text-xs bg-[#003a70] font-semibold flex items-center justify-center text-[#ffffff]'
-                      title={` See Additional ${
-                        product.getProductImageOptionList &&
-                        product.getProductImageOptionList.length -
-                          listing_max_showcolors
-                      } Colors`}
+                      className='absolute inset-0 bg-primary text-xs  font-semibold flex items-center justify-center text-[#ffffff]'
+                      title={` See Additional ${getProductsColorCount()} Colors`}
                     >
-                      {' '}
-                      +{' '}
-                      {product.getProductImageOptionList &&
-                        product.getProductImageOptionList.length -
-                          listing_max_showcolors}
+                      +{getProductsColorCount()}
                     </span>
                   </li>
                 </Link>

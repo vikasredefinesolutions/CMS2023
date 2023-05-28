@@ -514,6 +514,7 @@ type _Props = {
   logos: _LogoDetail[] | null;
   isSewOutEnable: boolean;
   sewOutCharges: number;
+  price: number;
 };
 
 export const getAddToCartObject = async (product: _Props): Promise<CartReq> => {
@@ -529,6 +530,7 @@ export const getAddToCartObject = async (product: _Props): Promise<CartReq> => {
     isSewOutEnable,
     sewOutCharges,
     isEmployeeLoggedIn,
+    price,
   } = product;
   const { totalPrice, totalQty } = total;
   let cartLogoPersonModel: CartLogoPersonModel[] = [];
@@ -583,7 +585,7 @@ export const getAddToCartObject = async (product: _Props): Promise<CartReq> => {
         attributeOptionId: res.attributeOptionId,
         attributeOptionValue: res.size,
         code: '',
-        price: res.price,
+        price: price,
         quantity: res.qty,
         estimateDate: new Date(),
         isEmployeeLoginPrice: 0,

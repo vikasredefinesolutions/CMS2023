@@ -98,7 +98,7 @@ const ProductAlike: React.FC<_ProductAlikeProps> = ({
                               >
                                 <div
                                   title={product.name}
-                                  className='text-anchor hover:text-anchor-hover underline h-11 text-ellipsis overflow-hidden line-clamp-2 text-[13px] tracking-[1.4px]'
+                                  className='text-anchor hover:text-anchor-hover underline h-11 text-ellipsis overflow-hidden line-clamp-2 text-small-text tracking-[1.4px]'
                                 >
                                   <span className='mt-1 text-anchor underline hover:text-anchor-hover whitespace-normal text-base'>
                                     {product.name}

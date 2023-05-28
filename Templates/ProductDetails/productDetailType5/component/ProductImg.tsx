@@ -65,19 +65,23 @@ const ProductImg_Type3: React.FC<_ProductImgProps> = ({ product }) => {
   }, [customerId, wishlist]);
 
   return (
-    <div className='lg:col-span-6 grid grid-cols-12 pr-[15px] pt-[8px]'>
-      <div className='col-span-12 border border-gray-border relative'>
-        {/* <div className='col-span-12 mb-[10px] text-small-text font-medium'>
-          <a href='product-listing.html' className='' title=''>
+    <div className='lg:col-span-6 grid grid-cols-12 lg:pr-[15px] pt-[8px]'>
+      <div className="lg:hidden col-span-12">
+                    <div className="text-title-text !font-bold pb-[10px]"> Carhartt Men's Rugged Professional Series Long Sleeve Shirt </div>
+                </div>
+                {/* <div className='col-span-12 mb-[10px] text-small-text font-medium'>
+          <a href='javascript:void(0);'>
             &lt;&lt; Back
           </a>
         </div> */}
+      <div className='col-span-12 border border-gray-border relative'>
+       
         <div className='main-image max-w-lg mx-auto'>
           <InnerImageZoom
             src={selectedImage?.imageUrl}
             zoomType='hover'
             hideHint={true}
-            className='sm:rounded-lg main_image max-h-full'
+            className='main_image max-h-full'
           />
         </div>
         {/* https://redefinecommerce.blob.core.windows.net/rdcbeta/1/product/attributeimages/attribute_10887_10887_1.jpg */}

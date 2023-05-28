@@ -16,7 +16,7 @@ const DiscountPricing: React.FC<
     <>
       {showMinQuantity ? (
         <div className='pt-[15px] text-default-text' x-data='{open : false}'>
-          <div className='flex flex-wrap items-center cursor-pointer text-default-text'>
+          <div className='flex flex-wrap items-center cursor-pointer text-default-text !font-bold'>
             <span
               className='material-icons-outlined'
               onClick={() => {
@@ -26,7 +26,7 @@ const DiscountPricing: React.FC<
               add
             </span>{' '}
             {__pagesText.productInfo.discountPricing.minimumOrder}
-            <span className='pl-[5px]'>
+            <span className='pl-[5px] !font-normal'>
               {' '}
               {` ${minQty} ${unitUnits} per color`}
             </span>

@@ -20,11 +20,11 @@ const ProductImg: React.FC<_ProductImgProps> = ({ product }) => {
   const [wishlistPresent, setWishlistPresent] = useState<boolean>(false);
   const colors = useTypedSelector_v2((state) => state.product?.product.colors);
   const handleChooseColor = (product: _ProductColor) => {
-    if (!product.splitproductList) {
+    if (!product.productSEName || product.productSEName === '') {
       setColor(product);
       return;
     }
-    //router.push(product.productSEName);
+    router.push(`${product.productSEName}.html`);
   };
   const brandId = useTypedSelector_v2((state) => state.wishlist.brandId);
   const selectedColor = useTypedSelector_v2(
@@ -116,14 +116,18 @@ const ProductImg: React.FC<_ProductImgProps> = ({ product }) => {
       </div>
       <div className='col-span-12 flex flex-wrap justify-center'>
         {colors &&
-          colors.map((product, index) => {
+          colors.map((color, index) => {
             return (
               <div
-                className='border border-gray-border hover:border-secondary mx-[5px] mb-[10px] p-[1px] w-[70px] max-h-[70px] cursor-pointer'
-                key={product.attributeOptionId}
-                onClick={() => handleChooseColor(product)}
+                className={`border  ${
+                  color.productId === product?.id
+                    ? 'border-primary'
+                    : 'border-gray-border'
+                }  hover:border-secondary mx-[5px] mb-[10px] p-[1px] w-[70px] max-h-[70px] cursor-pointer`}
+                key={color.attributeOptionId}
+                onClick={() => handleChooseColor(color)}
               >
-                <ColorImage product={product} />
+                <ColorImage product={color} />
               </div>
             );
           })}

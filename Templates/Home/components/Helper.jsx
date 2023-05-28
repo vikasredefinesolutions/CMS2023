@@ -979,6 +979,15 @@ export const updateSetProperties = (element) => {
           }
         }
       }
+      if(value.type === 'imagehide')
+          {
+              if(value.value)
+              {
+                let k =  key.replace('_image_hide', '');
+                if(x.querySelectorAll("#" + k).length > 0)
+                   x.querySelectorAll('#' + k)[0].className = 'hidden';
+              }
+          }
 
       // if (value.type == 'alt') {
       //   //let propname = key.replace("_alt", "");

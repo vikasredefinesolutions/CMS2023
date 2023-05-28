@@ -27,6 +27,7 @@ const ProductListingType2: React.FC<_ListingProps> = ({
   sortProductJson,
   clearFilters,
   compareCheckBoxHandler,
+  clearFilterSection,
   seType,
   brandId,
   sortingType,
@@ -75,6 +76,7 @@ const ProductListingType2: React.FC<_ListingProps> = ({
                         filters={filters}
                         handleChange={handleChange}
                         checkedFilters={checkedFilters}
+                        clearFilterSection={clearFilterSection}
                       />
                     )}
                   </div>

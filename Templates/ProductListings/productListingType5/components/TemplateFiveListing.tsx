@@ -10,7 +10,7 @@ import { splitproductList } from '@definations/productList.type';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import {
   GetlAllProductList,
-  GetProductImageOptionList,
+  GetProductImageOptionList
 } from '@templates/ProductListings/ProductListingType';
 import ProductBoxController from '@templates/ProductListings/productListingType1/components/productBoxController';
 import Link from 'next/link';
@@ -138,7 +138,7 @@ const TemplateFiveListing = ({
               <div className='mb-[10px] '>
                 <a
                   href={`${origin}/${product.sename}.html`}
-                  className='relative text-sub-text font-bold h-[45px] overflow-hidden inline-block'
+                  className='relative text-sub-text font-bold h-[45px] overflow-hidden inline-block !font-bold'
                   title={product.name}
                 >
                   {product.name}

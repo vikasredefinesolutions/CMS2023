@@ -83,12 +83,13 @@ const Custom: React.FC<_props> = ({
               title={title}
               onMouseLeave={() => setFocus(false)}
               type='button'
-              className={`relative text-[12px] xl:text-[14px] xl:ml-[21px] xl:mr-[20px] ml-[5px] mr-[5px] tracking-[2px] z-10 flex items-center font-[400] border-0 pt-[10px] pb-[10px] border-transparent hover:border-primary text-quaternary before:absolute before:bottom-[0px] before:content-[''] before:border-y-solid before:border-t-transparent before:border-x-transparent before:h-0 before:w-0 before:border-b-gray-100 before:border-[10px] before:left-1/2 before:-translate-x-1/2 before:inline-block ${
+              className={`relative text-[14px] xl:text-[17px] xl:ml-[10px] xl:mr-[10px] ml-[5px] mr-[5px] tracking-[2px] z-10 flex items-center font-[600] pt-[8px] pb-[8px] pl-[15px] pr-[15px] text-[#ffffff] hover:primary-link
+              ${
                 focus ? '' : 'before:hidden'
               }`}
             >
               <span
-                className='uppercase text-quaternary'
+                className='uppercase'
                 style={{ textTransform: 'uppercase' }}
               >
                 {title}

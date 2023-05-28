@@ -2,7 +2,7 @@ import { paths } from '@constants/paths.constant';
 import {
   _t_Brands,
   _t_MenuCategory,
-  _t_MenuTopic,
+  _t_MenuTopic
 } from '@definations/header.type';
 import Brand from '@header/header_Type2/Components/Menu//Header_BrandItem';
 import Category from '@header/header_Type2/Components/Menu//Header_CategoryItem';

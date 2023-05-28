@@ -58,7 +58,7 @@ const DiscountInfo: React.FC<{
 
   return (
     <>
-      <div className='mt-[10px] px-[5px] py-[10px] bg-[#000000] text-[#ffffff] text-center'>
+      <div className='mt-[10px] px-[10px] py-[10px] bg-[#000000] text-[#ffffff] text-center'>
         `Add {qtyRequired - totalQty} more of this {product?.name} to your cart
         to save an additional $
         {product?.msrp &&

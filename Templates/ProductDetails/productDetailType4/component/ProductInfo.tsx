@@ -56,7 +56,6 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
   const storeId = useTypedSelector_v2((state) => state.store.id);
   const customerId = useTypedSelector_v2((state) => state.user.id);
   const { colors } = useTypedSelector_v2((state) => state.product.product);
-
   const selectedProduct = useTypedSelector_v2(
     (state) => state.product.selected,
   );
@@ -270,26 +269,27 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
           showLogin={product ? !product.isDiscontinue : false}
           modalHandler={modalHandler}
         />
-        <Inventory productId={product.id} storeCode={''} />
-
+        {userId && <Inventory productId={product.id} storeCode={storeCode} />}
         {product?.companionProductName !== null ? (
           <ProductCompanion product={product} />
         ) : null}
-        <div className='mt-[15px] text-default-text bg-light-gray p-[15px] flex flex-wrap items-end justify-between gap-[10px] mb-[20px]'>
-          <div className=''>
-            <TotalQtySelected total={totalCheckout.totalQty} />
+        {userId && (
+          <div className='mt-[15px] text-default-text bg-light-gray p-[15px] flex flex-wrap items-end justify-between gap-[10px] mb-[20px]'>
             <div className=''>
-              <DiscountPrice
-                storeCode={storeCode}
-                ourCost={product?.ourCost || 0}
-                msrp={product?.msrp || 0}
-                imap={product?.imap || 0}
-                salePrice={pricePerItem || 0}
-              />
+              <TotalQtySelected total={totalCheckout.totalQty} />
+              <div className=''>
+                <DiscountPrice
+                  storeCode={storeCode}
+                  ourCost={product?.ourCost || 0}
+                  msrp={product?.msrp || 0}
+                  imap={product?.imap || 0}
+                  salePrice={pricePerItem || 0}
+                />
+              </div>
             </div>
+            <Subtotal subTotal={totalCheckout.totalPrice} />
           </div>
-          <Subtotal subTotal={totalCheckout.totalPrice} />
-        </div>
+        )}
         <form className='mt-[15px]'>
           <div className=''>
             <button
@@ -302,8 +302,8 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
               {product?.isDiscontinue
                 ? 'Discontinued'
                 : userId
-                ? 'ADD TO CART'
-                : 'LOGIN TO SHOP NOW WITH LIVE INVENTORY'}
+                ? `${__pagesText.productInfo.addTocart}`
+                : `${__pagesText.productInfo.checkInventoryPricing}`}
             </button>
           </div>
         </form>

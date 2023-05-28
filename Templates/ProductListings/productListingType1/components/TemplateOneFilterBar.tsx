@@ -48,9 +48,7 @@ const TemplateOneFilterBar: React.FC<props> = ({
                   <div className='flex items-center gap-2'>
                     <span>Sort </span>
                     <button
-                      onClick={() =>
-                        sortOpenHandler(showSortMenu ? false : true)
-                      }
+                      onClick={() => sortOpenHandler(!showSortMenu)}
                       type='button'
                       className='group inline-flex items-center justify-between text-small-text text-[#ffffff] bg-primary w-[200px] md:w-[245px] pl-[8px] pt-[4px] pb-[4px] pr-[4px]'
                     >

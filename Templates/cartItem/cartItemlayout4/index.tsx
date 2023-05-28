@@ -1,8 +1,8 @@
 import Price from '@appComponents/Price';
 import NxtImage from '@appComponents/reUsable/Image';
 import {
-  __SuccessErrorText,
   commonMessage,
+  __SuccessErrorText,
 } from '@constants/successError.text';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import { _CartItem } from '@services/cart';
@@ -12,7 +12,9 @@ import { FC, useRef, useState } from 'react';
 import { _globalStore } from 'store.global';
 // import { CI_Props } from './cartItem';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const CIlayout4: FC<any> = ({ cartData, removeCartItem }) => {
+const CIlayout4: FC<any> = ({ removeCartItem }) => {
+  const cartData = useTypedSelector_v2((state) => state.cart.cart);
+
   let mediaBaseUrl = _globalStore.blobUrl; // for server side
   const clientSideMediaBaseUrl = useTypedSelector_v2(
     (state) => state.store.mediaBaseUrl,

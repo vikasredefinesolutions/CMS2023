@@ -192,7 +192,6 @@ const ProductListController = (
 
   const productSorter_Fn = (type: number, products?: GetlAllProductList[]) => {
     let newList = [];
-
     if (products) {
       newList = products;
     } else {
@@ -204,6 +203,10 @@ const ProductListController = (
         return pro1.msrp > pro2.msrp ? 1 : -1;
       } else if (type === Sorting.Descending) {
         return pro1.msrp < pro2.msrp ? 1 : -1;
+      } else if (type === Sorting.AtoZ) {
+        return pro1.name > pro2.name ? 1 : -1;
+      } else if (type === Sorting.ZtoA) {
+        return pro1.name < pro2.name ? 1 : -1;
       }
       return 1;
     });

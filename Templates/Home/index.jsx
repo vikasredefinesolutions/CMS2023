@@ -1,7 +1,7 @@
 //import React, { useState, useEffect, useRef } from "react";
 import ElementAccordionDisplay from '@templates/Home/components/ElementAccordionDisplay';
 import ElementCarouselDisplay from '@templates/Home/components/ElementCarouselDisplay';
-
+import ElementFullSlider from '@templates/Home/components/ElementFullSlider';
 import FeaturedProducts from '@templates/Home/components/FeaturedProducts';
 import SocialShare from '@templates/Home/components/SocialShare';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
@@ -9,8 +9,8 @@ import { useEffect, useState } from 'react';
 
 import DIHomePage from '@templates/Home/components/DIHomePage';
 import * as helper from '@templates/Home/components/Helper';
-import AOS from 'aos';
-import 'aos/dist/aos.css';
+// import AOS from 'aos';
+// import 'aos/dist/aos.css';
 
 const Home = (props) => {
   const pageData = props.props?.pageData;
@@ -31,10 +31,10 @@ const Home = (props) => {
     };
   }, []);
 
-  useEffect(() => {
-    AOS.init();
-    AOS.refresh();
-  }, []);
+  // useEffect(() => {
+  //   AOS.init();
+  //   AOS.refresh();
+  // }, []);
 
   useEffect(() => {
     // let pageId = pageData.id;
@@ -271,12 +271,13 @@ const Home = (props) => {
                   const fixedBgDisplay = checkFixedBG(componentValue);
                   // console.log("CHED", componentValue.selectedVal);
                   let additionalclass = '';
+                  let additionalclass1 = '';
                   let innerDivClass = '';
                   if (
                     componentValue.selectedVal &&
                     'additionalclass' in componentValue.selectedVal
                   ) {
-                    additionalclass =
+                    additionalclass1 =
                       componentValue.selectedVal.additionalclass.value;
                   }
                   if (
@@ -374,7 +375,7 @@ const Home = (props) => {
                         componentValue.visibility == 'off' ? 'hidden' : ''
                       } ${
                         backgroundStyle === 'outer' ? backgroundImageClass : ''
-                      }`}
+                      }  ${additionalclass1}`}
                       style={
                         loadBackgroundType(componentValue) == 'image'
                           ? {
@@ -467,7 +468,7 @@ const Home = (props) => {
                                         dataArr={componentValue.selectedVal}
                                       />
                                     </>
-                                  ) : (
+                                  ) : ( 
                                     <>
                                       {Object.keys(
                                         componentValue.selectedVal,
@@ -510,12 +511,28 @@ const Home = (props) => {
                                             </>
                                           ) : (
                                             <>
+                                            { Object.keys(
+                                            componentValue.selectedVal,
+                                          ).includes('slickslider') ? (
+                                            <>  
+                                            <ElementFullSlider
+                                                bannerArr={
+                                                  componentValue.selectedVal
+                                                    .slickslider.value
+                                                }
+                                              />
+
+                                            </>): (<>
                                               <div
                                                 className={componentValue.uuid}
                                                 dangerouslySetInnerHTML={{
                                                   __html: componentValue.html,
                                                 }}
                                               ></div>
+                                            </>)
+
+                                            }
+                                              
                                             </>
                                           )}
                                         </>

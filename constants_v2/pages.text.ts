@@ -134,9 +134,13 @@ export const __pagesText = {
     },
     notesPk: {
       minimumPiecePerColor: `We request that all orders include a minimum of 4 pieces per color of a style, which can be split across men's and women's companion items. We may reject or require modification to any orders not meeting these requirements without prior approval.`,
-      backordered: `PLEASE NOTE: If you are ordering product that is backordered, your entire order will not ship until all items are available. Click the number in the Availability column above to see future inventory dates. Please reference the ship date shown in your cart.`,
+      backordered: `If you are ordering product that is backordered, your entire order will not ship until all items are available. Click the number in the Availability column above to see future inventory dates. Please reference the ship date shown in your cart.`,
+      pleaseNote: 'PLEASE NOTE:',
+      minimumPiecePerColorWithoutLogin:
+        'PLEASE SIGN INTO YOUR ACCOUNT TO VIEW LIVE INVENTORY AND VOLUME DISCOUNTS',
     },
-
+    checkInventoryPricing: 'Check Inventory And Your Pricing',
+    addTocart: 'ADD TO CART',
     somLogoOption: {
       addLogoLater: 'Add Logo Later',
       logoToBeSubmitted: 'Logo to be submitted after order is placed',
@@ -178,7 +182,7 @@ export const __pagesText = {
       selectColor: 'Select Color:',
       showless: 'Show Less',
       seeAll: 'See All',
-      colors: 'Colors:',
+      colors: 'Colors',
       onlycolor: 'Color',
     },
     forgotModal: {
@@ -250,12 +254,15 @@ export const __pagesText = {
       },
     },
     discountPricing: {
-      showMsg:
-        'We reserve the right to reject orders that do not meet the  piece minimum per style  and color, exceptions may apply for men’s and women’s companion styles per color.',
+      startshowMsg:
+        'We reserve the right to reject orders that do not meet the ',
+      endShowMsg:
+        'piece minimum per style and color, exceptions may apply for men’s and women’s companion styles per color.',
       exclusivePricingAvailable: 'EXCLUSIVE PRICING AVAILABLE',
       exclusivePricing: 'EXCLUSIVE PRICING',
       selectSizeAndQuantity: 'Select Size & Quantity:',
       minimumOrder: 'MINIMUM ORDER : ',
+      minimumOrderQuantity: 'MINIMUM ORDER QUANTITY:',
       price: 'Price:',
       MSRP: 'MSRP: ',
       showMsgStartingText:

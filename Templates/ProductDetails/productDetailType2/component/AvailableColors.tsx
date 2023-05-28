@@ -36,14 +36,11 @@ const AvailableColors: React.FC = () => {
         </div>
         <div className='flex flex-wrap text-center available-colors text-default-text ml-[4px] gap-[5px]'>
           {colors.map((product, index) => {
-            const show =
-              showAllColors ||
-              index < __pagesConstant._productDetails.imagesInRow;
             const highlight =
               product.attributeOptionId === selectedColor?.attributeOptionId
                 ? 'border-primary'
                 : 'border-slate-200';
-            return (
+            return index < __pagesConstant._productDetails.imagesInRow - 1 ? (
               <div
                 className=''
                 key={product.attributeOptionId}
@@ -61,10 +58,34 @@ const AvailableColors: React.FC = () => {
                   <ColorImage product={product} />
                 </div>
               </div>
+            ) : (
+              <></>
             );
           })}
         </div>
         {/* No CSS for this button in HTML files */}
+        {showAllColors &&
+          colors.map((product, index) => {
+            const highlight =
+              product.attributeOptionId === selectedColor?.attributeOptionId
+                ? 'border-primary'
+                : 'border-slate-200';
+            return index > __pagesConstant._productDetails.imagesInRow - 1 ? (
+              <div
+                className=''
+                key={product.attributeOptionId}
+                onClick={() => handleChooseColor(product)}
+              >
+                <div
+                  className={`w-[32px] h-[32px] p-[1px] border-2  hover:border-primary cursor-pointer ${highlight}`}
+                >
+                  <ColorImage product={product} />
+                </div>
+              </div>
+            ) : (
+              <></>
+            );
+          })}
         {showAllColorsButton && (
           <div className='text-right text-anchor hover:text-anchor-hover'>
             <button
@@ -72,12 +93,12 @@ const AvailableColors: React.FC = () => {
               className=' underline'
             >
               {showAllColors ? (
-                <span className='span1'>
+                <span className='span1 pl-[5px]'>
                   {__pagesText.productInfo.availableColors.showless}
                 </span>
               ) : (
                 <>
-                  <span className='span1'>
+                  <span className='span1 pl-[5px]'>
                     {__pagesText.productInfo.availableColors.seeAll}
                   </span>
                   <span className='span2'> {colorsCount} </span>
@@ -89,11 +110,6 @@ const AvailableColors: React.FC = () => {
             </button>
           </div>
         )}
-      </div>
-
-      <div className='pt-[15px] text-default-text'>
-        <span className='inline-block w-[90px]'>Color Name</span>{' '}
-        <span className='ml-[4px]'>{selectedColor.name}</span>
       </div>
 
       <div className='pt-[15px] text-default-text'>

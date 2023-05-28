@@ -79,6 +79,7 @@ const LogosToPrint: React.FC<_props> = ({ setShowOrSelect }) => {
         totalPrice,
         totalQty,
       },
+      price: toCheckout.price,
     });
 
     if (totalQty < toCheckout.minQty) {

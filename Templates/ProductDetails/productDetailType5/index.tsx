@@ -157,7 +157,7 @@ const ProductDetails_Type5: React.FC<_Props> = (product) => {
                 product={product.alike}
                 id={_defaultTemplates.youMayAlsoLike}
               />
-              ;
+              
             </div>
           );
         } else if (val === 'writereview') {

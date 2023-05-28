@@ -14,6 +14,29 @@ export const SortingMethod = [
   },
 ];
 
+export const SortingMethodForPkHealth = [
+  {
+    name: 'Relevance',
+    type: 1,
+  },
+  {
+    name: 'Price: (Low to High)',
+    type: 2,
+  },
+  {
+    name: 'Price: (High to Low)',
+    type: 3,
+  },
+  {
+    name: 'A-Z',
+    type: 4,
+  },
+  {
+    name: 'Z-A',
+    type: 5,
+  },
+];
+
 export const CCmonths = [
   {
     id: 1,

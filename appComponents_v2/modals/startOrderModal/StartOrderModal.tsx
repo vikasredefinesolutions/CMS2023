@@ -7,7 +7,7 @@ import SizePriceQtyTable from '@templates/ProductDetails/Components/SizePriceQty
 import SomActionsHandler from '@templates/ProductDetails/Components/SomActionsHandler';
 import SomCustomizeLogoOptions from '@templates/ProductDetails/Components/SomCustomizeLogoOptions';
 import StartOrderAvailableColors from '@templates/ProductDetails/Components/StartOrderAvailableColors';
-import Inventory from '@templates/ProductDetails/productDetailType4/component/ProductInventory';
+import SizePriceQtyTable4 from '@templates/ProductDetails/productDetailType4/component/SizePriceQtyTableType4';
 import Price from 'appComponents_v2/reUsable/Price';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
 import React, { useEffect, useState } from 'react';
@@ -214,10 +214,9 @@ const StartOrderModal: React.FC<_startOrderModalProps> = (props) => {
                     isSpecialBrand={props.product.isSpecialBrand}
                   />
                 ) : (
-                  <Inventory
-                    storeCode={storeCode}
-                    productId={edit?.productId}
-                    editDetails={edit}
+                  <SizePriceQtyTable4
+                    editDetails={getEditDetails()}
+                    isSpecialBrand={props.product.isSpecialBrand}
                   />
                 )}
 

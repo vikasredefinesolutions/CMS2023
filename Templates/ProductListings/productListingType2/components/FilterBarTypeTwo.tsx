@@ -1,5 +1,6 @@
-import { SortingMethod } from '@constants/common.constant';
-import React from 'react';
+import { SortingMethodForPkHealth } from '@constants/common.constant';
+import { useRouter } from 'next/router';
+import React, { useEffect } from 'react';
 type props = {
   totalCount: number;
   showSortMenu: boolean;
@@ -19,6 +20,10 @@ const FilterBarTypeTwo: React.FC<props> = ({
   setProductView,
   sortingType,
 }) => {
+  const router = useRouter();
+  useEffect(() => {
+    sortOpenHandler(false);
+  }, [router.asPath]);
   return (
     <div className='relative z-10 mt-[20px] lg:mt-[0px]'>
       <div className='flex flex-wrap justify-between items-center text-sm gap-2'>
@@ -55,8 +60,9 @@ const FilterBarTypeTwo: React.FC<props> = ({
               <span className=''>
                 <span>
                   {
-                    SortingMethod.find((method) => method.type === sortingType)
-                      ?.name
+                    SortingMethodForPkHealth.find(
+                      (method) => method.type === sortingType,
+                    )?.name
                   }
                 </span>
               </span>
@@ -68,7 +74,7 @@ const FilterBarTypeTwo: React.FC<props> = ({
           {showSortMenu && (
             <div className='origin-top-right absolute right-0 mt-[0px] w-full border border-[#000000] border-t-0 bg-[#ffffff] ring-1 ring-[#000000] ring-opacity-5 focus:outline-none'>
               <div className='pt-[4px] pb-[4px]'>
-                {SortingMethod.map((method) => (
+                {SortingMethodForPkHealth.map((method) => (
                   <button
                     key={method.type}
                     onClick={() => {

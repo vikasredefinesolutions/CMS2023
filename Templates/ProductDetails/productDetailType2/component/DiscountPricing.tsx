@@ -17,19 +17,30 @@ const DiscountPricing: React.FC<
     <>
       {showMinQuantity ? (
         <div className='pt-[15px] text-default-text' x-data='{open : false}'>
-          <div className='flex flex-wrap items-center cursor-pointer'>
+          <div
+            className='flex flex-wrap items-center cursor-pointer'
+            onClick={() => setShowMsg(!showMsg)}
+          >
             <span className='material-icons-outlined'>
-              add
+              {showMsg ? 'remove' : 'add'}
             </span>{' '}
-            {__pagesText.productInfo.discountPricing.minimumOrder}
+            <span className='font-bold'>
+              {__pagesText.productInfo.discountPricing.minimumOrderQuantity}
+            </span>
             <span className='pl-[5px]'>
               {' '}
               {` ${minQty} ${unitUnits} per color`}
             </span>
           </div>
-          <div className='text-extra-small-text py-4' x-show='open'>
-            {__pagesText.productInfo.discountPricing.showMsg}
-          </div>
+          {showMsg ? (
+            <div className='text-extra-small-text py-4' x-show='open'>
+              {__pagesText.productInfo.discountPricing.startshowMsg}
+              {minQty}
+              {__pagesText.productInfo.discountPricing.endShowMsg}
+            </div>
+          ) : (
+            <></>
+          )}
         </div>
       ) : null}
       <QtyPriceTable storeCode={storeCode} />

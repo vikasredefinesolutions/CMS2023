@@ -13,8 +13,8 @@ const BreadCrumb_Type4: NextPage<_BreadCrumbProps> = ({
 
   return (
     <>
-      <div className='container mx-auto'>
-        <div className='flex flex-wrap justify-between py-[10px]'>
+      <div className='container mx-auto bg-drak-gray'>
+        <div className='flex flex-wrap justify-between py-[10px] bg-drak-gray'>
           <nav
             className='flex flex-wrap items-center text-extra-small-text'
             aria-label='Breadcrumb'

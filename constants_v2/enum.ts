@@ -46,4 +46,6 @@ export enum UserAddressType {
 export enum Sorting {
   Ascending = 2,
   Descending = 3,
+  AtoZ = 4,
+  ZtoA = 5,
 }

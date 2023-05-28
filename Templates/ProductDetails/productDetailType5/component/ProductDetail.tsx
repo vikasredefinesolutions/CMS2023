@@ -16,6 +16,7 @@ const ProductDetail: React.FC<_ProductDetailsProps> = ({
             <h1 className='text-title-text'></h1>
           </div>
         </div>
+        
         <ProductImg product={product} />
         <ProductInfo product={product} storeCode={storeCode} />
       </div>

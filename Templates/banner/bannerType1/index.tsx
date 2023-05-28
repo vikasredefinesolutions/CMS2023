@@ -3,7 +3,9 @@
 import ForgotModal from '@appComponents/modals/forgotModal';
 import LoginModal from '@appComponents/modals/loginModal';
 import ImageComponent from '@appComponents/reUsable/Image';
+import { _Store } from '@configs/page.config';
 import { __pagesText } from '@constants/pages.text';
+import { useTypedSelector_v2 } from '@hooks_v2/index';
 import Link from 'next/link';
 import React from 'react';
 import { _BannerComponentProps } from '../Banner';
@@ -13,24 +15,27 @@ const BannerType1: React.FC<_BannerComponentProps> = ({
   showModal,
   userId,
 }) => {
+  const storeCode = useTypedSelector_v2((state) => state.store.code);
   if (banner === null || banner.length < 1) {
     return <></>;
   } else {
     return (
       <>
-        <div className='container pl-[15px] pr-[15px] mx-auto cursor-pointer'>
-          <div className='text-center bg-tertiary pl-[10px] pr-[10px] pt-[4px] pb-[4px]'>
-            <a
-              onClick={() => (!userId ? setShowModal('login') : null)}
-              className='inline-flex items-center tracking-[1.2px] text-default-text font-medium'
-            >
-              {__pagesText.productListing.Banner.loginforExclusivePrice}
-              <span className='material-icons ml-[7px]'>
-                {__pagesText.Headers.loginIcon}
-              </span>
-            </a>
+        {storeCode == _Store.type1 && (
+          <div className='container pl-[15px] pr-[15px] mx-auto cursor-pointer'>
+            <div className='text-center bg-tertiary pl-[10px] pr-[10px] pt-[4px] pb-[4px]'>
+              <a
+                onClick={() => (!userId ? setShowModal('login') : null)}
+                className='inline-flex items-center tracking-[1.2px] text-default-text font-medium'
+              >
+                {__pagesText.productListing.Banner.loginforExclusivePrice}
+                <span className='material-icons ml-[7px]'>
+                  {__pagesText.Headers.loginIcon}
+                </span>
+              </a>
+            </div>
           </div>
-        </div>
+        )}
 
         <div className='container pl-[15px] pr-[15px] mx-auto'>
           <div className='items-center md:pl-[70px] md:pr-[70px] md:pt-[70px] md:pb-[70px] pl-[0px] pr-[0px] pt-[16px] pb-[16px] bg-light-gray'>

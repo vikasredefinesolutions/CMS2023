@@ -9,7 +9,7 @@ import { _WishListProps } from '@services/wishlist';
 import {
   AddToWishlist,
   getWishlist,
-  removeWishlist,
+  removeWishlist
 } from '@services/wishlist.service';
 import { extractCookies } from 'helpers_v2/common.helper';
 import getLocation from 'helpers_v2/getLocation';

@@ -90,25 +90,27 @@ const SelectLocation: React.FC<_props> = ({
         })}
       </div>
 
-      <div className='flex flex-wrap items-center sm:justify-start justify-center mb-[15px] sm:mx-[-15px] mx-0'>
-        <div className='mx-[15px]'>
-          <button
-            onClick={() => actionHandler('now')}
-            className='btn btn-md btn-primary text-center btn-block uppercase'
-          >
-            SELECT YOUR LOGO
-          </button>
+      {selectedLocation && (
+        <div className='flex flex-wrap items-center sm:justify-start justify-center mb-[15px] sm:mx-[-15px] mx-0'>
+          <div className='mx-[15px]'>
+            <button
+              onClick={() => actionHandler('now')}
+              className='btn btn-md btn-primary text-center btn-block uppercase'
+            >
+              SELECT YOUR LOGO
+            </button>
+          </div>
+          <div className='px-[10px] py-[10px]'>OR</div>
+          <div className='mx-[15px]'>
+            <button
+              onClick={() => actionHandler('later')}
+              className='btn btn-md btn-primary text-center btn-block uppercase'
+            >
+              SHARE LOGO LATER
+            </button>
+          </div>
         </div>
-        <div className='px-[10px] py-[10px]'>OR</div>
-        <div className='mx-[15px]'>
-          <button
-            onClick={() => actionHandler('later')}
-            className='btn btn-md btn-primary text-center btn-block uppercase'
-          >
-            SHARE LOGO LATER
-          </button>
-        </div>
-      </div>
+      )}
     </>
   );
 };

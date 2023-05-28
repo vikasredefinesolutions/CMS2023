@@ -29,13 +29,13 @@ const AvailableColors: React.FC<_ModalProps> = ({ modalHandler }) => {
     <>
       {' '}
       <div className='pt-[15px] flex items-center text-default-text'>
-        <span className='inline-block w-[130px]'>Color Name</span>
+        <span className='inline-block w-[130px] !font-bold'>Color Name</span>
         <span>:</span> <span className='ml-[8px]'>{selectedColor.name}</span>
       </div>
       <div className='pt-[15px] flex flex-wrap items-end justify-between'>
         <div className='flex flex-wrap items-center'>
-          <div className='flex flex-wrap items-center pt-[15px]'>
-            <div className='text-default-text w-[130px]'>
+          <div className='flex flex-wrap items-center'>
+            <div className='text-default-text w-[130px] !font-bold'>
               <span className=''>Select Color</span>
             </div>
             <span>:</span>

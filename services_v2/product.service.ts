@@ -13,8 +13,8 @@ import {
   _ProductBySku,
   _ProductDetails,
   _ProductDoNotExist,
-  _ProductSEO,
   _ProductsAlike,
+  _ProductSEO,
   _ProductsRecentlyViewed,
   _ProductsRecentlyViewedPayload,
   _ProductsRecentlyViewedResponse,
@@ -66,7 +66,6 @@ export const FetchProductById = async (payload: {
   productId: number;
 }): Promise<_ProductDetails | null | _ProductDoNotExist> => {
   const url = `StoreProduct/getstoreproductbysename/${payload.seName}/${payload.storeId}/${payload.productId}.json`;
-
   conditionalLog_V2({
     data: payload,
     show: __console_v2.product.service.FetchProductById,

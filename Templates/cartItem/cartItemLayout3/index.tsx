@@ -2,8 +2,8 @@ import { default as Image } from '@appComponents/reUsable/Image';
 import Price from '@appComponents/reUsable/Price';
 import { cartQuantityUpdateConfirmMessage } from '@constants/global.constant';
 import {
-  __SuccessErrorText,
   commonMessage,
+  __SuccessErrorText,
 } from '@constants/successError.text';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import { _CartItem } from '@services/cart';
@@ -14,7 +14,6 @@ import { _globalStore } from 'store.global';
 // import { CI_Props } from './cartItem';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const CIlayout3: FC<any> = ({
-  cartData,
   isEditable,
   removeCartItem,
 
@@ -23,6 +22,7 @@ const CIlayout3: FC<any> = ({
   const { loggedIn: empLoggedIn } = useTypedSelector_v2(
     (state) => state.employee,
   );
+  const cartData = useTypedSelector_v2((state) => state.cart.cart);
   const { setShowLoader, showModal, fetchCartDetails } = useActions_v2();
   const valueRef = useRef<Record<string, undefined | number>>({});
   const isEmployeeLoggedIn = useTypedSelector_v2(

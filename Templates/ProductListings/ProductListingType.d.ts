@@ -230,7 +230,7 @@ export interface GetlAllProductList {
   brandUrl: string;
   getProductImageOptionList?: GetProductImageOptionList[];
   id?: number;
-  name?: string;
+  name: string;
   productTagViewModel: Array<{
     productId: number;
     imagename: string;

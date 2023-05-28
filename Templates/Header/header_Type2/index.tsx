@@ -5,7 +5,7 @@ import { _HeaderProps, _MenuItems } from '@definations/header.type';
 import {
   useActions_v2,
   useTypedSelector_v2,
-  useWindowDimensions_v2,
+  useWindowDimensions_v2
 } from '@hooks_v2/index';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
@@ -15,7 +15,7 @@ import {
   LoggedInMenu,
   LoginIcon,
   Logo,
-  MyCartIcon,
+  MyCartIcon
 } from '../header_Type2/Components/Icons';
 import Header_MenuItems from '../header_Type2/Components/Menu/Header_MenuItems';
 import SearchBar from '../header_Type2/Components/Menu/Header_SearchBar';
@@ -68,7 +68,7 @@ const Header_Type2: NextPage<_HeaderProps> = ({
           />
         )}
         <div className='fixed z-40 lg:hidden'></div>
-        <header className='relative tracking-[1px]'>
+        <header className='relative tracking-[1px]' >
           <nav aria-label='Top'>
             <div
               className={`${headerBgColor ? '' : 'bg-[#ffffff]'}`}

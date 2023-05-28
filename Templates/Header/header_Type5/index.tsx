@@ -4,7 +4,7 @@ import { _HeaderProps, _MenuItemsWithBrand } from '@definations/header.type';
 import {
   useActions_v2,
   useTypedSelector_v2,
-  useWindowDimensions_v2,
+  useWindowDimensions_v2
 } from '@hooks_v2/index';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
@@ -14,7 +14,7 @@ import {
   LoginIcon,
   Logo,
   MyCartIcon,
-  WishListIcon,
+  WishListIcon
 } from '../header_Type5/Components/Icons';
 import Header_MenuItems from '../header_Type5/Components/Menu/Header_MenuItems';
 import SearchBar from '../header_Type5/Components/Menu/Header_SearchBar';
@@ -75,7 +75,7 @@ const Header_Type5: NextPage<_HeaderProps> = ({
               style={{ backgroundColor: headerBgColor }}
             >
               <div className='container  mx-auto '>
-                <div className='pt-[10px] pb-[10px]'>
+                <div className='pt-[3px] pb-[3px]'>
                   <div className='flex items-center justify-between'>
                     {/* <div className='flex items-center w-1/2 sm:w-[50%] md:w-1/3 relative'>
                       {storeTypeId == storeBuilderTypeId ? (

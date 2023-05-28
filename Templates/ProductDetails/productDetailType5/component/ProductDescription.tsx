@@ -12,6 +12,7 @@ const ProductDescription: React.FC<_props> = ({ product }) => {
         <div>
           <div className='text-center font-semibold text-2xl-text pb-[20px]'>
             DESCRIPTION
+            <span className='border-b border-black w-[50px] mx-auto h-[1px] block pt-[5px]'></span>
           </div>
           <div
             className='text-default-text pb-[20px] max-w-7xl mx-auto'

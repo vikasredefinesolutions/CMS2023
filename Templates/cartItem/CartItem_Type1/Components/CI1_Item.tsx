@@ -9,8 +9,8 @@ import { CustomizeLaterMain } from '@constants/common.constant';
 import { cartRemoveConfirmMessage } from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
 import {
-  __SuccessErrorText,
   commonMessage,
+  __SuccessErrorText,
 } from '@constants/successError.text';
 import { captureRemoveItemEvent } from '@controllers/cartController';
 import { _ProductColor } from '@definations/APIs/colors.res';
@@ -543,6 +543,7 @@ const CI1_Item: React.FC<_CartItem & _Props> = (props) => {
               <div className='lg:w-1/4 w-full'>
                 <div className='mt-[24px] lg:ml-[20px]'>
                   <button
+                    type='button'
                     data-modal-toggle='startorderModal'
                     className='btn btn-secondary !w-full !pt-[0px] !pb-[0px] text-center uppercase'
                     onClick={() => {
@@ -555,6 +556,7 @@ const CI1_Item: React.FC<_CartItem & _Props> = (props) => {
                 </div>
                 <div className='mt-[12px] lg:ml-[20px]'>
                   <button
+                    type='button'
                     onClick={() => {
                       keepPersonalizing ? setKeepPersonalizing(false) : '';
                       handleRemoveItem(props.shoppingCartItemsId);
