@@ -7,11 +7,13 @@ import {
   KlaviyoScriptHelper,
 } from '@helpers/common.helper';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
+import { _globalStore } from 'store.global';
 import ProductDetails_Type2 from './productDetailType2';
 import ProductDetails_Type3 from './productDetailType3';
 import ProductDetails_Type4 from './productDetailType4';
 import ProductDetails_Type5 from './productDetailType5';
 import { _ProductDetailsTemplates, _Props } from './productDetails';
+let mediaBaseUrl = _globalStore.blobUrl;
 
 const ProductDetailTemplates: _ProductDetailsTemplates = {
   type1: ProductDetails_Type1,
@@ -26,6 +28,10 @@ const ProductDetails: React.FC<_Props> = (props) => {
   const { id: storeId } = useTypedSelector_v2((state) => state.store);
   const { categoryArr } = useTypedSelector_v2((state) => state.product);
   const isCaptured = useRef(false);
+  const clientSideMediaUrl = useTypedSelector_v2(
+    (state) => state.store.mediaBaseUrl,
+  );
+  mediaBaseUrl = mediaBaseUrl || clientSideMediaUrl;
 
   const { details, colors } = props;
   const ProductDetails =
@@ -38,7 +44,7 @@ const ProductDetails: React.FC<_Props> = (props) => {
     ];
 
   useEffect(() => {
-    if (details && storeId && !isCaptured.current) {
+    if (details && storeId && categoryArr.length && !isCaptured.current) {
       isCaptured.current = true;
       const payload = {
         storeId: storeId,
@@ -65,13 +71,12 @@ const ProductDetails: React.FC<_Props> = (props) => {
         storeId,
         payload,
       );
-
       const item = {
         ProductName: details?.name,
         ProductID: details?.id,
         SKU: details?.sku,
         Categories: categoryArr,
-        ImageURL: colors && colors[0]?.imageUrl,
+        ImageURL: colors && `${mediaBaseUrl}${colors[0]?.imageUrl}`,
         URL: window.location.href,
         Brand: details?.brandName,
         Price: details?.salePrice,
@@ -89,11 +94,10 @@ const ProductDetails: React.FC<_Props> = (props) => {
           CompareAtPrice: item?.CompareAtPrice,
         },
       };
-
       KlaviyoScriptHelper(['track', 'Viewed Product', item]);
       KlaviyoScriptHelper(['trackViewedItem', viewedItem]);
     }
-  }, [details?.id, storeId, customerId]);
+  }, [details?.id, storeId, customerId, categoryArr]);
 
   return <ProductDetails {...props} />;
 };
