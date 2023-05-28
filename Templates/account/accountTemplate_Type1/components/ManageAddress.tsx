@@ -36,13 +36,14 @@ const ManageAddress = () => {
     if (customer && customer.customerAddress) {
       if (showTab === UserAddressType.OTHERUSERADDRESS) {
         getAdminCustomerUsers();
-      }
-      const data = customer.customerAddress.filter(
-        (res) => res.addressType === showTab,
-      );
-      setAddress(data);
-      if (data.length > 0) {
-        setId(data[0].id);
+      } else {
+        const data = customer.customerAddress.filter(
+          (res) => res.addressType === showTab,
+        );
+        setAddress(data);
+        if (data.length > 0) {
+          setId(data[0].id);
+        }
       }
     }
   }, [customer, showTab]);
@@ -57,8 +58,12 @@ const ManageAddress = () => {
       customerid: customerId ? customerId : 0,
       storeid: storeId,
     });
-    if (usersData && usersData.length > 0)
-      setAddress(usersData[0].customerAddress);
+    if (usersData && usersData.length > 0) {
+      let otherUserAddressArr = usersData.map((userObj) => {
+        return userObj.customerAddress;
+      });
+      setAddress(otherUserAddressArr.flat());
+    }
   };
 
   const submitHandler = async (values: AddressType) => {
@@ -191,7 +196,7 @@ const ManageAddress = () => {
             <div className='mx-auto pt-[40px] max-w-[1050px]'>
               <div className='panel-01 tab-content pb-4'>
                 <div className='flex flex-wrap lg:-mx-3 gap-y-[24px]'>
-                  {address && address.length > 0 ? (
+                  {address ? (
                     address.map((address_obj) => (
                       <div
                         className='w-full lg:w-1/2 lg:px-[12px]'
@@ -288,15 +293,17 @@ const ManageAddress = () => {
                       </div>
                     ))
                   ) : (
-                    <section className='container mx-auto text-center'>
-                      <div className='pt-[60px] pb-[30px] flex flex-col justify-center items-center '>
-                        <div className='mb-[30px] mt-[15px]'>
-                          <div className='text-2xl-text mb-[20px] font-bold border-rose-600'>
-                            No Address Available
+                    <>
+                      <section className='container mx-auto text-center'>
+                        <div className='pt-[60px] pb-[30px] flex flex-col justify-center items-center '>
+                          <div className='mb-[30px] mt-[15px]'>
+                            <div className='text-2xl-text mb-[20px] font-bold border-rose-600'>
+                              No Address Available
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </section>
+                      </section>
+                    </>
                   )}
                 </div>
                 {showTab === UserAddressType.OTHERUSERADDRESS ? (

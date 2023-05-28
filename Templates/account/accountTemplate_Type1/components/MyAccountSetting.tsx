@@ -1,3 +1,4 @@
+import { _Store } from '@configs/page.config';
 import { __pagesText } from '@constants/pages.text';
 import { editAccountMessage } from '@constants/validation.text';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
@@ -21,8 +22,10 @@ type SettingForm = typeof initValue;
 const AccountSetting = () => {
   const { showModal } = useActions_v2();
   const customer = useTypedSelector_v2((state) => state.user.customer);
+  const { code: storeCode } = useTypedSelector_v2((state) => state.store);
   const [activeEditBox, setActiveEditBox] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
+  const [genderId, setGenderId] = useState(customer?.gender);
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordUpdate, setShowPasswordUpdate] = useState(false);
   const [newPassword, setNewPassword] = useState('');
@@ -78,6 +81,7 @@ const AccountSetting = () => {
     lastName: Yup.string().required(editAccountMessage.lastName),
     companyName: Yup.string().required(editAccountMessage.companyName),
     password: Yup.string().required(editAccountMessage.password),
+    gender: Yup.string(),
   });
 
   useEffect(() => {
@@ -94,13 +98,17 @@ const AccountSetting = () => {
     }
   }, [customer]);
 
+  useEffect(() => {
+    setGenderId(customer?.gender);
+  }, [customer?.gender]);
+
   const submitHandler = async (value: SettingForm) => {
     try {
       const res = await UpdateUserData({
         ...value,
         password: currentPass,
         customerId: customer?.id || 0,
-        gender: customer?.gender || 'Male',
+        gender: genderId ? genderId : customer?.gender || '',
       });
       if (res) {
         showModal({
@@ -239,6 +247,7 @@ const AccountSetting = () => {
                       </div>
                     </div>
                     <hr className='mt-[20px]'></hr>
+
                     <div className=''>
                       <div className='mt-[20px] flex flex-wrap items-center gap-[8px] max-w-3xl'>
                         <label className='block text-default-text font-[600] w-full md:w-1/3 md:text-right'>
@@ -325,6 +334,32 @@ const AccountSetting = () => {
                         )}
                       </div>
                     </div>
+
+                    {storeCode === _Store.type2 && (
+                      <div className='mt-[20px] flex flex-wrap items-center gap-[8px] max-w-3xl'>
+                        <label className='text-default-text font-[600] w-full md:w-1/3 md:text-right'>
+                          {__pagesText.accountPage.gender}{' '}
+                        </label>
+                        <div className='grow'>
+                          <select
+                            className='form-input'
+                            disabled={!activeEditBox}
+                            value={genderId}
+                            onChange={(e) => setGenderId(e.target.value)}
+                            style={
+                              !activeEditBox ? { backgroundColor: '#eee' } : {}
+                            }
+                          >
+                            <option value={'Gender Select'}>
+                              Select Gender
+                            </option>
+                            <option value={`Male`}>Male</option>
+                            <option value={`Female`}>Female</option>
+                          </select>
+                        </div>
+                      </div>
+                    )}
+
                     <div className='flex flex-wrap items-center gap-2 max-w-3xl pt-[40px]'>
                       <div className='w-full md:w-1/3'></div>
                       <div className='grow'>
@@ -353,6 +388,7 @@ const AccountSetting = () => {
                               onClick={() => {
                                 setActiveEditBox(false);
                                 handleReset();
+                                setGenderId(customer?.gender);
                                 setTimeout(() => setErrors({}), 1000);
                               }}
                               className='ml-2 btn btn-secondary'
