@@ -68,7 +68,7 @@ const Header_Type2: NextPage<_HeaderProps> = ({
           />
         )}
         <div className='fixed z-40 lg:hidden'></div>
-        <header className='relative tracking-[1px]' >
+        <header id={`${router.asPath===paths.HOME ? "spy" : ""}`} className='relative tracking-[1px]' >
           <nav aria-label='Top'>
             <div
               className={`${headerBgColor ? '' : 'bg-[#ffffff]'}`}

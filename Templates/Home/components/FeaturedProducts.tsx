@@ -9,7 +9,7 @@ interface _props {
 
 const FeaturedProducts: React.FC<_props> = (props) => {
   const { dataArr } = props;
-  let fTitle = dataArr.sectionTitle?.value;
+  let fTitle = dataArr?.sectionTitle?.value;
   return (
     <section className='mainsection featured_items text-center'>
       {fTitle && (

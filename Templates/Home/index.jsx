@@ -1,14 +1,15 @@
 //import React, { useState, useEffect, useRef } from "react";
+import { paths } from '@constants/paths.constant';
+import DIHomePage from '@templates/Home/components/DIHomePage';
 import ElementAccordionDisplay from '@templates/Home/components/ElementAccordionDisplay';
 import ElementCarouselDisplay from '@templates/Home/components/ElementCarouselDisplay';
 import ElementFullSlider from '@templates/Home/components/ElementFullSlider';
 import FeaturedProducts from '@templates/Home/components/FeaturedProducts';
+import * as helper from '@templates/Home/components/Helper';
 import SocialShare from '@templates/Home/components/SocialShare';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-
-import DIHomePage from '@templates/Home/components/DIHomePage';
-import * as helper from '@templates/Home/components/Helper';
 // import AOS from 'aos';
 // import 'aos/dist/aos.css';
 
@@ -17,7 +18,7 @@ const Home = (props) => {
   const [componentHtml, setComponentHtml] = useState([]);
   const storeId = useTypedSelector_v2((state) => state.store.id);
   const { topic_set_isCMS } = useActions_v2();
-
+  const router = useRouter();
   // const pathArray = document.location.pathname.split('/');
   // const slug = pathArray.at(-1);
   // const [pageData, setPageData] = useState([]);
@@ -25,6 +26,8 @@ const Home = (props) => {
   // const [componentHtml, setComponentHtml] = useState([]);
 
   useEffect(() => {
+    if(router.asPath === paths.HOME)
+      document.body.classList.add('index-page')
     topic_set_isCMS(true);
     return () => {
       topic_set_isCMS(false);

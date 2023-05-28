@@ -79,6 +79,8 @@ export interface StoreType {
 
 export interface _SelectedBrands {
   bg?: _Value;
+  sectionTitle?: _Value,
+  sectionTitle_final_class?: _Value,
   featuredproducts_tabing_display: _Value;
   featuredproducts_section_title: _Value;
   featuredproducts_footer_tabing_display: _Value;
