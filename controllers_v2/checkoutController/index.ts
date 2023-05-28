@@ -52,7 +52,8 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import { __pagesConstant } from '@constants/pages.constant';
 import { PaymentOptions } from '@definations/APIs/cart.req';
 import { _ProductDetails } from '@definations/APIs/productDetail.res';
-import { CustomerAddress } from '@definations/APIs/user.res';
+import { CustomerAddress, UserType } from '@definations/APIs/user.res';
+import { WishlistType } from '@definations/wishlist.type';
 import { _CartItem } from '@services/cart';
 import { Klaviyo_PlaceOrder } from '@services/klaviyo.service';
 import {
@@ -300,10 +301,85 @@ const CheckoutController = () => {
   const blockInvalidChar = (e: any) =>
     ['e', 'E', '+', '-', '.'].includes(e.key) && e.preventDefault();
 
+  const moveCartItemsToRegisteredUserCart = async (
+    registeredUserId: number,
+  ) => {
+    const tempCustomerId = extractCookies(
+      __Cookie.tempCustomerId,
+      'browserCookie',
+    ).tempCustomerId;
+
+    if (!tempCustomerId) return;
+    await updateCartByNewUserId(~~tempCustomerId, registeredUserId)
+      .then(() => {
+        fetchCartDetails({
+          customerId: registeredUserId,
+          isEmployeeLoggedIn: isEmployeeLoggedIn,
+        });
+        deleteCookie(__Cookie.tempCustomerId);
+      })
+      .finally(() => {});
+  };
+
+  const updateUserInKlaviyo = (user: UserType) => {
+    const userInfo = {
+      $email: user.email,
+      $first_name: user.firstname,
+      $last_name: user.lastName,
+      $phone_number: '',
+      $organization: user.companyName,
+      $title: 'title',
+      $timestamp: new Date(),
+    };
+
+    KlaviyoScriptTag(['identify', userInfo]);
+  };
+
+  const skipUserPasswordScreen = async (registeredUserId: number) => {
+    logInUser({
+      id: registeredUserId,
+    });
+    setCookie(__Cookie.userId, `${registeredUserId}`, __Cookie_Expiry.userId);
+
+    await Promise.allSettled([
+      GetStoreCustomer(registeredUserId),
+      moveCartItemsToRegisteredUserCart(registeredUserId),
+      getWishlist(registeredUserId),
+    ])
+      .then((values) => {
+        const customerDetails: UserType | null =
+          values[0].status === 'fulfilled' ? values[0].value : null;
+
+        const wishlist: WishlistType | null =
+          values[2].status === 'fulfilled' ? values[2].value : null;
+
+        if (customerDetails) {
+          updateUserInKlaviyo(customerDetails);
+          updateCustomer({ customer: customerDetails });
+        }
+
+        if (wishlist) {
+          updateWishListData(wishlist);
+        }
+      })
+      .catch(() => {})
+      .finally(() => {});
+
+    setCurrentPage(checkoutPages.address);
+    setShowLoader(false);
+  };
+
   const checkEmail = async (values: { email: string }) => {
+    setShowLoader(true);
     const response = await checkCustomerAlreadyExist(values.email, storeId);
     if (response) {
       setCustomerEmail(values.email);
+
+      if (isEmployeeLoggedIn && response.isCustomerExist) {
+        await skipUserPasswordScreen(response.id);
+        return;
+      }
+
       if (response.isCustomerExist) {
         setCurrentPage(checkoutPages.password);
       } else if (!response.isCustomerExist) {
@@ -313,6 +389,7 @@ const CheckoutController = () => {
         setAllowGuest(false);
       }
     }
+    setShowLoader(false);
   };
 
   const getPolicyDetails = (cartProducts: _CartItem[]) => {
@@ -859,14 +936,12 @@ const CheckoutController = () => {
           // window.location.assign(`${paths.THANK_YOU}?orderNumber=${res.id}`);
         }
       } catch (error) {
-        setShowLoader(false);
         showModal({
           title: commonMessage.failed,
           message: commonMessage.somethingWentWrong,
         });
       }
     }
-    createAccountPassword;
   };
 
   const paymentFieldUpdateHandler = (
@@ -957,6 +1032,18 @@ const CheckoutController = () => {
     await getStoreCustomer(user.id || 0);
     setShowAddAddressModal(false);
   };
+
+  useEffect(() => {
+    if (employeeLogin.isPaymentPending) {
+      setCardDetails({
+        cardNumber: '',
+        cardVarificationCode: '',
+        cardExpirationMonth: '',
+        cardExpirationYear: '',
+      });
+      setPurchaseOrder('');
+    }
+  }, [employeeLogin.isPaymentPending]);
 
   return {
     currentPage,
