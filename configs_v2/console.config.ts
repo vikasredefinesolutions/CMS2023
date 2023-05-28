@@ -27,6 +27,7 @@ export const __console_v2: __Console = {
   },
   user: {
     service: {
+      UpdatePaymentLater: false,
       FetchUserOrderIds: false,
       CheckIfEmailIsAlreadyRegistered: false,
       SignInUser: false,
