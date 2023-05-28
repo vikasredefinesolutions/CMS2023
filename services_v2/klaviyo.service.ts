@@ -1,4 +1,3 @@
-import config from '@configs/api.config';
 import { CallAPI_v2 } from '@helpers/api.helper';
 // import config from 'api.config';
 import axios from 'axios';
@@ -43,16 +42,13 @@ interface _Response {
 }
 
 export const Klaviyo_BackInStock = async (payload: _BackInStock) => {
-  var formData = new FormData();
-
-  Object.entries(payload).forEach((val: any) => {
-    let key = val[0];
-    let value = val[1];
-    formData.append(key, value);
-  });
-
-  const url = `${config.baseUrl.klaviyo2}onsite/components/back-in-stock/subscribe`;
-
-  const res: _Response = await axios.post(url, formData);
+  const url = `${process.env.NEXT_PUBLIC_KLAVIYO_COMPONENTS_URL}/back-in-stock/subscribe`;
+  const klaviyoPayload = {
+    a: payload.a,
+    email: payload.email,
+    variant: payload.variant,
+    platform: payload.platform,
+  };
+  const res: _Response = await axios.post(url, klaviyoPayload);
   return res.data;
 };

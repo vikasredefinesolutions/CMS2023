@@ -37,6 +37,9 @@ interface _Store {
   topBodySnippetGTM: string;
   homePageScriptGTM: string;
 
+  //Klaviyo Key
+  klaviyoKey: string;
+
   set: (
     pair: // Store
     | _StoreId
@@ -63,7 +66,8 @@ interface _Store {
       | _TopHeaderGTMScript
       | _BottomHeaderGTMScript
       | _TopBodySnippetGTM
-      | _HomePageGTMScript,
+      | _HomePageGTMScript
+      | _KlaviyoKey,
   ) => void;
 }
 
@@ -99,11 +103,16 @@ export let _globalStore: _Store = {
       dcTagTextArea: '',
     },
   },
+
   //GTM scripts
   topHeaderScriptGTM: '',
   bottomHeaderScriptGTM: '',
   topBodySnippetGTM: '',
   homePageScriptGTM: '',
+
+  //Klaviyo key
+  klaviyoKey: '',
+
   set: (pair) => {
     _globalStore = { ..._globalStore, [pair.key]: pair.value };
   },
@@ -197,6 +206,7 @@ interface _GoogleTags {
     };
   };
 }
+
 interface _TopHeaderGTMScript {
   key: 'topHeaderScriptGTM';
   value: string | null;
@@ -214,5 +224,10 @@ interface _TopBodySnippetGTM {
 
 interface _HomePageGTMScript {
   key: 'homePageScriptGTM';
+  value: string | null;
+}
+
+interface _KlaviyoKey {
+  key: 'klaviyoKey';
   value: string | null;
 }

@@ -21,7 +21,6 @@ import AvailableColors from './AvailableColors';
 import DiscountPricing from './DiscountPricing';
 import ProductFeatures from './ProductFeatures';
 import { _ProductInfoProps } from './productDetailsComponents';
-
 const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
   const { setShowLoader } = useActions_v2();
   const [showExtra, setShowExtra] = useState(false);
@@ -37,6 +36,7 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
   const { price, inventory } = useTypedSelector_v2(
     (state) => state.product.product,
   );
+  const { klaviyokey } = useTypedSelector_v2((state) => state.sbStore);
 
   const router = useRouter();
 
@@ -70,7 +70,7 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
     product.description.length >=
     __pagesConstant._productDetails.descriptionLength;
   const initialValue = 0;
-  const inv = inventory?.inventory.reduce(
+  const totalInventoryCount = inventory?.inventory.reduce(
     (accumulator, currentValue) => accumulator + currentValue.inventory,
     initialValue,
   );
@@ -80,18 +80,15 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
   const [email, setEmail] = useState<string>('');
 
   const sendEmailHandler = async (values: { email: string }) => {
-    console.log('I am here');
-    await Klaviyo_BackInStock({
+    const response = await Klaviyo_BackInStock({
       email: values.email,
-      a: __pagesConstant._document.klaviyoKey,
-      variant: '' + attributeOptionId,
+      variant: `${attributeOptionId}`,
       platform: 'api',
-    }).then((res) => {
-      console.log(res, 'res');
-      if (res.success) {
-        setEmail('SENT');
-      }
+      a: klaviyokey || '',
     });
+    if (response.success) {
+      setEmail('SENT');
+    }
   };
   const validationSchema = Yup.object().shape({
     email: Yup.string().email().required(__ValidationText.email.required),
@@ -311,7 +308,7 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
         </div>
       </div> */}
 
-      {inv && inv > 0 ? (
+      {totalInventoryCount && totalInventoryCount > 0 ? (
         <form className='mt-[24px]'>
           <div className='m-3 mt-6'>
             <button

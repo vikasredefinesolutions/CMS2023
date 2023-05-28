@@ -1,4 +1,3 @@
-import { __pagesConstant } from '@constants/pages.constant';
 import { __pagesText } from '@constants/pages.text';
 import { __ValidationText } from '@constants/validation.text';
 import { Klaviyo_BackInStock } from '@services/klaviyo.service';
@@ -39,8 +38,9 @@ const SelectOrInput: React.FC<_SelectOrInputProps> = ({
   const { multipleQuantity } = useTypedSelector_v2(
     (state) => state.product.selected.color,
   );
-
+  const { klaviyokey } = useTypedSelector_v2((state) => state.sbStore);
   const customerId = useTypedSelector_v2((state) => state.user.id);
+
   const [email, setEmail] = useState<string>('');
   const [inputOrSelect, setInputOrSelect] = useState<{
     type: 'input' | 'select' | 'saved';
@@ -125,16 +125,15 @@ const SelectOrInput: React.FC<_SelectOrInputProps> = ({
   };
 
   const sendEmailHandler = async (values: { email: string }) => {
-    await Klaviyo_BackInStock({
+    const response = await Klaviyo_BackInStock({
       email: values.email,
-      a: __pagesConstant._document.klaviyoKey,
-      variant: '' + attributeOptionId,
+      variant: `${attributeOptionId}`,
       platform: 'api',
-    }).then((res) => {
-      if (res.success) {
-        setEmail('SENT');
-      }
+      a: klaviyokey || '',
     });
+    if (response.success) {
+      setEmail('SENT');
+    }
   };
 
   useEffect(() => {

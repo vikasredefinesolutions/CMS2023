@@ -40,6 +40,7 @@ import {
   _templateIds,
 } from '@helpers/app.extras';
 import { FetchSbStoreConfiguration } from '@services/app.service';
+import { fetchThirdpartyservice } from '@services/thirdparty.service';
 import { GetStoreCustomer } from '@services/user.service';
 import Redefine_Layout from '@templates//TemplateComponents/Redefine_Layout';
 import AuthGuard from 'Guard/AuthGuard';
@@ -75,6 +76,7 @@ const RedefineCustomApp = ({
     updateWishListData,
     store_storeDetails,
     sbStore_sbStoreDetails,
+    setKlaviyoKey,
   } = useActions_v2();
 
   const { updatePageType, setShowLoader } = useActions_v2();
@@ -145,6 +147,18 @@ const RedefineCustomApp = ({
     router.events.on('routeChangeError', handleComplete);
   }, [router]);
 
+  const getKlaviyoKey = async (storeId: number) => {
+    try {
+      const response = await fetchThirdpartyservice({
+        storeId,
+      });
+      if (response?.length && response[0]?.key)
+        setKlaviyoKey({ klaviyoKey: response[0].key });
+    } catch (error) {
+      console.log('Klaviyo key not available', error);
+    }
+  };
+
   useEffect(() => {
     const cookies = extractCookies('', 'browserCookie');
     const tempCustomerId = extractCookies(
@@ -168,6 +182,8 @@ const RedefineCustomApp = ({
         store: store,
       });
     }
+
+    if (store && store?.storeId) getKlaviyoKey(store.storeId);
 
     if (sbStore && store?.storeTypeId == storeBuilderTypeId) {
       sbStore_sbStoreDetails({
@@ -394,6 +410,7 @@ RedefineCustomApp.getInitialProps = async (
       adminConfigs: propsToStoreAndGetFromCookies.adminConfig,
       customScripts: serverConfigs.customScripts,
       gTags: serverConfigs.gTags,
+      klaviyoKey: serverConfigs.klaviyoKey,
     });
   }
 

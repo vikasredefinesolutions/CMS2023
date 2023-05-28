@@ -156,7 +156,14 @@ class MyDocument extends Document {
           )}
           <Main />
           <NextScript />
-
+          {_globalStore.klaviyoKey && (
+            <script
+              type='application/javascript'
+              async
+              src={`${process.env.NEXT_PUBLIC_KLAVIYO}?company_id=${_globalStore.klaviyoKey}`}
+              crossOrigin='anonymous'
+            ></script>
+          )}
           {_globalStore.customFooterScript && (
             <>
               <script

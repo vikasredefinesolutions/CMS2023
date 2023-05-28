@@ -40,6 +40,7 @@ export interface _FetchStoreConfigurations {
   created_at: null | string;
   updated_at: null | string;
   config_value: null | string;
+  klaviyoKey: null | string;
 }
 export type StoreConfigurationConfigs =
   | 'footer'

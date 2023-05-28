@@ -10,6 +10,7 @@ import {
   FetchCompanyConfiguration,
   getAllConfigurations,
 } from '@services/app.service';
+import { fetchThirdpartyservice } from '@services/thirdparty.service';
 import { IncomingMessage, ServerResponse } from 'http';
 import { _globalStore } from 'store.global';
 import { extractCookies, nextJsSetCookie } from './common.helper';
@@ -275,11 +276,13 @@ export const passPropsToDocumentFile = ({
   customScripts,
   gTags,
   adminConfigs,
+  klaviyoKey,
 }: {
   customScripts: null | _CustomScriptConfigValue;
   gTags: null | _GoogleTagsConfigValue;
   store: _PropsToStoreAndGetFromCookies['store'];
   adminConfigs: _PropsToStoreAndGetFromCookies['adminConfig'];
+  klaviyoKey: string | null;
 }): void => {
   if (customScripts) {
     _globalStore.set({
@@ -353,6 +356,13 @@ export const passPropsToDocumentFile = ({
       value: adminConfigs.companyId,
     });
   }
+
+  if (klaviyoKey) {
+    _globalStore.set({
+      key: 'klaviyoKey',
+      value: klaviyoKey,
+    });
+  }
 };
 
 export const configsToCallEveryTime = async (
@@ -360,9 +370,11 @@ export const configsToCallEveryTime = async (
 ): Promise<{
   customScripts: null | _CustomScriptConfigValue;
   gTags: null | _GoogleTagsConfigValue;
+  klaviyoKey: string | null;
 }> => {
   let customScripts: null | _CustomScriptConfigValue = null;
   let gTags: null | _GoogleTagsConfigValue = null;
+  let klaviyoKey: string | null = null;
 
   await getAllConfigurations({
     storeId: storeId,
@@ -384,9 +396,16 @@ export const configsToCallEveryTime = async (
       );
     });
 
+  await fetchThirdpartyservice({ storeId: storeId })
+    .then((resposne) => {
+      if (resposne?.length && resposne[0]?.key) klaviyoKey = resposne[0].key;
+    })
+    .catch(() => console.log('Klaviyo key not available'));
+
   return {
     customScripts: customScripts,
     gTags: gTags,
+    klaviyoKey,
   };
 };
 export const getTemplateIDs = () => {};

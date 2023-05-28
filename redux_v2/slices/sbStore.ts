@@ -31,6 +31,7 @@ export interface _SbStore {
   location: null;
   ipAddress: null;
   macAddress: null;
+  klaviyokey: string | null;
 }
 // Define the initial state using that type
 const initialState: _SbStore = {
@@ -62,6 +63,7 @@ const initialState: _SbStore = {
   location: null,
   ipAddress: null,
   macAddress: null,
+  klaviyokey: '',
 };
 
 export const sbStoreSlice = createSlice({
@@ -106,6 +108,12 @@ export const sbStoreSlice = createSlice({
       state.location = sbStore.location;
       state.ipAddress = sbStore.ipAddress;
       state.macAddress = sbStore.macAddress;
+    },
+    setKlaviyoKey: (
+      state,
+      action: { payload: { klaviyoKey: string | null } },
+    ) => {
+      state.klaviyokey = action.payload.klaviyoKey || null;
     },
   },
 });

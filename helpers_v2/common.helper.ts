@@ -38,6 +38,8 @@ declare global {
   interface Window {
     dataLayer: any;
     openWidget: any;
+    _learnq: any;
+    __klKey: string;
   }
 }
 
@@ -706,6 +708,13 @@ _learnq.push(${JSON.stringify(data)});
   );
   newScript.appendChild(inlineScript);
   document.head.appendChild(newScript);
+};
+
+export const KlaviyoScriptHelper = (data: any) => {
+  const __klaviyoKey = window?.__klKey || null;
+  if (!__klaviyoKey) return;
+  const _learnq = window?._learnq || [];
+  _learnq.push(data);
 };
 
 export const getPrice = ({
