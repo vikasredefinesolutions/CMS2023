@@ -1,6 +1,6 @@
 import { CallAPI_v2 } from '@helpers/api.helper';
+import { SendAsync } from '@utils/axios.util';
 // import config from 'api.config';
-import axios from 'axios';
 
 export type _KlaviyoAPIs = 'Klaviyo_PlaceOrder' | 'Klaviyo_BackInStock';
 
@@ -31,24 +31,21 @@ interface _BackInStock {
   email: string;
   variant: string;
   platform: string;
-}
-
-interface _BackInStockResponse {
-  email: string;
-  success: boolean;
-}
-interface _Response {
-  data: _BackInStockResponse;
+  storeId: number;
 }
 
 export const Klaviyo_BackInStock = async (payload: _BackInStock) => {
-  const url = `${process.env.NEXT_PUBLIC_KLAVIYO_COMPONENTS_URL}/back-in-stock/subscribe`;
+  const url = `/Klaviyo/KlaviyoBackInStock.json`;
   const klaviyoPayload = {
-    a: payload.a,
-    email: payload.email,
-    variant: payload.variant,
-    platform: payload.platform,
+    storeId: payload.storeId,
+    klaviyoApiPublicKey: window.__klKey,
+    emailId: payload.email,
+    attributeOptionsID: payload.variant,
   };
-  const res: _Response = await axios.post(url, klaviyoPayload);
-  return res.data;
+  const res = await SendAsync<any>({
+    url: url,
+    method: 'POST',
+    data: klaviyoPayload,
+  });
+  return res;
 };

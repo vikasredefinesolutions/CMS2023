@@ -37,6 +37,7 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
     (state) => state.product.product,
   );
   const { klaviyokey } = useTypedSelector_v2((state) => state.sbStore);
+  const { id: storeId } = useTypedSelector_v2((state) => state.store);
 
   const router = useRouter();
 
@@ -85,8 +86,9 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
       variant: `${attributeOptionId}`,
       platform: 'api',
       a: klaviyokey || '',
+      storeId: storeId,
     });
-    if (response.success) {
+    if (response) {
       setEmail('SENT');
     }
   };
