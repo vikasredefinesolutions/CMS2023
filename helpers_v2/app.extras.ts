@@ -356,13 +356,10 @@ export const passPropsToDocumentFile = ({
       value: adminConfigs.companyId,
     });
   }
-
-  if (klaviyoKey) {
-    _globalStore.set({
-      key: 'klaviyoKey',
-      value: klaviyoKey,
-    });
-  }
+  _globalStore.set({
+    key: 'klaviyoKey',
+    value: klaviyoKey,
+  });
 };
 
 export const configsToCallEveryTime = async (

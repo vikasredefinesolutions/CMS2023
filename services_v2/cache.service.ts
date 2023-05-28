@@ -11,7 +11,7 @@ export interface _CacheApiServices {
 
 export const ClearBrandCache = async (params: {
   storeid: number;
-  brandid: number;
+  brandid: number | null;
 }): Promise<boolean | null> => {
   const url = `Brand/clearbrandcatch/${params.storeid}/${params.brandid}.json`;
 
@@ -31,7 +31,7 @@ export const ClearBrandCache = async (params: {
 
 export const ClearCategoryCache = async (params: {
   storeid: number;
-  categoryid: number;
+  categoryid: number | null;
 }): Promise<boolean | null> => {
   const url = `Category/clearcategorycatch/${params.storeid}/${params.categoryid}.json`;
 
