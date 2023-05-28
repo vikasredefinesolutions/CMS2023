@@ -82,13 +82,14 @@ const ProductsInfoTabs: React.FC<_props> = (props) => {
           variant='scrollable'
           scrollButtons='auto'
           aria-label='forced scroll tabs example'
+          // onChange={handleChange}
           sx={{
             borderBottom: (theme) => `1px solid ${theme.palette.divider}`,
             marginBottom: '30px',
           }}
           className='tab-container'
         >
-          {featuredProducts &&
+          {/* {featuredProducts &&
             featuredProducts.map((product, index) => {
               return (
                 <Tab
@@ -104,6 +105,36 @@ const ProductsInfoTabs: React.FC<_props> = (props) => {
                   }
                   label={product?.tabName}
                 />
+              );
+            })} */}
+          {featuredProducts &&
+            featuredProducts.map((product, index) => {
+              const activeClass =
+                value === product.index
+                  ? 'text-anchor hover:text-anchor-hover border-[#006CD1] border-b-[2px]'
+                  : 'rounded-sm';
+
+              return (
+                <div
+                  key={product?.index}
+                  className='mr-[2px] md:mr-0 font-[600]'
+                >
+                  <button
+                    onClick={(event) =>
+                      handleChange(
+                        event,
+                        product.index,
+                        product?.footerTabColorName,
+                      )
+                    }
+                    className={
+                      `tab pt-[8px] pb-[8px] pl-[8px] pr-[8px] mr-[4px] block hover:text-anchor focus:outline-none font-[600] border-anchor ` +
+                      activeClass
+                    }
+                  >
+                    {product?.tabName}
+                  </button>
+                </div>
               );
             })}
         </TabList>

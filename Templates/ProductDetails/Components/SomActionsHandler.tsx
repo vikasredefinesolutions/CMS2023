@@ -1,20 +1,20 @@
+import MsgContainer from '@appComponents/modals/msgContainer/MsgContainer';
 import { CG_STORE_CODE, __Cookie } from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
 import { paths } from '@constants/paths.constant';
+import { highLightError } from '@helpers/console.helper';
 import { AddItemsToTheCart } from '@services/cart.service';
 import {
   logoCartItems_Generator,
   singleColor_addToCart_PayloadGenerator,
 } from '@services/product.service.helper';
-import MsgContainer from 'appComponents_v2/modals/msgContainer/MsgContainer';
 import {
   GoogleAnalyticsTrackerForAllStore,
   GoogleAnalyticsTrackerForCG,
-  KlaviyoScriptTag,
+  KlaviyoScriptHelper,
   extractCookies,
   setCookie,
 } from 'helpers_v2/common.helper';
-import { highLightError } from 'helpers_v2/console.helper';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
@@ -79,8 +79,7 @@ const SomActionsHandler: React.FC<_SOMActionHandlerProps> = ({
     return message;
   };
 
-  const addItemToKlaviyo = async (productId: number) => {
-    // const categories = await getCategoriesArr(productId);
+  const addItemToKlaviyo = () => {
     const item = {
       $value: toCheckout.totalPrice,
       AddedItemProductName: product.name,
@@ -93,23 +92,24 @@ const SomActionsHandler: React.FC<_SOMActionHandlerProps> = ({
       AddedItemPrice: toCheckout.price,
       AddedItemQuantity: toCheckout.totalQty,
       ItemNames: [product.name],
-      CheckoutURL: paths.CHECKOUT,
-      Items: {
-        ProductID: product.id,
-        SKU: product.sku,
-        ProductName: product.name,
-        Quantity: toCheckout.totalQty,
-        ItemPrice: toCheckout.price,
-        RowTotal: toCheckout.totalPrice,
-        ProductURL: window.location.href,
-        ImageURL: selected.color.imageUrl,
-        ProductCategories: categoriesArr,
-        ColorName: selected.color.name,
-        Sizes: toCheckout.sizeQtys,
-      },
+      CheckoutURL: `${window.location.origin}${paths.CHECKOUT}`,
+      Items: [
+        {
+          ProductID: product.id,
+          SKU: product.sku,
+          ProductName: product.name,
+          Quantity: toCheckout.totalQty,
+          ItemPrice: toCheckout.price,
+          RowTotal: toCheckout.totalPrice,
+          ProductURL: window.location.href,
+          ImageURL: `${store.mediaBaseUrl}${selected.color.imageUrl}`,
+          ProductCategories: categoriesArr,
+          ColorName: selected.color.name,
+          Sizes: toCheckout.sizeQtys,
+        },
+      ],
     };
-
-    KlaviyoScriptTag(['track', 'Added to Cart', item]);
+    KlaviyoScriptHelper(['track', 'Added to Cart', item]);
   };
 
   const addToCartHandler = async () => {
@@ -201,12 +201,11 @@ const SomActionsHandler: React.FC<_SOMActionHandlerProps> = ({
       storeId,
       payload,
     );
+    addItemToKlaviyo();
 
     try {
       const guestId: number = await AddItemsToTheCart(cartPayload);
       setShowLoader(false);
-
-      await addItemToKlaviyo(selected.productId);
 
       let guest_OR_loggedIN_userID: number = loggedIN_userId
         ? loggedIN_userId

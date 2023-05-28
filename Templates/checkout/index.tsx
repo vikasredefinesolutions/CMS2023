@@ -4,10 +4,13 @@ import { paths } from '@constants/paths.constant';
 import {
   GoogleAnalyticsTrackerForAllStore,
   GoogleAnalyticsTrackerForCG,
+  KlaviyoScriptHelper,
 } from '@helpers/common.helper';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
+import { FetchCategoryByproductId } from '@services/product.service';
 import { useRouter } from 'next/router';
 import { FC, useEffect, useRef } from 'react';
+import uuid from 'react-uuid';
 import CheckoutType1 from './checkoutType1';
 import CheckoutType2 from './checkoutType2';
 import CheckoutType3 from './checkoutType3';
@@ -38,9 +41,62 @@ const CheckoutTemplate: FC<_Props> = ({ templateId }) => {
     discount: cartDiscountDetails,
     isCartLoading,
   } = useTypedSelector_v2((state) => state.cart);
-  const { id: storeId } = useTypedSelector_v2((state) => state.store);
+  const { id: storeId, mediaBaseUrl } = useTypedSelector_v2(
+    (state) => state.store,
+  );
   const { id: customerId } = useTypedSelector_v2((state) => state.user);
   const isCaptured = useRef(false);
+
+  const startCheckoutKalviyo = async (totalPrice: number) => {
+    let allProductCategories: Array<{
+      productId: number;
+      categories: string[];
+    }> = [];
+    if (cartData?.length)
+      await Promise.all(
+        cartData?.map(async (item) => {
+          const response = await FetchCategoryByproductId(
+            item.productId,
+            storeId,
+          );
+          if (response && response[0].name) {
+            const catNames = response[0].name.split(' > ');
+            allProductCategories.push({
+              productId: item.productId,
+              categories: catNames,
+            });
+          }
+        }),
+      );
+
+    const itemsName = cartData?.map((item) => item.productName);
+    const uniqueCategories = new Set(
+      allProductCategories?.map((prdct) => prdct.categories)?.flat(),
+    );
+    const item = {
+      $event_id: uuid(),
+      $value: totalPrice,
+      ItemNames: itemsName,
+      CheckoutURL: window.location.href,
+      Categories: Array.from(uniqueCategories),
+      Items: cartData?.map((prdct) => ({
+        ProductID: prdct.productId,
+        SKU: prdct.sku,
+        ProductName: prdct.productName,
+        Quantity: prdct.totalQty,
+        ItemPrice: prdct.totalPrice,
+        RowTotal: prdct.totalPrice,
+        ProductURL: `${window.location.origin}/${prdct.seName}.html`,
+        ImageURL: `${mediaBaseUrl}${prdct.colorImage}`,
+        ProductCategories:
+          allProductCategories?.find(
+            (cate) => cate.productId === prdct.productId,
+          )?.categories || [],
+      })),
+    };
+
+    KlaviyoScriptHelper(['track', 'Started Checkout', item]);
+  };
 
   useEffect(() => {
     let totalPrice = 0;
@@ -75,6 +131,8 @@ const CheckoutTemplate: FC<_Props> = ({ templateId }) => {
         storeId,
         payload,
       );
+
+      startCheckoutKalviyo(totalPrice);
     }
   }, [cartData, storeId]);
 
