@@ -38,7 +38,7 @@ const RcDate: React.FC<_props> = ({ value, setFieldValue }) => {
                 error={false}
                 onClick={() => setOpen(true)}
                 inputProps={{ ...params.inputProps, readOnly: true }}
-                disabled={true}
+                // disabled={true}
               />
             )}
           />
