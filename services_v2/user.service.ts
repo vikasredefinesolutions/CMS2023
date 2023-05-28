@@ -37,7 +37,8 @@ export type _UserAPIs_V2 =
   | 'CheckIfEmailIsAlreadyRegistered'
   | 'ResetPassword'
   | 'GetCityStateCountryWithZip'
-  | 'FetchUserOrderIds';
+  | 'FetchUserOrderIds'
+  | 'UpdatePaymentLater';
 
 export interface _UserServices_V2 {
   service: 'user';
@@ -113,7 +114,7 @@ export const OrderedBillingDetails = async (
   return response;
 };
 
-const OrderedProductDetails = async (
+export const OrderedProductDetails = async (
   orderId: number,
 ): Promise<_MyAcc_OrderProductDetails[] | null> => {
   const orderProductDetailsURL = `Order/GetOrderedShoppingCartItemsDetail/${orderId}.json`;
@@ -466,6 +467,55 @@ export const getLocationWithZipCode = async (
     request: {
       url: url,
       method: 'GET',
+    },
+  });
+
+  return response;
+};
+
+export interface OrderModelPayment {
+  id: number;
+  billingEqualsShipping: boolean;
+  billingEmail: string;
+  billingFirstName: string;
+  billingLastName: string;
+  billingCompany: string;
+  billingAddress1: string;
+  billingAddress2: string;
+  billingSuite: string;
+  billingCity: string;
+  billingState: string;
+  billingZip: string;
+  billingCountry: string;
+  billingPhone: string;
+  paymentMethod: string;
+  paymentGateway: string;
+  isCreditLimit: boolean;
+  cardName: string;
+  cardType: string;
+  cardNumber: string;
+  cardVarificationCode: string;
+  cardExpirationMonth: string;
+  cardExpirationYear: string;
+  poNumber: string;
+  storeID: number;
+  email: string;
+}
+
+export const UpdatePaymentLater = async (payload: {
+  orderModelPayment: OrderModelPayment;
+}) => {
+  const url = `Order/updateorderpayment.json`;
+
+  const response = await CallAPI_v2<any>({
+    name: {
+      service: 'user',
+      api: 'UpdatePaymentLater',
+    },
+    request: {
+      url: url,
+      method: 'POST',
+      data: payload,
     },
   });
 

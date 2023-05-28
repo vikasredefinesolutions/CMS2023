@@ -8,6 +8,7 @@ export const defaultRoute = '/';
 export const paths = {
   HOME: defaultRoute,
   PRODUCT: '/product',
+  DISCOUNTED: '/discontinued.html',
   SPECIAL_REQUEST: '/special_request',
   PRODUCT_LISTING: '/product-list',
   NOT_FOUND: '/not-found',

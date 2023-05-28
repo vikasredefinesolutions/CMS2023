@@ -115,7 +115,7 @@ const Header_Type4: NextPage<_HeaderProps> = ({
                           <LoggedInMenu />
                           <MyCartIcon />
                           <div className="pl-[15px] order-1 sm:order-4">
-                                                <a href="javascript:void(0);">
+                                                <a href="/patagonia-sustainability-initiatives.html">
                                                     <img src="/assets/images/di/for-the-planet.png" alt="" />
                                                 </a>
                                             </div>

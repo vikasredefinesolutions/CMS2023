@@ -1,15 +1,15 @@
 import {
   checkoutPages,
-  paymentMethodCustom as paymentEnum,
   PaymentMethod,
+  paymentMethodCustom as paymentEnum,
   UserAddressType,
 } from '@constants/enum';
 import {
+  CG_STORE_CODE,
   __Cookie,
   __Cookie_Expiry,
   __LocalStorage,
   __UserMessages,
-  CG_STORE_CODE,
 } from '@constants/global.constant';
 import { paths } from '@constants/paths.constant';
 
@@ -72,7 +72,6 @@ export interface _shippingMethod {
   price: number;
 }
 [];
-
 const CheckoutController = () => {
   const [endUserNameS, setEndUserName] = useState<string>('');
   const [endUserDisplay, setEndUserDisplay] = useState<boolean>(false);
@@ -96,23 +95,9 @@ const CheckoutController = () => {
   });
   const [allowedBalance, setAllowedBalance] = useState(0);
   const [purchaseOrder, setPurchaseOrder] = useState('');
-  const [shippingAdress, setShippingAdress] = useState<AddressType | null>({
-    firstname: '',
-    lastName: '',
-    email: '',
-    address1: '',
-    address2: '',
-    suite: '',
-    city: '',
-    state: '',
-    postalCode: '',
-    phone: '',
-    fax: '',
-    countryName: '',
-    isDefault: true,
-    companyName: '',
-    countryCode: '',
-  });
+  const [shippingAdress, setShippingAdress] = useState<AddressType | null>(
+    null,
+  );
 
   const [paymentOptions, setPaymentOption] = useState<PaymentOptions | null>(
     null,
@@ -246,29 +231,54 @@ const CheckoutController = () => {
           } else {
             setShowAddAddress(false);
           }
-          customer.customerAddress.map((res) => {
+
+          for (
+            let index = 0;
+            index < customer.customerAddress.length;
+            index++
+          ) {
             if (
-              res.addressType == UserAddressType.SHIPPINGADDRESS &&
-              res.isDefault
+              customer.customerAddress[index].addressType ==
+                UserAddressType.SHIPPINGADDRESS &&
+              customer.customerAddress[index].isDefault
             ) {
-              setShippingAdress(res as AddressType);
+              setShippingAdress(customer.customerAddress[index] as AddressType);
+              useShippingAddress &&
+                setBillingAdress(customer.customerAddress[index]);
+              break;
             } else if (
-              res.addressType == UserAddressType.BILLINGADDRESS &&
-              res.isDefault
+              customer.customerAddress[index].addressType ==
+              UserAddressType.SHIPPINGADDRESS
             ) {
-              setBillingAdress(res as AddressType);
-              billAddress && setBillingAdress(billAddress);
+              setShippingAdress(customer.customerAddress[index] as AddressType);
+              useShippingAddress &&
+                setBillingAdress(customer.customerAddress[index]);
             }
-          });
-          (!shippingAdress || !billingAdress) &&
-            customer.customerAddress.map((res) => {
-              if (res.addressType == UserAddressType.SHIPPINGADDRESS) {
-                setShippingAdress(res as AddressType);
-              } else if (res.addressType == UserAddressType.BILLINGADDRESS) {
-                setBillingAdress(res as AddressType);
-                billAddress && setBillingAdress(billAddress);
+          }
+          if (!useShippingAddress) {
+            for (
+              let index = 0;
+              index < customer.customerAddress.length;
+              index++
+            ) {
+              if (
+                customer.customerAddress[index].addressType ==
+                  UserAddressType.BILLINGADDRESS &&
+                customer.customerAddress[index].isDefault
+              ) {
+                setBillingAdress(
+                  customer.customerAddress[index] as AddressType,
+                );
+                // billAddress && setBillingAdress(billAddress);
+                break;
+              } else {
+                setBillingAdress(
+                  customer.customerAddress[index] as AddressType,
+                );
+                // billAddress && setBillingAdress(billAddress);
               }
-            });
+            }
+          }
         }
       }
     }
@@ -385,7 +395,12 @@ const CheckoutController = () => {
           ).tempCustomerId;
 
           if (tempCustomerId) {
-            updateCartByNewUserId(~~tempCustomerId, res.id);
+            updateCartByNewUserId(~~tempCustomerId, res.id).then(() => {
+              fetchCartDetails({
+                customerId: res.id,
+                isEmployeeLoggedIn: isEmployeeLoggedIn,
+              });
+            });
             deleteCookie(__Cookie.tempCustomerId);
           }
         }
@@ -590,7 +605,7 @@ const CheckoutController = () => {
           if (!useShippingAddress) {
             !billingAdress && setBillingAdress(billingForm.values);
           } else {
-            setBillAddress(shippingForm.values);
+            // setBillAddress(shippingForm.values);
             setBillingAdress(shippingForm.values);
           }
           addShippingPaymentInfoEventHandle('GoogleAddShippingInfoScript');
@@ -602,7 +617,7 @@ const CheckoutController = () => {
     } else {
       if (shippingAdress && billingAdress && checkPayment()) {
         if (useShippingAddress) {
-          setBillAddress(shippingAdress);
+          // setBillAddress(shippingAdress);
 
           setBillingAdress(shippingAdress);
         }
@@ -619,10 +634,10 @@ const CheckoutController = () => {
       if (storeId && shippingChargeType) {
         const data = await GetShippingmethod({
           shippingMethodModel: {
-            city: shippingAdress?.city,
-            state: shippingAdress?.state,
-            country: shippingAdress?.countryName,
-            zipCode: shippingAdress?.postalCode,
+            city: shippingAdress?.city || '',
+            state: shippingAdress?.state || '',
+            country: shippingAdress?.countryName || '',
+            zipCode: shippingAdress?.postalCode || '',
             customerID: userId,
             storeId: storeId,
             ordertotalwithoutshipppingcharge: totalPrice,
@@ -682,7 +697,7 @@ const CheckoutController = () => {
     return {};
   };
 
-  const getNewShippingCost = (shippingCost: number): number => {
+  const getNewShippingCost = (shippingCost: number = 0): number => {
     if (isEmployeeLoggedIn) {
       return employeeLogin.shippingPrice;
     }
@@ -797,7 +812,7 @@ const CheckoutController = () => {
         orderSubtotal: subTotal,
         orderTax: salesTax,
         orderTotal:
-          totalPrice + getNewShippingCost(selectedShippingMOodel.price),
+          totalPrice + getNewShippingCost(selectedShippingMOodel?.price),
         orderNotes: orderNote,
         couponCode: couponCode || '',
         couponDiscountAmount: discount,
@@ -807,7 +822,7 @@ const CheckoutController = () => {
         endUserName: endUserNameS,
         logoFinalTotal: totalLogoCharges,
         lineFinalTotal: totalLineCharges,
-        orderShippingCosts: getNewShippingCost(selectedShippingMOodel.price),
+        orderShippingCosts: getNewShippingCost(selectedShippingMOodel?.price),
         orderSmallRunFee: cartCharges?.smallRunFeesCharges
           ? cartCharges.smallRunFeesCharges
           : 0,
@@ -840,7 +855,7 @@ const CheckoutController = () => {
             logout_EmployeeLogin();
           }
 
-          router.push(`${paths.THANK_YOU}?orderNumber=${res.id}`);
+          router.push(`/${paths.THANK_YOU}?orderNumber=${res.id}`);
           // window.location.assign(`${paths.THANK_YOU}?orderNumber=${res.id}`);
         }
       } catch (error) {

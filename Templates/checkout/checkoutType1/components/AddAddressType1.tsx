@@ -1,3 +1,4 @@
+import { UserAddressType } from '@constants/enum';
 import {
   AddressFormRefType,
   AddressType,
@@ -14,6 +15,7 @@ const AddAddress = ({
   useShippingAddress,
   isBillingForm,
   billingAddress,
+  setAddressType,
 }: {
   refrence: AddressFormRefType;
   title: string;
@@ -22,6 +24,12 @@ const AddAddress = ({
   useShippingAddress?: boolean;
   isBillingForm: boolean;
   billingAddress?: AddressType | null;
+  setAddressType?: (
+    args:
+      | null
+      | UserAddressType.SHIPPINGADDRESS
+      | UserAddressType.BILLINGADDRESS,
+  ) => void;
 }) => {
   const {
     handleBlur,
@@ -37,7 +45,7 @@ const AddAddress = ({
   const customer = useTypedSelector_v2((state) => {
     return state.user.customer;
   });
-
+  const userId = useTypedSelector_v2((state) => state.user.id);
   const [country, setCountry] = useState<
     {
       id: number;
@@ -106,19 +114,23 @@ const AddAddress = ({
               <div className='input_checkbox'>
                 <input
                   type='checkbox'
-                  id='UseShippingAddress'
+                  id='UseShippingAddress2'
                   name='UseShippingAddress'
                   className='checkbox'
                   data-modal-toggle='billingaddressModal'
-                  onChange={(e) =>
+                  onChange={(e) => {
                     setShippingAddress &&
-                    !billingAddress &&
-                    setShippingAddress(e.target.checked)
-                  }
+                      !billingAddress &&
+                      setShippingAddress(e.target.checked);
+                    userId &&
+                      !e.target.checked &&
+                      setAddressType &&
+                      setAddressType(UserAddressType.BILLINGADDRESS);
+                  }}
                   checked={useShippingAddress}
-                />
+                />{' '}
               </div>
-              <label htmlFor='UseShippingAddress' className='ml-2'>
+              <label htmlFor='UseShippingAddress2' className='ml-2'>
                 Use Shipping Address
               </label>
             </div>

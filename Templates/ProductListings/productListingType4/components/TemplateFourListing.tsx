@@ -57,17 +57,19 @@ const TemplateFourListing = ({
               href={`${origin}/${product.sename}.html`}
               className='relative'
             >
-              <a style={{ display: "block"}}>
+              <a style={{ display: 'block' }}>
                 <NxtImage
-                  src={currentProduct?.imageName ? currentProduct?.imageName : ''}
+                  src={
+                    currentProduct?.imageName ? currentProduct?.imageName : ''
+                  }
                   alt=''
                   className='w-auto h-auto m-auto max-h-full'
                   key={currentProduct?.id}
                 />
               </a>
             </Link>
-            {product?.productTagViewModel?.length !== 0 ? (
-              <div className='absolute right-[10px] top-[10px] h-8 flex gap-1 tanish'>
+            {/* {product?.productTagViewModel?.length !== 0 ? (
+              <div className='absolute right-[10px] top-[10px] tanish'>
                 <div className='h-8'>
                   <img
                     src={`${mediaBaseUrl}${product?.productTagViewModel[0]?.imagename}`}
@@ -75,12 +77,27 @@ const TemplateFourListing = ({
                   ></img>
                 </div>
               </div>
-            ) : null}
+            ) : null} */}
+            {product?.productTagViewModel?.map((tagsdetails) => {
+              console.log(tagsdetails);
+              return (
+                <div
+                  className={`${tagsdetails.tagPosition} h-8 flex gap-1 absolute`}
+                >
+                  <div className='h-8'>
+                    <img
+                      src={`${mediaBaseUrl}${tagsdetails.imagename}`}
+                      className='max-h-full inline-block'
+                    ></img>
+                  </div>
+                </div>
+              );
+            })}
           </div>
           <div className='mt-[20px] relative md:px-[30px] px-[15px]'>
-            {product?.isBrandOnline ? (
+            {product?.isonlinebrand ? (
               <div className='mb-[10px] text-sm'>
-                <span className='w-[10px] h-[10px] bg-lime-500 inline-block rounded-full mr-1'></span>
+                <span className='w-[10px] h-[10px] bg-lime-500 inline-block rounded-full mr-1'></span>{' '}
                 Available Online
               </div>
             ) : null}

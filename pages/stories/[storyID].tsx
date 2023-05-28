@@ -1,3 +1,4 @@
+import SeoHead from '@appComponents/reUsable/SeoHead';
 import { _defaultTemplates } from '@configs/template.config';
 import { __Error, __pageTypeConstant } from '@constants/global.constant';
 import { __SuccessErrorText } from '@constants/successError.text';
@@ -86,22 +87,28 @@ const Story: React.FC<
 
   if (props.data.pageType === __pageTypeConstant.stories) {
     return (
-      <StoryCategoryTemplate
-        list={props.data.list || []}
-        id={_defaultTemplates.storyCategory}
-      />
+      <>
+        <SeoHead title={'Stories'} keywords={''} description={''} />
+        <StoryCategoryTemplate
+          list={props.data.list || []}
+          id={_defaultTemplates.storyCategory}
+        />
+      </>
     );
   }
 
   if (props.data.pageType === __pageTypeConstant.blog) {
     return (
-      <StoryDetailsTemplate
-        list={props.data.list || []}
-        id={_defaultTemplates.storyDetails}
-        banner={props.data.banner || []}
-        story={props.data.story}
-        page={props.data.page}
-      />
+      <>
+        <SeoHead title={'Story'} keywords={''} description={''} />
+        <StoryDetailsTemplate
+          list={props.data.list || []}
+          id={_defaultTemplates.storyDetails}
+          banner={props.data.banner || []}
+          story={props.data.story}
+          page={props.data.page}
+        />
+      </>
     );
   }
 

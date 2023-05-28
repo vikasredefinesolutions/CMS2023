@@ -1197,6 +1197,7 @@ export const productSlice = createSlice({
       state.toCheckout.totalPrice = action.payload.totalPrice;
       state.toCheckout.totalQty = action.payload.totalQty;
       state.toCheckout.sizeQtys = action.payload.sizeQtys;
+      state.toCheckout.additionalLogoCharge = action.payload.logototal;
     },
     storeDetails: (
       state,

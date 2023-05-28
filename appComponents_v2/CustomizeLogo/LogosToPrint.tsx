@@ -153,9 +153,17 @@ const LogosToPrint: React.FC<_props> = ({ setShowOrSelect }) => {
               message: __pagesText.cart.successMessage,
               title: 'Success',
             });
+            router.push(paths.CART);
           })
           .catch((err) => {
+            console.log(err);
             setShowLoader(false);
+            let x = '';
+            Object.values(err).forEach((val) => (x = x + val));
+            showModal({
+              message: x,
+              title: 'Failed',
+            });
           });
 
         if (!customerId && res) {
@@ -173,7 +181,6 @@ const LogosToPrint: React.FC<_props> = ({ setShowOrSelect }) => {
     }
 
     // modalHandler(null);
-    router.push(paths.CART);
   };
 
   const actionHandler = (action: 'CONTINUE' | 'CANCEL') => {
@@ -192,7 +199,7 @@ const LogosToPrint: React.FC<_props> = ({ setShowOrSelect }) => {
             <div className='mt-2 w-32'>
               <img
                 className='inline-block'
-                src={`${mediaBaseURL}/${logo.location.image}`}
+                src={`${mediaBaseURL}${logo.location.image}`}
                 alt='No Image'
               />
             </div>

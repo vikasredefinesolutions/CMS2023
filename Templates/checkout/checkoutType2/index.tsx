@@ -52,7 +52,9 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
   const { totalPrice } = GetCartTotals();
 
   useEffect(() => {
-    fetchShipping(totalPrice);
+    if (totalPrice) {
+      fetchShipping(totalPrice);
+    }
   }, [totalPrice, shippingAdress]);
 
   return (

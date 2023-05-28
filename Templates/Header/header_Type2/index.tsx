@@ -53,7 +53,7 @@ const Header_Type2: NextPage<_HeaderProps> = ({
 
   return (
     <div
-      className={`bg-[${headerBgColor}] sticky top-7 z-40  shadow-[0_0px_5px_rgba(0,0,0,0.12)]`}
+      className={`bg-[${headerBgColor}] sticky top-7 z-40  border-b border-y-gray-border`}
       id='mobile_menu_box'
     >
       {/* <NotificationBar /> */}

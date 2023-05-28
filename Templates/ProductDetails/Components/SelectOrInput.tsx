@@ -18,6 +18,7 @@ const SelectOrInput: React.FC<_SelectOrInputProps> = ({
   price,
   defaultQty,
   sizeAttributeOptionId,
+  isSpecialBrand,
 }) => {
   const isEmployeeLoggedIn = useTypedSelector_v2(
     (state) => state.employee.loggedIn,
@@ -27,9 +28,19 @@ const SelectOrInput: React.FC<_SelectOrInputProps> = ({
     (state) => state.product.selected.color,
   );
 
+  const newprice = useTypedSelector_v2(
+    (state) => state.product.toCheckout.price,
+  );
+
+  const discount = useTypedSelector_v2(
+    (state) => state.product.product.discounts,
+  );
+
   const { multipleQuantity } = useTypedSelector_v2(
     (state) => state.product.selected.color,
   );
+
+  const customerId = useTypedSelector_v2((state) => state.user.id);
   const [email, setEmail] = useState<string>('');
   const [inputOrSelect, setInputOrSelect] = useState<{
     type: 'input' | 'select' | 'saved';
@@ -61,7 +72,7 @@ const SelectOrInput: React.FC<_SelectOrInputProps> = ({
         size: size,
         qty:
           Math.ceil(+event.target.value / multipleQuantity) * multipleQuantity,
-        price: price.msrp,
+        price: newprice,
       });
       setInputOrSelect((input) => ({
         ...input,
@@ -75,7 +86,7 @@ const SelectOrInput: React.FC<_SelectOrInputProps> = ({
       attributeOptionId: sizeAttributeOptionId,
       size: size,
       qty: +event.target.value,
-      price: price.msrp,
+      price: newprice,
     });
     setInputOrSelect((input) => ({
       ...input,
@@ -89,7 +100,7 @@ const SelectOrInput: React.FC<_SelectOrInputProps> = ({
         attributeOptionId: sizeAttributeOptionId,
         size: size,
         qty: Math.ceil(value.itemCount),
-        price: price.msrp,
+        price: newprice,
       });
       setInputOrSelect({
         type: 'select',
@@ -103,7 +114,7 @@ const SelectOrInput: React.FC<_SelectOrInputProps> = ({
       attributeOptionId: sizeAttributeOptionId,
       size: size,
       qty: Math.ceil(value.itemCount),
-      price: price.msrp,
+      price: newprice,
     });
 
     setInputOrSelect({
@@ -127,8 +138,20 @@ const SelectOrInput: React.FC<_SelectOrInputProps> = ({
   };
 
   useEffect(() => {
-    updatePrice({ price: price.msrp });
-  }, []);
+    if (discount?.subRows[0].discountPrice) {
+      updatePrice({
+        price: isSpecialBrand
+          ? customerId
+            ? +discount?.subRows[0]?.discountPrice
+            : price.msrp
+          : +discount?.subRows[0]?.discountPrice,
+      });
+    } else {
+      updatePrice({
+        price: price.msrp,
+      });
+    }
+  }, [customerId, discount]);
 
   useEffect(() => {
     if (defaultQty > 0) {

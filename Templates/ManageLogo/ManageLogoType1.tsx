@@ -5,6 +5,7 @@ import { useTypedSelector_v2 } from '@hooks_v2/index';
 import moment from 'moment';
 import { NextPage } from 'next';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { _globalStore } from 'store.global';
 import { _ManageLogoProps } from './managelogo';
 
@@ -14,6 +15,8 @@ const ManageLogoType1: NextPage<_ManageLogoProps> = ({ logoList }) => {
     (state) => state.store.mediaBaseUrl,
   );
   mediaBaseUrl = mediaBaseUrl || clientSideMediaUrl;
+
+  const router = useRouter();
   return (
     <>
       <MyAccountTabs />
@@ -133,21 +136,28 @@ const ManageLogoType1: NextPage<_ManageLogoProps> = ({ logoList }) => {
                             {__pagesText.ManageLogo.Waiting}
                           </Link>
                         ) : (
-                          <div className='text-xs inline-block font-medium border border-green-300 bg-green-100 text-green-600 rounded-md text-center px-2.5 py-1 w-28'>
+                          <div
+                            className='text-xs inline-block font-medium border border-green-300 bg-green-100 text-green-600 rounded-md text-center px-2.5 py-1 w-28'
+                            onClick={() =>
+                              router.push(
+                                `/ManageLogo/CheckLogoApproved?logoId=${logo.logoId}`,
+                              )
+                            }
+                          >
                             {__pagesText.ManageLogo.Approved}
                           </div>
                         )}
                         {logo.status === __pagesText.ManageLogo.Waiting ? (
                           <div className='text-center'></div>
                         ) : (
-                          <>
+                          <div>
                             <div className=''>
                               {__pagesText.ManageLogo.ApprovedDate}
                             </div>
                             <div className=''>
                               {moment(logo.approvedDate).format('MMMM D, YYYY')}
                             </div>
-                          </>
+                          </div>
                         )}
                       </td>
                     </tr>

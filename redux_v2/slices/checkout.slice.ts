@@ -3,29 +3,35 @@ import { createSlice } from '@reduxjs/toolkit';
 
 interface _POPaymentMethod {
   method: 'bulk_payment';
+  valid: boolean;
   poNumber: string;
 }
 
 interface _CCPaymentMethod {
   method: 'individual_cards';
-  ccDetails: {
-    year: number;
+  valid: boolean;
+  data: {
+    name: string;
+    type: string;
+    year: string;
     ccNumber: string;
-    month: number;
+    month: string;
     securityCode: string;
   };
 }
 
 export interface _Checkout_Initials {
-  shippingAddress: CustomerAddress | null;
   billingAddress: CustomerAddress | null;
+  shippingAddress: CustomerAddress | null;
   editAddress: CustomerAddress | null;
   useShippingAddressForBilling: boolean;
   payment: {
     valid: boolean;
-    details: null | _POPaymentMethod | _CCPaymentMethod;
+    creditCard: _CCPaymentMethod['data'];
+    poNumber: string;
+    method: 'CREDIT_CARD' | 'PURCHASE_ORDER';
   };
-
+  orderNotes: '';
   el: {
     shippingPrice: number;
     allowPo: boolean;
@@ -51,9 +57,19 @@ const initialState: _Checkout_Initials = {
   editAddress: null,
   useShippingAddressForBilling: false,
   payment: {
-    valid: false,
-    details: null,
+    valid: true,
+    creditCard: {
+      name: '',
+      type: '',
+      year: '',
+      ccNumber: '',
+      month: '',
+      securityCode: '',
+    },
+    poNumber: '',
+    method: 'CREDIT_CARD',
   },
+  orderNotes: '',
   el: {
     shippingPrice: 0,
     allowPo: false,
@@ -82,20 +98,7 @@ export const checkoutSlice = createSlice({
       {
         payload,
       }: {
-        payload:
-          | 'CLEAN_ALL'
-          | {
-              editAddress: CustomerAddress | 'CLEANUP';
-            }
-          | {
-              shippingAddress: CustomerAddress | 'CLEANUP';
-            }
-          | {
-              useShippingAddressForBilling: true | 'CLEANUP';
-            }
-          | {
-              billingAddress: CustomerAddress | 'CLEANUP';
-            };
+        payload: _Update_CheckoutProps_Actions;
       },
     ) => {
       if (payload === 'CLEAN_ALL') {
@@ -149,35 +152,42 @@ export const checkoutSlice = createSlice({
     update_paymentDetails: (
       state,
       action: {
-        payload: 'CLEANUP' | _POPaymentMethod | _CCPaymentMethod;
+        payload:
+          | 'CLEANUP'
+          | { type: 'PURCHASE_ORDER' | 'CREDIT_CARD'; method: 'CHANGED' }
+          | _POPaymentMethod
+          | _CCPaymentMethod;
       },
     ) => {
       if (action.payload === 'CLEANUP') {
-        state.payment = {
-          valid: false,
-          details: null,
-        };
+        state.payment = JSON.parse(JSON.stringify(initialState.payment));
+        return;
+      }
+
+      if (action.payload.method === 'CHANGED') {
+        state.payment.method = action.payload.type;
+        state.payment.valid = false;
         return;
       }
 
       if (action.payload.method === 'bulk_payment') {
-        state.payment = {
-          valid: true,
-          details: action.payload,
-        };
-
+        state.payment.valid = action.payload.valid;
+        state.payment.poNumber = action.payload.poNumber;
+        state.payment.method = 'PURCHASE_ORDER';
+        state.payment.creditCard = JSON.parse(
+          JSON.stringify(initialState.payment.creditCard),
+        );
         return;
       }
 
       if (action.payload.method === 'individual_cards') {
-        state.payment = {
-          valid: true,
-          details: action.payload,
-        };
+        state.payment.valid = action.payload.valid;
+        state.payment.creditCard = { ...action.payload.data };
+        state.payment.method = 'CREDIT_CARD';
+        state.payment.poNumber = '';
         return;
       }
     },
-
     update_checkoutEmployeeLogin: (
       state,
       { payload }: { payload: _Update_CO_EL_Actions },
@@ -252,4 +262,19 @@ type _Update_CO_EL_Actions =
         value: string;
         label: string;
       };
+    };
+type _Update_CheckoutProps_Actions =
+  | 'CLEAN_ALL'
+  | { type: 'UPDATE_NOTE'; value: string }
+  | {
+      editAddress: CustomerAddress | 'CLEANUP';
+    }
+  | {
+      shippingAddress: CustomerAddress | 'CLEANUP';
+    }
+  | {
+      useShippingAddressForBilling: true | 'CLEANUP';
+    }
+  | {
+      billingAddress: CustomerAddress | 'CLEANUP';
     };

@@ -6,7 +6,7 @@ import { _SetState_Details } from './CT1_EL_Extras';
 
 const _QtyNUnitPriceYupSchema = Yup.object().shape({
   unitPrice: Yup.number().required().min(0),
-  qty: Yup.number().required().min(0),
+  qty: Yup.number().required().min(1),
 });
 
 interface _Props {
@@ -113,7 +113,7 @@ const CT1_EL_SizeQtyPrice: React.FC<_Props> = ({ details, setDetails }) => {
                   value={values.unitPrice}
                   type='number'
                   name='unitPrice'
-                  min={0}
+                  min={1}
                   onChange={(event) => {
                     handleChange(event);
                   }}

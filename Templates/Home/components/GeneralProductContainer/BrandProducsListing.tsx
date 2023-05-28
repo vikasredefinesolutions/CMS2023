@@ -16,6 +16,7 @@ interface _props {
   showButton: string;
   showPrice: string;
   showBrandLogo: string;
+  footerTabing: string;
 }
 interface _carouselProps {
   sliderSettings: {
@@ -39,6 +40,7 @@ const BrandProductListing: React.FC<_props> = (props) => {
     showButton,
     showPrice,
     showBrandLogo,
+    footerTabing,
   } = props;
 
   const Settings = {
@@ -167,6 +169,7 @@ const BrandProductListing: React.FC<_props> = (props) => {
                               showButton={showButton}
                               showPrice={showPrice}
                               showBrandLogo={showBrandLogo}
+                              footerTabing={footerTabing}
                             />
                           </div>
                         ) : (
@@ -179,6 +182,7 @@ const BrandProductListing: React.FC<_props> = (props) => {
                               showButton={showButton}
                               showPrice={showPrice}
                               showBrandLogo={showBrandLogo}
+                              footerTabing={footerTabing}
                             />
                           </div>
                         )}

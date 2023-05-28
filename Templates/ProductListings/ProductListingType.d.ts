@@ -226,7 +226,7 @@ export interface GetProductImageOptionList {
 }
 
 export interface GetlAllProductList {
-  isBrandOnline: boolean;
+  isonlinebrand: boolean;
   brandUrl: string;
   getProductImageOptionList?: GetProductImageOptionList[];
   id?: number;

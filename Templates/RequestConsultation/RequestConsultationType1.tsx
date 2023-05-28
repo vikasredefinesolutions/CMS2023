@@ -24,13 +24,13 @@ const RequestConsultationType1: React.FC<_RequestConsultationProps> = ({
   const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
 
   useEffect(() => {
-    const product = cartItems?.find(
-      (item) => details && item.productId === details.id,
-    );
-    if (product) {
-      setItemInCart(product);
+    if (cartItems?.length && details?.id) {
+      const product = cartItems?.find((item) => item.productId === details.id);
+      if (product) {
+        setItemInCart(product);
+      }
     }
-  }, [cartItems]);
+  }, [cartItems, details?.id]);
 
   return (
     <>

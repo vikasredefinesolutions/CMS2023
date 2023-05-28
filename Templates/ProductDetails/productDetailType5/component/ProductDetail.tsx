@@ -1,3 +1,4 @@
+// import ProductImg from '@templates/ProductDetails/productDetailType4/component/ProductImg';
 import FreeBannerTemplate5_Type2 from './FreeBannerTemplate5_Type2';
 import ProductDescription from './ProductDescription';
 import { _ProductDetailsProps } from './productDetailsComponents';

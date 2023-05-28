@@ -1,8 +1,16 @@
+import AddOTFItemNo from '@appComponents/modals/addOtfItem';
 import { __pagesText } from '@constants/pages.text';
 import { paths } from '@constants/paths.constant';
+import { useTypedSelector_v2 } from '@hooks_v2/index';
 import Link from 'next/link';
+import { useState } from 'react';
 
 const EmptyCart = () => {
+  const [showOTF, setShowOTF] = useState<'OTF' | null>(null);
+  const isEmployeeLoggedIn = useTypedSelector_v2(
+    (state) => !!state.employee.empId,
+  );
+
   return (
     <div className=''>
       <section className='container mx-auto text-center'>
@@ -22,8 +30,18 @@ const EmptyCart = () => {
               </a>
             </Link>
           </div>
+          {isEmployeeLoggedIn && (
+            <div className='mt-[20px]'>
+              <div onClick={() => setShowOTF('OTF')}>
+                <span className='btn btn-md btn-secondary'>ADD OTF ITEMS</span>
+              </div>
+            </div>
+          )}
         </div>
       </section>
+      {showOTF === 'OTF' && (
+        <AddOTFItemNo closeModal={() => setShowOTF(null)} />
+      )}
     </div>
   );
 };

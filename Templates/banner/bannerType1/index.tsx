@@ -41,7 +41,7 @@ const BannerType1: React.FC<_BannerComponentProps> = ({
                     <Link
                       href={`${
                         banner[0].customSEName
-                          ? `${banner[0].customSEName}.html`
+                          ? `/${banner[0].customSEName}.html`
                           : `javascript:void(0);`
                       }`}
                     >

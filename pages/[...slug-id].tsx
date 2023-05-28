@@ -45,13 +45,12 @@ export type _Slug_Props =
 
 const SlugSearch: NextPage<_Slug_Props, _Slug_Props> = (props) => {
   const { updatePageType } = useActions_v2();
-
   useEffect(() => {
     if ('metaData' in props) {
       updatePageType(props.metaData);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [props]);
 
   if ('error' in props) {
     return <>{props.error}</>;
@@ -146,3 +145,4 @@ const SlugSearch: NextPage<_Slug_Props, _Slug_Props> = (props) => {
 
 export default SlugSearch;
 export { getServerSideProps };
+

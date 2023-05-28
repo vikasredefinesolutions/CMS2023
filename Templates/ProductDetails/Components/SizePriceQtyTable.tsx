@@ -2,10 +2,11 @@ import { __pagesText } from '@constants/pages.text';
 import Price from 'appComponents_v2/reUsable/Price';
 import { useTypedSelector_v2 } from 'hooks_v2';
 import React from 'react';
-import { _SizePriceQtyTableProps } from './productDetailsComponents';
 import SelectOrInput from './SelectOrInput';
+import { _SizePriceQtyTableProps } from './productDetailsComponents';
 const SizePriceQtyTable: React.FC<_SizePriceQtyTableProps> = ({
   editDetails,
+  isSpecialBrand,
 }) => {
   const { price, inventory } = useTypedSelector_v2(
     (state) => state.product.product,
@@ -84,6 +85,7 @@ const SizePriceQtyTable: React.FC<_SizePriceQtyTableProps> = ({
                         price ? price : { msrp: 0, salePrice: 0, ourCost: 0 }
                       }
                       defaultQty={defaultQty}
+                      isSpecialBrand={isSpecialBrand}
                     />
                   </tr>
                 );

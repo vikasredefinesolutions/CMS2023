@@ -12,9 +12,9 @@ import { getWishlist } from '@services/wishlist.service';
 import { paths } from 'constants_v2/paths.constant';
 import { Formik } from 'formik';
 import {
-  KlaviyoScriptTag,
   deleteCookie,
   extractCookies,
+  KlaviyoScriptTag,
   setCookie,
 } from 'helpers_v2/common.helper';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
@@ -85,6 +85,10 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
                   customerId: res.id,
                   isEmployeeLoggedIn: false,
                 });
+                if (router.pathname === paths.CART) {
+                  router.reload();
+                }
+
                 deleteCookie(__Cookie.tempCustomerId);
               }
             }

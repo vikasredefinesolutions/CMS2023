@@ -28,6 +28,9 @@ const FeaturedProducts: React.FC<_props> = (props) => {
             customMessage={dataArr?.featuredproducts_custom_message?.value}
             showProductName={dataArr?.featuredproducts_show_product_name?.value}
             showPrice={dataArr?.featuredproducts_show_price?.value}
+            footerTabing={
+              dataArr?.featuredproducts_footer_tabing_display?.value
+            }
             showSplitProducts={
               dataArr?.featuredproducts_show_split_products?.value
             }
@@ -40,6 +43,9 @@ const FeaturedProducts: React.FC<_props> = (props) => {
               showBorder={dataArr?.featuredproducts_show_border?.value}
               productsData={dataArr?.featuredproducts?.value[0]?.data}
               customMessage={dataArr?.featuredproducts_custom_message?.value}
+              footerTabing={
+                dataArr?.featuredproducts_footer_tabing_display?.value
+              }
               showProductName={
                 dataArr?.featuredproducts_show_product_name?.value
               }

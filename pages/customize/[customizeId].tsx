@@ -3,17 +3,45 @@ import LogosToPrint from '@appComponents/CustomizeLogo/LogosToPrint';
 import NxtImage from '@appComponents/reUsable/Image';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import { FetchLogoLocationByProductId } from '@services/product.service';
-import { logoPositions } from 'mock_v2/startModal.mock';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
+interface logocharges {
+  isFirstLogoFree: boolean;
+  isLogoSetupCharges: boolean;
+  logoSetupCharges: number;
+  isLinepersonalization: boolean;
+  firstLineCharges: number;
+  secondLineCharges: number;
+  isSmallRun: boolean;
+  smallRunLimit: number;
+  smallRunFeesCharges: number;
+  productId: number;
+}
+
 const CustomizeLogo: NextPage = () => {
   const [firstLogoFree, setFirstLogoFree] = useState<boolean>(true);
   const { sizeQtys } = useTypedSelector_v2((state) => state.product.toCheckout);
+  const availableLocation = useTypedSelector_v2(
+    (state) => state.product.toCheckout.availableOptions,
+  );
   const { name: productName } = useTypedSelector_v2(
     (state) => state.product.product,
   );
+  const [logoCharges, setLogoCharges] = useState<logocharges>({
+    isFirstLogoFree: false,
+    isLogoSetupCharges: false,
+    logoSetupCharges: 0,
+    isLinepersonalization: false,
+    firstLineCharges: 0,
+    secondLineCharges: 0,
+    isSmallRun: false,
+    smallRunLimit: 0,
+    smallRunFeesCharges: 0,
+    productId: 0,
+  });
+
   const router = useRouter();
   const { customizeId } = router?.query ?? 0;
   const { color: productColor } = useTypedSelector_v2(
@@ -27,10 +55,20 @@ const CustomizeLogo: NextPage = () => {
     if (customizeId) {
       FetchLogoLocationByProductId({ productId: +customizeId }).then((res) => {
         if (res) {
-          setFirstLogoFree(res?.isFirstLogoFree);
-          res?.subRow && res?.subRow?.length > 0
-            ? clearLogoUploadHistory(res?.subRow)
-            : clearLogoUploadHistory(logoPositions);
+          setLogoCharges({
+            isFirstLogoFree: res.isFirstLogoFree,
+            isLogoSetupCharges: res.isLogoSetupCharges,
+            logoSetupCharges: res.logoSetupCharges,
+            isLinepersonalization: res.isLinepersonalization,
+            firstLineCharges: res.firstLineCharges,
+            secondLineCharges: res.secondLineCharges,
+            isSmallRun: res.isSmallRun,
+            smallRunLimit: res.smallRunLimit,
+            smallRunFeesCharges: res.smallRunFeesCharges,
+            productId: res.productId,
+          });
+
+          clearLogoUploadHistory(res?.subRow);
         }
       });
     }
@@ -88,14 +126,18 @@ const CustomizeLogo: NextPage = () => {
                   })}
               </div>
             </div>
-            {showOrSelect === 'SELECT' && (
-              <CustomizeLogoSteps
-                setShowOrSelect={setShowOrSelect}
-                firstLogoFree={firstLogoFree}
-              />
-            )}
-            {showOrSelect === 'SHOW' && (
-              <LogosToPrint setShowOrSelect={setShowOrSelect} />
+            {availableLocation && availableLocation?.length > 0 && (
+              <div>
+                {showOrSelect === 'SELECT' && (
+                  <CustomizeLogoSteps
+                    setShowOrSelect={setShowOrSelect}
+                    firstLogoFree={logoCharges.isFirstLogoFree}
+                  />
+                )}
+                {showOrSelect === 'SHOW' && (
+                  <LogosToPrint setShowOrSelect={setShowOrSelect} />
+                )}
+              </div>
             )}
           </div>
         </div>

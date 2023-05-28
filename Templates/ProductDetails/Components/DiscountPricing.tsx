@@ -22,6 +22,9 @@ const DiscountPricing: React.FC<
 
   const customerId = useTypedSelector_v2((state) => state.user.id);
   const { minQty } = useTypedSelector_v2((state) => state.product.toCheckout);
+  const minimumUnitsTotalPrice = useTypedSelector_v2(
+    (state) => state.product.product.discounts?.minimumUnitsTotalPrice,
+  );
 
   const showMinQuantity = minQty > 0;
   const unitUnits = minQty > 1 ? 'units' : 'unit';
@@ -70,9 +73,11 @@ const DiscountPricing: React.FC<
               </span>
               {title === 'selectsizeandquanity'
                 ? ` ${minQty} ${unitUnits} per color `
-                : ` ${minQty} ${unitUnits} per color for $${(
-                    minQty * price.msrp
-                  ).toFixed(2)}`}
+                : ` ${minQty} ${unitUnits} per color for $${
+                    minimumUnitsTotalPrice
+                      ? minimumUnitsTotalPrice
+                      : (minQty * price.msrp).toFixed(2)
+                  }`}
             </a>
           ) : null}
         </div>

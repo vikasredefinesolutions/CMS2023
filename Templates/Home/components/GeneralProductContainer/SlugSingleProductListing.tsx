@@ -14,6 +14,7 @@ interface _props {
   showButton: string;
   showPrice: string;
   showBrandLogo: string;
+  footerTabing: string;
 }
 
 const SlugSingleProductListing: React.FC<_props> = (props) => {
@@ -25,6 +26,7 @@ const SlugSingleProductListing: React.FC<_props> = (props) => {
     showButton,
     showPrice,
     showBrandLogo,
+    footerTabing,
   } = props;
   const store = useTypedSelector_v2((state) => state.store);
 

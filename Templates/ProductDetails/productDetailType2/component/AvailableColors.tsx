@@ -14,13 +14,11 @@ const AvailableColors: React.FC = () => {
   const [showAllColors, setShowAllColors] = useState(false);
   const colors = useTypedSelector_v2((state) => state.product.product.colors);
   const handleChooseColor = (product: _ProductColor) => {
-    if (!product.splitproductList) {
+    if (!product.productSEName || product.productSEName === '') {
       setColor(product);
       return;
     }
-    router.push(
-      product.productSEName ? product.productSEName : 'javascript:void(0);',
-    );
+    router.push(`${product.productSEName}.html`);
   };
   if (colors === null) return <></>;
   const colorsCount = colors.length;

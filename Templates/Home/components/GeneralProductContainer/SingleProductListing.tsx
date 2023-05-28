@@ -19,10 +19,17 @@ interface _props {
   showButton: string;
   showPrice: string;
   showBrandLogo: string;
+  footerTabing: string;
 }
 
 const SingleProductListing: React.FC<_props> = (props) => {
-  const { product, showProductName, showSplitProducts, showPrice } = props;
+  const {
+    product,
+    showProductName,
+    showSplitProducts,
+    showPrice,
+    footerTabing,
+  } = props;
 
   const [mainImageUrl, setMainImageUrl] = useState<string>('');
   const [currentProduct, setCurrentProduct] = useState<

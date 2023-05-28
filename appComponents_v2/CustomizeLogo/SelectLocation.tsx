@@ -23,6 +23,9 @@ const SelectLocation: React.FC<_props> = ({
     (state) => state.product.toCheckout,
   );
 
+  const mediaUrl = useTypedSelector_v2((state) => state.store.mediaBaseUrl);
+
+  let mediaBaseUrl = mediaUrl ? mediaUrl : _globalStore.blobUrl;
   const actionHandler = (action: 'now' | 'later') => {
     if (selectedLocation === null && action !== 'later') {
       setShowError(true);
@@ -77,7 +80,7 @@ const SelectLocation: React.FC<_props> = ({
               <div className='mb-[10px] flex flex-wrap items-center justify-center h-[120px] px-[10px]'>
                 <NxtImage
                   className='max-h-[120px] w-auto mx-auto'
-                  src={`${mediaBaseUrl}/${pos.image}`}
+                  src={`${mediaBaseUrl}${pos.image}`}
                   alt={pos.name}
                 />
               </div>

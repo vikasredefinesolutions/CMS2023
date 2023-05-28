@@ -39,29 +39,14 @@ const CO4_PaymentMethods: React.FC<_Props> = ({ methods }) => {
     });
   };
 
-  const handlePoNumberSubmit = ({ poNumber }: { poNumber: string }) => {
-    update_paymentDetails({
-      method: 'bulk_payment',
-      poNumber: poNumber,
-    });
-  };
+  const handlePoNumberSubmit = ({ poNumber }: { poNumber: string }) => {};
 
   const handleCCSubmit = (inputs: {
     year: '';
     ccNumber: '';
     month: '';
     securityCode: '';
-  }) => {
-    update_paymentDetails({
-      method: 'individual_cards',
-      ccDetails: {
-        year: +inputs.year,
-        month: +inputs.month,
-        ccNumber: inputs.ccNumber,
-        securityCode: inputs.securityCode,
-      },
-    });
-  };
+  }) => {};
 
   return (
     <div>
@@ -114,10 +99,10 @@ const CO4_PaymentMethods: React.FC<_Props> = ({ methods }) => {
                     handleBlur(event);
                     submitForm();
                   }}
+                  max={16}
                   setFieldValue={setFieldValue}
                   onChange={handleChange}
                   error={true}
-                  max={16}
                 />
                 <div className='flex flex-wrap -mx-3 md:gap-y-6'>
                   <div className='md:w-3/12 w-6/12 pl-[12px] pr-[12px]'>

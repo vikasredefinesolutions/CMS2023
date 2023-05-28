@@ -2,7 +2,7 @@ import Price from '@appComponents/reUsable/Price';
 import { __pagesText } from '@constants/pages.text';
 import { _shippingMethod } from '@controllers/checkoutController';
 import SummarryController from '@controllers/summarryController';
-import { isNumberKey } from '@helpers/common.helper';
+import { Form, Formik } from 'formik';
 import { GetCartTotals, useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
 import { FC, useState } from 'react';
 
@@ -16,7 +16,6 @@ const CartSummarryType1: FC<_props> = ({ selectedShippingModel }) => {
   const isEmployeeLoggedIn = useTypedSelector_v2(
     (state) => !!state.employee.empId,
   );
-
   const currentPage = useTypedSelector_v2((state) => state.store.currentPage);
   const { el: employeeLogin } = useTypedSelector_v2((state) => state.checkout);
   const [textOrNumber, setTextOrNumber] = useState<'number' | 'text'>('text');
@@ -58,7 +57,7 @@ const CartSummarryType1: FC<_props> = ({ selectedShippingModel }) => {
       const price =
         textOrNumber === 'text' && employeeLogin.shippingPrice === 0
           ? 'FREE'
-          : employeeLogin.shippingPrice;
+          : employeeLogin.shippingPrice.toFixed(2);
 
       return (
         <div className='border-t border-gray-200 flex items-center justify-between pt-[10px] pb-[10px]'>
@@ -70,29 +69,42 @@ const CartSummarryType1: FC<_props> = ({ selectedShippingModel }) => {
               <span className='absolute left-[0px] top-[12px] text-normal-text flex items-center tracking-normal'>
                 $
               </span>
-              <input
-                className='border border-gray-border text-right focus:border-gray-border rounded w-full px-2 py-2'
-                value={price}
-                onChange={(event) => {
-                  if (isNumberKey(event)) {
-                    if ('FREE'.includes(event.target.value[0])) {
-                      setTextOrNumber('number');
-                      update_checkoutEmployeeLogin({
-                        type: 'SHIPPING_PRICE',
-                        value: 0,
-                      });
-                      return;
-                    }
-
-                    update_checkoutEmployeeLogin({
-                      type: 'SHIPPING_PRICE',
-                      value: +event.target.value,
-                    });
-                  }
+              <Formik
+                initialValues={{ shipping: price }}
+                onSubmit={(values) => {
+                  setTextOrNumber('text');
+                  update_checkoutEmployeeLogin({
+                    type: 'SHIPPING_PRICE',
+                    value: +(+values.shipping).toFixed(2),
+                  });
                 }}
-                onBlur={() => setTextOrNumber('text')}
-                placeholder=''
-              />
+                enableReinitialize
+              >
+                {({ handleChange, values, setFieldValue, submitForm }) => {
+                  return (
+                    <Form>
+                      <input
+                        className='border border-gray-border text-right focus:border-gray-border rounded w-full px-2 py-2'
+                        value={values.shipping}
+                        name={'shipping'}
+                        type={textOrNumber}
+                        onChange={(event) => {
+                          if (textOrNumber === 'text') {
+                            setTextOrNumber('number');
+                          }
+                          if ('FREE'.includes(event.target.value[0])) {
+                            setFieldValue('number', '0');
+                            return;
+                          }
+                          handleChange(event);
+                        }}
+                        onBlur={() => submitForm()}
+                        placeholder=''
+                      />
+                    </Form>
+                  );
+                }}
+              </Formik>
             </div>
           </dd>
         </div>
@@ -249,14 +261,16 @@ const CartSummarryType1: FC<_props> = ({ selectedShippingModel }) => {
             </dt>
           </div>
           {ShippingHTML(selectedShippingModel?.price)}
-          <div className='border-t border-gray-200 flex items-center justify-between pt-[10px]'>
-            <dt className='text-normal-text flex items-center'>
-              <span>{__pagesText.CheckoutPage.orderSummary.tax}</span>
-            </dt>
-            <dd className='text-normal-text'>
-              <Price value={salesTax} />
-            </dd>
-          </div>
+          {currentPage === 'CHECKOUT' && (
+            <div className='border-t border-gray-200 flex items-center justify-between pt-[10px]'>
+              <dt className='text-normal-text flex items-center'>
+                <span>{__pagesText.CheckoutPage.orderSummary.tax}</span>
+              </dt>
+              <dd className='text-normal-text'>
+                <Price value={salesTax} />
+              </dd>
+            </div>
+          )}
         </dl>
       </div>
       <div className='flex justify-between items-center bg-light-gray w-full text-sub-text font-[600] pl-[16px] pr-[16px] pt-[8px] pb-[8px]'>

@@ -101,6 +101,7 @@ export interface _MyAcc_OrderBillingDetails {
   firstName: string;
   lastName: string;
   email: string;
+  companyName: string;
   notes: string;
   giftPackNote: null;
   billingEqualsShipping: boolean;
@@ -268,23 +269,39 @@ export interface _MyAcc_OrderProductDetails {
   colorImage: string;
   productName: string;
   productId: number;
+  isBrandPersonalization: null;
   sku: string;
   attributeOptionId: string;
   attributeOptionValue: string;
   shoppingCartItemsId: number;
   shoppingCartItemDetailsViewModels: ShoppingCartItemDetailsViewModel[];
   shoppingCartLogoPersonViewModels: ShoppingCartLogoPersonViewModel[];
-  shoppingCartLinePersonViewModel: any[];
+  shoppingCartItemsCustomFieldViewModel: ShoppingCartItemsCustomFieldViewModel[];
   totalQty: number;
   totalPrice: number;
-  txtcode: null;
-  seName: null | string;
+  productTotal: number;
+  txtcode: string;
+  itemNote: string;
+  seName: string;
+  totalCustomFieldsCharges: number;
+  discountPrice: number;
   logoTotalPrice: number;
   lineTotalPrice: number;
-  productTotal: number;
-  itemNote: string | null;
-  isBrandPersonalization: boolean;
   displayLineAttributeOptions: DisplayLineAttributeOption[];
+}
+
+export interface ShoppingCartItemsCustomFieldViewModel {
+  id: number;
+  cartItemsId: number;
+  storeProductCustomFieldName: string;
+  storeProductCustomFieldValue: string;
+  customizationCharges: number;
+  isRequired: boolean;
+  isExclusive: boolean;
+  isChargePerCharacter: boolean;
+  quantity: number;
+  subTotal: number;
+  productId: number;
 }
 
 export interface ShoppingCartItemDetailsViewModel {

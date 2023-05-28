@@ -102,11 +102,14 @@ const Br_Alphabets: React.FC<_Props> = ({
                               title={brand.brandName}
                               href={
                                 brand.brandCollectionUrl
-                                  ? `${brand.brandCollectionUrl}.html`
+                                  ? `/${brand.brandCollectionUrl}.html`
                                   : `${brand.seName}.html?v=product-list` || '/'
                               }
                             >
-                              <a className='text-[18px] mb-[4px] text-anchor-hover hover:text-anchor' title={brand.brandName}>
+                              <a
+                                className='text-[18px] mb-[4px] text-anchor-hover hover:text-anchor'
+                                title={brand.brandName}
+                              >
                                 {brand.brandName}
                               </a>
                             </Link>

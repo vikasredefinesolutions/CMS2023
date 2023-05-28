@@ -20,7 +20,9 @@ const CT1_EmployeeLoginCart: React.FC<_Props> = ({ cartItems }) => {
   const { fetchShipping, shippingAdress, selectedShipping, shippingMethod } =
     CheckoutController();
   useEffect(() => {
-    fetchShipping(totalPrice);
+    if (totalPrice) {
+      fetchShipping(totalPrice);
+    }
   }, [totalPrice, shippingAdress]);
   return (
     <>

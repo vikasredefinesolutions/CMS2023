@@ -47,7 +47,9 @@ const CartType3: React.FC<_CartProps> = ({
   const { fetchShipping, shippingAdress, selectedShipping, shippingMethod } =
     CheckoutController();
   useEffect(() => {
-    fetchShipping(totalPrice);
+    if (totalPrice) {
+      fetchShipping(totalPrice);
+    }
   }, [totalPrice, shippingAdress]);
 
   if (showLoaderOrEmptyText === 'loader') {

@@ -209,7 +209,10 @@ const StartOrderModal: React.FC<_startOrderModalProps> = (props) => {
                   </div>
                 </div>
                 {storeCode !== _Store.type4 ? (
-                  <SizePriceQtyTable editDetails={getEditDetails()} />
+                  <SizePriceQtyTable
+                    editDetails={getEditDetails()}
+                    isSpecialBrand={props.product.isSpecialBrand}
+                  />
                 ) : (
                   <Inventory
                     storeCode={storeCode}

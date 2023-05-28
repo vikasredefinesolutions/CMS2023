@@ -1,4 +1,3 @@
-import NxtImage from '@appComponents/reUsable/Image';
 import WishlistButton from '@appComponents/ui/Wishlist';
 import { _OtherImage, _ProductColor } from '@definations/APIs/colors.res';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
@@ -6,6 +5,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import InnerImageZoom from 'react-inner-image-zoom';
 import { _globalStore } from 'store.global';
+import ColorImage from './ColorImage';
 import { _ProductImgProps } from './productDetailsComponents';
 
 let mediaBaseUrl = _globalStore.blobUrl; // for server side rendering
@@ -28,6 +28,11 @@ const ProductImg_Type3: React.FC<_ProductImgProps> = ({ product }) => {
     (state) => state.product?.selected.color,
   );
 
+  const selectedColor2 = useTypedSelector_v2(
+    (state) => state.product?.selected,
+  );
+  console.log(selectedColor2, 'selectedColor2');
+
   const { setColor } = useActions_v2();
   const selectedImage = useTypedSelector_v2(
     (state) => state.product?.selected.image,
@@ -39,7 +44,7 @@ const ProductImg_Type3: React.FC<_ProductImgProps> = ({ product }) => {
   );
   mediaBaseUrl = mediaBaseUrl || clientSideMediaUrl;
   const selectImgHandler = (img: _OtherImage) => {
-    setImage_2(img);
+    setImage_2({ ...img, imageUrl: mediaBaseUrl + img.imageUrl });
   };
 
   useEffect(() => {
@@ -93,7 +98,7 @@ const ProductImg_Type3: React.FC<_ProductImgProps> = ({ product }) => {
           </button>
         </div>
       </div>
-      <div className='col-span-12 hidden md:flex items-center justify-center gap-[5px] sub-image mt-[15px]'>
+      {/* <div className='col-span-12 hidden md:flex items-center justify-center gap-[5px] sub-image mt-[15px]'>
         {selectedColor?.moreImages
           ?.map((img, index) => ({ ...img, id: index }))
           .map((img) => {
@@ -115,6 +120,20 @@ const ProductImg_Type3: React.FC<_ProductImgProps> = ({ product }) => {
                   className='max-h-full'
                   title={img.altTag}
                 />
+              </div>
+            );
+          })}
+      </div> */}
+      <div className='col-span-12 flex flex-wrap justify-center'>
+        {colors &&
+          colors.map((product, index) => {
+            return (
+              <div
+                className='border border-gray-border hover:border-secondary mx-[5px] mb-[10px] p-[1px] w-[70px] max-h-[70px]'
+                onClick={() => setColor(product)}
+                key={product.attributeOptionId}
+              >
+                <ColorImage product={product} />
               </div>
             );
           })}

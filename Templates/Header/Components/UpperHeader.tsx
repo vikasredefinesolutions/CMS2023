@@ -51,6 +51,13 @@ const UpperHeader: React.FC<_props> = (headerContent) => {
                 <div className='flex items-center gap-3'>
                   {employeeDetails.empId ? (
                     <>
+                      <span
+                        onClick={() => router.push(paths.DISCOUNTED)}
+                        className='text-center text-capitalize cursor-pointer text-[#ffffff]'
+                      >
+                        Discontinued
+                      </span>
+                      <span className='p-l-5 p-r-5 text-[#ffffff]'>|</span>
                       <span className='text-center text-capitalize cursor-pointer text-[#ffffff]'>
                         Employee Logged In
                         <button

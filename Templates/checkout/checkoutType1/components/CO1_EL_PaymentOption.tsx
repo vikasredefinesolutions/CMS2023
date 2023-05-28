@@ -21,7 +21,7 @@ const CT1_EL_PaymentOption: React.FC = () => {
             })
           }
         />
-        <div className='font-bold'>Use PAYMENT PENDING</div>
+        <div className='font-bold'>USE PAYMENT PENDING</div>
       </label>
       <label className='w-full flex justify-end cursor-pointer'>
         <input

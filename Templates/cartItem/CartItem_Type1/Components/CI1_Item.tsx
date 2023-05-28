@@ -41,10 +41,10 @@ import {
   FetchProductById,
 } from '@services/product.service';
 import { _CartLinePersonDetailModel } from '@services/product.service.type';
-import Personalizing from '@templates/cartItem/cartItemLayout2.tsx/components/Personalizing';
 import Link from 'next/link';
 import { useState } from 'react';
 import { _globalStore } from 'store.global';
+import Personalizing from './Personalizing';
 
 let mediaBaseUrl = _globalStore.blobUrl; // for server side
 

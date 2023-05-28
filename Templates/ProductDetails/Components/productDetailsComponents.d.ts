@@ -76,6 +76,7 @@ export interface _SelectOrInputProps {
   size: string;
   price: { msrp: number; ourCost: number; salePrice: number };
   defaultQty: number;
+  isSpecialBrand: boolean;
 }
 
 export type _SizePriceQtyTableProps = {
@@ -84,6 +85,7 @@ export type _SizePriceQtyTableProps = {
     qty: number;
     optionValue: string;
   }[];
+  isSpecialBrand: boolean;
 };
 
 export interface _SOMActionHandlerProps {

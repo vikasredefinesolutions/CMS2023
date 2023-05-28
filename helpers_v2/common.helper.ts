@@ -106,6 +106,9 @@ export const isNumberKey = (event: React.ChangeEvent<HTMLInputElement>) => {
     case 'Backspace':
       keyAllowed = true;
       break;
+    case '.':
+      keyAllowed = true;
+      break;
     case 'Enter':
       keyAllowed = true;
       break;

@@ -63,12 +63,14 @@ const TemplateTwoListing = ({
               href={`${origin}/${product.sename}.html`}
               className='relative'
             >
-              <NxtImage
-                src={mainImageUrl}
-                alt=''
-                className='w-auto h-auto m-auto max-h-[400px]'
-                key={currentProduct?.id}
-              />
+              <a>
+                <NxtImage
+                  src={mainImageUrl}
+                  alt=''
+                  className='w-auto h-auto m-auto max-h-[400px]'
+                  key={currentProduct?.id}
+                />
+              </a>
             </Link>
             <div className='absolute left-7 top-7 h-8 flex gap-1'>
               <div className='h-8'>

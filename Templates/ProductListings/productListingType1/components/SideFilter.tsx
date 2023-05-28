@@ -34,7 +34,7 @@ const SideFilter = ({
         onClick={() => setOpenFilters((prev) => !prev)}
         className='lg:hidden border-b border-b-neutral-300 p-2 sticky top-0 left-0 bg-primary flex items-center justify-between text-[#ffffff]'
       >
-        <div className='text-lg !font-semibold text-[#ffffff]'>Filters</div>
+        <div className='text-lg font-semibold text-[#ffffff]'>Filters</div>
         <a href='javascript:void(0);' className='inline-flex'>
           <span className='material-symbols-outlined mt-[5px]'>
             {openFilters ? 'remove' : 'add'}
@@ -84,7 +84,7 @@ const SideFilter = ({
                           id='panel1a-header'
                           className='flex items-center justify-between w-full h-5 group !mb-[10px] min-h-[auto]'
                         >
-                          <div className='text-medium-text !font-semibold text-[#000000] block uppercase'>
+                          <div className='text-medium-text font-semibold text-[#000000] block uppercase'>
                             {filter.label === 'Color' || filter.label === 'Size'
                               ? `Select ${filter.label}`
                               : filter.label}
@@ -372,36 +372,41 @@ const SideFilter = ({
                                         route.includes(option.sename) &&
                                         option.subrows.length > 0 && (
                                           <ul className='ml-[10px]'>
-                                            {option.subrows?.map((subrow) => (
-                                              <li
-                                                key={subrow.id}
-                                                className='w-full py-0 flex items-center'
-                                              >
-                                                {' '}
-                                                <Link
-                                                  key={subrow.name}
-                                                  href={`/${subrow.sename}.html`}
-                                                  className={`flex items-center !text-black !no-underline cursor-pointer ${
-                                                    route === subrow.sename
-                                                      ? '!font-bold'
-                                                      : ''
-                                                  }`}
-                                                >
-                                                  <>
-                                                    <span className='material-icons-outlined'>
-                                                      {' '}
-                                                      chevron_right
-                                                    </span>
-                                                    <span>
-                                                      {capitalizeFirstLetter(
-                                                        subrow.name,
-                                                      )}{' '}
-                                                      ({subrow.productCount})
-                                                    </span>
-                                                  </>
-                                                </Link>
-                                              </li>
-                                            ))}
+                                            {option.subrows?.map((subrow) => {
+                                              if (subrow.productCount > 0) {
+                                                return (
+                                                  <li
+                                                    key={subrow.id}
+                                                    className='w-full py-0 flex items-center'
+                                                  >
+                                                    {' '}
+                                                    <Link
+                                                      key={subrow.name}
+                                                      href={`/${subrow.sename}.html`}
+                                                      className={`flex items-center !text-black !no-underline cursor-pointer ${
+                                                        route === subrow.sename
+                                                          ? '!font-bold'
+                                                          : ''
+                                                      }`}
+                                                    >
+                                                      <>
+                                                        <span className='material-icons-outlined'>
+                                                          {' '}
+                                                          chevron_right
+                                                        </span>
+                                                        <span>
+                                                          {capitalizeFirstLetter(
+                                                            subrow.name,
+                                                          )}{' '}
+                                                          ({subrow.productCount}
+                                                          )
+                                                        </span>
+                                                      </>
+                                                    </Link>
+                                                  </li>
+                                                );
+                                              }
+                                            })}
                                           </ul>
                                         )}
                                     </li>

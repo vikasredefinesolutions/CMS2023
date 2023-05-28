@@ -81,6 +81,7 @@ export interface _SelectedBrands {
   bg?: _Value;
   featuredproducts_tabing_display: _Value;
   featuredproducts_section_title: _Value;
+  featuredproducts_footer_tabing_display: _Value;
   featuredproducts_show_border: _Value;
   featuredproducts_custom_message: _Value;
   featuredproducts_show_product_name: _Value;
@@ -93,6 +94,7 @@ export interface _SelectedBrands {
     value: {
       data: newFetauredItemResponse[];
       displayMethod: string;
+      footerTabColorName: string;
       index: string;
       productCount: number;
       selectedProducts: any;

@@ -1,3 +1,4 @@
+import { SpinnerComponent } from '@appComponents/ui/spinner';
 import { _defaultTemplates } from '@configs/template.config';
 import { paths } from '@constants/paths.constant';
 import {
@@ -14,21 +15,17 @@ const ThankYou: React.FC = () => {
   const router = useRouter();
   const orderId = router.query.orderNumber;
 
-  const [order, setOrderDetails] = useState<
-    | {
-        billing: _MyAcc_OrderBillingDetails | null;
-        product: _MyAcc_OrderProductDetails[] | null;
-      }
-    | null
-    | 'SOMETHING WENT WRONG'
-  >(null);
+  const [order, setOrderDetails] = useState<{
+    billing: _MyAcc_OrderBillingDetails | null;
+    product: _MyAcc_OrderProductDetails[] | null;
+  } | null>(null);
   // const showThankYou = useTypedSelector_v2((state) => state.cart.showThankYou);
 
   useEffect(() => {
     if (orderId && order === null) {
       FetchOrderDetails({ orderId: +orderId })
         .then((details) => setOrderDetails(details))
-        .catch(() => setOrderDetails('SOMETHING WENT WRONG'));
+        .catch(() => router.push(paths.HOME));
       return;
     }
 
@@ -43,16 +40,16 @@ const ThankYou: React.FC = () => {
 
   if (order === null) {
     return (
-      <div id='root'>
-        <div className='loader-wrapper'>
-          <div className='loader'>null</div>
-        </div>
+      <div className=''>
+        <section className='container mx-auto text-center'>
+          <div className='py-[12%]'>
+            <div className='text-2xl-text'>
+              <SpinnerComponent />
+            </div>
+          </div>
+        </section>
       </div>
     );
-  }
-
-  if (order === 'SOMETHING WENT WRONG') {
-    return <>Something went wrong!!!</>;
   }
 
   return (

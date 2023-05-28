@@ -44,12 +44,14 @@ const ProductCompanion: React.FC<_ProductCompanion> = ({
 
           <div className='mt-[10px] relative'>
             <div className='mb-[10px]'>
-              <a
-                href='product-page.html'
-                className='relative text-sub-text font-bold h-[45px] overflow-hidden inline-block'
-              >
-                {product?.companionProductName}
-              </a>
+              <Link href={`/${product?.companionProductSEName}`}>
+                <a
+                  href=''
+                  className='relative text-sub-text font-bold h-[45px] overflow-hidden inline-block'
+                >
+                  {product?.companionProductName}
+                </a>
+              </Link>
             </div>
             <div className='mb-[10px] text-black text-base tracking-wider'>
               <span className='font-semibold'></span>

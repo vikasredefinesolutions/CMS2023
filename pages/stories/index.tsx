@@ -1,13 +1,15 @@
+import SeoHead from '@appComponents/reUsable/SeoHead';
 import { _defaultTemplates } from '@configs/template.config';
 import { __pageTypeConstant } from '@constants/global.constant';
 import { __SuccessErrorText } from '@constants/successError.text';
 import { _Brand } from '@definations/brand';
 import { _Story } from '@definations/story';
+import { useActions_v2 } from '@hooks_v2/index';
 import { FetchBrands } from '@services/header.service';
 import { GetStoryList } from '@services/story.service';
 import StoryList_Template from '@templates/StoryList';
 import { GetServerSideProps, GetServerSidePropsResult } from 'next';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { _globalStore } from 'store.global';
 
 interface _Props {
@@ -17,6 +19,16 @@ interface _Props {
 }
 
 const Stories: React.FC<_Props> = (props) => {
+  const { store_CurrentPage } = useActions_v2();
+
+  useEffect(() => {
+    store_CurrentPage('STORIES');
+
+    return () => {
+      store_CurrentPage(null);
+    };
+  }, []);
+
   if (!props.list || !props.id) {
     return <>{__SuccessErrorText.tryRefreshingThePage}</>;
   }
@@ -26,11 +38,18 @@ const Stories: React.FC<_Props> = (props) => {
   }
 
   return (
-    <StoryList_Template
-      list={props.list}
-      brands={props.brands || []}
-      id={_defaultTemplates.storyList}
-    />
+    <>
+      <SeoHead
+        title='Custom Embroidery | Branded Promotional & Corporate Clothing'
+        description='Corporate Gear offers custom-embroidered corporate apparel, branded clothing, & accessories. Get YOUR logo printed on top-tier brands. Order today!'
+        keywords=''
+      />
+      <StoryList_Template
+        list={props.list}
+        brands={props.brands || []}
+        id={_defaultTemplates.storyList}
+      />
+    </>
   );
 };
 

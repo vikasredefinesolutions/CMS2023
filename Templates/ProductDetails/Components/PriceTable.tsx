@@ -11,7 +11,6 @@ const QtyPriceTable: React.FC<{
 }> = ({ storeCode }) => {
   const { product_storeData } = useActions_v2();
   const { id: storeId } = useTypedSelector_v2((state) => state.store);
-  const customerId = useTypedSelector_v2((state) => state.user.id);
   const selectedColor = useTypedSelector_v2(
     (state) => state.product.selected.color,
   );
@@ -26,6 +25,7 @@ const QtyPriceTable: React.FC<{
       : null;
   };
 
+  const customerId = useTypedSelector_v2((state) => state.user.id);
   useEffect(() => {
     if (storeId && selectedColor) {
       FetchDiscountTablePrices({
@@ -42,7 +42,7 @@ const QtyPriceTable: React.FC<{
         }),
       );
     }
-  }, [selectedColor.attributeOptionId]);
+  }, [selectedColor.attributeOptionId, customerId]);
 
   return (
     <>

@@ -93,7 +93,9 @@ const ChekoutType1: React.FC<_Props> = ({ templateId }) => {
   const { totalPrice } = GetCartTotals();
 
   useEffect(() => {
-    fetchShipping(totalPrice);
+    if (totalPrice) {
+      fetchShipping(totalPrice);
+    }
   }, [totalPrice, shippingAdress]);
 
   return (
@@ -253,35 +255,38 @@ const ChekoutType1: React.FC<_Props> = ({ templateId }) => {
                           <div className='pb-[10px] text-title-text'>
                             {__pagesText.CheckoutPage.BillingInformation}
                           </div>
-                          <div className='text-default-text'>
-                            <div
-                              onClick={() => {
-                                if (userId) {
-                                  setAddressType(
-                                    UserAddressType.BILLINGADDRESS,
-                                  );
-                                } else {
-                                  setShippingAddress(false);
-                                  setShowAddAddress(true);
-                                  setBillingAdress(null);
-                                  setCurrentPage(checkoutPages.address);
-                                }
-                              }}
-                              className='!text-anchor hover:!text-anchor-hover '
-                            >
-                              {__pagesText.CheckoutPage.Edit}
+                          {!useShippingAddress && (
+                            <div className='text-default-text'>
+                              <div
+                                onClick={() => {
+                                  if (userId) {
+                                    setAddressType(
+                                      UserAddressType.BILLINGADDRESS,
+                                    );
+                                  } else {
+                                    setShippingAddress(false);
+                                    setShowAddAddress(true);
+                                    setBillingAdress(null);
+                                    setCurrentPage(checkoutPages.address);
+                                  }
+                                }}
+                                className='!text-anchor hover:!text-anchor-hover '
+                              >
+                                {__pagesText.CheckoutPage.Edit}
+                              </div>
                             </div>
-                          </div>
+                          )}
                         </div>
                         <div className='mb-3 font-semibold text-lg'>
                           <div className='flex items-center'>
                             <div className='input_checkbox'>
                               <input
                                 type='checkbox'
-                                id='UseShippingAddress'
+                                id='UseShippingAddress3'
                                 name='UseShippingAddress'
                                 className='checkbox'
                                 data-modal-toggle='billingaddressModal'
+                                checked={useShippingAddress}
                                 onChange={(e) => {
                                   if (!userId) {
                                     setShippingAddress(false);
@@ -290,14 +295,21 @@ const ChekoutType1: React.FC<_Props> = ({ templateId }) => {
                                     useShippingAddress &&
                                       setCurrentPage(checkoutPages.address);
                                   }
-                                  setShippingAddress &&
+                                  setShippingAddress(!useShippingAddress);
+                                  useShippingAddress &&
+                                    setShippingAddress &&
                                     setShippingAddress(e.target.checked);
+                                  userId &&
+                                    !e.target.checked &&
+                                    setAddressType &&
+                                    setAddressType(
+                                      UserAddressType.BILLINGADDRESS,
+                                    );
                                 }}
-                                checked={useShippingAddress}
                               />
                             </div>
                             <label
-                              htmlFor='UseShippingAddress'
+                              htmlFor='UseShippingAddress3'
                               className='ml-2'
                             >
                               Use Shipping Address
@@ -385,6 +397,8 @@ const ChekoutType1: React.FC<_Props> = ({ templateId }) => {
                           />
                         ) : (
                           <CheckoutAddress
+                            setBillingAdress={setBillingAdress}
+                            setAddressType={setAddressType}
                             address={shippingAdress}
                             addressType={1}
                             changeClickHandler={() =>
@@ -404,6 +418,7 @@ const ChekoutType1: React.FC<_Props> = ({ templateId }) => {
                         />
                         {showAddAddress && !billingAdress ? (
                           <AddAddress
+                            setAddressType={setAddressType}
                             refrence={billingForm}
                             title={'Billing Address'}
                             setShippingAddress={setShippingAddress}
@@ -413,6 +428,8 @@ const ChekoutType1: React.FC<_Props> = ({ templateId }) => {
                           />
                         ) : (
                           <CheckoutAddress
+                            setAddressType={setAddressType}
+                            setBillingAdress={setBillingAdress}
                             address={billingAdress}
                             addressType={2}
                             setShippingAddress={setShippingAddress}
@@ -431,6 +448,7 @@ const ChekoutType1: React.FC<_Props> = ({ templateId }) => {
           </div>
           <div className='w-full md:w-4/12 lg:w-[27%] pl-[15px] pr-[15px]'>
             <CartSummarry selectedShippingModel={selectedShipping} />
+            {isEmployeeLoggedIn && <CT1_EL_Dropdowns />}
             <div id='OrderNoteDiv mt-[20px]'>
               <div className='text-sub-text font-bold &nbsp;trsacking-normal mb-[5px]'>
                 <label>Add a note to your order</label>
@@ -444,7 +462,6 @@ const ChekoutType1: React.FC<_Props> = ({ templateId }) => {
                 ></textarea>
               </div>
             </div>
-            {isEmployeeLoggedIn && <CT1_EL_Dropdowns />}
             <div className='text-medium-text font-semibold mb-[20px]'>
               <div className='text-rose-500'>
                 {__pagesText.CheckoutPageCardNote1.note}

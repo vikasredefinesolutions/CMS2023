@@ -103,6 +103,7 @@ export interface _SelectedBrands {
 
 export interface _SelectedTab {
   data: newFetauredItemResponse[];
+  footerTabColorName: string;
   displayMethod: string;
   index: string;
   productCount: number;

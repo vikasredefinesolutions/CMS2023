@@ -101,6 +101,15 @@ const AddOTFItemNo = ({ closeModal }: { closeModal: () => void }) => {
   ) => {
     setShowLoader(true);
 
+    const sizes = values.size.split(',');
+    const qtys = values.qty.split(',');
+
+    if (sizes.length !== qtys.length) {
+      confirm('Size and quantity length not matched');
+      setShowLoader(false);
+      return;
+    }
+
     try {
       const otfResponse = await addOTFItemToStore(
         storeId,

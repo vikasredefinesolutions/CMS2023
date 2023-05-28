@@ -90,7 +90,7 @@ const ChangeAddressModal: FC<props> = ({
                     .map((address, index) => (
                       <div key={index} className='w-full lg:w-1/2 px-3'>
                         <div className=''>
-                          <div className='mb-3 '>
+                          <div className='mb-3 min-h-[130px]'>
                             {address.firstname} {address.lastName}
                             <br />
                             {address.companyName}

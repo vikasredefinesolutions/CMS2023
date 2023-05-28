@@ -10,13 +10,30 @@ import {
   PersonalizationLocation,
   ShoppingCartItemDetailsViewModel,
   ShoppingCartLinePersonViewModel,
+  _CartItem,
 } from '@services/cart';
 import { updateCartPersonalization } from '@services/cart.service';
 import { _CartLinePersonDetailModel } from '@services/product.service.type';
 import { FC, useState } from 'react';
 import { _globalStore } from 'store.global';
 
-const Personalizing: FC<any> = ({
+interface _Props {
+  availableColor: PersonalizationColor[];
+  availableFont: PersonalizationFont[];
+  availableLocation: PersonalizationLocation[];
+  item: _CartItem;
+  setKeepPersonalizing: any;
+  personalizationArray: ShoppingCartItemDetailsViewModel[];
+  cartLinePersonModels: _CartLinePersonDetailModel[];
+  setCartLinePersonModels: any;
+  setPersonalizationArray: any;
+  shoppingCartItemsId: number;
+  earlierSelectedColor: string;
+  earlierSelectedFont: string;
+  earlierSelectedLocation: string;
+}
+
+const Personalizing: FC<_Props> = ({
   availableColor,
   availableFont,
   availableLocation,
@@ -49,7 +66,12 @@ const Personalizing: FC<any> = ({
       ? earlierSelectedLocation
       : availableLocation[0]['name'],
   );
-  const [showColorPelette, setShowColorPelette] = useState<boolean>(false);
+  const [showColorPelette, setShowColorPelette] = useState<boolean>(
+    availableColor.find((item) => item.name === earlierSelectedColor) ===
+      undefined
+      ? true
+      : false,
+  );
   const [selectedFont, setSelectedFont] = useState<string>(
     earlierSelectedFont !== '' ? earlierSelectedFont : availableFont[0]['name'],
   );
@@ -121,10 +143,11 @@ const Personalizing: FC<any> = ({
       .then((res) => {
         if (res) {
           setShowLoader(false);
-          showModal({ message: 'Successfully updated', title: 'Success' });
+
           if (obj) {
             setKeepPersonalizing(true);
           } else {
+            showModal({ message: 'Successfully updated', title: 'Success' });
             setKeepPersonalizing(false);
           }
           setCartLinePersonModels([]);
@@ -317,6 +340,7 @@ const Personalizing: FC<any> = ({
                       onClick={() => {
                         changeLocationForAll(item.name, 'color');
                         setSelectedColor(item.name);
+                        setShowColorPelette(false);
                       }}
                     >
                       <div
@@ -345,12 +369,12 @@ const Personalizing: FC<any> = ({
                   />
                 </div>
               )}
-              <div
-                className='h-[32px] border-2 pl-[4px] pr-[4px] pb-[4px] pt-[4px] text-default-text cursor-pointer'
+              <button
+                className='h-[32px] btn btn-sm text-sm border-2 btn-primary cursor-pointer'
                 onClick={() => setShowColorPelette(!showColorPelette)}
               >
-                Custom
-              </div>
+                {showColorPelette ? 'Close Custom Color' : 'Open Custom Color'}
+              </button>
             </div>
           </div>
         </div>

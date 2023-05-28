@@ -20,7 +20,9 @@ const RcOrderSummary: React.FC<_props> = ({ item }) => {
     CheckoutController();
   const { totalPrice } = GetCartTotals();
   useEffect(() => {
-    fetchShipping(totalPrice);
+    if (totalPrice) {
+      fetchShipping(totalPrice);
+    }
   }, [shippingAdress, totalPrice]);
 
   // console.log('item page', item.shoppingCartLogoPersonViewModels);
@@ -73,8 +75,8 @@ const RcOrderSummary: React.FC<_props> = ({ item }) => {
               <Price value={item.totalPrice} />
             </div>
           </div>
-          {item.shoppingCartLogoPersonViewModels &&
-            item?.shoppingCartLogoPersonViewModels.map((el: any, index) => {
+          {item?.shoppingCartLogoPersonViewModels.length > 0 &&
+            item.shoppingCartLogoPersonViewModels.map((el: any, index) => {
               return (
                 <div className='flex flex-wrap justify-between border-b last:border-b-0 border-gray-border mb-[10px] last:mb-0 text-normal-text'>
                   <div className='w-7/12 mb-[10px]'>
