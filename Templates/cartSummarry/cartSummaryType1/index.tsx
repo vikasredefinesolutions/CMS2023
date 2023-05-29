@@ -72,10 +72,11 @@ const CartSummarryType1: FC<_props> = ({ selectedShippingModel }) => {
               <Formik
                 initialValues={{ shipping: price }}
                 onSubmit={(values) => {
-                  setTextOrNumber('text');
+                  const price =
+                    values.shipping === 'FREE' ? 0 : values.shipping;
                   update_checkoutEmployeeLogin({
                     type: 'SHIPPING_PRICE',
-                    value: +(+values.shipping).toFixed(2),
+                    value: +(+price).toFixed(2),
                   });
                 }}
                 enableReinitialize
@@ -98,7 +99,10 @@ const CartSummarryType1: FC<_props> = ({ selectedShippingModel }) => {
                           }
                           handleChange(event);
                         }}
-                        onBlur={() => submitForm()}
+                        onBlur={() => {
+                          setTextOrNumber('text');
+                          submitForm();
+                        }}
                         placeholder=''
                       />
                     </Form>
@@ -277,7 +281,9 @@ const CartSummarryType1: FC<_props> = ({ selectedShippingModel }) => {
         <div>Total:</div>
         <div>
           <Price
-            value={totalPrice + getNewShippingCost(selectedShippingModel.price)}
+            value={
+              totalPrice + getNewShippingCost(selectedShippingModel?.price)
+            }
           />
         </div>
       </div>

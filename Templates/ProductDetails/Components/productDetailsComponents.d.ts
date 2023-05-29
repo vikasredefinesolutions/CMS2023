@@ -93,6 +93,7 @@ export interface _SOMActionHandlerProps {
   note: string;
   cartItemId: number;
   isUpdate: boolean;
+  logoNowOrLater: 'later' | 'now';
 }
 
 export type LogoStatus = string;

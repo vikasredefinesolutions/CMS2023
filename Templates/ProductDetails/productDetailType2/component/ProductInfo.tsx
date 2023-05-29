@@ -1,8 +1,8 @@
-import Price from '@appComponents/Price';
-import PersonalizeFontModal from '@appComponents/modals/PersonalizeFontModal/PersonalizeFontModal';
 import LoginModal from '@appComponents/modals/loginModal';
 import { _modals } from '@appComponents/modals/modal';
+import PersonalizeFontModal from '@appComponents/modals/PersonalizeFontModal/PersonalizeFontModal';
 import SizeChartModal from '@appComponents/modals/sizeChartModal/SizeChartModal';
+import Price from '@appComponents/Price';
 import { storeBuilderTypeId } from '@configs/page.config';
 import { __pagesText } from '@constants/pages.text';
 import { paths } from '@constants/paths.constant';
@@ -14,8 +14,8 @@ import { useEffect, useState } from 'react';
 import AvailableColors from './AvailableColors';
 import DiscountPrice from './DiscountPrice';
 import DiscountPricing from './DiscountPricing';
-import Inventory from './ProductInventory';
 import { _ProductInfoProps } from './productDetailsComponents';
+import Inventory from './ProductInventory';
 
 const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
   const [openModal, setOpenModal] = useState<null | _modals>(null);
@@ -158,27 +158,27 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
         </div>
         <div className=''>
           <div className='pt-[15px] text-default-text'>
-            <span className='inline-block w-[90px]'>
+            <span className='inline-block w-[90px] font-semibold'>
               {' '}
               {__pagesText.productInfo.sku}
             </span>
             <span>:</span> <span className='ml-[4px]'>{product?.sku}</span>
           </div>
           <div className='pt-[15px] text-default-text'>
-            <span className='inline-block w-[90px]'>
+            <span className='inline-block w-[90px] font-semibold'>
               {' '}
               {__pagesText.productInfo.msrp}
             </span>
 
             <span className='ml-[4px]'>
-              <Price
+              <i><Price
                 value={undefined}
                 prices={{
                   msrp: product ? product.msrp : 0,
                   salePrice: product ? product.salePrice : 0,
                 }}
                 addColon={true}
-              />{' '}
+              />{' '}</i>
             </span>
           </div>
         </div>
@@ -274,7 +274,7 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
         ) : (
           <>
             <div className='pt-[15px] text-default-text'>
-              <div className='text-red-700'>
+              <div className='text-tertiary'>
                 {
                   __pagesText.productInfo.notesPk
                     .minimumPiecePerColorWithoutLogin

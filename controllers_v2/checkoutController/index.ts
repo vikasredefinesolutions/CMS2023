@@ -637,46 +637,43 @@ const CheckoutController = () => {
       if (isValid) {
         if (checkPayment()) {
           const data = await getLocation();
-          {
-            const data = await getLocation();
-            const obj = {
-              storeCustomerAddressModel: {
-                id: 0,
-                rowVersion: '',
-                location: `${data.city}, ${data.region}, ${data.country}, ${data.postal_code}`,
-                ipAddress: data.ip_address,
-                macAddress: '00-00-00-00-00-00',
-                customerId: +userId || +customerId || 0,
-                firstname: shippingForm.values.firstname,
-                lastName: shippingForm.values.lastName,
-                email: customer?.email || customerEmail,
-                address1: shippingForm.values.address1,
-                address2: shippingForm.values.address2 || ' ',
-                suite: ' ',
-                city: shippingForm.values.city,
-                state: shippingForm.values.state,
-                postalCode: shippingForm.values.postalCode,
-                phone: shippingForm.values.phone,
-                fax: shippingForm.values.fax ? shippingForm.values.fax : '',
-                countryName: shippingForm.values.countryName,
-                countryCode: shippingForm.values.countryCode || '',
-                addressType: UserAddressType.SHIPPINGADDRESS,
-                isDefault: shippingForm.values.isDefault,
-                recStatus: 'A',
-                companyName: shippingForm.values.companyName || ' ',
-              },
-            };
+          const obj = {
+            storeCustomerAddressModel: {
+              id: 0,
+              rowVersion: '',
+              location: `${data.city}, ${data.region}, ${data.country}, ${data.postal_code}`,
+              ipAddress: data.ip_address,
+              macAddress: '00-00-00-00-00-00',
+              customerId: +userId || +customerId || 0,
+              firstname: shippingForm.values.firstname,
+              lastName: shippingForm.values.lastName,
+              email: customer?.email || customerEmail,
+              address1: shippingForm.values.address1,
+              address2: shippingForm.values.address2 || ' ',
+              suite: ' ',
+              city: shippingForm.values.city,
+              state: shippingForm.values.state,
+              postalCode: shippingForm.values.postalCode,
+              phone: shippingForm.values.phone,
+              fax: shippingForm.values.fax ? shippingForm.values.fax : '',
+              countryName: shippingForm.values.countryName,
+              countryCode: shippingForm.values.countryCode || '',
+              addressType: UserAddressType.SHIPPINGADDRESS,
+              isDefault: shippingForm.values.isDefault,
+              recStatus: 'A',
+              companyName: shippingForm.values.companyName || ' ',
+            },
+          };
 
-            obj.storeCustomerAddressModel.email &&
-              (await CreateUserAddress(obj)
-                .then(() => {
-                  GetStoreCustomer(+userId).then((res) => {
-                    if (res === null) return;
-                    updateCustomer({ customer: res });
-                  });
-                })
-                .catch((error) => console.log(error)));
-          }
+          obj.storeCustomerAddressModel.email &&
+            (await CreateUserAddress(obj)
+              .then(() => {
+                GetStoreCustomer(+userId).then((res) => {
+                  if (res === null) return;
+                  updateCustomer({ customer: res });
+                });
+              })
+              .catch((error) => console.log(error)));
 
           setShippingAdress(shippingForm.values);
           if (!useShippingAddress) {
@@ -774,7 +771,7 @@ const CheckoutController = () => {
     return {};
   };
 
-  const getNewShippingCost = (shippingCost: number = 0): number => {
+  const getNewShippingCost = (shippingCost: number | undefined = 0): number => {
     if (isEmployeeLoggedIn) {
       return employeeLogin.shippingPrice;
     }

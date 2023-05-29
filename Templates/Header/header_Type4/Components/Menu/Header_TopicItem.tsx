@@ -49,7 +49,7 @@ const Topic: React.FC<_props> = ({ title, url }) => {
             // onMouseOver={() => setFocus(true)}
             // onMouseOut={() => setFocus(false)}
             type='button'
-            className={`relative text-medium-text hover:text-primary-hover mt-[5px] xl:ml-[10px] xl:mr-[10px] ml-[5px] mr-[5px] z-10 flex items-center border-0 border-b-2 pt-[10px] pb-[10px] border-transparent hover:border-secondary-hover text-[#ffffff] hover:primary-link `}
+            className={`relative text-medium-text mt-[5px] xl:ml-[10px] xl:mr-[10px] ml-[5px] mr-[5px] z-10 flex items-center border-0 border-b-2 pt-[10px] pb-[10px] border-transparent hover:border-primary text-[#ffffff] hover:text-primary `}
           >
             <span>{title}</span>
           </button>

@@ -64,6 +64,8 @@ export const __pagesConstant = {
     mobileBreakPoint: 1025,
     imagesToShowInBrandDropdown: 5,
     brandImage: ['patagonia', 'nike', 'peter-millar', 'yeti'], // [49, 9, 28, 10], //[198, 11, 187, 27],
+    PKbrandImage: ['Patagonia', 'Nike', 'Peter-Millar', 'YETI'], // [49, 9, 28, 10], //[198, 11, 187, 27],
+    dibrandImage: ['patagonia', 'peter-millar'],
   },
   _productAlike: {
     carouselCounter: 5,

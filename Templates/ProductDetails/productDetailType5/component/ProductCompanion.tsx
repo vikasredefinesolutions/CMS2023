@@ -43,7 +43,7 @@ const ProductCompanion: React.FC<_ProductCompanion> = ({
           </Link>
 
           <div className='mt-[10px] relative'>
-            <div className='mb-[10px]'>
+            <div className='mb-[10px] px-[10px]'>
               <Link href={`/${product?.companionProductSEName}`}>
                 <a
                   href=''

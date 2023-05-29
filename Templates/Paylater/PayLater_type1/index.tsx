@@ -1,4 +1,5 @@
 import { PaymentMethod } from '@constants/enum';
+import { paths } from '@constants/paths.constant';
 import { __SuccessErrorText } from '@constants/successError.text';
 import {
   _MyAcc_OrderBillingDetails,
@@ -7,8 +8,9 @@ import {
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import { _CartItem } from '@services/cart';
 import { OrderModelPayment, UpdatePaymentLater } from '@services/user.service';
+import { useRouter } from 'next/router';
 import { useRef, useState } from 'react';
-import { ShippingAddressHTML, handleRedirect } from './components/PL1.extras';
+import { ShippingAddressHTML } from './components/PL1.extras';
 import PL1_BillingAddress from './components/PL1_BillingAddress';
 import PL1_CartItem from './components/PL1_OrderItem';
 import PL1_OrderSummary from './components/PL1_OrderSummary';
@@ -25,6 +27,8 @@ interface _Props {
 const PaylaterType1: React.FC<_Props> = ({ orderDetails }) => {
   const { setShowLoader, showModal } = useActions_v2();
   const orderNoteRef = useRef(null);
+  const router = useRouter();
+
   const { id: storeId } = useTypedSelector_v2((state) => state.store);
   const [billingAddress, setBillingAddress] = useState({
     billingEqualsShipping: false,
@@ -91,6 +95,20 @@ const PaylaterType1: React.FC<_Props> = ({ orderDetails }) => {
     return '';
   };
 
+  const handleRedirect = (reason: 'UNEXPECTED_ERROR' | 'PAYMENT_COMPLETE') => {
+    if (reason === 'PAYMENT_COMPLETE') {
+      router.push(paths.myAccount.order_details);
+      return;
+    }
+
+    if (reason === 'UNEXPECTED_ERROR') {
+      router.push(paths.HOME);
+      return;
+    }
+
+    router.push(paths.HOME);
+  };
+
   const makePaymentHandler = async () => {
     setShowLoader(true);
 
@@ -121,7 +139,8 @@ const PaylaterType1: React.FC<_Props> = ({ orderDetails }) => {
       .then(() => {
         handleRedirect('PAYMENT_COMPLETE');
       })
-      .catch(() => {
+      .catch((error) => {
+        console.log('ERROR ===>', error);
         showModal({
           message: __SuccessErrorText.SomethingWentWrong,
           title: 'ERROR',

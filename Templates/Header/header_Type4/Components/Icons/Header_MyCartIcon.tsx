@@ -60,14 +60,14 @@ const MyCartIcon: React.FC = () => {
             {__pagesText.Headers.shoppingCartIcon}
           </span>
 
-          <span className='absolute right-[-7px] top-[-10px] rounded-full flex items-center justify-center bg-[#dddddd] text-[9px] text-[#000000] pl-[4px] pr-[4px] pt-[2px] pb-[2px]'>
+          <span className='hidden absolute right-[-7px] top-[-1px] rounded-full flex items-center justify-center bg-secondary text-[9px] text-[#000000] pl-[4px] pr-[4px] pt-[2px] pb-[2px] leading-[10px]'>
             {totalCartQty}
           </span>
         </a>
       </Link>
 
       {Focus && totalCartQty > 0 && (
-        <div className='absolute top-full right-0 w-[300px] text-sm shadow-[0_0px_5px_rgb(0,0,0,0.5)] border border-[#f4ede6] tracking-[1.25px]'>
+        <div className='absolute top-full right-0 w-[300px] text-sm shadow-[0_0px_5px_rgb(0,0,0,0.5)] border border-[#f4ede6] tracking-[1.25px] hidden'>
           <div
             className='absolute inset-0 top-1/2 bg-white shadow'
             aria-hidden='true'
@@ -131,7 +131,7 @@ const MyCartIcon: React.FC = () => {
                 </div>
               </div>
               <div className=''>
-                <Link href={paths.CHECKOUT} className=''>
+                <Link href={paths.CART} className=''>
                   <a className='btn btn-secondary w-full text-center'>
                     {__pagesText.Headers.checkoutNow}
                   </a>

@@ -103,15 +103,15 @@ const ProductQuoteRequest: React.FC<_props> = ({
             {({ values, handleChange }) => {
               return (
                 <Form>
-                  <div className='relative bg-white rounded-lg shadow dark:bg-gray-700 max-h-screen overflow-y-auto'>
-                    <div className='flex justify-between items-center p-5 rounded-t border-b dark:border-gray-600 sticky top-0 left-0 bg-white'>
-                      <div className='text-xl font-semibold text-gray-900 lg:text-2xl login-top-title dark:text-white'>
+                  <div className='relative bg-white rounded-lg shadow max-h-screen overflow-y-auto'>
+                    <div className='flex justify-between items-center p-5 rounded-t border-b sticky top-0 left-0 bg-white'>
+                      <div className='text-xl font-semibold text-gray-900 lg:text-2xl login-top-title'>
                         Contact us
                       </div>
                       <div className='flex items-center gap-x-2'>
                         <button
                           type='button'
-                          className='text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white'
+                          className='text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center'
                           onClick={() => modalHandler(null)}
                         >
                           <svg
@@ -130,15 +130,15 @@ const ProductQuoteRequest: React.FC<_props> = ({
                       </div>
                     </div>
                     <div className='p-[25px]'>
-                      <div className='mb-6 medium-text text-left'>
+                      <div className='mb-6 medium-text text-left font-bold'>
                         Product Name :{productName}
                       </div>
                       {productColor && (
-                        <div className='mb-6 medium-text text-left'>
+                        <div className='mb-6 medium-text text-left font-bold'>
                           Color :{productColor}
                         </div>
                       )}
-                      <div className='flex flex-wrap -mx-3 gap-y-6 text-left'>
+                      <div className='flex flex-wrap -mx-3 gap-y-6 text-left font-bold'>
                         <ProductQuoteRequestInput
                           label={'Name'}
                           placeHolder={'Name'}
@@ -208,7 +208,7 @@ const ProductQuoteRequest: React.FC<_props> = ({
                         />
                       </div>
                     </div>
-                    <div className='flex items-center justify-end p-6 space-x-2 rounded-b border-t border-gray-200 dark:border-gray-600'>
+                    <div className='flex items-center justify-end p-6 space-x-2 rounded-b border-t border-gray-200'>
                       <button
                         type='button'
                         className='btn btn-primary'

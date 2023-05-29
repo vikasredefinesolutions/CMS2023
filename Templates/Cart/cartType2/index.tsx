@@ -17,6 +17,7 @@ import CartItem from 'Templates/cartItem';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import { _CartProps } from '../Cart';
+import CT1_EmployeeLoginCart from '../Cart_Type1/Components/CT1_EL_Cart';
 import EmptyCart from '../components/emptyCart';
 
 const CartType2: React.FC<_CartProps> = ({
@@ -49,6 +50,9 @@ const CartType2: React.FC<_CartProps> = ({
   }, [storeId]);
 
   const { totalPrice } = GetCartTotals();
+  const isEmployeeLoggedIn = useTypedSelector_v2(
+    (state) => state.employee.loggedIn,
+  );
 
   const { fetchShipping, shippingAdress, selectedShipping, shippingMethod } =
     CheckoutController();
@@ -74,6 +78,10 @@ const CartType2: React.FC<_CartProps> = ({
 
   if (showLoaderOrEmptyText === 'emptyCart' || !cartData) {
     return <EmptyCart />;
+  }
+
+  if (isEmployeeLoggedIn) {
+    return <CT1_EmployeeLoginCart cartItems={cartData} />;
   }
 
   return (

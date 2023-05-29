@@ -5,6 +5,7 @@ import { useTypedSelector_v2 } from '@hooks_v2/index';
 import React from 'react';
 import { _globalStore } from 'store.global';
 import { _BannerComponentProps } from '../Banner';
+
 let mediaBaseUrl = _globalStore.blobUrl;
 
 const BannerType4: React.FC<_BannerComponentProps> = ({
@@ -14,6 +15,7 @@ const BannerType4: React.FC<_BannerComponentProps> = ({
   userId,
 }) => {
   const store = useTypedSelector_v2((state) => state.store);
+  const storeCode = useTypedSelector_v2((state) => state.store.code);
   mediaBaseUrl = mediaBaseUrl || store.mediaBaseUrl;
 
   if (banner === null || banner.length < 1) {
@@ -22,6 +24,7 @@ const BannerType4: React.FC<_BannerComponentProps> = ({
     
     return (
       <>
+      {storeCode !== 'PKHG' &&  <>
         {!userId && (
           <div className='container pl-[15px] pr-[15px] mx-auto cursor-pointer'>
             <div className='text-center bg-tertiary pl-[10px] pr-[10px] pt-[4px] pb-[4px]'>
@@ -37,8 +40,10 @@ const BannerType4: React.FC<_BannerComponentProps> = ({
             </div>
           </div>
         )}
+        </>
+        }
         <div className='container pl-[15px] pr-[15px] mx-auto'>
-          <div className='items-center sm:pl-[40px] sm:pr-[40px] sm:pt-[40px] sm:pb-[40px] md:pl-[70px] md:pr-[70px] md:pt-[70px] md:pb-[70px] pl-[0px] pr-[0px] pt-[16px] pb-[16px] bg-light-gray'>
+          <div className='items-center sm:pl-[40px] sm:pr-[40px] sm:pt-[40px] sm:pb-[40px] md:pl-[70px] md:pr-[0px] md:pt-[40px] md:pb-[40px] pl-[0px] pr-[0px] pt-[16px] pb-[16px] bg-light-gray'>
             <div className='flex flex-wrap items-center gap-y-[40px]'>
               <div className='w-full text-[#000000] md:pl-[0px] md:pr-[0px] pl-[16px] pr-[16px]'>
                 <div className='text-2xl-text pb-[10px]'>{banner[0].name}</div>

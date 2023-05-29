@@ -31,7 +31,7 @@ const SideFiltersTypeTwo = ({
                       ) && (
                         <a
                           href='javascript:void(0);'
-                          className='btn btn-sm btn-primary p-[7px] text-extra-small-text text-anchor hover:text-anchor-hover'
+                          className='p-[7px] text-extra-small-text text-anchor hover:text-anchor-hover'
                           onClick={() => clearFilterSection(filter.label)}
                         >
                           {' '}

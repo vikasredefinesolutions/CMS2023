@@ -1,5 +1,7 @@
 import NxtImage from '@appComponents/reUsable/Image';
+import Price from '@appComponents/reUsable/Price';
 import { __pagesConstant } from '@constants/pages.constant';
+import { __pagesText } from '@constants/pages.text';
 import { newFetauredItemResponse } from '@definations/productList.type';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import Link from 'next/link';
@@ -28,6 +30,8 @@ const SlugSingleProductListing: React.FC<_props> = (props) => {
     showBrandLogo,
     footerTabing,
   } = props;
+  const customerId = useTypedSelector_v2((state) => state.user.id);
+
   const store = useTypedSelector_v2((state) => state.store);
 
   return (
@@ -79,6 +83,24 @@ const SlugSingleProductListing: React.FC<_props> = (props) => {
                         {product.productName}
                       </a>
                     </Link>
+                  </div>
+                )}
+                {showPrice == __pagesConstant?.show?.No ? (
+                  ''
+                ) : (
+                  <div className='mt-3 text-[#000000] text-base tracking-wider'>
+                    <span className='font-[600]'>
+                      {customerId
+                        ? __pagesText.productListing.PRICE
+                        : __pagesText.productListing.MSRP}
+                      <Price
+                        value={undefined}
+                        prices={{
+                          msrp: customerId ? product?.lowPrice : product.msrp,
+                          salePrice: product.salePrice,
+                        }}
+                      />
+                    </span>
                   </div>
                 )}
                 <div className='mb-2 font-semibold uppercase isinput'>

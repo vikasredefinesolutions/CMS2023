@@ -28,7 +28,7 @@ const Topic: React.FC<_props> = ({ title, url }) => {
               title={title}
               onClick={() => {
                 toggleSideMenu('CLOSE');
-                router.push(`/${url}`);
+                router.push(`/${url !== 'index' ? url : ''}`)
               }}
               className=''
             >
@@ -39,10 +39,10 @@ const Topic: React.FC<_props> = ({ title, url }) => {
       </div>
     );
   }
-
+ 
   if (view === 'DESKTOP') {
     return (
-      <Link href={`${url}`} className='flex'>
+      <Link href={`/${url !== 'index' ? url : ''}`} className='flex'>
         <div className=''>
           <button
             title={title}

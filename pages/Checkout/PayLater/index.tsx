@@ -15,7 +15,6 @@ import { FetchPageThemeConfigs } from '@services/product.service';
 import { FetchOrderDetails, GetStoreCustomer } from '@services/user.service';
 import { getWishlist } from '@services/wishlist.service';
 import PaylaterTemplate from '@templates/Paylater';
-import { handleRedirect } from '@templates/Paylater/PayLater_type1/components/PL1.extras';
 import { GetServerSideProps, GetServerSidePropsResult, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -23,8 +22,8 @@ import { _globalStore } from 'store.global';
 
 const Checkout: NextPage<{ templateId: number }> = ({ templateId }) => {
   const router = useRouter();
-  let orderNumber = router.query.OrderNumber;
   const { logInUser, updateCustomer, updateWishListData } = useActions_v2();
+  const orderNumber = router.query.OrderNumber;
 
   const [orderDetails, setOrderDetails] = useState<
     | {
@@ -68,6 +67,30 @@ const Checkout: NextPage<{ templateId: number }> = ({ templateId }) => {
     });
   };
 
+  const handleRedirect = (
+    reason:
+      | 'PAYMENT_ALREADY_DONE'
+      | 'NO_ORDER_ID_FOUND'
+      | 'UNEXPECTED_ERROR'
+      | 'PAYMENT_COMPLETE',
+  ) => {
+    if (reason === 'PAYMENT_ALREADY_DONE') {
+      router.push(paths.HOME);
+      return;
+    }
+
+    if (reason === 'NO_ORDER_ID_FOUND') {
+      router.push(paths.HOME);
+      return;
+    }
+    if (reason === 'UNEXPECTED_ERROR') {
+      router.push(paths.HOME);
+      return;
+    }
+
+    router.push(paths.HOME);
+  };
+
   useEffect(() => {
     if (orderNumber) {
       // Call Order API
@@ -83,17 +106,18 @@ const Checkout: NextPage<{ templateId: number }> = ({ templateId }) => {
             handlePaymentPending(res);
             return;
           }
+
           handleRedirect('PAYMENT_ALREADY_DONE');
         })
         .catch((error) => {
-          console.log('error ===>', error);
+          console.log('ERROR ===>', error);
           setOrderDetails('SOMETHING_WENT_WRONG');
         })
         .finally(() => {});
     }
 
     if (!orderNumber) {
-      router.push(paths.HOME);
+      handleRedirect('NO_ORDER_ID_FOUND');
     }
   }, []);
 

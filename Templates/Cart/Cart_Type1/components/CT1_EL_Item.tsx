@@ -11,6 +11,7 @@ import {
 } from '@hooks_v2/index';
 import {
   CartReq,
+  DisplayLineAttributeOption,
   PersonalizationColor,
   PersonalizationFont,
   PersonalizationLocation,
@@ -275,6 +276,16 @@ const CT1_EL_Item: React.FC<_CartItem & _Props> = (item) => {
                   <Price value={details.totalPrice} />
                 </div>
               </div>
+              {item.itemNote && (
+                <div className='flex  py-3 border-t border-b'>
+                  <div className='text-normal-text w-30 font-bold'>
+                    Item Note:
+                  </div>
+                  <div className='text-normal-text px-3  text-center'>
+                    {item.itemNote}
+                  </div>
+                </div>
+              )}
               {item.shoppingCartLogoPersonViewModels.map((logo, index) => {
                 if (logo.logoName === 'Customize Later') {
                   return (
@@ -359,6 +370,80 @@ const CT1_EL_Item: React.FC<_CartItem & _Props> = (item) => {
 
                 return null;
               })}
+              {item.displayLineAttributeOptions.length > 0 && (
+                <div className='mt-10'>
+                  <div className='text-normal-text border-t pt-[10px] mt-[10px] first:mt-0'>
+                    <div className='font-semibold'>Personalise Text:</div>
+                    <div className='flex justify-between py-1 first:pt-0 last:pb-0'>
+                      <div className='font-semibold'>Font</div>
+                      <div className='text-right'>
+                        {
+                          item.displayLineAttributeOptions[0]
+                            .linePersonalizeDetails[0].font
+                        }
+                      </div>
+                    </div>
+                    <div className='flex justify-between py-1 first:pt-0 last:pb-0'>
+                      <div className='font-semibold'>Color</div>
+                      <div className='text-right'>
+                        {
+                          item.displayLineAttributeOptions[0]
+                            .linePersonalizeDetails[0].color
+                        }
+                      </div>
+                    </div>
+                    <div className='flex justify-between py-1 first:pt-0 last:pb-0'>
+                      <div className='font-semibold'>
+                        Personalization Location
+                      </div>
+                      <div className='text-right'>
+                        {
+                          item.displayLineAttributeOptions[0]
+                            .linePersonalizeDetails[0].location
+                        }
+                      </div>
+                    </div>
+                  </div>
+                  {item.displayLineAttributeOptions.map(
+                    (Lineitem: DisplayLineAttributeOption, index: number) => {
+                      return (
+                        <>
+                          <div className='text-normal-text border-t pt-[10px] mt-[10px] first:mt-0'>
+                            <div className='flex justify-between py-1 first:pt-0 last:pb-0'>
+                              <div className='font-semibold'>Size</div>
+                              <div className='text-right font-bold'>
+                                {Lineitem.attributeOptionName}
+                              </div>
+                            </div>
+                            {Lineitem.linePersonalizeDetails.map(
+                              (line: any, ind: number) => (
+                                <>
+                                  <div className='flex justify-between py-1 first:pt-0 last:pb-0'>
+                                    <div className='font-semibold'>Line 1</div>
+                                    <div className='text-right'>
+                                      {line.line1Text}
+                                    </div>
+                                  </div>
+                                  {line.line2Text && line.line2Text !== '' && (
+                                    <div className='flex justify-between py-1 first:pt-0 last:pb-0'>
+                                      <div className='font-semibold'>
+                                        Line 2
+                                      </div>
+                                      <div className='text-right'>
+                                        {line.line2Text}
+                                      </div>
+                                    </div>
+                                  )}
+                                </>
+                              ),
+                            )}
+                          </div>
+                        </>
+                      );
+                    },
+                  )}
+                </div>
+              )}
             </div>
           </div>
           <div className='lg:w-1/4 w-full'>

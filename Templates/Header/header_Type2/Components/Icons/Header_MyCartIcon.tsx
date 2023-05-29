@@ -59,7 +59,7 @@ const MyCartIcon: React.FC = () => {
                 <img src="/assets/images/PKhealth/cart-icon-pkhg.png" />
               </span>
             </span>{' '}
-            <span className='absolute right-[-5px] top-[0px] rounded-full flex items-center justify-center bg-secondary text-[9px] text-[#000000] pl-[4px] pr-[4px] pt-[2px] pb-[2px] leading-[10px]'>
+            <span className='absolute right-[-5px] top-[1px] rounded-full flex items-center justify-center bg-secondary text-[9px] text-[#000000] pl-[4px] pr-[4px] pt-[2px] pb-[2px] leading-[10px]'>
               {totalCartQty}
             </span>
           </a>

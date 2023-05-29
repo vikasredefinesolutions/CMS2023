@@ -77,30 +77,29 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
       return;
     }
 
+    const selectedProducts: _Selectedproduct_v2[] = [];
+    colors &&
+      colors?.forEach((color) => {
+        if (sizeQtys && sizeQtys.map((c) => c.color).includes(color.name)) {
+          selectedProducts.push({
+            color: { ...color },
+            sizeQtys: sizeQtys?.filter((size) => size.color == color.name),
+            productId: color.productId,
+            image: {
+              id: 0,
+              imageUrl: color.imageUrl,
+              altTag: '',
+            },
+            inventory: null,
+          });
+        }
+      });
+
     if (isLoggedIn === true) {
       const addToCartHandler = async () => {
         setShowLoader(true);
         const { sizeQtys, totalPrice, totalQty, logos, price } = toCheckout;
         const location = await getLocation();
-
-        const selectedProducts: _Selectedproduct_v2[] = [];
-
-        colors &&
-          colors?.forEach((color) => {
-            if (sizeQtys && sizeQtys.map((c) => c.color).includes(color.name)) {
-              selectedProducts.push({
-                color: { ...color },
-                sizeQtys: sizeQtys?.filter((size) => size.color == color.name),
-                productId: color.productId,
-                image: {
-                  id: 0,
-                  imageUrl: color.imageUrl,
-                  altTag: '',
-                },
-                inventory: null,
-              });
-            }
-          });
 
         for (let Product of selectedProducts) {
           // console.log(totalQty, 'totalPrice');
@@ -205,16 +204,33 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
         }
       };
       if (sizeQtys === null || sizeQtys[0]?.qty === 0) {
-        modalHandler('requiredQty');
+        showModal({
+          message: `Please Select At Least Any One Color's Quantity.`,
+          title: 'Required ',
+        });
+
         return;
       } else if (totalQty < minQty) {
         showModal({
           message: `Please enter quantity greater than or equal to ${minQty}.`,
           title: 'Required Quantity',
         });
-
         return;
       } else {
+        for (let Product of selectedProducts) {
+          let totalColorqty = 0;
+          for (let colorqty of Product.sizeQtys) {
+            totalColorqty = totalColorqty + colorqty.qty;
+          }
+          if (totalColorqty < minQty && totalColorqty != 0) {
+            showModal({
+              message: `Please enter quantity greater than or equal to ${minQty}.`,
+              title: 'Required Quantity',
+            });
+
+            return;
+          }
+        }
         addToCartHandler();
       }
 

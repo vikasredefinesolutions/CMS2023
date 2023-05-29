@@ -27,15 +27,14 @@ interface logocharges {
 
 const SomCustomizeLogoOptions: React.FC<{
   editSizes: _CartItem['shoppingCartLogoPersonViewModels'] | null;
-
   totalQty: number;
-}> = ({ editSizes, totalQty }) => {
+  setNowOrLater: (value: 'later' | 'now') => void;
+  nowOrLater: 'later' | 'now';
+}> = ({ editSizes, totalQty, setNowOrLater, nowOrLater }) => {
   const { product_updateLogoDetails, product_updateFirstLogoPrice } =
     useActions_v2();
   const { getDetailsLogo } = LogoSetterToStore();
   const { som_logos } = useTypedSelector_v2((state) => state.product);
-
-  const [nowOrLater, setNowOrLater] = useState<'later' | 'now'>('later');
   const [logoCharges, setLogoCharges] = useState<logocharges>({
     isFirstLogoFree: false,
     isLogoSetupCharges: false,
@@ -86,7 +85,6 @@ const SomCustomizeLogoOptions: React.FC<{
       });
     }
   }, []);
-
   useEffect(() => {
     if (editSizes && logoLocation) {
       const { isLater, details } = getDetailsLogo(

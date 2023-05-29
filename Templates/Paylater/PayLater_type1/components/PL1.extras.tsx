@@ -1,38 +1,5 @@
 import { __pagesText } from '@constants/pages.text';
-import { paths } from '@constants/paths.constant';
 import { _MyAcc_OrderBillingDetails } from '@definations/APIs/user.res';
-import { useRouter } from 'next/router';
-
-export const handleRedirect = (
-  reason:
-    | 'PAYMENT_ALREADY_DONE'
-    | 'NO_ORDER_ID_FOUND'
-    | 'UNEXPECTED_ERROR'
-    | 'PAYMENT_COMPLETE',
-) => {
-  const router = useRouter();
-
-  if (reason === 'PAYMENT_COMPLETE') {
-    router.push(paths.myAccount.order_details);
-    return;
-  }
-
-  if (reason === 'PAYMENT_ALREADY_DONE') {
-    router.push(paths.HOME);
-    return;
-  }
-
-  if (reason === 'NO_ORDER_ID_FOUND') {
-    router.push(paths.HOME);
-    return;
-  }
-  if (reason === 'UNEXPECTED_ERROR') {
-    router.push(paths.HOME);
-    return;
-  }
-
-  router.push(paths.HOME);
-};
 
 export const ShippingAddressHTML = (billing: _MyAcc_OrderBillingDetails) => {
   return (

@@ -30,7 +30,7 @@ const ProductQuoteRequestInput: React.FC<_props> = ({
   if (type === 'number' || type === 'text') {
     return (
       <div className={containerClass}>
-        <label htmlFor='' className='mb-[4px] text-normal-text'>
+        <label htmlFor='' className='mb-[4px] text-normal-text !font-bold'>
           {label}{' '}
           <span className='text-rose-500'>{`${required ? `*` : ''}`}</span>
         </label>
@@ -53,7 +53,7 @@ const ProductQuoteRequestInput: React.FC<_props> = ({
   if (type === 'textArea') {
     return (
       <div className='w-full px-3'>
-        <label htmlFor='' className='mb-[4px] text-normal-text'>
+        <label htmlFor='' className='mb-[4px] text-normal-text !font-bold'>
           {label}
         </label>
         <div className='mt-1'>

@@ -1,7 +1,7 @@
 import { paths } from '@constants/paths.constant';
 import {
   _HeaderPropsWithTemplateid,
-  _HeaderTemplates,
+  _HeaderTemplates
 } from '@definations/header.type';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
@@ -41,7 +41,7 @@ const Header: NextPage<_HeaderPropsWithTemplateid> = ({
   const router = useRouter();
   return (
     <div
-      className='sticky md:top-7 z-40 shadow-[0_0px_5px_rgba(0,0,0,0.12)]'
+      className='sticky md:top-7 z-40 ' //shadow-[0_0px_5px_rgba(0,0,0,0.12)]
       id='MainHeader'
     >
       {router.pathname !== paths.CHECKOUT &&

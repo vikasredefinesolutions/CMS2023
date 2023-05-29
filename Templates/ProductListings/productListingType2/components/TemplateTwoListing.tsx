@@ -8,7 +8,7 @@ import { getCompareLink } from '@helpers/compare.helper';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import {
   GetlAllProductList,
-  GetProductImageOptionList,
+  GetProductImageOptionList
 } from '@templates/ProductListings/ProductListingType';
 import ProductBoxController from '@templates/ProductListings/productListingType1/components/productBoxController';
 import Link from 'next/link';
@@ -98,7 +98,7 @@ const TemplateTwoListing = ({
             </div>
           </div>
           <div className='mt-[20px] relative md:px-[30px] px-[15px]'>
-            <div className='mb-[10px] mt-[10px] h-[46px] text-anchor hover:text-anchor-hover text-medium-text'>
+            <div className='mb-[10px] mt-[10px] h-[46px] text-anchor hover:text-anchor-hover text-medium-text overflow-hidden'>
               <Link
                 href={`${origin}/${product.sename}.html`}
                 className='relative'
@@ -168,7 +168,7 @@ const TemplateTwoListing = ({
                     index < listing_max_showcolors - 1 ? (
                       <Link href={`/${subRow.seName}.html`}>
                         <li
-                          className={`w-[28px] h-[28px]  border-2 hover:border-secondary cursor-pointer`}
+                          className={`w-[28px] h-[28px]  border-2 hover:border-primary cursor-pointer`}
                           key={`${index}_${subRow.prodcutId}`}
                           onMouseOver={() => setMainImageUrl(subRow.imageurl)}
                           onMouseLeave={() =>
@@ -271,7 +271,7 @@ const TemplateTwoListing = ({
           </div>
 
           <div className='mt-[20px] relative md:px-[30px] px-[15px]'>
-            <div className='mb-[10px] mt-[10px] h-[46px] text-anchor hover:text-anchor-hover text-medium-text cursor-pointer'>
+            <div className='mb-[10px] mt-[10px] text-anchor hover:text-anchor-hover text-medium-text cursor-pointer'>
               <Link
                 key={product.id}
                 href={`${origin}/${product.sename}.html?v=product-detail&altview=1`}
@@ -282,7 +282,7 @@ const TemplateTwoListing = ({
             </div>
             <div className='mb-[12px] text-[#000000] text-default-text '>
               <span className=''>
-                MSRP
+                MSRP&nbsp;
                 <Price
                   value={undefined}
                   prices={{
@@ -318,7 +318,7 @@ const TemplateTwoListing = ({
             </div>
             <ul
               role='list'
-              className='flex flex-wrap items-center mt-[12px] justify-center space-x-1'
+              className='flex flex-wrap items-center mt-[12px] space-x-1'
             >
               {isAttributeSaparateProduct &&
               product.splitproductList &&
@@ -326,8 +326,8 @@ const TemplateTwoListing = ({
                 <>
                   <Link key={product.id} href={`/${product.sename}.html`}>
                     <li
-                      className={`w-7 h-7 border-2  border-secondary 
-                      hover:border-secondary cursor-pointer`}
+                      className={`w-7 h-7 border-2  border-primary 
+                      hover:border-primary cursor-pointer`}
                       key={product.id}
                     >
                       <NxtImage
@@ -343,7 +343,7 @@ const TemplateTwoListing = ({
                     index < listing_max_showcolors - 1 ? (
                       <Link key={product.id} href={`/${subRow.seName}.html`}>
                         <li
-                          className={`w-7 h-7 border-2 hover:border-secondary cursor-pointer`}
+                          className={`w-7 h-7 border-2 hover:border-primary cursor-pointer`}
                           key={subRow.prodcutId}
                           onMouseOver={() => setMainImageUrl(subRow.imageurl)}
                           onMouseLeave={() =>

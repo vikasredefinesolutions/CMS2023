@@ -383,7 +383,7 @@ const AddOTFItemNo = ({ closeModal }: { closeModal: () => void }) => {
                         onClick={closeModal}
                         className='btn btn-primary'
                       >
-                        Canel
+                        Cancel
                       </button>
                     </div>
                   </Form>

@@ -1,6 +1,7 @@
 import { _MenuItems } from '@definations/header.type';
 import MenuItem from '@header/header_Type4/Components/Menu//Header_MenuItem';
 import Backdrop from '@templates/Header/header_Type4/Components/Backdrop';
+import { useRouter } from 'next/router';
 import React, { Fragment, useEffect, useState } from 'react';
 import { CloseIcon } from '../Icons';
 
@@ -15,12 +16,17 @@ const MenuItems: React.FC<_props> = ({
   menuItems: menuItemsFromRoot,
   showSideMenu,
 }) => {
+  const [openTab, setOpenTab] = useState<string>('');
+  const router = useRouter();
   const [menuItems, setMenuItems] = useState<null | _MenuItems>(null);
   useEffect(() => {
     if (menuItemsFromRoot) {
       setMenuItems(menuItemsFromRoot);
     }
   }, [menuItemsFromRoot]);
+  useEffect(() => {
+    setOpenTab('');
+  }, [router.asPath]);
 
   if (!menuItems) return <></>;
 
@@ -55,6 +61,8 @@ const MenuItems: React.FC<_props> = ({
                     type={menu.type}
                     content={menu.items}
                     url={menu.seName}
+                    openTab={openTab}
+                    setOpenTab={setOpenTab}
                   />
                 </Fragment>
               );
@@ -80,6 +88,8 @@ const MenuItems: React.FC<_props> = ({
                 type={menu.type}
                 content={menu.items}
                 url={menu.seName}
+                openTab={openTab}
+                setOpenTab={setOpenTab}
               />
             </Fragment>
           );

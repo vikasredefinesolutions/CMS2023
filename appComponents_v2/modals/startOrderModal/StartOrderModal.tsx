@@ -45,6 +45,7 @@ const StartOrderModal: React.FC<_startOrderModalProps> = (props) => {
   );
 
   const [notevalue, setNotevalue] = useState<string>('');
+  const [nowOrLater, setNowOrLater] = useState<'later' | 'now'>('later');
 
   useEffect(() => {
     setShowLoader(false);
@@ -243,6 +244,8 @@ const StartOrderModal: React.FC<_startOrderModalProps> = (props) => {
                   <SomCustomizeLogoOptions
                     editSizes={edit?.shoppingCartLogoPersonViewModels || null}
                     totalQty={edit?.totalQty || 0}
+                    setNowOrLater={setNowOrLater}
+                    nowOrLater={nowOrLater}
                   />
                 )}
 
@@ -267,6 +270,7 @@ const StartOrderModal: React.FC<_startOrderModalProps> = (props) => {
                 note={notevalue}
                 cartItemId={edit?.shoppingCartItemsId || 0}
                 isUpdate={Boolean(edit?.shoppingCartItemsId)}
+                logoNowOrLater={nowOrLater}
               />
             </div>
           )}

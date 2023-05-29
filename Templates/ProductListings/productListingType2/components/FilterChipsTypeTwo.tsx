@@ -14,7 +14,7 @@ const FilterChipsTypeTwo = ({
 }) => {
   return checkedFilters.length > 0 ? (
     <div className='mt-[20px] flex gap-2.5 text-sm leading-none items-center'>
-      <div className='font-semibold'>Filters :</div>
+      <div className=''>Filters :</div>
       <div className=''>
         <ul className='flex flex-wrap gap-2'>
           {checkedFilters.map((filter, index) => (
@@ -43,7 +43,7 @@ const FilterChipsTypeTwo = ({
         <a
           onClick={clearFilters}
           href='javascript:void(0);'
-          className='inline-block font-semibold text-default-text cursor-pointer'
+          className='inline-block !font-semibold text-default-text cursor-pointer'
         >
           {__pagesText.productListing.clearAllButton}
         </a>

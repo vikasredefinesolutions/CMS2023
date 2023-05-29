@@ -25,6 +25,7 @@ const SomActionsHandler: React.FC<_SOMActionHandlerProps> = ({
   note,
   cartItemId,
   isUpdate,
+  logoNowOrLater,
 }) => {
   const router = useRouter();
   const { showModal, fetchCartDetails } = useActions_v2();
@@ -36,7 +37,7 @@ const SomActionsHandler: React.FC<_SOMActionHandlerProps> = ({
   const { selected, toCheckout, som_logos, product } = useTypedSelector_v2(
     (state) => state.product,
   );
-
+  console.log('---reaching some logo---', som_logos);
   const { clearToCheckout, setShowLoader } = useActions_v2();
   const store = useTypedSelector_v2((state) => state.store);
 
@@ -67,11 +68,12 @@ const SomActionsHandler: React.FC<_SOMActionHandlerProps> = ({
   const requiredMessage = (
     issue: 'quantity' | 'logo',
     minQty: null | number = 1,
-    logoIndex: null | string,
   ) => {
     let message = __pagesText.productInfo.someThingWentWrong;
-    if (issue === 'logo' && logoIndex) {
-      message = `${__pagesText.productInfo.pleaseUploadLogoLater} ${som_logos.choosedLogoCompletionPending} ${__pagesText.productInfo.logo}`;
+    if (issue === 'logo') {
+      if (som_logos.choosedLogoCompletionPending)
+        message = `${__pagesText.productInfo.pleaseUploadLogoLater} ${som_logos.choosedLogoCompletionPending} ${__pagesText.productInfo.logo}`;
+      else message = __pagesText.productInfo.pleaseUploadLogo;
     }
 
     if (issue === 'quantity') {
@@ -121,7 +123,7 @@ const SomActionsHandler: React.FC<_SOMActionHandlerProps> = ({
       return;
     }
 
-    if (som_logos.choosedLogoCompletionPending) {
+    if (logoNowOrLater === 'now' && !som_logos.details) {
       setShowLoader(false);
       setShowRequiredModal('logo');
       return;
@@ -277,11 +279,7 @@ const SomActionsHandler: React.FC<_SOMActionHandlerProps> = ({
       {showRequiredModal && (
         <MsgContainer
           modalHandler={() => setShowRequiredModal(null)}
-          message={requiredMessage(
-            showRequiredModal,
-            toCheckout.minQty,
-            som_logos.choosedLogoCompletionPending,
-          )}
+          message={requiredMessage(showRequiredModal, toCheckout.minQty)}
           title={'Required'}
         />
       )}

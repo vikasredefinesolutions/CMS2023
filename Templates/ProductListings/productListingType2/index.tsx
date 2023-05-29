@@ -1,4 +1,3 @@
-import ContactUs from '@appComponents/reUsable/ContactUs';
 import { __pagesText } from '@constants/pages.text';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import React, { Fragment, useEffect } from 'react';
@@ -144,7 +143,6 @@ const ProductListingType2: React.FC<_ListingProps> = ({
           </div>
         </div>
       </section>
-      <ContactUs />
     </>
   );
 };

@@ -127,17 +127,17 @@ const Brand: React.FC<_props> = ({ url, title, content }) => {
                       {content
                         ?.filter(
                           (brand) =>
-                            brand.brandColorImageUrl &&
-                            __pagesConstant._header.brandImage.includes(
+                            brand.brandBlackColorImageUrl &&
+                            __pagesConstant._header.PKbrandImage.includes(
                               brand.seName,
                             ),
                         )
                         .sort(function (a, b) {
                           return (
-                            __pagesConstant._header.brandImage.indexOf(
+                            __pagesConstant._header.PKbrandImage.indexOf(
                               a.seName,
                             ) -
-                            __pagesConstant._header.brandImage.indexOf(b.seName)
+                            __pagesConstant._header.PKbrandImage.indexOf(b.seName)
                           );
                         })
                         ?.map((brand) => (
@@ -149,7 +149,7 @@ const Brand: React.FC<_props> = ({ url, title, content }) => {
                                 : `${brand.seName}.html?v=product-list`
                             }
                             alt={capitalizeFirstLetter(brand.brandName)}
-                            src={brand.brandColorImageUrl}
+                            src={brand.brandBlackColorImageUrl}
                           />
                         ))}
                     </div>

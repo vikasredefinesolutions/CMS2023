@@ -49,14 +49,14 @@ export const create_cartLogoPersonDetailModels = (args: {
 }): CartLogoPersonDetailModel[] => {
   return args.details.map((item) => ({
     id: item.id,
-    logoPrice: item.logoPrice,
-    logoQty: item.qty,
+    logoPrice: item.logoPrice / item.qty,
+    logoQty: args.totalQtys,
     logoFile: item.logoImagePath, //
     logoLocation: item.logoLocation,
-    logoTotal: item.logoPrice * args.totalQtys, // Always questionable
+    logoTotal: (item.logoPrice / item.qty) * args.totalQtys, // Always questionable
     colorImagePath: args.colorImagePath,
     logoUniqueId: '', //
-    price: item.logoPrice, //
+    price: item.logoPrice / item.qty, //
     logoColors: '', //
     logoNotes: '', //
     logoDate: new Date(),

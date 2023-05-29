@@ -54,7 +54,7 @@ const CompareIcon: React.FC = () => {
             {/*  img link */}
             <img src="https://www.pkhealthgear.com/images/icon-compare.png" alt="Compare Products" title="Compare Products" />
           </span>
-          <span className='absolute right-[-7px] top-[-1px] rounded-full flex items-center justify-center bg-secondary text-[9px] text-[#000000] pl-[4px] pr-[4px] pt-[2px] pb-[2px] leading-[10px]'>
+          <span className='absolute right-[-5px] top-[1px] rounded-full flex items-center justify-center bg-secondary text-[9px] text-[#000000] pl-[4px] pr-[4px] pt-[2px] pb-[2px] leading-[10px]'>
             {skus.length}
           </span>
         </button>

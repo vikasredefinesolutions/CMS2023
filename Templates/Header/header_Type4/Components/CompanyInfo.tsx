@@ -29,14 +29,14 @@ const CompanyInfo: React.FC<_props> = ({ phoneNumber, email }) => {
         {': '}
         <a
           href={`mailto:${email}`}
-          className='text-[#ffffff] hover:text-primary-hover'
+          className='text-[#ffffff] hover:text-primary'
         >
           {email}
         </a>{' '}
         OR Call:{' '}
         <a
-          href={`'tel:${phoneNumber}`}
-          className='text-[#ffffff] hover:text-primary-hover'
+          href={`tel:${phoneNumber}`}
+          className='text-[#ffffff] hover:text-primary'
         >
           {phoneNumber}
         </a>

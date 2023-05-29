@@ -13,7 +13,9 @@ const FeaturedProducts: React.FC<_props> = (props) => {
   return (
     <section className='mainsection featured_items text-center'>
       {fTitle && (
-        <div className={`peter-millar-promotional-embroidered-clothing-nw ${dataArr?.sectionTitle_final_class?.value}`}>
+        <div
+          className={`peter-millar-promotional-embroidered-clothing-nw ${dataArr?.sectionTitle_final_class?.value}`}
+        >
           {fTitle ?? ''}
         </div>
       )}
