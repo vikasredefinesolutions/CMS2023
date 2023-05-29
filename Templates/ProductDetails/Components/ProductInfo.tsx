@@ -95,6 +95,96 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
   const validationSchema = Yup.object().shape({
     email: Yup.string().email().required(__ValidationText.email.required),
   });
+
+  const HTML_START_ORDER_BUTTON = () => {
+    if (
+      isEmployeeLoggedIn ||
+      (totalInventoryCount && totalInventoryCount > 0)
+    ) {
+      return (
+        <form className='mt-[24px]'>
+          <div className='m-3 mt-6'>
+            <button
+              type='button'
+              disabled={product.isDiscontinue}
+              onClick={() => {
+                setOpenModal('startOrder');
+                setShowLoader(true);
+              }}
+              className='btn btn-xl btn-secondary !flex items-center justify-center lg:!text-3xl w-full uppercase'
+            >
+              {startOrderBtnText()}
+            </button>
+          </div>
+        </form>
+      );
+    }
+
+    return (
+      <>
+        <div className='m-3 mt-6'>
+          <button
+            type='button'
+            disabled={true}
+            className='btn btn-xl bg-light-gray !flex items-center justify-center lg:!text-3xl w-full uppercase'
+          >
+            Out of Stock
+          </button>
+        </div>
+        {email === 'SENT' ? (
+          <div className='text-center text-medium-text font-bold px-2 py-4'>
+            {
+              __pagesText.productInfo.startOrderModal.sizePriceQty.selectOrInput
+                .thanksForSigningUp
+            }
+          </div>
+        ) : (
+          <>
+            <p className='font-bold text-medium-text mb-2 '>
+              Get Inventory Alert
+            </p>
+            <Formik
+              initialValues={{ email: '' }}
+              onSubmit={(values) => sendEmailHandler(values)}
+              validationSchema={validationSchema}
+            >
+              {({ values, handleChange }) => {
+                return (
+                  <Form className='flex flex-wrap mt-[2px]'>
+                    <input
+                      type='text'
+                      name='email'
+                      autoComplete='off'
+                      value={values.email}
+                      onChange={handleChange}
+                      className='grow bg-light-gray shadow-sm text-md py-1 px-2'
+                    />
+
+                    <button
+                      type='submit'
+                      className='btn btn-xl btn-secondary whitespace-nowrap'
+                    >
+                      {
+                        __pagesText.productInfo.startOrderModal.sizePriceQty
+                          .selectOrInput.notify
+                      }
+                    </button>
+
+                    <ErrorMessage
+                      name={'email'}
+                      className='text-rose-500'
+                      component={'p'}
+                    />
+                  </Form>
+                );
+              }}
+            </Formik>
+          </>
+        )}
+      </>
+    );
+  };
+
   return (
     <div className='col-span-1 mt-[15px] pl-[8px] pr-[8px] md:pl-[15px] md:pr-[15px] sm:pl-[0px] sm:pr-[0px] lg:mt-[0px]'>
       <div className='hidden md:flex flex-wrap'>
@@ -310,86 +400,7 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
         </div>
       </div> */}
 
-      {totalInventoryCount && totalInventoryCount > 0 ? (
-        <form className='mt-[24px]'>
-          <div className='m-3 mt-6'>
-            <button
-              type='button'
-              disabled={product.isDiscontinue}
-              onClick={() => {
-                setOpenModal('startOrder');
-                setShowLoader(true);
-              }}
-              className='btn btn-xl btn-secondary !flex items-center justify-center lg:!text-3xl w-full uppercase'
-            >
-              {startOrderBtnText()}
-            </button>
-          </div>
-        </form>
-      ) : (
-        <>
-          <div className='m-3 mt-6'>
-            <button
-              type='button'
-              disabled={true}
-              className='btn btn-xl bg-light-gray !flex items-center justify-center lg:!text-3xl w-full uppercase'
-            >
-              Out of Stock
-            </button>
-          </div>
-          {email === 'SENT' ? (
-            <div className='text-center text-medium-text font-bold px-2 py-4'>
-              {
-                __pagesText.productInfo.startOrderModal.sizePriceQty
-                  .selectOrInput.thanksForSigningUp
-              }
-            </div>
-          ) : (
-            <>
-              <p className='font-bold text-medium-text mb-2 '>
-                Get Inventory Alert
-              </p>
-              <Formik
-                initialValues={{ email: '' }}
-                onSubmit={(values) => sendEmailHandler(values)}
-                validationSchema={validationSchema}
-              >
-                {({ values, handleChange }) => {
-                  return (
-                    <Form className='flex flex-wrap mt-[2px]'>
-                      <input
-                        type='text'
-                        name='email'
-                        autoComplete='off'
-                        value={values.email}
-                        onChange={handleChange}
-                        className='grow bg-light-gray shadow-sm text-md py-1 px-2'
-                      />
-
-                      <button
-                        type='submit'
-                        className='btn btn-xl btn-secondary whitespace-nowrap'
-                      >
-                        {
-                          __pagesText.productInfo.startOrderModal.sizePriceQty
-                            .selectOrInput.notify
-                        }
-                      </button>
-
-                      <ErrorMessage
-                        name={'email'}
-                        className='text-rose-500'
-                        component={'p'}
-                      />
-                    </Form>
-                  );
-                }}
-              </Formik>
-            </>
-          )}
-          <div></div>
-        </>
-      )}
+      {HTML_START_ORDER_BUTTON()}
 
       {/* <div className='m-[12px] mt-[24px]'>
           <button

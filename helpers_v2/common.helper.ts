@@ -199,9 +199,6 @@ export const isStringyNumberKey = (
     case ',':
       keyAllowed = true;
       break;
-    case ' ':
-      keyAllowed = true;
-      break;
     default:
       break;
   }
@@ -768,25 +765,6 @@ export const getPageType = async (
 ) => {
   let res = await FetchPageThemeConfigs('' + storeid, configname);
   return res;
-};
-
-//Track event using google tag manager script
-export const CaptureGTMEvent = (payload: any) => {
-  return payload;
-  // const dataLayer = window?.dataLayer || null;
-  // if (dataLayer) {
-  //   dataLayer.push({ ecommerce: null });
-  //   dataLayer.push({ ...payload });
-  // }
-};
-
-//Track event using Google tag manager Library
-export const TrackGTMEvent = (payload: any) => {
-  return payload;
-  // GoogleTagManager.dataLayer({ dataLayer: { ecommerce: null } });
-  // GoogleTagManager.dataLayer({
-  //   dataLayer: payload,
-  // });
 };
 
 //Track GA event using APIs for CG

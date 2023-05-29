@@ -32,8 +32,39 @@ const Home = (props) => {
     return () => {
       topic_set_isCMS(false);
     };
+    
   }, []);
 
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      window.addEventListener("scroll", handleScroll);
+    }
+  }, []);
+
+  const handleScroll = () =>
+  {
+    if (typeof window !== "undefined") {
+      console.log("T", document.body.classList, window.pageYOffset, document.body.classList.contains('index-page'));
+      if(document.body.classList.contains('index-page'))
+      {
+         let x = document.querySelector('#spy');
+        // alert(x)
+         if(x)
+         {
+          console.log(x.scrollTop);
+          if(window.pageYOffset > 70)
+          {
+              x.classList.add('fix');
+          }
+          else
+          {
+            x.classList.remove('fix');
+          }
+
+         }
+      }
+    }
+  }
   // useEffect(() => {
   //   AOS.init();
   //   AOS.refresh();

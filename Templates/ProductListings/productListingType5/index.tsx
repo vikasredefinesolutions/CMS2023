@@ -117,7 +117,7 @@ const ProductListingType5: React.FC<_ListingProps> = ({
                         ))}
                       </ul>
                     </div>
-                    <div className='py-20 border-t border-t-gray-300 text-center'>
+                    <div className='py-20 text-center'>
                       <div className=''>
                         <div className='mb-8'>
                           You've seen {products.length} Products out of{' '}

@@ -100,10 +100,25 @@ export const OTF_Input: React.FC<_props> = ({
   required = false,
   onBlur: handleBlur,
 }) => {
-  const changeHandler = (event: React.ChangeEvent<HTMLInputElement>): void => {
+  const changeHandler = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    value: string | undefined,
+  ): void => {
     if (type === 'number') {
       if (name === 'qty' && isStringyNumberKey(event)) {
         // For specific 'Qty' as stringedNumber
+        if (
+          event.target.value[event.target.value.length - 1] === ',' &&
+          value
+        ) {
+          if (value === '') {
+            return;
+          }
+
+          if (value[value?.length - 1] === ',') {
+            return;
+          }
+        }
         onChange(event);
         return;
       }
@@ -133,12 +148,15 @@ export const OTF_Input: React.FC<_props> = ({
         <div className='mt-1'>
           <input
             id={name}
+            onKeyDown={(event) =>
+              ['.'].includes(event.key) && event.preventDefault()
+            }
             name={name}
             type={'text'}
             value={value}
             placeholder={placeHolder}
             onBlur={handleBlur}
-            onChange={changeHandler}
+            onChange={(event) => changeHandler(event, value)}
             className='form-input'
           />
         </div>

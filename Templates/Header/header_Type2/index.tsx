@@ -5,7 +5,7 @@ import { _HeaderProps, _MenuItems } from '@definations/header.type';
 import {
   useActions_v2,
   useTypedSelector_v2,
-  useWindowDimensions_v2
+  useWindowDimensions_v2,
 } from '@hooks_v2/index';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
@@ -15,7 +15,7 @@ import {
   LoggedInMenu,
   LoginIcon,
   Logo,
-  MyCartIcon
+  MyCartIcon,
 } from '../header_Type2/Components/Icons';
 import Header_MenuItems from '../header_Type2/Components/Menu/Header_MenuItems';
 import SearchBar from '../header_Type2/Components/Menu/Header_SearchBar';
@@ -29,6 +29,7 @@ const Header_Type2: NextPage<_HeaderProps> = ({
   const { store_setAppView } = useActions_v2();
   const { width } = useWindowDimensions_v2();
   const router = useRouter();
+  const storeCode = useTypedSelector_v2((state) => state.store.code);
 
   // const router = useRouter;
   // ------------------------------------------------------------------------
@@ -53,12 +54,18 @@ const Header_Type2: NextPage<_HeaderProps> = ({
 
   return (
     <div
-      className={`bg-[${headerBgColor}] sticky top-7 z-40  border-b border-y-gray-border`}
+      className={`${
+        storeCode !== 'PKHG' ? 'bg-[' + headerBgColor + ']' : ''
+      } sticky top-7 z-40  shadow-[0_0px_5px_rgba(0,0,0,0.12)]`}
       id='mobile_menu_box'
     >
       {/* <NotificationBar /> */}
 
-      <div className={`bg-[${headerBgColor}]`}>
+      <div
+        className={`${
+          storeCode !== 'PKHG' ? 'bg-[' + headerBgColor + ']' : ''
+        }`}
+      >
         {isMobileView && router.asPath != paths.CHECKOUT && (
           <Header_MenuItems
             showSideMenu={showSideMenu}
@@ -68,11 +75,22 @@ const Header_Type2: NextPage<_HeaderProps> = ({
           />
         )}
         <div className='fixed z-40 lg:hidden'></div>
-        <header id={`${router.asPath===paths.HOME ? "spy" : ""}`} className='relative tracking-[1px]' >
+        <header
+          id={`${router.asPath === paths.HOME ? 'spy' : ''}`}
+          className='relative tracking-[1px]'
+        >
           <nav aria-label='Top'>
             <div
-              className={`${headerBgColor ? '' : 'bg-[#ffffff]'}`}
-              style={{ backgroundColor: headerBgColor }}
+              className={`${
+                storeCode !== 'PKHG'
+                  ? headerBgColor
+                    ? ''
+                    : 'bg-[#ffffff]'
+                  : ''
+              }`}
+              style={{
+                backgroundColor: storeCode !== 'PKHG' ? headerBgColor : '',
+              }}
             >
               <div className='container  mx-auto'>
                 <div className='pt-[10px] pb-[10px]'>

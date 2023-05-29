@@ -78,8 +78,24 @@ const AddOTFItemNo = ({ closeModal }: { closeModal: () => void }) => {
         serverURL: null,
       };
 
+      const temp_Arr = imageFolderPath.split('/');
+
+      let temp_ImagFolderPath = '';
+      temp_Arr.forEach((ele, index) => {
+        if (index === 0) {
+          return;
+        }
+
+        if (index === 1) {
+          temp_ImagFolderPath += '/temp';
+          return;
+        }
+
+        temp_ImagFolderPath += '/' + ele;
+      });
+
       file.serverURL = await UploadImage({
-        folderPath: imageFolderPath,
+        folderPath: temp_ImagFolderPath,
         files: event.currentTarget?.files[0],
       });
 
@@ -101,8 +117,8 @@ const AddOTFItemNo = ({ closeModal }: { closeModal: () => void }) => {
   ) => {
     setShowLoader(true);
 
-    const sizes = values.size.split(',');
-    const qtys = values.qty.split(',');
+    const sizes = values.size.split(',').filter((ele) => ele !== '');
+    const qtys = values.qty.split(',').filter((ele) => ele !== '');
 
     if (sizes.length !== qtys.length) {
       confirm('Size and quantity length not matched');

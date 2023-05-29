@@ -85,7 +85,7 @@ const CT1_EL_SizeQtyPrice: React.FC<_Props> = ({ details, setDetails }) => {
       validationSchema={_QtyNUnitPriceYupSchema}
       enableReinitialize
     >
-      {({ handleChange, submitForm, values }) => {
+      {({ handleChange, submitForm, setFieldValue, values }) => {
         return (
           <Form>
             <div className='flex justify-between py-2'>
@@ -96,7 +96,11 @@ const CT1_EL_SizeQtyPrice: React.FC<_Props> = ({ details, setDetails }) => {
                   value={values.qty}
                   name='qty'
                   type='number'
-                  min={0}
+                  onKeyDown={(event) =>
+                    ['e', 'E', '+', '-', '.'].includes(event.key) &&
+                    event.preventDefault()
+                  }
+                  min={1}
                   onChange={(event) => {
                     if (!event.target.value.includes('.')) {
                       handleChange(event);
@@ -113,8 +117,17 @@ const CT1_EL_SizeQtyPrice: React.FC<_Props> = ({ details, setDetails }) => {
                   value={values.unitPrice}
                   type='number'
                   name='unitPrice'
-                  min={1}
+                  min={0.1}
+                  size={0.1}
+                  onKeyDown={(event) =>
+                    ['e', 'E', '+', '-'].includes(event.key) &&
+                    event.preventDefault()
+                  }
                   onChange={(event) => {
+                    if (+event.target.value === 0) {
+                      setFieldValue('unitPrice', 1);
+                      return;
+                    }
                     handleChange(event);
                   }}
                   onBlur={() => {

@@ -36,7 +36,7 @@ const SearchBar: React.FC<_props> = ({
                           id='txtSearch'
                           placeholder='Enter Search here'
                           onChange={handleChange}
-                          className='outline-none w-full border-0 focus:ring-0 text-[14px] tracking-[1px] text-quaternary h-[26px]'
+                          className='outline-none w-full border-0 focus:ring-0 text-[14px] tracking-[1px] text-quaternary h-[26px] bg-none'
                           autoComplete='off'
                           maxLength={255}
                         />
@@ -78,7 +78,7 @@ const SearchBar: React.FC<_props> = ({
                       id='txtSearch'
                       placeholder='Enter Search here'
                       onChange={handleChange}
-                      className='outline-none w-full border-0 focus:ring-0 text-[14px] tracking-[1px] text-quaternary h-[26px]'
+                      className='outline-none w-full border-0 focus:ring-0 text-[14px] tracking-[1px] text-quaternary h-[26px] bg-transparent'
                       autoComplete='off'
                       maxLength={255}
                     />

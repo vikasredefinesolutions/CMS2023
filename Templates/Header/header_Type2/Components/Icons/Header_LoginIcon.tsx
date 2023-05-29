@@ -31,9 +31,9 @@ const LoginIcon: React.FC = () => {
           <span className='text-[12px] hidden xl:inline-block whitespace-nowrap tracking-[1px]'>
             {__pagesText.Headers.login}
           </span>
-          {/* <span className='material-icons'>
+          <span className='material-icons xl:hidden '>
             {__pagesText.Headers.loginIcon}
-          </span> */}
+          </span>
         </button>
         {showModal === 'login' && <LoginModal modalHandler={setShowModal} />}
         {showModal === 'forgot' && <ForgotModal modalHandler={setShowModal} />}

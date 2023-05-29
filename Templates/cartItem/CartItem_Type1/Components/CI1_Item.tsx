@@ -9,8 +9,8 @@ import { CustomizeLaterMain } from '@constants/common.constant';
 import { cartRemoveConfirmMessage } from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
 import {
-  commonMessage,
   __SuccessErrorText,
+  commonMessage,
 } from '@constants/successError.text';
 import { captureRemoveItemEvent } from '@controllers/cartController';
 import { _ProductColor } from '@definations/APIs/colors.res';
@@ -545,7 +545,7 @@ const CI1_Item: React.FC<_CartItem & _Props> = (props) => {
                   <button
                     type='button'
                     data-modal-toggle='startorderModal'
-                    className='btn btn-secondary !w-full !pt-[0px] !pb-[0px] text-center uppercase'
+                    className='btn btn-primary !w-full  text-center uppercase'
                     onClick={() => {
                       handleEditItem(props);
                       keepPersonalizing ? setKeepPersonalizing(false) : '';
@@ -561,7 +561,7 @@ const CI1_Item: React.FC<_CartItem & _Props> = (props) => {
                       keepPersonalizing ? setKeepPersonalizing(false) : '';
                       handleRemoveItem(props.shoppingCartItemsId);
                     }}
-                    className='btn btn-primary !w-full !pt-[0px] !pb-[0px] text-center uppercase'
+                    className='btn btn-primary !w-full  text-center uppercase'
                   >
                     Remove
                   </button>

@@ -1,5 +1,6 @@
 import NxtImage, { default as Image } from '@appComponents/reUsable/Image';
 import Price from '@appComponents/reUsable/Price';
+import { CustomizeLaterMain } from '@constants/common.constant';
 import { cartRemoveConfirmMessage } from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
 import { commonMessage } from '@constants/successError.text';
@@ -8,8 +9,17 @@ import {
   useActions_v2,
   useTypedSelector_v2,
 } from '@hooks_v2/index';
-import { CartReq, _CartItem } from '@services/cart';
+import {
+  CartReq,
+  PersonalizationColor,
+  PersonalizationFont,
+  PersonalizationLocation,
+  ShoppingCartItemDetailsViewModel,
+  _CartItem,
+} from '@services/cart';
 import { addToCart, deleteItemCart } from '@services/cart.service';
+import { _CartLinePersonDetailModel } from '@services/product.service.type';
+import Personalizing from '@templates/cartItem/CartItem_Type1/Components/Personalizing';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import {
@@ -20,13 +30,34 @@ import {
 } from './CT1_EL_Extras';
 import CT1_EL_SizeQtyPrice from './CT1_EL_SizeQtyPrice';
 
-const CT1_EL_Item: React.FC<_CartItem> = (item) => {
+interface _Props {
+  availableFont: [] | PersonalizationFont[];
+  availableLocation: [] | PersonalizationLocation[];
+  availableColor: [] | PersonalizationColor[];
+}
+
+const CT1_EL_Item: React.FC<_CartItem & _Props> = (item) => {
+  const { availableLocation, availableFont, availableColor, ...rest } = item;
   const { fetchCartDetails, setShowLoader, showModal } = useActions_v2();
   const isEmployeeLoggedIn = useTypedSelector_v2(
     (state) => state.employee.loggedIn,
   );
-  const { id: storeId } = useTypedSelector_v2((state) => state.store);
+  const {
+    isLinepersonalization,
+    code: storeCode,
+    mediaBaseUrl: clientSideMediaBaseUrl,
+    isAttributeSaparateProduct,
+    id: storeId,
+  } = useTypedSelector_v2((state) => state.store);
   const { lastUpdate } = useTypedSelector_v2((state) => state.cart);
+
+  const [keepPersonalizing, setKeepPersonalizing] = useState<boolean>(false);
+  const [personalizationArray, setPersonalizationArray] = useState<
+    ShoppingCartItemDetailsViewModel[] | []
+  >([]);
+  const [cartLinePersonModels, setCartLinePersonModels] = useState<
+    _CartLinePersonDetailModel[] | []
+  >([]);
 
   // Component States
   const [details, setDetails] = useState<_SetState_Details>({
@@ -38,6 +69,7 @@ const CT1_EL_Item: React.FC<_CartItem> = (item) => {
     updateCart: false,
     lastUpdate: new Date().getTime(),
   });
+  const customer = useTypedSelector_v2((state) => state.user.customer);
 
   // Imported Functions
   const customerId = GetCustomerId();
@@ -150,6 +182,18 @@ const CT1_EL_Item: React.FC<_CartItem> = (item) => {
     }
   }, [lastUpdate]);
 
+  const ProductNameHTML = (seName: string | null, name: string) => {
+    if (!seName) {
+      return <a className='text-[#000000]'>{name}</a>;
+    }
+
+    return (
+      <Link href={`/${seName}`}>
+        <span className='text-[#000000]'>{name}</span>
+      </Link>
+    );
+  };
+
   return (
     <li className='flex flex-wrap pl-[20px] pr-[20px] ml-[-15px] mr-[-15px] mb-[40px]'>
       <div className='w-full lg:w-2/6 pl-[15px] pr-[15px]'>
@@ -168,9 +212,7 @@ const CT1_EL_Item: React.FC<_CartItem> = (item) => {
       </div>
       <div className='w-full lg:w-4/6 pl-[0px] pr-[0px] flex flex-wrap lg:justify-between'>
         <div className='text-title-text font-semibold mb-[10px]'>
-          <Link href={`/${item.seName}`} className='text-[#000000]'>
-            {item.productName}
-          </Link>
+          {ProductNameHTML(item.seName, item.productName)}
         </div>
         <div className='w-full flex flex-wrap mt-[5px]'>
           <div className='lg:w-2/3 w-full'>
@@ -328,9 +370,66 @@ const CT1_EL_Item: React.FC<_CartItem> = (item) => {
                 Remove
               </button>
             </div>
+            {isLinepersonalization &&
+              customer?.isCustomerPersonalization &&
+              item.shoppingCartLogoPersonViewModels.length >= 1 &&
+              item.shoppingCartLogoPersonViewModels[0].logoName !==
+                CustomizeLaterMain &&
+              item.isBrandPersonalization && (
+                <div className='mt-[12px] lg:ml-[20px] mb-[20px] text-center p-[2px] text-sm cursor-pointer'>
+                  <span
+                    className='!w-full btn btn-sm btn-secondary uppercase text-md'
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setPersonalizationArray(
+                        item.shoppingCartItemDetailsViewModels,
+                      );
+                      setCartLinePersonModels([]);
+                      setKeepPersonalizing(!keepPersonalizing);
+                    }}
+                  >
+                    {__pagesText.cart.personalize}
+                    <br />
+                    {__pagesText.cart.yourItem}
+                  </span>
+                </div>
+              )}
           </div>
         </div>
       </div>
+
+      {keepPersonalizing && (
+        <Personalizing
+          item={{ ...rest }}
+          setKeepPersonalizing={setKeepPersonalizing}
+          availableLocation={availableLocation}
+          availableFont={availableFont}
+          availableColor={availableColor}
+          personalizationArray={personalizationArray}
+          cartLinePersonModels={cartLinePersonModels}
+          setCartLinePersonModels={setCartLinePersonModels}
+          setPersonalizationArray={setPersonalizationArray}
+          shoppingCartItemsId={item.shoppingCartItemsId}
+          earlierSelectedColor={
+            item.displayLineAttributeOptions[0]
+              ? item.displayLineAttributeOptions[0].linePersonalizeDetails[0]
+                  .color
+              : ''
+          }
+          earlierSelectedFont={
+            item.displayLineAttributeOptions[0]
+              ? item.displayLineAttributeOptions[0].linePersonalizeDetails[0]
+                  .font
+              : ''
+          }
+          earlierSelectedLocation={
+            item.displayLineAttributeOptions[0]
+              ? item.displayLineAttributeOptions[0].linePersonalizeDetails[0]
+                  .location
+              : ''
+          }
+        />
+      )}
     </li>
   );
 };

@@ -6,7 +6,17 @@ import { _CartItem } from '@services/cart';
 import Link from 'next/link';
 
 import CheckoutController from '@controllers/checkoutController';
-import { GetCartTotals } from '@hooks_v2/index';
+import { GetCartTotals, useTypedSelector_v2 } from '@hooks_v2/index';
+import {
+  PersonalizationColor,
+  PersonalizationFont,
+  PersonalizationLocation,
+} from '@services/cart';
+import {
+  getPersonalizationColor,
+  getPersonalizationFont,
+  getPersonalizationLocation,
+} from '@services/cart.service';
 import CartSummary from '@templates/cartSummarry';
 import CT1_EL_Item from './CT1_EL_Item';
 
@@ -17,8 +27,35 @@ interface _Props {
 const CT1_EmployeeLoginCart: React.FC<_Props> = ({ cartItems }) => {
   const [showOTF, setShowOTF] = useState<'OTF' | null>(null);
   const { totalPrice } = GetCartTotals();
+  const { id: storeId } = useTypedSelector_v2((state) => state.store);
   const { fetchShipping, shippingAdress, selectedShipping, shippingMethod } =
     CheckoutController();
+
+  const [availableFont, setAvailableFont] = useState<
+    PersonalizationFont[] | []
+  >([]);
+  const [availableLocation, setAvailableLocation] = useState<
+    PersonalizationLocation[] | []
+  >([]);
+  const [availableColor, setAvailableColor] = useState<
+    PersonalizationColor[] | []
+  >([]);
+
+  // All useEffects
+  useEffect(() => {
+    if (storeId) {
+      getPersonalizationFont(storeId).then((res) => {
+        setAvailableFont(res);
+      });
+      getPersonalizationColor(storeId).then((res) => {
+        setAvailableColor(res);
+      });
+      getPersonalizationLocation(storeId).then((res) => {
+        setAvailableLocation(res);
+      });
+    }
+  }, [storeId]);
+
   useEffect(() => {
     if (totalPrice) {
       fetchShipping(totalPrice);
@@ -54,7 +91,13 @@ const CT1_EmployeeLoginCart: React.FC<_Props> = ({ cartItems }) => {
                   </div>
                   <ul role='list' className='overflow-hidden'>
                     {cartItems.map((item, index) => (
-                      <CT1_EL_Item key={index} {...item} />
+                      <CT1_EL_Item
+                        availableFont={availableFont}
+                        availableLocation={availableLocation}
+                        availableColor={availableColor}
+                        key={index}
+                        {...item}
+                      />
                     ))}
                   </ul>
                 </div>

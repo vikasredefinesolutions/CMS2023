@@ -143,7 +143,8 @@ export const productSlice = createSlice({
         let minQty = payload.data.qty;
 
         if (state.toCheckout.minQtyShouldNotBeMoreThanOne) {
-          minQty = 1;
+          state.toCheckout.minQty = 1;
+          return;
         }
 
         state.toCheckout.minQty = minQty;
@@ -377,11 +378,13 @@ export const productSlice = createSlice({
 
       state.selected.color = action.payload;
 
-      const minQty = state.toCheckout.minQtyShouldNotBeMoreThanOne
-        ? 1
-        : action.payload.minQuantity;
-      state.toCheckout.minQty = minQty;
       state.selected.productId = action.payload.productId;
+
+      if (state.toCheckout.minQtyShouldNotBeMoreThanOne) {
+        state.toCheckout.minQty = 1;
+        return;
+      }
+      state.toCheckout.minQty = action.payload.minQuantity;
     },
 
     setImage: (
