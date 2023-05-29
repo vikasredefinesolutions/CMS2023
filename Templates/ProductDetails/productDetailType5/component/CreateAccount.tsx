@@ -8,9 +8,9 @@ import * as Yup from 'yup';
 import { paths } from '@constants/paths.constant';
 import { __ValidationText } from '@constants/validation.text';
 import {
-  createNewAccount_payload,
   _CNA_StoreCustomerModel,
   _CreateNewAccount_Payload,
+  createNewAccount_payload,
 } from '@payloads/createNewAccount.payload';
 import { CreateNewAccount } from '@services/user.service';
 import getLocation from 'helpers_v2/getLocation';
@@ -18,7 +18,6 @@ import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
 
 import { UserAddressType } from '@constants/enum';
 import { __UserMessages } from '@constants/global.constant';
-import { TrackGTMEvent } from '@helpers/common.helper';
 
 const pattern1 = /^\(?([0-9]{3})\)?[-]([0-9]{3})[-]([0-9]{4})$/; //Matches xxx-xxx-xxxx
 const pattern2 = /^\(?([0-9]{3})\)?[.]([0-9]{3})[.]([0-9]{4})$/; //Matches xxx.xxx.xxxx
@@ -133,26 +132,6 @@ const CreateAccount: React.FC = () => {
         });
         return;
       }
-      const userRegistrationEventPayload = {
-        user_firstname: payload?.storeCustomerModel?.firstname,
-        user_lastname: payload?.storeCustomerModel?.lastName,
-        user_email: payload?.storeCustomerModel?.email,
-        user_phone: payload?.storeCustomerModel?.storeCustomerAddress[0]?.phone,
-        companyName: payload?.storeCustomerModel?.companyName,
-        jobTitle: payload?.storeCustomerModel?.jobTitle,
-        address1:
-          payload?.storeCustomerModel?.storeCustomerAddress[0]?.address1,
-        address2:
-          payload?.storeCustomerModel?.storeCustomerAddress[0]?.address2,
-        zipcode:
-          payload?.storeCustomerModel?.storeCustomerAddress[0]?.postalCode,
-        city: payload?.storeCustomerModel?.storeCustomerAddress[0]?.city,
-        state: payload?.storeCustomerModel?.storeCustomerAddress[0]?.state,
-        coutry:
-          payload?.storeCustomerModel?.storeCustomerAddress[0]?.countryName,
-        location: `${location?.city}, ${location?.region}, ${location?.country}, ${location?.postal_code}`,
-      };
-      TrackGTMEvent(userRegistrationEventPayload);
       showModal({
         message: __UserMessages.signUpPage.SuccessFullyAccountCreated,
         title: 'Success',

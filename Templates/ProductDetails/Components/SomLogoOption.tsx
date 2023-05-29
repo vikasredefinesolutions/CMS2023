@@ -183,41 +183,52 @@ const SomLogoOption: React.FC<_SOMLogoOptionProps> = ({
         previewURL: URL.createObjectURL(event.currentTarget.files[0]),
       };
 
-      const logoFileURL: string | null = await UploadImage({
-        folderPath: imageFolderPath,
-        files: event.currentTarget?.files[0],
-      });
+      var idxDot = file.name.split('.');
+      const type = idxDot[idxDot.length - 1];
 
-      product_updateLogoDetails({
-        type: 'Upload_Logo',
-        logo: {
-          status: logoLocation.submitted,
-          location: {
-            imageUrl: selectedLocation?.image.url ?? '',
-            name: selectedLocation?.label ?? '',
-            value: selectedLocation?.value ?? '',
+      if (type == 'jpg' || type == 'jpeg' || type == 'png') {
+        //TO DO
+
+        console.log(file, 'file data');
+
+        const logoFileURL: string | null = await UploadImage({
+          folderPath: imageFolderPath,
+          files: event.currentTarget?.files[0],
+        });
+
+        product_updateLogoDetails({
+          type: 'Upload_Logo',
+          logo: {
+            status: logoLocation.submitted,
+            location: {
+              imageUrl: selectedLocation?.image.url ?? '',
+              name: selectedLocation?.label ?? '',
+              value: selectedLocation?.value ?? '',
+            },
+            title: file.name,
+            filePath: logoFileURL ? logoFileURL : '',
+            date: JSON.stringify(new Date()),
+            price: logoPrice === 'FREE' ? 0 : logoPrice,
+            quantity: totalQty,
+            isSewOut: false,
+            sewOutAmount: 0,
+            reUsableCustomerLogo: 0,
           },
-          title: file.name,
-          filePath: logoFileURL ? logoFileURL : '',
-          date: JSON.stringify(new Date()),
-          price: logoPrice === 'FREE' ? 0 : logoPrice,
-          quantity: totalQty,
-          isSewOut: false,
-          sewOutAmount: 0,
-          reUsableCustomerLogo: 0,
-        },
-      });
-      product_updateLogoDetails({
-        type: 'Update_TotalPrice_ByLogo',
-        logo: {
-          addOrSubtract: 'add',
-          price: logoPrice,
-          index,
-        },
-      });
+        });
+        product_updateLogoDetails({
+          type: 'Update_TotalPrice_ByLogo',
+          logo: {
+            addOrSubtract: 'add',
+            price: logoPrice,
+            index,
+          },
+        });
 
-      setFileToUpload(file);
-      setLogoStatus('submitted');
+        setFileToUpload(file);
+        setLogoStatus('submitted');
+      } else {
+        alert('Only jpg/jpeg and png files are allowed!');
+      }
     } catch (error) {
       showModal({
         title: 'Error',
@@ -490,7 +501,7 @@ const SomLogoOption: React.FC<_SOMLogoOptionProps> = ({
                 value={''}
                 className='sr-only'
                 onChange={fileReader}
-                accept={'image/*'}
+                accept={'.png, .jpg, .jpeg'}
               />
             </div>
           </div>

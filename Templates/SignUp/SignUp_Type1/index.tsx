@@ -34,7 +34,6 @@ import {
 } from '@constants/global.constant';
 import {
   KlaviyoScriptTag,
-  TrackGTMEvent,
   deleteCookie,
   extractCookies,
   setCookie,
@@ -169,26 +168,6 @@ const SignUp_type1: React.FC = () => {
 
         return;
       }
-      const userRegistrationEventPayload = {
-        user_firstname: payload?.storeCustomerModel?.firstname,
-        user_lastname: payload?.storeCustomerModel?.lastName,
-        user_email: payload?.storeCustomerModel?.email,
-        user_phone: payload?.storeCustomerModel?.storeCustomerAddress[0]?.phone,
-        companyName: payload?.storeCustomerModel?.companyName,
-        jobTitle: payload?.storeCustomerModel?.jobTitle,
-        address1:
-          payload?.storeCustomerModel?.storeCustomerAddress[0]?.address1,
-        address2:
-          payload?.storeCustomerModel?.storeCustomerAddress[0]?.address2,
-        zipcode:
-          payload?.storeCustomerModel?.storeCustomerAddress[0]?.postalCode,
-        city: payload?.storeCustomerModel?.storeCustomerAddress[0]?.city,
-        state: payload?.storeCustomerModel?.storeCustomerAddress[0]?.state,
-        coutry:
-          payload?.storeCustomerModel?.storeCustomerAddress[0]?.countryName,
-        location: `${location?.city}, ${location?.region}, ${location?.country}, ${location?.postal_code}`,
-      };
-      TrackGTMEvent(userRegistrationEventPayload);
       showModal({
         message: __UserMessages.signUpPage.SuccessFullyAccountCreated,
         title: 'Success',

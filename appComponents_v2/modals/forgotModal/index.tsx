@@ -94,7 +94,7 @@ const ForgotModal: React.FC<_ModalProps> = ({ modalHandler }) => {
                       FinalMessage ? (
                         <p>
                           {__pagesText.productInfo.forgotModal.sentSucess1}
-                          {Email}
+                          {Email}{' '}
                           {__pagesText.productInfo.forgotModal.sentSucess2}
                         </p>
                       ) : (

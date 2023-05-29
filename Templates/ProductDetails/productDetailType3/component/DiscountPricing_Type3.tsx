@@ -31,7 +31,9 @@ const DiscountPricing_Type3: React.FC<
             </span>
           </div>
           <div className='text-extra-small-text py-4' x-show='open'>
-            {__pagesText.productInfo.discountPricing.showMsg}
+            {__pagesText.productInfo.discountPricing.startshowMsg}
+            {minQty}
+            {__pagesText.productInfo.discountPricing.startshowMsg}
           </div>
         </div>
       ) : null}

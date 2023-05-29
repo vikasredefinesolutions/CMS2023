@@ -40,6 +40,8 @@ const SomActionsHandler: React.FC<_SOMActionHandlerProps> = ({
   const { clearToCheckout, setShowLoader } = useActions_v2();
   const store = useTypedSelector_v2((state) => state.store);
 
+  const { totalQty } = useTypedSelector_v2((state) => state.product.toCheckout);
+
   const isEmployeeLoggedIn = useTypedSelector_v2(
     (state) => state.employee.loggedIn,
   );
@@ -112,7 +114,7 @@ const SomActionsHandler: React.FC<_SOMActionHandlerProps> = ({
     KlaviyoScriptHelper(['track', 'Added to Cart', item]);
   };
 
-  const addToCartHandler = async () => {
+  const addToCartHandler = async (totalQty: number) => {
     if (!toCheckout.allowAddToCart) {
       setShowLoader(false);
       setShowRequiredModal('quantity');
@@ -138,43 +140,47 @@ const SomActionsHandler: React.FC<_SOMActionHandlerProps> = ({
       toCheckout.sizeQtys,
     );
 
-    const cartPayload = await singleColor_addToCart_PayloadGenerator({
-      cartItemId,
-      storeId: storeId,
-      userId:
-        loggedIN_userId && loggedIN_userId > 0
-          ? loggedIN_userId
-          : tempCustId
-          ? parseInt(tempCustId)
-          : 0,
-      isEmployeeLoggedIn,
-      cartItems: [
-        {
-          attributeOptionName: 'Color',
-          attributeOptionValue: selected.color.name,
-          attributeOptionId: selected.color.attributeOptionId,
+    const cartPayload = await singleColor_addToCart_PayloadGenerator(
+      {
+        cartItemId,
+        storeId: storeId,
+        userId:
+          loggedIN_userId && loggedIN_userId > 0
+            ? loggedIN_userId
+            : tempCustId
+            ? parseInt(tempCustId)
+            : 0,
+        isEmployeeLoggedIn,
+        cartItems: [
+          {
+            attributeOptionName: 'Color',
+            attributeOptionValue: selected.color.name,
+            attributeOptionId: selected.color.attributeOptionId,
+          },
+        ],
+        personalization: {
+          logoCartItems: logoCartItems,
+          lineCartItems: lineCartItems,
         },
-      ],
-      personalization: {
-        logoCartItems: logoCartItems,
-        lineCartItems: lineCartItems,
+        product: {
+          id: selected.productId,
+          price: toCheckout.price,
+          total: {
+            price: toCheckout.totalPrice,
+            qty: toCheckout.totalQty,
+            discountPrice: 0,
+          },
+          color: {
+            altTag: selected.color.altTag,
+            imageUrl: selected.color.imageUrl,
+          },
+          status: 2,
+          note: note,
+        },
       },
-      product: {
-        id: selected.productId,
-        price: toCheckout.price,
-        total: {
-          price: toCheckout.totalPrice,
-          qty: toCheckout.totalQty,
-          discountPrice: 0,
-        },
-        color: {
-          altTag: selected.color.altTag,
-          imageUrl: selected.color.imageUrl,
-        },
-        status: 2,
-        note: note,
-      },
-    });
+      isUpdate,
+      totalQty,
+    );
 
     //GTM event for add-to-cart
     const payload = {
@@ -249,7 +255,7 @@ const SomActionsHandler: React.FC<_SOMActionHandlerProps> = ({
       <button
         onClick={() => {
           setShowLoader(true);
-          addToCartHandler();
+          addToCartHandler(isUpdate ? totalQty : 0);
         }}
         type='button'
         className='btn btn-xl btn-secondary w-full uppercase mb-2'

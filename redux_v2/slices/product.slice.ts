@@ -520,6 +520,20 @@ export const productSlice = createSlice({
       };
     },
 
+    product_editLogoPrice: (
+      state,
+      action: {
+        payload: {
+          prices: number[];
+        };
+      },
+    ) => {
+      state.som_logos.prices = action.payload.prices;
+      state.toCheckout.additionalLogoCharge =
+        state.toCheckout.totalQty *
+        action.payload.prices.reduce((a, b) => a + b);
+    },
+
     updateOptions: (
       state,
       action: {

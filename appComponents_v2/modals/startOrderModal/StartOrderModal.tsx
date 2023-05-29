@@ -15,8 +15,13 @@ import { _startOrderModalProps } from './startOrderModalType';
 
 const StartOrderModal: React.FC<_startOrderModalProps> = (props) => {
   const { product, modalHandler, edit } = props;
-  const { clearToCheckout, setShowLoader, product_storeData, setColor } =
-    useActions_v2();
+  const {
+    clearToCheckout,
+    setShowLoader,
+    product_storeData,
+    setColor,
+    product_editLogoPrice,
+  } = useActions_v2();
   const [ignoreFirstCleanUp, setIgnoreFirstCleanUp] = useState<boolean>(true);
   const [allColors, showAllColors] = useState<boolean>(false);
   const { code: storeCode } = useTypedSelector_v2((state) => state.store);
@@ -97,6 +102,20 @@ const StartOrderModal: React.FC<_startOrderModalProps> = (props) => {
     }
     return [];
   };
+  const { totalQty } = useTypedSelector_v2((state) => state.product.toCheckout);
+  useEffect(() => {
+    if (edit) {
+      let logoprizes = edit.shoppingCartLogoPersonViewModels.map(
+        (el) => el.logoPrice / el.qty,
+      );
+      product_editLogoPrice({ prices: logoprizes });
+    }
+  }, [edit?.shoppingCartLogoPersonViewModels, totalQty]);
+
+  // console.log(
+  //   'edit?.shoppingCartItemsId',
+  //   edit?.shoppingCartLogoPersonViewModels,
+  // );
 
   return (
     <div

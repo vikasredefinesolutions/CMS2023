@@ -158,8 +158,12 @@ export interface _ProductsAlike {
   name: string;
   msrp: number;
   seName: string;
-  image: null | string;
+  image: string;
   categoryId: number;
+  isSpecialBrand: boolean;
+  lowPrice: number;
+  masterId: number;
+  storeId: number;
   getProductImageOptionList: _ProductImageOption[];
 }
 

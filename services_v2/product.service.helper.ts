@@ -76,6 +76,8 @@ export const personalization: {
 
 export const singleColor_addToCart_PayloadGenerator = async (
   cart: _AddToCart_PayloadGenerator_Attributes,
+  isupdate: boolean,
+  totalQty: number,
 ): Promise<_AddToCart_Payload> => {
   let shoppingCartItemsDetailModel: _ShoppingCartItemsDetailModel[] = [];
   let cartLogoPersonModel: _CartLogoPersonModel[] = [];
@@ -99,7 +101,7 @@ export const singleColor_addToCart_PayloadGenerator = async (
           return {
             ...personalization.defaultLogoDetail,
             logoPrice: logo.price,
-            logoQty: logo.qty,
+            logoQty: isupdate ? totalQty : logo.qty,
             logoFile: logo.filePathUrl,
             logoTotal: logo.qty * logo.price,
             logoLocation: logo.positionImage.name,

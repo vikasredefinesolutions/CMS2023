@@ -20,29 +20,31 @@ const RcDate: React.FC<_props> = ({ value, setFieldValue }) => {
     <div className='w-full '>
       <div className='flex flex-wrap items-center justify-between'>
         <div className=''>In Hands Date:</div>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DesktopDatePicker
-            inputFormat={__pagesConstant._requestConsultation.dateFormat}
-            value={value}
-            onChange={(event: any) => {
-              event && setFieldValue('inHandDate', event['$d']);
-            }}
-            disableHighlightToday={true}
-            disablePast={true}
-            open={open}
-            onOpen={() => setOpen(true)}
-            onClose={() => setOpen(false)}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                error={false}
-                onClick={() => setOpen(true)}
-                inputProps={{ ...params.inputProps, readOnly: true }}
-                // disabled={true}
-              />
-            )}
-          />
-        </LocalizationProvider>
+        <div onClick={() => setOpen(true)}>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DesktopDatePicker
+              inputFormat={__pagesConstant._requestConsultation.dateFormat}
+              value={value}
+              onChange={(event: any) => {
+                event && setFieldValue('inHandDate', event['$d']);
+              }}
+              disableHighlightToday={true}
+              disablePast={true}
+              open={open}
+              onOpen={() => setOpen(true)}
+              onClose={() => setOpen(false)}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  error={false}
+                  onClick={() => setOpen(true)}
+                  inputProps={{ ...params.inputProps, readOnly: true }}
+                  // disabled={true}
+                />
+              )}
+            />
+          </LocalizationProvider>
+        </div>
       </div>
     </div>
   );
