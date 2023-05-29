@@ -16,7 +16,7 @@ import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import { addSubStore, addToCart } from '@services/cart.service';
 import { _ProductInfoProps } from '@templates/ProductDetails/Components/productDetailsComponents';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import DiscountPrice from './DiscountPrice';
 import DiscountPricing from './DiscountPricing';
 import ProductCompanion from './ProductCompanion';
@@ -50,6 +50,8 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
   const { toCheckout, product: storeProduct } = useTypedSelector_v2(
     (state) => state.product,
   );
+
+  const isCaptured = useRef(false);
   // const productDis = useTypedSelector_v2((state) =>
   //   console.log(state, 'discount'),
   // );
@@ -124,29 +126,33 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
 
           if (cartObject) {
             //GTM event for add-to-cart
-            const eventPayload = {
-              storeId: storeId,
-              customerId: userId,
-              productId: storeProduct?.id,
-              productName: storeProduct?.name,
-              colorName: storeProduct?.colors?.length
-                ? storeProduct?.colors?.find(
-                    (clr) => clr.productId === product.id,
-                  )?.name
-                : '',
-              price: toCheckout?.totalPrice,
-              salesPrice: toCheckout?.price,
-              sku: storeProduct?.sku,
-              brandName: storeProduct?.brand?.name,
-              quantity: toCheckout.totalQty,
-              value: toCheckout.totalPrice,
-              coupon: '',
-            };
-            GoogleAnalyticsTrackerForAllStore(
-              'GoogleAddToCartScript',
-              storeId,
-              eventPayload,
-            );
+            if (!isCaptured.current) {
+              isCaptured.current = true;
+
+              const eventPayload = {
+                storeId: storeId,
+                customerId: userId,
+                productId: storeProduct?.id,
+                productName: storeProduct?.name,
+                colorName: storeProduct?.colors?.length
+                  ? storeProduct?.colors?.find(
+                      (clr) => clr.productId === product.id,
+                    )?.name
+                  : '',
+                price: toCheckout?.totalPrice,
+                salesPrice: toCheckout?.price,
+                sku: storeProduct?.sku,
+                brandName: storeProduct?.brand?.name,
+                quantity: toCheckout.totalQty,
+                value: toCheckout.totalPrice,
+                coupon: '',
+              };
+              GoogleAnalyticsTrackerForAllStore(
+                'GoogleAddToCartScript',
+                storeId,
+                eventPayload,
+              );
+            }
             try {
               let c_id = customerId;
               let res;
