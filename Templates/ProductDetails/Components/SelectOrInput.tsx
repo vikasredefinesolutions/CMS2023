@@ -73,13 +73,21 @@ const SelectOrInput: React.FC<_SelectOrInputProps> = ({
         attributeOptionId: sizeAttributeOptionId,
         size: size,
         qty:
-          Math.ceil(+event.target.value / multipleQuantity) * multipleQuantity,
+          Math.ceil(+event.target.value / multipleQuantity) * multipleQuantity >
+          qty
+            ? qty
+            : Math.ceil(+event.target.value / multipleQuantity) *
+              multipleQuantity,
         price: newprice,
       });
       setInputOrSelect((input) => ({
         ...input,
         choosedValue:
-          Math.ceil(+event.target.value / multipleQuantity) * multipleQuantity,
+          Math.ceil(+event.target.value / multipleQuantity) * multipleQuantity >
+          qty
+            ? qty
+            : Math.ceil(+event.target.value / multipleQuantity) *
+              multipleQuantity,
       }));
       return;
     }
@@ -129,7 +137,7 @@ const SelectOrInput: React.FC<_SelectOrInputProps> = ({
   const sendEmailHandler = async (values: { email: string }) => {
     const response = await Klaviyo_BackInStock({
       email: values.email,
-      variant: `${attributeOptionId}`,
+      variant: `${sizeAttributeOptionId}`,
       platform: 'api',
       a: klaviyokey || '',
       storeId,

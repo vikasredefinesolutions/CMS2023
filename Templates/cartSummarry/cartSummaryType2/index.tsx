@@ -1,116 +1,288 @@
 import Price from '@appComponents/reUsable/Price';
-import { GetCartTotals, useTypedSelector_v2 } from 'hooks_v2';
-import { FC } from 'react';
+import { __pagesText } from '@constants/pages.text';
+import { _shippingMethod } from '@controllers/checkoutController';
+import SummarryController from '@controllers/summarryController';
+import { Form, Formik } from 'formik';
+import { GetCartTotals, useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
+import { FC, useState } from 'react';
 
-const CartSummarryType2: FC = () => {
+interface _props {
+  selectedShippingModel: _shippingMethod;
+}
+
+const CartSummarryType2: FC<_props> = ({ selectedShippingModel }) => {
+  const { update_checkoutEmployeeLogin } = useActions_v2();
   const couponDetails = useTypedSelector_v2((state) => state.cart.discount);
-
+  const isEmployeeLoggedIn = useTypedSelector_v2(
+    (state) => !!state.employee.empId,
+  );
+  const currentPage = useTypedSelector_v2((state) => state.store.currentPage);
+  const { el: employeeLogin } = useTypedSelector_v2((state) => state.checkout);
+  const [textOrNumber, setTextOrNumber] = useState<'number' | 'text'>('text');
   // Functions
-  const { totalPrice, subTotal, smallRunFee } = GetCartTotals();
-  return (
-    <>
-      <div className='border border-gray-border p-[15px]'>
-        <div className='w-full text-sub-text pt-[8px] pb-[8px]'>
-          Order Summary
+  const {
+    coupon,
+    successMessage,
+    setCoupon,
+    applyCouponHandler,
+    removeCouponCodeHandler,
+  } = SummarryController();
+  const {
+    totalPrice,
+    subTotal,
+    logoSetupCharges,
+    smallRunFee,
+    salesTax,
+    totalLogoCharges,
+    totalLineCharges,
+    totalQty,
+  } = GetCartTotals();
+
+  // const { cartQty } = useTypedSelector_v2((state) => state.cart);
+  // const { fetchShipping } = CheckoutController();
+  // useEffect(() => {
+  //   if (cartQty) {
+  //     fetchShipping(subTotal);
+  //   }
+  // }, [subTotal]);
+  const getNewShippingCost = (shippingCost: number): number => {
+    if (isEmployeeLoggedIn) {
+      return employeeLogin.shippingPrice;
+    }
+
+    return shippingCost;
+  };
+
+  const ShippingHTML = (userShippingPrice: number) => {
+    if (isEmployeeLoggedIn && currentPage === 'CHECKOUT') {
+      const price =
+        textOrNumber === 'text' && employeeLogin.shippingPrice === 0
+          ? 'FREE'
+          : employeeLogin.shippingPrice.toFixed(2);
+
+      return (
+        <div className='border-t border-gray-200 flex items-center justify-between pt-[10px] pb-[10px]'>
+          <dt className='text-normal-text flex items-center tracking-normal pb-[10px]'>
+            <span>Shipping</span>
+          </dt>
+          <dd className='text-normal-text tracking-normal'>
+            <div className='form-group m-b-10 pl-[15px] relative max-w-[100px]'>
+              <span className='absolute left-[0px] top-[12px] text-normal-text flex items-center tracking-normal'>
+                $
+              </span>
+              <Formik
+                initialValues={{ shipping: price }}
+                onSubmit={(values) => {
+                  setTextOrNumber('text');
+                  update_checkoutEmployeeLogin({
+                    type: 'SHIPPING_PRICE',
+                    value: +(+values.shipping).toFixed(2),
+                  });
+                }}
+                enableReinitialize
+              >
+                {({ handleChange, values, setFieldValue, submitForm }) => {
+                  return (
+                    <Form>
+                      <input
+                        className='border border-gray-border text-right focus:border-gray-border rounded w-full px-2 py-2'
+                        value={values.shipping}
+                        name={'shipping'}
+                        type={textOrNumber}
+                        onChange={(event) => {
+                          if (textOrNumber === 'text') {
+                            setTextOrNumber('number');
+                          }
+                          if ('FREE'.includes(event.target.value[0])) {
+                            setFieldValue('number', '0');
+                            return;
+                          }
+                          handleChange(event);
+                        }}
+                        onBlur={() => submitForm()}
+                        placeholder=''
+                      />
+                    </Form>
+                  );
+                }}
+              </Formik>
+            </div>
+          </dd>
         </div>
-        <div className='w-full pl-[15px] pr-[15px] border-b border-gray-border mt-[10px] mb-[10px]'></div>
-        <dl className='text-default-text'>
-          <div className='flex items-center justify-between pt-[15px]'>
-            <dt className=''>Merchandise</dt>
-            <dd className=''>
+      );
+    }
+
+    return (
+      <div className='border-t border-gray-200 flex items-center justify-between pt-[10px] pb-[10px]'>
+        <dt className='text-normal-text flex items-center'>
+          <span>Shipping</span>
+        </dt>
+        <dd className='text-normal-text'>
+          {userShippingPrice === 0 ? (
+            'FREE'
+          ) : (
+            <Price value={userShippingPrice} />
+          )}
+        </dd>
+      </div>
+    );
+  };
+
+  const addBottomPadding = couponDetails?.amount ? '' : 'pb-[20px]';
+
+  const decideValue = (args: {
+    message: string | null;
+    currentValue: string;
+    active: number | undefined;
+  }) => {
+    if (args.message) {
+      return args.message; // will show for 3 secs after applying the code
+    }
+
+    let text = '';
+    if (args.currentValue) {
+      text = args.currentValue;
+    }
+    if (args.active) {
+      text = coupon;
+    }
+    return text;
+  };
+
+  const showUpdateBtn = () => {
+    if (successMessage) {
+      return false;
+    }
+    if (coupon) {
+      return true;
+    }
+    return false;
+  };
+
+  return (
+    <div className='border border-slate-400 bg-[#ffffff] mb-[20px]'>
+      <div className='bg-light-gray w-full text-sub-text font-medium pl-[16px] pr-[16px] pt-[8px] pb-[8px]'>
+        {__pagesText.CheckoutPage.orderSummary.OrderSummary}
+      </div>
+      <div className='px-[15px] py-[15px]'>
+        <dl className=''>
+          <div className='font-[600] text-medium-text'>Products Price</div>
+          <div className='flex items-center justify-between pt-[15px] pb-[20px]'>
+            <dt className='text-normal-text'>Subtotal:</dt>
+            <dd className='text-normal-text'>
               <Price value={subTotal} />
             </dd>
           </div>
-          {couponDetails?.coupon ? (
-            <div className='flex items-center justify-between pt-[15px]'>
-              <dt className=''>Discount</dt>
-              <dd className=''>
-                - <Price value={couponDetails.amount || 0} />
+          {totalLineCharges > 0 && (
+            <div className='flex items-center justify-between pt-[10px]'>
+              <dt className='text-base'>Line Charges</dt>
+              <dd className='text-base font-medium text-gray-900'>
+                <Price value={totalLineCharges} />
               </dd>
             </div>
-          ) : (
-            <div className='flex items-center justify-between pt-[15px]'>
-              <dt className=''>Discount</dt>
-              <dd className=''>
-                - <Price value={0} />
+          )}
+          {totalLogoCharges > 0 && (
+            <div className='flex items-center justify-between pt-[10px]'>
+              <dt className='text-base'>Logo Charges</dt>
+              <dd className='text-base font-medium text-gray-900'>
+                <Price value={totalLogoCharges} />
+              </dd>
+            </div>
+          )}
+          {smallRunFee > 0 && totalQty > 10 && (
+            <div className='flex items-center justify-between pt-[10px]'>
+              <dt className='text-base'>Small Run Fee</dt>
+              <dd className='text-base font-medium text-gray-900'>
+                <Price value={smallRunFee} />
+              </dd>
+            </div>
+          )}
+          {logoSetupCharges > 0 && (
+            <div
+              className={`flex items-center justify-between pt-[10px] ${addBottomPadding}`}
+            >
+              <dt className='text-base'>Logo Setup Charges</dt>
+              <dd className='text-base font-medium text-gray-900'>
+                <Price value={logoSetupCharges} />
               </dd>
             </div>
           )}
 
-          <div className='w-full pl-[15px] pr-[15px] border-b border-gray-border mt-[10px]'></div>
-          <div className='flex items-center justify-between pt-[15px]'>
-            <dt className=''>
-              <span>Subtotal</span>
-            </dt>
-            <dd className=''>
-              {' '}
-              <Price
-                value={
-                  subTotal - (couponDetails?.amount ? couponDetails.amount : 0)
-                }
+          {!!couponDetails?.amount && (
+            <div className='flex items-center justify-between pt-[10px] pb-[20px]'>
+              <dt className='text-base'>
+                Promo{' '}
+                <span
+                  className='text-anchor cursor-pointer'
+                  onClick={() => removeCouponCodeHandler()}
+                >
+                  (Remove)
+                </span>
+              </dt>
+              <dd className='text-base font-medium text-gray-900 '>
+                - <Price value={couponDetails?.amount || 0} />
+              </dd>
+            </div>
+          )}
+
+          <div className='border-t border-gray-200 flex items-center pt-[10px] pb-[20px]'>
+            <dt className='text-base z-0 w-full promocode relative'>
+              <input
+                name='Promo_code'
+                id='Promo_code'
+                placeholder='Promo code'
+                type='text'
+                value={decideValue({
+                  message: successMessage,
+                  currentValue: coupon,
+                  active: couponDetails?.amount,
+                })}
+                autoComplete={'false'}
+                onChange={(e) => setCoupon(e.target.value.trim())}
+                className='peer placeholder:opacity-0 block w-full bg-transparent pt-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200 pr-10 relative z-10'
               />
-            </dd>
-          </div>
-          <div className='flex items-center justify-between pt-[15px]'>
-            <dt className=''>
-              <span>First Logo</span>
-            </dt>
-            <dd className=''>FREE</dd>
-          </div>
-          <div className='flex items-center justify-between pt-[15px]'>
-            <dt className=''>
-              <span>Second Logo</span>
-            </dt>
-            <dd className=''>$75.00</dd>
-          </div>
-          <div className='flex items-center justify-between pt-[15px]'>
-            <dt className=''>
-              <span>Small Run Fee</span>
-            </dt>
-            <dd className=''>
-              {' '}
-              <Price value={smallRunFee} />
-            </dd>
-          </div>
-          <div className='w-full pl-[15px] pr-[15px] border-b border-gray-border mt-[10px]'></div>
-          <div className='flex items-center justify-between pt-[15px] mb-[30px]'>
-            <dt className='font-semibold'>
-              <span>Estimated Total</span>
-            </dt>
-            <dd className='font-semibold'>
-              {' '}
-              <Price value={totalPrice} />
-            </dd>
-          </div>
-        </dl>
-        <div className=''>
-          <div className='mt-[16px]'>
-            <button
-              onClick={() => {}}
-              className='btn btn-lg btn-primary w-full !flex flex-wrap justify-center items-center'
-            >
-              <svg
-                className='svg-inline--fa fa-cart-shopping mr-[8px] w-[20px]'
-                aria-hidden='true'
-                focusable='false'
-                data-prefix='fas'
-                data-icon='cart-shopping'
-                role='img'
-                xmlns='http://www.w3.org/2000/svg'
-                viewBox='0 0 576 512'
-                data-fa-i2svg=''
+              <label
+                htmlFor='Promo_code'
+                className='absolute duration-300 -top-6 -z-1 origin-0 text-base bg-[#ffffff] peer-focus:-top-6 peer-placeholder-shown:top-2 pr-3'
               >
-                <path
-                  fill='currentColor'
-                  d='M96 0C107.5 0 117.4 8.19 119.6 19.51L121.1 32H541.8C562.1 32 578.3 52.25 572.6 72.66L518.6 264.7C514.7 278.5 502.1 288 487.8 288H170.7L179.9 336H488C501.3 336 512 346.7 512 360C512 373.3 501.3 384 488 384H159.1C148.5 384 138.6 375.8 136.4 364.5L76.14 48H24C10.75 48 0 37.25 0 24C0 10.75 10.75 0 24 0H96zM128 464C128 437.5 149.5 416 176 416C202.5 416 224 437.5 224 464C224 490.5 202.5 512 176 512C149.5 512 128 490.5 128 464zM512 464C512 490.5 490.5 512 464 512C437.5 512 416 490.5 416 464C416 437.5 437.5 416 464 416C490.5 416 512 437.5 512 464z'
-                ></path>
-              </svg>
-              CHECKOUT NOW
-            </button>
+                PROMO CODE
+              </label>{' '}
+              {showUpdateBtn() ? (
+                <button
+                  onClick={() => applyCouponHandler(coupon)}
+                  className='coupon-code-Apply text-sm absolute right-0 top-2 curosr-pointer z-40 btn btn-secondary btn-sm '
+                >
+                  UPDATE
+                </button>
+              ) : (
+                <div className='text-base font-medium absolute right-0 top-2'>
+                  {successMessage ? '' : '+'}
+                </div>
+              )}
+            </dt>
           </div>
+          {ShippingHTML(selectedShippingModel?.price)}
+          {currentPage === 'CHECKOUT' && (
+            <div className='border-t border-gray-200 flex items-center justify-between pt-[10px]'>
+              <dt className='text-normal-text flex items-center'>
+                <span>{__pagesText.CheckoutPage.orderSummary.tax}</span>
+              </dt>
+              <dd className='text-normal-text'>
+                <Price value={salesTax} />
+              </dd>
+            </div>
+          )}
+        </dl>
+      </div>
+      <div className='flex justify-between items-center bg-light-gray w-full text-sub-text font-[600] pl-[16px] pr-[16px] pt-[8px] pb-[8px]'>
+        <div>Total:</div>
+        <div>
+          <Price
+            value={totalPrice + getNewShippingCost(selectedShippingModel.price)}
+          />
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

@@ -35,6 +35,27 @@ const InventoryAvailability: React.FC<_props> = ({
     });
   };
 
+  const handleBlur = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (multipleQuantity) {
+      let updateQty = +event.target.value;
+      if (multipleQuantity) {
+        updateQty =
+          Math.ceil(+event.target.value / multipleQuantity) * multipleQuantity;
+      }
+      setValue(updateQty);
+      if (updateQty > qty) {
+        setValue(qty);
+      }
+      updateQuantities2({
+        size: size,
+        qty: +value,
+        price: price,
+        attributeOptionId: attributeOptionId,
+        color: color || '',
+      });
+    }
+  };
+
   return (
     <div className='flex flex-wrap items-center border-b border-b-gray-border pl-[10px]'>
       <div className='w-1/3 pt-[10px] pb-[10px]'>{size}</div>
@@ -50,6 +71,7 @@ const InventoryAvailability: React.FC<_props> = ({
           value={value === 0 ? '' : value}
           max={qty}
           onChange={handleChange}
+          onBlur={handleBlur}
         />
       </div>
     </div>

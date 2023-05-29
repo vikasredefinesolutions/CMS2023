@@ -38,9 +38,7 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
   );
   const { klaviyokey } = useTypedSelector_v2((state) => state.sbStore);
   const { id: storeId } = useTypedSelector_v2((state) => state.store);
-
   const router = useRouter();
-
   const modalHandler = (param: null | _modals) => {
     if (param) {
       setOpenModal(param);
@@ -75,15 +73,18 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
     (accumulator, currentValue) => accumulator + currentValue.inventory,
     initialValue,
   );
-  const { attributeOptionId } = useTypedSelector_v2(
-    (state) => state.product.selected.color,
+  const { inventory: inv } = useTypedSelector_v2(
+    (state) => state.product.product,
   );
   const [email, setEmail] = useState<string>('');
 
   const sendEmailHandler = async (values: { email: string }) => {
+    const sizeAttributeOptionId = inv?.inventory.find(
+      (item) => item.productId === product.id,
+    )?.attributeOptionId;
     const response = await Klaviyo_BackInStock({
       email: values.email,
-      variant: `${attributeOptionId}`,
+      variant: `${sizeAttributeOptionId}`,
       platform: 'api',
       a: klaviyokey || '',
       storeId: storeId,

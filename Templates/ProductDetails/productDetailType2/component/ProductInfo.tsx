@@ -289,6 +289,13 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
             <button
               disabled={product?.isDiscontinue}
               onClick={(e) => {
+                if (minQty > totalQty) {
+                  showModal({
+                    message: `Oops! The minimum order requirement for this piece is ${minQty} per color.
+                    `,
+                    title: ``,
+                  });
+                }
                 buyNowHandler(e, !!userId);
               }}
               className='btn btn-primary text-center btn-lg w-full'

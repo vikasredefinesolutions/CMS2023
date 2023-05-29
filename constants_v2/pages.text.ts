@@ -123,6 +123,7 @@ export const __pagesText = {
     pricePerItem: 'Price Per Item',
     someThingWentWrong: 'Something Went Wrong!!!',
     pleaseUploadLogoLater: 'Please Upload Logo or Add Logo Later for',
+    pleaseUploadLogo: 'Please Upload Logo or Choose Add Logo Later',
     logo: 'Logo',
     minimumOrderForThisColor: 'The minimum order for this color is',
     pleaseIncreaseYourQuantityAndTryAgain:
@@ -257,7 +258,7 @@ export const __pagesText = {
       startshowMsg:
         'We reserve the right to reject orders that do not meet the ',
       endShowMsg:
-        'piece minimum per style and color, exceptions may apply for men’s and women’s companion styles per color.',
+        ' piece minimum per style and color, exceptions may apply for men’s and women’s companion styles per color.',
       exclusivePricingAvailable: 'EXCLUSIVE PRICING AVAILABLE',
       exclusivePricing: 'EXCLUSIVE PRICING',
       selectSizeAndQuantity: 'Select Size & Quantity:',

@@ -8,7 +8,7 @@ import CartSummarryType4 from './cartSummaryType4';
 
 interface CS_Templates {
   type1: FC<_props>;
-  type2: FC;
+  type2: FC<_props>;
   type3: FC;
   type4: FC;
 }
