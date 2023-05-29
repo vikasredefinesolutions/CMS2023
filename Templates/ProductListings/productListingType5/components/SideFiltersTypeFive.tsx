@@ -112,24 +112,20 @@ const SideFiltersTypeFive = ({
                                   <Link
                                     key={option.name}
                                     id={option.name}
-                                    className={`flex items-center !text-black !no-underline cursor-pointer`}
+                                    className={`flex items-center !text-black !no-underline cursor-pointer font-semibold text-tertiary text-small-text ${
+                                      route === option.sename
+                                        ? '!font-bold'
+                                        : ''
+                                    }`}
                                     href={`/${option.sename}.html`}
                                   >
-                                    <a
-                                      className={`font-semibold flex items-center text-tertiary text-small-text !no-underline ${
-                                        route === option.sename
-                                          ? '!font-bold'
-                                          : ''
-                                      }`}
-                                    >
-                                      <span className='material-icons-outlined'>
-                                        {option.subrows
-                                          ? 'chevron_right'
-                                          : 'expand_more'}
-                                      </span>
-                                      {capitalizeFirstLetter(option.name)}(
-                                      {option.productCount})
-                                    </a>
+                                    <span className='material-icons-outlined'>
+                                      {option.subrows
+                                        ? 'chevron_right'
+                                        : 'expand_more'}
+                                    </span>
+                                    {capitalizeFirstLetter(option.name)}(
+                                    {option.productCount})
                                   </Link>
                                   {option.subrows && (
                                     <ul className='ml-3'>
@@ -142,7 +138,7 @@ const SideFiltersTypeFive = ({
                                           <Link
                                             key={subrow.name}
                                             href={`/${subrow.sename}.html`}
-                                            className='!text-black !no-underline'
+                                            className='!text-black !no-underline text-small-text flex items-center'
                                           >
                                             <span className='material-icons-outlined'>
                                               {' '}

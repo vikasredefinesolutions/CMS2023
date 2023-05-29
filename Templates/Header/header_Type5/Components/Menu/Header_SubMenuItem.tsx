@@ -1,7 +1,7 @@
 import { __pagesText } from '@constants/pages.text';
 import {
   _MenuCategory,
-  _MenuCategoryWithBrand
+  _MenuCategoryWithBrand,
 } from '@definations/header.type';
 import { FetchMenuCategories } from '@services/header.service';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
@@ -162,7 +162,7 @@ const SubMenuItem: React.FC<_props> = ({
         <li className='flex pt-[12px] ' key={itemLabel}>
           <Link href={`/${itemUrl}`}>
             <a
-              className='inline-block text-[14px] text-quaternary font-[400] tracking-[1px] leading-[18px]'
+              className='inline-block text-[15px] uppercase text-tertiary hover:text-tertiary-hover font-[500] tracking-[1px] leading-[18px]'
               title={itemLabel}
             >
               {itemLabel}

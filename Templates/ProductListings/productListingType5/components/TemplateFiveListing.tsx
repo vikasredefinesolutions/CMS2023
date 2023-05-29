@@ -9,8 +9,8 @@ import { _modals } from '@definations/product.type';
 import { splitproductList } from '@definations/productList.type';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import {
+  GetProductImageOptionList,
   GetlAllProductList,
-  GetProductImageOptionList
 } from '@templates/ProductListings/ProductListingType';
 import ProductBoxController from '@templates/ProductListings/productListingType1/components/productBoxController';
 import Link from 'next/link';
@@ -122,7 +122,7 @@ const TemplateFiveListing = ({
             <div className='mt-[10px] relative'>
               <div className='mb-[10px] text-center'>
                 <a
-                  className='inline-flex items-center gap-[5px] font-medium tracking-[1px]'
+                  className='inline-flex items-center gap-[5px] font-medium tracking-[1px] hover:text-primary-hover'
                   href={`${origin}/${product.sename}.html`}
                 >
                   <span>
@@ -146,7 +146,8 @@ const TemplateFiveListing = ({
               </div>
               <div className='mb-[10px] text-small-text'>
                 <span className='font-semibold'>
-                  MSRP
+                  <span className='pr-[3px] inline-block'>MSRP</span>
+
                   <Price
                     value={undefined}
                     prices={{

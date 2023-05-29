@@ -21,7 +21,7 @@ const LoginIcon: React.FC = () => {
   if (loggedIn) return <></>;
 
   return (
-    <div className='pl-[10px]'>
+    <div className='pl-[10px] flex items-center'>
       <div className='flex relative tracking-[1px]'>
         <button
           className='text-secondary hover:text-anchor-hover flex items-center'

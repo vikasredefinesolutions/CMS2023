@@ -27,7 +27,7 @@ const WishListIcon: React.FC = () => {
   }, [customerId, wishListData]);
 
   return (
-    <div className='flex pl-[10px]'>
+    <div className='flex pl-[10px] items-center'>
       <Link href={customerId ? paths.WISHLIST : paths.HOME}>
         <a
           className='text-secondary flex items-center relative pt-[5px] pb-[5px]'

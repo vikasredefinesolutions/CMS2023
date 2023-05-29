@@ -84,9 +84,7 @@ const Custom: React.FC<_props> = ({
               onMouseLeave={() => setFocus(false)}
               type='button'
               className={`relative text-[14px] xl:text-[17px] xl:ml-[10px] xl:mr-[10px] ml-[5px] mr-[5px] tracking-[2px] z-10 flex items-center font-[600] pt-[8px] pb-[8px] pl-[15px] pr-[15px] text-[#ffffff] hover:primary-link
-              ${
-                focus ? '' : 'before:hidden'
-              }`}
+              ${focus ? '' : 'before:hidden'}`}
             >
               <span
                 className='uppercase'
@@ -106,7 +104,7 @@ const Custom: React.FC<_props> = ({
               // x-transition:leave="transition ease-in duration-150"
               // x-transition:leave-start="opacity-100"
               // x-transition:leave-end="opacity-0"
-              className='absolute top-full left-[20%] xl:left-[43%] w-screen max-w-[600px] sm:text-[14px]'
+              // className='absolute top-full left-[20%] xl:left-[43%] w-screen max-w-[600px] sm:text-[14px]'
             >
               {/* <div className='absolute inset-0 top-1/2 bg-white shadow'></div> */}
               <div className='relative bg-gray-100 z-50 p-[15px] pt-[0px]'>

@@ -1,11 +1,17 @@
-import NxtImage from '@appComponents/reUsable/Image';
+import NxtImage, {
+  default as ImageComponent,
+} from '@appComponents/reUsable/Image';
 import Price from '@appComponents/reUsable/Price';
+import { showcolors } from '@constants/global.constant';
 import { __pagesConstant } from '@constants/pages.constant';
 import { __pagesText } from '@constants/pages.text';
-import { newFetauredItemResponse } from '@definations/productList.type';
+import {
+  newFetauredItemResponse,
+  splitproductList,
+} from '@definations/productList.type';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import Link from 'next/link';
-import React from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import 'react-loading-skeleton/dist/skeleton.css';
 
 interface _props {
@@ -33,7 +39,15 @@ const SlugSingleProductListing: React.FC<_props> = (props) => {
   const customerId = useTypedSelector_v2((state) => state.user.id);
 
   const store = useTypedSelector_v2((state) => state.store);
-
+  const [mainImageUrl, setMainImageUrl] = useState<string>('');
+  const [currentProduct, setCurrentProduct] = useState<
+    newFetauredItemResponse | undefined | null
+  >(null);
+  useEffect(() => {
+    setCurrentProduct(product);
+    setMainImageUrl(product?.imageUrl);
+  }, []);
+  let flag: boolean = false;
   return (
     <>
       <div key={product?.productId} className='slide-item'>
@@ -136,6 +150,77 @@ const SlugSingleProductListing: React.FC<_props> = (props) => {
                   </Link>
                 )}
               </div>
+              {showSplitProducts == __pagesConstant?.show?.No ? (
+                ''
+              ) : (
+                <ul className='flex items-center justify-center mt-2 list-none'>
+                  <Link
+                    key={product.productId}
+                    href={`/${product.productSEName}.html`}
+                  >
+                    <li
+                      className={`w-7 h-7 border-2 border-secondary
+                     hover:border-secondary cursor-pointer`}
+                    >
+                      <ImageComponent
+                        src={
+                          store.mediaBaseUrl + currentProduct &&
+                          currentProduct?.imageUrl
+                            ? currentProduct.imageUrl
+                            : ''
+                        }
+                        alt='no image'
+                        className='max-h-full m-auto'
+                        title={product?.moreImages[0].attributeOptionName}
+                      />
+                    </li>
+                  </Link>
+                  {product?.splitproductList &&
+                    product?.splitproductList.map(
+                      (option: splitproductList, index: number) =>
+                        index < showcolors - 1 ? (
+                          <Link
+                            key={option.prodcutId}
+                            href={`/${option.seName}.html`}
+                          >
+                            <li
+                              key={option.prodcutId}
+                              className={`border-2 w-7 h-7 text-center overflow-hidden  hover:border-secondary ml-1 cursor-pointer`}
+                              onMouseOver={() =>
+                                setMainImageUrl(option.imageurl)
+                              }
+                              onMouseLeave={() =>
+                                setMainImageUrl(
+                                  currentProduct?.imageUrl
+                                    ? currentProduct?.imageUrl
+                                    : '',
+                                )
+                              }
+                            >
+                              <ImageComponent
+                                src={store.mediaBaseUrl + option.imageurl}
+                                alt='no image'
+                                className='max-h-full m-auto'
+                                title={option.colorName}
+                              />
+                            </li>
+                          </Link>
+                        ) : (
+                          <Fragment key={index}>{(flag = true)}</Fragment>
+                        ),
+                    )}
+                  {flag ? (
+                    <Link href={`/${product.productSEName}.html`}>
+                      <li className='extra w-7 h-7 text-center border-2 hover:border-secondary inset-0 bg-primary text-xs font-semibold flex items-center justify-center text-white cursor-pointer'>
+                        <span>+</span>
+                        {product &&
+                          product?.splitproductList &&
+                          product?.splitproductList.length - showcolors + 1}
+                      </li>
+                    </Link>
+                  ) : null}
+                </ul>
+              )}
             </div>
           </div>
         </div>

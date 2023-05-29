@@ -117,27 +117,27 @@ const ProductListingType5: React.FC<_ListingProps> = ({
                         ))}
                       </ul>
                     </div>
-                    <div className='py-20 text-center'>
+                    <div className='py-[30px] text-center'>
                       <div className=''>
-                        <div className='mb-8'>
+                        <div className='mb-[15px]'>
                           You've seen {products.length} Products out of{' '}
                           {totalCount}
                         </div>
                         <div className='h-[2px] w-full max-w-[250px] mx-auto bg-[#808080] mt-2'>
-                            <div
-                              className='bg-secondary h-full'
-                              style={{
-                                width: `${(products.length * 100) / totalCount}%`,
-                              }}
-                            ></div>
-                          </div>
+                          <div
+                            className='bg-secondary h-full'
+                            style={{
+                              width: `${(products.length * 100) / totalCount}%`,
+                            }}
+                          ></div>
+                        </div>
                       </div>
-                      
+
                       {totalCount > products.length && (
                         <button
                           type='submit'
                           onClick={loadMore}
-                          className='mt-[16px] btn btn-md btn-secondary tracking-[1.4px] font-normal w-full max-w-[550px]'
+                          className='mt-[16px] btn btn-lg btn-secondary tracking-[1.4px] font-normal w-full max-w-[550px]'
                         >
                           <span className='inline-block w-[20px] h-[20px]'>
                             <img

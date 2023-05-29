@@ -22,7 +22,7 @@ const LoggedInMenu: React.FC = () => {
   if (!loggedIn) return <></>;
 
   return (
-    <div className='pl-[15px]'>
+    <div className='pl-[15px] flex items-center'>
       <div
         className='flex relative tracking-[1px]'
         onMouseOver={() => setFocus(true)}

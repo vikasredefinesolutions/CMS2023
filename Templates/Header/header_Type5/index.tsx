@@ -4,7 +4,7 @@ import { _HeaderProps, _MenuItemsWithBrand } from '@definations/header.type';
 import {
   useActions_v2,
   useTypedSelector_v2,
-  useWindowDimensions_v2
+  useWindowDimensions_v2,
 } from '@hooks_v2/index';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
@@ -14,7 +14,7 @@ import {
   LoginIcon,
   Logo,
   MyCartIcon,
-  WishListIcon
+  WishListIcon,
 } from '../header_Type5/Components/Icons';
 import Header_MenuItems from '../header_Type5/Components/Menu/Header_MenuItems';
 import SearchBar from '../header_Type5/Components/Menu/Header_SearchBar';
@@ -122,7 +122,7 @@ const Header_Type5: NextPage<_HeaderProps> = ({
                         />
                       ) : null)}
                     <div className='w-1/2 md:w-1/3 flex items-center justify-end'>
-                      <div className='flex items-center divide-x gap-[10px]'>
+                      <div className='flex divide-x gap-[10px]'>
                         {/* <div className='flex items-center '> */}
                         <LoginIcon />
                         <LoggedInMenu />

@@ -13,48 +13,53 @@ const BreadCrumb_Type4: NextPage<_BreadCrumbProps> = ({
 
   return (
     <>
-      <div className='container mx-auto bg-drak-gray'>
-        <div className='flex flex-wrap justify-between py-[10px] bg-drak-gray'>
-          <nav
-            className='flex flex-wrap items-center text-extra-small-text'
-            aria-label='Breadcrumb'
-          >
-            <ol className='inline-flex items-center'>
-              <>
-                {breadCrumbs.map((item, index) => (
-                  <li
-                    key={index}
-                    className={` ${index > 0 && 'inline-flex items-center'} `}
-                    aria-current='page'
-                  >
-                    <Link href={item.url} className='inline-flex items-center'>
-                      {
-                        <div className='flex items-center'>
-                          {index > 0 && (
-                            <span className='material-icons-outlined text-sm'>
-                              east
-                            </span>
-                          )}
-                          <div
-                            className={` ${
-                              index == 0
-                                ? 'inline-flex items-center font-semibold'
-                                : index !== 0 && index == breadCrumbs.length - 1
-                                ? 'ml-[6px] text-gray-text font-semibold'
-                                : 'ml-[6px] font-semibold'
-                            } `}
-                          >
-                            {item.name}
+      <div className='bg-drak-gray'>
+        <div className='container mx-auto '>
+          <div className='flex flex-wrap justify-between py-[10px] bg-drak-gray'>
+            <nav
+              className='flex flex-wrap items-center text-extra-small-text'
+              aria-label='Breadcrumb'
+            >
+              <ol className='inline-flex items-center'>
+                <>
+                  {breadCrumbs.map((item, index) => (
+                    <li
+                      key={index}
+                      className={` ${index > 0 && 'inline-flex items-center'} `}
+                      aria-current='page'
+                    >
+                      <Link
+                        href={item.url}
+                        className='inline-flex items-center'
+                      >
+                        {
+                          <div className='flex items-center'>
+                            {index > 0 && (
+                              <span className='material-icons-outlined text-sm'>
+                                east
+                              </span>
+                            )}
+                            <div
+                              className={` ${
+                                index == 0
+                                  ? 'inline-flex items-center font-semibold'
+                                  : index !== 0 &&
+                                    index == breadCrumbs.length - 1
+                                  ? 'ml-[6px] text-gray-text font-semibold'
+                                  : 'ml-[6px] font-semibold'
+                              } `}
+                            >
+                              {item.name}
+                            </div>
                           </div>
-                        </div>
-                      }
-                    </Link>
-                  </li>
-                ))}
-              </>
-            </ol>
-          </nav>
-          {/* {pageType === 'product' && (
+                        }
+                      </Link>
+                    </li>
+                  ))}
+                </>
+              </ol>
+            </nav>
+            {/* {pageType === 'product' && (
               <div className='text-center w-auto product-brand-logo'>
                 <NxtImage
                   src={product.brand?.url || ''}
@@ -67,6 +72,7 @@ const BreadCrumb_Type4: NextPage<_BreadCrumbProps> = ({
                 />
               </div>
             )} */}
+          </div>
         </div>
       </div>
     </>

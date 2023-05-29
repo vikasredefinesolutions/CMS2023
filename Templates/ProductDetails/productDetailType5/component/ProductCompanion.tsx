@@ -26,11 +26,11 @@ const ProductCompanion: React.FC<_ProductCompanion> = ({
   let mediaBaseUrl = _globalStore.blobUrl;
   return (
     <>
-      <div className='lg:col-span-2 mt-[15px] pl-[0px] pr-[0px] md:pl-[15px] md:pr-[15px] lg:mt-[0px]'>
+      <div className='lg:col-span-2 mt-[15px] pl-[0px] pr-[0px] md:pl-[15px] md:pr-[15px] lg:mt-[0px] lg:pr-0'>
         <div className='bg-light-gray p-[10px] mb-[10px] text-center text-title-text'>
           Companion
         </div>
-        <div className='relative border border-gray-200 pb-4 text-center'>
+        <div className='relative border border-gray-200 p-[20px] text-center'>
           <Link href={`${product?.companionProductSEName}`}>
             {product && (
               <NxtImage
