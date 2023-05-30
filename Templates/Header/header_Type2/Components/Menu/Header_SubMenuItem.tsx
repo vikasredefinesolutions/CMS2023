@@ -60,7 +60,7 @@ const SubMenuItem: React.FC<_props> = ({
     if (view === 'DESKTOP') {
       return (
         <li className='flex pt-[12px]'>
-          <span className='material-icons-outlined text-[18px] leading-none font-[100] mr-[10px]'>
+          <span className='material-icons-outlined text-[18px] leading-none font-[100] mr-[5px]'>
             {__pagesText.Headers.rightArrowIcon}
           </span>
           <Link href={`/${itemUrl}`}>

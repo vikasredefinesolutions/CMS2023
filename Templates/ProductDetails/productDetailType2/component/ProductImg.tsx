@@ -84,7 +84,7 @@ const ProductImg: React.FC<_ProductImgProps> = ({ product }) => {
               return (
                 <div
                   key={img.id + img.imageUrl}
-                  className={`md:border hover:border-primary p-[3px] mt-[5px] mb-[5px] last:mb-0 ${highlight} testingclassnametest cursor-pointer`}
+                  className={`bg-white md:border hover:border-primary p-[3px] mt-[5px] mb-[5px] last:mb-0 ${highlight} testingclassnametest cursor-pointer`}
                   onClick={() => selectImgHandler(img)}
                 >
                   <NxtImage
