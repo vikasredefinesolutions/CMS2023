@@ -28,7 +28,7 @@ const LoginIcon: React.FC = () => {
           onClick={toggleLoginModal}
           title='Login'
         >
-          <span className='text-[14px] hidden xl:inline-block whitespace-nowrap tracking-[1.25px] mr-[4px]'>
+          <span className='text-[14px] hidden xl:inline-block whitespace-nowrap tracking-[1.25px] mr-[4px] hover:primary-link'>
             {__pagesText.Headers.login}
           </span>
           <span className='material-icons-round xl:hidden'>person_2</span>

@@ -36,6 +36,8 @@ export const _defaultTemplates: _DefaultTemplatesType = {
   wishlist: 'type1',
   writeReview: 'type1',
   youMayAlsoLike: 'type1',
+  catalogs: 'type4',
+  contactRequest: 'type4',
 };
 
 interface _DefaultTemplatesType {
@@ -76,4 +78,6 @@ interface _DefaultTemplatesType {
   wishlist: 'type1';
   writeReview: 'type1';
   youMayAlsoLike: 'type1';
+  catalogs: 'type4';
+  contactRequest: 'type4';
 }

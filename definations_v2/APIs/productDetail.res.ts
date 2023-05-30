@@ -3,6 +3,7 @@ import {
   _ProductImageOption,
 } from '@definations/APIs/colors.res';
 import { _SizeChartTransformed } from '@definations/APIs/sizeChart.res';
+import { splitproductList } from '@definations/productList.type';
 export interface _ProductDetailsProps {
   details: null | _ProductDetails;
   colors: null | _ProductColor[];
@@ -174,6 +175,7 @@ export interface _ProductsAlike {
   masterId: number;
   storeId: number;
   getProductImageOptionList: _ProductImageOption[];
+  splitproductList?: splitproductList[];
 }
 
 export interface _ProductsRecentlyViewed {

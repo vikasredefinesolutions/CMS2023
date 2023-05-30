@@ -27,7 +27,7 @@ export const FetchBrands = async ({
 }: {
   storeId: number;
 }): Promise<_t_Brands | null> => {
-  const url = `Brand/getbrandbystoreid/${storeId}.json`;
+  const url = `/Brand/getstoreproductbrandbysequence/2/${storeId}.json`;
 
   const response = await CallAPI_v2<_Brand[]>({
     name: {
@@ -44,6 +44,7 @@ export const FetchBrands = async ({
     brands: response,
     dataType: 'BRANDS',
   };
+  console.log(transformed, 'console.log(first)');
 
   return transformed;
 };

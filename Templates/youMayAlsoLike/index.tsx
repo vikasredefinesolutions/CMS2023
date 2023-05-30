@@ -1,6 +1,7 @@
 import { _defaultTemplates } from '@configs/template.config';
 import { NextPage } from 'next';
 import YouMayAlsoLikeType1 from './YouMayAlsoLikeType1';
+import YouMayAlsoLikeType2 from './YouMayAlsoLikeType2';
 import {
   _YouMayAlsoLikeProps,
   _YouMayAlsoLikeTemplates,
@@ -8,13 +9,17 @@ import {
 
 const YouMayAlsoLikeTemplates: _YouMayAlsoLikeTemplates = {
   type1: YouMayAlsoLikeType1,
-  type2: YouMayAlsoLikeType1,
+  type2: YouMayAlsoLikeType2,
   type3: YouMayAlsoLikeType1,
   type4: YouMayAlsoLikeType1,
 };
 const YouMayAlsoLike: NextPage<_YouMayAlsoLikeProps> = ({ product, id }) => {
   const YouMayAlsoLikeTemplate =
-    YouMayAlsoLikeTemplates[_defaultTemplates.youMayAlsoLike];
+    YouMayAlsoLikeTemplates[
+      id
+        ? (`type${id}` as 'type1' | 'type2' | 'type3' | 'type4')
+        : _defaultTemplates.youMayAlsoLike
+    ];
   return <YouMayAlsoLikeTemplate productsData={product} />;
 };
 

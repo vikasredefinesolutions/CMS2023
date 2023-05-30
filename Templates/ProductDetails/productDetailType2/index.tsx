@@ -1,9 +1,8 @@
-import { _defaultTemplates } from '@configs/template.config';
 import { KlaviyoScriptTag } from '@helpers/common.helper';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import { FetchInventoryById } from '@services/product.service';
-import ProductRecentlyViewed from '@templates/recentlyViewedProducts';
 import Reviews from '@templates/Review';
+import ProductRecentlyViewed from '@templates/recentlyViewedProducts';
 import YouMayAlsoLike from '@templates/youMayAlsoLike';
 import Head from 'next/head';
 import { useEffect } from 'react';
@@ -19,7 +18,6 @@ const ProductDetails_Type2: React.FC<_Props> = (product) => {
     product_UpdateSelectedValues,
   } = useActions_v2();
   const { id: storeId, pageType } = useTypedSelector_v2((state) => state.store);
-
   // const getCategoriesArr = (): string[] => {
   //   let categories: CategoriesByPid = [];
   //   let categoryArr: string[] = [];
@@ -157,9 +155,8 @@ const ProductDetails_Type2: React.FC<_Props> = (product) => {
             <div key={val + index}>
               <YouMayAlsoLike
                 product={product.alike}
-                id={_defaultTemplates.youMayAlsoLike}
+                id={product.productDetailsTemplateId}
               />
-              ;
             </div>
           );
         } else if (val === 'writereview') {

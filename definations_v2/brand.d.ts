@@ -1,6 +1,7 @@
 import React from 'react';
 
 export interface _Brand {
+  catalogdetails: any;
   id: number;
   brandName: string;
   seName: string;

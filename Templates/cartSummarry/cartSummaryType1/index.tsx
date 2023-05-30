@@ -35,8 +35,8 @@ const CartSummarryType1: FC<_props> = ({ selectedShippingModel }) => {
     salesTax,
     totalLogoCharges,
     totalLineCharges,
+    sewOutTotal,
   } = GetCartTotals();
-
   // const { cartQty } = useTypedSelector_v2((state) => state.cart);
   // const { fetchShipping } = CheckoutController();
   // useEffect(() => {
@@ -184,11 +184,11 @@ const CartSummarryType1: FC<_props> = ({ selectedShippingModel }) => {
               </dd>
             </div>
           )}
-          {totalLogoCharges > 0 && (
+          {sewOutTotal > 0 && (
             <div className='flex items-center justify-between pt-[10px]'>
-              <dt className='text-base'>Logo Charges</dt>
+              <dt className='text-base'>Sew Out Charges</dt>
               <dd className='text-base font-medium text-gray-900'>
-                <Price value={totalLogoCharges} />
+                <Price value={sewOutTotal} />
               </dd>
             </div>
           )}

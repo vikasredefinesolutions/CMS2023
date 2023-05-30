@@ -104,6 +104,23 @@ export const __ValidationText = {
   credentials: {
     invalid: 'The username or password is incorrect.',
   },
+  contactRequest: {
+    name: { required: 'Enter your name.', minLength: 3, maxLength: 40 },
+    companyName: {
+      required: 'Enter your company name',
+      minLength: 3,
+      maxLength: 40,
+    },
+    email: {
+      required: 'Enter an email address.',
+      validRequest: 'Please enter a valid email address.',
+      invalid: '',
+    },
+    message: {
+      required: 'Enter a message.',
+      minLength: 3,
+    },
+  },
 };
 
 export const __QuoteRequestMessages = {

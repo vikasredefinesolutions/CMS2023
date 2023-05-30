@@ -45,7 +45,6 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
       console.log(error);
     }
   };
-  console.log('---reaching product details---', product);
 
   useEffect(() => {
     if (storeTypeId == storeBuilderTypeId) {

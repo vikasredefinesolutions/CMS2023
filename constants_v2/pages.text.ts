@@ -671,4 +671,6 @@ export const __pagesText = {
     closedStoreMessage: ` This store is no longer active. Please check with your coach or
     director to see if/when a new store will be opened. Thank You!`,
   },
+
+  contactRequest: {},
 };

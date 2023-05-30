@@ -112,7 +112,7 @@ const TemplateFourListing = ({
                 />
               </Link>
             </div>
-            <div className='mb-[10px] mt-[10px] h-[46px] text-anchor hover:text-anchor-hover text-medium-text'>
+            <div className='mb-[10px] mt-[10px] h-[46px] text-anchor hover:text-anchor-hover text-medium-text overflow-hidden'>
               <Link
                 href={`${origin}/${product.sename}.html`}
                 className='relative'

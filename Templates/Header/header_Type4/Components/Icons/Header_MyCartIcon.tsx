@@ -4,7 +4,7 @@ import {
   GetCartTotals,
   GetCustomerId,
   useActions_v2,
-  useTypedSelector_v2
+  useTypedSelector_v2,
 } from 'hooks_v2';
 // import { useActions_v2, useTypedSelector_v2 } from '@src/hooks';
 import NxtImage from '@appComponents/reUsable/Image';
@@ -51,7 +51,7 @@ const MyCartIcon: React.FC = () => {
       x-data='{ open: false }'
     >
       <Link href={paths.CART}>
-        <a className='text-[#ffffff] hover:text-primary-hover group flex items-center relative pt-[8px] pb-[8px]'>
+        <a className='text-[#ffffff] hover:text-primary-hover group flex items-center relative pt-[8px] pb-[8px] hover:primary-link'>
           <span className='mr-[8px] text-[14px] hidden xl:inline-block whitespace-nowrap tracking-[1.25px]'>
             My Cart
           </span>

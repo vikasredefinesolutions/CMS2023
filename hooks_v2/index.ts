@@ -87,6 +87,7 @@ export const GetCartTotals = () => {
     totalQty: 0,
     totalLineCharges: 0,
     totalLogoCharges: 0,
+    sewOutTotal: 0,
   };
   if (cart && cart.length > 0) {
     cart.forEach((res) => {
@@ -95,6 +96,7 @@ export const GetCartTotals = () => {
       priceObject.totalQty += res.totalQty;
       priceObject.totalLineCharges += res.lineTotalPrice;
       priceObject.totalLogoCharges += res.logoTotalPrice;
+      priceObject.sewOutTotal += res?.sewOutTotal;
     });
 
     if (store.cartCharges) {
@@ -116,7 +118,9 @@ export const GetCartTotals = () => {
         priceObject.logoSetupCharges = logoSetupCharges;
       }
     }
-
+    if (priceObject.sewOutTotal > 0) {
+      priceObject.totalPrice += priceObject.sewOutTotal;
+    }
     priceObject.totalPrice -= couponDiscount;
     if (useBalance) {
       if (allowedBalance > priceObject.totalPrice) {

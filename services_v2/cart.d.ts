@@ -44,6 +44,7 @@ export interface ShoppingCartLogoPersonViewModel {
 }
 
 export interface _CartItem {
+  sewOutTotal: number;
   itemNote: string;
   colorImage: string;
   productName: string;

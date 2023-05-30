@@ -58,7 +58,7 @@ const ProductImg: React.FC<_ProductImgProps> = ({ product }) => {
           {product &&
             product.productTagViewModel &&
             product.productTagViewModel.length > 0 &&
-            (product.productTagViewModel[0].productTagName === 'sale' ? (
+            (product.productTagViewModel[0].productTagName ? (
               <div className='absolute top-1 left-2 text-gray-800 p-1 z-5"'>
                 <img
                   src={`${mediaBaseUrl}${product?.productTagViewModel[0].imagename}`}
