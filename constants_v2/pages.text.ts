@@ -178,6 +178,7 @@ export const __pagesText = {
     requestConsultaionProof: 'Request Consultation & Proof',
     availableSizes: 'Available Size(s):',
     companionProduct: 'Companion Product',
+    companion: 'COMPANION',
     availableColors: {
       availableColors: 'Available Color',
       selectColor: 'Select Color:',
@@ -213,6 +214,8 @@ export const __pagesText = {
       termsOfUse: 'Terms of use',
       and: 'and',
       privacyPolicy: 'Privacy policy',
+      pkIntroText:
+        'Health by ParsonsKellogg provides exclusive access to Patagonia apparel and accessories to the healthcare industry. Please log in or create an account to shop now.',
     },
     startOrderModal: {
       color: 'Color : ',
@@ -462,6 +465,7 @@ export const __pagesText = {
       'Free Logo &amp; Proof on All Orders + Free Shipping on Orders Over $4K',
     order: 'Order',
     accountSetting: 'Account Settings',
+    logoLocation: 'Logo Location',
     help: 'Help',
     signOut: 'Sign Out',
     login: 'Login',

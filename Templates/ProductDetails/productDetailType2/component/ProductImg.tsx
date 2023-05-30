@@ -133,7 +133,7 @@ const ProductImg: React.FC<_ProductImgProps> = ({ product }) => {
           })}
       </div>
 
-      {product?.companionProductName !== null ? (
+      {product?.companionProductName ? (
         <ProductCompanion product={product} />
       ) : null}
     </div>

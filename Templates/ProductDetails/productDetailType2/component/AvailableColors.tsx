@@ -35,33 +35,28 @@ const AvailableColors: React.FC = () => {
           </span>
         </div>
         <div className='flex flex-wrap text-center available-colors text-default-text ml-[4px] gap-[5px]'>
-          {colors.map((product, index) => {
-            const highlight =
-              product.attributeOptionId === selectedColor?.attributeOptionId
-                ? 'border-primary'
-                : 'border-slate-200';
-            return index < __pagesConstant._productDetails.imagesInRow - 1 ? (
-              <div
-                className=''
-                key={product.attributeOptionId}
-                onClick={() => handleChooseColor(product)}
-              >
+          {!showAllColors &&
+            colors.map((product, index) => {
+              const highlight =
+                product.attributeOptionId === selectedColor?.attributeOptionId
+                  ? 'border-primary'
+                  : 'border-slate-200';
+              return index < __pagesConstant._productDetails.imagesInRow - 1 ? (
                 <div
-                  className={`w-[32px] h-[32px] p-[1px] border-2  hover:border-primary cursor-pointer ${highlight}`}
+                  className=''
+                  key={product.attributeOptionId}
+                  onClick={() => handleChooseColor(product)}
                 >
-                  {/* <NxtImage
-                  title={`${product.name}`}
-                  src={product.imageUrl}
-                  alt={product.altTag}
-                  className='w-full object-center object-cover cursor-pointer'
-                /> */}
-                  <ColorImage product={product} />
+                  <div
+                    className={`w-[32px] h-[32px] p-[1px] border-2  hover:border-primary cursor-pointer ${highlight}`}
+                  >
+                    <ColorImage product={product} />
+                  </div>
                 </div>
-              </div>
-            ) : (
-              <></>
-            );
-          })}
+              ) : (
+                <></>
+              );
+            })}
         </div>
         {/* No CSS for this button in HTML files */}
         {showAllColors &&
@@ -70,7 +65,8 @@ const AvailableColors: React.FC = () => {
               product.attributeOptionId === selectedColor?.attributeOptionId
                 ? 'border-primary'
                 : 'border-slate-200';
-            return index > __pagesConstant._productDetails.imagesInRow - 1 ? (
+
+            return (
               <div
                 className=''
                 key={product.attributeOptionId}
@@ -82,8 +78,6 @@ const AvailableColors: React.FC = () => {
                   <ColorImage product={product} />
                 </div>
               </div>
-            ) : (
-              <></>
             );
           })}
         {showAllColorsButton && (

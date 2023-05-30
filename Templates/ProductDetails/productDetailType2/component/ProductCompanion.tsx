@@ -12,7 +12,7 @@ const ProductCompanion: React.FC<_ProductCompanion> = ({ product }) => {
     <>
       <div className='col-span-12 text-center pt-[20px]'>
         <div className='text-title-text'>
-          {__pagesText.productInfo.companionProduct}
+          {__pagesText.productInfo.companion}
         </div>
       </div>
       <div className='col-span-12 md:col-start-5 md:col-span-4 text-center'>

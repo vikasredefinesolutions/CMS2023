@@ -39,6 +39,7 @@ const SomActionsHandler: React.FC<_SOMActionHandlerProps> = ({
   );
   const { clearToCheckout, setShowLoader } = useActions_v2();
   const store = useTypedSelector_v2((state) => state.store);
+  const { sizes } = useTypedSelector_v2((state) => state.product.product);
 
   const { totalQty } = useTypedSelector_v2((state) => state.product.toCheckout);
 
@@ -100,7 +101,7 @@ const SomActionsHandler: React.FC<_SOMActionHandlerProps> = ({
           ImageURL: `${store.mediaBaseUrl}${selected.color.imageUrl}`,
           ProductCategories: categoriesArr,
           ColorName: selected.color.name,
-          Sizes: toCheckout.sizeQtys,
+          Sizes: sizes,
         },
       ],
     };
