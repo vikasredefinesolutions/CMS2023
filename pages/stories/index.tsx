@@ -40,8 +40,8 @@ const Stories: React.FC<_Props> = (props) => {
   return (
     <>
       <SeoHead
-        title='Custom Embroidery | Branded Promotional & Corporate Clothing'
-        description='Corporate Gear offers custom-embroidered corporate apparel, branded clothing, & accessories. Get YOUR logo printed on top-tier brands. Order today!'
+        title=''
+        description=''
         keywords=''
       />
       <StoryList_Template

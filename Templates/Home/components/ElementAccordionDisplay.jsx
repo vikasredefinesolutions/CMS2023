@@ -15,6 +15,8 @@ const ElementAccordionDisplay = ({ selected_Values, acValues }) => {
     add_circle_outline: 'remove_circle_outline',
     add_circle: 'remove_circle',
     remove_circle: 'add_circle',
+    add: 'remove',
+    remove: 'add'
   };
 
   const showHideAccordion = (event) => {
@@ -23,12 +25,17 @@ const ElementAccordionDisplay = ({ selected_Values, acValues }) => {
       if (!el.classList.contains('hidden')) {
         el.classList.add('hidden');
       }
+      // else
+      // {
+      //   el.classList.remove('hidden');
+      // }
     });
     let symbolobj = event.target.querySelector('.pointer-class');
     let existH = symbolobj.innerHTML;
     const accordionButtons = document.querySelectorAll('.pointer-class');
     accordionButtons?.forEach((el) => {
       if (symbolobj && symbolobj != el) {
+        
         if (el.innerHTML === 'remove_circle_outline') {
           el.innerHTML = iconArr.remove_circle_outline;
         }
@@ -39,7 +46,14 @@ const ElementAccordionDisplay = ({ selected_Values, acValues }) => {
         // }
         else if (el.innerHTML === 'remove_circle') {
           el.innerHTML = iconArr.remove_circle;
-        } else if (el.innerHTML === 'keyboard_arrow_down') {
+        }
+        else if (el.innerHTML === 'remove') {
+          el.innerHTML = iconArr.remove;
+        }
+        // else if (el.innerHTML === 'add') {
+        //   el.innerHTML = iconArr.add;
+        // }
+         else if (el.innerHTML === 'keyboard_arrow_down') {
           el.innerHTML = iconArr.keyboard_arrow_down;
         }
         //  else {
@@ -52,18 +66,28 @@ const ElementAccordionDisplay = ({ selected_Values, acValues }) => {
 
     if (symbolobj) {
       if (existH === iconArr.remove_circle_outline) {
-        event.target
-          .querySelector('.ac-description')
-          .classList.remove('hidden');
+        event.target.querySelector('.ac-description').classList.remove('hidden');
         symbolobj.innerHTML = iconArr.add_circle_outline;
       } else if (existH === iconArr.remove_circle) {
-        event.target
-          .querySelector('.ac-description')
-          .classList.remove('hidden');
+        event.target.querySelector('.ac-description').classList.remove('hidden');
         symbolobj.innerHTML = iconArr.add_circle;
       } else if (existH === iconArr.add_circle) {
         event.target.querySelector('.ac-description').classList.add('hidden');
         symbolobj.innerHTML = iconArr.remove_circle;
+      }
+      else if (existH === iconArr.add) {
+        event.target.querySelector('.ac-description').classList.add('hidden');
+        symbolobj.innerHTML = iconArr.remove;
+      }else if (existH === iconArr.remove) {
+        event.target.querySelector('.ac-description').classList.remove('hidden');
+        symbolobj.innerHTML = iconArr.add;
+      }
+      else if (existH === iconArr.keyboard_arrow_up) {
+        event.target.querySelector('.ac-description').classList.add('hidden');
+        symbolobj.innerHTML = iconArr.keyboard_arrow_down;
+      }else if (existH === iconArr.keyboard_arrow_down) {
+        event.target.querySelector('.ac-description').classList.remove('hidden');
+        symbolobj.innerHTML = iconArr.keyboard_arrow_up;
       } else {
         event.target.querySelector('.ac-description').classList.add('hidden');
         symbolobj.innerHTML = iconArr.remove_circle_outline;

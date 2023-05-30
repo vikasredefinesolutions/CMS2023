@@ -266,9 +266,10 @@ const Home = (props) => {
   }, [componentHtml]);
 
   const storeTypeId = useTypedSelector_v2((state) => state.store.storeTypeId);
+  const storeCode = useTypedSelector_v2((state) => state.store.code);
   return (
     <>
-      {storeId === 4 &&
+      {storeCode === 'DI' &&
       (props.props.slug === '/' || props.props.slug === '') ? (
         <>
           <DIHomePage storeId={storeId}></DIHomePage>
