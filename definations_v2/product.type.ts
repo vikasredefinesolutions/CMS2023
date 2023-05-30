@@ -65,6 +65,9 @@ export interface _Selectedproduct_v2 {
   };
   productId: number;
   inventory: _ProductInventoryTransfomed | null;
+  attributeOptionId?: number;
+  productName?: string;
+  productQty?: any;
 }
 
 // --------------------
