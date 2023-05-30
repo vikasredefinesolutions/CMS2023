@@ -1,5 +1,5 @@
 import MsgContainer from '@appComponents/modals/msgContainer/MsgContainer';
-import { CG_STORE_CODE, __Cookie } from '@constants/global.constant';
+import { __Cookie } from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
 import { paths } from '@constants/paths.constant';
 import { highLightError } from '@helpers/console.helper';
@@ -37,7 +37,6 @@ const SomActionsHandler: React.FC<_SOMActionHandlerProps> = ({
   const { selected, toCheckout, som_logos, product } = useTypedSelector_v2(
     (state) => state.product,
   );
-  console.log('---reaching some logo---', som_logos);
   const { clearToCheckout, setShowLoader } = useActions_v2();
   const store = useTypedSelector_v2((state) => state.store);
 
@@ -46,15 +45,6 @@ const SomActionsHandler: React.FC<_SOMActionHandlerProps> = ({
   const isEmployeeLoggedIn = useTypedSelector_v2(
     (state) => state.employee.loggedIn,
   );
-
-  // const getCategoriesArr = async (productId: number): Promise<string[]> => {
-  //   let categoriesArr: string[] = [];
-  //   const categories = await FetchCategoryByproductId(productId, storeId);
-  //   if (categories.length > 0) {
-  //     categoriesArr = categories[0].name.split(' > ');
-  //   }
-  //   return categoriesArr;
-  // };
 
   const categoriesArr = useTypedSelector_v2(
     (state) => state.product.categoryArr,
@@ -97,6 +87,7 @@ const SomActionsHandler: React.FC<_SOMActionHandlerProps> = ({
       AddedItemQuantity: toCheckout.totalQty,
       ItemNames: [product.name],
       CheckoutURL: `${window.location.origin}${paths.CHECKOUT}`,
+      VisitorType: loggedIN_userId ? 'high-value' : 'low-value',
       Items: [
         {
           ProductID: product.id,
@@ -123,7 +114,13 @@ const SomActionsHandler: React.FC<_SOMActionHandlerProps> = ({
       return;
     }
 
-    if (logoNowOrLater === 'now' && !som_logos.details) {
+    //Condition if logo or next logo not selected
+    if (
+      logoNowOrLater === 'now' &&
+      (som_logos.choosedLogoCompletionPending ||
+        !som_logos.details ||
+        (som_logos?.details?.length && !som_logos.allowNextLogo))
+    ) {
       setShowLoader(false);
       setShowRequiredModal('logo');
       return;
@@ -198,16 +195,32 @@ const SomActionsHandler: React.FC<_SOMActionHandlerProps> = ({
       sku: product?.sku,
       brandName: product?.brand?.name,
       quantity: toCheckout.totalQty,
-      ...(storeId !== CG_STORE_CODE
-        ? { value: toCheckout.totalPrice || '', coupon: '' }
-        : {}),
+    };
+
+    const payload2 = {
+      storeId: storeId,
+      customerId: loggedIN_userId,
+      value: toCheckout?.totalPrice,
+      coupon: '',
+      shoppingCartItemsModel: [
+        {
+          productId: product?.id,
+          productName: product?.name,
+          colorVariants: product?.colors?.length
+            ? product?.colors?.find((clr) => clr.productId === product.id)
+                ?.attributeOptionId
+            : '',
+          price: toCheckout?.totalPrice,
+          quantity: toCheckout.totalQty,
+        },
+      ],
     };
 
     GoogleAnalyticsTrackerForCG('GoogleAddToCartScript', storeId, payload);
     GoogleAnalyticsTrackerForAllStore(
       'GoogleAddToCartScript',
       storeId,
-      payload,
+      payload2,
     );
     addItemToKlaviyo();
 

@@ -64,18 +64,20 @@ const BuyNowHandler: React.FC<_Props> = (size) => {
       const payload = {
         storeId: storeId,
         customerId: loggedIN_userId,
-        productId: product?.id,
-        productName: product?.name,
-        colorName: product?.colors?.length
-          ? product?.colors?.find((clr) => clr.productId === product.id)?.name
-          : '',
-        price: toCheckout?.totalPrice,
-        salesPrice: toCheckout?.price,
-        sku: product?.sku,
-        brandName: product?.brand?.name,
-        quantity: toCheckout.totalQty,
-        value: toCheckout.totalPrice,
+        value: toCheckout?.totalPrice,
         coupon: '',
+        shoppingCartItemsModel: [
+          {
+            productId: product?.id,
+            productName: product?.name,
+            colorVariants: product?.colors?.length
+              ? product?.colors?.find((clr) => clr.productId === product.id)
+                  ?.attributeOptionId
+              : '',
+            price: toCheckout?.totalPrice,
+            quantity: toCheckout.totalQty,
+          },
+        ],
       };
       GoogleAnalyticsTrackerForAllStore(
         'GoogleAddToCartScript',

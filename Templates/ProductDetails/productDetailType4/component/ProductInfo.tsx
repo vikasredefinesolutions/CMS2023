@@ -1,13 +1,13 @@
+import Price from '@appComponents/Price';
 import LoginModal from '@appComponents/modals/loginModal';
 import { _modals } from '@appComponents/modals/modal';
-import Price from '@appComponents/Price';
 import { storeBuilderTypeId } from '@configs/page.config';
 import { __Cookie } from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
 import { _Selectedproduct_v2 } from '@definations/product.type';
 import {
-  getAddToCartObject,
   GoogleAnalyticsTrackerForAllStore,
+  getAddToCartObject,
   setCookie,
 } from '@helpers/common.helper';
 import { highLightError } from '@helpers/console.helper';
@@ -78,7 +78,7 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
       modalHandler('login');
       return;
     }
-
+    let GAAddToCartPaylod: any = { shoppingCartItemsModel: [] };
     const selectedProducts: _Selectedproduct_v2[] = [];
     colors &&
       colors?.forEach((color) => {
@@ -93,6 +93,11 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
               altTag: '',
             },
             inventory: null,
+            attributeOptionId: color.attributeOptionId,
+            productName: color.productName,
+            productQty: sizeQtys
+              ?.filter((size) => size.color == color.name)
+              .reduce((acc: any, curr) => acc.qty + curr.qty),
           });
         }
       });
@@ -100,12 +105,10 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
     if (isLoggedIn === true) {
       const addToCartHandler = async () => {
         setShowLoader(true);
-        const { sizeQtys, totalPrice, totalQty, logos, price } = toCheckout;
+        const { sizeQtys, totalPrice, totalQty } = toCheckout;
         const location = await getLocation();
 
         for (let Product of selectedProducts) {
-          // console.log(totalQty, 'totalPrice');
-
           // let totalPrice = price;
           const cartObject = await getAddToCartObject({
             userId: customerId || 0,
@@ -126,33 +129,22 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
 
           if (cartObject) {
             //GTM event for add-to-cart
-            if (!isCaptured.current) {
-              isCaptured.current = true;
-
-              const eventPayload = {
-                storeId: storeId,
-                customerId: userId,
-                productId: storeProduct?.id,
-                productName: storeProduct?.name,
-                colorName: storeProduct?.colors?.length
-                  ? storeProduct?.colors?.find(
-                      (clr) => clr.productId === product.id,
-                    )?.name
-                  : '',
-                price: toCheckout?.totalPrice,
-                salesPrice: toCheckout?.price,
-                sku: storeProduct?.sku,
-                brandName: storeProduct?.brand?.name,
-                quantity: toCheckout.totalQty,
-                value: toCheckout.totalPrice,
-                coupon: '',
-              };
-              GoogleAnalyticsTrackerForAllStore(
-                'GoogleAddToCartScript',
-                storeId,
-                eventPayload,
-              );
-            }
+            GAAddToCartPaylod = {
+              storeId: storeId,
+              customerId: customerId,
+              value: totalPrice,
+              coupon: '',
+              shoppingCartItemsModel: [
+                ...GAAddToCartPaylod?.shoppingCartItemsModel,
+                {
+                  productId: Product.productId,
+                  productName: Product.productName,
+                  colorVariants: Product.attributeOptionId,
+                  price: Product?.productQty * pricePerItem || 0,
+                  quantity: Product?.productQty || 0,
+                },
+              ],
+            };
             try {
               let c_id = customerId;
               let res;
@@ -208,6 +200,12 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
             router.push('/cart/IndexNew.html');
           }
         }
+
+        GoogleAnalyticsTrackerForAllStore(
+          'GoogleAddToCartScript',
+          storeId,
+          GAAddToCartPaylod,
+        );
       };
       if (sizeQtys === null || sizeQtys[0]?.qty === 0) {
         showModal({

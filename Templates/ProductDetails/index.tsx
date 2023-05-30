@@ -27,6 +27,8 @@ const ProductDetails: React.FC<_Props> = (props) => {
   const { id: customerId } = useTypedSelector_v2((state) => state.user);
   const { id: storeId } = useTypedSelector_v2((state) => state.store);
   const { categoryArr } = useTypedSelector_v2((state) => state.product);
+  const { sizes } = useTypedSelector_v2((state) => state.product.product);
+
   const isCaptured = useRef(false);
   const clientSideMediaUrl = useTypedSelector_v2(
     (state) => state.store.mediaBaseUrl,
@@ -46,14 +48,16 @@ const ProductDetails: React.FC<_Props> = (props) => {
   useEffect(() => {
     if (details && storeId && categoryArr.length && !isCaptured.current) {
       isCaptured.current = true;
+
+      const colourName = colors?.length
+        ? colors.find((clr) => clr.productId === details?.id)?.name
+        : '';
       const payload = {
         storeId: storeId,
         customerId: customerId || 0,
         productId: details?.id,
         productName: details?.name,
-        colorName: colors?.length
-          ? colors.find((clr) => clr.productId === details?.id)?.name
-          : '',
+        colorName: colourName,
         price: details?.msrp,
         salesPrice: details?.salePrice,
         sku: details?.sku,
@@ -71,6 +75,7 @@ const ProductDetails: React.FC<_Props> = (props) => {
         storeId,
         payload,
       );
+
       const item = {
         ProductName: details?.name,
         ProductID: details?.id,
@@ -81,6 +86,9 @@ const ProductDetails: React.FC<_Props> = (props) => {
         Brand: details?.brandName,
         Price: details?.salePrice,
         CompareAtPrice: details?.msrp,
+        VisitorType: customerId ? 'high-value' : 'low-value',
+        Sizes: sizes,
+        Colors: colourName,
       };
       const viewedItem = {
         Title: item?.ProductName,
