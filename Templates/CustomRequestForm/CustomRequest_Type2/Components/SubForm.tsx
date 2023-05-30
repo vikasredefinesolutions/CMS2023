@@ -41,7 +41,7 @@ const SubForm: React.FC = () => {
                     <span className='text-red-600'>*</span>
                   </label>
                   <div className='grow'>
-                    <ul className='items-center w-full text-sm font-medium text-gray-900 rounded-lg sm:flex dark:text-white'>
+                    <ul className='items-center w-full text-sm font-medium text-gray-900 rounded-lg sm:flex'>
                       <li className='mr-4 last:mr-0'>
                         <div className='flex items-center pl-3'>
                           <input
@@ -49,9 +49,9 @@ const SubForm: React.FC = () => {
                             type='radio'
                             value=''
                             name='list-radio'
-                            className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500'
+                            className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 focus:ring-2'
                           />
-                          <label className='w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300'>
+                          <label className='w-full py-3 ml-2 text-sm font-medium text-gray-900 '>
                             Yes
                           </label>
                         </div>
@@ -63,9 +63,9 @@ const SubForm: React.FC = () => {
                             type='radio'
                             value=''
                             name='list-radio'
-                            className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500'
+                            className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 focus:ring-2 '
                           />
-                          <label className='w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300'>
+                          <label className='w-full py-3 ml-2 text-sm font-medium text-gray-900 '>
                             No
                           </label>
                         </div>
@@ -253,9 +253,9 @@ const SubForm: React.FC = () => {
                             id='vue-checkbox'
                             type='checkbox'
                             value=''
-                            className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500'
+                            className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2'
                           />
-                          <label className='w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300'>
+                          <label className='w-full py-3 ml-2 text-sm font-medium text-gray-900'>
                             Men's
                           </label>
                         </div>
@@ -266,9 +266,9 @@ const SubForm: React.FC = () => {
                             id='react-checkbox'
                             type='checkbox'
                             value=''
-                            className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500'
+                            className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2 '
                           />
-                          <label className='w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300'>
+                          <label className='w-full py-3 ml-2 text-sm font-medium text-gray-900 '>
                             Women's
                           </label>
                         </div>
@@ -279,9 +279,9 @@ const SubForm: React.FC = () => {
                             id='angular-checkbox'
                             type='checkbox'
                             value=''
-                            className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500'
+                            className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2'
                           />
-                          <label className='w-full py-3 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300'>
+                          <label className='w-full py-3 ml-2 text-sm font-medium text-gray-900'>
                             Unisex
                           </label>
                         </div>
@@ -292,9 +292,9 @@ const SubForm: React.FC = () => {
                             id='laravel-checkbox'
                             type='checkbox'
                             value=''
-                            className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500'
+                            className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2'
                           />
-                          <label className='flex w-full py-1 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300'>
+                          <label className='flex w-full py-1 ml-2 text-sm font-medium text-gray-900'>
                             <input
                               className='form-input'
                               type='text'

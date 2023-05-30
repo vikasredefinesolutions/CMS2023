@@ -43,7 +43,7 @@ const LoggedInMenu: React.FC = () => {
         </Link>
 
         {focus && (
-          <div className='text-xs uppercase absolute right-0 top-full bg-white z-40 w-[220px] pt-[10px]'>
+          <div className='text-[16px] uppercase absolute right-0 top-full bg-white z-40 w-[220px] pt-[10px]'>
             <ul className='border-[3px] border-[#000000]'>
               <li className='border-t border-t-gray-300'>
                 <Link href={paths.loggedInMenu.order}>

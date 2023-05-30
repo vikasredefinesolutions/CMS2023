@@ -94,14 +94,14 @@ const AddAddress = ({
         <div className='w-full h-full bg-black bg-opacity-50 flex items-center justify-center'>
           <div className='relative w-full max-w-2xl'>
             <div className='relative bg-white rounded-lg shadow max-h-screen overflow-y-auto'>
-              <div className='flex justify-between items-start p-4 rounded-t border-b dark:border-gray-600'>
+              <div className='flex justify-between items-start p-4 rounded-t border-b '>
                 <div></div>
-                <h3 className='text-xl font-semibold text-gray-900 dark:text-white text-center'>
+                <h3 className='text-xl font-semibold text-gray-900 text-center'>
                   {editData ? 'Edit Address' : 'New Shipping Address'}
                 </h3>
                 <button
                   type='button'
-                  className='text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white'
+                  className='text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center '
                   data-modal-toggle='AddNewAddress'
                   onClick={closePopupHandler}
                 >
@@ -122,7 +122,7 @@ const AddAddress = ({
               <div className='p-6 space-y-6'>
                 <AddressForm {...form} />
               </div>
-              <div className='flex items-center justify-between p-6 gap-2 rounded-b border-t border-gray-200 dark:border-gray-600 flex-col'>
+              <div className='flex items-center justify-between p-6 gap-2 rounded-b border-t border-gray-200 flex-col'>
                 <button
                   type='submit'
                   disabled={isSubmitting}

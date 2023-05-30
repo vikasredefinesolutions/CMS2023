@@ -21,14 +21,14 @@ const SuccessErrorModal = () => {
     >
       <div className='w-full h-full bg-black bg-opacity-50 flex items-center justify-center'>
         <div className='relative px-4 w-full max-w-2xl h-fullborder border-neutral-200 inline-block h-auto'>
-          <div className='relative bg-white rounded-lg shadow dark:bg-gray-700 max-h-screen overflow-y-auto'>
-            <div className='flex justify-between items-start p-5 rounded-t border-b dark:border-gray-600 sticky top-0 left-0 bg-white'>
-              <div className='text-xl font-semibold text-gray-900 lg:text-2xl login-top-title dark:text-white'>
+          <div className='relative bg-white rounded-lg shadow max-h-screen overflow-y-auto'>
+            <div className='flex justify-between items-start p-5 rounded-t border-b sticky top-0 left-0 bg-white'>
+              <div className='text-xl font-semibold text-gray-900 lg:text-2xl login-top-title '>
                 {modal.title}
               </div>
               <button
                 type='button'
-                className='text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white'
+                className='text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center'
                 onClick={() => hideModal()}
               >
                 <svg

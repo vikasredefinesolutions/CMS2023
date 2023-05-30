@@ -54,8 +54,8 @@ const ChangeAddressModal: FC<props> = ({
       <div className='w-full h-full bg-black bg-opacity-50 flex items-center justify-center'>
         <div className='relative w-full max-w-xl'>
           <div className='relative bg-white rounded-lg shadow max-h-screen overflow-y-auto'>
-            <div className='flex justify-between items-start p-4 rounded-t border-b dark:border-gray-600'>
-              <h3 className='text-xl font-semibold text-gray-900 dark:text-white'>
+            <div className='flex justify-between items-start p-4 rounded-t border-b'>
+              <h3 className='text-xl font-semibold text-gray-900 '>
                 Change{' '}
                 {addressType === UserAddressType.SHIPPINGADDRESS
                   ? 'Shipping'
@@ -65,7 +65,7 @@ const ChangeAddressModal: FC<props> = ({
               <button
                 onClick={closeModalHandler}
                 type='button'
-                className='text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white'
+                className='text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center'
                 data-modal-toggle='shippingaddressModal'
               >
                 <svg
@@ -145,7 +145,7 @@ const ChangeAddressModal: FC<props> = ({
                 </div>
               </div>
             </div>
-            <div className='flex items-center justify-between p-6 space-x-2 flex-wrap rounded-b border-t border-gray-200 dark:border-gray-600 text-center'>
+            <div className='flex items-center justify-between p-6 space-x-2 flex-wrap rounded-b border-t border-gray-200 text-center'>
               <button
                 data-modal-toggle='addshippingaddressModal'
                 type='button'

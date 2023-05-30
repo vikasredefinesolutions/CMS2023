@@ -9,7 +9,7 @@ const SD_PhoneCountry: React.FC<_Props> = () => {
         <div className='flex'>
           <button
             id='states-button'
-            className='flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-500 bg-light-grayborder border-gray-300 hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600'
+            className='flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-500 bg-light-grayborder border-gray-300 hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 '
             type='button'
           >
             <svg
@@ -115,7 +115,7 @@ const SD_PhoneCountry: React.FC<_Props> = () => {
           </button>
           <div
             id='dropdown-states'
-            className='z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 hidden'
+            className='z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 hidden'
             style={{
               position: 'absolute',
               inset: '0px auto auto 0px',
@@ -125,13 +125,13 @@ const SD_PhoneCountry: React.FC<_Props> = () => {
             data-popper-placement='bottom'
           >
             <ul
-              className='py-2 text-sm text-gray-700 dark:text-gray-200'
+              className='py-2 text-sm text-gray-700'
               aria-labelledby='states-button'
             >
               <li>
                 <button
                   type='button'
-                  className='inline-flex w-full px-4 py-2 text-sm text-gray-700 hover:bg-light-graydark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white'
+                  className='inline-flex w-full px-4 py-2 text-sm text-gray-700 hover:bg-light-gray'
                 >
                   <div className='inline-flex items-center'>
                     <svg
