@@ -44,7 +44,7 @@ const SideFiltersTypeTwo = ({
                         className={
                           filter.label === 'Color'
                             ? 'flex flex-wrap gap-2.5'
-                            : 'space-y-3'
+                            : 'space-y-2'
                         }
                       >
                         {filter.options.map((val, _index) => {

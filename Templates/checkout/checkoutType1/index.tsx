@@ -94,7 +94,11 @@ const ChekoutType1: React.FC<_Props> = ({ templateId }) => {
 
   useEffect(() => {
     if (totalPrice) {
-      fetchShipping(totalPrice);
+      if (shippingAdress?.countryName) {
+        fetchShipping(totalPrice);
+      } else {
+        fetchShipping(totalPrice, null);
+      }
     }
   }, [totalPrice, shippingAdress]);
 
@@ -216,7 +220,12 @@ const ChekoutType1: React.FC<_Props> = ({ templateId }) => {
                             )}
                           </div>
                         </div>
-                        <div className='flex flex-wrap items-center justify-between pt-[10px] border-b border-[#ececec]'>
+                        <div
+                          className={`flex flex-wrap items-center justify-between pt-[10px] border-b border-[#ececec] ${
+                            selectedShipping.name !== '' ? '' : 'hidden'
+                          }`}
+                          data-value={selectedShipping.name}
+                        >
                           <div className='pb-[10px] text-title-text'>
                             {__pagesText.CheckoutPage.ShippingMethods}
                           </div>
@@ -224,6 +233,7 @@ const ChekoutType1: React.FC<_Props> = ({ templateId }) => {
                         <div className='flex flex-wrap items-center justify-between pt-[10px]'>
                           <div className='pb-[10px] text-default-text'>
                             {shippingMethod &&
+                              shippingMethod[0].name !== '' &&
                               shippingMethod.map(
                                 (el: _shippingMethod, index: number) => (
                                   <div className='w-full block' key={index}>

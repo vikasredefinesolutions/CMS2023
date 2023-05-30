@@ -24,6 +24,7 @@ import React, { useState } from 'react';
 import * as Yup from 'yup';
 import Input from '../../ui/switch/Input';
 import { _ModalProps } from '../modal';
+import { _Store } from '@configs/page.config';
 
 const validationSchema = Yup.object().shape({
   userName: Yup.string()
@@ -47,6 +48,10 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
   const bothLogin = useTypedSelector_v2((state) => state.store.bothLogin);
   const [showErroMsg, setErrorMsg] = useState<null | string>(null);
   const { id: storeId } = useTypedSelector_v2((state) => state.store);
+  const storeCode = useTypedSelector_v2((state) => state.store.code);
+  // const storeEmail = useTypedSelector_v2((state) => state.store.email_address);
+  const { phone_number: storePhoneNumber, email_address: storeEmail } =
+    useTypedSelector_v2((state) => state.store);
 
   const signInHandler = (enteredInputs: {
     userName: string;
@@ -124,6 +129,7 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
       });
     });
   };
+
   return (
     <>
       <div
@@ -131,7 +137,11 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
         className=' overflow-y-auto overflow-x-hidden fixed z-50 justify-center items-center h-modal inset-0 text-default-text'
       >
         <div className='w-full h-full bg-[#000000] bg-opacity-[0.50] flex items-center justify-center'>
-          <div className='relative px-[16px] w-full max-w-xl h-full md:h-auto'>
+          <div
+            className={`relative px-[16px] w-full ${
+              storeCode == _Store.type4 ? 'max-w-4xl' : 'max-w-xl'
+            } h-full md:h-auto`}
+          >
             <div className='relative bg-[#ffffff] shadow max-h-screen overflow-y-auto h-full rounded-md'>
               <div className='flex justify-between items-center p-[15px] rounded-t border-b sticky top-0 left-0 bg-[#ffffff] z-50'>
                 <div className='font-[600] text-medium-text'>
@@ -159,7 +169,19 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
 
               <div className='p-[25px]'>
                 <div className='mb-[10px] font-[700] text-lg text-center'>
-                  {__pagesText.productInfo.loginModal.signIn}
+                  {storeCode === 'PKHG' ? (
+                    <>
+                      <p
+                        className='!font-normal text-left text-default-text'
+                        dangerouslySetInnerHTML={{
+                          __html:
+                            __pagesText.productInfo.loginModal.pkIntroText,
+                        }}
+                      />
+                    </>
+                  ) : (
+                    <>{__pagesText.productInfo.loginModal.signIn}</>
+                  )}
                 </div>
 
                 <Formik
@@ -221,7 +243,7 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
                           <div className='mb-[20px]'>
                             <button
                               disabled={!!showErroMsg}
-                              className='btn btn-md btn-secondary w-full'
+                              className='btn btn-md btn-secondary w-full  pk-hg-primary'
                               type='submit'
                               onClick={() => {
                                 handleSubmit();
@@ -283,12 +305,29 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
                                 modalHandler(null);
                                 router.push(paths.SIGN_UP);
                               }}
-                              className='btn btn-md btn-secondary w-full'
+                              className='btn btn-md btn-secondary w-full pk-hg-primary'
                             >
                               {
                                 __pagesText.productInfo.loginModal
                                   .createNewAccount
                               }
+                            </button>
+                          </div>
+                          <div
+                            className={`${
+                              storeCode == _Store.type4 ? 'mb-4' : 'hidden'
+                            }`}
+                          >
+                            <button
+                              onClick={() => {
+                                showModal({
+                                  message: `Please contact Driving Impressions at ${storeEmail} or ${storePhoneNumber} For Driving Impression Account`,
+                                  title: 'Information',
+                                });
+                              }}
+                              className='btn btn-md btn-secondary w-full pk-hg-primary'
+                            >
+                              {__pagesText.productInfo.loginModal.newCustomer}
                             </button>
                           </div>
                           <div className='mt-[10px] text-extra-small-text text-center'>

@@ -10,6 +10,7 @@ interface _Props {
     urlType: string;
     url: string;
   }[];
+  productSku: string;
   story: {
     title: string;
     category: {
@@ -26,7 +27,12 @@ interface _Props {
   };
 }
 
-const SD_HeroSection: React.FC<_Props> = ({ banner, story, page }) => {
+const SD_HeroSection: React.FC<_Props> = ({
+  banner,
+  story,
+  page,
+  productSku,
+}) => {
   return (
     <section className='mt-[20px]'>
       <div>
@@ -91,7 +97,7 @@ const SD_HeroSection: React.FC<_Props> = ({ banner, story, page }) => {
           </div>
         </section>
         <SD_FaqSection page={page} />
-        <SD_ShopNowSection />
+        <SD_ShopNowSection productSku={productSku} />
         {/* <SD_ProductsSlider /> */}
       </div>
     </section>

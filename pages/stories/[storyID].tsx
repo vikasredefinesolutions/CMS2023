@@ -54,6 +54,7 @@ interface _StoryDetailsProps {
       type: __pageTypeConstant.blog;
       slug: string;
     };
+    productSku: string;
   };
   metadata: _GetPageType;
 }
@@ -107,6 +108,7 @@ const Story: React.FC<
           banner={props.data.banner || []}
           story={props.data.story}
           page={props.data.page}
+          productSku={props.data.productSku}
         />
       </>
     );
@@ -176,6 +178,7 @@ export const getServerSideProps: GetServerSideProps = async (
     data: {
       id: _defaultTemplates.storyDetails,
       pageType: __pageTypeConstant.blog,
+      productSku: '',
       list: null,
       story: {
         category: {
@@ -220,9 +223,10 @@ export const getServerSideProps: GetServerSideProps = async (
       type: __pageTypeConstant.blog,
     });
 
-    const { banner, prevNext, category } = await GetNextStoryByStoryID({
-      storiesId: pageMetaData.id,
-    });
+    const { banner, prevNext, category, productSku } =
+      await GetNextStoryByStoryID({
+        storiesId: pageMetaData.id,
+      });
 
     detailsProps.data.page = {
       ...detailsProps.data.page,
@@ -230,6 +234,7 @@ export const getServerSideProps: GetServerSideProps = async (
       slug: pageMetaData.slug,
     };
     detailsProps.data.banner = banner;
+    detailsProps.data.productSku = productSku;
     detailsProps.data.story = {
       ...prevNext,
       title: pageMetaData.name,

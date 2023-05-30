@@ -190,7 +190,9 @@ export const __pagesText = {
     forgotModal: {
       forgotPassword: 'Forgot Password',
       back: 'Back',
-      notFound: 'not found',
+      notFound: `We're sorry. We weren't able to identify you given the information provided.`,
+      sucessmesage:
+        'Instructions for creating a new password have been emailed to you.',
       sentSucess1: 'An email has been sent to ',
       sentSucess2:
         'with a link to reset your password. It may take a few minutes to arrive. If you dont see it in your inbox, please check your spam folder.',
@@ -207,6 +209,7 @@ export const __pagesText = {
       },
       forgotPassword: 'Forgot Password?',
       createNewAccount: 'CREATE NEW CUSTOMER ACCOUNT',
+      newCustomer: 'New Customer Requesting a Driving Impression Account',
       samllogin: 'LOGIN VIA SAML',
       emailPlaceHolder: 'Enter the email address',
       passwordPlaceHolder: 'Password',

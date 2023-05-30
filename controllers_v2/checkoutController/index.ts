@@ -36,7 +36,11 @@ import {
   checkCustomerAlreadyExist,
   placeOrder as placeOrderService,
 } from '@services/checkout.service';
-import { CreateNewAccount, GetStoreCustomer } from '@services/user.service';
+import {
+  createAccountWithoutCompany,
+  CreateNewAccount,
+  GetStoreCustomer,
+} from '@services/user.service';
 
 import {
   CreateUserAddress,
@@ -73,6 +77,7 @@ export interface _shippingMethod {
   price: number;
 }
 [];
+
 const CheckoutController = () => {
   const [endUserNameS, setEndUserName] = useState<string>('');
   const [endUserDisplay, setEndUserDisplay] = useState<boolean>(false);
@@ -301,6 +306,99 @@ const CheckoutController = () => {
   const blockInvalidChar = (e: any) =>
     ['e', 'E', '+', '-', '.'].includes(e.key) && e.preventDefault();
 
+  const loginSubmitHandler = async (enteredInputs: {
+    pass: string;
+    cpass: string;
+  }) => {
+    const location = await getLocation();
+    setShowLoader(true);
+    const addAccount = {
+      storeCustomerModel: {
+        ...signup_payload,
+        firstname: '',
+        lastName: '',
+        email: customerEmail,
+        password: enteredInputs.pass,
+        confirmPassword: enteredInputs.cpass,
+        companyName: '',
+        location: `${location.city}, ${location.region}, ${location.country}, ${location.postal_code}`,
+        ipAddress: location.ip_address,
+        storeId: storeId,
+        memberFrom: 0,
+        memberTo: 0,
+        organizationId: 0,
+        primaryColor: '',
+        mascotId: '',
+        teamGender: '',
+        timeOfYearPurchase: '',
+        position: '',
+        navCustomerId: '',
+        organizationName: '',
+        storeCustomerAddress: [],
+      },
+    };
+    const userDetail = await createAccountWithoutCompany(addAccount);
+
+    if (userDetail) {
+      signInUser({
+        userName: userDetail?.item1.email,
+        password: enteredInputs.pass,
+        storeId: storeId!,
+      })
+        .then((user) => {
+          if (user.credentials === 'INVALID') {
+            // setErrorMsg(user.message);
+          }
+          if (user.credentials === 'VALID') {
+            logInUser({
+              id: +user.id,
+            });
+            setCookie(__Cookie.userId, user.id, __Cookie_Expiry.userId);
+
+            GetStoreCustomer(+user.id).then((res) => {
+              if (res === null) return;
+              if (localStorage) {
+                const tempCustomerId = extractCookies(
+                  __Cookie.tempCustomerId,
+                  'browserCookie',
+                ).tempCustomerId;
+
+                if (tempCustomerId) {
+                  updateCartByNewUserId(~~tempCustomerId, res.id).then(() => {
+                    fetchCartDetails({
+                      customerId: res.id,
+                      isEmployeeLoggedIn: isEmployeeLoggedIn,
+                    });
+                  });
+                  deleteCookie(__Cookie.tempCustomerId);
+                }
+              }
+
+              const userInfo = {
+                $email: res.email,
+                $first_name: res.firstname,
+                $last_name: res.lastName,
+                $phone_number: '',
+                $organization: res.companyName,
+                $title: 'title',
+                $timestamp: new Date(),
+              };
+
+              KlaviyoScriptTag(['identify', userInfo]);
+              updateCustomer({ customer: res });
+              getWishlist(res.id).then((wishListResponse) => {
+                updateWishListData(wishListResponse);
+              });
+            });
+          }
+        })
+        .finally(() => {
+          setShowLoader(false);
+          setCurrentPage(checkoutPages.address);
+        });
+    }
+  };
+
   const moveCartItemsToRegisteredUserCart = async (
     registeredUserId: number,
   ) => {
@@ -447,8 +545,11 @@ const CheckoutController = () => {
     password: string;
     confirmPassword: string;
   }) => {
-    setCreateAccountPassword(arg);
-    setCurrentPage(checkoutPages.address);
+    // setCreateAccountPassword(arg);
+    loginSubmitHandler({
+      pass: arg.password,
+      cpass: arg.confirmPassword,
+    });
   };
 
   const loginCustomer = async ({ password }: { password: string }) => {
@@ -500,6 +601,8 @@ const CheckoutController = () => {
       });
       // setCurrentPage(checkoutPages.address);
     } else if (loginResponse.credentials === 'INVALID') {
+      console.log('loginResponse', loginResponse);
+
       showModal({
         message: loginResponse.message,
         title: commonMessage.failed,
@@ -703,14 +806,18 @@ const CheckoutController = () => {
   };
   const { shippingChargeType } = useTypedSelector_v2((state) => state.store);
 
-  const fetchShipping = async (totalPrice: number) => {
+  const fetchShipping = async (
+    totalPrice: number,
+    shippingCountry?: string | null,
+  ) => {
     try {
       if (storeId && shippingChargeType) {
         const data = await GetShippingmethod({
           shippingMethodModel: {
             city: shippingAdress?.city || '',
             state: shippingAdress?.state || '',
-            country: shippingAdress?.countryName || '',
+            country:
+              shippingCountry === null ? ' ' : shippingAdress?.countryName,
             zipCode: shippingAdress?.postalCode || '',
             customerID: userId,
             storeId: storeId,
@@ -841,6 +948,7 @@ const CheckoutController = () => {
       const orderModel = {
         ...AddOrderDefault,
         ...addPaymentDetails(),
+        cardName: billingAdress.firstname + ' ' + billAddress?.lastName,
         ...(useBalance
           ? {
               isCreditLimit: true,
@@ -914,28 +1022,45 @@ const CheckoutController = () => {
       };
 
       try {
-        logoutClearCart();
-        deleteCookie(__Cookie.tempCustomerId);
-
-        const res = await placeOrderService({
+        await placeOrderService({
           orderModel,
-        });
-        if (res) {
-          await Klaviyo_PlaceOrder({
-            orderNumber: res.id,
+        })
+          .then(async (res) => {
+            if (res?.id) {
+              await Klaviyo_PlaceOrder({
+                orderNumber: res.id,
+              });
+              if (isEmployeeLoggedIn) {
+                logout_EmployeeLogin();
+              }
+              setShowLoader(false);
+              router.push(`/${paths.THANK_YOU}?orderNumber=${res.id}`);
+              logoutClearCart();
+              deleteCookie(__Cookie.tempCustomerId);
+            } else if (res) {
+              setShowLoader(false);
+              showModal({
+                message: Object.values(res)[0],
+                title: Object.keys(res)[0],
+              });
+            }
+          })
+          .catch((err) => {
+            setShowLoader(false);
+            let x = '';
+            Object.values(err).forEach((val) => (x = x + val));
+            showModal({
+              message: x,
+              title: 'Failed',
+            });
           });
-
-          if (isEmployeeLoggedIn) {
-            logout_EmployeeLogin();
-          }
-
-          router.push(`/${paths.THANK_YOU}?orderNumber=${res.id}`);
-          // window.location.assign(`${paths.THANK_YOU}?orderNumber=${res.id}`);
-        }
-      } catch (error) {
+      } catch (error: any) {
+        setShowLoader(false);
+        let x = '';
+        Object.values(error).forEach((val) => (x = x + val));
         showModal({
-          title: commonMessage.failed,
-          message: commonMessage.somethingWentWrong,
+          message: x,
+          title: 'Failed',
         });
       }
     }

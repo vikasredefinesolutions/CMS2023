@@ -60,6 +60,7 @@ interface _t_GetNextStoryByStoryID {
     prev: string;
     next: string;
   };
+  productSku: string;
   category: {
     name: string;
     url: string;
@@ -82,6 +83,7 @@ export interface _GetNextStoryByStoryID_Response {
   categoryName: string;
   categoryUrl: string;
   getStoriesBannerModels: { name: string; urlType: URLType; url: string }[];
+  productSku: string;
 }
 
 export const GetNextStoryByStoryID = async (payload: {
@@ -110,6 +112,7 @@ export const GetNextStoryByStoryID = async (payload: {
       url: (response && response[0].categoryUrl) || '',
     },
     banner: (response && response[0]?.getStoriesBannerModels) || [],
+    productSku: (response && response[0]?.productSku) || '',
   };
 
   return transformedData;

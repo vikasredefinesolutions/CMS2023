@@ -35,8 +35,8 @@ export const placeOrder = async (orderObject: {
     });
 
     return res;
-  } catch (error) {
-    return null;
+  } catch (error: any) {
+    return error;
   }
 };
 

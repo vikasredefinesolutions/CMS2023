@@ -95,6 +95,56 @@ export const CreateNewAccount = async (
   }
 };
 
+export const createAccountWithoutCompany = async (
+  payload: _CreateNewAccount_Payload,
+): Promise<_AccCreated | null> => {
+  const url = '/StoreCustomer/storecustomercreateguest.json';
+
+  conditionalLog_V2({
+    data: payload,
+    show: __console_v2.user.service.CreateNewAccount,
+    type: 'API-PAYLOAD',
+    name: 'CreateNewAccount',
+  });
+
+  try {
+    const res = await SendAsync<_AccCreated>({
+      url: url,
+      method: 'POST',
+      data: payload,
+    });
+    // @ts-ignore: Unreachable code error
+    if (!res || res.success === false) {
+      let transformedRes: null | string = __SuccessErrorText.SomethingWentWrong;
+
+      // @ts-ignore: Unreachable code error
+      if (res.errors && 'storeCustomerModel.Email' in res.errors) {
+        // @ts-ignore: Unreachable code error
+        transformedRes = res.errors[`storeCustomerModel.Email`] as string;
+      }
+
+      conditionalLog_V2({
+        data: { res, transformedRes },
+        show: __console_v2.user.service.CreateNewAccount,
+        type: 'API-RESPONSE',
+        name: 'CreateNewAccount',
+      });
+
+      return null;
+    }
+
+    return res;
+  } catch (error: any) {
+    conditionalLog_V2({
+      data: error,
+      show: __console_v2.user.service.CreateNewAccount,
+      type: 'API-ERROR',
+      name: 'CreateNewAccount',
+    });
+    return { data: null, ...error };
+  }
+};
+
 export const OrderedBillingDetails = async (
   orderId: number,
 ): Promise<_MyAcc_OrderBillingDetails | null> => {
@@ -297,10 +347,10 @@ export const signInUser = async (
       credentials: 'VALID',
       id: `${res}`,
     };
-  } catch (error) {
+  } catch (error: any) {
     return {
       credentials: 'INVALID',
-      message: __Login.something_went_wrong,
+      message: error.exception,
     };
   }
 };

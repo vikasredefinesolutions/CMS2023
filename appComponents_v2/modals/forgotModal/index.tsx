@@ -39,6 +39,15 @@ const ForgotModal: React.FC<_ModalProps> = ({ modalHandler }) => {
     }
   };
 
+  const showerror = () => {
+    alert(__pagesText.productInfo.forgotModal.notFound);
+  };
+
+  if (Error) {
+    showerror();
+    setError(false);
+  }
+
   return (
     <>
       <div
@@ -89,51 +98,46 @@ const ForgotModal: React.FC<_ModalProps> = ({ modalHandler }) => {
                 </div>
 
                 <div className='Login-Main'>
+                  <input
+                    type='email'
+                    id='email-address0'
+                    name='email-address0'
+                    placeholder='Enter Your Email Address'
+                    className='form-input'
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
                   <div className='mb-[10PX]'>
                     {FinalMessage || Error ? (
                       FinalMessage ? (
-                        <p>
-                          {__pagesText.productInfo.forgotModal.sentSucess1}
+                        <>
+                          <p className='text-green-400'>
+                            {/* {__pagesText.productInfo.forgotModal.sentSucess1}
                           {Email}{' '}
-                          {__pagesText.productInfo.forgotModal.sentSucess2}
-                        </p>
+                          {__pagesText.productInfo.forgotModal.sentSucess2} */}
+                            {__pagesText.productInfo.forgotModal.sucessmesage}
+                          </p>
+                        </>
                       ) : (
-                        <p>
-                          {Email} {__pagesText.productInfo.forgotModal.notFound}
-                        </p>
+                        ''
                       )
                     ) : (
                       <>
-                        <input
-                          type='email'
-                          id='email-address0'
-                          name='email-address0'
-                          placeholder='Enter Your Email Address'
-                          className='form-input'
-                          onChange={(e) => setEmail(e.target.value)}
-                        />
-                        <div>
-                          {errorStatement && (
-                            <p className='text-red-500 text-xs mt-1'>
-                              Please enter a valid email address
-                            </p>
-                          )}
-                        </div>
+                        <div></div>
                       </>
                     )}
                   </div>
-                  {FinalMessage || Error ? (
+                  {/* {FinalMessage || Error ? (
                     ''
-                  ) : (
-                    <div className=''>
-                      <button
-                        className='btn btn-md btn-secondary w-full'
-                        onClick={() => forgotPassword(Email)}
-                      >
-                        {__pagesText.productInfo.forgotModal.forgotPassword}{' '}
-                      </button>
-                    </div>
-                  )}
+                  ) : ( */}
+                  <div className=''>
+                    <button
+                      className='btn btn-md btn-secondary w-full'
+                      onClick={() => forgotPassword(Email)}
+                    >
+                      {__pagesText.productInfo.forgotModal.forgotPassword}{' '}
+                    </button>
+                  </div>
+                  {/* )} */}
                 </div>
               </div>
             </div>

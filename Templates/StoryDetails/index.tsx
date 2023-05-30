@@ -12,6 +12,7 @@ interface _Props {
     urlType: string;
     url: string;
   }[];
+  productSku: string;
   story: {
     title: string;
     category: {

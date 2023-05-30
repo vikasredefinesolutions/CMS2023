@@ -8,7 +8,7 @@ import { getCompareLink } from '@helpers/compare.helper';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import {
   GetlAllProductList,
-  GetProductImageOptionList
+  GetProductImageOptionList,
 } from '@templates/ProductListings/ProductListingType';
 import ProductBoxController from '@templates/ProductListings/productListingType1/components/productBoxController';
 import Link from 'next/link';
@@ -73,7 +73,7 @@ const TemplateTwoListing = ({
 
   return productView === 'grid' ? (
     <li className='text-center'>
-      <div className='flex justify-center w-full border border-gray-border hover:border-gray-border hover:shadow-md'>
+      <div className='flex justify-center w-full border border-gray-border pkhg-product-list-hover'>
         <div className='relative w-full mb-[20px]'>
           <div className='w-full px-[30px] pt-[10px] cursor-pointer'>
             <Link key={product.id} href={`/${product.sename}.html`}>
@@ -151,7 +151,7 @@ const TemplateTwoListing = ({
               product.splitproductList &&
               product?.splitproductList?.length > 0 ? (
                 <>
-                  <Link key={product.id} href={`/${product.sename}.html`}>
+                  {/* <Link key={product.id} href={`/${product.sename}.html`}>
                     <li
                       className={`w-[28px] h-[28px] border-2 border-primary hover:border-primary cursor-pointer`}
                     >
@@ -162,7 +162,7 @@ const TemplateTwoListing = ({
                         title={currentProduct.colorName}
                       />
                     </li>
-                  </Link>
+                  </Link> */}
 
                   {product?.splitproductList?.map((subRow, index) =>
                     index < listing_max_showcolors - 1 ? (

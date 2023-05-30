@@ -189,8 +189,6 @@ const SomLogoOption: React.FC<_SOMLogoOptionProps> = ({
       if (type == 'jpg' || type == 'jpeg' || type == 'png') {
         //TO DO
 
-        console.log(file, 'file data');
-
         const logoFileURL: string | null = await UploadImage({
           folderPath: imageFolderPath,
           files: event.currentTarget?.files[0],
