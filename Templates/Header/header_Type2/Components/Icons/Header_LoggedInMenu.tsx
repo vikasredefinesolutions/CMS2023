@@ -34,7 +34,7 @@ const LoggedInMenu: React.FC = () => {
             title={__pagesText.Headers.myAccountTittle}
           >
             <span className='text-[12px] hidden xl:inline-block whitespace-nowrap tracking-[1px]'>
-              {customer?.firstname}
+              {__pagesText.Headers.myAccountTittle}
             </span>
             <span className='xl:hidden material-icons text-[30px]'>
               {__pagesText.Headers.loginIcon}
@@ -43,7 +43,7 @@ const LoggedInMenu: React.FC = () => {
         </Link>
 
         {focus && (
-          <div className='text-xs uppercase absolute right-0 top-full bg-white z-40 w-[220px] pt-2'>
+          <div className='text-xs uppercase absolute right-0 top-full bg-white z-40 w-[220px]'>
             <ul className='border-[3px] border-[#000000]'>
               <li className='border-t border-t-gray-300'>
                 <Link href={paths.loggedInMenu.order}>
@@ -62,7 +62,24 @@ const LoggedInMenu: React.FC = () => {
                   </a>
                 </Link>
               </li>
-              <li className='border-t border-t-gray-300'>
+              <li className=''>
+                <Link href={paths.myAccount.manage_logo}>
+                  <a className='flex items-center p-2 gap-2.5 text-[#000000] hover:text-[#000000]'>
+                    <span className=''>
+                      <NxtImage
+                        src='/assets/images/PKhealth/manage-logo.png'
+                        alt={''}
+                        className={''}
+                        isStatic={true}
+                        useNextImage={false}
+                        title={__pagesText.Headers.logoLocation}
+                      />
+                    </span>
+                    <span className=''>{__pagesText.Headers.logoLocation}</span>
+                  </a>
+                </Link>
+              </li>
+              <li className=''>
                 <Link href={paths.loggedInMenu.settings}>
                   <a className='flex items-center p-2 gap-2.5 text-[#000000] hover:text-[#000000]'>
                     <span className=''>
@@ -78,23 +95,6 @@ const LoggedInMenu: React.FC = () => {
                     <span className=''>
                       {__pagesText.Headers.accountSetting}
                     </span>
-                  </a>
-                </Link>
-              </li>
-              <li className='border-t border-t-gray-300'>
-                <Link href={paths.loggedInMenu.help}>
-                  <a className='flex items-center p-2 gap-2.5 text-[#000000] hover:text-[#000000]'>
-                    <span className=''>
-                      <NxtImage
-                        src={__StaticImg.loggedInMenu.help.src}
-                        alt={''}
-                        className={''}
-                        isStatic={true}
-                        useNextImage={false}
-                        title={__pagesText.Headers.help}
-                      />
-                    </span>
-                    <span className=''> {__pagesText.Headers.help}</span>
                   </a>
                 </Link>
               </li>

@@ -4,11 +4,11 @@ import { useTypedSelector_v2 } from '@hooks_v2/index';
 import Link from 'next/link';
 import React, { useState } from 'react';
 import {
+  Cateogory,
+  _Category,
   categories,
   categoriesWithBrands,
-  Cateogory,
   colorImgTabArray,
-  _Category,
 } from './brandsByCategoriesType1.extras';
 
 interface _Props {

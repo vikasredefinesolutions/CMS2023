@@ -1,8 +1,8 @@
+import Price from '@appComponents/Price';
+import PersonalizeFontModal from '@appComponents/modals/PersonalizeFontModal/PersonalizeFontModal';
 import LoginModal from '@appComponents/modals/loginModal';
 import { _modals } from '@appComponents/modals/modal';
-import PersonalizeFontModal from '@appComponents/modals/PersonalizeFontModal/PersonalizeFontModal';
 import SizeChartModal from '@appComponents/modals/sizeChartModal/SizeChartModal';
-import Price from '@appComponents/Price';
 import { storeBuilderTypeId } from '@configs/page.config';
 import { __pagesText } from '@constants/pages.text';
 import { paths } from '@constants/paths.constant';
@@ -12,10 +12,11 @@ import { _sbsStore_props } from '@templates/ProductDetails/productDetails';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import AvailableColors from './AvailableColors';
+import BuyNowHeader from './BuyNowHeader';
 import DiscountPrice from './DiscountPrice';
 import DiscountPricing from './DiscountPricing';
-import { _ProductInfoProps } from './productDetailsComponents';
 import Inventory from './ProductInventory';
+import { _ProductInfoProps } from './productDetailsComponents';
 
 const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
   const [openModal, setOpenModal] = useState<null | _modals>(null);
@@ -32,11 +33,9 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
   const { showModal, updateSbsStore } = useActions_v2();
   const router = useRouter();
   const [sbstoreList, setSbstoreList] = useState<_sbsStore_props[] | any>([]);
-  const [sbs_state, setSbs_state] = useState<
-    { [key: string]: string | number }[]
-  >([]);
-  const { storeTypeId } = useTypedSelector_v2((state) => state.store);
 
+  const { storeTypeId } = useTypedSelector_v2((state) => state.store);
+  const [isVisible, setIsVisible] = useState(false);
   const fetch_SbStore = async () => {
     try {
       await SbStore_fn({ productId: product?.id }).then((res) => {
@@ -46,6 +45,7 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
       console.log(error);
     }
   };
+  console.log('---reaching product details---', product);
 
   useEffect(() => {
     if (storeTypeId == storeBuilderTypeId) {
@@ -60,9 +60,16 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
     }
     setOpenModal(null);
   };
-
-  const buyNowHandler = (e: any, isLoggedIn: boolean) => {
-    e.preventDefault();
+  const buyNowHandler = (e: any) => {
+    e?.preventDefault();
+    if (minQty > totalQty) {
+      showModal({
+        message: `Oops! The minimum order requirement for this piece is ${minQty} per color.
+        `,
+        title: ``,
+      });
+    }
+    const isLoggedIn = !!userId;
     if (isLoggedIn === false) {
       modalHandler('login');
       return;
@@ -105,8 +112,20 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
     router.push(`${seName}`);
   };
 
-  const selected = useTypedSelector_v2((state) => state.product.selected);
+  const { image } = useTypedSelector_v2((state) => state.product.selected);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const element = document.getElementById('mainContent');
+      const rect = element?.getBoundingClientRect();
+      const isInRange = rect ? rect?.top <= 200 : false;
+      setIsVisible(isInRange);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
   return (
     <>
       <div className='col-span-1 mt-[15px] pl-[0px] pr-[0px] md:pl-[15px] md:pr-[15px] sm:pl-[0px] sm:pr-[0px] lg:mt-[0px]'>
@@ -171,14 +190,16 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
             </span>
 
             <span className='ml-[4px]'>
-              <i><Price
-                value={undefined}
-                prices={{
-                  msrp: product ? product.msrp : 0,
-                  salePrice: product ? product.salePrice : 0,
-                }}
-                addColon={true}
-              />{' '}</i>
+              <i>
+                <Price
+                  value={undefined}
+                  prices={{
+                    msrp: product ? product.msrp : 0,
+                    salePrice: product ? product.salePrice : 0,
+                  }}
+                  addColon={true}
+                />{' '}
+              </i>
             </span>
           </div>
         </div>
@@ -289,14 +310,7 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
             <button
               disabled={product?.isDiscontinue}
               onClick={(e) => {
-                if (minQty > totalQty) {
-                  showModal({
-                    message: `Oops! The minimum order requirement for this piece is ${minQty} per color.
-                    `,
-                    title: ``,
-                  });
-                }
-                buyNowHandler(e, !!userId);
+                buyNowHandler(e);
               }}
               className='btn btn-primary text-center btn-lg w-full'
             >
@@ -322,6 +336,14 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
         <PersonalizeFontModal modalHandler={modalHandler} />
       )}
       {openModal === 'login' && <LoginModal modalHandler={modalHandler} />}
+      {isVisible && (
+        <BuyNowHeader
+          msrp={product?.msrp || 0}
+          productName={product?.name || ''}
+          buyNowHandler={buyNowHandler}
+          image={image}
+        />
+      )}
     </>
   );
 };
