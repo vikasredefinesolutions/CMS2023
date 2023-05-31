@@ -103,6 +103,7 @@ export interface _ProductDetails {
   categoryName?: string;
   productBrandLogo: string | null;
   brandSEname: string | null;
+  isDropShipProduct: boolean;
   productTagViewModel: Array<{
     productId: number;
     imagename: string;

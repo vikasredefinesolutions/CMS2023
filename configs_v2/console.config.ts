@@ -114,6 +114,7 @@ export const __console_v2: __Console = {
   },
   header: {
     service: {
+      FetchCatalog: false,
       FetchBrands: false,
       FetchStoreMenu: false,
       FetchMenuTopics: false,
