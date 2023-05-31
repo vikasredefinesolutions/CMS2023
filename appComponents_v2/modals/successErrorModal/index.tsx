@@ -46,7 +46,13 @@ const SuccessErrorModal = () => {
               </button>
             </div>
             <div className='p-3'>
-              <div className='mb-4 text-center'>{modal.message}</div>
+              <div
+                className={`mb-4 text-center ${
+                  modal.title === 'Error' ? 'text-rose-500' : ''
+                } ${modal.title.includes('error') ? 'text-rose-500' : ''}`}
+              >
+                {modal.message}
+              </div>
             </div>
           </div>
         </div>

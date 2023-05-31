@@ -1,7 +1,7 @@
 import NxtImage from '@appComponents/reUsable/Image';
 import { _Brand } from '@definations/brand';
 import { capitalizeFirstLetter } from '@helpers/common.helper';
-import { FetchBrands } from '@services/header.service';
+import { FetchCatalog } from '@services/header.service';
 import Link from 'next/link';
 import React, { Fragment, useEffect, useState } from 'react';
 interface _props {
@@ -15,7 +15,7 @@ const CatalogDisplayBrandsType3: React.FC<_props> = ({ storeId }) => {
 
   const [brandImages, setBrandImages] = useState<_Brand[] | null>([]);
   const fetchBrandImages = async () => {
-    const brands = await FetchBrands({ storeId: storeId });
+    const brands = await FetchCatalog({ storeId: storeId });
     brands && setBrandImages(brands.brands);
   };
 

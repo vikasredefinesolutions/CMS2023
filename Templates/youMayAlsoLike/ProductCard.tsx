@@ -19,7 +19,6 @@ const ProductCard = ({ product }: { product: _ProductsAlike }) => {
     seName: '',
     name: '',
   });
-
   useEffect(() => {
     setSelectedProduct({
       seName: product.seName,
@@ -74,6 +73,36 @@ const ProductCard = ({ product }: { product: _ProductsAlike }) => {
                   role='list'
                   className='flex flex-wrap items-center mt-2 justify-center gap-[5px]'
                 >
+                  <li
+                    key={product.id}
+                    className={`w-7 h-7 border-2 ${
+                      selectedProduct.seName === product.seName
+                        ? 'border-primary'
+                        : ''
+                    } hover:border-primar`}
+                    onClick={() => router.push(product.seName)}
+                    onMouseEnter={() =>
+                      setSelectedProduct({
+                        image: product.image,
+                        seName: product.seName,
+                        name: product.name,
+                      })
+                    }
+                    onMouseLeave={() =>
+                      setSelectedProduct({
+                        image: product.image,
+                        seName: product.seName,
+                        name: product.name,
+                      })
+                    }
+                  >
+                    <ImageComponent
+                      src={mediaBaseUrl + product.image}
+                      alt='no image'
+                      className='max-h-full m-auto'
+                      title={product.name}
+                    />
+                  </li>
                   {product?.splitproductList?.map(
                     (option: splitproductList) => (
                       <li
@@ -83,11 +112,19 @@ const ProductCard = ({ product }: { product: _ProductsAlike }) => {
                             ? 'border-primary'
                             : ''
                         } hover:border-primar`}
-                        onClick={() =>
+                        onClick={() => router.push(option.seName)}
+                        onMouseEnter={() =>
                           setSelectedProduct({
                             image: option.imageurl,
                             seName: option.seName,
                             name: option.name,
+                          })
+                        }
+                        onMouseLeave={() =>
+                          setSelectedProduct({
+                            image: product.image,
+                            seName: product.seName,
+                            name: product.name,
                           })
                         }
                       >

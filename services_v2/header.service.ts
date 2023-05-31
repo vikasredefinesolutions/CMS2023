@@ -15,7 +15,8 @@ export type _HeaderAPIs =
   | 'FetchBannerDetails'
   | 'FetchStoreMenu'
   | 'FetchMenuTopics'
-  | 'FetchMenuCategories';
+  | 'FetchMenuCategories'
+  | 'FetchCatalog';
 
 export type _HeaderServices = {
   service: 'header';
@@ -27,7 +28,7 @@ export const FetchBrands = async ({
 }: {
   storeId: number;
 }): Promise<_t_Brands | null> => {
-  const url = `/Brand/getstoreproductbrandbysequence/2/${storeId}.json`;
+  const url = `Brand/getbrandbystoreid/${storeId}.json`;
 
   const response = await CallAPI_v2<_Brand[]>({
     name: {
@@ -44,11 +45,35 @@ export const FetchBrands = async ({
     brands: response,
     dataType: 'BRANDS',
   };
+
+  return transformed;
+};
+export const FetchCatalog = async ({
+  storeId,
+}: {
+  storeId: number;
+}): Promise<_t_Brands | null> => {
+  const url = `/Brand/getstoreproductbrandbysequence/2/${storeId}.json`;
+
+  const response = await CallAPI_v2<_Brand[]>({
+    name: {
+      api: 'FetchCatalog',
+      service: 'header',
+    },
+    request: {
+      url: url,
+      method: 'GET',
+    },
+  });
+
+  const transformed: _t_Brands = {
+    brands: response,
+    dataType: 'BRANDS',
+  };
   console.log(transformed, 'console.log(first)');
 
   return transformed;
 };
-
 export const FetchBannerDetails = async (payload: {
   storeId: number;
   isBrand: boolean;

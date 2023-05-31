@@ -42,6 +42,7 @@ const TemplateTwoListing = ({
   const [mainImageUrl, setMainImageUrl] = useState<string>(
     currentProduct?.imageName ? currentProduct.imageName : '',
   );
+
   const store = useTypedSelector_v2((state) => state.store);
   const { isAttributeSaparateProduct } = useTypedSelector_v2(
     (state) => state.store,
@@ -63,7 +64,6 @@ const TemplateTwoListing = ({
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [product]);
-
   // let flag:boolean = product.getProductImageOptionList.length > 4 ? true : false;
   // let countImage:Number = product.getProductImageOptionList.length - 4;
   let flag: boolean = false;
@@ -151,7 +151,7 @@ const TemplateTwoListing = ({
               product.splitproductList &&
               product?.splitproductList?.length > 0 ? (
                 <>
-                  {/* <Link key={product.id} href={`/${product.sename}.html`}>
+                  <Link key={product.id} href={`/${product.sename}.html`}>
                     <li
                       className={`w-[28px] h-[28px] border-2 border-primary hover:border-primary cursor-pointer`}
                     >
@@ -162,31 +162,31 @@ const TemplateTwoListing = ({
                         title={currentProduct.colorName}
                       />
                     </li>
-                  </Link> */}
+                  </Link>
 
                   {product?.splitproductList?.map((subRow, index) =>
                     index < listing_max_showcolors - 1 ? (
-                      <Link href={`/${subRow.seName}.html`}>
-                        <li
-                          className={`w-[28px] h-[28px]  border-2 hover:border-primary cursor-pointer`}
-                          key={`${index}_${subRow.prodcutId}`}
-                          onMouseOver={() => setMainImageUrl(subRow.imageurl)}
-                          onMouseLeave={() =>
-                            setMainImageUrl(
-                              currentProduct?.imageName
-                                ? currentProduct?.imageName
-                                : '',
-                            )
-                          }
-                        >
+                      <li
+                        className={`w-[28px] h-[28px]  border-2 hover:border-primary cursor-pointer`}
+                        key={`${index}_${subRow.prodcutId}`}
+                        onMouseOver={() => setMainImageUrl(subRow.imageurl)}
+                        onMouseLeave={() =>
+                          setMainImageUrl(
+                            currentProduct?.imageName
+                              ? currentProduct?.imageName
+                              : '',
+                          )
+                        }
+                      >
+                        <Link href={`/${subRow.seName}.html`}>
                           <NxtImage
                             src={`${mediaBaseUrl}${subRow.imageurl}`}
                             alt=''
                             className=''
                             title={subRow.colorName}
                           />
-                        </li>
-                      </Link>
+                        </Link>
+                      </li>
                     ) : (
                       <>{(flag = true)}</>
                     ),
@@ -324,44 +324,44 @@ const TemplateTwoListing = ({
               product.splitproductList &&
               product?.splitproductList?.length > 0 ? (
                 <>
-                  <Link key={product.id} href={`/${product.sename}.html`}>
-                    <li
-                      className={`w-7 h-7 border-2  border-primary 
+                  <li
+                    className={`w-7 h-7 border-2  border-primary 
                       hover:border-primary cursor-pointer`}
-                      key={product.id}
-                    >
+                    key={product.id}
+                  >
+                    <Link key={product.id} href={`/${product.sename}.html`}>
                       <NxtImage
                         src={`${mediaBaseUrl}${currentProduct.imageName}`}
                         alt=''
-                        className='w-auto h-auto max-h-max cursor-pointer flex items-center'
+                        className=''
                         title={product.name}
                       />
-                    </li>
-                  </Link>
+                    </Link>
+                  </li>
 
                   {product?.splitproductList?.map((subRow, index) =>
                     index < listing_max_showcolors - 1 ? (
-                      <Link key={product.id} href={`/${subRow.seName}.html`}>
-                        <li
-                          className={`w-7 h-7 border-2 hover:border-primary cursor-pointer`}
-                          key={subRow.prodcutId}
-                          onMouseOver={() => setMainImageUrl(subRow.imageurl)}
-                          onMouseLeave={() =>
-                            setMainImageUrl(
-                              currentProduct?.imageName
-                                ? currentProduct?.imageName
-                                : '',
-                            )
-                          }
-                        >
+                      <li
+                        className={`w-7 h-7 border-2 hover:border-primary cursor-pointer`}
+                        key={subRow.prodcutId}
+                        onMouseOver={() => setMainImageUrl(subRow.imageurl)}
+                        onMouseLeave={() =>
+                          setMainImageUrl(
+                            currentProduct?.imageName
+                              ? currentProduct?.imageName
+                              : '',
+                          )
+                        }
+                      >
+                        <Link key={product.id} href={`/${subRow.seName}.html`}>
                           <NxtImage
                             src={`${mediaBaseUrl}${subRow.imageurl}`}
                             alt=''
                             className=''
                             title={subRow.colorName}
                           />
-                        </li>
-                      </Link>
+                        </Link>
+                      </li>
                     ) : (
                       <>{(flag = true)}</>
                     ),

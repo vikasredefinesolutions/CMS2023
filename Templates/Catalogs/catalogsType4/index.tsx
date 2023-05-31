@@ -2,7 +2,7 @@ import NxtImage from '@appComponents/reUsable/Image';
 import { _Brand } from '@definations/brand';
 import { capitalizeFirstLetter } from '@helpers/common.helper';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
-import { FetchBrands } from '@services/header.service';
+import { FetchCatalog } from '@services/header.service';
 import Link from 'next/link';
 import React, { Fragment, useEffect, useState } from 'react';
 import { _globalStore } from 'store.global';
@@ -19,7 +19,7 @@ const CatalogDisplayBrandsType4: React.FC<_props> = ({ storeId }) => {
 
   const [brandImages, setBrandImages] = useState<_Brand[] | null>([]);
   const fetchBrandImages = async () => {
-    const brands = await FetchBrands({ storeId: storeId });
+    const brands = await FetchCatalog({ storeId: storeId });
     brands && setBrandImages(brands.brands);
   };
   const store = useTypedSelector_v2((state) => state.store);
@@ -46,11 +46,10 @@ const CatalogDisplayBrandsType4: React.FC<_props> = ({ storeId }) => {
                           <Link
                             href={
                               mediaBaseUrl +
-                              brandImage?.catalogdetails.catalogFile
+                              brandImage?.catalogdetails?.catalogFile
                             }
-                            target='_blank'
                           >
-                            <a style={{ display: 'block' }}>
+                            <a style={{ display: 'block' }} target='_blank'>
                               <NxtImage
                                 src={brandImage.brandColorImageUrl}
                                 className=''

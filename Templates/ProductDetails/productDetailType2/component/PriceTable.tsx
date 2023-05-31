@@ -13,7 +13,7 @@ const QtyPriceTable: React.FC<{ storeCode: string }> = ({ storeCode }) => {
     (state) => state.product.selected.color,
   );
   const { discounts } = useTypedSelector_v2((state) => state.product.product);
-
+  const { totalQty } = useTypedSelector_v2((state) => state.product.toCheckout);
   const fillEmptySpaces = (arr: SubRow[]): 'empty'[] | null => {
     return arr.length < 6
       ? new Array(6 - arr.length).fill('empty')
@@ -48,13 +48,30 @@ const QtyPriceTable: React.FC<{ storeCode: string }> = ({ storeCode }) => {
             {__pagesText.productInfo.quantity}
           </div>
           <div className='flex flex-wrap justify-center items-center border border-gray-border text-center p-[10px] md:divide-x md:divide-gray-border gap-y-[10px]'>
-            {discounts?.subRows?.map((column) => {
+            {discounts?.subRows?.map((column, index) => {
               return (
                 <div
                   className='w-1/2 md:w-auto px-[10px] even:border-l even:border-l-gray-border'
                   key={column.discountPrice}
                 >
-                  <div className='px-[10px]'>
+                  <div
+                    className={`px-[10px] ${
+                      totalQty >=
+                        Number(column?.displayQuantity?.slice(0, -1)) &&
+                      discounts.subRows.length - 1 === index
+                        ? 'bg-light-gray'
+                        : totalQty >=
+                            Number(column?.displayQuantity?.slice(0, -1)) &&
+                          totalQty <
+                            Number(
+                              discounts?.subRows[
+                                index + 1
+                              ]?.displayQuantity?.slice(0, -1),
+                            )
+                        ? 'bg-light-gray'
+                        : ''
+                    }`}
+                  >
                     <div className=''>{column.displayQuantity}</div>
                     <div className=''>
                       <Price value={column.discountPrice} />

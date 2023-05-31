@@ -336,21 +336,23 @@ export const signInUser = async (
       method: 'POST',
       data: payload,
     });
-    if (res === null) {
-      return {
-        credentials: 'INVALID',
-        // @ts-ignore: Unreachable code error
-        message: res?.errors?.exception,
-      };
-    }
+
+    // if (res == null) {
+    //   return {
+    //     credentials: 'INVALID',
+    //     // @ts-ignore: Unreachable code error
+    //     message: 'error',
+    //   };
+    // }
     return {
       credentials: 'VALID',
       id: `${res}`,
     };
   } catch (error: any) {
+    const errormessage = Object.values(error)[0];
     return {
       credentials: 'INVALID',
-      message: error.exception,
+      message: JSON.stringify(errormessage),
     };
   }
 };

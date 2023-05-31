@@ -160,7 +160,6 @@ const DiscountPricing: React.FC<
                     __pagesText.productInfo.discountPricing
                       .exclusivePricingAvailable
                   }
-                  sdf
                 </a>
               ) : null}
             </div>

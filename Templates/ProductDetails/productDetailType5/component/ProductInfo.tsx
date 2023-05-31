@@ -9,14 +9,14 @@ import { paths } from '@constants/paths.constant';
 import { _ProductColor } from '@definations/APIs/colors.res';
 import {
   _ProductDetails,
-  _ProductDoNotExist
+  _ProductDoNotExist,
 } from '@definations/APIs/productDetail.res';
 // import { _ProductColor } from '@definations/APIs/colors.res';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import {
   FetchColors,
   FetchProductById,
-  SbStore_fn
+  SbStore_fn,
 } from '@services/product.service';
 import { _sbsStore_props } from '@templates/ProductDetails/productDetails';
 import ProductCompanion from '@templates/ProductDetails/productDetailType5/component/ProductCompanion';
@@ -174,7 +174,9 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
       >
         <div className='hidden md:flex flex-wrap'>
           <div className='w-full'>
-            <h1 className='text-title-text !font-bold pb-[10px]'>{product?.name}</h1>
+            <h1 className='text-title-text !font-bold pb-[10px]'>
+              {product?.name}
+            </h1>
             <div className=''>
               <a className='inline-flex items-center gap-[5px] font-medium tracking-[1px] '>
                 <span>

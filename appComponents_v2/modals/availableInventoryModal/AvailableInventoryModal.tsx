@@ -123,7 +123,9 @@ const AvailableInventoryModal: React.FC<_ModalProps> = ({ modalHandler }) => {
                                   <div>
                                     {foundIt.inventory === 0
                                       ? foundIt.futureInventory || '-'
-                                      : foundIt.inventory}
+                                      : foundIt.inventory < 100
+                                      ? foundIt.inventory
+                                      : '100+'}
                                   </div>
                                 </td>
                               );

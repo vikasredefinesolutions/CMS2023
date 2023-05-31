@@ -67,7 +67,8 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
     })
       .then((user) => {
         if (user.credentials === 'INVALID') {
-          setErrorMsg(__SuccessErrorText.invalidCrendentials);
+          // setErrorMsg(__SuccessErrorText.invalidCrendentials);
+          setErrorMsg(user.message);
         }
         if (user.credentials === 'VALID') {
           modalHandler(null);

@@ -17,7 +17,7 @@ const YouMayAlsoLike: NextPage<_YouMayAlsoLikeProps> = ({ product, id }) => {
   const YouMayAlsoLikeTemplate =
     YouMayAlsoLikeTemplates[
       id
-        ? (`type${id}` as 'type1' | 'type2' | 'type3' | 'type4')
+        ? (`type1` as 'type1' | 'type2' | 'type3' | 'type4')
         : _defaultTemplates.youMayAlsoLike
     ];
   return <YouMayAlsoLikeTemplate productsData={product} />;

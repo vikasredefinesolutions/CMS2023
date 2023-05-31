@@ -58,6 +58,7 @@ export interface _LogoLocation {
 }
 
 export interface _ProductDetails {
+  isDropShipProduct: boolean;
   productBrandLogo: string | null;
   id: number;
   storeId: number;

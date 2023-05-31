@@ -644,11 +644,15 @@ const CheckoutController = () => {
           if (cardDetails.cardNumber.length < 16) {
             showModal({
               message: 'Please enter valid card number',
-              title: 'Warning',
+              title: 'Error',
             });
             return;
           }
-          showModal({ message: 'Invalid Card Details', title: 'Warning' });
+          showModal({
+            message:
+              'Error in Credit Card information. Please verify and try again.',
+            title: 'Error',
+          });
           return;
         }
       } else if (paymentEnum.purchaseOrder === paymentMethod) {
@@ -717,12 +721,20 @@ const CheckoutController = () => {
       const currentYear = new Date().getFullYear().toString();
       const currentMonth = new Date().getMonth() + 1;
       const currentDate = currentYear + currentMonth.toString();
-      // console.log('card ---------', cardDetails, +givenDate, +currentDate);
       if (paymentEnum.creditCard === paymentMethod) {
         if (+currentDate > +givenDate) {
           showModal({
-            message: 'Invalid Expiration Date',
-            title: 'Warning',
+            message:
+              'Error in Credit Card information. Please verify and try again.',
+            title: 'Error',
+          });
+          return;
+        }
+        if (cardDetails.cardVarificationCode.length !== 3) {
+          showModal({
+            message:
+              'Error in Credit Card information. Please verify and try again.',
+            title: 'Error',
           });
           return;
         }
@@ -1041,7 +1053,7 @@ const CheckoutController = () => {
               setShowLoader(false);
               showModal({
                 message: Object.values(res)[0],
-                title: Object.keys(res)[0],
+                title: 'Error',
               });
             }
           })

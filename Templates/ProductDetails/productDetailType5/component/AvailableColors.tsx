@@ -11,8 +11,9 @@ const AvailableColors: React.FC<_ModalProps> = ({ modalHandler }) => {
   const selectedColor = useTypedSelector_v2(
     (state) => state.product.selected.color,
   );
-  const [showAllColors, setShowAllColors] = useState(false);
+  const [showAllColors] = useState(false);
   const colors = useTypedSelector_v2((state) => state.product.product.colors);
+  const { inventory } = useTypedSelector_v2((state) => state.product.product);
   const handleChooseColor = (product: _ProductColor) => {
     if (!product.productSEName || product.productSEName === '') {
       setColor(product);
@@ -20,6 +21,7 @@ const AvailableColors: React.FC<_ModalProps> = ({ modalHandler }) => {
     }
     router.push(product.productSEName);
   };
+
   if (colors === null) return <></>;
   const colorsCount = colors.length;
   const showAllColorsButton =
@@ -95,15 +97,17 @@ const AvailableColors: React.FC<_ModalProps> = ({ modalHandler }) => {
               </div>
             )} */}
         </div>
-        <div className='pt-[15px] text-default-text text-right'>
-          <a
-            className='text-anchor hover:text-anchor-hover '
-            data-modal-toggle='FitandSize'
-            onClick={() => modalHandler('sizeChart')}
-          >
-            <img src={'/assets/images/size-chart.jpg'} alt={'Fit and Size'} />
-          </a>
-        </div>
+        {inventory?.inventory[0]?.name !== 'Misc' && (
+          <div className='pt-[15px] text-default-text text-right'>
+            <a
+              className='text-anchor hover:text-anchor-hover '
+              data-modal-toggle='FitandSize'
+              onClick={() => modalHandler('sizeChart')}
+            >
+              <img src={'/assets/images/size-chart.jpg'} alt={'Fit and Size'} />
+            </a>
+          </div>
+        )}
       </div>
     </>
   );

@@ -12,7 +12,7 @@ import { __pagesText } from '@constants/pages.text';
 import { UploadImage } from '@services/file.service';
 import { SumbitRequestConsultationDetails } from '@services/product.service';
 import { Form, Formik } from 'formik';
-import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
+import { GetCustomerId, useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
@@ -106,6 +106,7 @@ const RcForm: React.FC<{
   const { id: storeId, imageFolderPath } = useTypedSelector_v2(
     (state) => state.store,
   );
+  const customerId = GetCustomerId();
 
   const store = useTypedSelector_v2((state) => state.store);
   mediaBaseUrl = mediaBaseUrl || store.mediaBaseUrl;
@@ -153,10 +154,9 @@ const RcForm: React.FC<{
     }
 
     const location = await getLocation();
-
     const payload: _SubmitConsultationPayload = {
       consultationModel: {
-        id: 0,
+        id: +customerId,
         rowVersion: '',
         location: `${location.city}, ${location.region}, ${location.country}, ${location.postal_code}`,
         ipAddress: location.ip_address,
@@ -190,6 +190,7 @@ const RcForm: React.FC<{
   if (formSubmit) {
     return <RcRequestDone />;
   }
+
   return (
     <Formik
       initialValues={_RequestConsultationInitials}

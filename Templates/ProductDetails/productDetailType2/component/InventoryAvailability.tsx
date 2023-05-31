@@ -1,5 +1,5 @@
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 interface _props {
   size: string;
   qty: number;
@@ -14,12 +14,22 @@ const InventoryAvailability: React.FC<_props> = ({
   color,
   attributeOptionId,
 }) => {
-  const { updateQuantities, updateQuantities2 } = useActions_v2();
+  const { updateQuantities2 } = useActions_v2();
   const [value, setValue] = useState<number | string>(0);
   const { id: userId } = useTypedSelector_v2((state) => state.user);
   const { multipleQuantity } = useTypedSelector_v2(
     (state) => state.product.selected.color,
   );
+  const { sizeQtys } = useTypedSelector_v2((state) => state.product.toCheckout);
+
+  useEffect(() => {
+    if (sizeQtys && sizeQtys?.length) {
+      const fetchOldValue =
+        sizeQtys.find((item) => item.attributeOptionId === attributeOptionId)
+          ?.qty || 0;
+      setValue(fetchOldValue);
+    }
+  }, []);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue(+event.target.value);

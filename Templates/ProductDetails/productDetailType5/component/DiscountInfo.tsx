@@ -58,12 +58,13 @@ const DiscountInfo: React.FC<{
 
   return (
     <>
-      <div className='mt-[10px] px-[10px] py-[10px] bg-[#000000] text-[#ffffff] text-center'>
-        `Add {qtyRequired - totalQty} more of this {product?.name} to your cart
-        to save an additional $
-        {product?.msrp &&
-          parseFloat(`${product?.msrp}`) - parseFloat(`${nextDiscountPrice}`)}
-        per Item!`
+      <div className='px-[15px] py-[10px] bg-[#000000] text-[#ffffff] text-center leading-3 font-bold '>
+        Add {totalQty - qtyRequired} more of this{' '}
+        <h3 className='inline'>{product?.name}</h3> to your cart to save an
+        additional $
+        {product?.msrp && parseFloat(`${product?.msrp - nextDiscountPrice}`)}
+        {'.00 '}
+        per Item!
       </div>
     </>
   );
