@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import AddUserModal from '@appComponents/modals/addUserModal';
+import { __LocalStorage } from '@constants/global.constant';
 import { __pagesConstant } from '@constants/pages.constant';
 import {
   CommanMessage,
@@ -34,19 +35,35 @@ export type User = {
 };
 
 const UserManagement = () => {
-  const { showModal, setShowLoader } = useActions_v2();
-  const { logInUser, logoutClearCart, setWishListEmpty } = useActions_v2();
+  const {
+    showModal,
+    setShowLoader,
+    setWishListEmpty,
+    updateEmployeeV2,
+    product_employeeLogin,
+    logoutClearCart,
+    logInUser,
+  } = useActions_v2();
   const customer = useTypedSelector_v2((state) => state.user.customer);
   const store = useTypedSelector_v2((state) => state.store.id);
   const [userList, setUserList] = useState<CustomerUsersObject[] | null>(null);
   const [showAddUserModal, setShowAddUserModal] = useState(false);
   const [editData, setEditData] = useState<CustomerUsersObject | null>(null);
+  const isEmployeeLoggedIn = useTypedSelector_v2(
+    (state) => state.employee.empId,
+  );
   const closeModal = () => {
     setShowAddUserModal(false);
     setEditData(null);
   };
 
   const logoutHandler = () => {
+    if (isEmployeeLoggedIn) {
+      updateEmployeeV2('CLEAN_UP');
+      product_employeeLogin('MinQtyToOne_CleanUp');
+      localStorage.removeItem(__LocalStorage.empData);
+    }
+
     logoutClearCart();
     setWishListEmpty([]);
     Logout(logInUser);

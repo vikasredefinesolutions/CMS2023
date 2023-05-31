@@ -1,6 +1,7 @@
+import { __LocalStorage } from '@constants/global.constant';
 import { paths } from '@constants/paths.constant';
 import { Logout } from '@helpers/common.helper';
-import { useActions_v2 } from '@hooks_v2/index';
+import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
@@ -15,10 +16,19 @@ const _TABS = [
 ];
 
 const MyAccountTabsType1: React.FC = () => {
-  const { logInUser, logoutClearCart, setWishListEmpty } = useActions_v2();
+  const {
+    setWishListEmpty,
+    updateEmployeeV2,
+    product_employeeLogin,
+    logoutClearCart,
+    logInUser,
+  } = useActions_v2();
   const { pathname: currentPath } = useRouter();
   const [selectedStage, setSelectedStage] = useState('');
   const router = useRouter();
+  const isEmployeeLoggedIn = useTypedSelector_v2(
+    (state) => state.employee.empId,
+  );
 
   useEffect(() => {
     _TABS.filter((tab) => {
@@ -27,6 +37,11 @@ const MyAccountTabsType1: React.FC = () => {
   }, [router.asPath]);
 
   const logoutHandler = () => {
+    if (isEmployeeLoggedIn) {
+      updateEmployeeV2('CLEAN_UP');
+      product_employeeLogin('MinQtyToOne_CleanUp');
+      localStorage.removeItem(__LocalStorage.empData);
+    }
     logoutClearCart();
     setWishListEmpty([]);
     Logout(logInUser);

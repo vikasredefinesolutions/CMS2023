@@ -37,14 +37,14 @@ const CO1_EL_Dropdowns: React.FC<_Props> = () => {
     if (inputs.source) {
       update_checkoutEmployeeLogin({
         type: 'SOURCE',
-        value: employeesList.find((item) => item.value === inputs.source)!,
+        value: sourcesList.find((item) => item.value === inputs.source)!,
       });
     }
 
     if (inputs.sourceMedium) {
       update_checkoutEmployeeLogin({
         type: 'SOURCE_MEDIUM',
-        value: employeesList.find(
+        value: sourceMediumList.find(
           (item) => item.value === inputs.sourceMedium,
         )!,
       });
@@ -120,6 +120,13 @@ const CO1_EL_Dropdowns: React.FC<_Props> = () => {
                         label={field.label}
                         onChange={(event) => {
                           if (field.name === 'source') {
+                            update_checkoutEmployeeLogin({
+                              type: 'SOURCE_MEDIUM',
+                              value: {
+                                value: '',
+                                label: '',
+                              },
+                            });
                             FetchEmpSourceMediumList(event.target.value).then(
                               (response) => {
                                 setSourceMedium(response);

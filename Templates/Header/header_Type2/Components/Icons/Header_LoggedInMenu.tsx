@@ -1,4 +1,5 @@
 import NxtImage from '@appComponents/reUsable/Image';
+import { __LocalStorage } from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
 import { paths } from '@constants/paths.constant';
 import { Logout } from '@helpers/common.helper';
@@ -8,11 +9,26 @@ import React, { useState } from 'react';
 import { __StaticImg } from '../../../../../public/assets/images.asset';
 
 const LoggedInMenu: React.FC = () => {
-  const { logInUser, logoutClearCart, setWishListEmpty } = useActions_v2();
+  const {
+    setWishListEmpty,
+    updateEmployeeV2,
+    product_employeeLogin,
+    logoutClearCart,
+    logInUser,
+  } = useActions_v2();
   const { id: loggedIn, customer } = useTypedSelector_v2((state) => state.user);
   const [focus, setFocus] = useState(false);
+  const isEmployeeLoggedIn = useTypedSelector_v2(
+    (state) => state.employee.empId,
+  );
 
   const logoutHandler = () => {
+    if (isEmployeeLoggedIn) {
+      updateEmployeeV2('CLEAN_UP');
+      product_employeeLogin('MinQtyToOne_CleanUp');
+      localStorage.removeItem(__LocalStorage.empData);
+    }
+
     setFocus(false);
     logoutClearCart();
     setWishListEmpty([]);

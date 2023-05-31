@@ -1,6 +1,7 @@
+import { __LocalStorage } from '@constants/global.constant';
 import { paths } from '@constants/paths.constant';
 import { Logout } from '@helpers/common.helper';
-import { useActions_v2 } from '@hooks_v2/index';
+import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { ReactNode, useEffect, useState } from 'react';
@@ -16,11 +17,26 @@ const _TABS = [
 const MyAccountTabsType2: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const { logInUser, logoutClearCart, setWishListEmpty } = useActions_v2();
+  const {
+    setWishListEmpty,
+    updateEmployeeV2,
+    product_employeeLogin,
+    logoutClearCart,
+    logInUser,
+  } = useActions_v2();
   const { pathname: currentPath } = useRouter();
   const [pageHeading, setPageHeading] = useState<string>('');
+  const isEmployeeLoggedIn = useTypedSelector_v2(
+    (state) => state.employee.empId,
+  );
 
   const handleLogout = () => {
+    if (isEmployeeLoggedIn) {
+      updateEmployeeV2('CLEAN_UP');
+      product_employeeLogin('MinQtyToOne_CleanUp');
+      localStorage.removeItem(__LocalStorage.empData);
+    }
+
     logoutClearCart();
     setWishListEmpty([]);
     Logout(logInUser);
