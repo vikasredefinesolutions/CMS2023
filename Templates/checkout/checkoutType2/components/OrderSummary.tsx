@@ -89,7 +89,7 @@ const OrderSummary: React.FC<_props> = ({
             <dt className='font-semibold'>{totalPrice}</dt>
           </div>
           <div className='mt-[16px]'>
-            <div className='text-[#ff0000] text-default-text mb-[10px]'>
+            <div className=' text-rose-600 mb-[10px]'>
               {__pagesText.CheckoutPage.orderSummary.CartSummarryInstruction}
             </div>
           </div>

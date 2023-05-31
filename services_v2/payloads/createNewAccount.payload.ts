@@ -2,6 +2,17 @@ export interface _CreateNewAccount_Payload {
   storeCustomerModel: _CNA_StoreCustomerModel;
 }
 
+export interface _CreateNewAccount_Payload_without {
+  storeCustomerModel: {
+    id: number;
+    email: string;
+    password: string;
+    confirmPassword: string;
+    storeId: number | string;
+    recStatus: string;
+  };
+}
+
 export interface _CNA_StoreCustomerModel {
   id: number;
   rowVersion: string;

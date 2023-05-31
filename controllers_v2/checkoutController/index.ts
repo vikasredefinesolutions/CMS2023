@@ -314,27 +314,12 @@ const CheckoutController = () => {
     setShowLoader(true);
     const addAccount = {
       storeCustomerModel: {
-        ...signup_payload,
-        firstname: '',
-        lastName: '',
+        id: 0,
         email: customerEmail,
         password: enteredInputs.pass,
         confirmPassword: enteredInputs.cpass,
-        companyName: '',
-        location: `${location.city}, ${location.region}, ${location.country}, ${location.postal_code}`,
-        ipAddress: location.ip_address,
         storeId: storeId,
-        memberFrom: 0,
-        memberTo: 0,
-        organizationId: 0,
-        primaryColor: '',
-        mascotId: '',
-        teamGender: '',
-        timeOfYearPurchase: '',
-        position: '',
-        navCustomerId: '',
-        organizationName: '',
-        storeCustomerAddress: [],
+        recStatus: 'A',
       },
     };
     const userDetail = await createAccountWithoutCompany(addAccount);
@@ -717,7 +702,11 @@ const CheckoutController = () => {
 
   const reviewOrder = async () => {
     if (!employeeLogin.isPaymentPending) {
-      const givenDate = `${cardDetails.cardExpirationYear}${cardDetails.cardExpirationMonth}`;
+      const yearFull =
+        cardDetails.cardExpirationYear.length == 2
+          ? `20${cardDetails.cardExpirationYear}`
+          : cardDetails.cardExpirationYear;
+      const givenDate = `${yearFull}${cardDetails.cardExpirationMonth}`;
       const currentYear = new Date().getFullYear().toString();
       const currentMonth = new Date().getMonth() + 1;
       const currentDate = currentYear + currentMonth.toString();
@@ -802,6 +791,8 @@ const CheckoutController = () => {
 
           setCurrentPage(checkoutPages.reviewOrder);
         }
+      } else {
+        setCurrentPage(checkoutPages.reviewOrder);
       }
     } else {
       if (shippingAdress && billingAdress && checkPayment()) {
@@ -810,6 +801,7 @@ const CheckoutController = () => {
 
           setBillingAdress(shippingAdress);
         }
+
         addShippingPaymentInfoEventHandle('GoogleAddShippingInfoScript');
         addShippingPaymentInfoEventHandle('GoogleAddPaymentInfoScript');
         setCurrentPage(checkoutPages.reviewOrder);
@@ -1082,11 +1074,7 @@ const CheckoutController = () => {
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const { name, value } = e.target;
-    const month = new Date().getMonth() + 1;
-    const year = new Date().getFullYear();
-    // if (name == 'cardExpirationMonth' && Number(value) < date) {
-    //   setCardDetails((prev) => ({ ...prev, [name]: '' }));
-    // } else {
+
     switch (paymentMethod) {
       case paymentEnum.creditCard:
         setCardDetails((prev) => ({ ...prev, [name]: value }));
@@ -1094,8 +1082,6 @@ const CheckoutController = () => {
       case paymentEnum.purchaseOrder:
         setPurchaseOrder(value);
     }
-
-    // }
   };
 
   const detectCardType = () => {

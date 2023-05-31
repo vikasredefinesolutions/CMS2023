@@ -9,6 +9,15 @@ export type paymentProps = FC<{
   updatePaymentMethod: (arg: paymentMethodCustom) => void;
   changeHandler: (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
   detectCardType?: () => string;
+  cardDetails?: {
+    cardNumber: string;
+    cardExpirationMonth: string;
+    cardExpirationYear: string;
+    cardVarificationCode: string;
+  };
+  paymentMethod?: paymentMethodCustom;
+
+  purchaseOrder?: string;
   /* eslint-enable no-unused-vars */
 }>;
 
@@ -20,6 +29,13 @@ const PaymentType: FC<{
   paymentMethod: paymentMethodCustom;
   updatePaymentMethod: (arg: paymentMethodCustom) => void;
   detectCardType: () => string;
+  cardDetails?: {
+    cardNumber: string;
+    cardExpirationMonth: string;
+    cardExpirationYear: string;
+    cardVarificationCode: string;
+  };
+  purchaseOrder?: string;
   /* eslint-enable no-unused-vars */
 }> = ({
   changeHandler,
@@ -36,6 +52,7 @@ const PaymentType: FC<{
               changeHandler,
               updatePaymentMethod,
               detectCardType,
+              paymentMethod,
             }}
           />
           <CardPaymentType
@@ -43,6 +60,7 @@ const PaymentType: FC<{
               changeHandler,
               updatePaymentMethod,
               detectCardType,
+              paymentMethod,
             }}
           />
         </>
@@ -62,12 +80,14 @@ const PaymentType: FC<{
               changeHandler,
               updatePaymentMethod,
               detectCardType,
+              paymentMethod,
             }}
           />
           <PurchaseOrderType
             {...{
               updatePaymentMethod,
               changeHandler,
+              paymentMethod,
             }}
           />
         </>

@@ -115,6 +115,16 @@ const CartType2: React.FC<_CartProps> = ({
               className='w-full lg:w-4/12 md:w-5/12 pl-[15px] pr-[15px] mt-[15px]'
             >
               <CartSummarry selectedShippingModel={selectedShipping} />
+              <div className='mt-4'>
+                <Link className='' href={paths.CHECKOUT}>
+                  <a className='btn btn-lg btn-secondary !flex items-center justify-center w-full'>
+                    <span className='material-icons text-lg mr-[2px]'>
+                      shopping_cart
+                    </span>
+                    CHECKOUT NOW
+                  </a>
+                </Link>
+              </div>
             </section>
           </div>
         </div>

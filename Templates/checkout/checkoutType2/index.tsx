@@ -8,7 +8,10 @@ import Link from 'next/link';
 import { FC, useEffect, useState } from 'react';
 import OrderSummary from './components/OrderSummary';
 import PaymentType from './components/Payment';
-// import { GetShippingmethod } from '@services/address.service';
+import secureCard from '@images/secure-card.jpg';
+import secureCardHover from '@images/secure-card-hover.png';
+import secureBtn from '@images/secure-btm.jpg';
+import norton from '@images/norton.png';
 
 import CheckoutController, {
   _shippingMethod,
@@ -22,6 +25,8 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
   const { shippingChargeType, id: storeId } = useTypedSelector_v2(
     (state) => state.store,
   );
+
+  // console.log('we are in type 2');
 
   const {
     currentPage,
@@ -40,11 +45,15 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
     selectedShipping,
     setSelectedShipping,
     fetchShipping,
+    cardDetails,
+    purchaseOrder,
   } = CheckoutController();
 
   // console.log('all shippingmethod', shippingMethod);
   // console.log('slected shippingmethod', selectedShipping);
   // console.log('value', _.isEmpty(selectedShipping));
+
+  // console.log('carddeatils', cardDetails);
 
   const [showPayment, setshowPayment] = useState<boolean>(false);
 
@@ -229,7 +238,7 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
                                       ? true
                                       : false
                                   }
-                                  className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600'
+                                  className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 focus:ring-2 '
                                 />
                                 <label
                                   htmlFor={`shippingMethod${index}`}
@@ -262,11 +271,12 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
                             {__pagesText.CheckoutPage.PaymentMethod}
                           </div>
                           <div className='pt-[10px] pb-[10px]'>
-                            <div className='w-10'>
+                            <div className='w-20'>
                               <NxtImage
-                                src='/images/secure-card-hover.png'
+                                src={secureCardHover}
                                 alt='lockimage'
                                 className=''
+                                isStatic={true}
                               />
                             </div>
                           </div>
@@ -282,14 +292,13 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
                               <div className='pb-[10px] text-title-text'>
                                 {__pagesText.CheckoutPage.PaymentMethod}
                               </div>
-                              <div className='pt-[10px] pb-[10px]'>
-                                <div className='w-10'>
-                                  <NxtImage
-                                    src='/images/secure-card.jpg'
-                                    alt='lockimage'
-                                    className=''
-                                  />
-                                </div>
+                              <div className='w-28'>
+                                <NxtImage
+                                  src={secureCard}
+                                  alt='lockimage'
+                                  className='w-full'
+                                  isStatic={true}
+                                />
                               </div>
                             </div>
                             <div className='text-right text-default-text'>
@@ -299,11 +308,26 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
                         </div>
 
                         <div className='pl-[15px] pr-[15px] pt-[15px] pb-[15px]'>
+                          <div className='flex flex-wrap items-center justify-between pt-[10px] mb-[20px]'>
+                            <div className='pb-[10px] text-default-text'>
+                              All fields marked with * are required fields.
+                            </div>
+                            <div className='pb-[10px]'>
+                              <NxtImage
+                                src={norton}
+                                alt='lockimage'
+                                className='w-full'
+                                isStatic={true}
+                              />
+                            </div>
+                          </div>
                           <PaymentType
                             changeHandler={paymentFieldUpdateHandler}
                             paymentMethod={paymentMethod}
                             updatePaymentMethod={updatePaymentMethod}
                             detectCardType={detectCardType}
+                            cardDetails={cardDetails}
+                            purchaseOrder={purchaseOrder}
                           />
                           <div className='max-w-[278px]'>
                             <button
@@ -320,7 +344,7 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
                           <div className='pl-[15px] pr-[15px] pt-[15px] pb-[15px] text-center'>
                             <div>
                               <NxtImage
-                                src={'/images/secure-btm.jpg'}
+                                src={secureBtn}
                                 alt=''
                                 className='w-full max-h-[100px]'
                               />

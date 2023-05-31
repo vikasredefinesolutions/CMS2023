@@ -14,6 +14,7 @@ export type paymentProps = FC<{
     cardExpirationYear: string;
     cardVarificationCode: string;
   };
+  paymentMethod?: paymentMethodCustom;
   purchaseOrder?: string;
   /* eslint-enable no-unused-vars */
 }>;

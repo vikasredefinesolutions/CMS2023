@@ -17,8 +17,11 @@ import {
 import { _SignIn } from '@definations/user.type';
 import { CallAPI_v2 } from '@helpers/api.helper';
 import { conditionalLog_V2 } from '@helpers/console.helper';
-import { _CreateNewAccount_Payload } from '@payloads/createNewAccount.payload';
-import { _AccCreated } from '@responses/createNewAccount';
+import {
+  _CreateNewAccount_Payload,
+  _CreateNewAccount_Payload_without,
+} from '@payloads/createNewAccount.payload';
+import { _AccCreated, _AccCreated_without } from '@responses/createNewAccount';
 import { SendAsync } from '@utils/axios.util';
 
 export type _UserAPIs_V2 =
@@ -96,8 +99,8 @@ export const CreateNewAccount = async (
 };
 
 export const createAccountWithoutCompany = async (
-  payload: _CreateNewAccount_Payload,
-): Promise<_AccCreated | null> => {
+  payload: _CreateNewAccount_Payload_without,
+): Promise<_AccCreated_without | null> => {
   const url = '/StoreCustomer/storecustomercreateguest.json';
 
   conditionalLog_V2({
@@ -108,7 +111,7 @@ export const createAccountWithoutCompany = async (
   });
 
   try {
-    const res = await SendAsync<_AccCreated>({
+    const res = await SendAsync<_AccCreated_without>({
       url: url,
       method: 'POST',
       data: payload,

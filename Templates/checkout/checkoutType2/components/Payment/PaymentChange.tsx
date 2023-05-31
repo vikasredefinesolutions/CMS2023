@@ -6,13 +6,18 @@ const PaymentChange: paymentProps = ({
   updatePaymentMethod,
   changeHandler,
   detectCardType,
+  paymentMethod,
 }) => {
   return (
     <>
       <div className='flex justify-between flex-wrap items-center mt-[12px]  flex-wrap'>
         <div className='mb-[15px] w-full'>
           <button
-            className='bg-[#ffffff] flex items-center font-semibold text-normal-text pl-[10px] pr-[10px] pb-[10px] pt-[10px] border border-[#000000]'
+            className={`bg-[#ffffff] flex items-center font-semibold text-normal-text pl-[10px] pr-[10px] pb-[10px] pt-[10px] border border-[#000000] ${
+              paymentMethod == paymentMethodCustom.creditCard
+                ? 'bg-gray-500 text-[#fff]'
+                : ''
+            }`}
             onClick={() => updatePaymentMethod(paymentMethodCustom.creditCard)}
           >
             <span className='mr-[10px]'>
@@ -27,7 +32,11 @@ const PaymentChange: paymentProps = ({
         </div>
         <div className='mb-[15px]'>
           <button
-            className='bg-[#ffffff] flex flex-wrap items-center font-semibold text-normal-text pl-[10px] pr-[10px] pb-[10px] pt-[10px] border border-[#000000]'
+            className={`bg-[#ffffff] flex flex-wrap items-center font-semibold text-normal-text pl-[10px] pr-[10px] pb-[10px] pt-[10px] border border-[#000000] ${
+              paymentMethod == paymentMethodCustom.purchaseOrder
+                ? 'bg-gray-500'
+                : ''
+            }`}
             onClick={() =>
               updatePaymentMethod(paymentMethodCustom.purchaseOrder)
             }

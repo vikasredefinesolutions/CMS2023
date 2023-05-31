@@ -88,6 +88,7 @@ const CardPaymentType1: paymentProps = ({
       setcardCheck(true);
     }
   }, []);
+
   return (
     <div id='PaymentCard'>
       {/* flex items-baseline mt-[12px] mb-[12px] pb-[18px] border-b border-gray-border */}

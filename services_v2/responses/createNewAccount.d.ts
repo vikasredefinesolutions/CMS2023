@@ -5,6 +5,17 @@ export interface _CreateAccRes {
   otherData: null;
 }
 
+export interface _AccCreated_without {
+  item1: {
+    id: number;
+    email: string;
+    password: string;
+    confirmPassword: string;
+    storeId: number | string;
+    recStatus: string;
+  };
+  item2: string;
+}
 export interface _AccCreated {
   item1: {
     firstname: string;
