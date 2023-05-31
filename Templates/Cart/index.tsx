@@ -4,12 +4,14 @@ import CartType2 from './cartType2';
 import CartType3 from './cartType3';
 import CartType1 from './Cart_Type1';
 import CartType4 from './cart_Type4';
+import CartType5 from './Cart_Type5';
 
 const CartTemplates: _CartTemplates = {
   type1: CartType1, //for Corporate Gear
   type2: CartType2, //for PKHG
   type3: CartType3, //for Store Builder
   type4: CartType4, //for corporate Store like cyxtera and etc
+  type5: CartType5,
 };
 
 const CartTemplate: FC<_CartProps> = (props) => {

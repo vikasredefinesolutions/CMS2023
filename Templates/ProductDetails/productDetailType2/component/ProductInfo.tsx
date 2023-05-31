@@ -61,8 +61,16 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
   };
   const buyNowHandler = (e: any) => {
     e?.preventDefault();
+
+    if (!totalQty) {
+      return showModal({
+        message: `Please select any one size.
+        `,
+        title: `Required Size`,
+      });
+    }
     if (minQty > totalQty) {
-      showModal({
+      return showModal({
         message: `Oops! The minimum order requirement for this piece is ${minQty} per color.
         `,
         title: ``,

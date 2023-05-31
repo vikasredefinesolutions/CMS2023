@@ -1,3 +1,4 @@
+import { dimax } from '@constants/enum';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import { _CartItem } from '@services/cart';
 import { useState } from 'react';
@@ -20,7 +21,7 @@ const InventoryAvailability: React.FC<_props> = ({
   editDetails,
 }) => {
   const { updateQuantities, updateQuantities3 } = useActions_v2();
-  const [value, setValue] = useState<number | string>(val);
+  const [value, setValue] = useState<number>(val);
   const { id: userId } = useTypedSelector_v2((state) => state.user);
   const comingprice = useTypedSelector_v2(
     (state) => state.product.toCheckout.price,
@@ -51,18 +52,18 @@ const InventoryAvailability: React.FC<_props> = ({
 
   return (
     <>
-      <div className='mb-2'>{userId ? qty : 'Login to See Inventory'}</div>
+      <div className='mb-2'>{qty < dimax ? qty : `${dimax}+`}</div>
       <div className=''>
-          <input
-            type='number'
-            className='form-input !px-[10px] !inline-block !w-[65px]'
-            placeholder='0'
-            min={0}
-            value={value}
-            max={qty}
-            onChange={handleChange}
-          />
-        </div>
+        <input
+          type='number'
+          className='form-input !px-[10px] !inline-block !w-[65px]'
+          placeholder='0'
+          min={0}
+          value={value > 0 ? value : ''}
+          max={qty}
+          onChange={handleChange}
+        />
+      </div>
     </>
   );
 };

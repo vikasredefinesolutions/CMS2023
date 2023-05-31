@@ -253,6 +253,9 @@ const CL2_Item: React.FC<_CartItem & _Props> = (props) => {
     };
     const confirmRes = confirm(cartRemoveConfirmMessage);
     if (confirmRes) {
+      if (props.shoppingCartItemDetailsViewModels.length === 1) {
+        return handleRemoveItem(props.shoppingCartItemsId);
+      }
       removeParticularSizeProduct(payload)
         .then((res) => {
           setShowLoader(true);
@@ -328,10 +331,10 @@ const CL2_Item: React.FC<_CartItem & _Props> = (props) => {
     }
   };
 
-  const handleLogoUpdate = (id: number, shoppingCartId: number) => {
+  const handleLogoUpdate = (itemId: number, shoppingCartId: number) => {
     const payload = {
       deletecartlogopersondetailmodel: {
-        cartLogoPersonDetailId: id,
+        cartLogoPersonDetailId: itemId,
         shoppingCartItemsId: shoppingCartId,
       },
     };
@@ -341,15 +344,12 @@ const CL2_Item: React.FC<_CartItem & _Props> = (props) => {
         .then((res) => {
           setShowLoader(true);
           if (res) {
-            setShowLoader(false);
-            fetchCartDetails({
-              customerId: id ? id : 0,
-              isEmployeeLoggedIn,
-            });
+            fetchCartDetails({ customerId: id ? id : 0, isEmployeeLoggedIn });
             showModal({
               message: commonMessage.removed,
               title: __SuccessErrorText.Success,
             });
+            setShowLoader(false);
           }
         })
         .catch((err) => {
@@ -364,7 +364,6 @@ const CL2_Item: React.FC<_CartItem & _Props> = (props) => {
 
   const handleRemoveItem = async (itemId: number) => {
     const userConfirmsToDelete = confirm(cartRemoveConfirmMessage);
-
     if (userConfirmsToDelete) {
       setShowLoader(true);
       captureRemoveItemEvent(cartData, itemId, customerId, storeId);
@@ -568,11 +567,14 @@ const CL2_Item: React.FC<_CartItem & _Props> = (props) => {
                           <div className='w-full lg:w-1/2'>
                             <div className='mb-1 text-default-text'>Price</div>
                             <div className='text-default-text font-semibold'>
-                              <div className=''>
-                                {_item.logoPrice === 0
-                                  ? 'Free'
-                                  : `$${_item.logoPrice}`}
-                              </div>
+                              {_item.logoPrice === 0 ? (
+                                <>
+                                  <div className=''>$0.00</div>
+                                  <div className=''>First Logo Free</div>
+                                </>
+                              ) : (
+                                <div className=''>${_item.logoPrice}</div>
+                              )}
                             </div>
                           </div>
                         </div>

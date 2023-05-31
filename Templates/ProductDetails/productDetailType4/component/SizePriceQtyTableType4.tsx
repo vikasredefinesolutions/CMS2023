@@ -18,7 +18,6 @@ const SizePriceQtyTable4: React.FC<_SizePriceQtyTableProps> = ({
   );
 
   const { color } = useTypedSelector_v2((state) => state.product.selected);
-
   return (
     <div className='mt-[15px] text-default-text border border-gray-border'>
       <div className='hidden md:flex flex-wrap gap-y-5 bg-primary text-white'>

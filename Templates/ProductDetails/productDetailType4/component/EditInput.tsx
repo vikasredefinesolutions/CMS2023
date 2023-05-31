@@ -40,7 +40,7 @@ const EditInput: React.FC<_SelectOrInputProps> = ({
 
   const customerId = useTypedSelector_v2((state) => state.user.id);
   const [email, setEmail] = useState<string>('');
-  const [inputOrSelect, setInputOrSelect] = useState<{
+  const [EditInput, setEditInput] = useState<{
     type: 'input';
     choosedValue: number;
     focus: boolean;
@@ -50,48 +50,6 @@ const EditInput: React.FC<_SelectOrInputProps> = ({
     focus: false,
   });
 
-  const selectQtyHandler = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    if (event.target.value === '10+') {
-      setInputOrSelect((input) => ({
-        ...input,
-        type: 'input',
-        focus: true,
-      }));
-      return;
-    }
-
-    if (
-      multipleQuantity !== 0 &&
-      multipleQuantity < qty &&
-      +event.target.value % multipleQuantity !== 0
-    ) {
-      updateQuantities({
-        attributeOptionId: sizeAttributeOptionId,
-        size: size,
-        qty:
-          Math.ceil(+event.target.value / multipleQuantity) * multipleQuantity,
-        price: newprice,
-      });
-      setInputOrSelect((input) => ({
-        ...input,
-        choosedValue:
-          Math.ceil(+event.target.value / multipleQuantity) * multipleQuantity,
-      }));
-      return;
-    }
-
-    updateQuantities({
-      attributeOptionId: sizeAttributeOptionId,
-      size: size,
-      qty: +event.target.value,
-      price: newprice,
-    });
-    setInputOrSelect((input) => ({
-      ...input,
-      choosedValue: +event.target.value,
-    }));
-  };
-
   const enterQtyHandler = (value: { itemCount: number }) => {
     // if (value.itemCount < 10) {
     //   updateQuantities({
@@ -100,7 +58,7 @@ const EditInput: React.FC<_SelectOrInputProps> = ({
     //     qty: Math.ceil(value.itemCount),
     //     price: newprice,
     //   });
-    //   setInputOrSelect({
+    //   setEditInput({
     //     type: 'select',
     //     choosedValue: Math.ceil(value.itemCount),
     //     focus: false,
@@ -115,7 +73,7 @@ const EditInput: React.FC<_SelectOrInputProps> = ({
       price: newprice,
     });
 
-    setInputOrSelect({
+    setEditInput({
       type: 'input',
       choosedValue: Math.ceil(value.itemCount),
       focus: false,
@@ -234,44 +192,9 @@ const EditInput: React.FC<_SelectOrInputProps> = ({
 
   return (
     <td className='px-2 py-4'>
-      {/* {inputOrSelect.type === 'select' && (
-        <div className=''>
-          <select
-            className='block w-full border border-gray-600 shadow-sm py-1 px-2 pr-10 text-default-text max-w-[100px]'
-            value={
-              multipleQuantity !== 0 &&
-              inputOrSelect.choosedValue % multipleQuantity !== 0 &&
-              multipleQuantity < qty
-                ? Math.ceil(inputOrSelect.choosedValue / multipleQuantity) *
-                  multipleQuantity
-                : inputOrSelect.choosedValue
-            }
-            name={size}
-            onChange={selectQtyHandler}
-          >
-            <option value='0'>0</option>
-            {new Array(9).fill('').map((_, index) =>
-              qty > index || isEmployeeLoggedIn ? (
-                <option key={index} value={index + 1}>
-                  {index + 1}
-                </option>
-              ) : (
-                ''
-              ),
-            )}
-
-            {qty > 9 || isEmployeeLoggedIn ? (
-              <option value='10+'>{__pagesText.productInfo.tenPlus}</option>
-            ) : (
-              ''
-            )}
-          </select>
-        </div>
-      )} */}
-
-      {inputOrSelect.type === 'input' && (
+      {EditInput.type === 'input' && (
         <Formik
-          initialValues={{ itemCount: Math.ceil(inputOrSelect.choosedValue) }}
+          initialValues={{ itemCount: Math.ceil(EditInput.choosedValue) }}
           onSubmit={enterQtyHandler}
         >
           {({ values, handleChange, setFieldValue }) => {
@@ -282,10 +205,11 @@ const EditInput: React.FC<_SelectOrInputProps> = ({
                     type='number'
                     name='itemCount'
                     min={0}
+                    placeholder='0'
                     max={isEmployeeLoggedIn ? '' : qty}
                     value={values.itemCount ? Math.ceil(values.itemCount) : ''}
                     onBlur={(e) =>
-                      setInputOrSelect((state) => ({
+                      setEditInput((state) => ({
                         ...state,
                         choosedValue: parseInt(e.target.value),
                         focus: true,
@@ -294,7 +218,7 @@ const EditInput: React.FC<_SelectOrInputProps> = ({
                     onChange={handleChange}
                     className='block w-full border border-gray-600 shadow-sm py-1 px-2 text-default-text max-w-[100px]'
                   />
-                  {inputOrSelect.focus && values.itemCount <= qty && (
+                  {EditInput.focus && values.itemCount <= qty && (
                     <>
                       <button
                         onClick={() => {
@@ -337,7 +261,7 @@ const EditInput: React.FC<_SelectOrInputProps> = ({
                             qty: 0,
                             price: price.msrp,
                           });
-                          setInputOrSelect({
+                          setEditInput({
                             type: 'input',
                             choosedValue: 0,
                             focus: false,
@@ -352,7 +276,7 @@ const EditInput: React.FC<_SelectOrInputProps> = ({
                       </button>
                     </>
                   )}
-                  {values.itemCount > qty && inputOrSelect.focus && (
+                  {values.itemCount > qty && EditInput.focus && (
                     <span className='text-rose-500 text-sm'>
                       Only {qty} Available!
                     </span>

@@ -10,7 +10,6 @@ import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
 import ProductRecentlyViewed from '@templates/recentlyViewedProducts';
 import Reviews from '@templates/Review';
 // import { _StoreCache } from 'pages/[slug]/slug';
-import { _defaultTemplates } from '@configs/template.config';
 import YouMayAlsoLike from '@templates/youMayAlsoLike';
 import ProductDetails from './Components/ProductDetails';
 import { _Props } from './productDetails';
@@ -155,7 +154,7 @@ const Ecommerce_ProductDetails_View: React.FC<_Props> = (product) => {
             <div key={val + index}>
               <YouMayAlsoLike
                 product={product.alike}
-                id={_defaultTemplates.youMayAlsoLike}
+                id={product.productDetailsTemplateId}
               />
             </div>
           );

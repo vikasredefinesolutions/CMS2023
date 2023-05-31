@@ -142,6 +142,8 @@ export const __pagesText = {
     },
     checkInventoryPricing: 'Check Inventory And Your Pricing',
     addTocart: 'ADD TO CART',
+    contactUs: 'Contact us for Available Inventory',
+    Discontinued: 'Discontinued',
     somLogoOption: {
       addLogoLater: 'Add Logo Later',
       logoToBeSubmitted: 'Logo to be submitted after order is placed',
@@ -261,6 +263,7 @@ export const __pagesText = {
       },
     },
     discountPricing: {
+      discountPricing: 'Discount Pricing:',
       startshowMsg:
         'We reserve the right to reject orders that do not meet the ',
       endShowMsg:

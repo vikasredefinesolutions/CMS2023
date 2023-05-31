@@ -235,7 +235,7 @@ const LogosToPrint: React.FC<_props> = ({ setShowOrSelect }) => {
             }}
             className='btn btn-primary w-full text-center '
           >
-            ADD ANOTHER LOGO
+            + ADD ANOTHER LOGO
           </button>
         )}
       </div>

@@ -77,11 +77,11 @@ const ProductImg: React.FC<_ProductImgProps> = ({ product }) => {
             .map((img) => {
               const highlight =
                 img.id === selectedImage.id
-                  ? 'border-primary'
-                  : 'border-slate-200';
+                  ? 'border-secondary'
+                  : 'border-gray-border';
               return (
                 <div
-                  className='md:border hover:border-secondary p-[3px] mt-[5px] mb-[5px] last:mb-0 cursor-pointer'
+                  className={`md:border hover:border-secondary p-[3px] mt-[5px] mb-[5px] last:mb-0 cursor-pointer ${highlight}`}
                   key={img.id + img.imageUrl}
                   onClick={() => selectImgHandler(img)}
                 >
@@ -119,7 +119,8 @@ const ProductImg: React.FC<_ProductImgProps> = ({ product }) => {
           colors.map((product, index) => {
             return (
               <div
-                className='border border-gray-border hover:border-secondary mx-[5px] mb-[10px] p-[1px] w-[70px] max-h-[70px]'
+                className={`border hover:border-secondary mx-[5px] mb-[10px] p-[1px] w-[70px] max-h-[70px] ${selectedColor.attributeOptionId==product.attributeOptionId?'border-secondary'
+                : 'border-gray-border'}`}
                 onClick={() => setColor(product)}
                 key={product.attributeOptionId}
               >

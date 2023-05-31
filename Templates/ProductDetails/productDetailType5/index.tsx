@@ -1,4 +1,3 @@
-import { _defaultTemplates } from '@configs/template.config';
 import { KlaviyoScriptTag } from '@helpers/common.helper';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import { FetchInventoryById } from '@services/product.service';
@@ -155,9 +154,8 @@ const ProductDetails_Type5: React.FC<_Props> = (product) => {
             <div key={val + index}>
               <YouMayAlsoLike
                 product={product.alike}
-                id={_defaultTemplates.youMayAlsoLike}
+                id={product.productDetailsTemplateId}
               />
-              
             </div>
           );
         } else if (val === 'writereview') {

@@ -49,3 +49,5 @@ export enum Sorting {
   AtoZ = 4,
   ZtoA = 5,
 }
+
+export const dimax = 250;

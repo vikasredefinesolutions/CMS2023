@@ -1,13 +1,13 @@
-import Price from '@appComponents/Price';
 import LoginModal from '@appComponents/modals/loginModal';
 import { _modals } from '@appComponents/modals/modal';
+import Price from '@appComponents/Price';
 import { storeBuilderTypeId } from '@configs/page.config';
 import { __Cookie } from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
 import { _Selectedproduct_v2 } from '@definations/product.type';
 import {
-  GoogleAnalyticsTrackerForAllStore,
   getAddToCartObject,
+  GoogleAnalyticsTrackerForAllStore,
   setCookie,
 } from '@helpers/common.helper';
 import { highLightError } from '@helpers/console.helper';
@@ -57,10 +57,13 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
   // );
   const storeId = useTypedSelector_v2((state) => state.store.id);
   const customerId = useTypedSelector_v2((state) => state.user.id);
-  const { colors } = useTypedSelector_v2((state) => state.product.product);
+  const { colors, inventory } = useTypedSelector_v2(
+    (state) => state.product.product,
+  );
   const selectedProduct = useTypedSelector_v2(
     (state) => state.product.selected,
   );
+
   const isEmployeeLoggedIn = useTypedSelector_v2(
     (state) => state.employee.loggedIn,
   );
@@ -76,6 +79,10 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
     e.preventDefault();
     if (isLoggedIn === false) {
       modalHandler('login');
+      return;
+    }
+    if (totalinvetory === 0) {
+      router.push('/contact-request');
       return;
     }
     let GAAddToCartPaylod: any = { shoppingCartItemsModel: [] };
@@ -245,7 +252,23 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
     if (seName === null) return;
     router.push(`${seName}`);
   };
-
+  let totalinvetory = 0;
+  const data = inventory?.inventory?.map((inv) => {
+    totalinvetory = totalinvetory + inv.inventory;
+  });
+  const buttonMessage = () => {
+    if (product?.isDiscontinue) {
+      return __pagesText.productInfo.Discontinued;
+    } else if (userId) {
+      if (totalinvetory == 0) {
+        return __pagesText.productInfo.contactUs;
+      } else {
+        return __pagesText.productInfo.addTocart;
+      }
+    } else {
+      return __pagesText.productInfo.checkInventoryPricing;
+    }
+  };
   return (
     <>
       <div className='col-span-1 mt-[15px] pl-[0px] pr-[0px] md:pl-[15px] md:pr-[15px] sm:pl-[0px] sm:pr-[0px] lg:mt-[0px]'>
@@ -279,7 +302,7 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
             </span>
           </div>
         </div>
-        <DiscountPricing
+        {/* <DiscountPricing
           storeCode={storeCode}
           showMsrpLine={true}
           price={{
@@ -288,7 +311,20 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
           }}
           showLogin={product ? !product.isDiscontinue : false}
           modalHandler={modalHandler}
-        />
+        /> */}
+        {userId && (
+          <DiscountPricing
+            title={'selectsizeandquanity'}
+            storeCode={storeCode ? storeCode : ''}
+            showMsrpLine={false}
+            modalHandler={modalHandler}
+            price={{
+              msrp: product.msrp,
+              salePrice: product.salePrice,
+            }}
+            isSpecialBrand={product.isSpecialBrand}
+          />
+        )}
         {userId && <Inventory productId={product.id} storeCode={storeCode} />}
         {product?.companionProductName !== null ? (
           <ProductCompanion product={product} />
@@ -319,11 +355,7 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
               }}
               className='btn btn-primary text-center btn-lg w-full'
             >
-              {product?.isDiscontinue
-                ? 'Discontinued'
-                : userId
-                ? `${__pagesText.productInfo.addTocart}`
-                : `${__pagesText.productInfo.checkInventoryPricing}`}
+              {buttonMessage()}
             </button>
           </div>
         </form>

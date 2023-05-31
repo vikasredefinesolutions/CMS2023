@@ -1,15 +1,15 @@
 import {
   checkoutPages,
-  paymentMethodCustom as paymentEnum,
   PaymentMethod,
+  paymentMethodCustom as paymentEnum,
   UserAddressType,
 } from '@constants/enum';
 import {
+  CG_STORE_CODE,
   __Cookie,
   __Cookie_Expiry,
   __LocalStorage,
   __UserMessages,
-  CG_STORE_CODE,
 } from '@constants/global.constant';
 import { paths } from '@constants/paths.constant';
 
@@ -1230,6 +1230,7 @@ const CheckoutController = () => {
     fetchShipping,
     selectedShipping,
     setSelectedShipping,
+    getPolicyDetails,
   };
 };
 

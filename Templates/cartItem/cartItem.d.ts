@@ -20,4 +20,5 @@ export interface CI_Templates {
   type2: FC<_CartProps>;
   type3: FC<_CartProps>;
   type4: FC<_CartProps>;
+  type5: FC<_CartProps>;
 }

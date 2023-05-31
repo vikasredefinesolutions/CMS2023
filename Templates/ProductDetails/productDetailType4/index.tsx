@@ -1,10 +1,9 @@
-import { _defaultTemplates } from '@configs/template.config';
 import { _StoreCache } from '@definations/slug.type';
 import { KlaviyoScriptTag } from '@helpers/common.helper';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import { FetchInventoryById } from '@services/product.service';
-import Reviews from '@templates/Review';
 import ProductRecentlyViewed from '@templates/recentlyViewedProducts';
+import Reviews from '@templates/Review';
 import YouMayAlsoLike from '@templates/youMayAlsoLike';
 import Head from 'next/head';
 import { useEffect } from 'react';
@@ -158,7 +157,7 @@ const ProductDetails_Type4: React.FC<_ProductDetailsProps & _StoreCache> = (
             <div key={val + index}>
               <YouMayAlsoLike
                 product={product?.alike}
-                id={_defaultTemplates.youMayAlsoLike}
+                id={product.productDetailsTemplateId}
               />
             </div>
           );
