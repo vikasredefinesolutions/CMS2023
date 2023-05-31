@@ -12,7 +12,7 @@ export const _defaultTemplates: _DefaultTemplatesType = {
   cartItem: 'type1',
   cartSummary: 'type1',
   checkLogoApproved: 'type1',
-  checkout: 'type1',
+  checkout: 'type2',
   compareProducts: 'type1',
   footer: 'type1',
   header: 'type1',
@@ -54,7 +54,7 @@ interface _DefaultTemplatesType {
   cartItem: 'type1';
   cartSummary: 'type1';
   checkLogoApproved: 'type1';
-  checkout: 'type1';
+  checkout: 'type2';
   compareProducts: 'type1';
   footer: 'type1';
   header: 'type1';

@@ -3,7 +3,6 @@ import LogosToPrint from '@appComponents/CustomizeLogo/LogosToPrint';
 import NxtImage from '@appComponents/reUsable/Image';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import { FetchLogoLocationByProductId } from '@services/product.service';
-import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
@@ -20,8 +19,15 @@ interface logocharges {
   productId: number;
 }
 
-const CustomizeLogo: NextPage = () => {
-  const [firstLogoFree, setFirstLogoFree] = useState<boolean>(true);
+interface _Props {
+  productID: number;
+  setShowLogoComponent: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const CustomizeLogo: React.FC<_Props> = ({
+  productID,
+  setShowLogoComponent,
+}) => {
   const { sizeQtys } = useTypedSelector_v2((state) => state.product.toCheckout);
   const availableLocation = useTypedSelector_v2(
     (state) => state.product.toCheckout.availableOptions,
@@ -43,7 +49,6 @@ const CustomizeLogo: NextPage = () => {
   });
 
   const router = useRouter();
-  const { customizeId } = router?.query ?? 0;
   const { color: productColor } = useTypedSelector_v2(
     (state) => state.product.selected,
   );
@@ -52,8 +57,8 @@ const CustomizeLogo: NextPage = () => {
   const { clearLogoUploadHistory } = useActions_v2();
 
   useEffect(() => {
-    if (customizeId) {
-      FetchLogoLocationByProductId({ productId: +customizeId }).then((res) => {
+    if (productID) {
+      FetchLogoLocationByProductId({ productId: productID }).then((res) => {
         if (res) {
           setLogoCharges({
             isFirstLogoFree: res.isFirstLogoFree,
@@ -67,6 +72,7 @@ const CustomizeLogo: NextPage = () => {
             smallRunFeesCharges: res.smallRunFeesCharges,
             productId: res.productId,
           });
+          console.log(res.subRow);
           clearLogoUploadHistory(res?.subRow);
         }
       });
@@ -138,6 +144,12 @@ const CustomizeLogo: NextPage = () => {
                 )}
               </div>
             )}
+            {/* <button
+              className='btn btn-primary btn-md'
+              onClick={() => setShowLogoComponent(false)}
+            >
+              BACK
+            </button> */}
           </div>
         </div>
       </section>

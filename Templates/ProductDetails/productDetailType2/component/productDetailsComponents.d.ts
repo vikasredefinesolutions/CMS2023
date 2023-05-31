@@ -51,6 +51,7 @@ export interface _ProductImgProps {
 export interface _ProductInfoProps {
   product: _ProductDetails | null;
   storeCode: string;
+  setShowLogoComponent?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export interface _ProductReviewDetailsProps {

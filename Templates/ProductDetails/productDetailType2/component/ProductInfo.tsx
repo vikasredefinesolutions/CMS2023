@@ -3,22 +3,29 @@ import PersonalizeFontModal from '@appComponents/modals/PersonalizeFontModal/Per
 import LoginModal from '@appComponents/modals/loginModal';
 import { _modals } from '@appComponents/modals/modal';
 import SizeChartModal from '@appComponents/modals/sizeChartModal/SizeChartModal';
-import { storeBuilderTypeId } from '@configs/page.config';
 import { __pagesText } from '@constants/pages.text';
-import { paths } from '@constants/paths.constant';
+import { _ProductDetails } from '@definations/APIs/productDetail.res';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
-import { SbStore_fn } from '@services/product.service';
-import { _sbsStore_props } from '@templates/ProductDetails/productDetails';
-import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import AvailableColors from './AvailableColors';
 import BuyNowHeader from './BuyNowHeader';
 import DiscountPrice from './DiscountPrice';
 import DiscountPricing from './DiscountPricing';
 import Inventory from './ProductInventory';
-import { _ProductInfoProps } from './productDetailsComponents';
 
-const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
+interface _Props {
+  product: _ProductDetails | null;
+  storeCode: string;
+  setShowLogoComponent: React.Dispatch<React.SetStateAction<boolean>>;
+  showLogoComponent: boolean;
+}
+
+const ProductInfo: React.FC<_Props> = ({
+  product,
+  storeCode,
+  setShowLogoComponent,
+  showLogoComponent,
+}) => {
   const [openModal, setOpenModal] = useState<null | _modals>(null);
   const {
     totalQty,
@@ -31,26 +38,7 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
   );
   const { id: userId } = useTypedSelector_v2((state) => state.user);
   const { showModal, updateSbsStore } = useActions_v2();
-  const router = useRouter();
-  const [sbstoreList, setSbstoreList] = useState<_sbsStore_props[] | any>([]);
-
-  const { storeTypeId } = useTypedSelector_v2((state) => state.store);
   const [isVisible, setIsVisible] = useState(false);
-  const fetch_SbStore = async () => {
-    try {
-      await SbStore_fn({ productId: product?.id }).then((res) => {
-        setSbstoreList(res);
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    if (storeTypeId == storeBuilderTypeId) {
-      fetch_SbStore();
-    }
-  }, [storeTypeId]);
 
   const modalHandler = (param: null | _modals) => {
     if (param) {
@@ -87,13 +75,6 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
         modalHandler('requiredQty');
         return;
       }
-      // if (sbstoreList.length !== sbs_state.length) {
-      //   showModal({
-      //     message: `Please enter additional custom field.`,
-      //     title: 'Required field',
-      //   });
-      //   return;
-      // }
       if (totalQty < minQty) {
         showModal({
           message: `Please enter quantity greater than or equal to ${minQty}.`,
@@ -102,21 +83,8 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
 
         return;
       }
-      router.push(`${paths.CUSTOMIZE_LOGO}/${product?.id}`);
+      setShowLogoComponent(true);
     }
-  };
-
-  const blurHandler = (e: any, charge: number) => {
-    updateSbsStore({
-      name: e.target.name,
-      value: e.target.value,
-      charge: charge,
-    });
-  };
-
-  const goToProduct = (seName: string | null) => {
-    if (seName === null) return;
-    router.push(`${seName}`);
   };
 
   const { image } = useTypedSelector_v2((state) => state.product.selected);
@@ -250,36 +218,6 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
         )}
 
         {/* only for substore */}
-
-        <>
-          {sbstoreList &&
-            sbstoreList?.map((el: _sbsStore_props, index: number) => {
-              return (
-                <div
-                  className='flex flex-wrap justify-between items-center mt-[18px] pb-[8px] text-default-text border-b border-b-gray-border'
-                  key={index}
-                >
-                  <div className='flex items-center justify-center my-[10]'>
-                    <span className='mr-[3px] text-sub-text w-52'>
-                      {el.name}
-                    </span>
-                    <span className='text-large-text mr-5'>
-                      <input
-                        type='text'
-                        name={el.name}
-                        className='form-input !px-[10px] !inline-block !w-[100px]'
-                        onBlur={(e) => blurHandler(e, el.customizationCharges)}
-                      />
-                    </span>
-                    <span>
-                      ${el.customizationCharges.toFixed(2)} extra charge per
-                      character
-                    </span>
-                  </div>
-                </div>
-              );
-            })}
-        </>
 
         {userId ? (
           <>

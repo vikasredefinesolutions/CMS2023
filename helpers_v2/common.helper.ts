@@ -598,7 +598,7 @@ export const getAddToCartObject = async (product: _Props): Promise<CartReq> => {
 
       shoppingCartItemModel: {
         id: shoppingCartItemId ? shoppingCartItemId : 0,
-        price: totalPrice / totalQty,
+        price: price ? price : totalPrice / totalQty,
         quantity: totalQty,
         weight: 0,
         productType: 0,

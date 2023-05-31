@@ -1,5 +1,6 @@
 import { default as NxtImage } from '@appComponents/reUsable/Image';
 import Price from '@appComponents/reUsable/Price';
+import { CustomizeLaterMain } from '@constants/common.constant';
 import {
   cartQuantityUpdateConfirmMessage,
   cartRemoveConfirmMessage,
@@ -397,11 +398,10 @@ const CL2_Item: React.FC<_CartItem & _Props> = (props) => {
         <div className='w-full lg:w-3/4 pl-[12px] pr-[12px]'>
           <div className='flex flex-wrap justify-between items-center'>
             <div className='text-sub-text font-semibold mb-[10px]'>
-              <Link
-                href={`/${props.seName}`}
-                className='!text-anchor hover:!text-anchor-hover'
-              >
-                {props.productName}
+              <Link href={`/${props.seName}`}>
+                <a className='!text-anchor hover:!text-anchor-hover'>
+                  {props.productName}
+                </a>
               </Link>
             </div>
             <div className='text-default-text mb-[10px]'>
@@ -751,28 +751,31 @@ const CL2_Item: React.FC<_CartItem & _Props> = (props) => {
             </div>
           </div>
         </div>
-        {/* {isLinepersonalization &&
+        {isLinepersonalization &&
           customer?.isCustomerPersonalization &&
           props.shoppingCartLogoPersonViewModels.length >= 1 &&
           props.shoppingCartLogoPersonViewModels[0].logoName !==
             CustomizeLaterMain &&
-          props.isBrandPersonalization && ( */}
-        <div className='mt-[12px] lg:ml-[20px] mb-[20px] text-center p-[2px] text-sm cursor-pointer'>
-          <span
-            className='!w-full btn btn-sm btn-secondary uppercase text-md'
-            onClick={(e) => {
-              e.preventDefault();
-              e.preventDefault();
-              setPersonalizationArray(props.shoppingCartItemDetailsViewModels);
-              setCartLinePersonModels([]);
-              setKeepPersonalizing(!keepPersonalizing);
-            }}
-          >
-            {__pagesText.cart.personalize}
-            <br />
-            {__pagesText.cart.yourItem}
-          </span>
-        </div>
+          props.availableColor.length > 0 &&
+          props.availableFont.length > 0 &&
+          props.availableLocation.length > 0 &&
+          props.isBrandPersonalization && (
+            <div className='mt-[20px] mb-[20px] text-center w-full pl-[12px] pr-[12px]'>
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  setPersonalizationArray(
+                    props.shoppingCartItemDetailsViewModels,
+                  );
+                  setCartLinePersonModels([]);
+                  setKeepPersonalizing(!keepPersonalizing);
+                }}
+                className='btn btn-lg btn-secondary uppercase'
+              >
+                Personalize Your Item
+              </button>
+            </div>
+          )}
 
         {keepPersonalizing && (
           <Personalizing

@@ -29,6 +29,9 @@ const PaymentType: FC<{
   paymentMethod: paymentMethodCustom;
   updatePaymentMethod: (arg: paymentMethodCustom) => void;
   detectCardType: () => string;
+  changeBillingAddress: boolean;
+  BillingFormik: any;
+  setChangeBillingAddress: (value: boolean) => void;
   cardDetails?: {
     cardNumber: string;
     cardExpirationMonth: string;
@@ -41,7 +44,10 @@ const PaymentType: FC<{
   changeHandler,
   paymentMethod,
   updatePaymentMethod,
+  changeBillingAddress,
   detectCardType,
+  BillingFormik,
+  setChangeBillingAddress,
 }) => {
   switch (paymentMethod) {
     case paymentMethodCustom.creditCard:
@@ -52,6 +58,9 @@ const PaymentType: FC<{
               changeHandler,
               updatePaymentMethod,
               detectCardType,
+              changeBillingAddress,
+              BillingFormik,
+              setChangeBillingAddress,
               paymentMethod,
             }}
           />
@@ -80,6 +89,9 @@ const PaymentType: FC<{
               changeHandler,
               updatePaymentMethod,
               detectCardType,
+              BillingFormik,
+              changeBillingAddress,
+              setChangeBillingAddress,
               paymentMethod,
             }}
           />

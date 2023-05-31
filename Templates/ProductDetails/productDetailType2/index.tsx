@@ -1,3 +1,4 @@
+import CustomizeLogo from '@appComponents/CustomizeLogo/Customize';
 import { KlaviyoScriptTag } from '@helpers/common.helper';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import { FetchInventoryById } from '@services/product.service';
@@ -5,7 +6,7 @@ import Reviews from '@templates/Review';
 import ProductRecentlyViewed from '@templates/recentlyViewedProducts';
 import YouMayAlsoLike from '@templates/youMayAlsoLike';
 import Head from 'next/head';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { _Props } from '../productDetails';
 import ProductDetail from './component/ProductDetail';
 
@@ -18,6 +19,8 @@ const ProductDetails_Type2: React.FC<_Props> = (product) => {
     product_UpdateSelectedValues,
   } = useActions_v2();
   const { id: storeId, pageType } = useTypedSelector_v2((state) => state.store);
+  const [showLogoComponent, SetShowLogoComponent] = useState<boolean>(false);
+
   // const getCategoriesArr = (): string[] => {
   //   let categories: CategoriesByPid = [];
   //   let categoryArr: string[] = [];
@@ -148,34 +151,50 @@ const ProductDetails_Type2: React.FC<_Props> = (product) => {
   return (
     <>
       {HeadTag}
-      <ProductDetail product={product?.details} storeCode={product.storeCode} />
-      {product.sectionView.map((val: string, index: number) => {
-        if (val === 'youmayalsolike') {
-          return (
-            <div key={val + index}>
-              <YouMayAlsoLike
-                product={product.alike}
-                id={product.productDetailsTemplateId}
-              />
-            </div>
-          );
-        } else if (val === 'writereview') {
-          return (
-            <div key={val + index}>
-              <Reviews
-                storeCode={product.storeCode}
-                productId={product?.details?.id ? product.details.id : 0}
-              />
-            </div>
-          );
-        } else {
-          return (
-            <div key={val + index}>
-              <ProductRecentlyViewed product={product} />
-            </div>
-          );
-        }
-      })}
+      {!showLogoComponent && (
+        <>
+          {' '}
+          <ProductDetail
+            product={product?.details}
+            storeCode={product.storeCode}
+            setShowLogoComponent={SetShowLogoComponent}
+            showLogoComponent={showLogoComponent}
+          />
+          {product.sectionView.map((val: string, index: number) => {
+            if (val === 'youmayalsolike') {
+              return (
+                <div key={val + index}>
+                  <YouMayAlsoLike
+                    product={product.alike}
+                    id={product.productDetailsTemplateId}
+                  />
+                </div>
+              );
+            } else if (val === 'writereview') {
+              return (
+                <div key={val + index}>
+                  <Reviews
+                    storeCode={product.storeCode}
+                    productId={product?.details?.id ? product.details.id : 0}
+                  />
+                </div>
+              );
+            } else {
+              return (
+                <div key={val + index}>
+                  <ProductRecentlyViewed product={product} />
+                </div>
+              );
+            }
+          })}
+        </>
+      )}
+      {showLogoComponent && (
+        <CustomizeLogo
+          productID={product.details.id}
+          setShowLogoComponent={SetShowLogoComponent}
+        />
+      )}
     </>
   );
 };

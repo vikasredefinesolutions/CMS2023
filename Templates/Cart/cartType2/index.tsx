@@ -12,7 +12,7 @@ import {
   getPersonalizationFont,
   getPersonalizationLocation,
 } from '@services/cart.service';
-import CartSummarry from '@templates/cartSummarry';
+import CartSummarryType2 from '@templates/cartSummarry/cartSummaryType2';
 import CartItem from 'Templates/cartItem';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
@@ -106,7 +106,7 @@ const CartType2: React.FC<_CartProps> = ({
               />
               <div className='mt-[16px] mb-[16px]'>
                 <Link href={paths.HOME}>
-                  <a className='btn btn-lg btn-secondary'>KEEP SHOPPING</a>
+                  <a className='btn btn-lg btn-primary'>KEEP SHOPPING</a>
                 </Link>
               </div>
             </section>
@@ -114,17 +114,7 @@ const CartType2: React.FC<_CartProps> = ({
               aria-labelledby='summary-heading'
               className='w-full lg:w-4/12 md:w-5/12 pl-[15px] pr-[15px] mt-[15px]'
             >
-              <CartSummarry selectedShippingModel={selectedShipping} />
-              <div className='mt-4'>
-                <Link className='' href={paths.CHECKOUT}>
-                  <a className='btn btn-lg btn-secondary !flex items-center justify-center w-full'>
-                    <span className='material-icons text-lg mr-[2px]'>
-                      shopping_cart
-                    </span>
-                    CHECKOUT NOW
-                  </a>
-                </Link>
-              </div>
+              <CartSummarryType2 selectedShippingModel={selectedShipping} />
             </section>
           </div>
         </div>

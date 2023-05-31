@@ -1,70 +1,196 @@
 import NxtImage from '@appComponents/reUsable/Image';
-import { checkoutPages, UserAddressType } from '@constants/enum';
+import { UserAddressType, checkoutPages } from '@constants/enum';
 import { __pagesText } from '@constants/pages.text';
 import { GetCartTotals, useTypedSelector_v2 } from '@hooks_v2/index';
 import CartItem from '@templates/cartItem';
 import _ from 'lodash';
-import Link from 'next/link';
 import { FC, useEffect, useState } from 'react';
+import * as yup from 'yup';
 import OrderSummary from './components/OrderSummary';
 import PaymentType from './components/Payment';
-import secureCard from '@images/secure-card.jpg';
-import secureCardHover from '@images/secure-card-hover.png';
-import secureBtn from '@images/secure-btm.jpg';
-import norton from '@images/norton.png';
 
 import CheckoutController, {
   _shippingMethod,
 } from '@controllers/checkoutController';
+import { AddressType } from '@controllers/checkoutController/CheckoutAddressForm';
+import { _Country } from '@definations/app.type';
+import { GetShippingmethod } from '@services/address.service';
+import { FetchCountriesList } from '@services/general.service';
+import { useFormik } from 'formik';
 
 interface _Props {
   templateId: number;
 }
 
 const ChekoutType2: FC<_Props> = ({ templateId }) => {
-  const { shippingChargeType, id: storeId } = useTypedSelector_v2(
-    (state) => state.store,
-  );
-
-  // console.log('we are in type 2');
-
   const {
     currentPage,
     placeOrder,
-    reviewOrder,
-    cartData,
     paymentFieldUpdateHandler,
     paymentMethod,
     updatePaymentMethod,
     detectCardType,
-    shippingAdress,
-    billingAdress,
-    setAddressType,
-    setShippingMethod,
-    shippingMethod,
-    selectedShipping,
-    setSelectedShipping,
-    fetchShipping,
-    cardDetails,
-    purchaseOrder,
   } = CheckoutController();
 
-  // console.log('all shippingmethod', shippingMethod);
-  // console.log('slected shippingmethod', selectedShipping);
-  // console.log('value', _.isEmpty(selectedShipping));
+  const { shippingChargeType, id: storeId } = useTypedSelector_v2(
+    (state) => state.store,
+  );
+
+  const [selectedShipping, setSelectedShipping] = useState<
+    _shippingMethod | { name: ''; price: 0 }
+  >({ name: '', price: 0 });
+
+  const fetchShipping = async (
+    totalPrice: number,
+    shippingCountry?: string | null,
+  ) => {
+    try {
+      if (storeId && shippingChargeType) {
+        const data = await GetShippingmethod({
+          shippingMethodModel: {
+            city: shippingAddress?.city || '',
+            state: shippingAddress?.state || '',
+            country:
+              shippingCountry === null ? ' ' : shippingAddress?.countryName,
+            zipCode: shippingAddress?.postalCode || '',
+            customerID: id,
+            storeId: storeId,
+            ordertotalwithoutshipppingcharge: totalPrice,
+            shippingType: shippingChargeType,
+          },
+        });
+        if (data) {
+          setShippingMethod(data);
+          setSelectedShipping(data[0]);
+        }
+        return data;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const [shippingMethod, setShippingMethod] = useState<_shippingMethod[] | []>([
+    {
+      name: '',
+      price: 0,
+    },
+  ]);
+
+  const cartData = useTypedSelector_v2((state) => state.cart);
+  const [shippingAddress, setShippingAddress] = useState<AddressType | null>(
+    null,
+  );
+  const [billingAddress, setBillingAddress] = useState<AddressType | null>(
+    null,
+  );
+
+  const { loggedIn, customer, id } = useTypedSelector_v2((state) => state.user);
+  const [changeBillingAddress, setChangeBillingAddress] =
+    useState<boolean>(false);
+  useEffect(() => {
+    if (loggedIn && customer) {
+      if (customer.customerAddress.length > 0) {
+        if (customer && customer.customerAddress) {
+          for (
+            let index = 0;
+            index < customer.customerAddress.length;
+            index++
+          ) {
+            if (
+              customer.customerAddress[index].addressType ==
+                UserAddressType.SHIPPINGADDRESS &&
+              customer.customerAddress[index].isDefault
+            ) {
+              setShippingAddress(
+                customer.customerAddress[index] as AddressType,
+              );
+            } else if (
+              customer.customerAddress[index].addressType ==
+                UserAddressType.BILLINGADDRESS &&
+              customer.customerAddress[index].isDefault
+            ) {
+              setBillingAddress(customer.customerAddress[index] as AddressType);
+            }
+          }
+        }
+      }
+    }
+  }, [customer]);
+
+  const validationSchema = yup.object({
+    firstName: yup.string().required('Required field'),
+    lastName: yup.string().required('Required field'),
+    streetAddress: yup.string().required('Required field'),
+    city: yup.string().required('Required field'),
+    zipCode: yup.string().required('Required Field'),
+    country: yup.string().required('Required field'),
+    state: yup.string().required('Required field'),
+    phone: yup.string().required('Required field'),
+  });
+
+  const initialBillingValues = {
+    firstName: '',
+    lastName: '',
+    streetAddress: '',
+    aptSuite: '',
+    zipCode: '',
+    city: '',
+    country: '',
+    state: '',
+    phone: '',
+  };
+
+  const initialShippingValues = {
+    firstName: shippingAddress ? shippingAddress?.firstname : '',
+    lastName: shippingAddress ? shippingAddress.lastName : '',
+    streetAddress: shippingAddress ? shippingAddress.address1 : '',
+    aptSuite: shippingAddress ? shippingAddress.suite : '',
+    zipCode: shippingAddress ? shippingAddress.postalCode : '',
+    city: shippingAddress ? shippingAddress.city : '',
+    country: shippingAddress ? shippingAddress.countryName : '',
+    state: shippingAddress ? shippingAddress.state : '',
+    phone: shippingAddress ? shippingAddress.phone : '',
+  };
+
+  const Billingformik = useFormik({
+    initialValues: initialBillingValues,
+    validationSchema: validationSchema,
+    validateOnChange: true,
+    onSubmit: (values) => {
+      console.log(values, 'bill');
+    },
+  });
+
+  const ShippingFormik = useFormik({
+    initialValues: initialShippingValues,
+    validationSchema: validationSchema,
+    validateOnChange: true,
+    onSubmit: (values) => {
+      console.log(values, 'ship');
+    },
+  });
 
   // console.log('carddeatils', cardDetails);
 
   const [showPayment, setshowPayment] = useState<boolean>(false);
-
-  const { id } = useTypedSelector_v2((state) => state.user);
+  const [showShippingMethod, setShowShippingMethod] = useState<boolean>(true);
   const { totalPrice } = GetCartTotals();
+  const [countries, setCountries] = useState<_Country[] | []>([]);
+
+  useEffect(() => {
+    FetchCountriesList().then((res) => {
+      if (res) {
+        setCountries(res);
+      }
+    });
+  }, []);
 
   useEffect(() => {
     if (totalPrice) {
       fetchShipping(totalPrice);
     }
-  }, [totalPrice, shippingAdress]);
+  }, [totalPrice, shippingAddress]);
 
   return (
     <section className='mt-[20px]'>
@@ -82,32 +208,34 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
                       </div>
                       <div className='text-default-text'>
                         <div
-                          onClick={() =>
-                            setAddressType(UserAddressType.BILLINGADDRESS)
-                          }
-                          className='!text-anchor hover:!text-anchor-hover '
+                          onClick={() => {
+                            setChangeBillingAddress(true);
+                            setShowShippingMethod(false);
+                            setshowPayment(true);
+                          }}
+                          className='!text-anchor hover:!text-anchor-hover cursor-pointer '
                         >
                           {__pagesText.CheckoutPage.Change}
                         </div>
                       </div>
                     </div>
-                    {billingAdress && (
+                    {billingAddress && (
                       <div className='text-default-text mt-[10px]'>
-                        {billingAdress?.firstname} {billingAdress?.lastName}
+                        {billingAddress?.firstname} {billingAddress?.lastName}
                         <br />
-                        {billingAdress?.companyName}
+                        {billingAddress?.companyName}
                         <br />
-                        {billingAdress?.address1}
+                        {billingAddress?.address1}
                         <br />
                         {[
-                          billingAdress?.city,
-                          billingAdress?.state,
-                          billingAdress?.postalCode,
+                          billingAddress?.city,
+                          billingAddress?.state,
+                          billingAddress?.postalCode,
                         ].join(', ')}
                         <br />
-                        {billingAdress?.countryName}
+                        {billingAddress?.countryName}
                         <br />
-                        {billingAdress?.phone}
+                        {billingAddress?.phone}
                       </div>
                     )}
                   </div>
@@ -119,11 +247,16 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
                         {__pagesText.CheckoutPage.ShippingMethod}
                       </div>
                       <div className='text-default-text'>
-                        <Link href={'#shippingMethod'}>
-                          <a className='!text-anchor hover:!text-anchor-hover'>
-                            {__pagesText.CheckoutPage.Change}
-                          </a>
-                        </Link>
+                        <span
+                          className='!text-anchor hover:!text-anchor-hover'
+                          onClick={() => {
+                            setShowShippingMethod(true);
+                            setshowPayment(false);
+                            setChangeBillingAddress(false);
+                          }}
+                        >
+                          {__pagesText.CheckoutPage.Change}
+                        </span>
                       </div>
                     </div>
                     <div className='text-default-text mt-[10px] mb-[15px]'>
@@ -147,9 +280,15 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
                         {__pagesText.CheckoutPage.paymentInfo}
                       </div>
                       <div className='text-default-text'>
-                        <div className='!text-anchor hover:!text-anchor-hover'>
+                        <span
+                          className='!text-anchor hover:!text-anchor-hover'
+                          onClick={() => {
+                            setChangeBillingAddress(false);
+                            !showShippingMethod && setshowPayment(true);
+                          }}
+                        >
                           {__pagesText.CheckoutPage.Change}
-                        </div>
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -166,207 +305,416 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
                 />
               ) : (
                 <>
-                  {/* Shipping Address */}
-                  <div className='bg-light-gray w-full mb-[30px] opacity-100'>
-                    <div className='bg-light-gray flex-1 w-full md:w-full mt-[15px] ml-[15px] mr-[15px] mb-[30px]'>
-                      <div className='pl-[15px] pr-[15px] pt-[15px] pb-[15px]'>
-                        <div className='flex flex-wrap items-center justify-between pt-[10px] border-b border-[#ececec]'>
-                          <div className='pb-[10px] text-title-text'>
-                            {__pagesText.CheckoutPage.ShippingAddress}
-                          </div>
-                          <div className='text-default-text'>
-                            <div
-                              onClick={() =>
-                                setAddressType(UserAddressType.SHIPPINGADDRESS)
-                              }
-                              className='!text-anchor hover:!text-anchor-hover cursor-pointer'
-                            >
-                              {__pagesText.CheckoutPage.Change}
-                            </div>
-                          </div>
-                        </div>
-                        {shippingAdress && (
-                          <div className='text-default-text mt-[10px]'>
-                            {shippingAdress?.firstname}{' '}
-                            {shippingAdress?.lastName}
-                            <br />
-                            {shippingAdress?.companyName}
-                            <br />
-                            {shippingAdress?.address1}
-                            <br />
-                            {[
-                              shippingAdress?.city,
-                              shippingAdress?.state,
-                              shippingAdress?.postalCode,
-                            ].join(', ')}
-                            <br />
-                            {shippingAdress?.countryName}
-                            <br />
-                            {shippingAdress?.phone}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* shipping method */}
-                  <div
-                    className='bg-light-gray w-full mb-[30px]'
-                    id='shippingMethod'
-                  >
-                    <div className='pl-[15px] pr-[15px] pt-[15px] pb-[15px]'>
-                      <div className='pt-[10px] border-b border-[#ececec]'>
-                        <div className='pb-[10px] text-title-text'>
-                          {__pagesText.CheckoutPage.ShippingMethod}
-                        </div>
-                      </div>
-                      <div className='text-default-text mb-[5px] mt-[10px]'>
-                        {__pagesText.CheckoutPage.ChooseShippingMethod}
-                      </div>
-                      <div className='flex items-center flex-wrap mb-[30px]'>
-                        {shippingMethod &&
-                          shippingMethod.map(
-                            (el: _shippingMethod, index: number) => (
-                              <div className='w-full block' key={index}>
-                                <input
-                                  type='radio'
-                                  name='shippingMethod'
-                                  id={`shippingMethod${index}`}
-                                  onChange={() => setSelectedShipping(el)}
-                                  checked={
-                                    selectedShipping.name == el.name
-                                      ? true
-                                      : false
-                                  }
-                                  className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 focus:ring-2 '
-                                />
-                                <label
-                                  htmlFor={`shippingMethod${index}`}
-                                  className='ml-2 text-default-text'
-                                >
-                                  {shippingMethod &&
-                                    `${el.name}($${el.price.toPrecision(2)})`}
-                                </label>
-                              </div>
-                            ),
-                          )}
-                      </div>
-                      <div className=''>
-                        <button
-                          className='btn btn-lg btn-secondary'
-                          onClick={() => setshowPayment(true)}
-                        >
-                          {__pagesText.CheckoutPage.GoToPayment}
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* payment method */}
-                  {!showPayment ? (
-                    <div className='bg-light-gray w-full mb-[30px] opacity-50'>
-                      <div className='pl-[15px] pr-[15px] pt-[15px] pb-[15px]'>
-                        <div className='flex flex-wrap items-center justify-between'>
-                          <div className='pt-[10px] pb-[10px] text-title-text'>
-                            {__pagesText.CheckoutPage.PaymentMethod}
-                          </div>
-                          <div className='pt-[10px] pb-[10px]'>
-                            <div className='w-20'>
-                              <NxtImage
-                                src={secureCardHover}
-                                alt='lockimage'
-                                className=''
-                                isStatic={true}
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  ) : (
+                  {showShippingMethod && (
                     <>
-                      <div className='PaymentMethodInne bg-light-gray'>
-                        <div className='bg-[#d4d4d4] w-full'>
+                      <div className='bg-light-gray w-full mb-[30px] opacity-100'>
+                        <div className='bg-light-gray flex-1 w-full md:w-full mt-[15px] ml-[15px] mr-[15px] mb-[30px]'>
                           <div className='pl-[15px] pr-[15px] pt-[15px] pb-[15px]'>
-                            <div className='flex flex-wrap items-center justify-between pt-[10px] mb-[10px] border-b border-[#ececec]'>
+                            <div className='flex flex-wrap items-center justify-between pt-[10px] border-b border-[#ececec]'>
                               <div className='pb-[10px] text-title-text'>
-                                {__pagesText.CheckoutPage.PaymentMethod}
-                              </div>
-                              <div className='w-28'>
-                                <NxtImage
-                                  src={secureCard}
-                                  alt='lockimage'
-                                  className='w-full'
-                                  isStatic={true}
-                                />
+                                {__pagesText.CheckoutPage.ShippingAddress}
                               </div>
                             </div>
-                            <div className='text-right text-default-text'>
-                              {__pagesText.CheckoutPage.secure128}
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className='pl-[15px] pr-[15px] pt-[15px] pb-[15px]'>
-                          <div className='flex flex-wrap items-center justify-between pt-[10px] mb-[20px]'>
-                            <div className='pb-[10px] text-default-text'>
-                              All fields marked with * are required fields.
-                            </div>
-                            <div className='pb-[10px]'>
-                              <NxtImage
-                                src={norton}
-                                alt='lockimage'
-                                className='w-full'
-                                isStatic={true}
-                              />
-                            </div>
-                          </div>
-                          <PaymentType
-                            changeHandler={paymentFieldUpdateHandler}
-                            paymentMethod={paymentMethod}
-                            updatePaymentMethod={updatePaymentMethod}
-                            detectCardType={detectCardType}
-                            cardDetails={cardDetails}
-                            purchaseOrder={purchaseOrder}
-                          />
-                          <div className='max-w-[278px]'>
-                            <button
-                              className='btn btn-lg !w-full text-center btn-secondary mb-[8px]'
-                              id='btn-review-order'
-                              onClick={reviewOrder}
-                            >
-                              {__pagesText.CheckoutPage.GotoReview}
-                            </button>
-                          </div>
-                        </div>
-
-                        <div className='bg-[#d4d4d4] w-full mb-[30px]'>
-                          <div className='pl-[15px] pr-[15px] pt-[15px] pb-[15px] text-center'>
-                            <div>
-                              <NxtImage
-                                src={secureBtn}
-                                alt=''
-                                className='w-full max-h-[100px]'
-                              />
-                            </div>
+                            <form>
+                              <div id='BillingAddress'>
+                                <div className='text-default-text text-[#84694d] mt-[10px] mb-[20px]'>
+                                  All Fields marked * are required fields.
+                                </div>
+                                <div className='flex flex-wrap ml-[-15px] mr-[-15px]'>
+                                  <div className='mb-[15px] w-full md:w-6/12 pl-[15px] pr-[15px]'>
+                                    <label className='mb-[4px] text-normal-text'>
+                                      First Name*
+                                    </label>
+                                    <div className='flex flex-wrap justify-between items-center'>
+                                      <input
+                                        onBlur={ShippingFormik.handleBlur}
+                                        onChange={ShippingFormik.handleChange}
+                                        name='firstName'
+                                        placeholder=' '
+                                        value={ShippingFormik.values.firstName}
+                                        className='form-input !w-[calc(100%-40px)]'
+                                      />
+                                      {ShippingFormik.errors.firstName ? (
+                                        <img
+                                          className='ml-[5px] '
+                                          src='/no.png'
+                                        />
+                                      ) : (
+                                        <img
+                                          className='ml-[5px]'
+                                          src='/yes.png'
+                                        />
+                                      )}
+                                    </div>
+                                  </div>
+                                  <div className='mb-[15px] w-full md:w-6/12 pl-[15px] pr-[15px]'>
+                                    <label className='mb-[4px] text-normal-text'>
+                                      Last Name*
+                                    </label>
+                                    <div className='flex flex-wrap justify-between items-center'>
+                                      <input
+                                        onBlur={ShippingFormik.handleBlur}
+                                        onChange={ShippingFormik.handleChange}
+                                        name='lastName'
+                                        placeholder=' '
+                                        value={ShippingFormik.values.lastName}
+                                        className='form-input !w-[calc(100%-40px)]'
+                                      />
+                                      {ShippingFormik.errors.lastName ? (
+                                        <img
+                                          className='ml-[5px] '
+                                          src='/no.png'
+                                        />
+                                      ) : (
+                                        <img
+                                          className='ml-[5px]'
+                                          src='/yes.png'
+                                        />
+                                      )}
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className='flex flex-wrap ml-[-15px] mr-[-15px]'>
+                                  <div className='mb-[15px] w-full pl-[15px] pr-[15px]'>
+                                    <label className='mb-[4px] text-normal-text'>
+                                      Street Address*
+                                    </label>
+                                    <div className='flex flex-wrap justify-between items-center'>
+                                      <input
+                                        onBlur={ShippingFormik.handleBlur}
+                                        onChange={ShippingFormik.handleChange}
+                                        name='streetAddress'
+                                        placeholder=' '
+                                        value={
+                                          ShippingFormik.values.streetAddress
+                                        }
+                                        className='form-input !w-[calc(100%-40px)]'
+                                      />
+                                      {ShippingFormik.errors.streetAddress ? (
+                                        <img
+                                          className='ml-[5px] '
+                                          src='/no.png'
+                                        />
+                                      ) : (
+                                        <img
+                                          className='ml-[5px]'
+                                          src='/yes.png'
+                                        />
+                                      )}
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className='flex flex-wrap ml-[-15px] mr-[-15px]'>
+                                  <div className='mb-[15px] w-full md:w-6/12 pl-[15px] pr-[15px]'>
+                                    <label className='mb-[4px] text-normal-text'>
+                                      Apt, Suite
+                                    </label>
+                                    <input
+                                      onBlur={ShippingFormik.handleBlur}
+                                      onChange={ShippingFormik.handleChange}
+                                      name='aptSuite'
+                                      placeholder=' '
+                                      value={ShippingFormik.values.aptSuite}
+                                      className='form-input'
+                                    />
+                                  </div>
+                                  <div className='mb-[15px] w-full md:w-6/12 pl-[15px] pr-[15px]'>
+                                    <label className='mb-[4px] text-normal-text'>
+                                      Zip Code*
+                                    </label>
+                                    <div className='flex flex-wrap justify-between items-center'>
+                                      <input
+                                        onBlur={ShippingFormik.handleBlur}
+                                        onChange={ShippingFormik.handleChange}
+                                        name='zipCode'
+                                        placeholder=' '
+                                        value={ShippingFormik.values.zipCode}
+                                        className='form-input  !w-[calc(100%-40px)]'
+                                      />
+                                      {ShippingFormik.errors.zipCode ? (
+                                        <img
+                                          className='ml-[5px] '
+                                          src='/no.png'
+                                        />
+                                      ) : (
+                                        <img
+                                          className='ml-[5px]'
+                                          src='/yes.png'
+                                        />
+                                      )}
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className='flex flex-wrap ml-[-15px] mr-[-15px]'>
+                                  <div className='mb-[15px] w-full md:w-6/12 pl-[15px] pr-[15px]'>
+                                    <label className='mb-[4px] text-normal-text'>
+                                      City*
+                                    </label>
+                                    <div className='flex flex-wrap justify-between items-center'>
+                                      <input
+                                        onBlur={ShippingFormik.handleBlur}
+                                        onChange={ShippingFormik.handleChange}
+                                        name='city'
+                                        placeholder=' '
+                                        value={ShippingFormik.values.city}
+                                        className='form-input  !w-[calc(100%-40px)]'
+                                      />
+                                      {ShippingFormik.errors.city ? (
+                                        <img
+                                          className='ml-[5px] '
+                                          src='/no.png'
+                                        />
+                                      ) : (
+                                        <img
+                                          className='ml-[5px]'
+                                          src='/yes.png'
+                                        />
+                                      )}
+                                    </div>
+                                  </div>
+                                  <div className='mb-[15px] w-full md:w-6/12 pl-[15px] pr-[15px]'>
+                                    <label className='mb-[4px] text-normal-text'>
+                                      State / Province*
+                                    </label>
+                                    <div className='flex flex-wrap justify-between items-center'>
+                                      <select
+                                        className='form-input !w-[calc(100%-40px)]'
+                                        placeholder='Select Country'
+                                        name='state'
+                                        onChange={ShippingFormik.handleChange}
+                                        value={ShippingFormik.values.state}
+                                      >
+                                        <option value='1'>United States</option>
+                                      </select>
+                                      <img
+                                        className='ml-[5px]'
+                                        src='/yes.png'
+                                      />
+                                      <img
+                                        className='ml-[5px] '
+                                        src='/no.png'
+                                      />
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className='flex flex-wrap ml-[-15px] mr-[-15px] mb-[30px]'>
+                                  <div className='mb-[15px] w-full md:w-6/12 pl-[15px] pr-[15px]'>
+                                    <label className='mb-[4px] text-normal-text'>
+                                      Country*
+                                    </label>
+                                    <div className='flex flex-wrap justify-between items-center'>
+                                      <select
+                                        className='form-input !w-[calc(100%-40px)]'
+                                        placeholder='Select Country'
+                                        name='country'
+                                        onChange={ShippingFormik.handleChange}
+                                        onSelect={ShippingFormik.handleChange}
+                                        value={ShippingFormik.values.country}
+                                      >
+                                        {countries.map((item) => {
+                                          return (
+                                            <option value={item.id}>
+                                              {item.name}
+                                            </option>
+                                          );
+                                        })}
+                                      </select>
+                                      {ShippingFormik.errors ? (
+                                        <img
+                                          className='ml-[5px]'
+                                          src='/yes.png'
+                                        />
+                                      ) : (
+                                        <img
+                                          className='ml-[5px] '
+                                          src='/no.png'
+                                        />
+                                      )}
+                                    </div>
+                                  </div>
+                                  <div className='mb-[15px] w-full md:w-6/12 pl-[15px] pr-[15px]'>
+                                    <label className='mb-[4px] text-normal-text'>
+                                      Phone Number*
+                                    </label>
+                                    <div className='flex flex-wrap justify-between items-center'>
+                                      <input
+                                        onBlur={ShippingFormik.handleBlur}
+                                        onChange={ShippingFormik.handleChange}
+                                        name='phone'
+                                        placeholder=' '
+                                        value={ShippingFormik.values.phone}
+                                        className='form-input  !w-[calc(100%-40px)]'
+                                      />
+                                      {ShippingFormik.errors.phone ? (
+                                        <img
+                                          className='ml-[5px] '
+                                          src='/no.png'
+                                        />
+                                      ) : (
+                                        <img
+                                          className='ml-[5px]'
+                                          src='/yes.png'
+                                        />
+                                      )}
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </form>
                           </div>
                         </div>
                       </div>
-                      <div className='bg-light-gray w-full mb-[30px] opacity-50'>
+
+                      <div
+                        className='bg-light-gray w-full mb-[30px]'
+                        id='shippingMethod'
+                      >
                         <div className='pl-[15px] pr-[15px] pt-[15px] pb-[15px]'>
-                          <div className='flex flex-wrap items-center justify-between'>
-                            <div className='pt-[10px] pb-[10px] text-title-text'>
-                              {__pagesText.CheckoutPage.OrderReview}
+                          <div className='pt-[10px] border-b border-[#ececec]'>
+                            <div className='pb-[10px] text-title-text'>
+                              {__pagesText.CheckoutPage.ShippingMethod}
                             </div>
+                          </div>
+                          <div className='text-default-text mb-[5px] mt-[10px]'>
+                            {__pagesText.CheckoutPage.ChooseShippingMethod}
+                          </div>
+                          <div className='flex items-center flex-wrap mb-[30px]'>
+                            {shippingMethod &&
+                              shippingMethod.map(
+                                (el: _shippingMethod, index: number) => (
+                                  <div className='w-full block' key={index}>
+                                    <input
+                                      type='radio'
+                                      name='shippingMethod'
+                                      id={`shippingMethod${index}`}
+                                      onChange={() => setSelectedShipping(el)}
+                                      checked={
+                                        selectedShipping.name == el.name
+                                          ? true
+                                          : false
+                                      }
+                                      className='w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 focus:ring-2 '
+                                    />
+                                    <label
+                                      htmlFor={`shippingMethod${index}`}
+                                      className='ml-2 text-default-text'
+                                    >
+                                      {shippingMethod &&
+                                        `${el.name}($${el.price.toPrecision(
+                                          2,
+                                        )})`}
+                                    </label>
+                                  </div>
+                                ),
+                              )}
+                          </div>
+                          <div className=''>
+                            <button
+                              className='btn btn-lg btn-secondary'
+                              onClick={() => setshowPayment(true)}
+                            >
+                              {__pagesText.CheckoutPage.GoToPayment}
+                            </button>
                           </div>
                         </div>
                       </div>
                     </>
                   )}
+
+                  {/* payment method */}
+                  <div className='bg-light-gray w-full mb-[30px] opacity-50'>
+                    <div className='pl-[15px] pr-[15px] pt-[15px] pb-[15px]'>
+                      <div className='flex flex-wrap items-center justify-between'>
+                        <div className='pt-[10px] pb-[10px] text-title-text'>
+                          {__pagesText.CheckoutPage.PaymentMethod}
+                        </div>
+                        <div className='pt-[10px] pb-[10px]'>
+                          <div className='w-10'>
+                            <img
+                              src='/secure-card-hover.png'
+                              alt='lockimage'
+                              className=''
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {showPayment && (
+                    <div className='PaymentMethodInne bg-light-gray'>
+                      <div className='bg-[#d4d4d4] w-full'>
+                        <div className='pl-[15px] pr-[15px] pt-[15px] pb-[15px]'>
+                          <div className='flex flex-wrap items-center justify-between pt-[10px] mb-[10px] border-b border-[#ececec]'>
+                            <div className='pb-[10px] text-title-text'>
+                              {__pagesText.CheckoutPage.PaymentMethod}
+                            </div>
+                            <div className='pt-[10px] pb-[10px]'>
+                              <div className='w-10'>
+                                <NxtImage
+                                  src='/secure-card.jpg'
+                                  alt='lockimage'
+                                  className=''
+                                />
+                              </div>
+                            </div>
+                          </div>
+                          <div className='text-right text-default-text'>
+                            {__pagesText.CheckoutPage.secure128}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className='pl-[15px] pr-[15px] pt-[15px] pb-[15px]'>
+                        <PaymentType
+                          changeHandler={paymentFieldUpdateHandler}
+                          paymentMethod={paymentMethod}
+                          updatePaymentMethod={updatePaymentMethod}
+                          detectCardType={detectCardType}
+                          BillingFormik={Billingformik}
+                          changeBillingAddress={changeBillingAddress}
+                          setChangeBillingAddress={setChangeBillingAddress}
+                        />
+                        <div className='max-w-[278px]'>
+                          <button
+                            className='btn btn-lg !w-full text-center btn-secondary mb-[8px]'
+                            id='btn-review-order'
+                            onClick={() => {
+                              console.log(Billingformik.values);
+                              console.log(ShippingFormik.values);
+                            }}
+                          >
+                            {__pagesText.CheckoutPage.GotoReview}
+                          </button>
+                        </div>
+                      </div>
+
+                      <div className='bg-[#d4d4d4] w-full mb-[30px]'>
+                        <div className='pl-[15px] pr-[15px] pt-[15px] pb-[15px] text-center'>
+                          <div>
+                            <img
+                              src={'/secure-btm.jpg'}
+                              alt=''
+                              className='w-full max-h-[100px]'
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  <div className='bg-light-gray w-full mb-[30px] opacity-50'>
+                    <div className='pl-[15px] pr-[15px] pt-[15px] pb-[15px]'>
+                      <div className='flex flex-wrap items-center justify-between'>
+                        <div className='pt-[10px] pb-[10px] text-title-text'>
+                          {__pagesText.CheckoutPage.OrderReview}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </>
               )}
             </section>
-
             <OrderSummary
               currentpage={currentPage}
               selectedShipModel={selectedShipping}
