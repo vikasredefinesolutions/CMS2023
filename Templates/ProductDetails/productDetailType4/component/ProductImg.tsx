@@ -119,8 +119,11 @@ const ProductImg: React.FC<_ProductImgProps> = ({ product }) => {
           colors.map((product, index) => {
             return (
               <div
-                className={`border hover:border-secondary mx-[5px] mb-[10px] p-[1px] w-[70px] max-h-[70px] ${selectedColor.attributeOptionId==product.attributeOptionId?'border-secondary'
-                : 'border-gray-border'}`}
+                className={`border-2 hover:border-secondary mx-[5px] mb-[10px] p-[1px] w-[70px] max-h-[70px] ${
+                  selectedColor.attributeOptionId == product.attributeOptionId
+                    ? 'border-secondary'
+                    : 'border-gray-border'
+                }`}
                 onClick={() => setColor(product)}
                 key={product.attributeOptionId}
               >

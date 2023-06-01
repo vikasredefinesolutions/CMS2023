@@ -121,7 +121,7 @@ const DiscountPricing: React.FC<
       </div>
 
       {showMsg && (
-        <div className='text-medium-text pt-[10px] pb-[10px]' id='divMinorder'>
+        <div className='text-default-text pt-[10px] pb-[10px]' id='divMinorder'>
           {__pagesText.productInfo.discountPricing.showMsgStartingText + ' '}
           {minQty} {__pagesText.productInfo.discountPricing.showMsgMiddleText}
           <br />

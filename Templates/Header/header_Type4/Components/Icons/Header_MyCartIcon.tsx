@@ -60,7 +60,7 @@ const MyCartIcon: React.FC = () => {
             {__pagesText.Headers.shoppingCartIcon}
           </span>
 
-          <span className='absolute right-[-7px] top-[-4px] rounded-full flex items-center justify-center bg-[#dddddd] text-[9px] text-[#000000] pl-[4px] pr-[4px] pt-[2px] pb-[2px]'>
+          <span className='absolute right-[-7px] top-[-4px] rounded-full flex items-center justify-center bg-[#dddddd] text-[9px] text-[#000000] pl-[4px] pr-[4px] pt-[2px] pb-[2px] hidden'>
             {totalCartQty}
           </span>
         </a>
@@ -132,7 +132,7 @@ const MyCartIcon: React.FC = () => {
               </div>
               <div className=''>
                 <Link href={paths.CART} className=''>
-                  <a className='btn btn-secondary w-full text-center'>
+                  <a className='btn btn-primary w-full text-center'>
                     {__pagesText.Headers.checkoutNow}
                   </a>
                 </Link>

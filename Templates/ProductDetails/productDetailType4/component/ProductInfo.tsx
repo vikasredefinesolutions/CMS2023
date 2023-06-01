@@ -115,7 +115,7 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
         const { sizeQtys, totalPrice, totalQty } = toCheckout;
         const location = await getLocation();
 
-        for (let Product of selectedProducts) {
+        for (let [index, Product] of Object(selectedProducts).entries()) {
           // let totalPrice = price;
           const cartObject = await getAddToCartObject({
             userId: customerId || 0,
@@ -190,6 +190,9 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
                     message: __pagesText.cart.successMessage,
                     title: 'Success',
                   });
+                  if (index == selectedProducts.length - 1) {
+                    clearToCheckout();
+                  }
                 })
                 .catch((err) => {
                   setShowLoader(false);

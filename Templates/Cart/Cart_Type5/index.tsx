@@ -8,8 +8,8 @@ import {
   PersonalizationFont,
   PersonalizationLocation,
 } from '@services/cart';
-import CartSummarry from '@templates/cartSummarry';
-import Link from 'next/link';
+import CartSummarryType5 from '@templates/cartSummarry/cartSummaryType5';
+import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import CartItem from 'Templates/cartItem';
 import { _CartProps } from '../Cart';
@@ -26,6 +26,7 @@ const CartType5: React.FC<_CartProps> = ({
     (state) => state.employee.loggedIn,
   );
   const storeId = useTypedSelector_v2((state) => state.store.id);
+  const router = useRouter();
 
   // Local States
   const [availableFont, setAvailableFont] = useState<
@@ -68,12 +69,20 @@ const CartType5: React.FC<_CartProps> = ({
 
   useEffect(() => {
     getPolicyDetails(cartData || []);
-  }, []);
+  }, [cartData]);
   useEffect(() => {
     if (totalPrice) {
       fetchShipping(totalPrice, null);
     }
   }, [totalPrice, shippingAdress]);
+  let uniquePolicybrand: string[] = [];
+
+  productPolicy &&
+    productPolicy?.map((item: _ProductPolicy) => {
+      if (item.isPolicywithcheckbox && item.brandName) {
+        uniquePolicybrand.push(item.brandName);
+      }
+    });
 
   if (showLoaderOrEmptyText === 'loader') {
     return (
@@ -101,13 +110,6 @@ const CartType5: React.FC<_CartProps> = ({
     }
     setChecked(updateCheckedList);
   };
-  let uniquePolicybrand: string[] = [];
-  productPolicy &&
-    productPolicy.map((item: _ProductPolicy) => {
-      if (item.isPolicywithcheckbox && item.brandName) {
-        uniquePolicybrand.push(item.brandName);
-      }
-    });
 
   const buttonDisabed =
     checked.length == uniquePolicybrand.length
@@ -151,20 +153,29 @@ const CartType5: React.FC<_CartProps> = ({
                   className='w-full lg:w-4/12 pl-[12px] pr-[12px] mt-3'
                 >
                   <div className='sticky top-32'>
-                    <CartSummarry selectedShippingModel={selectedShipping} />
+                    <CartSummarryType5
+                      selectedShippingModel={selectedShipping}
+                    />
                     {productPolicy &&
-                      productPolicy.map((policy: _ProductPolicy) => {
-                        return (
-                          policy.isPolicywithcheckbox && (
-                            <div className='p-2' key={policy.brandName}>
-                              <input
-                                className='w-4 h-4 rounded m-4'
-                                type='checkbox'
-                                id={policy.brandName || ''}
-                                value={policy.brandName || ''}
-                                onChange={(event) => handlecheck(event)}
-                              />
-                              <strong className='text-lg font-semibold mt-4 p-4'>
+                      productPolicy?.map((policy: _ProductPolicy) => {
+                        return policy.isPolicywithcheckbox ? (
+                          <div className='' key={policy.brandName}>
+                            <input
+                              className='w-4 h-4 rounded mr-2'
+                              type='checkbox'
+                              id={policy.brandName || ''}
+                              value={policy.brandName || ''}
+                              onChange={(event) => handlecheck(event)}
+                            />
+                            <strong className='mt-[20px] text-medium-text font-[600]'>
+                              {policy.policyMessage}
+                              <span className='text-red-600 p-1'>*</span>
+                            </strong>
+                          </div>
+                        ) : (
+                          policy.policyMessage != '' && (
+                            <div className='' key={policy.brandName}>
+                              <strong className='mt-[20px] text-medium-text font-[600]'>
                                 {policy.policyMessage}
                                 <span className='text-red-600 p-1'>*</span>
                               </strong>
@@ -173,14 +184,15 @@ const CartType5: React.FC<_CartProps> = ({
                         );
                       })}
                     {endUserDisplay && (
-                      <div className='text-lg font-semibold mt-4'>
-                        {' '}
-                        End User Name (your customer) :
-                        <span className='text-red-600'>*</span>
+                      <div className='mt-[20px] font-[600]'>
+                        <div className='mb-[10px]'>
+                          End User Name (your customer) :{' '}
+                          <span className='text-red-600 p-1'>*</span>
+                        </div>
                         <input
                           type='text'
                           id='enduserstio'
-                          className='p-2 w-full'
+                          className='form-input'
                           onChange={(event) =>
                             setEndUserName(event.target.value)
                           }
@@ -193,15 +205,18 @@ const CartType5: React.FC<_CartProps> = ({
                         key={'/checkout'}
                         className={`mt-4 w-full `}
                         disabled={!buttonDisabed}
+                        onClick={() => router.push(`${paths.CHECKOUT}`)}
                       >
-                        <Link className='' href={paths.CHECKOUT}>
-                          <a className='btn btn-lg btn-secondary !flex items-center justify-center w-full'>
-                            <span className='material-icons text-lg mr-[2px]'>
-                              shopping_cart
-                            </span>
-                            CHECKOUT NOW
-                          </a>
-                        </Link>
+                        <a
+                          className={`btn btn-lg btn-secondary !flex items-center justify-center w-full ${
+                            !buttonDisabed ? 'opacity-40' : ''
+                          }`}
+                        >
+                          <span className='material-icons text-lg mr-[2px]'>
+                            shopping_cart
+                          </span>
+                          CHECKOUT NOW
+                        </a>
                       </button>
                     </div>
                   </div>

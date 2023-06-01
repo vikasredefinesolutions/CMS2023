@@ -378,7 +378,7 @@ const CI5_Item: React.FC<_CartItem & _Props> = (props) => {
                   <button
                     type='button'
                     data-modal-toggle='startorderModal'
-                    className='btn-normal btn-primary w-full  text-center uppercase'
+                    className='btn-sm btn-primary w-full  text-center uppercase'
                     onClick={() => {
                       handleEditItem(props);
                       keepPersonalizing ? setKeepPersonalizing(false) : '';
@@ -394,7 +394,7 @@ const CI5_Item: React.FC<_CartItem & _Props> = (props) => {
                       keepPersonalizing ? setKeepPersonalizing(false) : '';
                       handleRemoveItem(props.shoppingCartItemsId);
                     }}
-                    className='btn-normal btn-primary w-full  text-center uppercase'
+                    className='btn-sm btn-secondary w-full  text-center uppercase'
                   >
                     Remove
                   </button>

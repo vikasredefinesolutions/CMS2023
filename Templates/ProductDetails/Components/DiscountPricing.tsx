@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import Price from '@appComponents/Price';
+import { _Store } from '@configs/page.config';
 import { __pagesText } from '@constants/pages.text';
 import { useTypedSelector_v2 } from 'hooks_v2';
 import React, { useState } from 'react';
@@ -28,7 +29,6 @@ const DiscountPricing: React.FC<
   const isEmployeeLoggedIn = useTypedSelector_v2(
     (state) => state.employee.empId,
   );
-
   const unitUnits = minQty > 1 ? 'units' : 'unit';
 
   const showMinQuantity = (): boolean => {
@@ -178,7 +178,14 @@ const DiscountPricing: React.FC<
       </div>
 
       {showMsg && (
-        <div className='text-medium-text pt-[10px] pb-[10px]' id='divMinorder'>
+        <div
+          className={`${
+            storeCode !== _Store.type4
+              ? 'text-medium-text'
+              : 'text-default-text'
+          } pt-[10px] pb-[10px]`}
+          id='divMinorder'
+        >
           {__pagesText.productInfo.discountPricing.showMsgStartingText + ' '}
           {minQty} {__pagesText.productInfo.discountPricing.showMsgMiddleText}
           <br />

@@ -242,8 +242,10 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
                             <button
                               disabled={!!showErroMsg}
                               className={`btn ${
-                                storeCode == _Store.type4 ? '' : 'btn-md'
-                              }  btn-secondary w-full pk-hg-primary`}
+                                storeCode == _Store.type4
+                                  ? 'btn-primary'
+                                  : 'btn-md btn-secondary'
+                              }   w-full pk-hg-primary`}
                               type='submit'
                               onClick={() => {
                                 handleSubmit();
@@ -306,8 +308,10 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
                                 router.push(paths.SIGN_UP);
                               }}
                               className={`btn ${
-                                storeCode == _Store.type4 ? '' : 'btn-md'
-                              }  btn-secondary w-full pk-hg-primary`}
+                                storeCode == _Store.type4
+                                  ? 'btn-primary'
+                                  : 'btn-md btn-secondary'
+                              }   w-full pk-hg-primary`}
                             >
                               {
                                 __pagesText.productInfo.loginModal
@@ -328,8 +332,10 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
                                 });
                               }}
                               className={`btn ${
-                                storeCode == _Store.type4 ? '' : 'btn-md'
-                              }  btn-secondary w-full pk-hg-primary`}
+                                storeCode == _Store.type4
+                                  ? 'btn-primary'
+                                  : 'btn-md btn-secondary'
+                              }   w-full pk-hg-primary`}
                             >
                               {__pagesText.productInfo.loginModal.newCustomer}
                             </button>
