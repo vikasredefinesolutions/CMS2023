@@ -24,7 +24,7 @@ const LoginIcon: React.FC = () => {
     <div className='pl-[15px] order-2'>
       <div className='flex relative tracking-[1.25px]'>
         <button
-          className='text-[#ffffff] hover:text-primary-hover flex items-center gap-1'
+          className='text-[#ffffff] hover:text-primary-hover flex items-center gap-1 hover:primary-link'
           onClick={toggleLoginModal}
           title='Login'
         >

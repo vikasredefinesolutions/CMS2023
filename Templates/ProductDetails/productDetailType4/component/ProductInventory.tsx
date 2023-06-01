@@ -89,7 +89,7 @@ const Inventory: React.FC<{
                       />
                     </div>
                   ) : (
-                    <div className='p-2 w-1/2 md:w-1/6'>
+                    <div className='p-2 w-1/2 md:w-auto'>
                       <div className='border-bottom p-b-10'>
                         <strong className='text-center center'> - </strong>{' '}
                       </div>

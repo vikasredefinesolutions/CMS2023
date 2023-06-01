@@ -30,7 +30,7 @@ const LoggedInMenu: React.FC = () => {
       >
         <Link href={paths.loggedInMenu.title}>
           <a
-            className='text-[#ffffff] hover:text-primary-hover flex items-center gap-1'
+            className='text-[#ffffff] hover:text-primary-hover flex items-center gap-1 hover:primary-link'
             title={__pagesText.Headers.myAccountTittle}
           >
             <span className='text-[14px] hidden xl:inline-block whitespace-nowrap tracking-[1.25px] mr-[4px]'>
@@ -45,7 +45,7 @@ const LoggedInMenu: React.FC = () => {
             <ul className='border-[3px] border-primary bg-white'>
               <li className='border-t border-t-gray-300'>
                 <Link href={paths.loggedInMenu.order}>
-                  <a className='flex items-center p-2 gap-2.5 text-primary hover:text-primary-hover'>
+                  <a className='flex items-center p-2 gap-2.5 text-primary hover:primary-link'>
                     <span className=''>
                       <NxtImage
                         src={__StaticImg.loggedInMenu.order.src}
@@ -62,7 +62,7 @@ const LoggedInMenu: React.FC = () => {
               </li>
               <li className='border-t border-t-gray-300'>
                 <Link href={paths.loggedInMenu.settings}>
-                  <a className='flex items-center p-2 gap-2.5 text-primary hover:text-primary-hover'>
+                  <a className='flex items-center p-2 gap-2.5 text-primary hover:primary-link'>
                     <span className=''>
                       <NxtImage
                         src={__StaticImg.loggedInMenu.settings.src}
@@ -81,7 +81,7 @@ const LoggedInMenu: React.FC = () => {
               </li>
               <li className='border-t border-t-gray-300'>
                 <Link href={paths.loggedInMenu.help}>
-                  <a className='flex items-center p-2 gap-2.5 text-primary hover:text-primary-hover'>
+                  <a className='flex items-center p-2 gap-2.5 text-primary hover:primary-link'>
                     <span className=''>
                       <NxtImage
                         src={__StaticImg.loggedInMenu.help.src}
@@ -100,7 +100,7 @@ const LoggedInMenu: React.FC = () => {
                 <a
                   href='javascript:void(0);'
                   onClick={() => logoutHandler()}
-                  className='flex items-center p-2 gap-2.5 text-primary hover:text-primary-hover'
+                  className='flex items-center p-2 gap-2.5 text-primary hover:primary-link'
                 >
                   <span className=''>
                     <NxtImage

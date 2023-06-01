@@ -959,7 +959,7 @@ const CheckoutController = () => {
       const orderModel = {
         ...AddOrderDefault,
         ...addPaymentDetails(),
-        cardName: billingAdress.firstname + ' ' + billAddress?.lastName,
+        cardName: billingAdress.firstname + ' ' + billingAdress?.lastName,
         ...(useBalance
           ? {
               isCreditLimit: true,

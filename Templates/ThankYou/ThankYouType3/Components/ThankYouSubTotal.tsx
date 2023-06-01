@@ -31,7 +31,7 @@ const ThankYouSubTotal: React.FC<_props> = ({ billing }) => {
             </div>
             <div className='flex justify-between border-t mt-[8px] border-gray-border pt-[8px]'>
               <dt className='font-[600] pt-[8px]'>
-                {__pagesText.ThankYouPage.TotalSummary.GrandTotal}
+                {__pagesText.ThankYouPage.TotalSummary.GrandTotal} &nbsp;
               </dt>
               <dd className='font-[600] pt-[8px]'>
                 <Price value={billing?.orderTotal} />

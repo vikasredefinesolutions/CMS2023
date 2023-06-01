@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable no-unused-vars */
+import { _Store } from '@configs/page.config';
 import { __length, __messages } from '@constants/form.config';
 import { __Cookie, __Cookie_Expiry } from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
-import { __SuccessErrorText } from '@constants/successError.text';
 import { fetchCartDetails } from '@redux/asyncActions/cart.async';
 import { updateCartByNewUserId } from '@services/cart.service';
 import { fetchThirdpartyservice } from '@services/thirdparty.service';
@@ -24,7 +24,6 @@ import React, { useState } from 'react';
 import * as Yup from 'yup';
 import Input from '../../ui/switch/Input';
 import { _ModalProps } from '../modal';
-import { _Store } from '@configs/page.config';
 
 const validationSchema = Yup.object().shape({
   userName: Yup.string()
@@ -139,9 +138,7 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
       >
         <div className='w-full h-full bg-[#000000] bg-opacity-[0.50] flex items-center justify-center'>
           <div
-            className={`relative px-[16px] w-full ${
-              storeCode == _Store.type4 ? 'max-w-4xl' : 'max-w-xl'
-            } h-full md:h-auto`}
+            className={`relative px-[16px] w-full max-w-2xl h-full md:h-auto`}
           >
             <div className='relative bg-[#ffffff] shadow max-h-screen overflow-y-auto h-full rounded-md'>
               <div className='flex justify-between items-center p-[15px] rounded-t border-b sticky top-0 left-0 bg-[#ffffff] z-50'>
@@ -244,7 +241,9 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
                           <div className='mb-[20px]'>
                             <button
                               disabled={!!showErroMsg}
-                              className='btn btn-md btn-secondary w-full  pk-hg-primary'
+                              className={`btn ${
+                                storeCode == _Store.type4 ? '' : 'btn-md'
+                              }  btn-secondary w-full pk-hg-primary`}
                               type='submit'
                               onClick={() => {
                                 handleSubmit();
@@ -265,7 +264,7 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
                                   handleChange(ev);
                                 }}
                                 type='checkbox'
-                                id="'ChkKeepMeLogged'"
+                                id='ChkKeepMeLogged'
                                 name='keepMeLoggedIn'
                               />
                               <label htmlFor='ChkKeepMeLogged'>
@@ -306,7 +305,9 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
                                 modalHandler(null);
                                 router.push(paths.SIGN_UP);
                               }}
-                              className='btn btn-md btn-secondary w-full pk-hg-primary'
+                              className={`btn ${
+                                storeCode == _Store.type4 ? '' : 'btn-md'
+                              }  btn-secondary w-full pk-hg-primary`}
                             >
                               {
                                 __pagesText.productInfo.loginModal
@@ -326,7 +327,9 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
                                   title: 'Information',
                                 });
                               }}
-                              className='btn btn-md btn-secondary w-full pk-hg-primary'
+                              className={`btn ${
+                                storeCode == _Store.type4 ? '' : 'btn-md'
+                              }  btn-secondary w-full pk-hg-primary`}
                             >
                               {__pagesText.productInfo.loginModal.newCustomer}
                             </button>

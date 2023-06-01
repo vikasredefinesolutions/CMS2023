@@ -71,3 +71,11 @@
   opacity: 1;
   background-color: black;
 }
+
+@media print {
+  body {
+    transform: scale(0.8);
+    zoom: 80%;
+    margin: 0;
+  }
+}

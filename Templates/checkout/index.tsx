@@ -26,7 +26,6 @@ export interface CTTemplates {
   type4: FC<_Props>;
 }
 
-
 const checkoutTemplates: CTTemplates = {
   type1: CheckoutType1,
   type2: CheckoutType2,
@@ -59,8 +58,7 @@ const CheckoutTemplate: FC<_Props> = ({ templateId }) => {
             item.productId,
             storeId,
           );
-
-          if (response.length > 0 && response[0].name) {
+          if (response && response[0]?.name) {
             const catNames = response[0].name.split(' > ');
             allProductCategories.push({
               productId: item.productId,
@@ -144,7 +142,10 @@ const CheckoutTemplate: FC<_Props> = ({ templateId }) => {
     }
   }, [cartData, isCartLoading]);
   const storeCode = useTypedSelector_v2((state) => state.store.code);
-  const CheckoutSelectedTemplate = checkoutTemplates[(storeCode === 'CG' ? 'type1' : (storeCode === 'PKHG' ? 'type2' : 'type3'))];
+  const CheckoutSelectedTemplate =
+    checkoutTemplates[
+      storeCode === 'CG' ? 'type1' : storeCode === 'PKHG' ? 'type2' : 'type3'
+    ];
 
   return <CheckoutSelectedTemplate templateId={templateId} />;
 };

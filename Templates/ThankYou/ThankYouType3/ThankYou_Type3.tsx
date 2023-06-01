@@ -3,8 +3,8 @@ import {
   _MyAcc_OrderProductDetails,
 } from '@definations/APIs/user.res';
 import React from 'react';
-import ThankYouHeader from '../CommonComponents/ThankYouHeader';
-import ThankYouAccordian from './Components/ThankYouAccordian';
+import ThankYouHeaderType_3 from './Components/ThankYouHeaderType_3';
+import ThankYouOrderDetail from './Components/ThankYouOrderDetail';
 interface _props {
   order: {
     billing: _MyAcc_OrderBillingDetails | null;
@@ -14,11 +14,11 @@ interface _props {
 const ThankYouType3: React.FC<_props> = ({ order }) => {
   return (
     <>
-      <ThankYouHeader order={order} />
+      <ThankYouHeaderType_3 order={order} />
       <section id=''>
         <div className='bg-[#ffffff]'>
           <div className='container mx-auto'>
-            <ThankYouAccordian order={order} />
+            <ThankYouOrderDetail order={order} />
           </div>
         </div>
       </section>

@@ -131,7 +131,7 @@ const TemplateFourListing = ({
                 />
               </span>
             </div>
-            <div className='form-group mb-[12px] text-default-text'>
+            <div className='form-group mb-[12px] text-small-text'>
               <label className='checkbox-inline'>
                 <input
                   checked={skuList.includes(product?.sku ? product.sku : '')}
@@ -144,9 +144,16 @@ const TemplateFourListing = ({
                   <>
                     {skuList.length &&
                     skuList.includes(product?.sku ? product.sku : '') ? (
-                      <Link href={getCompareLink()}>
-                        <span>Compare {skuList.length}</span>
-                      </Link>
+                      skuList.length === 1 ? (
+                        <>
+                          Please select two or more products to Add to Compare
+                          to use this feature.
+                        </>
+                      ) : (
+                        <Link href={getCompareLink()}>
+                          <span>Compare {skuList.length}</span>
+                        </Link>
+                      )
                     ) : (
                       <>Add to Compare</>
                     )}

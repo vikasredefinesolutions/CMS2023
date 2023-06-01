@@ -46,80 +46,81 @@ const ThankYouProductTable: React.FC<_props> = ({ product }) => {
         </div>
       </div>
 
-      {product.shoppingCartLogoPersonViewModels.map(
-        (item: any, index: number) => {
-          return item.logoName === 'Customize Later' ? (
-            <div className='flex justify-start items-center mt-3'>
-              <div>
-                <span className='material-icons text-[60px] mr-3'>
-                  support_agent
-                </span>
-              </div>
-              <div>
-                <div className='text-lg font-semibold'>
-                  {CustomizeLaterMain}
-                </div>
-                <div className='text-base'>{CustomizeLater}</div>
-              </div>
-            </div>
-          ) : (
-            <div
-              key={`${item}-${index}`}
-              className='w-full flex justify-between py-3'
-            >
-              <div className='text-base'>
-                <div className='mb-3 flex'>
-                  {item.logoImagePath === '' ? (
-                    <img
-                      className='w-14 h-12'
-                      src={`/assets/images/logo-to-be-submitted.webp`}
-                      title=''
-                      alt={item.logoPositionImage}
-                    />
-                  ) : (
-                    <NxtImage
-                      className='w-14 h-12'
-                      src={`${mediaBaseUrl}${item.logoImagePath}`}
-                      title=''
-                      alt={item.logoImagePath}
-                    />
-                  )}
-
-                  {item.logoName === 'Add Logo Later' ? (
-                    <span className='font-semibold ml-3'>
-                      {__pagesText.ThankYouPage.LogoToBe}
-                      <br />
-                      {__pagesText.ThankYouPage.Submitted}
-                    </span>
-                  ) : (
-                    <span className='font-semibold ml-3'>
-                      {__pagesText.ThankYouPage.Logo}
-                      <br />
-                      {__pagesText.ThankYouPage.Submitted}
-                    </span>
-                  )}
-                </div>
+      {store.storeName !== 'Driving Impressions' &&
+        product.shoppingCartLogoPersonViewModels.map(
+          (item: any, index: number) => {
+            return item.logoName === 'Customize Later' ? (
+              <div className='flex justify-start items-center mt-3'>
                 <div>
-                  <span className='font-semibold mr-1 mt-2s'>
-                    {__pagesText.ThankYouPage.Location}
+                  <span className='material-icons text-[60px] mr-3'>
+                    support_agent
                   </span>
-                  <span>{item.logoLocation}</span>
-                </div>
-              </div>
-              <div className='text-base text-right'>
-                <div className='font-semibold'>
-                  {__pagesText.ThankYouPage.LogoPrice}
                 </div>
                 <div>
-                  {index === 0 && item.logoPrice === 0
-                    ? 'First Logo Free'
-                    : `$${item.logoPrice}`}
+                  <div className='text-lg font-semibold'>
+                    {CustomizeLaterMain}
+                  </div>
+                  <div className='text-base'>{CustomizeLater}</div>
                 </div>
               </div>
-            </div>
-          );
-        },
-      )}
+            ) : (
+              <div
+                key={`${item}-${index}`}
+                className='w-full flex justify-between py-3'
+              >
+                <div className='text-base'>
+                  <div className='mb-3 flex'>
+                    {item.logoImagePath === '' ? (
+                      <img
+                        className='w-14 h-12'
+                        src={`/assets/images/logo-to-be-submitted.webp`}
+                        title=''
+                        alt={item.logoPositionImage}
+                      />
+                    ) : (
+                      <NxtImage
+                        className='w-14 h-12'
+                        src={`${mediaBaseUrl}${item.logoImagePath}`}
+                        title=''
+                        alt={item.logoImagePath}
+                      />
+                    )}
+
+                    {item.logoName === 'Add Logo Later' ? (
+                      <span className='font-semibold ml-3'>
+                        {__pagesText.ThankYouPage.LogoToBe}
+                        <br />
+                        {__pagesText.ThankYouPage.Submitted}
+                      </span>
+                    ) : (
+                      <span className='font-semibold ml-3'>
+                        {__pagesText.ThankYouPage.Logo}
+                        <br />
+                        {__pagesText.ThankYouPage.Submitted}
+                      </span>
+                    )}
+                  </div>
+                  <div>
+                    <span className='font-semibold mr-1 mt-2s'>
+                      {__pagesText.ThankYouPage.Location}
+                    </span>
+                    <span>{item.logoLocation}</span>
+                  </div>
+                </div>
+                <div className='text-base text-right'>
+                  <div className='font-semibold'>
+                    {__pagesText.ThankYouPage.LogoPrice}
+                  </div>
+                  <div>
+                    {index === 0 && item.logoPrice === 0
+                      ? 'First Logo Free'
+                      : `$${item.logoPrice}`}
+                  </div>
+                </div>
+              </div>
+            );
+          },
+        )}
       {product.displayLineAttributeOptions.length > 0 && (
         <div className='mt-10'>
           <div className='text-normal-text border-t pt-[10px] mt-[10px] first:mt-0'>

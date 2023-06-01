@@ -100,7 +100,8 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
   const HTML_START_ORDER_BUTTON = () => {
     if (
       isEmployeeLoggedIn ||
-      (totalInventoryCount && totalInventoryCount > 0)
+      (totalInventoryCount && totalInventoryCount > 0) ||
+      product.isDropShipProduct
     ) {
       return (
         <form className='mt-[24px]'>
@@ -241,16 +242,17 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
         modalHandler={modalHandler}
         isSpecialBrand={product.isSpecialBrand}
       />
-
-      <div className='ml-[10px] mr-[10px] mt-[13px]'>
-        <button
-          type='button'
-          className='!text-anchor hover:!text-anchor-hover text-normal-text'
-          onClick={() => modalHandler('availableInventory')}
-        >
-          {__pagesText.productInfo.checkAvailableInventory}
-        </button>
-      </div>
+      {!product?.isDropShipProduct && (
+        <div className='ml-[10px] mr-[10px] mt-[13px]'>
+          <button
+            type='button'
+            className='!text-anchor hover:!text-anchor-hover text-normal-text'
+            onClick={() => modalHandler('availableInventory')}
+          >
+            {__pagesText.productInfo.checkAvailableInventory}
+          </button>
+        </div>
+      )}
 
       {/* <div className='ml-[10px] mr-[10px] mt-[13px]'>
         <button
@@ -261,6 +263,7 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
           {__pagesText.productInfo.checkAvailableInventory}
         </button>
       </div> */}
+
       <div className='ml-[10px] mr-[10px] mt-[6px] flex flex-wrap justify-between gap-[8px] items-center'>
         <div className='pt-[10px] text-sub-text'>
           <span> {__pagesText.productInfo.availableSizes}</span>
