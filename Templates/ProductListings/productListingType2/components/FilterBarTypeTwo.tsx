@@ -14,6 +14,7 @@ type props = {
 
 const FilterBarTypeTwo: React.FC<props> = ({
   totalCount,
+  productView,
   showSortMenu,
   sortProductJson,
   sortOpenHandler,
@@ -33,9 +34,7 @@ const FilterBarTypeTwo: React.FC<props> = ({
             onClick={() => setProductView('grid')}
           >
             <span className='sr-only'>Grid View</span>
-            <span className='material-icons-outlined text-anchor hover:text-anchor-hover'>
-              grid_view
-            </span>
+            <span className={`material-symbols-outlined text-anchor hover:text-anchor-hover ${productView === 'grid' ? 'text-anchor-active' : ''}`}>grid_on</span>
           </button>
 
           <button
@@ -43,9 +42,10 @@ const FilterBarTypeTwo: React.FC<props> = ({
             onClick={() => setProductView('list')}
           >
             <span className='sr-only'>List View</span>
-            <span className='material-icons-outlined text-anchor hover:text-anchor-hover'>
+            {/* <span className='material-icons-outlined text-anchor hover:text-anchor-hover'>
               view_agenda
-            </span>
+            </span> */}
+            <span className={`material-symbols-outlined text-anchor hover:text-anchor-hover ${productView === 'list' ? 'text-anchor-active' : ''}`}>format_list_bulleted</span>
           </button>
           <span className='font-600'>{totalCount} results</span>
         </div>
@@ -66,9 +66,9 @@ const FilterBarTypeTwo: React.FC<props> = ({
                   }
                 </span>
               </span>
-              <span className='material-icons-outlined leading-none font-[900]'>
-                expand_{showSortMenu ? 'less' : 'more'}
-              </span>
+              <span className='material-symbols-outlined text-2xl leading-none'>
+                        add
+                      </span>
             </button>
           </div>
           {showSortMenu && (

@@ -315,7 +315,6 @@ const CT2_EL_CartItem: React.FC<_CartItem & _Props> = (item) => {
                 )}
 
                 {item.shoppingCartLogoPersonViewModels.map((_item, _index) => {
-                  console.log(_item, 'this is item');
                   return (
                     <>
                       <div className='pl-[12px] pr-[12px] pt-[12px] pb-[12px] mb-[10px] border border-gray-border'>

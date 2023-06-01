@@ -48,8 +48,6 @@ const CO4_ShippingAddress: React.FC<_Props> = () => {
     );
   };
 
-  console.log('shipping', noAddressFound);
-
   return (
     <>
       <div className='' id='ShippingAddress'>

@@ -28,7 +28,6 @@ const Brands: NextPage<_Props> = (props) => {
       store_CurrentPage(null);
     };
   }, []);
-
   return <BrandsListingTemplate id={_defaultTemplates.brands} {...props} />;
 };
 

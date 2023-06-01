@@ -676,4 +676,16 @@ export const __pagesText = {
   },
 
   contactRequest: {},
+  PKGH_special_request_form: {
+    formTitle: 'PATAGONIA SPECIAL REQUEST FORM',
+    formDescription: ` Are you looking to order a Patagonia style not featured in our catalog?
+    We’d be glad to help! Please keep in mind, any requested styles that are
+    not featured in our catalog are subject to a 10-piece minimum per style
+    and color, which may be split between sizes and men’s and ladies’
+    styles. Availability advertised on Patagonia.com is a separate
+    allocation htmlFor retail and not reflective of what we may access. To
+    submit a non-catalog request, please complete the below form with as
+    much detail as possible. You will be contacted by a Sales Rep, who will
+    work with you to fulfill the order.`,
+  },
 };

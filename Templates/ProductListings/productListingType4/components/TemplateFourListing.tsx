@@ -79,7 +79,6 @@ const TemplateFourListing = ({
               </div>
             ) : null} */}
             {product?.productTagViewModel?.map((tagsdetails) => {
-              console.log(tagsdetails);
               return (
                 <div
                   className={`${tagsdetails.tagPosition} h-8 flex gap-1 absolute`}

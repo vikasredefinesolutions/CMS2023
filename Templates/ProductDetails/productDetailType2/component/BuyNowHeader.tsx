@@ -15,8 +15,7 @@ const BuyNowHeader = ({
   const { totalPrice } = useTypedSelector_v2(
     (state) => state.product.toCheckout,
   );
-  const { id: storeId } = useTypedSelector_v2((state) => state.store);
-  return storeId === 7 ? (
+  return (
     <div className='fixed top-0 left-0 right-0 pt-[10px] pb-[10px] z-[100] bg-white'>
       <div className='container mx-auto'>
         <div className='flex flex-wrap border-b border-gray-border justify-between gap-4 items-center'>
@@ -54,7 +53,7 @@ const BuyNowHeader = ({
         </div>
       </div>
     </div>
-  ) : null;
+  );
 };
 
 export default BuyNowHeader;

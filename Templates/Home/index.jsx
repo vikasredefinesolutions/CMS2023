@@ -19,6 +19,8 @@ const Home = (props) => {
   const storeId = useTypedSelector_v2((state) => state.store.id);
   const { topic_set_isCMS } = useActions_v2();
   const router = useRouter();
+  const storeCode = useTypedSelector_v2((state) => state.store.code);
+
   // const pathArray = document.location.pathname.split('/');
   // const slug = pathArray.at(-1);
   // const [pageData, setPageData] = useState([]);
@@ -26,45 +28,36 @@ const Home = (props) => {
   // const [componentHtml, setComponentHtml] = useState([]);
 
   useEffect(() => {
-    if(router.asPath === paths.HOME)
-      document.body.classList.add('index-page')
+    if (router.asPath === paths.HOME) document.body.classList.add('index-page');
     topic_set_isCMS(true);
     return () => {
       topic_set_isCMS(false);
     };
-    
   }, []);
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      window.addEventListener("scroll", handleScroll);
+    if (typeof window !== 'undefined') {
+      window.addEventListener('scroll', handleScroll);
     }
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleScroll = () =>
-  {
-    if (typeof window !== "undefined") {
-      console.log("T", document.body.classList, window.pageYOffset, document.body.classList.contains('index-page'));
-      if(document.body.classList.contains('index-page'))
-      {
-         let x = document.querySelector('#spy');
-        // alert(x)
-         if(x)
-         {
-          console.log(x.scrollTop);
-          if(window.pageYOffset > 70)
-          {
-              x.classList.add('fix');
-          }
-          else
-          {
-            x.classList.remove('fix');
-          }
-
-         }
+  const handleScroll = () => {
+    if (typeof window !== 'undefined') {
+      // if(document.body.classList.contains('index-page') || storeCode === 'DI')
+      // {
+      let x = document.querySelector('#spy');
+      // alert(x)
+      if (x) {
+        if (window.pageYOffset > 70) {
+          x.classList.add('fix');
+        } else {
+          x.classList.remove('fix');
+        }
       }
+      //}
     }
-  }
+  };
   // useEffect(() => {
   //   AOS.init();
   //   AOS.refresh();
@@ -266,7 +259,6 @@ const Home = (props) => {
   }, [componentHtml]);
 
   const storeTypeId = useTypedSelector_v2((state) => state.store.storeTypeId);
-  const storeCode = useTypedSelector_v2((state) => state.store.code);
   return (
     <>
       {storeCode === 'DI' &&
@@ -304,7 +296,6 @@ const Home = (props) => {
                   const backgroundImageClass =
                     loadBackgroundImageClass(componentValue);
                   const fixedBgDisplay = checkFixedBG(componentValue);
-                  // console.log("CHED", componentValue.selectedVal);
                   let additionalclass = '';
                   let additionalclass1 = '';
                   let innerDivClass = '';
@@ -503,7 +494,7 @@ const Home = (props) => {
                                         dataArr={componentValue.selectedVal}
                                       />
                                     </>
-                                  ) : ( 
+                                  ) : (
                                     <>
                                       {Object.keys(
                                         componentValue.selectedVal,
@@ -546,28 +537,30 @@ const Home = (props) => {
                                             </>
                                           ) : (
                                             <>
-                                            { Object.keys(
-                                            componentValue.selectedVal,
-                                          ).includes('slickslider') ? (
-                                            <>  
-                                            <ElementFullSlider
-                                                bannerArr={
-                                                  componentValue.selectedVal
-                                                    .slickslider.value
-                                                }
-                                              />
-
-                                            </>): (<>
-                                              <div
-                                                className={componentValue.uuid}
-                                                dangerouslySetInnerHTML={{
-                                                  __html: componentValue.html,
-                                                }}
-                                              ></div>
-                                            </>)
-
-                                            }
-                                              
+                                              {Object.keys(
+                                                componentValue.selectedVal,
+                                              ).includes('slickslider') ? (
+                                                <>
+                                                  <ElementFullSlider
+                                                    bannerArr={
+                                                      componentValue.selectedVal
+                                                        .slickslider.value
+                                                    }
+                                                  />
+                                                </>
+                                              ) : (
+                                                <>
+                                                  <div
+                                                    className={
+                                                      componentValue.uuid
+                                                    }
+                                                    dangerouslySetInnerHTML={{
+                                                      __html:
+                                                        componentValue.html,
+                                                    }}
+                                                  ></div>
+                                                </>
+                                              )}
                                             </>
                                           )}
                                         </>

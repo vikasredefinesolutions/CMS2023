@@ -23,7 +23,6 @@ const SideFiltersTypeFive = ({
 }) => {
   const router = useRouter();
   let route = router.asPath.split('.')[0].replace('.html', '').replace('/', '');
-  console.log(route);
 
   return (
     // <div className='relative'>

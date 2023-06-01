@@ -70,7 +70,6 @@ export const FetchCatalog = async ({
     brands: response,
     dataType: 'BRANDS',
   };
-  console.log(transformed, 'console.log(first)');
 
   return transformed;
 };

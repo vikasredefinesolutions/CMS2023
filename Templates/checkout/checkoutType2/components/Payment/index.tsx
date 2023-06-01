@@ -39,6 +39,8 @@ const PaymentType: FC<{
     cardVarificationCode: string;
   };
   purchaseOrder?: string;
+  setUseShippingAddress: (args: boolean) => void;
+  useShippingAddress: boolean;
   /* eslint-enable no-unused-vars */
 }> = ({
   changeHandler,
@@ -48,6 +50,8 @@ const PaymentType: FC<{
   detectCardType,
   BillingFormik,
   setChangeBillingAddress,
+  setUseShippingAddress,
+  useShippingAddress,
 }) => {
   switch (paymentMethod) {
     case paymentMethodCustom.creditCard:
@@ -62,6 +66,8 @@ const PaymentType: FC<{
               BillingFormik,
               setChangeBillingAddress,
               paymentMethod,
+              setUseShippingAddress,
+              useShippingAddress,
             }}
           />
           <CardPaymentType
@@ -93,6 +99,8 @@ const PaymentType: FC<{
               changeBillingAddress,
               setChangeBillingAddress,
               paymentMethod,
+              setUseShippingAddress,
+              useShippingAddress,
             }}
           />
           <PurchaseOrderType

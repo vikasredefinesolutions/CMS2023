@@ -1,22 +1,23 @@
 import { _SelectedBrands } from '@definations/APIs/storeDetails.res';
+import { useTypedSelector_v2 } from '@hooks_v2/index';
 import React from 'react';
 import BrandProductListing from './GeneralProductContainer/BrandProducsListing';
 import ProductsInfoTabs from './GeneralProductContainer/GeneralProductTabs';
-
 interface _props {
   dataArr: _SelectedBrands;
 }
 
 const FeaturedProducts: React.FC<_props> = (props) => {
   const { dataArr } = props;
+  const storeCode = useTypedSelector_v2((state) => state.store.code);
   let fTitle = dataArr?.sectionTitle?.value;
   return (
     <section className='mainsection featured_items text-center'>
       {fTitle && (
         <div
-          className={`peter-millar-promotional-embroidered-clothing-nw ${dataArr?.sectionTitle_final_class?.value}`}
-        >
-          {fTitle ?? ''}
+          className={`pkhg-featured-title pkhg-featured-title peter-millar-promotional-embroidered-clothing-nw ${dataArr?.sectionTitle_final_class?.value}`}
+        > {storeCode === 'PKHG' ? <><span>{fTitle}</span></> : <> {fTitle}</>}
+         
         </div>
       )}
 

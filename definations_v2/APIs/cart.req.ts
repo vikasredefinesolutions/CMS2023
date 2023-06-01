@@ -92,6 +92,8 @@ export interface AddToCartModel {
   customerId: number;
   productId: number;
   storeId: number;
+  ipAddress: string;
+  isForm: boolean;
   isempLogin: boolean;
   shoppingCartItemModel: ShoppingCartItemModel;
   shoppingCartItemsDetailModels: ShoppingCartItemsDetailModel[];

@@ -24,46 +24,45 @@ export const dynamicHalfSizeBoxes = (dataArr, selectedObj) => {
         strHTML += '<img src="' + item.ImageNumber_image + '" />';
         strHTML += '</span>';
       } else {
-          let icon;
-          let iconFontSize;
-          let iconFontWeight;
-          let iconTextAlignment;
-          let iconFontColor;
-          let iconType;
+        let icon;
+        let iconFontSize;
+        let iconFontWeight;
+        let iconTextAlignment;
+        let iconFontColor;
+        let iconType;
 
-          let className = '';
-          if(item.ImageNumber_icon_color)
-          {
-              iconFontColor = item.ImageNumber_icon_color;
-          }
-          if(item.ImageNumber_icon_font_size)
-          {
-              className += item.ImageNumber_icon_font_size;
-          }
-          if(item.ImageNumber_icon_font_weight)
-          {
-              className += item.ImageNumber_icon_font_weight;
-          }
-          if(item.ImageNumber_icon_alignment)
-          {
-              className += item.ImageNumber_icon_alignment;
-          }
-          if(item.ImageNumber_icon_type === 'googlematerial')
-          {
-              className += ' material-icons-outlined';
-          }
-          else if(item.ImageNumber_icon_type === 'fontawesome')
-          {
-              className += '';
-          }
-          else if (item.ImageNumber_icon_type === "googlesymbol") {
-              className += ' material-symbols-outlined';
-          }
+        let className = '';
+        if (item.ImageNumber_icon_color) {
+          iconFontColor = item.ImageNumber_icon_color;
+        }
+        if (item.ImageNumber_icon_font_size) {
+          className += item.ImageNumber_icon_font_size;
+        }
+        if (item.ImageNumber_icon_font_weight) {
+          className += item.ImageNumber_icon_font_weight;
+        }
+        if (item.ImageNumber_icon_alignment) {
+          className += item.ImageNumber_icon_alignment;
+        }
+        if (item.ImageNumber_icon_type === 'googlematerial') {
+          className += ' material-icons-outlined';
+        } else if (item.ImageNumber_icon_type === 'fontawesome') {
+          className += '';
+        } else if (item.ImageNumber_icon_type === 'googlesymbol') {
+          className += ' material-symbols-outlined';
+        }
 
-          
-          strHTML += '<div class="text-center h-full bg-gray-50 p-6 lg:py-12 lg:px-16 md:rounded-tl-lg">';
-          strHTML += '<span class="'+className+'" style="color: '+iconFontColor + '">'+item.ImageNumber_icon_symbol+'</span>';
-          strHTML += '</div>';
+        strHTML +=
+          '<div class="text-center h-full bg-gray-50 p-6 lg:py-12 lg:px-16 md:rounded-tl-lg">';
+        strHTML +=
+          '<span class="' +
+          className +
+          '" style="color: ' +
+          iconFontColor +
+          '">' +
+          item.ImageNumber_icon_symbol +
+          '</span>';
+        strHTML += '</div>';
       }
       // strHTML += '<div class="inset-x-0 -mt-6 flex justify-center items-center w-12 h-12 mx-auto rounded-full bg-gray-500 text-gray-50 font-bold font-heading">';
       // if(item.ImageNumber === "Number")
@@ -121,37 +120,36 @@ export const numberdescriptionblock = (dataArr, selectedObj) => {
         let iconType;
 
         let className = '';
-        if(item.ImageNumber_icon_color)
-        {
-            iconFontColor = item.ImageNumber_icon_color;
+        if (item.ImageNumber_icon_color) {
+          iconFontColor = item.ImageNumber_icon_color;
         }
-        if(item.ImageNumber_icon_font_size)
-        {
-            className += item.ImageNumber_icon_font_size;
+        if (item.ImageNumber_icon_font_size) {
+          className += item.ImageNumber_icon_font_size;
         }
-        if(item.ImageNumber_icon_font_weight)
-        {
-            className += item.ImageNumber_icon_font_weight;
+        if (item.ImageNumber_icon_font_weight) {
+          className += item.ImageNumber_icon_font_weight;
         }
-        if(item.ImageNumber_icon_alignment)
-        {
-            className += item.ImageNumber_icon_alignment;
+        if (item.ImageNumber_icon_alignment) {
+          className += item.ImageNumber_icon_alignment;
         }
-        if(item.ImageNumber_icon_type === 'googlematerial')
-        {
-            className += ' material-icons-outlined';
-        }
-        else if(item.ImageNumber_icon_type === 'fontawesome')
-        {
-            className += '';
-        }
-        else if (item.ImageNumber_icon_type === "googlesymbol") {
-            className += ' material-symbols-outlined';
+        if (item.ImageNumber_icon_type === 'googlematerial') {
+          className += ' material-icons-outlined';
+        } else if (item.ImageNumber_icon_type === 'fontawesome') {
+          className += '';
+        } else if (item.ImageNumber_icon_type === 'googlesymbol') {
+          className += ' material-symbols-outlined';
         }
 
-        
-        strHTML += '<div class="text-center h-full bg-gray-50 p-6 lg:py-12 lg:px-16 md:rounded-tl-lg">';
-        strHTML += '<span class="'+className+'" style="color: '+iconFontColor + '">'+item.ImageNumber_icon_symbol+'</span>';
+        strHTML +=
+          '<div class="text-center h-full bg-gray-50 p-6 lg:py-12 lg:px-16 md:rounded-tl-lg">';
+        strHTML +=
+          '<span class="' +
+          className +
+          '" style="color: ' +
+          iconFontColor +
+          '">' +
+          item.ImageNumber_icon_symbol +
+          '</span>';
         strHTML += '</div>';
       }
       // strHTML += '<div class="inset-x-0 -mt-6 flex justify-center items-center w-12 h-12 mx-auto rounded-full bg-gray-500 text-gray-50 font-bold font-heading">';
@@ -295,9 +293,8 @@ export const boximage = (dataArr, selectedObj) => {
         if (sectionWidth === '') sectionWidth = 'max-w-3xl';
       }
 
-      if(selectedObj.selectedVal.TextAppearance_on_bottom)
-      {
-          onBottom = selectedObj.selectedVal.TextAppearance_on_bottom.value;
+      if (selectedObj.selectedVal.TextAppearance_on_bottom) {
+        onBottom = selectedObj.selectedVal.TextAppearance_on_bottom.value;
       }
 
       let themeclassName = '';
@@ -314,29 +311,44 @@ export const boximage = (dataArr, selectedObj) => {
         item.Headline !== '' &&
         item.Headline !== null
       ) {
-
         let abClass = '';
-                if(!onBottom)
-                {
-                    clName = 'flex relative w-full text-white';
-                    abClass = 'flex absolute ';
-                }
-                else
-                {
-                    clName = 'w-full text-white';
-                }
-                    
-                headLine += '<div class="'+abClass+' inset-0 p-1 lg:p-4 text-white'+sectionWidth+' ' +textHPos +' '+textVPos+'">';
-                headLine += '<div class="" style="background: rgba('+bgColor+','+bgOpacity+'); padding: 20px;">';
-                headLine += '<div class="'+themeclassName+'" style="color:'+fontColor+'">'+item.Headline+'</div>';
-                headLine += '<div>';
-                headLine += buttonHTML;
-                headLine += '</div>';
-                headLine += '</div>';
-                headLine += '</div>';
-        
-      } else {
-        
+        if (!onBottom) {
+          clName = 'flex relative w-full text-white';
+          abClass = 'flex absolute ';
+        } else {
+          clName = 'w-full text-white';
+        }
+
+        headLine +=
+          '<div class="' +
+          abClass +
+          ' inset-0 p-1 lg:p-4 text-white' +
+          sectionWidth +
+          ' ' +
+          textHPos +
+          ' ' +
+          textVPos +
+          '">';
+        headLine +=
+          '<div class="" style="background: rgba(' +
+          bgColor +
+          ',' +
+          bgOpacity +
+          '); padding: 20px;">';
+        headLine +=
+          '<div class="' +
+          themeclassName +
+          '" style="color:' +
+          fontColor +
+          '">' +
+          item.Headline +
+          '</div>';
+        headLine += '<div>';
+        headLine += buttonHTML;
+        headLine += '</div>';
+        headLine += '</div>';
+        headLine += '</div>';
+      } else if(buttonHTML) {
         clName = 'flex relative w-full text-white';
         headLine +=
           '<div class="flex absolute ' +
@@ -365,9 +377,11 @@ export const boximage = (dataArr, selectedObj) => {
 
       if (item.Image !== undefined) {
         strHTML += '<div class="' + clName + '">';
-        strHTML += '<a title="' + item.Image_link + '">';
+        strHTML += '<a title="' + item.Image_alt + '" href="'+item.Image_link+'">';
         strHTML +=
           '<img class="w-full" alt="' +
+          item?.Image_alt +
+          '" alt="' +
           item?.Image_alt +
           '" title="' +
           item?.Image_alt +
@@ -454,8 +468,7 @@ export const multipleImages = (dataArr, selectedObj) => {
         textVPos = aprData.text_vpos ?? '';
         sectionWidth = aprData.section_width ?? '';
       }
-      if(!textPos)
-           textPos='center';
+      if (!textPos) textPos = 'center';
       //fontSize = item.Headline_font_size ?? '';
 
       let themeclassName = '';
@@ -474,7 +487,7 @@ export const multipleImages = (dataArr, selectedObj) => {
       ) {
         // if(textPos != 'top' && textPos != 'bottom' && textPos != '')
         // {
-           clName = 'flex relative w-full text-white';
+        clName = 'flex relative w-full text-white';
         headLine +=
           '<div class="flex absolute inset-0 p-1 lg:p-4 text-white ' +
           textHPos +

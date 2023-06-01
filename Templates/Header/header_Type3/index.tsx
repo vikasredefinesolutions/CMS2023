@@ -72,7 +72,7 @@ const Header_Type3: NextPage<_HeaderProps> = ({
         )}
 
         <div className='fixed z-40 lg:hidden'></div>
-        <header className='relative trancking-[1px]'>
+        <header className='relative trancking-[1px]' id="spy">
           <nav className='container mx-auto'>
             <div
               className={`${headerBgColor ? '' : 'bg-[#ffffff]'}]`}

@@ -13,7 +13,7 @@ import {
   deleteCookie,
   extractCookies,
   KlaviyoScriptTag,
-  setCookie,
+  setCookie
 } from 'helpers_v2/common.helper';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
 import { useRouter } from 'next/router';
@@ -183,7 +183,7 @@ const LoginComp: React.FC<_ModalProps> = ({ modalHandler }) => {
                           handleChange(ev);
                         }}
                         type='checkbox'
-                        id="'ChkKeepMeLogged'"
+                        id="ChkKeepMeLogged"
                         name='keepMeLoggedIn'
                       />
                       <label htmlFor='ChkKeepMeLogged'>

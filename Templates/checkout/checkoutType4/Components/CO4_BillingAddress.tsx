@@ -32,8 +32,6 @@ const CO4_BillingAddress: React.FC = () => {
     lookingFor: 'B',
   });
 
-  console.log('bi', noAddressFound);
-
   const BillingAddress = (user: CustomerAddress | null) => {
     if (!user) return <></>;
 

@@ -1,6 +1,5 @@
 import { _ModalProps } from '@appComponents/modals/modal';
 import { __pagesConstant } from '@constants/pages.constant';
-import { _ProductColor } from '@definations/APIs/colors.res';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
@@ -14,13 +13,13 @@ const AvailableColors: React.FC<_ModalProps> = ({ modalHandler }) => {
   const [showAllColors] = useState(false);
   const colors = useTypedSelector_v2((state) => state.product.product.colors);
   const { inventory } = useTypedSelector_v2((state) => state.product.product);
-  const handleChooseColor = (product: _ProductColor) => {
-    if (!product.productSEName || product.productSEName === '') {
-      setColor(product);
-      return;
-    }
-    router.push(product.productSEName);
-  };
+  // const handleChooseColor = (product: _ProductColor) => {
+  //   if (!product.productSEName || product.productSEName === '') {
+  //     setColor(product);
+  //     return;
+  //   }
+  //   router.push(product.productSEName);
+  // };
 
   if (colors === null) return <></>;
   const colorsCount = colors.length;
@@ -44,9 +43,9 @@ const AvailableColors: React.FC<_ModalProps> = ({ modalHandler }) => {
           </div>
           <div className='flex flex-wrap text-center available-colors text-default-text ml-[8px] gap-[3px]'>
             {colors.map((product, index) => {
-              const show =
-                showAllColors ||
-                index < __pagesConstant._productDetails.imagesInRow;
+              // const show =
+              //   showAllColors ||
+              //   index < __pagesConstant._productDetails.imagesInRow;
               const highlight =
                 product.attributeOptionId === selectedColor?.attributeOptionId
                   ? 'border-primary'
@@ -55,10 +54,10 @@ const AvailableColors: React.FC<_ModalProps> = ({ modalHandler }) => {
                 <div
                   className=''
                   key={product.attributeOptionId}
-                  onClick={() => handleChooseColor(product)}
+                  onClick={() => setColor(product)}
                 >
                   <div
-                    className={`w-[32px] h-[32px] p-[1px] border-2  hover:border-primary cursor-pointer ${highlight}`}
+                    className={`w-[32px] h-[32px] p-[1px] border-2 hover:border-tertiary cursor-pointer ${highlight}`}
                   >
                     {/* <NxtImage
                       title={`${product.name}`}
@@ -97,10 +96,11 @@ const AvailableColors: React.FC<_ModalProps> = ({ modalHandler }) => {
               </div>
             )} */}
         </div>
-        {inventory?.inventory[0]?.name !== 'Misc' && (
+        {inventory?.inventory[0]?.name.toLowerCase() !==
+          __pagesConstant?._productDetails?.Misc && (
           <div className='pt-[15px] text-default-text text-right'>
             <a
-              className='text-anchor hover:text-anchor-hover '
+              className='text-anchor hover:text-anchor-hover'
               data-modal-toggle='FitandSize'
               onClick={() => modalHandler('sizeChart')}
             >

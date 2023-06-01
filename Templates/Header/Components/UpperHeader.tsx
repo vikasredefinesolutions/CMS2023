@@ -1,7 +1,6 @@
-import { __Cookie, __LocalStorage } from '@constants/global.constant';
+import { __LocalStorage } from '@constants/global.constant';
 import { paths } from '@constants/paths.constant';
 import { _AnnouncementRow } from '@definations/header.type';
-import { deleteCookie, setCookie } from '@helpers/common.helper';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -28,14 +27,15 @@ const UpperHeader: React.FC<_props> = (headerContent) => {
     : '';
 
   const employeeClear = () => {
+    // Don't logout LoggedIn user
     setShowLoader(true);
     updateEmployeeV2('CLEAN_UP');
     product_employeeLogin('MinQtyToOne_CleanUp');
-    logoutClearCart();
-    logInUser('CLEAN_UP');
+    // logoutClearCart();
+    // logInUser('CLEAN_UP');
 
-    setCookie(__Cookie.userId, '', 'EPOCH');
-    deleteCookie(__Cookie.tempCustomerId);
+    // setCookie(__Cookie.userId, '', 'EPOCH');
+    // deleteCookie(__Cookie.tempCustomerId);
     localStorage.removeItem(__LocalStorage.empData);
     router.push(paths.HOME);
   };

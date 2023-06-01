@@ -79,7 +79,7 @@ const ElementCarouselDisplay = ({ bannerArr }) => {
     sheadline1StartTag = '<'+bannerArr.images[0].headline_tag1+'>';
     sheadline1EndTag = '</'+bannerArr.images[0].headline_tag1+'>';
   }
-
+  let backgroundIndex = 1;
   return (
     <>
       {Object.keys(bannerArr).length > 0 && !bannerArr.images[0].image_as_bg && bannerArr.images != null ? (
@@ -203,7 +203,7 @@ const ElementCarouselDisplay = ({ bannerArr }) => {
               headline1EndTag = '</'+image.headline_tag1+'>';
             }
             return ( <>
-              <div key={image} className='relative presentation-mode'>
+              <div key={image} className={`relative presentation-mode cgslide-${backgroundIndex}`}>
               <div className='overflow-hidden'>
                 {image.image_or_video == 'Image' ? (
                   <img src={image.image_url} alt='corousel' />
@@ -312,6 +312,8 @@ const ElementCarouselDisplay = ({ bannerArr }) => {
             </>
               
             );
+            backgroundIndex++;
+            
           })}
         </Carousel>
       ) : <> 

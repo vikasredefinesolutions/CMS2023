@@ -140,6 +140,7 @@ const Header_Category: React.FC<_props> = ({
                       >
                         {content &&
                           content[0] &&
+                          content[0]?.categoryDetails &&
                           content[0]?.categoryDetails.map((item, index) => {
                             return (
                               <SubMenuItem

@@ -23,7 +23,7 @@ const DiscountPricing: React.FC<
                 setShowMsg(!showMsg);
               }}
             >
-              add
+              {showMsg ? 'remove' : 'add'}
             </span>{' '}
             {__pagesText.productInfo.discountPricing.minimumOrder}
             <span className='pl-[5px] !font-normal'>

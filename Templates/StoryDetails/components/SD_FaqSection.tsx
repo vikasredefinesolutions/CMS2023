@@ -19,9 +19,7 @@ interface _ConsultationPayload {
 }
 
 const SD_FaqSection: React.FC<_Props> = ({ page }) => {
-  const handleStartReview = () => {
-    console.log('Handle Start Review');
-  };
+  const handleStartReview = () => {};
 
   return (
     <section className='relative pt-[40px] pb-[40px] bg-light-gray'>

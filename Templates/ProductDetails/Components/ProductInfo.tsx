@@ -211,22 +211,21 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
             </span>
           </div>
         </div>
-        {!product?.isDropShipProduct && (
-          <div className='w-full md:w-1/3 mt-2.5 md:text-right text-sm font-semibold text-anchor'>
-            <div className='inline-flex items-center'>
-              <a
-                href='javascript:void(0);'
-                onClick={() => router.push(consultationURL)}
-                className='!text-anchor hover:!text-anchor-hover text-normal-text pr-[1px]'
-              >
-                {__pagesText.productInfo.requestConsultaionProof}
-              </a>{' '}
-              <span className='material-icons-outlined leading-none text-[20px] font-600 w-[15px] text-anchor hover:text-anchor-hover no-underline'>
-                chevron_right
-              </span>
-            </div>
+
+        <div className='w-full md:w-1/3 mt-2.5 md:text-right text-sm font-semibold text-anchor'>
+          <div className='inline-flex items-center'>
+            <a
+              href='javascript:void(0);'
+              onClick={() => router.push(consultationURL)}
+              className='!text-anchor hover:!text-anchor-hover text-normal-text pr-[1px]'
+            >
+              {__pagesText.productInfo.requestConsultaionProof}
+            </a>{' '}
+            <span className='material-icons-outlined leading-none text-[20px] font-600 w-[15px] text-anchor hover:text-anchor-hover no-underline'>
+              chevron_right
+            </span>
           </div>
-        )}
+        </div>
       </div>
 
       <AvailableColors />

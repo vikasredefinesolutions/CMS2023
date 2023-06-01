@@ -39,7 +39,7 @@ const CustomRequestForm_Type2: React.FC = () => {
           ],
         }}
         onSubmit={() => {
-          console.log('Hello');
+          // console.log('Hello');
         }}
         // validationSchema={validationSchema}
       >

@@ -160,8 +160,6 @@ const CL2_Item: React.FC<_CartItem & _Props> = (props) => {
     });
   };
 
-  console.log(props.shoppingCartLogoPersonViewModels);
-
   const fetchProductDetails = async ({
     seName,
     productId,
@@ -506,7 +504,6 @@ const CL2_Item: React.FC<_CartItem & _Props> = (props) => {
                 )}
 
                 {props.shoppingCartLogoPersonViewModels.map((_item, _index) => {
-                  console.log(_item, 'this is item');
                   return (
                     <>
                       <div className='pl-[12px] pr-[12px] pt-[12px] pb-[12px] mb-[10px] border border-gray-border'>

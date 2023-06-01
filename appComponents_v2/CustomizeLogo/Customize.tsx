@@ -72,7 +72,7 @@ const CustomizeLogo: React.FC<_Props> = ({
             smallRunFeesCharges: res.smallRunFeesCharges,
             productId: res.productId,
           });
-          console.log(res.subRow);
+          // console.log(res.subRow);
           clearLogoUploadHistory(res?.subRow);
         }
       });

@@ -6,9 +6,11 @@ const SizeChart: React.FC = () => {
     (state) => state.product.product.sizeChart,
   );
 
-  return (
+  return sizeChart ? (
     <div className='mt-[30px]'>
-      <div className='text-center text-2xl-text pb-[20px] relative after:border-b after:border-gray-border after:h-[1px] after:w-[50px] after:absolute after:top-full'>MEASURING</div>
+      <div className='text-center text-2xl-text pb-[20px] relative after:border-b after:border-gray-border after:h-[1px] after:w-[50px] after:absolute after:top-full'>
+        MEASURING
+      </div>
       <div className='text-default-text'>
         <p>FIND YOUR SIZE</p>
         <div className='overflow-x-auto mx-auto'>
@@ -19,7 +21,7 @@ const SizeChart: React.FC = () => {
             width='100%'
           >
             <tbody>
-              <tr className='text-white' style={{ background: '#051c2c'}}>
+              <tr className='text-white' style={{ background: '#051c2c' }}>
                 <td className='border border-gray-border p-[5px]'>&nbsp;</td>
                 {sizeChart?.measurements?.map((piece: string) => {
                   return (
@@ -44,7 +46,7 @@ const SizeChart: React.FC = () => {
         </div>
       </div>
     </div>
-  );
+  ) : null;
 };
 
 export default SizeChart;

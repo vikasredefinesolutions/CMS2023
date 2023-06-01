@@ -55,7 +55,6 @@ export const CO4_CreditCardInput: React.FC<_CreditCardInputProps> = ({
 
   const isNumberKey = (event: React.ChangeEvent<HTMLInputElement>) => {
     let keyAllowed = false;
-    console.log('event', event.nativeEvent);
 
     if ((event.nativeEvent as any).inputType === 'deleteContentBackward') {
       keyAllowed = true;

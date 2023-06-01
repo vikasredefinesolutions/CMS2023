@@ -74,12 +74,16 @@ const CardPaymentType: paymentProps = ({
 
   const handledate = () => {
     const date = new Date();
-    const currentdate = date.getFullYear().toString() + (date.getMonth() + 1);
     const givendate =
       cardValidation.cardExpirationYear.toString() +
       cardValidation.cardExpirationMonth;
+    // const month =
+    //   date.getMonth() + 1 < 10
+    //     ? `0${date.getMonth() + 1}`
+    //     : `${date.getMonth() + 1}`;
+    const currentdate = date.getFullYear().toString() + (date.getMonth() + 1);
 
-    if (givendate >= currentdate) {
+    if (+givendate >= +currentdate) {
       setshowMonthImage('right');
     } else if (
       cardValidation.cardExpirationMonth == '' &&
@@ -191,7 +195,7 @@ const CardPaymentType: paymentProps = ({
               ))}
 
             {input.toString().length > 0 && (
-              <div className='w-[40px] h-8'>
+              <div className='w-8 h-8'>
                 <NxtImage
                   src={yesImg}
                   alt=''
@@ -235,8 +239,6 @@ const CardPaymentType: paymentProps = ({
                   onBlur={changeHandler}
                   onKeyDown={blockInvalidChar}
                   onChange={(e) => {
-                    console.log(+e.target.value < 13);
-
                     if (+e.target.value < 13) {
                       setcardValidation({
                         ...cardValidation,

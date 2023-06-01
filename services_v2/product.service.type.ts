@@ -167,6 +167,8 @@ export interface _AddToCart_PayloadGenerator_Attributes {
   storeId: number;
   userId: number;
   isEmployeeLoggedIn: boolean;
+  ipAddress: string;
+  isForm: boolean;
   product: _AddToCart_ProductDetails;
   cartItems: _AddToCart_CartItems[];
   personalization: {

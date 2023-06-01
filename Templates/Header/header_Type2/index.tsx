@@ -5,7 +5,7 @@ import { _HeaderProps, _MenuItems } from '@definations/header.type';
 import {
   useActions_v2,
   useTypedSelector_v2,
-  useWindowDimensions_v2,
+  useWindowDimensions_v2
 } from '@hooks_v2/index';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
@@ -15,7 +15,7 @@ import {
   LoggedInMenu,
   LoginIcon,
   Logo,
-  MyCartIcon,
+  MyCartIcon
 } from '../header_Type2/Components/Icons';
 import Header_MenuItems from '../header_Type2/Components/Menu/Header_MenuItems';
 import SearchBar from '../header_Type2/Components/Menu/Header_SearchBar';

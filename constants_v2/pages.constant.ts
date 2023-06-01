@@ -3,7 +3,8 @@ export const __pagesConstant = {
     klaviyoKey: 'SNtzPN',
     klaviyoKey2: 'Tr8sxw',
   },
- _productDetails: {
+  _productDetails: {
+    Misc: 'misc',
     imagesInRow: 7,
     descriptionLength: 500,
     recentlyViewed: {

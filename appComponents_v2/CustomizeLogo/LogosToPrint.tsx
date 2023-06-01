@@ -205,8 +205,7 @@ const LogosToPrint: React.FC<_props> = ({ setShowOrSelect }) => {
               />
             </div>
             <div className='mt-2'>
-              Logo :{' '}
-              {logo.logo.name === '' ? 'Will Be Applied Later' : logo.logo.name}
+              Logo : {!logo.no ? 'Will Be Applied Later' : `#${logo.no}`}
             </div>
             <div className='mt-2 flex gap-2 items-center'>
               <div className='font-semibold'>Logo {index + 1}:</div>

@@ -15,7 +15,6 @@ const OrderInvoice_type1: React.FC<_propsOrder> = ({ order }) => {
   const { logoUrl, mediaBaseUrl, storeName } = useTypedSelector_v2(
     (state) => state.store,
   );
-  console.log(order.billing);
 
   return (
     <>

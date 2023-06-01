@@ -1,5 +1,5 @@
 import WishlistButton from '@appComponents/ui/Wishlist';
-import { _OtherImage, _ProductColor } from '@definations/APIs/colors.res';
+import { _OtherImage } from '@definations/APIs/colors.res';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -16,13 +16,13 @@ const ProductImg_Type3: React.FC<_ProductImgProps> = ({ product }) => {
   const [wishlistId, setWishlistId] = useState<number>(0);
   const [wishlistPresent, setWishlistPresent] = useState<boolean>(false);
   const colors = useTypedSelector_v2((state) => state.product?.product.colors);
-  const handleChooseColor = (product: _ProductColor) => {
-    if (!product.productSEName || product.productSEName === '') {
-      setColor(product);
-      return;
-    }
-    router.push(product.productSEName);
-  };
+  // const handleChooseColor = (product: _ProductColor) => {
+  //   if (!product.productSEName || product.productSEName === '') {
+  //     setColor(product);
+  //     return;
+  //   }
+  //   router.push(product.productSEName);
+  // };
   const brandId = useTypedSelector_v2((state) => state.wishlist.brandId);
   const selectedColor = useTypedSelector_v2(
     (state) => state.product?.selected.color,
@@ -31,7 +31,6 @@ const ProductImg_Type3: React.FC<_ProductImgProps> = ({ product }) => {
   const selectedColor2 = useTypedSelector_v2(
     (state) => state.product?.selected,
   );
-  console.log(selectedColor2, 'selectedColor2');
 
   const { setColor } = useActions_v2();
   const selectedImage = useTypedSelector_v2(
@@ -137,9 +136,13 @@ const ProductImg_Type3: React.FC<_ProductImgProps> = ({ product }) => {
       <div className='col-span-12 flex flex-wrap justify-center m-[10px]'>
         {colors &&
           colors.map((product, index) => {
+            const highlight =
+              product.attributeOptionId === selectedColor?.attributeOptionId
+                ? 'border-primary'
+                : 'border-secondary';
             return (
               <div
-                className='border border-gray-border hover:border-secondary mx-[5px] mb-[10px] p-[1px] w-[70px] max-h-[70px]'
+                className={`border-2 mx-[5px] mb-[10px] p-[1px] w-[70px] max-h-[70px] ${highlight}`}
                 onClick={() => setColor(product)}
                 key={product.attributeOptionId}
               >

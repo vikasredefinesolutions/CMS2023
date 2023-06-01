@@ -24,7 +24,7 @@ const Header_Type4: NextPage<_HeaderProps> = ({
   const { store_setAppView } = useActions_v2();
   const { width } = useWindowDimensions_v2();
   const router = useRouter();
-
+  const storeCode = useTypedSelector_v2((state) => state.store.code);
   const showSideMenu = useTypedSelector_v2((state) => state.modals.sideMenu);
   const islogo = useTypedSelector_v2((state) => state.sbStore.isLogo);
   const storeTypeId = useTypedSelector_v2((state) => state.store.storeTypeId);
@@ -61,7 +61,7 @@ const Header_Type4: NextPage<_HeaderProps> = ({
         )}
 
         <div className='fixed z-40 lg:hidden'></div>
-        <header className='relative trancking-[1px]'>
+        <header className='relative trancking-[1px]' id={`${storeCode === 'DI' ? 'spy' : ''}`}>
           <nav aria-label='Top'>
             <div
               className={`${headerBgColor ? '' : 'bg-[#ffffff]'}]`}

@@ -37,7 +37,8 @@ const ProductInfo: React.FC<_Props> = ({
     (state) => state.product.selected.color,
   );
   const { id: userId } = useTypedSelector_v2((state) => state.user);
-  const { showModal, updateSbsStore } = useActions_v2();
+  const { showModal } = useActions_v2();
+  const { sizeChart } = useTypedSelector_v2((state) => state.product.product);
   const [isVisible, setIsVisible] = useState(false);
 
   const modalHandler = (param: null | _modals) => {
@@ -101,6 +102,7 @@ const ProductInfo: React.FC<_Props> = ({
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
+
   return (
     <>
       <div className='col-span-1 mt-[15px] pl-[0px] pr-[0px] md:pl-[15px] md:pr-[15px] sm:pl-[0px] sm:pr-[0px] lg:mt-[0px]'>
@@ -191,14 +193,16 @@ const ProductInfo: React.FC<_Props> = ({
         <AvailableColors />
 
         <div className='pt-[15px] text-default-text text-right items-end justify-between text-anchor hover:text-anchor-hover'>
-          <a
-            href='javascript:void(0)'
-            className=' underline'
-            data-modal-toggle='FitandSize'
-            onClick={() => modalHandler('sizeChart')}
-          >
-            Fit and Size
-          </a>{' '}
+          {sizeChart && (
+            <a
+              href='javascript:void(0)'
+              className=' underline'
+              data-modal-toggle='FitandSize'
+              onClick={() => modalHandler('sizeChart')}
+            >
+              Fit and Size
+            </a>
+          )}{' '}
           <a
             href='javascript:void(0)'
             className='underline'

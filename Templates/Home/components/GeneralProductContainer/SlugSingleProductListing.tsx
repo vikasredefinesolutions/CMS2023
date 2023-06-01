@@ -117,40 +117,10 @@ const SlugSingleProductListing: React.FC<_props> = (props) => {
                     </span>
                   </div>
                 )}
-                <div className='mb-2 font-semibold uppercase isinput'>
+                {/* <div className='mb-2 font-semibold uppercase isinput'>
                   {customMessage ?? ''}
-                </div>
-                {showButton == __pagesConstant?.show?.No ? (
-                  ''
-                ) : (
-                  <Link
-                    href={`${encodeURIComponent(product.productSEName)}.html`}
-                  >
-                    <a
-                      style={{
-                        marginTop: '1.5rem',
-                        backgroundColor: '#ffa400',
-                        color: '#000',
-                      }}
-                      className='btn-lg btn btn-secondary rounded-0 hrefurl changebtn isinput'
-                      data-nofollow='N'
-                      data-acsb-clickable='true'
-                      data-acsb-navigable='true'
-                      data-acsb-now-navigable='true'
-                    >
-                      <span
-                        className='acsb-sr-only'
-                        data-acsb-sr-only='true'
-                        data-acsb-force-visible='true'
-                        aria-hidden='false'
-                        data-acsb-hidden='false'
-                      ></span>
-                      DETAILS
-                    </a>
-                  </Link>
-                )}
-              </div>
-              {showSplitProducts == __pagesConstant?.show?.No ? (
+                </div> */}
+                {showSplitProducts == __pagesConstant?.show?.No ? (
                 ''
               ) : (
                 <ul className='flex items-center justify-center mt-2 list-none'>
@@ -221,6 +191,37 @@ const SlugSingleProductListing: React.FC<_props> = (props) => {
                   ) : null}
                 </ul>
               )}
+                {showButton == __pagesConstant?.show?.No ? (
+                  ''
+                ) : (
+                  <Link
+                    href={`${encodeURIComponent(product.productSEName)}.html`}
+                  >
+                    <a
+                      style={{
+                        marginTop: '1.5rem',
+                        backgroundColor: '#ffa400',
+                        color: '#000',
+                      }}
+                      className='btn-lg btn btn-secondary rounded-0 hrefurl changebtn isinput'
+                      data-nofollow='N'
+                      data-acsb-clickable='true'
+                      data-acsb-navigable='true'
+                      data-acsb-now-navigable='true'
+                    >
+                      <span
+                        className='acsb-sr-only'
+                        data-acsb-sr-only='true'
+                        data-acsb-force-visible='true'
+                        aria-hidden='false'
+                        data-acsb-hidden='false'
+                      ></span>
+                      DETAILS
+                    </a>
+                  </Link>
+                )}
+              </div>
+              
             </div>
           </div>
         </div>

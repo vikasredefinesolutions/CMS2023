@@ -151,6 +151,8 @@ const SomActionsHandler: React.FC<_SOMActionHandlerProps> = ({
             ? parseInt(tempCustId)
             : 0,
         isEmployeeLoggedIn,
+        ipAddress: '192.168.1.1',
+        isForm: false,
         cartItems: [
           {
             attributeOptionName: 'Color',

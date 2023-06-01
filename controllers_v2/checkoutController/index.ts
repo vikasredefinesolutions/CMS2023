@@ -586,8 +586,6 @@ const CheckoutController = () => {
       });
       // setCurrentPage(checkoutPages.address);
     } else if (loginResponse.credentials === 'INVALID') {
-      console.log('loginResponse', loginResponse);
-
       showModal({
         message: loginResponse.message,
         title: commonMessage.failed,
@@ -723,6 +721,15 @@ const CheckoutController = () => {
           showModal({
             message:
               'Error in Credit Card information. Please verify and try again.',
+            title: 'Error',
+          });
+          return;
+        }
+      }
+      if (paymentEnum.purchaseOrder == paymentMethod) {
+        if (purchaseOrder.length <= 0) {
+          showModal({
+            message: 'Invalid Purchase Order Details',
             title: 'Error',
           });
           return;
@@ -1217,6 +1224,7 @@ const CheckoutController = () => {
     selectedShipping,
     setSelectedShipping,
     getPolicyDetails,
+    addPaymentDetails,
   };
 };
 

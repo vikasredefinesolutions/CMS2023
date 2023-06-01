@@ -5,7 +5,7 @@ import { __pagesConstant } from '@constants/pages.constant';
 import { __pagesText } from '@constants/pages.text';
 import {
   newFetauredItemResponse,
-  splitproductList,
+  splitproductList
 } from '@definations/productList.type';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import Link from 'next/link';

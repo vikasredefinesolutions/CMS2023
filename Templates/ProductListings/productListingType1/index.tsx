@@ -144,6 +144,7 @@ const ProductListingType1: React.FC<_ListingProps> = ({
                 </div>
               </div>
             </div>
+            
           </div>
         </div>
       </section>

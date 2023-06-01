@@ -1,4 +1,3 @@
-import { _defaultTemplates } from '@configs/template.config';
 import { CG_STORE_CODE } from '@constants/global.constant';
 import { paths } from '@constants/paths.constant';
 import {
@@ -26,6 +25,7 @@ export interface CTTemplates {
   type3: FC<_Props>;
   type4: FC<_Props>;
 }
+
 
 const checkoutTemplates: CTTemplates = {
   type1: CheckoutType1,
@@ -59,7 +59,8 @@ const CheckoutTemplate: FC<_Props> = ({ templateId }) => {
             item.productId,
             storeId,
           );
-          if (response && response[0].name) {
+
+          if (response.length > 0 && response[0].name) {
             const catNames = response[0].name.split(' > ');
             allProductCategories.push({
               productId: item.productId,
@@ -79,6 +80,7 @@ const CheckoutTemplate: FC<_Props> = ({ templateId }) => {
       ItemNames: itemsName,
       CheckoutURL: window.location.href,
       Categories: Array.from(uniqueCategories),
+      VisitorType: customerId ? 'high-value' : 'low-value',
       Items: cartData?.map((prdct) => ({
         ProductID: prdct.productId,
         SKU: prdct.sku,
@@ -141,9 +143,8 @@ const CheckoutTemplate: FC<_Props> = ({ templateId }) => {
       router.push(paths.CART);
     }
   }, [cartData, isCartLoading]);
-
-  const CheckoutSelectedTemplate =
-    checkoutTemplates[_defaultTemplates.checkout];
+  const storeCode = useTypedSelector_v2((state) => state.store.code);
+  const CheckoutSelectedTemplate = checkoutTemplates[(storeCode === 'CG' ? 'type1' : (storeCode === 'PKHG' ? 'type2' : 'type3'))];
 
   return <CheckoutSelectedTemplate templateId={templateId} />;
 };

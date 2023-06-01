@@ -19,6 +19,10 @@ export const getSymbol = (symbol, status) => {
   } else if (symbol === 'addcircle') {
     if (status === 'Yes') returnSymbol = 'remove_circle';
     else returnSymbol = 'add_circle';
+  }
+  else if (symbol === 'add') {
+    if (status === 'Yes') returnSymbol = 'remove';
+    else returnSymbol = 'add';
   } else {
     if (status === 'Yes') returnSymbol = 'remove_circle_outline';
     else returnSymbol = 'add_circle_outline';
@@ -780,12 +784,11 @@ export const updateSetProperties = (element) => {
           }
 
           if (objName.ImageAsBG !== undefined) {
-            x.querySelectorAll('#' + key)[0].innerHTML =
-              '<div class="absolute inset-0 bg-cover ' +
+            x.querySelectorAll('#' + key)[0].innerHTML = '<a href="'+link + '"><div class="absolute inset-0 bg-cover ' +
               effectClass +
               '" style="background-image: url(\'' +
               value.value +
-              '\')"></div>';
+              '\')"></div></a>';
           } else {
             if (
               Object.keys(element.selectedVal).includes(key + '_image_position')
