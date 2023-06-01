@@ -35,7 +35,7 @@ const ProductListingType1: React.FC<_ListingProps> = ({
   sortingType,
   clearFilterSection,
 }) => {
-  const buttonRef = useRef(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
   // useEffect(() => {
   //   buttonRef.current.addEventListener('click', clickHandler);
   // }, []);
@@ -43,13 +43,19 @@ const ProductListingType1: React.FC<_ListingProps> = ({
     if (typeof window !== 'undefined') {
       // if(document.body.classList.contains('index-page') || storeCode === 'DI')
       // {
-      let x = document.getElementById('loadmore');
-      console.log(x?.offsetTop, window.pageYOffset + document.documentElement.clientHeight,window.pageYOffset, document.documentElement.scrollHeight, document.documentElement.clientHeight);
-      // alert(x)
-     
-        if ((window.pageYOffset + document.documentElement.clientHeight) >= x?.offsetTop) {
-          buttonRef.current.click();
-        }
+      let x = document.querySelector('#loadmore');
+      if (x instanceof HTMLElement) 
+      {
+        // alert(x)
+       
+          if ((window.pageYOffset + document.documentElement.clientHeight) >= x?.offsetTop) {
+            if(buttonRef.current)
+             {
+              buttonRef?.current.click();
+             } 
+          }
+  
+      }
       
       //}
     }
