@@ -492,6 +492,8 @@ type _Props = {
   note: string;
   storeId: number;
   isEmployeeLoggedIn: boolean;
+  ipAddress: string;
+  isForm: boolean;
   sizeQtys: Array<_Product_SizeQtys | null> | null;
   productDetails: {
     productId: number;

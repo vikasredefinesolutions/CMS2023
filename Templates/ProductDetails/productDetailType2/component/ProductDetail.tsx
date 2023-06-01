@@ -20,7 +20,7 @@ const ProductDetail: React.FC<_Props> = ({
     <>
       <div className='container mx-auto mt-[15px]'>
         <div className='lg:grid lg:grid-cols-2 lg:items-start pb-[20px]'>
-          <ProductImg product={product} />
+          <ProductImg product={product!} />
           <ProductInfo
             product={product}
             storeCode={storeCode}

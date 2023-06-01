@@ -79,7 +79,7 @@ const SubMenuItem: React.FC<_props> = ({
               {__pagesText.Headers.rightArrowIcon}
             </span>
             <span
-              className='inline-block text-normal-text text-primary hover:text-primary leading-[18px] cursor-pointer'
+              className='inline-block text-default-text text-primary hover:text-primary leading-[18px] cursor-pointer'
               title={itemLabel}
             >
               {itemLabel}
@@ -181,7 +181,7 @@ const SubMenuItem: React.FC<_props> = ({
           </span>
           <Link href={`/${itemUrl}`}>
             <span
-              className='inline-block text-primary hover:text-primary-hover font-[600] tracking-[1.25px] leading-[18px]'
+              className='inline-block text-default-text text-primary hover:text-primary leading-[18px] cursor-pointer'
               title={itemLabel}
             >
               {itemLabel}

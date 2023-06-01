@@ -1,7 +1,10 @@
 import { CallAPI_v2 } from '@helpers/api.helper';
 import { _FeaturedProduct } from '@templates/ProductDetails/productDetailsTypes/storeDetails.res';
 
-export type _HomeAPIs = 'FetchFeaturedProducts' | 'getPageComponents';
+export type _HomeAPIs =
+  | 'FetchFeaturedProducts'
+  | 'getPageComponents'
+  | 'getPageComponentsByCategoryId';
 
 export interface _HomeServices {
   service: 'home';
@@ -46,6 +49,26 @@ export const getPageComponents = async (payload: {
       url: url,
       method: 'POST',
       data: payload,
+    },
+  });
+
+  return response;
+};
+
+export const GetPageComponentsByCategoryId = async (payload: {
+  categoryId: number;
+}) => {
+  const url = `CmsComponents/getpagecomponents/${payload.categoryId}.json`;
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const response = await CallAPI_v2<any>({
+    name: {
+      service: 'home',
+      api: 'getPageComponentsByCategoryId',
+    },
+    request: {
+      url: url,
+      method: 'GET',
     },
   });
 

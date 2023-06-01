@@ -7,9 +7,13 @@ import yesImg from '@images/yes.png';
 const PurchaseOrderType: paymentProps = ({
   changeHandler,
   updatePaymentMethod,
+  purchaseOrder,
 }) => {
   const [showPO, setShowPO] = useState<Boolean>(false);
-  const [numPO, setNumPO] = useState<string>('');
+  const [numPO, setNumPO] = useState<string>(
+    purchaseOrder ? purchaseOrder : '',
+  );
+
   return (
     <div id='PurchaseOrder'>
       <div className=' ml-[-15px] mr-[-15px] w-full'>
@@ -29,6 +33,7 @@ const PurchaseOrderType: paymentProps = ({
               required={true}
               className='form-input !w-[calc(100%-40px)]'
               onFocus={() => setShowPO(true)}
+              value={numPO}
               onChange={(e) => setNumPO(e.target.value)}
             />
             {numPO.length > 0 && (

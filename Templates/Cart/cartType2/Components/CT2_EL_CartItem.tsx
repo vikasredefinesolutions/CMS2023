@@ -27,7 +27,7 @@ import {
   create_cartLogoPersonDetailModels,
   create_cartLogoPersonModel,
   initialSizeWithPriceNQtyGetter,
-} from './CT1_EL_Extras';
+} from '../../Cart_Type1/components/CT1_EL_Extras';
 
 interface _Props {
   availableFont: [] | PersonalizationFont[];
@@ -90,6 +90,8 @@ const CT2_EL_CartItem: React.FC<_CartItem & _Props> = (item) => {
         productId: item.productId,
         storeId: storeId,
         isempLogin: true,
+        ipAddress: '192.168.1.1',
+        isForm: false,
         shoppingCartItemModel: {
           id: item.shoppingCartItemsId,
           price: details.totalPrice,

@@ -7,6 +7,8 @@ export interface AddToCartModel {
   productId: number;
   storeId: number;
   isempLogin: boolean;
+  ipAddress: string;
+  isForm: boolean;
   shoppingCartItemModel: _ShoppingCartItemModel;
   shoppingCartItemsDetailModels: _ShoppingCartItemsDetailModel[];
   cartLogoPersonDetailModels: _CartLogoPersonDetailModel[];

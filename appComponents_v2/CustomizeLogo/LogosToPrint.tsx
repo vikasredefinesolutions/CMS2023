@@ -61,6 +61,8 @@ const LogosToPrint: React.FC<_props> = ({ setShowOrSelect }) => {
       isEmployeeLoggedIn,
       note: '',
       sizeQtys: sizeQtys,
+      ipAddress: '192.168.1.1',
+      isForm: false,
       productDetails: {
         productId: selectedProduct.productId,
         color: {

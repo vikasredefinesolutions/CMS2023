@@ -1,9 +1,10 @@
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable no-unused-vars */
 import { __pagesText } from '@constants/pages.text';
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect, useRef } from 'react';
 // import { GetlAllProductList, _ListingProps } from '../productListing';
 
+import Home from '@templates/Home';
 import { GetlAllProductList, _ListingProps } from '../ProductListingType';
 import FilterChips from './components/FilterChips';
 import FreeBanner from './components/FreeBanner';
@@ -15,6 +16,7 @@ const ProductListingType1: React.FC<_ListingProps> = ({
   slug,
   filters,
   products,
+  CMS,
   checkedFilters,
   totalCount,
   showFilter,
@@ -35,6 +37,38 @@ const ProductListingType1: React.FC<_ListingProps> = ({
   sortingType,
   clearFilterSection,
 }) => {
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  // useEffect(() => {
+  //   buttonRef.current.addEventListener('click', clickHandler);
+  // }, []);
+   const handleScroll = () => {
+    if (typeof window !== 'undefined') {
+      // if(document.body.classList.contains('index-page') || storeCode === 'DI')
+      // {
+      let x = document.querySelector('#loadmore');
+      if (x instanceof HTMLElement) 
+      {
+        // alert(x)
+       
+          if ((window.pageYOffset + document.documentElement.clientHeight) >= x?.offsetTop) {
+            if(buttonRef.current)
+             {
+              buttonRef?.current.click();
+             } 
+          }
+  
+      }
+      
+      //}
+    }
+  };
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      window.addEventListener('scroll', handleScroll);
+    }
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+  
   return (
     <>
       <FreeBanner />
@@ -115,11 +149,12 @@ const ProductListingType1: React.FC<_ListingProps> = ({
                         </div>
                       </div>
                       {products.length < totalCount && (
-                        <button
+                        <button id="loadmore" ref={buttonRef}
                           onClick={loadMore}
                           type='submit'
                           className='mt-[16px] btn btn-md btn-secondary tracking-[1.4px] font-normal w-full max-w-[550px] mx-auto focus:outline-none focus:ring-2 mb-[30px] '
-                        >
+                          style={{ opacity: 0}}
+                       >
                           <span className='inline-block w-[20px] h-[20px]'>
                             <img
                               className='max-h-full'
@@ -143,8 +178,18 @@ const ProductListingType1: React.FC<_ListingProps> = ({
                   </div>
                 </div>
               </div>
+              {CMS.component && (
+                <div className='flex flex-wrap ml-[-16px] mr-[-16px]'>
+                  <Home
+                    props={{
+                      pageData: { components: CMS.component },
+                      pageType: CMS.type,
+                      slug: CMS.slug,
+                    }}
+                  />
+                </div>
+              )}
             </div>
-            
           </div>
         </div>
       </section>

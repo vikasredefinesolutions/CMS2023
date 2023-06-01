@@ -9,8 +9,21 @@ const LoginIcon: React.FC = () => {
   const [showModal, setShowModal] = useState<null | _modals>(null);
   // const storeLayout = useTypedSelector_v2((state) => state.store.layout);
   const { id: loggedIn } = useTypedSelector_v2((state) => state.user);
+  const { empId, isEmpGuest } = useTypedSelector_v2((state) => state.employee);
+
+  const btnText = () => {
+    if (!!empId) {
+      return `LOGIN CONTINUE AS GUEST`;
+    }
+    return 'Login';
+  };
 
   const toggleLoginModal = () => {
+    if (!!empId) {
+      setShowModal('guestLogin');
+      return;
+    }
+
     if (showModal) {
       setShowModal(null);
       return;
@@ -18,8 +31,7 @@ const LoginIcon: React.FC = () => {
     setShowModal('login');
   };
 
-  if (loggedIn) return <></>;
-
+  if (loggedIn || isEmpGuest) return <></>;
   return (
     <div className='pl-[15px]'>
       <div className='flex relative tracking-[1px]'>
@@ -29,13 +41,16 @@ const LoginIcon: React.FC = () => {
           title='Login'
         >
           <span className='text-[12px] hidden xl:inline-block whitespace-nowrap tracking-[1px]'>
-            {__pagesText.Headers.login}
+            {btnText()}
           </span>
           <span className='material-icons xl:hidden '>
             {__pagesText.Headers.loginIcon}
           </span>
         </button>
         {showModal === 'login' && <LoginModal modalHandler={setShowModal} />}
+        {showModal === 'guestLogin' && (
+          <LoginModal modalHandler={setShowModal} />
+        )}
         {showModal === 'forgot' && <ForgotModal modalHandler={setShowModal} />}
       </div>
     </div>

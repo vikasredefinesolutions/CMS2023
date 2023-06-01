@@ -19,7 +19,7 @@ import {
   getPersonalizationLocation,
 } from '@services/cart.service';
 import CartSummarryType2 from '@templates/cartSummarry/cartSummaryType2';
-import CT1_EL_Item from './CT1_EL_Item';
+import CT1_EL_Item from '../../Cart_Type1/components/CT1_EL_Item';
 
 interface _Props {
   cartItems: _CartItem[];

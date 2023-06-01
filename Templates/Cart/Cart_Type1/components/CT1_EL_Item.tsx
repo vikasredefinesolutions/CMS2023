@@ -92,6 +92,8 @@ const CT1_EL_Item: React.FC<_CartItem & _Props> = (item) => {
         productId: item.productId,
         storeId: storeId,
         isempLogin: true,
+        ipAddress: '192.168.1.1',
+        isForm: false,
         shoppingCartItemModel: {
           id: item.shoppingCartItemsId,
           price: details.totalPrice,

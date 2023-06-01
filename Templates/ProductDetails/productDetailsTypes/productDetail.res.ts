@@ -73,6 +73,7 @@ export interface _ProductDetails {
   companionProductId: number | null;
   companionProductName: string | null;
   companionProductSEName: string | null;
+  companionMSRP: string | null;
   companionProductImage: string | null;
   isEnableLogolocation: boolean;
   sku: string;

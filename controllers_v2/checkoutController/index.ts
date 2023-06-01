@@ -1,15 +1,15 @@
 import {
   checkoutPages,
-  PaymentMethod,
   paymentMethodCustom as paymentEnum,
+  PaymentMethod,
   UserAddressType,
 } from '@constants/enum';
 import {
-  CG_STORE_CODE,
   __Cookie,
   __Cookie_Expiry,
   __LocalStorage,
   __UserMessages,
+  CG_STORE_CODE,
 } from '@constants/global.constant';
 import { paths } from '@constants/paths.constant';
 
@@ -310,10 +310,9 @@ const CheckoutController = () => {
     pass: string;
     cpass: string;
   }) => {
-    const location = await getLocation();
     setShowLoader(true);
     const addAccount = {
-      storeCustomerModel: {
+      storeCustomerGuestModel: {
         id: 0,
         email: customerEmail,
         password: enteredInputs.pass,
@@ -598,11 +597,12 @@ const CheckoutController = () => {
     }
   };
 
-  const logout_EmployeeLogin = () => {
+  const logout_EmployeeLogin = (id: string) => {
     updateEmployeeV2('CLEAN_UP');
     product_employeeLogin('MinQtyToOne_CleanUp');
     logoutClearCart();
     logInUser('CLEAN_UP');
+    router.push(`/${paths.THANK_YOU}?orderNumber=${id}`);
 
     setCookie(__Cookie.userId, '', 'EPOCH');
     deleteCookie(__Cookie.tempCustomerId);
@@ -787,6 +787,7 @@ const CheckoutController = () => {
               .catch((error) => console.log(error)));
 
           setShippingAdress(shippingForm.values);
+          await fetchShipping(totalPrice);
           if (!useShippingAddress) {
             !billingAdress && setBillingAdress(billingForm.values);
           } else {
@@ -1042,7 +1043,7 @@ const CheckoutController = () => {
                 orderNumber: res.id,
               });
               if (isEmployeeLoggedIn) {
-                logout_EmployeeLogin();
+                logout_EmployeeLogin(res.id);
               }
               setShowLoader(false);
               router.push(`/${paths.THANK_YOU}?orderNumber=${res.id}`);

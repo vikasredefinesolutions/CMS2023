@@ -20,6 +20,7 @@ export type _modals =
   | 'personalizationFonts'
   | 'qouteRequest'
   | 'startOrder'
+  | 'guestLogin'
   | 'InventoryLimit';
 
 export interface _Reviews {}

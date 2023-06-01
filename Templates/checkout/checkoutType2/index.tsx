@@ -1,5 +1,10 @@
 import NxtImage from '@appComponents/reUsable/Image';
-import { PaymentMethod, UserAddressType, checkoutPages } from '@constants/enum';
+import {
+  PaymentMethod,
+  UserAddressType,
+  checkoutPages,
+  paymentMethodCustom as paymentEnum,
+} from '@constants/enum';
 import { __pagesText } from '@constants/pages.text';
 import {
   GetCartTotals,
@@ -9,7 +14,7 @@ import {
 } from '@hooks_v2/index';
 import CartItem from '@templates/cartItem';
 import _ from 'lodash';
-import { FC, useEffect, useState } from 'react';
+import { ChangeEvent, FC, useEffect, useState } from 'react';
 import * as yup from 'yup';
 import OrderSummary from './components/OrderSummary';
 import PaymentType from './components/Payment';
@@ -23,39 +28,62 @@ import CheckoutController, {
 } from '@controllers/checkoutController';
 import { AddressType } from '@controllers/checkoutController/CheckoutAddressForm';
 import { deleteCookie } from '@helpers/common.helper';
-import { GetShippingmethod } from '@services/address.service';
+import {
+  CreditCardDetailsType,
+  CreditCardDetailsType2,
+} from '@definations/checkout';
+import {
+  CreateUserAddress,
+  GetShippingmethod,
+} from '@services/address.service';
 import { placeOrder as placeOrderService } from '@services/checkout.service';
 import AddressFormPk from './components/Form';
 
 import { Klaviyo_PlaceOrder } from '@services/klaviyo.service';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
+import getLocation from '@helpers/getLocation';
+import { GetStoreCustomer } from '@services/user.service';
 interface _Props {
   templateId: number;
 }
 
 const ChekoutType2: FC<_Props> = ({ templateId }) => {
   // placeOrder,
-  const {
-    currentPage,
-    paymentFieldUpdateHandler,
-    paymentMethod,
-    updatePaymentMethod,
-    detectCardType,
-    reviewOrder,
-    addPaymentDetails,
-    setCurrentPage,
-    cardDetails,
-  } = CheckoutController();
+  const { currentPage, setCurrentPage } = CheckoutController();
   const router = useRouter();
-  const { setShowLoader, logoutClearCart, showModal } = useActions_v2();
+  const { setShowLoader, logoutClearCart, showModal, updateCustomer } =
+    useActions_v2();
   const { shippingChargeType, id: storeId } = useTypedSelector_v2(
     (state) => state.store,
   );
   const useBalance = useTypedSelector_v2(
     (state) => state.cart.userCreditBalance.useBalance,
   );
+  const [paymentMethod, setPaymentMethod] = useState(paymentEnum.creditCard);
 
+  const [cardDetails, setCardDetails] = useState<CreditCardDetailsType2>({
+    cardNumber: '',
+    cardVarificationCode: '',
+    cardExpirationMonth: '',
+    cardExpirationYear: '',
+    creditCardHolder: '',
+  });
+  const [purchaseOrder, setPurchaseOrder] = useState('');
+
+  const paymentFieldUpdateHandler = (
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
+    const { name, value } = e.target;
+
+    switch (paymentMethod) {
+      case paymentEnum.creditCard:
+        setCardDetails((prev) => ({ ...prev, [name]: value }));
+        break;
+      case paymentEnum.purchaseOrder:
+        setPurchaseOrder(value);
+    }
+  };
   const [selectedShipping, setSelectedShipping] = useState<
     _shippingMethod | { name: ''; price: 0 }
   >({ name: '', price: 0 });
@@ -97,49 +125,117 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
     },
   ]);
 
-  const cartData = useTypedSelector_v2((state) => state.cart);
   const { loggedIn: isEmployeeLoggedIn, isLoadingComplete } =
     useTypedSelector_v2((state) => state.employee);
-  const [shippingAddress, setShippingAddress] = useState<AddressType | null>(
-    null,
-  );
+
+  const { el: employeeLogin } = useTypedSelector_v2((state) => state.checkout);
+
+  const { loggedIn, customer, id } = useTypedSelector_v2((state) => state.user);
+
   const [billingAddress, setBillingAddress] = useState<AddressType | null>(
     null,
   );
 
-  const { loggedIn, customer, id } = useTypedSelector_v2((state) => state.user);
-  const userID = GetCustomerId();
-  const [changeBillingAddress, setChangeBillingAddress] =
-    useState<boolean>(false);
+  const [shippingAddress, setShippingAddress] = useState<AddressType | null>(
+    null,
+  );
+
+  const [initialShippingValues, setShippingInitial] = useState<any>({});
+  const [initialBillingValues, setBillingInitial] = useState<any>({});
+
   useEffect(() => {
-    if (loggedIn && customer) {
-      if (customer.customerAddress.length > 0) {
-        if (customer && customer.customerAddress) {
-          for (
-            let index = 0;
-            index < customer.customerAddress.length;
-            index++
-          ) {
-            if (
-              customer.customerAddress[index].addressType ==
-                UserAddressType.SHIPPINGADDRESS &&
-              customer.customerAddress[index].isDefault
-            ) {
-              setShippingAddress(
-                customer.customerAddress[index] as AddressType,
-              );
-            } else if (
-              customer.customerAddress[index].addressType ==
-                UserAddressType.BILLINGADDRESS &&
-              customer.customerAddress[index].isDefault
-            ) {
-              setBillingAddress(customer.customerAddress[index] as AddressType);
-            }
-          }
-        }
+    if (customer) {
+      const userAccBilling = customer?.customerAddress.find(
+        (el) =>
+          (el.isDefault && el.addressType == UserAddressType.BILLINGADDRESS) ||
+          el.addressType == UserAddressType.BILLINGADDRESS,
+      );
+      const userAccShipping = customer?.customerAddress.find(
+        (el) =>
+          (el.isDefault && el.addressType == UserAddressType.SHIPPINGADDRESS) ||
+          el.addressType == UserAddressType.SHIPPINGADDRESS,
+      );
+      if (userAccBilling) {
+        setBillingAddress(userAccBilling);
+        setBillingInitial({
+          firstname: userAccBilling ? userAccBilling?.firstname : '',
+          lastName: userAccBilling ? userAccBilling?.lastName : '',
+          email: userAccBilling ? userAccBilling?.email : '',
+          address1: userAccBilling ? userAccBilling?.address1 : '',
+          address2: userAccBilling ? userAccBilling?.address2 : '',
+          suite: userAccBilling ? userAccBilling?.suite : '',
+          city: userAccBilling ? userAccBilling?.city : '',
+          state: userAccBilling ? userAccBilling?.state : '',
+          postalCode: userAccBilling ? userAccBilling?.postalCode : '',
+          Phone: userAccBilling ? userAccBilling?.phone : '',
+          fax: userAccBilling ? userAccBilling?.fax : '',
+          CountryName: userAccBilling ? userAccBilling?.countryName : '',
+          isDefault: true,
+          companyName: userAccBilling ? userAccBilling?.companyName : '',
+          countryCode: userAccBilling ? userAccBilling?.countryCode : '',
+        });
+      }
+      if (userAccShipping) {
+        setShippingAddress(userAccShipping);
+        setShippingInitial({
+          firstname: shippingAddress ? shippingAddress?.firstname : '',
+          lastName: shippingAddress ? shippingAddress?.lastName : '',
+          email: shippingAddress ? shippingAddress?.email : '',
+          address1: shippingAddress ? shippingAddress?.address1 : '',
+          address2: shippingAddress ? shippingAddress?.address2 : '',
+          suite: shippingAddress ? shippingAddress?.suite : '',
+          city: shippingAddress ? shippingAddress?.city : '',
+          state: shippingAddress ? shippingAddress?.state : '',
+          postalCode: shippingAddress ? shippingAddress?.postalCode : '',
+          Phone: shippingAddress ? shippingAddress?.phone : '',
+          fax: shippingAddress ? shippingAddress?.fax : '',
+          CountryName: shippingAddress ? shippingAddress?.countryName : '',
+          isDefault: true,
+          companyName: shippingAddress ? shippingAddress?.companyName : '',
+          countryCode: shippingAddress ? shippingAddress?.countryCode : '',
+        });
       }
     }
   }, [customer]);
+
+  const addPaymentDetails = () => {
+    if (employeeLogin.isPaymentPending) {
+      return {
+        paymentMethod: 'PAYMENTPENDING',
+      };
+    }
+
+    const card = {
+      cardType: detectCardType(),
+      cardNumber: cardDetails.cardNumber,
+      cardVarificationCode: cardDetails.cardVarificationCode,
+      cardExpirationMonth: cardDetails.cardExpirationMonth,
+      cardExpirationYear: cardDetails.cardExpirationYear,
+      isCreditLimit: false,
+      paymentMethod: PaymentMethod.CREDITCARD,
+      paymentGateway: PaymentMethod.CHARGELOGIC,
+    };
+
+    if (paymentMethod === paymentEnum.creditCard) {
+      return card;
+    }
+
+    const purchaseOrderObj = {
+      AuthorizationPNREF: purchaseOrder,
+      isCreditLimit: false,
+      paymentMethod: PaymentMethod.PREPAYMENT,
+      paymentGateway: PaymentMethod.PREPAYMENT,
+    };
+    if (paymentMethod === paymentEnum.purchaseOrder) {
+      return purchaseOrderObj;
+    }
+
+    return {};
+  };
+
+  const userID = GetCustomerId();
+  const [changeBillingAddress, setChangeBillingAddress] =
+    useState<boolean>(false);
 
   const validationSchema = yup.object({
     firstName: yup.string().required('Required field'),
@@ -152,56 +248,24 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
     phone: yup.number().required('Required field'),
   });
 
-  const initialBillingValues = {
-    firstname: billingAddress ? billingAddress?.firstname : '',
-    lastName: billingAddress ? billingAddress?.lastName : '',
-    email: billingAddress ? billingAddress?.email : '',
-    address1: billingAddress ? billingAddress?.address1 : '',
-    address2: billingAddress ? billingAddress?.address2 : '',
-    suite: billingAddress ? billingAddress?.suite : '',
-    city: billingAddress ? billingAddress?.city : '',
-    state: billingAddress ? billingAddress?.state : '',
-    postalCode: billingAddress ? billingAddress?.postalCode : '',
-    phone: billingAddress ? billingAddress?.phone : '',
-    fax: billingAddress ? billingAddress?.fax : '',
-    countryName: billingAddress ? billingAddress?.countryName : '',
-    isDefault: true,
-    companyName: billingAddress ? billingAddress?.companyName : '',
-    countryCode: billingAddress ? billingAddress?.countryCode : '',
-  };
-
-  const initialShippingValues = {
-    firstname: shippingAddress ? shippingAddress?.firstname : '',
-    lastName: shippingAddress ? shippingAddress?.lastName : '',
-    email: shippingAddress ? shippingAddress?.email : '',
-    address1: shippingAddress ? shippingAddress?.address1 : '',
-    address2: shippingAddress ? shippingAddress?.address2 : '',
-    suite: shippingAddress ? shippingAddress?.suite : '',
-    city: shippingAddress ? shippingAddress?.city : '',
-    state: shippingAddress ? shippingAddress?.state : '',
-    postalCode: shippingAddress ? shippingAddress?.postalCode : '',
-    phone: shippingAddress ? shippingAddress?.phone : '',
-    fax: shippingAddress ? shippingAddress?.fax : '',
-    countryName: shippingAddress ? shippingAddress?.countryName : '',
-    isDefault: true,
-    companyName: shippingAddress ? shippingAddress?.companyName : '',
-    countryCode: shippingAddress ? shippingAddress?.countryCode : '',
-  };
-
   const Billingformik = useFormik({
     initialValues: initialBillingValues,
     validationSchema: validationSchema,
-    validateOnChange: true,
+    validateOnMount: true,
+    enableReinitialize: true,
     onSubmit: (values) => {},
   });
 
   const ShippingFormik = useFormik({
     initialValues: initialShippingValues,
     validationSchema: validationSchema,
-    validateOnChange: true,
+    validateOnMount: true,
+    enableReinitialize: true,
     onSubmit: (values) => {},
   });
+
   const [useShippingAddress, setUseShippingAddress] = useState<boolean>(true);
+
   const {
     totalPrice,
     subTotal,
@@ -218,7 +282,6 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
   const [showShippingMethod, setShowShippingMethod] = useState<boolean>(true);
 
   const placeOrder = async (selectedShippingMOodel: _shippingMethod) => {
-    // const shippingData = await fetchShipping(price);
     let userNewId = 0;
     setShowLoader(true);
 
@@ -341,9 +404,218 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
 
   useEffect(() => {
     if (totalPrice) {
-      fetchShipping(totalPrice);
+      if (shippingAddress?.countryName) {
+        fetchShipping(totalPrice);
+      } else {
+        fetchShipping(totalPrice, null);
+      }
     }
   }, [totalPrice, shippingAddress]);
+
+  const detectCardType = () => {
+    const cc = cardDetails.cardNumber;
+    let re = new RegExp('^4');
+    if (cc.match(re) != null) return 'VISA';
+
+    if (
+      /^(5[1-5][0-9]{14}|2(22[1-9][0-9]{12}|2[3-9][0-9]{13}|[3-6][0-9]{14}|7[0-1][0-9]{13}|720[0-9]{12}))$/.test(
+        cc,
+      )
+    )
+      return 'MASTERCARD';
+
+    re = new RegExp('^3[47]');
+    if (cc.match(re) != null) return 'AMEX';
+
+    re = new RegExp(
+      '^(6011|622(12[6-9]|1[3-9][0-9]|[2-8][0-9]{2}|9[0-1][0-9]|92[0-5]|64[4-9])|65)',
+    );
+    if (cc.match(re) != null) return 'DISCOVER';
+
+    return '';
+  };
+  const reviewOrder = async () => {
+    if (!employeeLogin.isPaymentPending) {
+      const yearFull =
+        cardDetails.cardExpirationYear.length == 2
+          ? `20${cardDetails.cardExpirationYear}`
+          : cardDetails.cardExpirationYear;
+      const givenDate = `${yearFull}${cardDetails.cardExpirationMonth}`;
+      const currentYear = new Date().getFullYear().toString();
+      const currentMonth = new Date().getMonth() + 1;
+      const currentDate = currentYear + currentMonth.toString();
+      if (paymentEnum.creditCard === paymentMethod) {
+        if (+currentDate > +givenDate) {
+          showModal({
+            message:
+              'Error in Credit Card information. Please verify and try again.',
+            title: 'Error',
+          });
+          return;
+        }
+        if (cardDetails.cardVarificationCode.length !== 3) {
+          showModal({
+            message:
+              'Error in Credit Card information. Please verify and try again.',
+            title: 'Error',
+          });
+          return;
+        }
+      }
+      if (paymentEnum.purchaseOrder == paymentMethod) {
+        if (purchaseOrder.length <= 0) {
+          showModal({
+            message: 'Invalid Purchase Order Details',
+            title: 'Error',
+          });
+          return;
+        }
+      }
+
+      const data = await getLocation();
+      if (useShippingAddress) {
+        console.log(
+          'we are in same',
+          ShippingFormik.values,
+          Billingformik.values,
+        );
+
+        const objShipping = {
+          storeCustomerAddressModel: {
+            id: 0,
+            rowVersion: '',
+            location: `${data.city}, ${data.region}, ${data.country}, ${data.postal_code}`,
+            ipAddress: data.ip_address,
+            macAddress: '00-00-00-00-00-00',
+            customerId: ~~userID,
+            firstname: ShippingFormik.values.firstname,
+            lastName: ShippingFormik.values.lastName,
+            email: customer?.email || '',
+            address1: ShippingFormik.values.address1,
+            address2: ShippingFormik.values.address2 || ' ',
+            suite: ' ',
+            city: ShippingFormik.values.city,
+            state: ShippingFormik.values.state,
+            postalCode: ShippingFormik.values.postalCode,
+            phone: ShippingFormik.values.Phone,
+            fax: ShippingFormik.values.fax ? ShippingFormik.values.fax : '',
+            countryName: ShippingFormik.values.CountryName,
+            countryCode: ShippingFormik.values.countryCode || '',
+            addressType: UserAddressType.SHIPPINGADDRESS,
+            isDefault: true,
+            recStatus: 'A',
+            companyName: ShippingFormik.values.companyName || ' ',
+          },
+        };
+
+        const objBilling = {
+          storeCustomerAddressModel: {
+            id: 0,
+            rowVersion: '',
+            location: `${data.city}, ${data.region}, ${data.country}, ${data.postal_code}`,
+            ipAddress: data.ip_address,
+            macAddress: '00-00-00-00-00-00',
+            customerId: ~~userID,
+            firstname: ShippingFormik.values.firstname,
+            lastName: ShippingFormik.values.lastName,
+            email: customer?.email || '',
+            address1: ShippingFormik.values.address1,
+            address2: ShippingFormik.values.address2 || ' ',
+            suite: ' ',
+            city: ShippingFormik.values.city,
+            state: ShippingFormik.values.state,
+            postalCode: ShippingFormik.values.postalCode,
+            phone: ShippingFormik.values.Phone,
+            fax: ShippingFormik.values.fax ? ShippingFormik.values.fax : '',
+            countryName: ShippingFormik.values.CountryName,
+            countryCode: ShippingFormik.values.countryCode || '',
+            addressType: UserAddressType.BILLINGADDRESS,
+            isDefault: true,
+            recStatus: 'A',
+            companyName: ShippingFormik.values.companyName || ' ',
+          },
+        };
+        const ShippingADD = await CreateUserAddress(objShipping);
+        const BillingADD = await CreateUserAddress(objBilling);
+
+        if (ShippingADD && BillingADD) {
+          GetStoreCustomer(+userID).then((res) => {
+            if (res === null) return;
+            updateCustomer({ customer: res });
+          });
+        }
+      } else {
+        console.log('we are in else', ShippingFormik, Billingformik);
+
+        const objShipping = {
+          storeCustomerAddressModel: {
+            id: 0,
+            rowVersion: '',
+            location: `${data.city}, ${data.region}, ${data.country}, ${data.postal_code}`,
+            ipAddress: data.ip_address,
+            macAddress: '00-00-00-00-00-00',
+            customerId: ~~userID,
+            firstname: ShippingFormik.values.firstname,
+            lastName: ShippingFormik.values.lastName,
+            email: customer?.email || '',
+            address1: ShippingFormik.values.address1,
+            address2: ShippingFormik.values.address2 || ' ',
+            suite: ' ',
+            city: ShippingFormik.values.city,
+            state: ShippingFormik.values.state,
+            postalCode: ShippingFormik.values.postalCode,
+            phone: ShippingFormik.values.phone,
+            fax: ShippingFormik.values.fax ? ShippingFormik.values.fax : '',
+            countryName: ShippingFormik.values.countryName,
+            countryCode: ShippingFormik.values.countryCode || '',
+            addressType: UserAddressType.SHIPPINGADDRESS,
+            isDefault: true,
+            recStatus: 'A',
+            companyName: ShippingFormik.values.companyName || ' ',
+          },
+        };
+
+        const objBilling = {
+          storeCustomerAddressModel: {
+            id: 0,
+            rowVersion: '',
+            location: `${data.city}, ${data.region}, ${data.country}, ${data.postal_code}`,
+            ipAddress: data.ip_address,
+            macAddress: '00-00-00-00-00-00',
+            customerId: ~~userID,
+            firstname: Billingformik.values.firstname,
+            lastName: Billingformik.values.lastName,
+            email: customer?.email || '',
+            address1: Billingformik.values.address1,
+            address2: Billingformik.values.address2 || ' ',
+            suite: ' ',
+            city: Billingformik.values.city,
+            state: Billingformik.values.state,
+            postalCode: Billingformik.values.postalCode,
+            phone: Billingformik.values.phone,
+            fax: Billingformik.values.fax ? Billingformik.values.fax : '',
+            countryName: Billingformik.values.countryName,
+            countryCode: Billingformik.values.countryCode || '',
+            addressType: UserAddressType.BILLINGADDRESS,
+            isDefault: true,
+            recStatus: 'A',
+            companyName: Billingformik.values.companyName || ' ',
+          },
+        };
+        const ShippingADD = await CreateUserAddress(objShipping);
+        const BillingADD = await CreateUserAddress(objBilling);
+
+        if (ShippingADD && BillingADD) {
+          GetStoreCustomer(+userID).then((res) => {
+            if (res === null) return;
+            updateCustomer({ customer: res });
+          });
+        }
+      }
+
+      setCurrentPage(checkoutPages.reviewOrder);
+    }
+  };
 
   return (
     <section className='mt-[20px]'>
@@ -580,13 +852,15 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
                         <PaymentType
                           changeHandler={paymentFieldUpdateHandler}
                           paymentMethod={paymentMethod}
-                          updatePaymentMethod={updatePaymentMethod}
+                          updatePaymentMethod={setPaymentMethod}
                           detectCardType={detectCardType}
                           BillingFormik={Billingformik}
                           changeBillingAddress={changeBillingAddress}
                           setChangeBillingAddress={setChangeBillingAddress}
                           setUseShippingAddress={setUseShippingAddress}
                           useShippingAddress={useShippingAddress}
+                          cardDetails={cardDetails}
+                          purchaseOrder={purchaseOrder}
                         />
                         <div className='max-w-[278px]'>
                           <button
@@ -594,10 +868,10 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
                             id='btn-review-order'
                             onClick={() => {
                               reviewOrder();
-                              setBillingAddress({ ...ShippingFormik.values });
-                              setShippingAddress({ ...ShippingFormik.values });
                             }}
-                          ></button>
+                          >
+                            {__pagesText.CheckoutPage.GotoReview}
+                          </button>
                         </div>
                       </div>
 
@@ -619,7 +893,7 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
                     <div className='pl-[15px] pr-[15px] pt-[15px] pb-[15px]'>
                       <div className='flex flex-wrap items-center justify-between'>
                         <div className='pt-[10px] pb-[10px] text-title-text'>
-                          {__pagesText.CheckoutPage.OrderReview}
+                          {__pagesText.CheckoutPage.OrderReview} test
                         </div>
                       </div>
                     </div>

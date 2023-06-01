@@ -9,14 +9,17 @@ const ProductDetail: React.FC<_ProductDetailsProps> = ({
   storeCode,
 }) => {
   return (
-    <div className='container mx-auto mt-[15px]'>
-      <div className='lg:grid lg:grid-cols-12 lg:items-start'>
+    <div className='container mx-auto mt-[30px]'>
+      <div
+        className='lg:grid lg:grid-cols-12 lg:items-start'
+        style={{ borderTop: '2px solid #f0f0f0' }}
+      >
         <div className='flex flex-wrap md:hidden'>
           <div className='w-full md:w-2/3'>
             <h1 className='text-title-text'></h1>
           </div>
         </div>
-        
+
         <ProductImg product={product} />
         <ProductInfo product={product} storeCode={storeCode} />
       </div>

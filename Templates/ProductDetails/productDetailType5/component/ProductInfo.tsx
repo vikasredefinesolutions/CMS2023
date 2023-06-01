@@ -170,7 +170,7 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
       <div
         className={`lg:col-span-${
           product?.companionProductId ? '4' : '6'
-        } mt-[15px] pl-[0px] pr-[0px] md:pl-[15px] md:pr-[15px] lg:mt-[0px]`}
+        } mt-[15px] pl-[0px] pr-[0px] md:pl-[15px] md:pr-[15px] lg:my-[30px]`}
       >
         <div className='hidden md:flex flex-wrap'>
           <div className='w-full'>

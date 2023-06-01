@@ -41,12 +41,12 @@ const AddressFormPk: React.FC<_Props> = ({ addressformik }) => {
                 <input
                   onBlur={addressformik.handleBlur}
                   onChange={addressformik.handleChange}
-                  name='firstName'
+                  name='firstname'
                   placeholder=' '
-                  value={addressformik.values.firstName}
+                  value={addressformik.values.firstname}
                   className='form-input !w-[calc(100%-40px)]'
                 />
-                {addressformik.errors.firstName ? (
+                {addressformik.errors.firstname ? (
                   <img className='ml-[5px] ' src='/no.png' />
                 ) : (
                   <img className='ml-[5px]' src='/yes.png' />
@@ -81,12 +81,12 @@ const AddressFormPk: React.FC<_Props> = ({ addressformik }) => {
                 <input
                   onBlur={addressformik.handleBlur}
                   onChange={addressformik.handleChange}
-                  name='streetAddress'
+                  name='address1'
                   placeholder=' '
-                  value={addressformik.values.streetAddress}
+                  value={addressformik.values.address1}
                   className='form-input !w-[calc(100%-40px)]'
                 />
-                {addressformik.errors.streetAddress ? (
+                {addressformik.errors.address1 ? (
                   <img className='ml-[5px] ' src='/no.png' />
                 ) : (
                   <img className='ml-[5px]' src='/yes.png' />
@@ -100,9 +100,9 @@ const AddressFormPk: React.FC<_Props> = ({ addressformik }) => {
               <input
                 onBlur={addressformik.handleBlur}
                 onChange={addressformik.handleChange}
-                name='aptSuite'
+                name='address2'
                 placeholder=' '
-                value={addressformik.values.aptSuite}
+                value={addressformik.values.address2}
                 className='form-input'
               />
             </div>
@@ -112,12 +112,12 @@ const AddressFormPk: React.FC<_Props> = ({ addressformik }) => {
                 <input
                   onBlur={addressformik.handleBlur}
                   onChange={addressformik.handleChange}
-                  name='zipCode'
+                  name='postalCode'
                   placeholder=' '
-                  value={addressformik.values.zipCode}
+                  value={addressformik.values.postalCode}
                   className='form-input  !w-[calc(100%-40px)]'
                 />
-                {addressformik.errors.zipCode ? (
+                {addressformik.errors.postalCode ? (
                   <img className='ml-[5px] ' src='/no.png' />
                 ) : (
                   <img className='ml-[5px]' src='/yes.png' />
@@ -156,8 +156,17 @@ const AddressFormPk: React.FC<_Props> = ({ addressformik }) => {
                   onChange={addressformik.handleChange}
                   value={addressformik.values.state}
                 >
+                  <option value={''}>Select State</option>
+
                   {stateList.map((item) => {
-                    return <option value={item.id}>{item.name}</option>;
+                    if (addressformik.values.state == item.name) {
+                      return (
+                        <option value={item.name} selected>
+                          {item.name}
+                        </option>
+                      );
+                    }
+                    return <option value={item.name}>{item.name}</option>;
                   })}
                 </select>
                 {addressformik.errors.state ? (
@@ -175,22 +184,30 @@ const AddressFormPk: React.FC<_Props> = ({ addressformik }) => {
                 <select
                   className='form-input !w-[calc(100%-40px)]'
                   placeholder='Select Country'
-                  name='country'
+                  name='CountryName'
                   onChange={(e) => {
                     let id = countries.filter(
                       (item) => item.name === e.target.value,
                     );
                     setCountryId(id[0].id);
-                    addressformik.setFieldValue('country', e.target.value);
+                    addressformik.setFieldValue('CountryName', e.target.value);
+                    addressformik.setFieldValue('state', '');
                   }}
-                  value={addressformik.values.country}
+                  value={addressformik.values.countryName}
                 >
                   <option value={''}>Select Country</option>
                   {countries.map((item) => {
+                    if (addressformik.values.CountryName == item.name) {
+                      return (
+                        <option value={item.name} selected>
+                          {item.name}
+                        </option>
+                      );
+                    }
                     return <option value={item.name}>{item.name}</option>;
                   })}
                 </select>
-                {addressformik.errors.country ? (
+                {addressformik.errors.CountryName ? (
                   <img className='ml-[5px] ' src='/no.png' />
                 ) : (
                   <img className='ml-[5px]' src='/yes.png' />
@@ -203,12 +220,12 @@ const AddressFormPk: React.FC<_Props> = ({ addressformik }) => {
                 <input
                   onBlur={addressformik.handleBlur}
                   onChange={addressformik.handleChange}
-                  name='phone'
+                  name='Phone'
                   placeholder=' '
-                  value={addressformik.values.phone}
+                  value={addressformik.values.Phone}
                   className='form-input  !w-[calc(100%-40px)]'
                 />
-                {addressformik.errors.phone ? (
+                {addressformik.errors.Phone ? (
                   <img className='ml-[5px] ' src='/no.png' />
                 ) : (
                   <img className='ml-[5px]' src='/yes.png' />

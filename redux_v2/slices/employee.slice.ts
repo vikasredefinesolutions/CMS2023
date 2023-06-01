@@ -6,6 +6,7 @@ export interface _EmployeeState {
   employee: EmployeeType | null;
   loggedIn: boolean;
   isLoadingComplete: boolean;
+  isEmpGuest: boolean;
 }
 
 const initialState: _EmployeeState = {
@@ -13,6 +14,7 @@ const initialState: _EmployeeState = {
   employee: null,
   loggedIn: false,
   isLoadingComplete: false,
+  isEmpGuest: false, // FOR PK
 };
 
 export const employeeSlice = createSlice({
@@ -35,6 +37,7 @@ export const employeeSlice = createSlice({
         state.empId = null;
         state.loggedIn = false;
         state.isLoadingComplete = true;
+        state.isEmpGuest = false;
         return;
       }
 
@@ -42,6 +45,9 @@ export const employeeSlice = createSlice({
       state.empId = action.payload.empId;
       state.loggedIn = true;
       state.isLoadingComplete = true;
+    },
+    employee_Login: (state, action: { payload: { isGuest: boolean } }) => {
+      state.isEmpGuest = action.payload.isGuest;
     },
   },
 });

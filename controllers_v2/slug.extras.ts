@@ -42,6 +42,7 @@ export interface _ProductList_PropsData {
   checkedFilters: _CheckedFilter[];
   brandId: number;
   googleTagManagerResponseCommonData: any | null;
+  categoryComponents: string | null;
 }
 
 export interface _BrandSEO {

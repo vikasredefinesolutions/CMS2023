@@ -3,7 +3,7 @@ export interface _CreateNewAccount_Payload {
 }
 
 export interface _CreateNewAccount_Payload_without {
-  storeCustomerModel: {
+  storeCustomerGuestModel: {
     id: number;
     email: string;
     password: string;

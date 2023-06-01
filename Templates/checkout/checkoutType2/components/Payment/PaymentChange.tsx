@@ -17,6 +17,7 @@ interface _PaymentProps {
     cardExpirationMonth: string;
     cardExpirationYear: string;
     cardVarificationCode: string;
+    creditCardHolder: string;
   };
   purchaseOrder?: string;
   paymentMethod?: paymentMethodCustom;

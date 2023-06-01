@@ -144,6 +144,8 @@ const AddOTFItemNo = ({ closeModal }: { closeModal: () => void }) => {
           productId: otfResponse.id,
           storeId: storeId,
           isempLogin: true,
+          ipAddress: '192.168.1.1',
+          isForm: false,
           shoppingCartItemModel: {
             price: totalPrice,
             quantity: totalQty,

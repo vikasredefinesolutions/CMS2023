@@ -90,6 +90,10 @@ const ProductInfo: React.FC<_Props> = ({
 
   const { image } = useTypedSelector_v2((state) => state.product.selected);
 
+  const isEmployeeGuestLoggedIn = useTypedSelector_v2(
+    (state) => state.employee.isEmpGuest,
+  );
+
   useEffect(() => {
     const handleScroll = () => {
       const element = document.getElementById('mainContent');
@@ -102,6 +106,37 @@ const ProductInfo: React.FC<_Props> = ({
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
+
+  const BUY_NOW_BTN_HTML = (): React.ReactNode => {
+    //if condition order matters here
+    let disableBtn = product?.isDiscontinue;
+    let btnText = 'LOGIN TO SHOP NOW WITH LIVE INVENTORY';
+
+    if (disableBtn) {
+      btnText = 'Discontinued';
+    }
+
+    if (userId) {
+      btnText = 'CUSTOMIZE NOW AND ADD TO CART';
+    }
+
+    if (isEmployeeGuestLoggedIn) {
+      disableBtn = false;
+      btnText = 'CUSTOMIZE NOW AND ADD TO CART';
+    }
+
+    return (
+      <div className='m-[12px] mt-[24px]'>
+        <button
+          disabled={disableBtn}
+          onClick={buyNowHandler}
+          className='btn btn-primary text-center btn-lg w-full'
+        >
+          {btnText}
+        </button>
+      </div>
+    );
+  };
 
   return (
     <>
@@ -254,23 +289,7 @@ const ProductInfo: React.FC<_Props> = ({
           </>
         )}
 
-        <form className='mt-[24px]'>
-          <div className='m-[12px] mt-[24px]'>
-            <button
-              disabled={product?.isDiscontinue}
-              onClick={(e) => {
-                buyNowHandler(e);
-              }}
-              className='btn btn-primary text-center btn-lg w-full'
-            >
-              {product?.isDiscontinue
-                ? 'Discontinued'
-                : userId
-                ? 'CUSTOMIZE NOW AND ADD TO CART'
-                : 'LOGIN TO SHOP NOW WITH LIVE INVENTORY'}
-            </button>
-          </div>
-        </form>
+        <form className='mt-[24px]'>{BUY_NOW_BTN_HTML()}</form>
         <div className='pt-[15px] text-default-text '>
           <span className='font-bold'>
             {__pagesText.productInfo.notesPk.pleaseNote}

@@ -371,7 +371,7 @@ const CI1_Item: React.FC<_CartItem & _Props> = (props) => {
                   </div>
                 </div>
 
-                {props.itemNote && (
+                {props?.itemNote && (
                   <div className='flex  py-3 border-t border-b'>
                     <div className='text-normal-text w-30 font-bold'>
                       Item Note:

@@ -37,6 +37,8 @@ const BuyNowHandler: React.FC<_Props> = (size) => {
       userId: loggedIN_userId || 0,
       storeId: storeId || 0,
       isEmployeeLoggedIn,
+      isForm: false,
+      ipAddress: '192.168.1.1',
       note: '',
       sizeQtys: sizeQtys,
       productDetails: selectedProduct,

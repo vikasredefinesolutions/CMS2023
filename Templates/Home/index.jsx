@@ -465,7 +465,8 @@ const Home = (props) => {
                               <div
                                 dangerouslySetInnerHTML={{
                                   __html:
-                                    componentValue.selectedVal?.PlainText.value,
+                                    componentValue.selectedVal?.PlainText
+                                      ?.value,
                                 }}
                               />
                             </>

@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+import { __pageTypeConstant } from '@constants/global.constant';
 import { splitproductList } from '@definations/productList.type';
 import React from 'react';
 
@@ -6,6 +7,11 @@ export interface _ProductListingProps {
   pageData: _PageData;
   slug: string;
   seType: string;
+  CMS: {
+    component: string | null;
+    type: __pageTypeConstant.category;
+    slug: string;
+  };
 }
 
 export interface _ListingProps {
@@ -31,6 +37,11 @@ export interface _ListingProps {
   brandId: number | null;
   sortingType?: number;
   clearFilterSection: (value: string) => void;
+  CMS: {
+    component: string | null;
+    type: __pageTypeConstant.category;
+    slug: string;
+  };
 }
 
 export interface _PageData {

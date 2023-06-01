@@ -189,3 +189,32 @@ export const CustomRequestMessage = {
     required: 'Need by date is required',
   },
 };
+
+export const consultationProofMessages = {
+  firstname: {
+    required: 'First name is required',
+  },
+  lastname: {
+    required: 'Last name is required',
+  },
+  company: {
+    required: 'Organization name is required',
+  },
+
+  email: {
+    required: 'Email is required',
+    invalid: 'Email is invalid',
+  },
+  state: {
+    required: 'State is required',
+  },
+  city: {
+    required: 'City is required',
+  },
+  desiredQuantity: {
+    required: 'Quantity is required',
+  },
+  teamSport: {
+    required: 'TeamSport is required',
+  },
+};

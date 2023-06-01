@@ -121,6 +121,8 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
             userId: customerId || 0,
             storeId: storeId || 0,
             isEmployeeLoggedIn,
+            isForm: false,
+            ipAddress: '192.168.1.1',
             note: '',
             sizeQtys: Product.sizeQtys || [],
             productDetails: Product,

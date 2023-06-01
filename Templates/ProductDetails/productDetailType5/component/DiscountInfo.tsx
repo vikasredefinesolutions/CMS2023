@@ -18,6 +18,9 @@ const DiscountInfo: React.FC<{
   const totalQty = useTypedSelector_v2(
     (state) => state.product.toCheckout.totalQty,
   );
+  const minQty = useTypedSelector_v2(
+    (state) => state.product.product.discounts?.minimumUnits,
+  );
   const [qtyRequired, setQtyRequired] = useState(0);
   const [nextDiscountPrice, setNextDiscountPrice] = useState(0);
 
@@ -59,9 +62,9 @@ const DiscountInfo: React.FC<{
   return (
     <>
       <div className='px-[15px] py-[10px] bg-[#000000] text-[#ffffff] text-center leading-3 font-bold '>
-        Add {totalQty - qtyRequired} more of this{' '}
-        <h3 className='inline'>{product?.name}</h3> to your cart to save an
-        additional $
+        Add {qtyRequired - totalQty == 0 ? minQty : qtyRequired - totalQty} more
+        of this <h3 className='inline'>{product?.name}</h3> to your cart to save
+        an additional $
         {product?.msrp && parseFloat(`${product?.msrp - nextDiscountPrice}`)}
         {'.00 '}
         per Item!

@@ -14,6 +14,7 @@ export type paymentProps = FC<{
     cardExpirationMonth: string;
     cardExpirationYear: string;
     cardVarificationCode: string;
+    creditCardHolder: string;
   };
   paymentMethod?: paymentMethodCustom;
 
@@ -37,6 +38,7 @@ const PaymentType: FC<{
     cardExpirationMonth: string;
     cardExpirationYear: string;
     cardVarificationCode: string;
+    creditCardHolder: string;
   };
   purchaseOrder?: string;
   setUseShippingAddress: (args: boolean) => void;
@@ -52,6 +54,8 @@ const PaymentType: FC<{
   setChangeBillingAddress,
   setUseShippingAddress,
   useShippingAddress,
+  cardDetails,
+  purchaseOrder,
 }) => {
   switch (paymentMethod) {
     case paymentMethodCustom.creditCard:
@@ -76,6 +80,7 @@ const PaymentType: FC<{
               updatePaymentMethod,
               detectCardType,
               paymentMethod,
+              cardDetails,
             }}
           />
         </>
@@ -89,6 +94,7 @@ const PaymentType: FC<{
               cardExpirationMonth: '',
               cardExpirationYear: '',
               cardVarificationCode: '',
+              creditCardHolder: '',
             }}
             purchaseOrder={''}
             {...{
@@ -108,6 +114,7 @@ const PaymentType: FC<{
               updatePaymentMethod,
               changeHandler,
               paymentMethod,
+              purchaseOrder,
             }}
           />
         </>

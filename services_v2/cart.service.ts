@@ -1,3 +1,4 @@
+import { __LocalStorage } from '@constants/global.constant';
 import { SendAsync } from '@utils/axios.util';
 import {
   AddPromoCodeReq,
@@ -20,6 +21,12 @@ export const getCartDetails = async (
   customerId: number,
   isEmpLoggedIn: boolean,
 ): Promise<_CartItem[]> => {
+  const employeeSessionData =
+    localStorage.getItem(__LocalStorage.empData) || '';
+  const decodedData = employeeSessionData
+    ? JSON.parse(decodeURIComponent(employeeSessionData))
+    : {};
+  isEmpLoggedIn = decodedData ? !!decodedData?.id : isEmpLoggedIn;
   const url = `Store/GetShoppingCartItemsDetail/${customerId}/${isEmpLoggedIn}.json`;
   const response = await SendAsync<_CartItem[]>({
     url,

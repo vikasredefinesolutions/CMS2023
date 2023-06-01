@@ -26,7 +26,7 @@ const UpperHeader: React.FC<_props> = (headerContent) => {
     ? headerContent.headerContent.rightSideText
     : '';
 
-  const employeeClear = () => {
+  const logoutEmployeeHandler = () => {
     // Don't logout LoggedIn user
     setShowLoader(true);
     updateEmployeeV2('CLEAN_UP');
@@ -63,7 +63,7 @@ const UpperHeader: React.FC<_props> = (headerContent) => {
                         <button
                           className='ml-1'
                           style={{ color: '#7BC24E' }}
-                          onClick={() => employeeClear()}
+                          onClick={logoutEmployeeHandler}
                         >
                           (LogOut)
                         </button>

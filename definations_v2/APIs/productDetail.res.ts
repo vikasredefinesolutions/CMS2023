@@ -91,6 +91,7 @@ export interface _ProductDetails {
   sizes: string;
   brandColorLogoUrl: string;
   brandBannerImage: null;
+  companionMSRP: string | null;
   isDiscontinue: boolean;
   discontinueDate: string;
   discontinueEndDate: string;

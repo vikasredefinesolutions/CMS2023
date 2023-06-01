@@ -8,7 +8,10 @@ import { BrandFilter, CategoryFilter } from '@definations/productList.type';
 import { _GetPageType } from '@definations/slug.type';
 import { extractSlugName } from '@helpers/common.helper';
 import { highLightError } from '@helpers/console.helper';
-import { getPageComponents } from '@services/home.service';
+import {
+  GetPageComponentsByCategoryId,
+  getPageComponents,
+} from '@services/home.service';
 import { FetchFiltersJSON } from '@services/product.service';
 import { FetchPageType } from '@services/slug.service';
 import { GetServerSideProps, GetServerSidePropsResult } from 'next';
@@ -226,6 +229,7 @@ export const getServerSideProps: GetServerSideProps = async (
     let product: GetlAllProductList[] = [];
     let configs: _FetchPageThemeConfigs_ProductListing | null = null;
     let googleTagManagerResponseCommonData: any | null = null;
+    let categoryComponents: any | null = null;
 
     try {
       const filter = {
@@ -244,9 +248,12 @@ export const getServerSideProps: GetServerSideProps = async (
           'productListing',
         ),
         FetchFiltersJSON(pageMetaData.type, filter),
+        GetPageComponentsByCategoryId({ categoryId: pageMetaData.id }),
       ]).then((values) => {
         configs = values[0].status === 'fulfilled' ? values[0].value : null;
         ProductFilt = values[1].status === 'fulfilled' ? values[1].value : null;
+        categoryComponents =
+          values[2].status === 'fulfilled' ? values[2].value : null;
       });
 
       if (ProductFilt) {
@@ -280,6 +287,7 @@ export const getServerSideProps: GetServerSideProps = async (
           checkedFilters: FilterOptions,
           brandId: pageMetaData.id,
           googleTagManagerResponseCommonData,
+          categoryComponents: categoryComponents,
         },
         metaData: pageMetaData,
         configs: {

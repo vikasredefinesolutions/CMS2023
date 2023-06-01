@@ -29,6 +29,7 @@ const ProductListing: React.FC<_ProductListingProps & { id: string }> = ({
   id,
   pageData,
   seType,
+  CMS,
   slug,
 }) => {
   const isCaptured = useRef(false);
@@ -116,6 +117,7 @@ const ProductListing: React.FC<_ProductListingProps & { id: string }> = ({
       brandId={pageData?.brandId}
       sortingType={sorting}
       clearFilterSection={clearFilterSection}
+      CMS={CMS}
     />
   );
 };

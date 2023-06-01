@@ -27,7 +27,7 @@ const ProductCompanion: React.FC<_ProductCompanion> = ({
   return (
     <>
       <div className='lg:col-span-2 mt-[15px] pl-[0px] pr-[0px] md:pl-[15px] md:pr-[15px] lg:mt-[0px] lg:pr-0'>
-        <div className='bg-light-gray p-[10px] mb-[10px] text-center text-title-text'>
+        <div className='bg-light-gray p-[10px] mt-[20px] mb-[15px] text-center text-title-text'>
           Companion
         </div>
         <div className='relative border border-gray-200 p-[20px] text-center'>
@@ -52,6 +52,9 @@ const ProductCompanion: React.FC<_ProductCompanion> = ({
                   {product?.companionProductName}
                 </a>
               </Link>
+            </div>
+            <div className='color-#415364 py-[5px] text-base'>
+              MSRP <span>${product?.companionMSRP}</span>
             </div>
             <div className='mb-[10px] text-black text-base tracking-wider'>
               <span className='font-semibold'></span>
@@ -102,10 +105,10 @@ const ProductCompanion: React.FC<_ProductCompanion> = ({
                 companionProductcolor.map((subRow, index) =>
                   index < listing_max_showcolors ? (
                     <li
-                      className={`w-7 h-7 border-2 hover:border-secondary cursor-pointer ${
+                      className={`w-7 h-7 border-2 hover:border-tertiary cursor-pointer ${
                         subRow.imageUrl === selectedCompanionimg
-                          ? ' border-secondary'
-                          : 'border-light-gray'
+                          ? ' border-primary'
+                          : 'border-secondary'
                       }`}
                       onClick={() => {
                         setselectedCompanionimg(subRow.imageUrl);

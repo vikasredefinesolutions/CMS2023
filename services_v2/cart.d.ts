@@ -212,10 +212,14 @@ export interface AddToCartModel {
   productId: number;
   storeId: number;
   isempLogin: boolean;
+  ipAddress: string;
+  isForm: boolean;
   shoppingCartItemModel: ShoppingCartItemModel;
   shoppingCartItemsDetailModels: ShoppingCartItemsDetailModel[];
   cartLogoPersonModel: CartLogoPersonModel[];
   cartLogoPersonDetailModels: CartLogoPersonDetailModel[];
+  ipAddress: string;
+  isForm: boolean;
 }
 export interface CartReq {
   addToCartModel: AddToCartModel;

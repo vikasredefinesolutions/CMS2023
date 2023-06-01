@@ -10,10 +10,11 @@ export const _StoreDomains = {
   // domain1: 'corporategear',
   // domain1: 'cg.headlessmart.com',
   domain1: 'cg.redefinecommerce.info',
-  domain2: 'gg.redefinecommerce.info',
+  domain2: 'gamedaygear.info',
   domain3: 'pkhealthgear.online',
-  domain4: 'di.redefinecommerce.info',
-  domain5: 'https://bacardi.headlessmart.com',
+  // domain3: 'pkhealthgear.redefinecommerce.info',
+  domain4: 'drivingi.online',
+  domain5: 'corporategear.online',
   domain6: 'bacarditogo.headlessmart.com', // CLOSED
   domain7: 'bbcprod.redefinecommerce.info',
   domain8: 'bain.redefinecommerce.info',
@@ -29,6 +30,7 @@ export const _StoreDomains = {
   domain18: 'theHardFordClaimsapparel', // CLOSED
   domain19: 'theHardFordJuniorfireMarshal', // CLOSED
   domain20: 'theHardFordVolshirt', // CLOSED
+  // domain21: 'corporategear.online',
   domain21: 'cg.redefinecommerce.info',
   domain22: 'humanadev.parsonskellogg.com',
   domain23: 'ussaClaimsApparel',
@@ -47,7 +49,7 @@ export const _StoreDomains = {
 
 export const __domain = {
   isSiteLive: true,
-  localDomain: _StoreDomains.domain2,
+  localDomain: _StoreDomains.domain5,
 };
 
 export const defaultCountry = 1;

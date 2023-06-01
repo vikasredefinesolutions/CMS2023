@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/rules-of-hooks */
 import SeoHead from '@appComponents/reUsable/SeoHead';
-import { __Error } from '@constants/global.constant';
+import { __Error, __pageTypeConstant } from '@constants/global.constant';
 import { getServerSideProps } from '@controllers/getServerSideProps';
 import { _FetchProductDetails } from '@controllers/ProductController.async';
 import { _ProductList_PropsData } from '@controllers/slug.extras';
@@ -135,6 +135,11 @@ const SlugSearch: NextPage<_Slug_Props, _Slug_Props> = (props) => {
           slug={metaData.slug}
           seType={metaData.type}
           id={configs.templateId}
+          CMS={{
+            component: listingData.categoryComponents,
+            type: __pageTypeConstant.category,
+            slug: metaData.slug,
+          }}
         />
       </>
     );
@@ -145,4 +150,3 @@ const SlugSearch: NextPage<_Slug_Props, _Slug_Props> = (props) => {
 
 export default SlugSearch;
 export { getServerSideProps };
-

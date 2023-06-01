@@ -264,7 +264,7 @@ const CartSummarryType1: FC<_props> = ({ selectedShippingModel }) => {
               )}
             </dt>
           </div>
-          {ShippingHTML(selectedShippingModel?.price)}
+          {ShippingHTML(getNewShippingCost(selectedShippingModel?.price))}
           {currentPage === 'CHECKOUT' && (
             <div className='border-t border-gray-200 flex items-center justify-between pt-[10px]'>
               <dt className='text-normal-text flex items-center'>

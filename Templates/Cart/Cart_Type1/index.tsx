@@ -43,7 +43,7 @@ const CartType1: React.FC<_CartProps> = ({
 
   // All useEffects
   useEffect(() => {
-    if (storeId) {
+    if (storeId && !isEmployeeLoggedIn) {
       getPersonalizationFont(storeId).then((res) => {
         setAvailableFont(res);
       });

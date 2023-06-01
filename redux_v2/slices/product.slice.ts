@@ -521,6 +521,15 @@ export const productSlice = createSlice({
         lines: null,
         additionalSewOutCharges: 0,
       };
+      state.som_logos = {
+        ...state.som_logos,
+        prices: null,
+        details: null,
+        allowNextLogo: false,
+        availableOptions: null,
+        additionalLogoCharge: 0,
+        choosedLogoCompletionPending: null,
+      };
     },
 
     product_editLogoPrice: (

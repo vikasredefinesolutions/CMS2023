@@ -24,6 +24,7 @@ const CardPaymentType: paymentProps = ({
   const [cvv, setcvv] = useState<number | string>(
     cardDetails?.cardVarificationCode ? cardDetails?.cardVarificationCode : '',
   );
+
   const [showMonthImage, setshowMonthImage] = useState<
     'right' | 'wrong' | 'no'
   >('no');
@@ -39,6 +40,10 @@ const CardPaymentType: paymentProps = ({
   const handleCVV = (e: any) => {
     if (!Number(e.target.value)) {
       setcvv('');
+      setcardValidation({
+        ...cardValidation,
+        [e.target.name]: '',
+      });
       return;
     } else {
       if (e.target.value.length < e.target.maxLength + 1) {
@@ -54,34 +59,51 @@ const CardPaymentType: paymentProps = ({
   const handleCard = (e: any) => {
     if (!Number(e.target.value) || e.target.value.length == 0) {
       setcardCheck(false);
-      setInput('');
-
+      setcardValidation({
+        ...cardValidation,
+        [e.target.name]: '',
+      });
       return;
     } else {
+      const type = detectCardType && detectCardType();
+      setcardCheck(true);
       if (e.target.value.length < e.target.maxLength + 1) {
-        setInput(e.target.value);
-        setcardCheck(true);
+        setcardValidation({
+          ...cardValidation,
+          [e.target.name]: e.target.value,
+        });
       }
     }
   };
 
   const [cardValidation, setcardValidation] = useState({
-    cardExpirationYear: '',
-    cardExpirationMonth: '',
-    creditCardHolder: '',
-    cardVarificationCode: '',
+    cardExpirationYear: cardDetails?.cardExpirationYear
+      ? cardDetails?.cardExpirationYear
+      : '',
+    cardExpirationMonth: cardDetails?.cardExpirationMonth
+      ? cardDetails?.cardExpirationMonth
+      : '',
+    creditCardHolder: cardDetails?.creditCardHolder
+      ? cardDetails?.creditCardHolder
+      : '',
+    cardVarificationCode: cardDetails?.cardVarificationCode
+      ? cardDetails?.cardVarificationCode
+      : '',
+    cardNumber: cardDetails?.cardNumber ? cardDetails?.cardNumber : '',
   });
 
   const handledate = () => {
     const date = new Date();
-    const givendate =
-      cardValidation.cardExpirationYear.toString() +
-      cardValidation.cardExpirationMonth;
-    // const month =
-    //   date.getMonth() + 1 < 10
-    //     ? `0${date.getMonth() + 1}`
-    //     : `${date.getMonth() + 1}`;
-    const currentdate = date.getFullYear().toString() + (date.getMonth() + 1);
+    const givenMonth =
+      +cardValidation.cardExpirationMonth < 10
+        ? `0${cardValidation.cardExpirationMonth}`
+        : `${cardValidation.cardExpirationMonth}`;
+    const givendate = cardValidation.cardExpirationYear.toString() + givenMonth;
+    const month =
+      date.getMonth() + 1 < 10
+        ? `0${date.getMonth() + 1}`
+        : `${date.getMonth() + 1}`;
+    const currentdate = date.getFullYear().toString() + month;
 
     if (+givendate >= +currentdate) {
       setshowMonthImage('right');
@@ -126,6 +148,7 @@ const CardPaymentType: paymentProps = ({
               }
               onFocus={() => setCardName(true)}
               onBlur={changeHandler}
+              value={cardValidation.creditCardHolder}
               name='creditCardHolder'
               required={true}
               className='form-input !w-[calc(100%-40px)]'
@@ -172,7 +195,7 @@ const CardPaymentType: paymentProps = ({
               name='cardNumber'
               placeholder=' '
               required={true}
-              value={input}
+              value={cardValidation.cardNumber}
               maxLength={
                 +`${detectCardType && detectCardType() === 'AMEX' ? 15 : 16}`
               }
@@ -194,7 +217,7 @@ const CardPaymentType: paymentProps = ({
                 </div>
               ))}
 
-            {input.toString().length > 0 && (
+            {cardValidation.cardNumber.toString().length > 0 && (
               <div className='w-8 h-8'>
                 <NxtImage
                   src={yesImg}
@@ -206,7 +229,7 @@ const CardPaymentType: paymentProps = ({
                 />
               </div>
             )}
-            {input.toString().length == 0 && cardImage ? (
+            {cardValidation.cardNumber.toString().length == 0 && cardImage ? (
               <div className='w-8 h-8'>
                 <NxtImage
                   src={noImg}
@@ -248,7 +271,6 @@ const CardPaymentType: paymentProps = ({
                   }}
                   value={cardValidation.cardExpirationMonth}
                   name='cardExpirationMonth'
-                  data-value={cardValidation.cardExpirationMonth}
                   maxLength={2}
                   placeholder='02'
                   className='form-input apperance !w-[calc(100%-40px)]'
@@ -293,7 +315,7 @@ const CardPaymentType: paymentProps = ({
                 name='cardExpirationYear'
                 onKeyDown={blockInvalidChar}
                 disabled={employeeLogin.isPaymentPending}
-                data-value={cardValidation.cardExpirationYear}
+                value={cardValidation.cardExpirationYear.slice(2)}
                 type='text'
                 placeholder='02'
                 maxLength={2}
@@ -339,7 +361,7 @@ const CardPaymentType: paymentProps = ({
               onChange={handleCVV}
               name='cardVarificationCode'
               maxLength={3}
-              value={cvv}
+              value={cardValidation.cardVarificationCode}
               className='form-input !w-[calc(100%-40px)] appearance-none'
             />
             {cardValidation.cardVarificationCode.length === 3 && (
