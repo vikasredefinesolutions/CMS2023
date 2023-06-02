@@ -119,6 +119,7 @@ const CO1_EL_Dropdowns: React.FC<_Props> = () => {
                         supressedLabel={field.supressedLabel}
                         label={field.label}
                         onChange={(event) => {
+                          if (event.target.value === 'none') return;
                           if (field.name === 'source') {
                             update_checkoutEmployeeLogin({
                               type: 'SOURCE_MEDIUM',

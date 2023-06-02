@@ -102,11 +102,16 @@ const CT1_EL_SizeQtyPrice: React.FC<_Props> = ({ details, setDetails }) => {
                   }
                   min={1}
                   onChange={(event) => {
+                    if (event.target.value.toString() === '0') {
+                      // handleChange(event);
+                      return setFieldValue('qty', 1);
+                    }
                     if (!event.target.value.includes('.')) {
                       handleChange(event);
                     }
                   }}
-                  onBlur={() => {
+                  onBlur={(event) => {
+                    if (!event.target.value) setFieldValue('qty', 1);
                     submitForm();
                   }}
                 />

@@ -92,7 +92,7 @@ export const CO1_El_Select: React.FC<_SelectProps> = ({
         {/* {options.length === 0 ? (
           <option value={'Others'}>{noOptionText}</option>
         ) : null} */}
-        <option value=''></option>
+        <option value='none'></option>
         {options.map((option) => {
           return (
             <option key={option.value} value={option.value}>
