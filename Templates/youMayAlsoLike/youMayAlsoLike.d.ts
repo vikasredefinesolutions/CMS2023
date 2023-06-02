@@ -12,6 +12,7 @@ export interface _YouMayAlsoLikeTemplates {
   type2: React.FC<_TemplateProps>;
   type3: React.FC<_TemplateProps>;
   type4: React.FC<_TemplateProps>;
+  type5: React.FC<_TemplateProps>;
 }
 
 export interface _TemplateProps {

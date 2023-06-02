@@ -2,6 +2,7 @@ import { _defaultTemplates } from '@configs/template.config';
 import { NextPage } from 'next';
 import YouMayAlsoLikeType1 from './YouMayAlsoLikeType1';
 import YouMayAlsoLikeType2 from './YouMayAlsoLikeType2';
+import YouMayAlsoLikeType5 from './YouMayAlsoLikeType5';
 import {
   _YouMayAlsoLikeProps,
   _YouMayAlsoLikeTemplates,
@@ -12,6 +13,7 @@ const YouMayAlsoLikeTemplates: _YouMayAlsoLikeTemplates = {
   type2: YouMayAlsoLikeType2,
   type3: YouMayAlsoLikeType1,
   type4: YouMayAlsoLikeType1,
+  type5: YouMayAlsoLikeType5,
 };
 const YouMayAlsoLike: NextPage<_YouMayAlsoLikeProps> = ({ product, id }) => {
   const YouMayAlsoLikeTemplate =
