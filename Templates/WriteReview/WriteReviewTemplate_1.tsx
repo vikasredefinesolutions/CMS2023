@@ -182,7 +182,7 @@ const WriteReviewTemplate_1 = () => {
               <div className='w-full mt-[12px]'>
                 <div className='items-center w-full pl-[15px] pr-[15px] pt-[16px] pb-[16px] mb-[20px]'>
                   <div className='text-title-text mr-[12px] font-semibold text-center'>
-                    {__pagesText.review.writeReview}
+                    {__pagesText.review.writeReview} jdfajkdfasjdfhk
                   </div>
                 </div>
                 <ul className='overflow-hidden' role='list'>

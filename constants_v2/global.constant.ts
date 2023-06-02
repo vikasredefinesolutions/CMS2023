@@ -164,13 +164,13 @@ export const GDG_RequestQuote_DesiredQuantities = [
 
 export const formFields: any = [
   {
-    name: 'firstname',
+    name: 'firstName',
     label: 'First Name:',
     placeholder: 'First Name *',
     isRequired: true,
   },
   {
-    name: 'lastname',
+    name: 'lastName',
     label: 'Last Name:',
     placeholder: 'Last Name *',
     isRequired: true,
@@ -182,14 +182,14 @@ export const formFields: any = [
     isRequired: true,
   },
   {
-    name: 'phone',
+    name: 'phoneNumber',
     label: 'Phone Number:',
     placeholder: 'Phone Number',
     type: 'number',
     isRequired: false,
   },
   {
-    name: 'company',
+    name: 'organization',
     label: 'School/Organization:',
     placeholder: 'School/Organization *',
     isRequired: true,
@@ -215,7 +215,7 @@ export const formFields: any = [
     isRequired: true,
   },
   {
-    name: 'desiredQuantity', // check name for it
+    name: 'approximateQuantity',
     label: ' Approximate Quantity',
     type: 'dropdown',
     options: GDG_RequestQuote_DesiredQuantities,
@@ -223,14 +223,14 @@ export const formFields: any = [
     isRequired: true,
   },
   {
-    name: 'logoUrl',
+    name: 'teamLogo',
     label: '',
     type: 'file',
     placeholder: '',
     isRequired: false,
   },
   {
-    name: 'message', // check name
+    name: 'message',
     label: ' How can we help you?',
     type: 'textarea',
     placeholder:

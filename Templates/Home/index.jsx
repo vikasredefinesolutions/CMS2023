@@ -28,36 +28,18 @@ const Home = (props) => {
   // const [componentHtml, setComponentHtml] = useState([]);
 
   useEffect(() => {
-    if (router.asPath === paths.HOME) document.body.classList.add('index-page');
-    topic_set_isCMS(true);
+    if (router.asPath === paths.HOME) 
+    {
+      document.body.classList.add('index-page');
+      topic_set_isCMS(true);
+
+    }
     return () => {
       topic_set_isCMS(false);
     };
   }, []);
 
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      window.addEventListener('scroll', handleScroll);
-    }
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  const handleScroll = () => {
-    if (typeof window !== 'undefined') {
-      // if(document.body.classList.contains('index-page') || storeCode === 'DI')
-      // {
-      let x = document.querySelector('#spy');
-      // alert(x)
-      if (x) {
-        if (window.pageYOffset > 70) {
-          x.classList.add('fix');
-        } else {
-          x.classList.remove('fix');
-        }
-      }
-      //}
-    }
-  };
+  
   // useEffect(() => {
   //   AOS.init();
   //   AOS.refresh();

@@ -40,6 +40,7 @@ export const paths = {
     notAuthorized: defaultRoute,
   },
   CART: '/cart/IndexNew.html',
+  CATALOGS: '/catalogs.html',
   cart: {
     keepShopping: defaultRoute,
   },

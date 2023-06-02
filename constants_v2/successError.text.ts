@@ -20,3 +20,7 @@ export const commonMessage = {
   updated: 'Updated Successfully',
   removed: 'Removed Succesfully',
 };
+
+export const storeRequestMessages = {
+  requestCreated: 'Store request created successfully',
+};

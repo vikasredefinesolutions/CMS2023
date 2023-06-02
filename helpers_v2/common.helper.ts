@@ -854,3 +854,10 @@ const pushToDataLayerUtil = (payload: Record<string, any>) => {
       dataLayer.push({ ...JSON.parse(payload?.pageItemDetails) });
   }
 };
+
+export const set_EnduserName = (endUserNameS: string) => {
+  localStorage.setItem('endusername', endUserNameS);
+};
+export const remove_EnduserName = (key: string) => {
+  localStorage.removeItem(key);
+};

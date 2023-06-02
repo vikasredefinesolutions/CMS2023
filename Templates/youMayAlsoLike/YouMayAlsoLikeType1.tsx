@@ -29,7 +29,7 @@ const YouMayAlsoLikeType1: React.FC<_TemplateProps> = ({ productsData }) => {
           <div className='container mx-auto'>
             <div
               className={
-                'w-full text-center font-[600] text-2xl-text font-title text-color-title mb-[16px]'
+                'w-full text-center font-[600] text-2xl-text font-title text-color-title mb-[16px] description-title'
               }
             >
               {__pagesText.YouMayAlsoLike.YouMayAlsoLike}

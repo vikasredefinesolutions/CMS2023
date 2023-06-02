@@ -206,6 +206,31 @@ const RedefineCustomApp = ({
   if ('error' in pageProps) {
     return <>{pageProps.error}</>;
   }
+
+  const handleScroll = () => {
+    if (typeof window !== 'undefined') {
+      // if(document.body.classList.contains('index-page') || storeCode === 'DI')
+      // {
+      let x = document.querySelector('#spy');
+      // alert(x)
+      if (x) {
+        if (window.pageYOffset > 70) {
+          x.classList.add('fix');
+        } else {
+          x.classList.remove('fix');
+        }
+      }
+      //}
+    }
+  };
+  
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      window.addEventListener('scroll', handleScroll);
+    }
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+  
   return (
     <>
       <Spinner>

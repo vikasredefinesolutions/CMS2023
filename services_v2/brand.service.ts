@@ -15,6 +15,15 @@ export const FetchBrands = async (storeId: string) => {
   return res;
 };
 
+export const FetchDIBrands = async (storeId: string, sequence: number) => {
+  const url = `/Brand/getstoreproductbrandbysequence/${sequence}/${storeId}.json`;
+  const res: _Brand[] = await SendAsync({
+    url: url,
+    method: 'GET',
+  });
+  return res;
+};
+
 // Added Any for now - husain - 20-3-23
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const FetchDataByBrand = async (body: any) => {
@@ -42,6 +51,16 @@ export const FetchSiteMapPages = async (id: number) => {
     url: url,
     method: 'POST',
     data: { storeId: id },
+  });
+  return res;
+};
+
+// Added by Vikas  - 02-06-2023
+export const FetchBrandsBySequence = async (storeId: string) => {
+  const url = `/Brand/getstorebrandbysequence/${storeId}.json`;
+  const res: _Brand[] = await SendAsync({
+    url: url,
+    method: 'GET',
   });
   return res;
 };

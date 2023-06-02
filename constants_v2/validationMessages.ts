@@ -191,13 +191,13 @@ export const CustomRequestMessage = {
 };
 
 export const consultationProofMessages = {
-  firstname: {
+  firstName: {
     required: 'First name is required',
   },
-  lastname: {
+  lastName: {
     required: 'Last name is required',
   },
-  company: {
+  organization: {
     required: 'Organization name is required',
   },
 
@@ -211,7 +211,7 @@ export const consultationProofMessages = {
   city: {
     required: 'City is required',
   },
-  desiredQuantity: {
+  approximateQuantity: {
     required: 'Quantity is required',
   },
   teamSport: {

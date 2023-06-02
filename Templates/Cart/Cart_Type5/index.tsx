@@ -1,6 +1,7 @@
 import { SpinnerComponent } from '@appComponents/ui/spinner';
 import { paths } from '@constants/paths.constant';
 import CheckoutController from '@controllers/checkoutController';
+import { set_EnduserName } from '@helpers/common.helper';
 import { GetCartTotals, useTypedSelector_v2 } from '@hooks_v2/index';
 import {
   BrandPolicyViewModel,
@@ -9,9 +10,9 @@ import {
   PersonalizationLocation,
 } from '@services/cart';
 import CartSummarryType5 from '@templates/cartSummarry/cartSummaryType5';
+import CartItem from 'Templates/cartItem';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
-import CartItem from 'Templates/cartItem';
 import { _CartProps } from '../Cart';
 import EmptyCart from '../components/emptyCart';
 
@@ -198,9 +199,10 @@ const CartType5: React.FC<_CartProps> = ({
                           type='text'
                           id='enduserstio'
                           className='form-input'
-                          onChange={(event) =>
-                            setEndUserName(event.target.value)
-                          }
+                          onChange={(event) => {
+                            setEndUserName(event.target.value);
+                          }}
+                          onBlur={(e) => set_EnduserName(e.target.value)}
                         />
                       </div>
                     )}

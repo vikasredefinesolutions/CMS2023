@@ -171,7 +171,7 @@ const RequestConsultationForm: React.FC<{
                           {__pagesText.requestConsultation.heading}
                         </div>
                         <div className='p-[15px] border border-gray-border'>
-                          <div className='bg-light-gray text text-[18px] leading-[36px] h-[36px] block font-semibold px-[15px] mb-[15px]'>
+                          <div className='bg-light-gray text text-[18px] leading-[36px] block font-semibold px-[15px] mb-[15px]'>
                             {__pagesText.requestConsultation.contactInformation}
                           </div>
                           <div className='mb-[15px]'>

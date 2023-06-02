@@ -1,7 +1,7 @@
 import ImageComponent from '@appComponents/reUsable/Image';
 import { _Brand } from '@definations/brand';
 import { capitalizeFirstLetter } from '@helpers/common.helper';
-import { FetchBrands } from '@services/brand.service';
+import { FetchBrandsBySequence } from '@services/brand.service';
 import Link from 'next/link';
 import React, { Fragment, useEffect, useState } from 'react';
 interface _props {
@@ -15,7 +15,8 @@ const DIHomePage: React.FC<_props> = ({ storeId }) => {
 
   const [brandImages, setBrandImages] = useState<_Brand[] | null>(null);
   const fetchBrandImages = async () => {
-    const brands: _Brand[] = await FetchBrands('' + storeId);
+    //const brands: _Brand[] = await FetchDIBrands('' + storeId, 2);
+    const brands: _Brand[] = await FetchBrandsBySequence('' + storeId);
     setBrandImages(brands);
   };
 

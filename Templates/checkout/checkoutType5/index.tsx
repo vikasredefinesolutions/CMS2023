@@ -30,6 +30,7 @@ import {
   deleteCookie,
   GoogleAnalyticsTrackerForAllStore,
   GoogleAnalyticsTrackerForCG,
+  remove_EnduserName,
   setCookie,
 } from '@helpers/common.helper';
 import getLocation from '@helpers/getLocation';
@@ -48,7 +49,7 @@ import { placeOrder as placeOrderService } from '@services/checkout.service';
 import { Klaviyo_PlaceOrder } from '@services/klaviyo.service';
 import { GetStoreCustomer } from '@services/user.service';
 import CartItem from '@templates/cartItem';
-import CartSummarry from '@templates/cartSummarry';
+import CartSummarryType5 from '@templates/cartSummarry/cartSummaryType5';
 import _ from 'lodash';
 import { useRouter } from 'next/router';
 import { ChangeEvent, useEffect, useState } from 'react';
@@ -758,13 +759,13 @@ const ChekoutType5: React.FC<_Props> = ({ templateId }) => {
     return disable;
   };
 
-  console.log(
-    'card deatils',
-    cardDetails,
-    `po: ${purchaseOrder}`,
-    paymentMethod,
-  );
-
+  useEffect(() => {
+    const valuesEnduser = localStorage.getItem('endusername');
+    if (valuesEnduser) {
+      setEndUserName(valuesEnduser);
+      remove_EnduserName('endusername');
+    }
+  }, []);
   return (
     <>
       {' '}
@@ -1114,31 +1115,13 @@ const ChekoutType5: React.FC<_Props> = ({ templateId }) => {
             )}
           </div>
           <div className='w-full md:w-4/12 lg:w-[27%] pl-[15px] pr-[15px]'>
-            <CartSummarry selectedShippingModel={selectedShipping} />
+            <CartSummarryType5 selectedShippingModel={selectedShipping} />
             {isEmployeeLoggedIn && <CT1_EL_Dropdowns />}
-            <div id='OrderNoteDiv mt-[20px]'>
-              <div className='text-sub-text font-bold &nbsp;trsacking-normal mb-[5px]'>
-                <label>Add a note to your order</label>
-              </div>
-              <div className='form-group mb-[10px]'>
-                <textarea
-                  className='border border-gray-border rounded pt-[12px] pb-[12px] pl-[12px] pr-[12px] w-full text-sub-text'
-                  rows={3}
-                  id='txtOrderNotes'
-                  onChange={(e) => setorderNotes(e.target.value)}
-                ></textarea>
-              </div>
-            </div>
+
             <div className='text-medium-text font-semibold mb-[20px]'>
-              <div className='text-rose-500'>
-                {__pagesText.CheckoutPageCardNote1.note}
-              </div>
+              <div className='text-rose-500'>{__pagesText.dicheckoutNote}</div>
             </div>
-            <div className='text-medium-text font-semibold mb-[20px]'>
-              <div className='text-rose-500'>
-                {__pagesText.CheckoutPageCardNote2.note}
-              </div>
-            </div>
+
             {currentPage === checkoutPages.address && (
               <div className=''>
                 <button
@@ -1166,20 +1149,6 @@ const ChekoutType5: React.FC<_Props> = ({ templateId }) => {
                 </button>{' '}
               </div>
             )}
-            <div className='mt-4 bg-light-gray px-4 py-4'>
-              <div className='flex items-center justify-center'>
-                <img
-                  src='/order-risk-free-icon.jpg'
-                  alt=''
-                  className='mr-2 w-5 h-5'
-                />
-                <span className='text-2xl font-semibold'>Order Risk-Free!</span>
-              </div>
-              <div className='flex items-center justify-center text-base text-center mt-3 font-semibold'>
-                Cancel your order without penalty anytime before your proof is
-                approved.
-              </div>
-            </div>
           </div>
         </div>
       </div>

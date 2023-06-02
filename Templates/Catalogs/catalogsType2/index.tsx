@@ -24,7 +24,7 @@ const CatalogDisplayBrandsType2: React.FC<_props> = ({ storeId }) => {
       <div>
         <div className='text-center pb-8'>
           <div className='text-2xl md:text-3xl lg:text-title font-title text-color-title mb-2'>
-            Our Exclusive Brands You Can Buy Online
+            Our Exclusive Brands You Can Buy Online--
           </div>
         </div>
         <div className='brand-image-list'>

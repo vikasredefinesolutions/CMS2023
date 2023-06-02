@@ -1,4 +1,6 @@
-import { ErrorMessage, Field } from 'formik';
+import { useTypedSelector_v2 } from '@hooks_v2/index';
+import { UploadImage } from '@services/file.service';
+import { ErrorMessage, Field, useFormikContext } from 'formik';
 
 export interface Option {
   value: string;
@@ -23,6 +25,22 @@ const ConsultationInput = ({
   options = [],
   key,
 }: Props) => {
+  const { imageFolderPath } = useTypedSelector_v2((state) => state.store);
+  const { setFieldValue } = useFormikContext();
+
+  const handleFileUpload = async (file: File) => {
+    try {
+      const url: string | null = await UploadImage({
+        folderPath: imageFolderPath,
+        files: file,
+      });
+      if (url) {
+        setFieldValue('teamLogo', url);
+      }
+    } catch (e) {
+      console.log('exception -- uploading image -- ', e);
+    }
+  };
   return (
     <>
       {type === 'file' ? (
@@ -44,7 +62,17 @@ const ConsultationInput = ({
                 </span>
                 <span>Upload</span>
               </label>
-              <Field type={type} name={name} id={name} className='sr-only' />
+              <input
+                type='file'
+                name={name}
+                id={name}
+                className='sr-only'
+                onChange={(e) => {
+                  if (e.target.files) {
+                    handleFileUpload(e.target.files[0]);
+                  }
+                }}
+              />
             </div>
           </div>
         </div>

@@ -8,6 +8,7 @@ import { _KlaviyoServices } from '@services/klaviyo.service';
 import { _LogoApiService } from '@services/logo.service';
 import { _ProductDetailService_V2 } from '@services/product.service';
 import { _SlugService_V2 } from '@services/slug.service';
+import { _StoreRequestService_V2 } from '@services/storerequest.service';
 import { _StoryService_V2 } from '@services/story.service';
 import { _UserServices_V2 } from '@services/user.service';
 import { SendAsync } from '@utils/axios.util';
@@ -36,6 +37,7 @@ export const CallAPI_v2 = async <T>({
     | _CacheApiServices
     | _HomeServices
     | _LogoApiService
+    | _StoreRequestService_V2
     | _StoryService_V2;
   request: _GET | _POST;
 }) => {

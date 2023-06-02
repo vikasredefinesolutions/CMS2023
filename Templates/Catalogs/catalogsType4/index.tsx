@@ -26,16 +26,14 @@ const CatalogDisplayBrandsType4: React.FC<_props> = ({ storeId }) => {
 
   let mediaBaseUrl = _globalStore.blobUrl;
   mediaBaseUrl = mediaBaseUrl || store.mediaBaseUrl;
+
   return (
     <>
-      <section className='new-home m-b-30 pt-[50px] pb-[50px] bg-primary'>
+      <section className='new-home m-b-30 pt-[50px] pb-[50px] bg-primary mt-[-40px]'>
         <div className='container mx-auto '>
-          <div className='text-center pb-8'>
-            <div className='text-2xl md:text-3xl lg:text-title font-title text-color-title mb-2'>
-              Our Exclusive Brands You Can Buy Online
-            </div>
-          </div>
+         
           <div className='brand-image-list'>
+           
             <ul className='flex flex-wrap justify-center'>
               {brandImages &&
                 brandImages.map((brandImage) => {

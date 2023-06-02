@@ -20,11 +20,10 @@ const ReviewDetails_Type1: React.FC<_ReviewDetailsProps> = ({
   return (
     <>
       <section>
-        <div className='container mx-auto mt-[40px] lg:pl-[45px] lg:pr-[45px]'>
+        <div className='container mx-auto mt-[40px] lg:pl-[45px] lg:pr-[45px] review'>
           <div className='text-center pb-[40px]'>
-            <div className='pb-[20px] font-[600] text-2xl-text uppercase '>
+            <div className='pb-[20px] font-[600] text-2xl-text uppercase description-title'>
               {__pagesText.review.heading}
-              <span className='border-b border-black w-[50px] mx-auto h-[1px] block pt-[5px]'></span>
             </div>
 
             {reviewsCount?.totalRatingCount ? (

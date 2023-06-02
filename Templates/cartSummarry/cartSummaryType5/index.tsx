@@ -228,7 +228,7 @@ const CartSummarryType5: FC<_props> = ({ selectedShippingModel }) => {
             </div>
           )}
 
-          <div className='border-t border-gray-200 flex items-center pt-[10px] pb-[10px]'>
+          <div className='border-t border-gray-200 flex items-center pt-[10px] pb-[10px] checkoutpage'>
             <dt className='text-base z-0 w-full promocode relative'>
               <input
                 name='Promo_code'

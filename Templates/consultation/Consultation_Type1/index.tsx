@@ -1,53 +1,58 @@
 import { formFields } from '@constants/global.constant';
+import { __pagesText } from '@constants/pages.text';
+import {
+  __SuccessErrorText,
+  storeRequestMessages,
+} from '@constants/successError.text';
 import { consultationProofMessages } from '@constants/validationMessages';
-import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
+import { useActions_v2 } from '@hooks_v2/index';
+import { createStoreRequests } from '@services/storerequest.service';
 import { Form, Formik } from 'formik';
+import { useState } from 'react';
+import ReCAPTCHA from 'react-google-recaptcha';
 import * as Yup from 'yup';
 import ConsultationInput from './components/ConsultationInput';
 
 const Consultation_Type1 = () => {
-  const { id: storeId } = useTypedSelector_v2((state) => state.store);
-  const { setShowLoader } = useActions_v2();
+  const { setShowLoader, showModal } = useActions_v2();
+  const [captchaVerified, setverifiedRecaptch] = useState<
+    'NOT_VALID' | null | 'VALID'
+  >(null);
+
+  const captchaHandler = (value: any) => {
+    setverifiedRecaptch('VALID');
+  };
+
+  // const { resetForm } = useFormikContext();
+
   const initialValues = {
-    // id: 0,
-    // rowVersion: '',
-    location: 'string',
-    ipAddress: '192.168.1.1',
-    macAddress: '00-00-00-00-00-00',
-    storeId,
-    productId: 0,
-    firstname: '',
-    lastname: '',
-    company: '',
+    firstName: '',
+    lastName: '',
     email: '',
+    phoneNumber: '',
+    organization: '',
+    teamSport: '',
     city: '',
     state: '',
-    phone: '',
-    teamSport: '',
-    contactMethod: 0,
-    desiredQuantity: '',
-    inHandsDate: '2023-06-01T04:54:06.932Z',
-    logoUrl: '',
+    approximateQuantity: '',
+    teamLogo: '',
     message: '',
-    recStatus: 'A',
-    gclid: '',
-    productattributeoptionid: 0,
-    status: '',
-    customerId: 0,
   };
 
   const validationSchema = Yup.object().shape({
-    firstname: Yup.string().required(
-      consultationProofMessages.firstname.required,
+    firstName: Yup.string().required(
+      consultationProofMessages.firstName.required,
     ),
-    lastname: Yup.string().required(
-      consultationProofMessages.lastname.required,
+    lastName: Yup.string().required(
+      consultationProofMessages.lastName.required,
     ),
-    company: Yup.string().required(consultationProofMessages.company.required),
+    organization: Yup.string().required(
+      consultationProofMessages.organization.required,
+    ),
     city: Yup.string().required(consultationProofMessages.city.required),
     state: Yup.string().required(consultationProofMessages.state.required),
-    desiredQuantity: Yup.string().required(
-      consultationProofMessages.desiredQuantity.required,
+    approximateQuantity: Yup.string().required(
+      consultationProofMessages.approximateQuantity.required,
     ),
     teamSport: Yup.string().required(
       consultationProofMessages.teamSport.required,
@@ -58,9 +63,42 @@ const Consultation_Type1 = () => {
   });
 
   const handleSubmit = async (values: any) => {
-    setShowLoader(true);
     console.log('values: ', values);
-    setShowLoader(false);
+    setShowLoader(true);
+    const payload = {
+      ggQuoteRequestModel: {
+        firstName: values.firstName,
+        lastName: values.lastName,
+        email: values.email,
+        phoneNumber: values.phoneNumber,
+        organization: values.organization,
+        teamSport: values.teamSport,
+        city: values.city,
+        state: values.state,
+        approximateQuantity: values.approximateQuantity,
+        teamLogo: values.teamLogo,
+        message: values.message,
+      },
+    };
+    try {
+      const res = await createStoreRequests(payload);
+      if (res) {
+        // resetForm();
+        showModal({
+          title: 'Success',
+          message: storeRequestMessages.requestCreated,
+        });
+      } else {
+        showModal({
+          title: 'Error',
+          message: __SuccessErrorText.SomethingWentWrong,
+        });
+      }
+      setShowLoader(false);
+    } catch (e) {
+      setShowLoader(false);
+      console.log('api exception---request a quote', e);
+    }
   };
 
   return (
@@ -96,6 +134,19 @@ const Consultation_Type1 = () => {
                       options={field.options}
                     />
                   ))}
+
+                  <div className='mb-[15px]'>
+                    <ReCAPTCHA
+                      className='max-w-xs w-full'
+                      sitekey={process.env.NEXT_PUBLIC_RECAPTCHASITEKEY || ''}
+                      onChange={captchaHandler}
+                    />
+                    {captchaVerified === 'NOT_VALID' && (
+                      <p className='text-rose-500'>
+                        {__pagesText.requestConsultation.captchaNotValid}
+                      </p>
+                    )}
+                  </div>
 
                   <div className='w-full px-[15px] text-center'>
                     <button

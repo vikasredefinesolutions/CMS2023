@@ -8,7 +8,7 @@ interface _props {
 const ProductDescription: React.FC<_props> = ({ product }) => {
   return (
     <div className='mt-[30px]'>
-      <div className='text-center text-2xl-text pb-[20px]'>INFORMATION</div>
+      <div className='text-center text-2xl-text pb-[20px] description-title'>INFORMATION</div>
       <div
         className='text-default-text'
         dangerouslySetInnerHTML={{ __html: product?.description || '' }}

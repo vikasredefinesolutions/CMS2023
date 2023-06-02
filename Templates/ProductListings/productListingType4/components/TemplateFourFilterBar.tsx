@@ -29,7 +29,7 @@ const TemplateFourFilterBar: React.FC<props> = ({
               <div className='flex-1 flex flex-wrap items-center pr-[4px]'>
                 <span>
                   Total{' '}
-                  <span className='font-medium'>{totalCount} Results</span>
+                  <span className='font-semibold'>{totalCount} Results</span>
                 </span>
               </div>
             </div>

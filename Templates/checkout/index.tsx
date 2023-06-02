@@ -12,9 +12,9 @@ import { FC, useEffect, useRef } from 'react';
 import uuid from 'react-uuid';
 import CheckoutType1 from './checkoutType1';
 import CheckoutType2 from './checkoutType2';
-import CheckoutType5 from './checkoutType3';
+import CheckoutType3 from './checkoutType3';
 import CheckoutType4 from './checkoutType4';
-import CheckoutType3 from './checkoutType5';
+import CheckoutType5 from './checkoutType5';
 
 interface _Props {
   templateId: number;

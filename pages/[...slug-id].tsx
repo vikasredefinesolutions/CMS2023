@@ -150,3 +150,4 @@ const SlugSearch: NextPage<_Slug_Props, _Slug_Props> = (props) => {
 
 export default SlugSearch;
 export { getServerSideProps };
+

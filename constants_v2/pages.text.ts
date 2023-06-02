@@ -502,6 +502,8 @@ export const __pagesText = {
     pageNotFound: 'PAGE NOT FOUND',
     backToHome: 'BACK TO HOME PAGE',
   },
+  dicheckoutNote:
+    'If a valid resale certificate is not provided prior to shipment, the applicable sales tax will be calculated and charged.',
   CheckoutPageCardNote1: {
     note: 'Please note that the tax amount on this order is subject to change based on the final invoice, and in accordance with local and state laws',
   },

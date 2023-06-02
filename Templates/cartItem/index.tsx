@@ -20,7 +20,7 @@ const CartItem: FC<_CartProps & { templateId: number }> = ({
 }) => {
   const CI_Template =
     CartTemplates[
-      (`type${templateId}` as 'type1') || 'type2' || 'type3' || 'type4'
+      (`type${templateId}` as 'type1') || 'type2' || 'type3' || 'type4' || 'type5'
     ];
 
   return <CI_Template {...rest} />;

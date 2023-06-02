@@ -12,8 +12,8 @@ import StartOrderModal from '@appComponents/modals/startOrderModal/StartOrderMod
 import Price from '@appComponents/Price';
 import { cartRemoveConfirmMessage } from '@constants/global.constant';
 import {
-  commonMessage,
   __SuccessErrorText,
+  commonMessage,
 } from '@constants/successError.text';
 import { captureRemoveItemEvent } from '@controllers/cartController';
 import {
@@ -22,11 +22,11 @@ import {
   useTypedSelector_v2,
 } from '@hooks_v2/index';
 import {
+  _CartItem,
   PersonalizationColor,
   PersonalizationFont,
   PersonalizationLocation,
   ShoppingCartItemDetailsViewModel,
-  _CartItem,
 } from '@services/cart';
 import { deleteItemCart } from '@services/cart.service';
 import {
@@ -310,22 +310,22 @@ const CI5_Item: React.FC<_CartItem & _Props> = (props) => {
           <div className='w-full flex flex-wrap'>
             <div className='lg:w-3/4 w-full'>
               <div className='mt-[30px]'>
-                <div className='text-normal-text font-semibold border-b pb-[8px] mb-[5px]'>
+                <div className='ttext-normal-text font-semibold border-b pb-[8px] mb-[5px]'>
                   Item Details
                 </div>
                 <div className='flex justify-between py-2'>
-                  <div className='text-normal-text font-semibold w-28'>
+                  <div className='text-normal-text font-semibold w-1/3'>
                     Size
                   </div>
-                  <div className='text-normal-text font-semibold w-16 text-center'>
+                  <div className='text-normal-text font-semibold w-1/3 text-center'>
                     Qty
                   </div>
                   {isEmployeeLoggedIn && (
-                    <div className='text-normal-text font-semibold w-16 text-center'>
+                    <div className='text-normal-text font-semibold w-1/3 text-right'>
                       Unit Price
                     </div>
                   )}
-                  <div className='text-normal-text font-semibold w-20 text-right'>
+                  <div className='text-normal-text font-semibold w-1/3 text-right'>
                     Price
                   </div>
                 </div>

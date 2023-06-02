@@ -42,7 +42,7 @@ const Topic: React.FC<_props> = ({ title, url }) => {
 
   if (view === 'DESKTOP') {
     return (
-      <Link href={`${url}`} className='flex'>
+      <Link href={`/${url}.html`} className='flex'>
         <div className='relative flex'>
           <button
             title={title}
