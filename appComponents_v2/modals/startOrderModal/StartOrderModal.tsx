@@ -79,6 +79,7 @@ const StartOrderModal: React.FC<_startOrderModalProps> = (props) => {
       if (selectedColor) {
         setColor(selectedColor);
       }
+      setNotevalue(edit?.itemNote);
     }
   }, [edit]);
 
@@ -259,6 +260,7 @@ const StartOrderModal: React.FC<_startOrderModalProps> = (props) => {
                     className='block w-full border border-gray-600 shadow-sm text-base py-2 px-4'
                     rows={3}
                     onChange={(e) => setNotevalue(e.target.value)}
+                    value={notevalue}
                   ></textarea>
                 </div>
               </div>

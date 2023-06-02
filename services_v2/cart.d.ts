@@ -72,8 +72,14 @@ export interface _CartItem {
   shoppingCartItemsCustomFieldViewModel: ShoppingCartItemsCustomFieldViewModel[];
   isBrandPersonalization: boolean;
   displayLineAttributeOptions: DisplayLineAttributeOption[];
+  brandPolicyViewModels: BrandPolicyViewModel;
 }
-
+export interface BrandPolicyViewModel {
+  name: string;
+  policyWithCheckBox: boolean;
+  policyMessage: string;
+  isEndUserDisplay: boolean;
+}
 export type DeleteCartItemResponse = {
   success: boolean;
   data: Object;

@@ -1,6 +1,4 @@
-import NxtImage, {
-  default as ImageComponent,
-} from '@appComponents/reUsable/Image';
+import { default as ImageComponent } from '@appComponents/reUsable/Image';
 import Price from '@appComponents/reUsable/Price';
 import { showcolors } from '@constants/global.constant';
 import { __pagesConstant } from '@constants/pages.constant';
@@ -23,6 +21,7 @@ interface _props {
   showPrice: string;
   showBrandLogo: string;
   footerTabing: string;
+  showBorder: string;
 }
 
 const SlugSingleProductListing: React.FC<_props> = (props) => {
@@ -35,6 +34,7 @@ const SlugSingleProductListing: React.FC<_props> = (props) => {
     showPrice,
     showBrandLogo,
     footerTabing,
+    showBorder,
   } = props;
   const customerId = useTypedSelector_v2((state) => state.user.id);
 
@@ -53,7 +53,13 @@ const SlugSingleProductListing: React.FC<_props> = (props) => {
       <div key={product?.productId} className='slide-item'>
         <div className='px-2'>
           <div className='w-full'>
-            <div className='border border-gray-50 px-6 py-6 bg-white relative'>
+            <div
+              className={`${
+                showBorder == __pagesConstant?.show.Yes
+                  ? 'border border-gray-200 bg-white border-solid p-5'
+                  : 'border border-gray-50'
+              } px-6 py-6 bg-white relative`}
+            >
               <div className=''>
                 <Link
                   key={product?.productId}
@@ -61,20 +67,23 @@ const SlugSingleProductListing: React.FC<_props> = (props) => {
                   className='hrefurl'
                 >
                   <a style={{ display: 'block' }}>
-                    <NxtImage
-                      src={product?.imageUrl}
+                    <ImageComponent
+                      src={store.mediaBaseUrl + mainImageUrl}
                       alt={product?.productName}
                       title={product?.productName}
-                      className='w-full mx-auto isinput img-editable alttitle'
+                      className='w-auto h-auto m-auto max-h-[348px]'
+                      height={350}
+                      width={350}
+                      key={currentProduct?.productId}
                     />
                   </a>
                 </Link>
               </div>
-              <div className='mt-6'>
+              <div className=''>
                 {showBrandLogo == __pagesConstant?.show?.No ? (
                   ''
                 ) : (
-                  <div className='mt-[4px] text-center h-[35px] cursor-pointer'>
+                  <div className='text-center h-auto cursor-pointer'>
                     <img
                       className='!inline-block'
                       src={store.mediaBaseUrl + product?.productBrandLogo}
@@ -117,83 +126,81 @@ const SlugSingleProductListing: React.FC<_props> = (props) => {
                     </span>
                   </div>
                 )}
-                {/* <div className='mb-2 font-semibold uppercase isinput'>
+                <div className='mb-2 font-semibold uppercase isinput'>
                   {customMessage ?? ''}
-                </div> */}
+                </div>
                 {showSplitProducts == __pagesConstant?.show?.No ? (
-                ''
-              ) : (
-                <ul className='flex items-center justify-center mt-2 list-none'>
-                  <Link
-                    key={product.productId}
-                    href={`/${product.productSEName}.html`}
-                  >
-                    <li
-                      className={`w-7 h-7 border-2 border-secondary
-                     hover:border-secondary cursor-pointer`}
-                    >
-                      <ImageComponent
-                        src={
-                          store.mediaBaseUrl + currentProduct &&
-                          currentProduct?.imageUrl
-                            ? currentProduct.imageUrl
-                            : ''
-                        }
-                        alt='no image'
-                        className='max-h-full m-auto'
-                        title={product?.moreImages[0].attributeOptionName}
-                      />
-                    </li>
-                  </Link>
-                  {product?.splitproductList &&
-                    product?.splitproductList.map(
-                      (option: splitproductList, index: number) =>
-                        index < showcolors - 1 ? (
-                          <Link
-                            key={option.prodcutId}
-                            href={`/${option.seName}.html`}
-                          >
-                            <li
-                              key={option.prodcutId}
-                              className={`border-2 w-7 h-7 text-center overflow-hidden  hover:border-secondary ml-1 cursor-pointer`}
-                              onMouseOver={() =>
-                                setMainImageUrl(option.imageurl)
-                              }
-                              onMouseLeave={() =>
-                                setMainImageUrl(
-                                  currentProduct?.imageUrl
-                                    ? currentProduct?.imageUrl
-                                    : '',
-                                )
-                              }
-                            >
-                              <ImageComponent
-                                src={store.mediaBaseUrl + option.imageurl}
-                                alt='no image'
-                                className='max-h-full m-auto'
-                                title={option.colorName}
-                              />
-                            </li>
-                          </Link>
-                        ) : (
-                          <Fragment key={index}>{(flag = true)}</Fragment>
-                        ),
-                    )}
-                  {flag ? (
-                    <Link href={`/${product.productSEName}.html`}>
-                      <li className='extra w-7 h-7 text-center border-2 hover:border-secondary inset-0 bg-primary text-xs font-semibold flex items-center justify-center text-white cursor-pointer'>
-                        <span>+</span>
-                        {product &&
-                          product?.splitproductList &&
-                          product?.splitproductList.length - showcolors + 1}
-                      </li>
-                    </Link>
-                  ) : null}
-                </ul>
-              )}
-                {showButton == __pagesConstant?.show?.No ? (
                   ''
                 ) : (
+                  <ul className='flex items-center justify-center mt-2 list-none'>
+                    <Link
+                      key={product.productId}
+                      href={`/${product.productSEName}.html`}
+                    >
+                      <li
+                        className={`w-7 h-7 border-2 border-secondary
+                     hover:border-secondary cursor-pointer`}
+                      >
+                        <ImageComponent
+                          src={
+                            store.mediaBaseUrl + currentProduct &&
+                            currentProduct?.imageUrl
+                              ? currentProduct.imageUrl
+                              : ''
+                          }
+                          alt='no image'
+                          className='max-h-full m-auto'
+                          title={product?.moreImages[0].attributeOptionName}
+                        />
+                      </li>
+                    </Link>
+                    {product?.splitproductList &&
+                      product?.splitproductList.map(
+                        (option: splitproductList, index: number) =>
+                          index < showcolors - 1 ? (
+                            <Link
+                              key={option.prodcutId}
+                              href={`/${option.seName}.html`}
+                            >
+                              <li
+                                key={option.prodcutId}
+                                className={`border-2 w-7 h-7 text-center overflow-hidden  hover:border-secondary ml-1 cursor-pointer`}
+                                onMouseOver={() =>
+                                  setMainImageUrl(option.imageurl)
+                                }
+                                onMouseLeave={() =>
+                                  setMainImageUrl(
+                                    currentProduct?.imageUrl
+                                      ? currentProduct?.imageUrl
+                                      : '',
+                                  )
+                                }
+                              >
+                                <ImageComponent
+                                  src={store.mediaBaseUrl + option.imageurl}
+                                  alt='no image'
+                                  className='max-h-full m-auto'
+                                  title={option.colorName}
+                                />
+                              </li>
+                            </Link>
+                          ) : (
+                            <Fragment key={index}>{(flag = true)}</Fragment>
+                          ),
+                      )}
+                    {flag ? (
+                      <Link href={`/${product.productSEName}.html`}>
+                        <li className='extra w-7 h-7 text-center border-2 hover:border-secondary inset-0 bg-primary text-xs font-semibold flex items-center justify-center text-white cursor-pointer'>
+                          <span>+</span>
+                          {product &&
+                            product?.splitproductList &&
+                            product?.splitproductList.length - showcolors + 1}
+                        </li>
+                      </Link>
+                    ) : null}
+                  </ul>
+                )}
+                {showButton && showButton == __pagesConstant?.show?.Yes ? (
                   <Link
                     href={`${encodeURIComponent(product.productSEName)}.html`}
                   >
@@ -219,9 +226,10 @@ const SlugSingleProductListing: React.FC<_props> = (props) => {
                       DETAILS
                     </a>
                   </Link>
+                ) : (
+                  ''
                 )}
               </div>
-              
             </div>
           </div>
         </div>

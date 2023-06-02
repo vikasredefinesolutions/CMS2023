@@ -12,8 +12,9 @@ import { FC, useEffect, useRef } from 'react';
 import uuid from 'react-uuid';
 import CheckoutType1 from './checkoutType1';
 import CheckoutType2 from './checkoutType2';
-import CheckoutType3 from './checkoutType3';
+import CheckoutType5 from './checkoutType3';
 import CheckoutType4 from './checkoutType4';
+import CheckoutType3 from './checkoutType5';
 
 interface _Props {
   templateId: number;
@@ -24,6 +25,7 @@ export interface CTTemplates {
   type2: FC<_Props>;
   type3: FC<_Props>;
   type4: FC<_Props>;
+  type5: FC<_Props>;
 }
 
 const checkoutTemplates: CTTemplates = {
@@ -31,6 +33,7 @@ const checkoutTemplates: CTTemplates = {
   type2: CheckoutType2,
   type3: CheckoutType3,
   type4: CheckoutType4,
+  type5: CheckoutType5,
 };
 
 const CheckoutTemplate: FC<_Props> = ({ templateId }) => {
@@ -144,7 +147,7 @@ const CheckoutTemplate: FC<_Props> = ({ templateId }) => {
   const storeCode = useTypedSelector_v2((state) => state.store.code);
   const CheckoutSelectedTemplate =
     checkoutTemplates[
-      storeCode === 'CG' ? 'type1' : storeCode === 'PKHG' ? 'type2' : 'type3'
+      `type${templateId}` as 'type1' | 'type2' | 'type3' | 'type4' | 'type5'
     ];
 
   return <CheckoutSelectedTemplate templateId={templateId} />;

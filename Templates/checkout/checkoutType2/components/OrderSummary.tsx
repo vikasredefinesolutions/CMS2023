@@ -1,3 +1,4 @@
+import Price from '@appComponents/reUsable/Price';
 import { checkoutPages } from '@constants/enum';
 import { __pagesText } from '@constants/pages.text';
 import { _shippingMethod } from '@controllers/checkoutController';
@@ -39,54 +40,59 @@ const OrderSummary: React.FC<_props> = ({
             <>
               <div className='flex items-center justify-between pt-[15px]'>
                 <dt>{__pagesText.CheckoutPage.orderSummary.Merchandise}</dt>
-                <dt>{subTotal + discount}</dt>
+                {/* <dt>{subTotal + discount}</dt> */}
+                <Price value={subTotal + discount} />
               </div>
               <div className='flex items-center justify-between pt-[15px]'>
                 <dt>{__pagesText.CheckoutPage.orderSummary.Discount}</dt>
-                <dt>{discount}</dt>
+                {/* <dt>{discount}</dt> */}
+                <Price value={discount} />
               </div>
             </>
           )}
           <div className='w-full pl-[15px] pr-[15px] border-b border-gray-border mt-[10px]'></div>
           <div className='flex items-center justify-between pt-[15px]'>
             <dt>{__pagesText.CheckoutPage.orderSummary.Subtotal}</dt>
-            <dt>{subTotal}</dt>
+            {/* <dt>{subTotal}</dt> */}
+            <Price value={subTotal} />
           </div>
           {storeId !== 11 && (
             <>
               {' '}
               <div className='flex items-center justify-between pt-[15px]'>
                 <dt>{__pagesText.CheckoutPage.orderSummary.FirstLogo}</dt>
-                <dt></dt>
+                <Price value={''} />
               </div>
               <div className='flex items-center justify-between pt-[15px]'>
                 <dt>{__pagesText.CheckoutPage.orderSummary.SecondLogo}</dt>
-                <dt></dt>
+                <Price value={''} />
               </div>
               <div className='flex items-center justify-between pt-[15px]'>
                 <dt>{__pagesText.CheckoutPage.orderSummary.SmallRunFee}</dt>
-                <dt>{smallRunFee}</dt>
+                <Price value={smallRunFee} />
               </div>
             </>
           )}
           <div className='flex items-center justify-between pt-[15px]'>
             <dt>{__pagesText.CheckoutPage.orderSummary.ShippingHandling}</dt>
-            <dt>{selectedShipModel.price}</dt>
+            <Price value={selectedShipModel.price} />
           </div>
           <div className='flex items-center justify-between pt-[15px]'>
             <dt>{__pagesText.CheckoutPage.orderSummary.Tax}</dt>
-            <dt>{salesTax}</dt>
+            <Price value={salesTax} />
           </div>
           <div className='flex items-center justify-between pt-[15px]'>
             <dt>{__pagesText.CheckoutPage.orderSummary.InternalCredit}</dt>
-            <dt>{creditBalance}</dt>
+            <Price value={creditBalance} />
           </div>
           <div className='w-full pl-[15px] pr-[15px] border-b border-gray-border mt-[10px]'></div>
           <div className='flex items-center justify-between pt-[15px] mb-[30px]'>
             <dt className='font-semibold'>
               {__pagesText.CheckoutPage.orderSummary.EstimatedTotal}
             </dt>
-            <dt className='font-semibold'>{totalPrice}</dt>
+            <dt className='font-semibold'>
+              <Price value={totalPrice} />
+            </dt>
           </div>
           <div className='mt-[16px]'>
             <div className=' text-rose-600 mb-[10px]'>

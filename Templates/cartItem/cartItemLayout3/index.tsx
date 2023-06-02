@@ -2,8 +2,8 @@ import { default as Image } from '@appComponents/reUsable/Image';
 import Price from '@appComponents/reUsable/Price';
 import { cartQuantityUpdateConfirmMessage } from '@constants/global.constant';
 import {
-  commonMessage,
   __SuccessErrorText,
+  commonMessage,
 } from '@constants/successError.text';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import { _CartItem } from '@services/cart';
@@ -13,12 +13,7 @@ import { FC, useRef, useState } from 'react';
 import { _globalStore } from 'store.global';
 // import { CI_Props } from './cartItem';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const CIlayout3: FC<any> = ({
-  isEditable,
-  removeCartItem,
-
-  loadProduct,
-}) => {
+const CIlayout3: FC<any> = ({ isEditable, removeCartItem, loadProduct }) => {
   const { loggedIn: empLoggedIn } = useTypedSelector_v2(
     (state) => state.employee,
   );
@@ -29,6 +24,9 @@ const CIlayout3: FC<any> = ({
     (state) => state.employee.loggedIn,
   );
   const { id } = useTypedSelector_v2((state) => state.user);
+
+  const { code: storeCode } = useTypedSelector_v2((state) => state.store);
+
   const [sizeId, setSizeId] = useState<number[]>([]);
   const handleUpdate = (e: string, qty: any, itemId: any) => {
     if (+e !== qty) {
@@ -216,129 +214,26 @@ const CIlayout3: FC<any> = ({
                         );
                       },
                     )}
-                    {/* <div className='flex justify-between py-3 border-t border-b'>
-                      <div className='text-normal-text w-30'>
-                        Product Total:
-                      </div>
-                      <div className='text-normal-text w-16 text-center'>
-                        {item.totalQty}
-                      </div>
-                      {empLoggedIn && (
-                        <div className='text-normal-text w-16 text-center'></div>
-                      )}
-                      <div className='text-normal-text w-20 text-right'>
-                        <Price value={item.totalPrice} />
-                      </div>
-                    </div> */}
                   </div>
-                  {/* {item.shoppingCartLogoPersonViewModels.map(
-                    (_item, _index) => {
-                      return _item.logoName === 'Customize Later' ? (
-                        <div className='flex justify-start items-center mt-3'>
-                          <div>
-                            <span className='material-icons text-[60px] mr-3'>
-                              support_agent
-                            </span>
-                          </div>
-                          <div>
-                            <div className='text-lg font-semibold'>
-                              Customize Later
-                            </div>
-                            <div className='text-base'>
-                              {__pagesText.CustomizeLater}
-                            </div>
-                          </div>
-                        </div>
-                      ) : (
-                        <div
-                          key={`${_item}-${_index}`}
-                          className='flex justify-between py-3'
-                        >
-                          <div className='text-base'>
-                            <div className='mb-3 flex'>
-                              {_item.logoImagePath === '' ? (
-                                <NxtImage
-                                  className='w-14 h-12'
-                                  src='/assets/images/logo-to-be-submitted.webp'
-                                  title=''
-                                  alt={_item.logoImagePath}
-                                  isStatic={true}
-                                />
-                              ) : (
-                                <NxtImage
-                                  className='w-14 h-12'
-                                  src={_item.logoImagePath}
-                                  title=''
-                                  alt={_item.logoImagePath}
-                                />
-                              )}
-
-                              {_item.logoName === 'Add Logo Later' ? (
-                                <span className='font-semibold ml-3'>
-                                  Logo to be
-                                  <br />
-                                  submitted
-                                </span>
-                              ) : (
-                                <span className='font-semibold ml-3'>
-                                  Logo
-                                  <br />
-                                  submitted
-                                </span>
-                              )}
-                            </div>
-                            <div>
-                              <span className='font-semibold mr-1'>
-                                Location:
-                              </span>
-                              <span>{_item.logoLocation}</span>
-                            </div>
-                          </div>
-                          <div className='text-base text-right'>
-                            <div className='font-semibold'>Logo Price</div>
-                            <div>
-                              {_index === 0 && _item.logoPrice === 0 ? (
-                                'First Logo Free'
-                              ) : (
-                                <Price value={_item.logoPrice} />
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    },
-                  )} */}
                 </div>
                 <div className='mt-[10px] lg:w-1/3 w-full'>
                   <div className='font-bold text-medium-text text-right'>
-                    <span className=''>Item Total:</span>
-                    <br />
-                    <span className=''>
+                    <div className='font-semibold mb-2'>Item Total:</div>
+                    <span className='font-semibold'>
                       <Price value={item.totalPrice} />
                     </span>
                   </div>
 
-                  {/* {isEditable && (
-                      <div className='lg:w-1/4 w-full'>
-                        {!empLoggedIn && (
-                          <div className='mt-[24px] lg:ml-[20px]'>
-                            <button
-                              data-modal-toggle='startorderModal'
-                              className='btn btn-secondary !w-full !pt-[0px] !pb-[0px] text-center uppercase'
-                              onClick={() => loadProduct(item)}
-                            >
-                              EDIT ITEM
-                            </button>
-                          </div>
-                        )} */}
-                  <div className='"mt-[15px] lg:ml-[40px]'>
-                    <a
-                      onClick={() => removeCartItem(item.shoppingCartItemsId)}
-                      className='btn btn-primary !w-full !py-[5px] text-center'
-                    >
-                      Remove
-                    </a>
-                  </div>
+                  {removeCartItem && (
+                    <div className={`mt-[15px] lg:ml-[40px]`}>
+                      <a
+                        onClick={() => removeCartItem(item.shoppingCartItemsId)}
+                        className='btn btn-primary !w-full !py-[5px] text-center'
+                      >
+                        Remove
+                      </a>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

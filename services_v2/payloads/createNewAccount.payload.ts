@@ -122,7 +122,7 @@ export const createNewAccount_payload: _CreateNewAccount_Payload = {
         postalCode: '',
         phone: '',
         fax: '',
-        countryName: '',
+        countryName: 'United States',
         countryCode: '',
         addressType: '',
         isDefault: false,

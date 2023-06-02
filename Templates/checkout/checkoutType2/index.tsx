@@ -27,11 +27,8 @@ import CheckoutController, {
   _shippingMethod,
 } from '@controllers/checkoutController';
 import { AddressType } from '@controllers/checkoutController/CheckoutAddressForm';
+import { CreditCardDetailsType2 } from '@definations/checkout';
 import { deleteCookie } from '@helpers/common.helper';
-import {
-  CreditCardDetailsType,
-  CreditCardDetailsType2,
-} from '@definations/checkout';
 import {
   CreateUserAddress,
   GetShippingmethod,
@@ -39,11 +36,11 @@ import {
 import { placeOrder as placeOrderService } from '@services/checkout.service';
 import AddressFormPk from './components/Form';
 
+import getLocation from '@helpers/getLocation';
 import { Klaviyo_PlaceOrder } from '@services/klaviyo.service';
+import { GetStoreCustomer } from '@services/user.service';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
-import getLocation from '@helpers/getLocation';
-import { GetStoreCustomer } from '@services/user.service';
 interface _Props {
   templateId: number;
 }
@@ -692,7 +689,7 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
                         {!_.isEmpty(selectedShipping) && (
                           <span>{`${
                             selectedShipping.name
-                          } $(${selectedShipping.price.toPrecision(2)})`}</span>
+                          } ($${selectedShipping.price.toFixed(2)})`}</span>
                         )}
                       </span>
                     </div>
@@ -781,9 +778,7 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
                                       className='ml-2 text-default-text'
                                     >
                                       {shippingMethod &&
-                                        `${el.name}($${el.price.toPrecision(
-                                          2,
-                                        )})`}
+                                        `${el.name}($${el.price.toFixed(2)})`}
                                     </label>
                                   </div>
                                 ),

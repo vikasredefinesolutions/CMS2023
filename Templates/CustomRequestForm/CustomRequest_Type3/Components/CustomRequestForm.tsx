@@ -4,8 +4,10 @@ import { _CustomerOrderPayload } from '@services/product';
 import { CustomerProductOrder } from '@services/product.service';
 // import { UploadImage } from '@services/general.service';
 import { __pagesText } from '@constants/pages.text';
+import { paths } from '@constants/paths.constant';
 import { getLocationWithZipCode } from '@services/user.service';
 import { Form, Formik } from 'formik';
+import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
 import * as Yup from 'yup';
@@ -57,6 +59,7 @@ const CustomRequestForm: React.FC = () => {
   const [fileUrl, setFileUrl] = useState('');
   const [verifiedRecaptch, setverifiedRecaptch] = useState(false);
   const [initialValues, setInitialValues] = useState(_initialValues);
+  const router = useRouter();
 
   const { id: storeId, imageFolderPath } = useTypedSelector_v2(
     (state) => state.store,
@@ -104,11 +107,7 @@ const CustomRequestForm: React.FC = () => {
     };
     CustomerProductOrder(payload2)
       .then(() => {
-        showModal({
-          title: 'Success',
-          message: 'Request submitted successfully',
-        });
-        setInitialValues(_initialValues);
+        router.push(paths.REQUEST_THANKYOU);
       })
       .finally(() => setShowLoader(false));
   };

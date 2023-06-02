@@ -296,13 +296,41 @@ const SelectOrInput: React.FC<_SelectOrInputProps> = ({
                     min={0}
                     max={isEmployeeLoggedIn ? '' : qty}
                     value={values.itemCount ? Math.ceil(values.itemCount) : ''}
-                    onBlur={(e) =>
+                    onFocus={(e) => {
                       setInputOrSelect((state) => ({
                         ...state,
                         choosedValue: parseInt(e.target.value),
                         focus: true,
-                      }))
-                    }
+                      }));
+                    }}
+                    onBlur={(e) => {
+                      enterQtyHandler({
+                        itemCount: +(values.itemCount
+                          ? multipleQuantity !== 0 &&
+                            values.itemCount % multipleQuantity !== 0 &&
+                            multipleQuantity < qty
+                            ? Math.ceil(values.itemCount / multipleQuantity) *
+                              multipleQuantity
+                            : Math.ceil(values.itemCount)
+                          : ''),
+                      });
+                      setFieldValue(
+                        'itemCount',
+                        +(values.itemCount
+                          ? multipleQuantity !== 0 &&
+                            values.itemCount % multipleQuantity !== 0 &&
+                            multipleQuantity < qty
+                            ? Math.ceil(values.itemCount / multipleQuantity) *
+                              multipleQuantity
+                            : Math.ceil(values.itemCount)
+                          : ''),
+                      );
+                      setInputOrSelect((state) => ({
+                        ...state,
+                        choosedValue: parseInt(e.target.value),
+                        focus: true,
+                      }));
+                    }}
                     onChange={handleChange}
                     className='block w-full border border-gray-600 shadow-sm py-1 px-2 text-default-text max-w-[100px]'
                   />

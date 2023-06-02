@@ -1,10 +1,8 @@
-import { __pagesConstant } from '@constants/pages.constant';
 import { newFetauredItemResponse } from '@definations/productList.type';
 import { useWindowDimensions_v2 } from '@hooks_v2/index';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { Fragment, useEffect, useRef, useState } from 'react';
 import 'react-loading-skeleton/dist/skeleton.css';
 import Slider from 'react-slick';
-import SingleProductListing from './SingleProductListing';
 import SlugSingleProductListing from './SlugSingleProductListing';
 
 interface _props {
@@ -158,8 +156,8 @@ const BrandProductListing: React.FC<_props> = (props) => {
                 >
                   {productsData?.map((product) => {
                     return (
-                      <>
-                        {showBorder == __pagesConstant?.show?.Yes ? (
+                      <Fragment key={product?.productId}>
+                        {/* {showBorder == __pagesConstant?.show?.Yes ? (
                           <div key={product.productId} className='slide-item'>
                             <SingleProductListing
                               product={product}
@@ -172,21 +170,22 @@ const BrandProductListing: React.FC<_props> = (props) => {
                               footerTabing={footerTabing}
                             />
                           </div>
-                        ) : (
-                          <div key={product.productId} className='slide-item'>
-                            <SlugSingleProductListing
-                              product={product}
-                              customMessage={customMessage}
-                              showProductName={showProductName}
-                              showSplitProducts={showSplitProducts}
-                              showButton={showButton}
-                              showPrice={showPrice}
-                              showBrandLogo={showBrandLogo}
-                              footerTabing={footerTabing}
-                            />
-                          </div>
-                        )}
-                      </>
+                        ) : ( */}
+                        <div key={product.productId} className='slide-item'>
+                          <SlugSingleProductListing
+                            showBorder={showBorder}
+                            product={product}
+                            customMessage={customMessage}
+                            showProductName={showProductName}
+                            showSplitProducts={showSplitProducts}
+                            showButton={showButton}
+                            showPrice={showPrice}
+                            showBrandLogo={showBrandLogo}
+                            footerTabing={footerTabing}
+                          />
+                        </div>
+                        {/* )} */}
+                      </Fragment>
                     );
                   })}
                 </Slider>

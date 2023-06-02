@@ -2,7 +2,7 @@
 // eslint-disable-next-line import/named
 import { Form, Formik, FormikErrors } from 'formik';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import * as Yup from 'yup';
 
 import { paths } from '@constants/paths.constant';
@@ -22,6 +22,7 @@ import {
 import getLocation from 'helpers_v2/getLocation';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
 
+import { _Store } from '@configs/page.config';
 import { UserAddressType } from '@constants/enum';
 import {
   __Cookie,
@@ -32,6 +33,7 @@ import {
   phonePattern3,
   phonePattern4,
 } from '@constants/global.constant';
+import { _Country, _State } from '@definations/app.type';
 import {
   KlaviyoScriptTag,
   deleteCookie,
@@ -39,11 +41,11 @@ import {
   setCookie,
 } from '@helpers/common.helper';
 import { updateCartByNewUserId } from '@services/cart.service';
+import { FetchCountriesList, FetchStatesList } from '@services/general.service';
 import { getWishlist } from '@services/wishlist.service';
 import SU_EmailInput from './Components/SU1_EmailInput';
 import SU1_Input from './Components/SU1_Input';
 import SU_PasswordInput from './Components/SU1_PasswordInput';
-import SU_StateNcountries from './Components/SU1_StateNcountries';
 
 const _SignupSchema = Yup.object().shape({
   firstname: Yup.string()
@@ -114,6 +116,10 @@ const SignUp_type1: React.FC = () => {
   } = useActions_v2();
   const storeId = useTypedSelector_v2((state) => state.store.id);
   const userId = useTypedSelector_v2((state) => state.user.id);
+  const [country, setCountry] = useState<_Country[]>([]);
+  const [state, setState] = useState<_State[]>([]);
+
+  const storeCode = useTypedSelector_v2((state) => state.store.code);
   // const state = useTypedSelector_v2((state) => state);
   // console.log('state', state);
 
@@ -138,7 +144,9 @@ const SignUp_type1: React.FC = () => {
         teamGender: '',
         timeOfYearPurchase: '',
         position: '',
-        navCustomerId: '',
+        navCustomerId: enteredInputs.navCustomerId
+          ? enteredInputs.navCustomerId
+          : '',
         storeCustomerAddress: [
           {
             ...enteredInputs.storeCustomerAddress[0],
@@ -153,7 +161,6 @@ const SignUp_type1: React.FC = () => {
         recStatus: 'A',
       },
     };
-
     CreateNewAccount(payload).then((res: any) => {
       const keyRes = Object.keys(res).find((obj) =>
         obj.includes('storeCustomerModel.'),
@@ -233,10 +240,28 @@ const SignUp_type1: React.FC = () => {
     return res;
   };
 
-  if (userId) {
-    router.push(paths.HOME);
-    return <></>;
-  }
+  useEffect(() => {
+    FetchCountriesList().then((response) => {
+      setCountry(response ? response : []);
+    });
+
+    FetchStatesList(1).then((response) => {
+      setState(response ? response : []);
+    });
+  }, []);
+
+  const customChangeHandler = (e: any, handleChange: any) => {
+    handleChange(e);
+    let countryId = e.target[e?.target.selectedIndex].id;
+    FetchStatesList(countryId).then((response) => {
+      setState(response ? response : []);
+    });
+  };
+
+  // if (userId) {
+  //   router.push(paths.HOME);
+  //   return <></>;
+  // }
 
   return (
     <>
@@ -257,7 +282,6 @@ const SignUp_type1: React.FC = () => {
                   .storeCustomerAddress[0],
                 state: '',
                 countryCode: '',
-                countryName: '',
               },
             ],
           }}
@@ -283,12 +307,20 @@ const SignUp_type1: React.FC = () => {
                   setFieldValue('storeCustomerAddress[0].city', res.cityName);
                   setFieldValue(
                     'storeCustomerAddress[0].countryName',
-                    res.countryId,
+                    res.countryName,
                   );
-                  setFieldValue('storeCustomerAddress[0].state', res.stateId);
+                  FetchStatesList(res.countryId).then((response) => {
+                    setState(response ? response : []);
+
+                    setFieldValue(
+                      'storeCustomerAddress[0].state',
+                      res.stateName,
+                    );
+                  });
                 }
               });
             };
+
             return (
               <Form>
                 <div className='container mx-auto mb-6'>
@@ -483,7 +515,82 @@ const SignUp_type1: React.FC = () => {
                             : null
                         }
                       />
-                      <SU_StateNcountries
+
+                      <div className='w-full lg:w-1/2 px-[15px]'>
+                        <label className='block text-default-text'>
+                          Country
+                        </label>
+                        <div className='mt-2 relative'>
+                          <div className='mr-8'>
+                            <select
+                              className='form-input'
+                              name='storeCustomerAddress[0].countryName'
+                              value={values.storeCustomerAddress[0].countryName}
+                              onChange={(e) => {
+                                customChangeHandler(e, handleChange);
+                              }}
+                              onBlur={handleBlur}
+                            >
+                              <>
+                                {country.length === 0 ? (
+                                  <option>No State found</option>
+                                ) : (
+                                  ''
+                                )}
+                                {country?.map((opt) => (
+                                  <option id={opt.id.toString()} key={opt.id}>
+                                    {opt.name}
+                                  </option>
+                                ))}
+                              </>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className='w-full lg:w-1/2 px-[15px]'>
+                        <label className='block text-default-text'>State</label>
+                        <div className='mt-2 relative'>
+                          <div className='mr-8'>
+                            <select
+                              className='form-input'
+                              name='storeCustomerAddress[0].state'
+                              value={values.storeCustomerAddress[0].state}
+                              onChange={handleChange}
+                              onBlur={handleBlur}
+                            >
+                              <>
+                                {country.length === 0 ? (
+                                  <option>No State found</option>
+                                ) : (
+                                  ''
+                                )}
+                                {state?.map((opt) => (
+                                  <option id={opt.id.toString()} key={opt.id}>
+                                    {opt.name}
+                                  </option>
+                                ))}
+                              </>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+
+                      {storeCode == _Store.type4 && (
+                        <SU1_Input
+                          name={'navCustomerId'}
+                          value={values.navCustomerId}
+                          label={'Customer Number:'}
+                          onChange={handleChange}
+                          placeHolder={'Enter Your Customer Number'}
+                          onBlur={handleBlur}
+                          touched={!!touched.navCustomerId}
+                          error={
+                            errors?.navCustomerId ? errors.navCustomerId : null
+                          }
+                        />
+                      )}
+                      {/* <SU1_StateNcountries
                         countryName={'storeCustomerAddress[0].countryName'}
                         countryValue={
                           values.storeCustomerAddress[0].countryName
@@ -491,7 +598,8 @@ const SignUp_type1: React.FC = () => {
                         stateName={'storeCustomerAddress[0].state'}
                         stateValue={values.storeCustomerAddress[0].state}
                         setFieldValue={setFieldValue}
-                      />
+                      /> */}
+
                       <div className='w-full lg:w-full px-[15px] text-center'>
                         <button
                           type='submit'

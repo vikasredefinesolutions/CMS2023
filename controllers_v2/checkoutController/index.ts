@@ -1,15 +1,15 @@
 import {
   checkoutPages,
-  paymentMethodCustom as paymentEnum,
   PaymentMethod,
+  paymentMethodCustom as paymentEnum,
   UserAddressType,
 } from '@constants/enum';
 import {
+  CG_STORE_CODE,
   __Cookie,
   __Cookie_Expiry,
   __LocalStorage,
   __UserMessages,
-  CG_STORE_CODE,
 } from '@constants/global.constant';
 import { paths } from '@constants/paths.constant';
 
@@ -55,17 +55,14 @@ import { ChangeEvent, useEffect, useState } from 'react';
 
 import { __pagesConstant } from '@constants/pages.constant';
 import { PaymentOptions } from '@definations/APIs/cart.req';
-import { _ProductDetails } from '@definations/APIs/productDetail.res';
 import { CustomerAddress, UserType } from '@definations/APIs/user.res';
 import { WishlistType } from '@definations/wishlist.type';
-import { _CartItem } from '@services/cart';
+import { BrandPolicyViewModel, _CartItem } from '@services/cart';
 import { Klaviyo_PlaceOrder } from '@services/klaviyo.service';
 import {
   getCustomerAllowBalance,
   getPaymentOption,
 } from '@services/payment.service';
-import { FetchProductById } from '@services/product.service';
-import { _ProductPolicy } from '@templates/ProductDetails/productDetailsTypes/productDetail.res';
 import { useRouter } from 'next/router';
 import CheckoutAddressForm, {
   AddressFormRefType,
@@ -81,7 +78,7 @@ export interface _shippingMethod {
 const CheckoutController = () => {
   const [endUserNameS, setEndUserName] = useState<string>('');
   const [endUserDisplay, setEndUserDisplay] = useState<boolean>(false);
-  const [productPolicy, setproductPolicy] = useState<_ProductPolicy[]>();
+  const [productPolicy, setproductPolicy] = useState<BrandPolicyViewModel[]>();
 
   const [currentPage, setCurrentPage] = useState(checkoutPages.login);
   const [allowGuest, setAllowGuest] = useState(true);
@@ -474,43 +471,29 @@ const CheckoutController = () => {
     setShowLoader(false);
   };
 
-  const getPolicyDetails = (cartProducts: _CartItem[]) => {
-    let flag = false;
-    let policydetailsArray: _ProductPolicy[] = [];
+  const getPolicyDetails = async (cartProducts: _CartItem[]) => {
+    let policydetailsArray: BrandPolicyViewModel[] = [];
     cartProducts?.map((product) => {
-      if (storeId) {
-        FetchProductById({
-          seName: product.seName,
-          storeId: storeId,
-          productId: 0,
-        }).then((resp) => {
-          if (resp) {
-            const res = resp as _ProductDetails;
-            const PolicyDetails: _ProductPolicy = {
-              storeId: res.storeId,
-              brandID: res.brandID,
-              brandName: res.brandName,
-              isBrandOnline: res.isBrandOnline,
-              isPolicywithcheckbox: res.isPolicywithcheckbox,
-              policyMessage: res.policyMessage,
-              isEnduserDisplay: res.isEnduserDisplay,
-            };
-            policydetailsArray.push(PolicyDetails);
-            const policybrandarray = policydetailsArray.map((item) =>
-              JSON.stringify(item),
-            );
-            const uniquePolicyProduct = new Set(policybrandarray);
-            const PolicyProduct = Array.from(uniquePolicyProduct).map((item) =>
-              JSON.parse(item),
-            );
-            if (res.isEnduserDisplay) {
-              setEndUserDisplay(true);
-            }
-            setproductPolicy([...PolicyProduct]);
-          }
-        });
-      }
+      policydetailsArray.push(product.brandPolicyViewModels);
+      const policybrandarray = policydetailsArray.map((item) =>
+        JSON.stringify(item),
+      );
+      const uniquePolicyProduct = new Set(policybrandarray);
+      const PolicyProduct = Array.from(uniquePolicyProduct).map((item) =>
+        JSON.parse(item),
+      );
+
+      setproductPolicy([...PolicyProduct]);
     });
+  };
+
+  const getEnduser = (productPolicy: BrandPolicyViewModel[]) => {
+    for (let index = 0; index < productPolicy.length; index++) {
+      if (productPolicy[index].isEndUserDisplay) {
+        return true;
+      }
+    }
+    return false;
   };
   const checkHandler = (e: ChangeEvent<HTMLInputElement>) => {
     const useBalance = e.target.checked;
@@ -1226,6 +1209,8 @@ const CheckoutController = () => {
     setSelectedShipping,
     getPolicyDetails,
     addPaymentDetails,
+    getEnduser,
+    setEndUserDisplay,
   };
 };
 

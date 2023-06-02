@@ -83,6 +83,7 @@ export interface UserType {
   customerRoleId: number;
   macAddress: string;
   isCustomerPersonalization: null | boolean;
+  isUseNet: boolean;
 }
 
 export interface EmployeeType {

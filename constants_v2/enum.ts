@@ -35,12 +35,19 @@ export enum paymentMethodCustom {
   creditCard,
   purchaseOrder,
   creditWallet = 'Credit',
+  netNumber = 'Net',
 }
 
 export enum UserAddressType {
   BILLINGADDRESS = 'B',
   SHIPPINGADDRESS = 'S',
   OTHERUSERADDRESS = 'F',
+}
+
+export enum CheckoutType {
+  corporate = 'CG',
+  pkhealthgear = 'PKHG',
+  driving = 'DI',
 }
 
 export enum Sorting {

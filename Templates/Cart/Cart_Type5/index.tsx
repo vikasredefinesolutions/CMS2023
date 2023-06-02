@@ -1,9 +1,9 @@
 import { SpinnerComponent } from '@appComponents/ui/spinner';
 import { paths } from '@constants/paths.constant';
 import CheckoutController from '@controllers/checkoutController';
-import { _ProductPolicy } from '@definations/APIs/productDetail.res';
 import { GetCartTotals, useTypedSelector_v2 } from '@hooks_v2/index';
 import {
+  BrandPolicyViewModel,
   PersonalizationColor,
   PersonalizationFont,
   PersonalizationLocation,
@@ -21,7 +21,6 @@ const CartType5: React.FC<_CartProps> = ({
 }) => {
   const cartData = useTypedSelector_v2((state) => state.cart.cart);
   const user = useTypedSelector_v2((state) => state.user);
-
   const isEmployeeLoggedIn = useTypedSelector_v2(
     (state) => state.employee.loggedIn,
   );
@@ -64,12 +63,18 @@ const CartType5: React.FC<_CartProps> = ({
     endUserDisplay,
     setEndUserName,
     endUserNameS,
+    getEnduser,
+    setEndUserDisplay,
   } = CheckoutController();
   const [checked, setChecked] = useState<string[]>([]);
 
   useEffect(() => {
     getPolicyDetails(cartData || []);
   }, [cartData]);
+  useEffect(() => {
+    const data = getEnduser(productPolicy || []);
+    setEndUserDisplay(data);
+  }, [productPolicy]);
   useEffect(() => {
     if (totalPrice) {
       fetchShipping(totalPrice, null);
@@ -78,9 +83,9 @@ const CartType5: React.FC<_CartProps> = ({
   let uniquePolicybrand: string[] = [];
 
   productPolicy &&
-    productPolicy?.map((item: _ProductPolicy) => {
-      if (item.isPolicywithcheckbox && item.brandName) {
-        uniquePolicybrand.push(item.brandName);
+    productPolicy?.map((item: BrandPolicyViewModel) => {
+      if (item.policyWithCheckBox && item.name) {
+        uniquePolicybrand.push(item.name);
       }
     });
 
@@ -157,14 +162,14 @@ const CartType5: React.FC<_CartProps> = ({
                       selectedShippingModel={selectedShipping}
                     />
                     {productPolicy &&
-                      productPolicy?.map((policy: _ProductPolicy) => {
-                        return policy.isPolicywithcheckbox ? (
-                          <div className='' key={policy.brandName}>
+                      productPolicy?.map((policy: BrandPolicyViewModel) => {
+                        return policy.policyWithCheckBox ? (
+                          <div className='' key={policy.name}>
                             <input
                               className='w-4 h-4 rounded mr-2'
                               type='checkbox'
-                              id={policy.brandName || ''}
-                              value={policy.brandName || ''}
+                              id={policy.name || ''}
+                              value={policy.name || ''}
                               onChange={(event) => handlecheck(event)}
                             />
                             <strong className='mt-[20px] text-medium-text font-[600]'>
@@ -174,7 +179,7 @@ const CartType5: React.FC<_CartProps> = ({
                           </div>
                         ) : (
                           policy.policyMessage != '' && (
-                            <div className='' key={policy.brandName}>
+                            <div className='' key={policy.name}>
                               <strong className='mt-[20px] text-medium-text font-[600]'>
                                 {policy.policyMessage}
                                 <span className='text-red-600 p-1'>*</span>
@@ -208,7 +213,7 @@ const CartType5: React.FC<_CartProps> = ({
                         onClick={() => router.push(`${paths.CHECKOUT}`)}
                       >
                         <a
-                          className={`btn btn-lg btn-secondary !flex items-center justify-center w-full ${
+                          className={`btn btn-lg btn-primary !flex items-center justify-center w-full ${
                             !buttonDisabed ? 'opacity-40' : ''
                           }`}
                         >

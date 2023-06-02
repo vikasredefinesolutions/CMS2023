@@ -50,6 +50,11 @@ const ProductInfo: React.FC<_Props> = ({
   };
   const buyNowHandler = (e: any) => {
     e?.preventDefault();
+    const isLoggedIn = !!userId;
+    if (isLoggedIn === false) {
+      modalHandler('login');
+      return;
+    }
 
     if (!totalQty) {
       return showModal({
@@ -64,11 +69,6 @@ const ProductInfo: React.FC<_Props> = ({
         `,
         title: ``,
       });
-    }
-    const isLoggedIn = !!userId;
-    if (isLoggedIn === false) {
-      modalHandler('login');
-      return;
     }
 
     if (isLoggedIn === true) {

@@ -1,10 +1,10 @@
 import { FC } from 'react';
+import CIlayout1 from './CI_layout1';
+import CIlayout5 from './CartItem_Type5/CI_layout5';
 import { CI_Templates, _CartProps } from './cartItem';
 import CIlayout2 from './cartItemLayout2.tsx';
 import CIlayout3 from './cartItemLayout3';
 import CIlayout4 from './cartItemlayout4';
-import CIlayout5 from './CartItem_Type5/CI_layout5';
-import CIlayout1 from './CI_layout1';
 
 const CartTemplates: CI_Templates = {
   type1: CIlayout1,
