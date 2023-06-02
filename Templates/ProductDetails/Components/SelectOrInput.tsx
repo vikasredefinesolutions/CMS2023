@@ -65,6 +65,7 @@ const SelectOrInput: React.FC<_SelectOrInputProps> = ({
     }
 
     if (
+      !isEmployeeLoggedIn &&
       multipleQuantity !== 0 &&
       multipleQuantity < qty &&
       +event.target.value % multipleQuantity !== 0
@@ -251,9 +252,11 @@ const SelectOrInput: React.FC<_SelectOrInputProps> = ({
           <select
             className='block w-full border border-gray-600 shadow-sm py-1 px-2 pr-10 text-default-text max-w-[100px]'
             value={
-              multipleQuantity !== 0 &&
-              inputOrSelect.choosedValue % multipleQuantity !== 0 &&
-              multipleQuantity < qty
+              isEmployeeLoggedIn
+                ? inputOrSelect.choosedValue
+                : multipleQuantity !== 0 &&
+                  inputOrSelect.choosedValue % multipleQuantity !== 0 &&
+                  multipleQuantity < qty
                 ? Math.ceil(inputOrSelect.choosedValue / multipleQuantity) *
                   multipleQuantity
                 : inputOrSelect.choosedValue
@@ -306,9 +309,11 @@ const SelectOrInput: React.FC<_SelectOrInputProps> = ({
                     onBlur={(e) => {
                       enterQtyHandler({
                         itemCount: +(values.itemCount
-                          ? multipleQuantity !== 0 &&
-                            values.itemCount % multipleQuantity !== 0 &&
-                            multipleQuantity < qty
+                          ? isEmployeeLoggedIn
+                            ? values.itemCount
+                            : multipleQuantity !== 0 &&
+                              values.itemCount % multipleQuantity !== 0 &&
+                              multipleQuantity < qty
                             ? Math.ceil(values.itemCount / multipleQuantity) *
                               multipleQuantity
                             : Math.ceil(values.itemCount)
@@ -317,9 +322,11 @@ const SelectOrInput: React.FC<_SelectOrInputProps> = ({
                       setFieldValue(
                         'itemCount',
                         +(values.itemCount
-                          ? multipleQuantity !== 0 &&
-                            values.itemCount % multipleQuantity !== 0 &&
-                            multipleQuantity < qty
+                          ? isEmployeeLoggedIn
+                            ? values.itemCount
+                            : multipleQuantity !== 0 &&
+                              values.itemCount % multipleQuantity !== 0 &&
+                              multipleQuantity < qty
                             ? Math.ceil(values.itemCount / multipleQuantity) *
                               multipleQuantity
                             : Math.ceil(values.itemCount)
@@ -340,9 +347,11 @@ const SelectOrInput: React.FC<_SelectOrInputProps> = ({
                         onClick={() => {
                           enterQtyHandler({
                             itemCount: +(values.itemCount
-                              ? multipleQuantity !== 0 &&
-                                values.itemCount % multipleQuantity !== 0 &&
-                                multipleQuantity < qty
+                              ? isEmployeeLoggedIn
+                                ? values.itemCount
+                                : multipleQuantity !== 0 &&
+                                  values.itemCount % multipleQuantity !== 0 &&
+                                  multipleQuantity < qty
                                 ? Math.ceil(
                                     values.itemCount / multipleQuantity,
                                   ) * multipleQuantity
@@ -352,9 +361,11 @@ const SelectOrInput: React.FC<_SelectOrInputProps> = ({
                           setFieldValue(
                             'itemCount',
                             +(values.itemCount
-                              ? multipleQuantity !== 0 &&
-                                values.itemCount % multipleQuantity !== 0 &&
-                                multipleQuantity < qty
+                              ? isEmployeeLoggedIn
+                                ? values.itemCount
+                                : multipleQuantity !== 0 &&
+                                  values.itemCount % multipleQuantity !== 0 &&
+                                  multipleQuantity < qty
                                 ? Math.ceil(
                                     values.itemCount / multipleQuantity,
                                   ) * multipleQuantity

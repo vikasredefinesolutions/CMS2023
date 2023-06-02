@@ -1,15 +1,15 @@
 import {
   checkoutPages,
-  PaymentMethod,
   paymentMethodCustom as paymentEnum,
+  PaymentMethod,
   UserAddressType,
 } from '@constants/enum';
 import {
-  CG_STORE_CODE,
   __Cookie,
   __Cookie_Expiry,
   __LocalStorage,
   __UserMessages,
+  CG_STORE_CODE,
 } from '@constants/global.constant';
 import { paths } from '@constants/paths.constant';
 
@@ -57,7 +57,7 @@ import { __pagesConstant } from '@constants/pages.constant';
 import { PaymentOptions } from '@definations/APIs/cart.req';
 import { CustomerAddress, UserType } from '@definations/APIs/user.res';
 import { WishlistType } from '@definations/wishlist.type';
-import { BrandPolicyViewModel, _CartItem } from '@services/cart';
+import { _CartItem, BrandPolicyViewModel } from '@services/cart';
 import { Klaviyo_PlaceOrder } from '@services/klaviyo.service';
 import {
   getCustomerAllowBalance,
@@ -142,11 +142,10 @@ const CheckoutController = () => {
   } = useActions_v2();
   const user = useTypedSelector_v2((state) => state.user);
   const cartData = useTypedSelector_v2((state) => state.cart.cart);
-  const { discount: cartDiscountDetails } = useTypedSelector_v2(
-    (state) => state.cart,
-  );
 
-  const cartCharges = useTypedSelector_v2((state) => state.store.cartCharges);
+  const { cartCharges, isSewOutEnable } = useTypedSelector_v2(
+    (state) => state.store,
+  );
   const { loggedIn: isEmployeeLoggedIn, isLoadingComplete } =
     useTypedSelector_v2((state) => state.employee);
   const useBalance = useTypedSelector_v2(
@@ -167,6 +166,7 @@ const CheckoutController = () => {
     creditBalance,
     totalLineCharges,
     totalLogoCharges,
+    sewOutTotal,
   } = GetCartTotals();
 
   const billingForm = CheckoutAddressForm({});
@@ -910,6 +910,8 @@ const CheckoutController = () => {
           position: '',
           navCustomerId: '',
           organizationName: '',
+          sewOut: isSewOutEnable,
+          sewoutTotal: sewOutTotal,
 
           storeCustomerAddress: [
             {
@@ -1014,6 +1016,8 @@ const CheckoutController = () => {
         salesRepName: employeeLogin.salesRep.label,
         salesAgentId: +employeeLogin.salesRep.value,
         isAllowPo: employeeLogin.allowPo,
+        sewOut: isSewOutEnable,
+        sewoutTotal: sewOutTotal,
       };
 
       try {
