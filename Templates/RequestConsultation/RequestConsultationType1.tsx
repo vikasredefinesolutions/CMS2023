@@ -1,7 +1,7 @@
 import NxtImage from '@appComponents/reUsable/Image';
-import { _defaultTemplates } from '@configs/template.config';
 import { __pagesText } from '@constants/pages.text';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
+import { FetchStoreConfigurations } from '@services/app.service';
 import { _CartItem } from '@services/cart';
 import YouMayAlsoLike from '@templates/youMayAlsoLike';
 import Head from 'next/head';
@@ -22,7 +22,19 @@ const RequestConsultationType1: React.FC<_RequestConsultationProps> = ({
   const cartItems = useTypedSelector_v2((state) => state.cart.cart);
   const [itemInCart, setItemInCart] = useState<null | _CartItem>(null);
   const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
-
+  const [youmayalsolikeId, setyoumayalsolikeId] = useState<string>('');
+  const { id: storeId } = useTypedSelector_v2((state) => state.store);
+  useEffect(() => {
+    FetchStoreConfigurations({
+      storeId: storeId,
+      configname: 'productDetail',
+    }).then((data) => {
+      if (data) {
+        const obj = JSON?.parse(data?.config_value ? data?.config_value : '{}');
+        setyoumayalsolikeId(obj?.sectionDisplay?.youmayalsolike?.value);
+      }
+    });
+  }, []);
   useEffect(() => {
     if (cartItems?.length && details?.id) {
       const product = cartItems?.find((item) => item.productId === details.id);
@@ -31,7 +43,6 @@ const RequestConsultationType1: React.FC<_RequestConsultationProps> = ({
       }
     }
   }, [cartItems, details?.id]);
-
   return (
     <>
       <Head>
@@ -89,10 +100,7 @@ const RequestConsultationType1: React.FC<_RequestConsultationProps> = ({
             </div>
           </div>
           <div>
-            <YouMayAlsoLike
-              product={alike}
-              id={_defaultTemplates.youMayAlsoLike}
-            />
+            <YouMayAlsoLike product={alike} id={`${youmayalsolikeId}`} />
           </div>
         </section>
       )}

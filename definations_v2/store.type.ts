@@ -50,7 +50,8 @@ export type StoreConfigurationConfigs =
   | 'header_config'
   | 'googleTags'
   | 'productListing'
-  | 'contactInfo';
+  | 'contactInfo'
+  | 'productDetail';
 
 export interface _FetchSbStoreConfiguration {
   id: number | null;
