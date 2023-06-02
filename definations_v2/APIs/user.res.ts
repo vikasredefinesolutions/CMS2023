@@ -273,6 +273,7 @@ export interface _MyAcc_OrderProductDetails {
   productId: number;
   isBrandPersonalization: null;
   sku: string;
+  msrp: number;
   attributeOptionId: string;
   attributeOptionValue: string;
   shoppingCartItemsId: number;

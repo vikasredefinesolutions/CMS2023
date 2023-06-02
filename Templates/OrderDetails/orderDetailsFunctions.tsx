@@ -369,7 +369,7 @@ export const BillingAddress = (
 
 export const ShippingAddress = (
   billing: _MyAcc_OrderBillingDetails,
-  type: '1' | '2' = '1',
+  type: '1' | '2' | '3' = '1',
 ) => {
   let address = '';
   if (billing?.shippingAddress1) {
@@ -395,11 +395,18 @@ export const ShippingAddress = (
     address += ', ';
     address += `${billing.shippingZip}`;
   }
-
   if (type === '2') {
     return (
       <div>
         <div className='font-[600]'>Ship to:</div>
+        <div className=''>{address}</div>
+      </div>
+    );
+  }
+  if (type === '3') {
+    return (
+      <div>
+        <div className='font-[600]'>SHIPPING ADDRESS:</div>
         <div className=''>{address}</div>
       </div>
     );
