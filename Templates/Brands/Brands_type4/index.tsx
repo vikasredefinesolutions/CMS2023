@@ -2,7 +2,7 @@ import ImageComponent from '@appComponents/reUsable/Image';
 import { _Brand, _BrandProps } from '@definations/brand';
 import { capitalizeFirstLetter } from '@helpers/common.helper';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
-import { FetchBrands } from '@services/brand.service';
+import { FetchBrandsBySequence } from '@services/brand.service';
 import Link from 'next/link';
 import { Fragment, useEffect, useState } from 'react';
 
@@ -14,7 +14,7 @@ const BrandsType4: React.FC<_BrandProps> = (props) => {
 
   const [brandImages, setBrandImages] = useState<_Brand[] | null>(null);
   const fetchBrandImages = async () => {
-    const brands: _Brand[] = await FetchBrands('' + storeId);
+    const brands: _Brand[] = await FetchBrandsBySequence('' + storeId);
     setBrandImages(brands);
   };
 

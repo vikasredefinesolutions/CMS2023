@@ -24,7 +24,7 @@ const BrandsListingTemplate: React.FC<
     id = 'type1';
   }
   const Template = brandsTemplates[id];
-
+console.log(Template);
   return <Template {...rest} />;
 };
 

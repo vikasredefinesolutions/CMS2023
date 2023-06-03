@@ -45,7 +45,7 @@ const Header_Type4: NextPage<_HeaderProps> = ({
 
   return (
     <div
-      className='bg-primary sticky top-0 z-40 shadow-[0_0px_5px_rgba(0,0,0,0.12)]'
+      className='bg-primary sticky top-0 z-40'
       id='mobile_menu_box'
     >
       {/* <NotificationBar /> */}
@@ -63,10 +63,7 @@ const Header_Type4: NextPage<_HeaderProps> = ({
         <div className='fixed z-40 lg:hidden'></div>
         <header className='relative trancking-[1px]' id={`${storeCode === 'DI' ? 'spy' : ''}`}>
           <nav aria-label='Top'>
-            <div
-              className={`${headerBgColor ? '' : 'bg-[#ffffff]'}]`}
-              style={{ backgroundColor: headerBgColor }}
-            >
+            <div>
               <div className='container pl-[15px] pr-[15px] mx-auto'>
                 <div className='pt-[10px] pb-[10px]'>
                   <div className='flex items-center justify-between'>
