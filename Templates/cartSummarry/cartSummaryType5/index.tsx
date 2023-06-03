@@ -253,7 +253,7 @@ const CartSummarryType5: FC<_props> = ({ selectedShippingModel }) => {
               {showUpdateBtn() ? (
                 <button
                   onClick={() => applyCouponHandler(coupon)}
-                  className='coupon-code-Apply text-sm absolute right-0 top-[10px]  '
+                  className='coupon-code-Apply text-sm absolute right-0 top-2 curosr-pointer z-40 btn btn-secondary btn-sm  '
                 >
                   UPDATE
                 </button>

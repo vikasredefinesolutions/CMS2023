@@ -40,7 +40,7 @@ export const createStoreRequests = async (payload: _StoryRequestPaylod) => {
       data: payload,
     },
   });
-  console.log('response in service: ', response);
+  // console.log('response in service: ', response);
 
   return response;
 };

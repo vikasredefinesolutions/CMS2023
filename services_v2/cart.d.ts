@@ -155,7 +155,7 @@ export interface ShoppingCartItemModel {
   discountPercentage: number;
   productCustomizationId: number;
   itemNotes: string;
-  isEmployeeLoginPrice: number;
+  isEmployeeLoginPrice: boolean;
 }
 
 export interface ShoppingCartItemsDetailModel {

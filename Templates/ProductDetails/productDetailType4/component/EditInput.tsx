@@ -71,6 +71,7 @@ const EditInput: React.FC<_SelectOrInputProps> = ({
       size: size,
       qty: Math.ceil(value.itemCount),
       price: newprice,
+      sewOutCharges: 0,
     });
 
     setEditInput({
@@ -116,6 +117,7 @@ const EditInput: React.FC<_SelectOrInputProps> = ({
         size: size,
         qty: +defaultQty || 0,
         price: price.msrp,
+        sewOutCharges: 0,
       });
     }
   }, [defaultQty]);
@@ -191,7 +193,7 @@ const EditInput: React.FC<_SelectOrInputProps> = ({
   // }
 
   return (
-    <td className='px-2 py-4'>
+    <div className='px-2 py-4'>
       {EditInput.type === 'input' && (
         <Formik
           initialValues={{ itemCount: Math.ceil(EditInput.choosedValue) }}
@@ -200,7 +202,7 @@ const EditInput: React.FC<_SelectOrInputProps> = ({
           {({ values, handleChange, setFieldValue }) => {
             return (
               <Form>
-                <div className='flex items-center gap-2 flex-wrap'>
+                <div className='flex items-center justify-center gap-2 flex-wrap'>
                   <input
                     type='number'
                     name='itemCount'
@@ -260,6 +262,7 @@ const EditInput: React.FC<_SelectOrInputProps> = ({
                             size: size,
                             qty: 0,
                             price: price.msrp,
+                            sewOutCharges: 0,
                           });
                           setEditInput({
                             type: 'input',
@@ -287,7 +290,7 @@ const EditInput: React.FC<_SelectOrInputProps> = ({
           }}
         </Formik>
       )}
-    </td>
+    </div>
   );
 };
 export default EditInput;

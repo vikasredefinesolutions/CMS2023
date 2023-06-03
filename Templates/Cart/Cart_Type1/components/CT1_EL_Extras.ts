@@ -92,6 +92,6 @@ export const create_cartLogoPersonModel = (args: {
     price: +item.unitPrice,
     quantity: item.qty,
     estimateDate: new Date(),
-    isEmployeeLoginPrice: +item.unitPrice, //
+    isEmployeeLoginPrice: 1, //
   }));
 };

@@ -39,72 +39,72 @@ const OrD_ItemDetails: React.FC<_props> = ({
             <a>{item.productName}</a>
           </Link>
         </div>
-        <div>
-          <div className='w-full'>
-            <div className='text-normal-text mt-[15px]'>
-              <span className='font-semibold'>SKU :</span> {item?.sku}
-            </div>
-            <div className='text-normal-text mt-[15px]'>
-              <span className='font-semibold'>COLOR : </span>{' '}
-              {item.attributeOptionValue}
-            </div>
 
-            {/* <div className='mb-6'></div>
+        <div className='w-full'>
+          <div className='text-normal-text mt-[15px]'>
+            <span className='font-semibold'>SKU :</span> {item?.sku}
+          </div>
+          <div className='text-normal-text mt-[15px]'>
+            <span className='font-semibold'>COLOR : </span>{' '}
+            {item.attributeOptionValue}
+          </div>
+
+          {/* <div className='mb-6'></div>
           <div className='mb-6'>
             <span className='font-[600]'>SIZE : </span>
             {mergeAllSizes(item.shoppingCartItemDetailsViewModels)}
           </div> */}
 
-            <div className='mt-[15px] border-t border-t-gray-border text-small-text'>
-              {item.shoppingCartItemDetailsViewModels.map((product, index) => (
-                <div
-                  key={index}
-                  className='flex justify-between py-[15px] border-b border-gray-border'
-                >
-                  <div className='w-full md:w-1/3'>
-                    <div className='mb-[5px]'>SIZE</div>
-                    <div className='font-semibold'>
-                      {product.attributeOptionValue}
-                    </div>
-                  </div>
-                  <div className='w-full md:w-1/3'>
-                    <div className='mb-[5px]'>PRICE</div>
-                    <div className='font-semibold'>
-                      <Price value={product.price} />
-                    </div>
-                  </div>
-                  <div className='w-full md:w-1/3'>
-                    <div className='mb-[5px]'>QTY</div>
-                    <div className='font-semibold'>{product.qty}</div>
+          <div className='mt-[15px] border-t border-t-gray-border text-small-text'>
+            {item.shoppingCartItemDetailsViewModels.map((product, index) => (
+              <div
+                key={index}
+                className='flex justify-between py-[15px] border-b border-gray-border'
+              >
+                <div className='w-full md:w-1/3'>
+                  <div className='mb-[5px]'>SIZE</div>
+                  <div className='font-semibold'>
+                    {product.attributeOptionValue}
                   </div>
                 </div>
-              ))}
-            </div>
-          </div>
-          <div className='flex justify-between py-[15px] border-b border-gray-border'>
-            <div className='w-1/2'>
-              <div className='mb-[5px]'>UNIT TOTAL</div>
-              <div className='font-semibold'>
-                <Price value={item.productTotal} />
+                <div className='w-full md:w-1/3'>
+                  <div className='mb-[5px]'>PRICE</div>
+                  <div className='font-semibold'>
+                    <Price value={product.price} />
+                  </div>
+                </div>
+                <div className='w-full md:w-1/3'>
+                  <div className='mb-[5px]'>QTY</div>
+                  <div className='font-semibold'>{product.qty}</div>
+                </div>
               </div>
-            </div>
-            <div className='w-1/2 text-right'>
-              <div className='mb-[5px]'>ESTIMATED PRICE</div>
-              <div className='font-semibold'>
-                <Price value={item.productTotal} />
-              </div>
-            </div>
-          </div>
-          <div className='py-[15px]'>
-            <Link
-              href={`${paths.WRITE_A_REVIEW}?ProductId=${item.productId}&attributeId=${item.attributeOptionId}`}
-              title={'Write A Review'}
-              className='btn btn-primary btn-lg uppercase'
-            >
-              <a className='btn btn-primary btn-lg uppercase'>Write A Review</a>
-            </Link>
+            ))}
           </div>
         </div>
+        <div className='flex justify-between py-[15px] border-b border-gray-border'>
+          <div className='w-1/2'>
+            <div className='mb-[5px]'>UNIT TOTAL</div>
+            <div className='font-semibold'>
+              <Price value={item.productTotal} />
+            </div>
+          </div>
+          <div className='w-1/2 text-right'>
+            <div className='mb-[5px]'>ESTIMATED PRICE</div>
+            <div className='font-semibold'>
+              <Price value={item.productTotal} />
+            </div>
+          </div>
+        </div>
+        <div className='py-[15px]'>
+          <Link
+            href={`${paths.WRITE_A_REVIEW}?ProductId=${item.productId}&attributeId=${item.attributeOptionId}`}
+            title={'Write A Review'}
+            className='btn btn-primary btn-lg uppercase'
+          >
+            <a className='btn btn-primary btn-lg uppercase'>Write A Review</a>
+          </Link>
+        </div>
+
         {/* <div className='mt-4 border-[#d2d2d2] pt-1'>
             {item.shoppingCartLogoPersonViewModels.length > 0 &&
               item.shoppingCartLogoPersonViewModels.map((logo, index) =>

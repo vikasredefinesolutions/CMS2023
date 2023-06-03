@@ -35,6 +35,8 @@ const Index = () => {
   const [state, setState] = useState<Array<_State>>([]);
   const customerId = useTypedSelector_v2((state) => state.user.id);
   const [initialValues, setInitialValues] = useState(_initialValues);
+  const [shipAddress, setShipAddress] = useState<any>([]);
+  const [billingAddress, setBilingAddress] = useState<any>([]);
   const router = useRouter();
   const { edit } = router.query;
   const { getStoreCustomer, setShowLoader, showModal } = useActions_v2();
@@ -49,7 +51,6 @@ const Index = () => {
       const addressData = customer?.customerAddress.filter((res) => {
         return res.id === intTrans;
       });
-
       if (addressData) {
         setEditData(addressData[0]);
       }
@@ -107,8 +108,28 @@ const Index = () => {
     return null;
   };
 
+  useEffect(() => {
+    let shippingAddressArr = customer?.customerAddress.filter(
+      (res) => res.addressType === 'S',
+    );
+    setShipAddress(shippingAddressArr ? shippingAddressArr : []);
+    let billingAddressArr = customer?.customerAddress.filter(
+      (res) => res.addressType === 'B',
+    );
+    setBilingAddress(billingAddressArr ? billingAddressArr : []);
+  }, [customer]);
+
   const submitHandler = async (values: any) => {
     const data = await getLocation();
+
+    if (
+      (edit === paths.myAccount.editShippingAddress &&
+        shipAddress.length < 1) ||
+      (edit === paths.myAccount.editBillingAddress && billingAddress.length < 1)
+    ) {
+      values.isDefault = true;
+    }
+
     const obj = {
       storeCustomerAddressModel: {
         id: editData ? editData.id : 0,
@@ -156,8 +177,6 @@ const Index = () => {
             title: 'Failed',
           });
         });
-
-      await getStoreCustomer(customerId || 0);
     } else {
       await CreateUserAddress(obj)
         .then((res) => {
@@ -174,6 +193,8 @@ const Index = () => {
           });
         });
     }
+    let cake = await getStoreCustomer(customerId || 0);
+    // console.log(cake, '<----------cake os here');
     setShowLoader(false);
     router.push('/myaccount/Address');
   };
@@ -450,7 +471,9 @@ const Index = () => {
                         </button>
                         <button
                           className='btn btn-secondary uppercase'
-                          onClick={() => router.push(paths.myAccount.address)}
+                          onClick={() =>
+                            router.push(paths.myAccount.account_settings)
+                          }
                         >
                           Cancel
                         </button>

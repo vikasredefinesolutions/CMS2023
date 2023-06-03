@@ -9,9 +9,12 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { FormControlLabel } from '@mui/material';
 import {
-  CreateUserAddress, deleteCustomerAddress,
-  udpateIsDefaultAddress, UpdateUserAddress
+  CreateUserAddress,
+  UpdateUserAddress,
+  deleteCustomerAddress,
+  udpateIsDefaultAddress,
 } from '@services/address.service';
+import { FetchCountriesList } from '@services/general.service';
 import { GetAdminCustomerUsers } from '@services/user.service';
 import { useEffect, useState } from 'react';
 
@@ -22,6 +25,14 @@ const ManageAddress = () => {
   const [editData, setEditData] = useState<CustomerAddress | null>(null);
   const [address, setAddress] = useState<CustomerAddress[] | null>(null);
   const [id, setId] = useState<number | null>(null);
+  const [country, setCountry] = useState<Array<{ id: number; name: string }>>(
+    [],
+  );
+
+  useEffect(() => {
+    FetchCountriesList().then((res) => res && setCountry(res));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const customer = useTypedSelector_v2((state) => {
     return state.user.customer;

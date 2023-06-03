@@ -75,7 +75,7 @@ const MyAccountTabsType1: React.FC = () => {
                     >
                       <button
                         onClick={logoutHandler}
-                        className={`text-[#0a1c2b] hover:text-[#0a1c2b] focus:text-[#0a1c2b] font-semibold ${
+                        className={`w-full block text-right text-medium-text hover:text-medium-text focus:text-medium-text font-[600] py-[10px] hover:bg-gray-100 border-r-[5px] border-white pr-4 hover:border-tertiary ${
                           tab.path === currentPath ? 'active' : ''
                         }`}
                       >

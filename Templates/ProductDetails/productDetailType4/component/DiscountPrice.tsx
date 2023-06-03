@@ -35,7 +35,7 @@ const DiscountPrice: React.FC<_props & { storeCode: string }> = ({
       </span>{' '}
       <span className='font-semibold'>
         {' '}
-        <Price value={salePrice} />
+        <Price value={salePrice != 0 ? salePrice : msrp} />
       </span>
     </>
   );

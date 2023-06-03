@@ -9,10 +9,11 @@ const orderDetailsTemplates: _OrderDetailsTemplates = {
   type3: OrderDetails_type3,
 };
 
-const OrderDetails: React.FC<{ id: 'type1' | 'type2' | 'type3' }> = ({
-  id,
-}) => {
-  const Component = orderDetailsTemplates[id];
+const OrderDetails: React.FC<{ id: string }> = ({ id }) => {
+  const Component =
+    orderDetailsTemplates[
+      (`type${id}` as 'type1') || 'type2' || 'type3' || 'type4'
+    ];
   return <Component />;
 };
 

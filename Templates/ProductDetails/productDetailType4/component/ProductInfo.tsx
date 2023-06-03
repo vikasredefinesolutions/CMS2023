@@ -16,7 +16,7 @@ import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import { addSubStore, addToCart } from '@services/cart.service';
 import { _ProductInfoProps } from '@templates/ProductDetails/Components/productDetailsComponents';
 import { useRouter } from 'next/router';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import DiscountPrice from './DiscountPrice';
 import DiscountPricing from './DiscountPricing';
 import ProductCompanion from './ProductCompanion';
@@ -74,6 +74,9 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
     }
     setOpenModal(null);
   };
+  useEffect(() => {
+    clearToCheckout();
+  }, []);
 
   const buyNowHandler = (e: any, isLoggedIn: boolean) => {
     e.preventDefault();

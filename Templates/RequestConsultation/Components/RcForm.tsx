@@ -156,7 +156,7 @@ const RcForm: React.FC<{
     const location = await getLocation();
     const payload: _SubmitConsultationPayload = {
       consultationModel: {
-        id: +customerId,
+        id: 0,
         rowVersion: '',
         location: `${location.city}, ${location.region}, ${location.country}, ${location.postal_code}`,
         ipAddress: location.ip_address,
@@ -177,6 +177,7 @@ const RcForm: React.FC<{
         productattributeoptionid: attriubteOptionId,
         recStatus: 'A',
         status: '',
+        customerId: +customerId,
       },
     };
 

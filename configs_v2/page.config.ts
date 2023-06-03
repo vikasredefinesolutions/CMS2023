@@ -3,6 +3,7 @@
 export const _Store = {
   type1: 'CG',
   type2: 'GG',
+  type3: 'PKHG',
   type4: 'DI',
 };
 

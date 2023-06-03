@@ -154,6 +154,8 @@ export interface _SU2_InitialValues {
   phoneNumber: string;
   jobTitle: string;
   usersMessage: string;
+  password: string;
+  confirmPassword: string;
 }
 
 export const su2_initialValues: _SU2_InitialValues = {
@@ -167,10 +169,12 @@ export const su2_initialValues: _SU2_InitialValues = {
   zipCode: '',
   cityName: '',
   state: '',
-  country: '',
+  country: 'United States',
   phoneNumber: '',
   jobTitle: '',
   usersMessage: '',
+  password: '',
+  confirmPassword: '',
 };
 
 export const _Signup2Schema = Yup.object().shape({
@@ -210,19 +214,14 @@ export const _Signup2Schema = Yup.object().shape({
     .max(__ValidationText.signUp.companyName.maxLength),
   cityName: Yup.string()
     .trim()
-    .required(__ValidationText.signUp.companyId.required)
-    .min(__ValidationText.signUp.companyName.minLength)
-    .max(__ValidationText.signUp.companyName.maxLength),
+    .required(__ValidationText.signUp.companyId.required),
   state: Yup.string()
     .trim()
-    .required(__ValidationText.signUp.companyId.required)
-    .min(__ValidationText.signUp.companyName.minLength)
-    .max(__ValidationText.signUp.companyName.maxLength),
+    .required(__ValidationText.signUp.companyId.required),
+
   country: Yup.string()
     .trim()
-    .required(__ValidationText.signUp.companyId.required)
-    .min(__ValidationText.signUp.companyName.minLength)
-    .max(__ValidationText.signUp.companyName.maxLength),
+    .required(__ValidationText.signUp.companyId.required),
   phoneNumber: Yup.string()
     .trim()
     .required(__ValidationText.signUp.companyId.required)
@@ -233,4 +232,9 @@ export const _Signup2Schema = Yup.object().shape({
     .required(__ValidationText.signUp.companyId.required)
     .min(__ValidationText.signUp.companyName.minLength)
     .max(__ValidationText.signUp.companyName.maxLength),
+  password: Yup.string()
+    .trim()
+    .required(__ValidationText.signUp.password.required)
+    .min(__ValidationText.signUp.password.minLength)
+    .max(__ValidationText.signUp.password.maxLength),
 });

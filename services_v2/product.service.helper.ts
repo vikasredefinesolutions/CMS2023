@@ -34,7 +34,7 @@ const _default_shoppingCartItemModel: _ShoppingCartItemModel = {
   discountPercentage: 0,
   productCustomizationId: 0,
   itemNotes: '',
-  isEmployeeLoginPrice: 0,
+  isEmployeeLoginPrice: false,
 };
 
 export const personalization: {
@@ -127,10 +127,7 @@ export const singleColor_addToCart_PayloadGenerator = async (
         price: cart.product.price ? +cart.product.price : 0,
         quantity: item.product.qty,
         estimateDate: item.product.date,
-        isEmployeeLoginPrice:
-          cart.isEmployeeLoggedIn && cart.product.price
-            ? +cart.product.price
-            : 0,
+        isEmployeeLoginPrice: 0,
       };
     });
   }
@@ -152,10 +149,7 @@ export const singleColor_addToCart_PayloadGenerator = async (
         logogImagePath: cart.product.color.imageUrl,
         status: cart.product.status,
         itemNotes: cart.product.note,
-        isEmployeeLoginPrice:
-          cart.isEmployeeLoggedIn && cart.product.price
-            ? +cart.product.price
-            : 0,
+        isEmployeeLoginPrice: false,
       },
       shoppingCartItemsDetailModels: shoppingCartItemsDetailModel,
       cartLogoPersonModel: cartLogoPersonModel,

@@ -53,5 +53,6 @@ export interface _SubmitConsultationPayload {
     productattributeoptionid: number;
     recStatus: 'A';
     status: string;
+    customerId: number;
   };
 }

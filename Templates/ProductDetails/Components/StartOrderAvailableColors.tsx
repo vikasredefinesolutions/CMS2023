@@ -8,7 +8,7 @@ import React from 'react';
 const StartOrderAvailableColors: React.FC = () => {
   const router = useRouter();
   const { colors } = useTypedSelector_v2((state) => state.product.product);
-  const { setColor } = useActions_v2();
+  const { setColor, clearToCheckout } = useActions_v2();
   const selectedColor = useTypedSelector_v2(
     (state) => state.product.selected.color.name,
   );
@@ -23,6 +23,7 @@ const StartOrderAvailableColors: React.FC = () => {
       return;
     }
     router.push(`${product.productSEName}.html`);
+    clearToCheckout();
   };
   return (
     <div>

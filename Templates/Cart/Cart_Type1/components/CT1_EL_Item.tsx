@@ -101,7 +101,7 @@ const CT1_EL_Item: React.FC<_CartItem & _Props> = (item) => {
           discountPrice: item.discountPrice,
           logoTitle: item.productName,
           logogImagePath: item.colorImage,
-          isEmployeeLoginPrice: details.totalPrice,
+          isEmployeeLoginPrice: true,
 
           // Static values
           status: 2,

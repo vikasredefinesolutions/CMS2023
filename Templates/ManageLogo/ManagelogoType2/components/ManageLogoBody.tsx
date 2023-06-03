@@ -66,7 +66,7 @@ const ManageLogoBody: NextPage<_ManageLogoProps> = ({ logoList }) => {
                         </div>
                       </td>
                       <td className='border-b border-r border-gray-border p-[16px]'>
-                        <div className=''>{logo.productType}</div>
+                        <div className=''>{logo.logoLocation}</div>
                       </td>
                     </tr>
                   ))}

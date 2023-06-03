@@ -226,13 +226,15 @@ export const productSlice = createSlice({
             details: null,
             allowNextLogo: false,
             availableOptions: null,
-            additionalLogoCharge: state.som_logos.additionalLogoCharge,
+            additionalLogoCharge: 0,
             choosedLogoCompletionPending: null,
           };
 
           state.toCheckout.totalPrice =
             state.toCheckout.totalPrice - state.toCheckout.additionalLogoCharge;
           state.toCheckout.additionalLogoCharge = 0;
+          state.toCheckout.logo.price = null;
+          state.toCheckout.additionalSewOutCharges = 0;
           return;
         }
 
@@ -254,8 +256,9 @@ export const productSlice = createSlice({
           state.toCheckout.additionalSewOutCharges =
             state.toCheckout.additionalSewOutCharges -
             logos[payload.logoIndex]?.sewOutAmount;
-          // state.toCheckout.totalPrice =
-          //   state.toCheckout.totalPrice - logos[payload.logoIndex]?.price;
+          state.toCheckout.totalPrice =
+            state.toCheckout.totalPrice -
+            logos[payload.logoIndex]?.sewOutAmount;
           logos.splice(payload.logoIndex, 1);
           state.som_logos.details = logos;
         }
@@ -852,6 +855,7 @@ export const productSlice = createSlice({
           size: string;
           qty: number;
           price: number;
+          sewOutCharges: number;
         };
       },
     ) => {
@@ -860,6 +864,7 @@ export const productSlice = createSlice({
       let productPrice = action.payload.price;
       let productQty = action.payload.qty;
       let totalQty = 0;
+      let sewOutCharges = action.payload.sewOutCharges;
       let updatedSizeQtys;
 
       if (state.toCheckout.sizeQtys === null) {
@@ -910,6 +915,14 @@ export const productSlice = createSlice({
         return (updateAdditionalLogoCharge += price * totalQty);
       });
 
+      let updateSewOutCharge: number = 0;
+
+      state.som_logos.details?.forEach((item) => {
+        if (item.isSewOut) {
+          updateSewOutCharge = updateSewOutCharge + sewOutCharges * totalQty;
+        }
+      });
+
       if (totalQty >= state.toCheckout.minQty) {
         state.toCheckout.allowAddToCart = true;
       }
@@ -932,7 +945,10 @@ export const productSlice = createSlice({
       });
 
       // TOTAL PRICE
-      let totalPrice = totalQty * productPrice + updateAdditionalLogoCharge;
+      let totalPrice =
+        totalQty * productPrice +
+        updateAdditionalLogoCharge +
+        updateSewOutCharge;
 
       // STATE UPDATES
       state.toCheckout.additionalLogoCharge = updateAdditionalLogoCharge;
@@ -940,6 +956,7 @@ export const productSlice = createSlice({
       state.toCheckout.price = productPrice;
       state.toCheckout.totalQty = totalQty;
       state.toCheckout.totalPrice = totalPrice;
+      state.toCheckout.additionalSewOutCharges = updateSewOutCharge;
     },
     // updateSbsState: (state, action:{
     //   payload: {
@@ -1224,6 +1241,7 @@ export const productSlice = createSlice({
       state.toCheckout.totalQty = action.payload.totalQty;
       state.toCheckout.sizeQtys = action.payload.sizeQtys;
       state.toCheckout.additionalLogoCharge = action.payload.logototal;
+      state.toCheckout.additionalSewOutCharges = action.payload.sewOutAmount;
     },
     storeDetails: (
       state,

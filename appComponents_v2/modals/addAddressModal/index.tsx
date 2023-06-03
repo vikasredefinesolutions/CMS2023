@@ -57,7 +57,7 @@ const AddAddress = ({
   payloadObj.submitHandler = submitHandler;
 
   const form = CheckoutAddressForm(payloadObj);
-  const { isSubmitting, submitForm } = form;
+  const { isSubmitting, submitForm, initialValues } = form;
 
   const deleteAddress = async (id: number, rowVersion: string) => {
     const location = await getLocation();

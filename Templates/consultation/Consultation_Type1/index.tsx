@@ -63,7 +63,7 @@ const Consultation_Type1 = () => {
   });
 
   const handleSubmit = async (values: any) => {
-    console.log('values: ', values);
+    // console.log('values: ', values);
     setShowLoader(true);
     const payload = {
       ggQuoteRequestModel: {
@@ -97,7 +97,7 @@ const Consultation_Type1 = () => {
       setShowLoader(false);
     } catch (e) {
       setShowLoader(false);
-      console.log('api exception---request a quote', e);
+      // console.log('api exception---request a quote', e);
     }
   };
 

@@ -80,7 +80,7 @@ const AccountSetting = () => {
     firstName: Yup.string().required(editAccountMessage.firstName),
     lastName: Yup.string().required(editAccountMessage.lastName),
     companyName: Yup.string().required(editAccountMessage.companyName),
-    password: Yup.string().required(editAccountMessage.password),
+    password: Yup.string().length(8).required(editAccountMessage.password),
     gender: Yup.string(),
   });
 
@@ -123,7 +123,11 @@ const AccountSetting = () => {
   };
 
   return (
-    <section className='pt-[40px]'>
+    <section
+      className={`${
+        storeCode == _Store.type3 ? 'w-4/4 lg:w-4/5' : 'pt-[40px] '
+      }`}
+    >
       <div className='container mx-auto'>
         <div className='gird grid-cols-1 lg:flex lg:items-center'>
           <div className='w-full mx-auto max-w-4xl'>
@@ -325,7 +329,10 @@ const AccountSetting = () => {
                           <div className='m:col-span-1'>
                             <button
                               type='button'
-                              onClick={updatePassword}
+                              onClick={(e) => {
+                                handleReset(e);
+                                updatePassword();
+                              }}
                               className='m-r-10 btn btn-secondary '
                             >
                               {__pagesText.accountPage.passwordChange}

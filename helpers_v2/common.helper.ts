@@ -614,7 +614,7 @@ export const getAddToCartObject = async (product: _Props): Promise<CartReq> => {
         discountPercentage: 0,
         productCustomizationId: 0,
         itemNotes: note || '',
-        isEmployeeLoginPrice: 0,
+        isEmployeeLoginPrice: false,
       },
       shoppingCartItemsDetailModels: [
         {

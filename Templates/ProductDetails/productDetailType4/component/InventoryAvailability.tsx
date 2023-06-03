@@ -38,6 +38,7 @@ const InventoryAvailability: React.FC<_props> = ({
         qty: qty > +event.target.value ? +event.target.value : qty,
         price: price,
         attributeOptionId: attributeOptionId,
+        sewOutCharges: 0,
       });
     } else {
       updateQuantities3({

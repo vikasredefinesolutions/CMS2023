@@ -22,6 +22,8 @@ const SelectOrInput: React.FC<_SelectOrInputProps> = ({
   const isEmployeeLoggedIn = useTypedSelector_v2(
     (state) => state.employee.loggedIn,
   );
+
+  const { sewOutCharges } = useTypedSelector_v2((state) => state.store);
   const { updateQuantities, updatePrice } = useActions_v2();
   const { attributeOptionId } = useTypedSelector_v2(
     (state) => state.product.selected.color,
@@ -80,16 +82,36 @@ const SelectOrInput: React.FC<_SelectOrInputProps> = ({
             : Math.ceil(+event.target.value / multipleQuantity) *
               multipleQuantity,
         price: newprice,
+        sewOutCharges: sewOutCharges,
       });
-      setInputOrSelect((input) => ({
-        ...input,
-        choosedValue:
-          Math.ceil(+event.target.value / multipleQuantity) * multipleQuantity >
-          qty
-            ? qty
-            : Math.ceil(+event.target.value / multipleQuantity) *
-              multipleQuantity,
-      }));
+      if (
+        Math.ceil(+event.target.value / multipleQuantity) * multipleQuantity >
+        9
+      ) {
+        setInputOrSelect((input) => ({
+          ...input,
+          type: 'input',
+          choosedValue:
+            Math.ceil(+event.target.value / multipleQuantity) *
+              multipleQuantity >
+            qty
+              ? qty
+              : Math.ceil(+event.target.value / multipleQuantity) *
+                multipleQuantity,
+        }));
+      } else {
+        setInputOrSelect((input) => ({
+          ...input,
+          choosedValue:
+            Math.ceil(+event.target.value / multipleQuantity) *
+              multipleQuantity >
+            qty
+              ? qty
+              : Math.ceil(+event.target.value / multipleQuantity) *
+                multipleQuantity,
+        }));
+      }
+
       return;
     }
 
@@ -98,6 +120,7 @@ const SelectOrInput: React.FC<_SelectOrInputProps> = ({
       size: size,
       qty: +event.target.value,
       price: newprice,
+      sewOutCharges: sewOutCharges,
     });
     setInputOrSelect((input) => ({
       ...input,
@@ -112,6 +135,7 @@ const SelectOrInput: React.FC<_SelectOrInputProps> = ({
         size: size,
         qty: Math.ceil(value.itemCount),
         price: newprice,
+        sewOutCharges: sewOutCharges,
       });
       setInputOrSelect({
         type: 'select',
@@ -126,6 +150,7 @@ const SelectOrInput: React.FC<_SelectOrInputProps> = ({
       size: size,
       qty: Math.ceil(value.itemCount),
       price: newprice,
+      sewOutCharges: sewOutCharges,
     });
 
     setInputOrSelect({
@@ -171,6 +196,7 @@ const SelectOrInput: React.FC<_SelectOrInputProps> = ({
         size: size,
         qty: +defaultQty || 0,
         price: price.msrp,
+        sewOutCharges: sewOutCharges,
       });
     }
   }, [defaultQty]);
@@ -387,6 +413,7 @@ const SelectOrInput: React.FC<_SelectOrInputProps> = ({
                             size: size,
                             qty: 0,
                             price: price.msrp,
+                            sewOutCharges: sewOutCharges,
                           });
                           setInputOrSelect({
                             type: 'select',

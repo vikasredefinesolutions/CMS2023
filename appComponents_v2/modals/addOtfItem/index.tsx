@@ -149,7 +149,7 @@ const AddOTFItemNo = ({ closeModal }: { closeModal: () => void }) => {
           shoppingCartItemModel: {
             price: totalPrice,
             quantity: totalQty,
-            isEmployeeLoginPrice: totalPrice, // Questionable
+            isEmployeeLoginPrice: true, // Questionable
             logoTitle: otfResponse.name,
             logogImagePath: otfResponse.imagePath,
             // Static
@@ -176,7 +176,7 @@ const AddOTFItemNo = ({ closeModal }: { closeModal: () => void }) => {
             attributeOptionId: item.attributeOptionId,
             attributeOptionValue: item.name,
             //
-            isEmployeeLoginPrice: otfResponse.price,
+            isEmployeeLoginPrice: 1,
             price: otfResponse.price,
             quantity: otfResponse.qty[index],
             // Static

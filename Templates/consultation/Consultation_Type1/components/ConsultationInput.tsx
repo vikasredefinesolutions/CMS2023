@@ -38,7 +38,7 @@ const ConsultationInput = ({
         setFieldValue('teamLogo', url);
       }
     } catch (e) {
-      console.log('exception -- uploading image -- ', e);
+      // console.log('exception -- uploading image -- ', e);
     }
   };
   return (

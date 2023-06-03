@@ -10,9 +10,9 @@ import {
   PersonalizationLocation,
 } from '@services/cart';
 import CartSummarryType5 from '@templates/cartSummarry/cartSummaryType5';
-import CartItem from 'Templates/cartItem';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
+import CartItem from 'Templates/cartItem';
 import { _CartProps } from '../Cart';
 import EmptyCart from '../components/emptyCart';
 
@@ -179,7 +179,7 @@ const CartType5: React.FC<_CartProps> = ({
                             </strong>
                           </div>
                         ) : (
-                          policy.policyMessage != '' && (
+                          policy.policyMessage.trim() != '' && (
                             <div className='' key={policy.name}>
                               <strong className='mt-[20px] text-medium-text font-[600]'>
                                 {policy.policyMessage}

@@ -18,7 +18,7 @@ const Checkout: NextPage<{ templateId: number }> = ({ templateId }) => {
   } else if (code === CheckoutType.pkhealthgear) {
     id = 2;
   } else if (code === CheckoutType.driving) {
-    id = 3;
+    id = 5;
   }
 
   useEffect(() => {
