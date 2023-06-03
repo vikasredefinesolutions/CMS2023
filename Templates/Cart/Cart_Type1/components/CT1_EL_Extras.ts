@@ -83,6 +83,7 @@ export const create_cartLogoPersonModel = (args: {
     totalPrice: number;
     attributeOptionId: number;
   }[];
+  isPriceChangedByEmployee?: boolean;
 }): CartLogoPersonModel[] => {
   return args.details.map((item) => ({
     id: item.id,
@@ -92,6 +93,6 @@ export const create_cartLogoPersonModel = (args: {
     price: +item.unitPrice,
     quantity: item.qty,
     estimateDate: new Date(),
-    isEmployeeLoginPrice: 1, //
+    isEmployeeLoginPrice: args.isPriceChangedByEmployee ? 1 : 0, //send 1 if empoloyeed changes the price
   }));
 };

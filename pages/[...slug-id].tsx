@@ -62,7 +62,6 @@ const SlugSearch: NextPage<_Slug_Props, _Slug_Props> = (props) => {
     storeCode: _globalStore.code,
   };
   const { page, metaData } = props;
-
   if (page === 'PRODUCT_DETAILS') {
     const { configs, data } = props;
     return (
@@ -114,6 +113,7 @@ const SlugSearch: NextPage<_Slug_Props, _Slug_Props> = (props) => {
 
   if (page === 'PRODUCT_LISTING') {
     const { listingData, configs } = props;
+
 
     return (
       <>

@@ -253,7 +253,7 @@ const CartSummarryType5: FC<_props> = ({ selectedShippingModel }) => {
               {showUpdateBtn() ? (
                 <button
                   onClick={() => applyCouponHandler(coupon)}
-                  className='coupon-code-Apply text-sm absolute right-0 top-2 curosr-pointer z-40 btn btn-secondary btn-sm  '
+                  className='coupon-code-Apply text-sm absolute right-0 top-0 curosr-pointer z-40 btn btn-secondary btn-sm  '
                 >
                   UPDATE
                 </button>
@@ -265,7 +265,7 @@ const CartSummarryType5: FC<_props> = ({ selectedShippingModel }) => {
             </dt>
           </div>
           {ShippingHTML(selectedShippingModel?.price)}
-          {currentPage === 'CHECKOUT' && (
+          {currentPage === 'CHECKOUT' && salesTax != 0 && (
             <div className='border-t border-gray-200 flex items-center justify-between pt-[10px]'>
               <dt className='text-normal-text flex items-center'>
                 <span>{__pagesText.CheckoutPage.orderSummary.tax}</span>

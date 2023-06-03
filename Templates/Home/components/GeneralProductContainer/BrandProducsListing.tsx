@@ -1,12 +1,19 @@
+import FeaturedSkeleton from '@appComponents/Loading/Skeleton';
 import { newFetauredItemResponse } from '@definations/productList.type';
-import { useWindowDimensions_v2 } from '@hooks_v2/index';
+import {
+  useActions_v2,
+  useTypedSelector_v2,
+  useWindowDimensions_v2,
+} from '@hooks_v2/index';
+import { FetchDataByBrand } from '@services/brand.service';
+import { _SelectedTab } from '@templates/ProductDetails/productDetailsTypes/storeDetails.res';
 import React, { Fragment, useEffect, useRef, useState } from 'react';
 import 'react-loading-skeleton/dist/skeleton.css';
 import Slider from 'react-slick';
 import SlugSingleProductListing from './SlugSingleProductListing';
 
 interface _props {
-  productsData: newFetauredItemResponse[] | [];
+  productsData: _SelectedTab;
   showBorder: string;
   customMessage: string;
   showProductName: string;
@@ -15,6 +22,7 @@ interface _props {
   showPrice: string;
   showBrandLogo: string;
   footerTabing: string;
+  productToDisplay: string;
 }
 interface _carouselProps {
   sliderSettings: {
@@ -39,24 +47,72 @@ const BrandProductListing: React.FC<_props> = (props) => {
     showPrice,
     showBrandLogo,
     footerTabing,
+    productToDisplay,
   } = props;
 
+  const { width } = useWindowDimensions_v2();
   const Settings = {
     sliderSettings: {
       dots: false,
       infinite: true,
       speed: 500,
-      slidesToShow: 4,
+      slidesToShow: width <= 418 ? 1 : width <= 768 ? 2 : width <= 1024 ? 3 : 4,
       slidesToScroll: 1,
       arrows: false,
     },
-    carouselCounter: 4,
+    carouselCounter:
+      width <= 418 ? 1 : width <= 768 ? 2 : width <= 1024 ? 3 : 4,
   };
 
   const [featuredProductCarouselSetting, setFeaturedProductCarouselSetting] =
     useState<_carouselProps>(Settings);
 
-  const { width } = useWindowDimensions_v2();
+  const [loading, setLoading] = useState<boolean>(false);
+  const [brandsData, setBrandsData] = useState<newFetauredItemResponse[] | []>(
+    [],
+  );
+
+  const sliderRef = useRef<null | Slider>(null);
+
+  // ** redux
+  const { storeData } = useActions_v2();
+  const storeId = useTypedSelector_v2((state) => state.store.id);
+  const cacheData = useTypedSelector_v2((state) => state.cache.cacheData);
+
+  const fetchBrandData = async () => {
+    let body = {
+      sename:
+        productsData?.displayMethod == 'dynamic'
+          ? productsData?.selectedBrands?.map((brand) => brand.value).join(',')
+          : productsData?.selectedProducts
+              .map((product: any) => product?.seName)
+              .join(','),
+      type: productsData?.displayMethod,
+      storeId: storeId,
+      tagName: productToDisplay ?? 'featured',
+      maximumItemsForFetch: productsData?.productCount,
+    };
+    if (body.storeId) {
+      const data: newFetauredItemResponse[] = await FetchDataByBrand(body);
+      storeData({
+        [productsData?.tabName]: data,
+      });
+      console.log(data, 'dataaa');
+      setBrandsData(data);
+    }
+    setLoading(false);
+  };
+
+  // Fetching products by brand
+  useEffect(() => {
+    if (productsData?.tabName in cacheData) {
+      setLoading(false);
+      setBrandsData(cacheData[productsData?.tabName]);
+    } else {
+      setLoading(true);
+      fetchBrandData();
+    }
+  }, [productsData?.tabName, storeId]);
 
   useEffect(() => {
     if (width <= 480) {
@@ -92,10 +148,10 @@ const BrandProductListing: React.FC<_props> = (props) => {
         carouselCounter: 4,
       });
     }
-  }, [width]);
+  }, [width, brandsData]);
 
   useEffect(() => {
-    if (productsData?.length < 4) {
+    if (brandsData?.length < 4) {
       setFeaturedProductCarouselSetting({
         sliderSettings: {
           ...featuredProductCarouselSetting?.sliderSettings,
@@ -112,9 +168,7 @@ const BrandProductListing: React.FC<_props> = (props) => {
         carouselCounter: featuredProductCarouselSetting?.carouselCounter,
       });
     }
-  }, [productsData]);
-
-  const sliderRef = useRef<null | Slider>(null);
+  }, [brandsData]);
 
   const goToNextProduct = () => {
     sliderRef.current?.slickNext();
@@ -135,7 +189,7 @@ const BrandProductListing: React.FC<_props> = (props) => {
               <div className=''>
                 <div
                   className={`${
-                    productsData?.length >
+                    brandsData?.length >
                     featuredProductCarouselSetting?.carouselCounter
                       ? 'absolute'
                       : 'hidden'
@@ -154,44 +208,49 @@ const BrandProductListing: React.FC<_props> = (props) => {
                   ref={(c) => (sliderRef.current = c)}
                   {...featuredProductCarouselSetting.sliderSettings}
                 >
-                  {productsData?.map((product) => {
-                    return (
-                      <Fragment key={product?.productId}>
-                        {/* {showBorder == __pagesConstant?.show?.Yes ? (
-                          <div key={product.productId} className='slide-item'>
-                            <SingleProductListing
-                              product={product}
-                              customMessage={customMessage}
-                              showProductName={showProductName}
-                              showSplitProducts={showSplitProducts}
-                              showButton={showButton}
-                              showPrice={showPrice}
-                              showBrandLogo={showBrandLogo}
-                              footerTabing={footerTabing}
-                            />
+                  {brandsData && brandsData?.length
+                    ? brandsData?.map((product) => {
+                        return (
+                          <Fragment key={product?.productId}>
+                            <div key={product.productId} className='slide-item'>
+                              <SlugSingleProductListing
+                                showBorder={showBorder}
+                                product={product}
+                                customMessage={customMessage}
+                                showProductName={showProductName}
+                                showSplitProducts={showSplitProducts}
+                                showButton={showButton}
+                                showPrice={showPrice}
+                                showBrandLogo={showBrandLogo}
+                                footerTabing={footerTabing}
+                              />
+                            </div>
+                            {/* )} */}
+                          </Fragment>
+                        );
+                      })
+                    : Array.from(
+                        Array(
+                          featuredProductCarouselSetting?.sliderSettings
+                            ?.slidesToShow,
+                        ),
+                      ).map((_, index) => {
+                        return (
+                          <div key={index} className='slide-item'>
+                            <div className='px-2'>
+                              <div className='w-full'>
+                                <div className='text-center relative border border-gray-200 border-solid bg-white relative'>
+                                  <FeaturedSkeleton />
+                                </div>
+                              </div>
+                            </div>
                           </div>
-                        ) : ( */}
-                        <div key={product.productId} className='slide-item'>
-                          <SlugSingleProductListing
-                            showBorder={showBorder}
-                            product={product}
-                            customMessage={customMessage}
-                            showProductName={showProductName}
-                            showSplitProducts={showSplitProducts}
-                            showButton={showButton}
-                            showPrice={showPrice}
-                            showBrandLogo={showBrandLogo}
-                            footerTabing={footerTabing}
-                          />
-                        </div>
-                        {/* )} */}
-                      </Fragment>
-                    );
-                  })}
+                        );
+                      })}
                 </Slider>
                 <div
                   className={`${
-                    productsData?.length >
+                    brandsData?.length >
                     featuredProductCarouselSetting?.carouselCounter
                       ? 'absolute'
                       : 'hidden'

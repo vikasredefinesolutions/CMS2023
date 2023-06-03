@@ -59,6 +59,7 @@ export const GetPageComponentsByCategoryId = async (payload: {
   categoryId: number;
 }) => {
   const url = `CmsComponents/getpagecomponents/${payload.categoryId}.json`;
+  
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const response = await CallAPI_v2<any>({
@@ -71,6 +72,5 @@ export const GetPageComponentsByCategoryId = async (payload: {
       method: 'GET',
     },
   });
-
   return response;
 };

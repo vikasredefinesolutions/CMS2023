@@ -11,13 +11,17 @@ const CartTemplates: _CartTemplates = {
   type2: CartType2, //for PKHG
   type3: CartType3, //for Store Builder
   type4: CartType4, //for corporate Store like cyxtera and etc
-  type5: CartType5,
+  type5: CartType5, // di
 };
 
 const CartTemplate: FC<_CartProps> = (props) => {
   const Cart =
     CartTemplates[
-      (`type${props.templateId}` as 'type1') || 'type2' || 'type3' || 'type4' || 'type5'
+      (`type${props.templateId}` as 'type1') ||
+        'type2' ||
+        'type3' ||
+        'type4' ||
+        'type5'
     ];
   return <Cart {...props} />;
 };

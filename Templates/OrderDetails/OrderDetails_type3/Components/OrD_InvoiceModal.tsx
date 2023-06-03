@@ -166,12 +166,48 @@ const OrD_InvoiceModal: React.FC<_Props> = ({
                   <div className='w-full lg:w-1/2'>
                     <div className='font-[600]'>Bill to</div>
                     <div className=''>{billing?.billingFirstName}</div>
-                    <div className=''>{getBillingAddress(billing)}</div>
+
+                    {billing.billingAddress1 && (
+                      <div className=''> {billing.billingAddress1},</div>
+                    )}
+                    {billing.billingAddress2 && (
+                      <div className=''>{billing.billingAddress2},</div>
+                    )}
+                    {billing?.billingCity && (
+                      <div className=''>{billing?.billingCity},</div>
+                    )}
+                    {billing.billingState && (
+                      <div className=''>{billing.billingState},</div>
+                    )}
+                    {billing.billingCountry && (
+                      <div className=''>{billing.billingCountry},</div>
+                    )}
+                    {billing.billingZip && (
+                      <div className=''>{billing.billingZip}</div>
+                    )}
                   </div>
                   <div className='w-full lg:w-1/2'>
                     <div className='font-[600]'>Ship to</div>
                     <div className=''>{billing?.shippingFirstName}</div>
-                    <div className=''>{getShippingAddress(billing)}</div>
+
+                    {billing.shippingAddress1 && (
+                      <div className=''> {billing.shippingAddress1},</div>
+                    )}
+                    {billing.shippingAddress2 && (
+                      <div className=''>{billing.shippingAddress2},</div>
+                    )}
+                    {billing?.shippingCity && (
+                      <div className=''>{billing?.shippingCity},</div>
+                    )}
+                    {billing.shippingState && (
+                      <div className=''>{billing.shippingState},</div>
+                    )}
+                    {billing.shippingCountry && (
+                      <div className=''>{billing.shippingCountry},</div>
+                    )}
+                    {billing.shippingZip && (
+                      <div className=''>{billing.shippingZip}</div>
+                    )}
                   </div>
                   <div className='w-full'></div>
                 </div>

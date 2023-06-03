@@ -25,7 +25,6 @@ import {
 } from '@definations/store.type';
 import { conditionalLog_V2 } from '@helpers/console.helper';
 
-import Metatags from '@appComponents/MetaTags';
 import Spinner from '@appComponents/ui/spinner';
 import { PageResponseType } from '@definations/app.type';
 import { _MenuItems } from '@definations/header.type';
@@ -234,11 +233,11 @@ const RedefineCustomApp = ({
   return (
     <>
       <Spinner>
-        <Metatags
+        {/* <Metatags
           storeName={store.storeName}
           pageMetaData={pageProps?.metaData}
           routepath={router.asPath}
-        />
+        /> */}
         <DcTags />
         <TwitterTags
           pageMetaData={pageProps?.metaData}

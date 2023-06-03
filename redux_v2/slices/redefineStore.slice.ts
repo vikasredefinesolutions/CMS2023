@@ -39,6 +39,8 @@ export interface _RedesignStore {
   bothLogin: boolean;
   isLinepersonalization: boolean;
   currentPage: 'CHECKOUT' | 'BRANDS' | 'STORIES' | null;
+  firstLogoCharge: number;
+  secondLogoCharge: number;
 }
 
 // Define the initial state using that type
@@ -70,6 +72,8 @@ const initialState: _RedesignStore = {
   bothLogin: false,
   isLinepersonalization: false,
   currentPage: null,
+  firstLogoCharge: 0,
+  secondLogoCharge: 0,
 };
 
 export const storeSlice = createSlice({
@@ -108,6 +112,8 @@ export const storeSlice = createSlice({
       state.thirdPartyLogin = store.thirdPartyLogin;
       state.shippingChargeType = store.shippingChargeType;
       state.isLinepersonalization = store.isLinepersonalization;
+      state.firstLogoCharge = store.firstLogoCharge;
+      state.secondLogoCharge = store.secondLogoCharge;
     },
 
     store_setAppView: (

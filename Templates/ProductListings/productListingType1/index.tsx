@@ -178,6 +178,7 @@ const ProductListingType1: React.FC<_ListingProps> = ({
                   </div>
                 </div>
               </div>
+              
               {CMS.component && (
                 <div className='flex flex-wrap ml-[-16px] mr-[-16px]'>
                   <Home

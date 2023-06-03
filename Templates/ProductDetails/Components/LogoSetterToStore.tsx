@@ -40,7 +40,7 @@ const LogoSetterToStore = () => {
             name: res.logoLocation || '',
             value: res.logoLocation || '',
           },
-          price: res.logoPrice,
+          price: res.logoPrice ? res.logoPrice / totalQty : 0,
           quantity: totalQty,
           status: LOGOlocation.submitLater,
           isSewOut: res.isSewOut,
@@ -56,7 +56,7 @@ const LogoSetterToStore = () => {
             name: res.logoLocation || '',
             value: res.logoLocation || '',
           },
-          price: res.logoPrice / totalQty,
+          price: res.logoPrice ? res.logoPrice / totalQty : 0,
           quantity: totalQty,
           status: LOGOlocation.submitted,
           title: res.name,
@@ -87,14 +87,16 @@ const LogoSetterToStore = () => {
           alt: res.logoLocation || '',
         },
         show: true,
-        price: res.logoPrice,
-        cost: res.logoPrice,
+        price: res.logoPrice ? res.logoPrice / totalQty : 0,
+        cost: res.logoPrice ? res.logoPrice / totalQty : 0,
       };
 
       return {
         logoStatus,
         fileToUpload,
         selectedLocation,
+        isSewOut: res.isSewOut,
+        sewOutAmount: res.sewOutAmount,
       };
     });
     if (!isLater) {

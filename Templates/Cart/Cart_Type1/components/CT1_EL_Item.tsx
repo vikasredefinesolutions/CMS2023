@@ -86,6 +86,11 @@ const CT1_EL_Item: React.FC<_CartItem & _Props> = (item) => {
 
   const updateCartItems = async () => {
     setShowLoader(true);
+    //Checking if employee has changed the product or not
+    const isPriceChangedByEmployee =
+      Number(item.shoppingCartItemDetailsViewModels[0]?.unitPrice)?.toFixed(
+        2,
+      ) === details.sizesWithPriceNQty[0]?.unitPrice;
     const payload: CartReq = {
       addToCartModel: {
         customerId: +customerId,
@@ -101,7 +106,7 @@ const CT1_EL_Item: React.FC<_CartItem & _Props> = (item) => {
           discountPrice: item.discountPrice,
           logoTitle: item.productName,
           logogImagePath: item.colorImage,
-          isEmployeeLoginPrice: true,
+          isEmployeeLoginPrice: !isPriceChangedByEmployee,
 
           // Static values
           status: 2,
@@ -122,6 +127,7 @@ const CT1_EL_Item: React.FC<_CartItem & _Props> = (item) => {
         ],
         cartLogoPersonModel: create_cartLogoPersonModel({
           details: details.sizesWithPriceNQty,
+          isPriceChangedByEmployee: !isPriceChangedByEmployee,
         }),
         cartLogoPersonDetailModels: create_cartLogoPersonDetailModels({
           colorImagePath: item.colorImage,

@@ -132,7 +132,7 @@ const TemplateFourListing = ({
               </span>
             </div>
             <div className='form-group mb-[12px] text-small-text'>
-              <label className='checkbox-inline'>
+              <label className='checkbox-inline flex items-center gap-x-1 justify-center'>
                 <input
                   checked={skuList.includes(product?.sku ? product.sku : '')}
                   onChange={() =>
@@ -151,7 +151,7 @@ const TemplateFourListing = ({
                         </>
                       ) : (
                         <Link href={getCompareLink()}>
-                          <span>Compare {skuList.length}</span>
+                          <span>Compare ({skuList.length})</span>
                         </Link>
                       )
                     ) : (
@@ -161,6 +161,7 @@ const TemplateFourListing = ({
                 }
               </label>
             </div>
+            
             <ul
               role='list'
               className='flex flex-wrap items-center mt-[12px] justify-center space-x-1'

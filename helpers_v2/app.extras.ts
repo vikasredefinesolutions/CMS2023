@@ -42,6 +42,8 @@ export const expectedProps: _Expected_AppProps = {
     bothLogin: false,
     logoUrl: '',
     isLinepersonalization: false,
+    firstLogoCharge: 0,
+    secondLogoCharge: 0,
   },
   menuItems: null,
   sbStore: {

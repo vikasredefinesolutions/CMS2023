@@ -6,20 +6,34 @@ import { _ContactRequest } from '@definations/contactRequest.type';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import { SendAsync } from '@utils/axios.util';
 import { Form, Formik } from 'formik';
-import { useState } from 'react';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 import * as Yup from 'yup';
 
 export const RequestContactForm = () => {
   const { setShowLoader, showModal } = useActions_v2();
+  const router = useRouter();
 
   const storeId = useTypedSelector_v2((state) => state.store.id);
   const { user } = useTypedSelector_v2((state) => state);
+
   const [initialValues, setinitialValues] = useState({
     name: user.customer ? user.customer.name : '',
     companyName: user.customer ? user.customer.companyName : '',
     email: user.customer ? user.customer.email : '',
-    comment: '',
+    comment: router.query.name ? router.query.name : '',
   });
+
+  useEffect(() => {
+    if (user.customer) {
+      setinitialValues({
+        ...initialValues,
+        name: user.customer.name,
+        companyName: user.customer.companyName,
+        email: user.customer.email,
+      });
+    }
+  }, [user.customer]);
 
   const _ContactRequestSchema = Yup.object().shape({
     name: Yup.string()
@@ -96,12 +110,13 @@ export const RequestContactForm = () => {
     };
     createContactUs(payload);
   };
+
   return (
     <>
       <section className='container pl-[15px] pr-[15px] mx-auto'>
         {' '}
         <div className='max-w-6 mx-auto'>
-          {__pagesText.requestConsultation.heading}
+          {/* {__pagesText.requestConsultation.heading} */}
           <div className='text-center pb-[20px]'>
             <div className='pt-[12px] pb-[12px] mx-[15px]'>
               <div className='flex flex-wrap bg-light-gray py-[15px] px-[15px]'>
@@ -207,12 +222,12 @@ export const RequestContactForm = () => {
                                         onChange={handleChange}
                                         type={'text'}
                                         required={true}
-                                        className={'form-input'}
+                                        className={
+                                          'text-medium-text border border-[#ababab] rounded pt-[12px] pb-[12px] pl-[12px] pr-[12px] w-full'
+                                        }
                                       />
                                     </div>
-                                  </div>{' '}
-                                  {/* </div>
-                                   */}
+                                  </div>
                                   <div className='w-full'>
                                     <label
                                       htmlFor='Message'
@@ -227,78 +242,23 @@ export const RequestContactForm = () => {
                                     <div className='w-full'>
                                       <textarea
                                         placeholder='Message here'
-                                        className='form-input'
+                                        className='text-medium-text border border-[#ababab] rounded pt-[12px] pb-[12px] pl-[12px] pr-[12px] w-full'
                                         name={'comment'}
                                         value={values.comment}
                                         onChange={handleChange}
+                                        rows={5}
                                       ></textarea>
                                     </div>
                                   </div>
                                   <div className='w-full text-left'>
                                     <button
                                       type='submit'
-                                      className={
-                                        'btn btn-md btn-secondary mb-[15px]'
-                                      }
+                                      className={'btn btn-primary mb-[15px]'}
                                     >
                                       {' '}
                                       SUBMIT{' '}
                                     </button>
                                   </div>
-                                </div>
-                                <div className='w-full'>
-                                  <label
-                                    htmlFor='Company Name / ASI# or PPAI#:'
-                                    className='block text-base font-medium text-gray-700'
-                                  >
-                                    {' '}
-                                    Company Name / ASI# or PPAI#:{' '}
-                                    <span className='text-red-500'>*</span>{' '}
-                                  </label>
-                                  <div className='w-full md:w-[50%]'>
-                                    <RequestInput
-                                      placeHolder={'Company'}
-                                      name={'companyName'}
-                                      value={values.companyName}
-                                      onChange={handleChange}
-                                      type={'text'}
-                                      required={true}
-                                      className={
-                                        'text-medium-text border border-[#ababab] rounded pt-[12px] pb-[12px] pl-[12px] pr-[12px] w-full'
-                                      }
-                                    />
-                                  </div>
-                                </div>{' '}
-                                {/* </div>
-                                 */}
-                                <div className='w-full'>
-                                  <label
-                                    htmlFor='Message'
-                                    className='block text-base font-medium text-gray-700'
-                                  >
-                                    {' '}
-                                    Message:{' '}
-                                    <span className='text-red-500'>*</span>{' '}
-                                  </label>
-                                  <div className='w-full'>
-                                    <textarea
-                                      placeholder='Message here'
-                                      className='text-medium-text border border-[#ababab] rounded pt-[12px] pb-[12px] pl-[12px] pr-[12px] w-full'
-                                      name={'comment'}
-                                      value={values.comment}
-                                      onChange={handleChange}
-                                      rows={5}
-                                    ></textarea>
-                                  </div>
-                                </div>
-                                <div className='w-full text-left'>
-                                  <button
-                                    type='submit'
-                                    className={'btn btn-primary mb-[15px]'}
-                                  >
-                                    {' '}
-                                    SUBMIT{' '}
-                                  </button>
                                 </div>
                               </div>
                             </div>

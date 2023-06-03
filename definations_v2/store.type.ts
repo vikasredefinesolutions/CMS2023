@@ -30,6 +30,8 @@ export interface _StoreReturnType {
   thirdPartyLogin: boolean;
   bothLogin: boolean;
   isLinepersonalization: boolean;
+  firstLogoCharge: number;
+  secondLogoCharge: number;
 }
 
 export interface _FetchStoreConfigurations {

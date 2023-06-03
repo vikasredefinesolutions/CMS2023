@@ -56,8 +56,9 @@ export const paths = {
   Contact: '/Contact',
   ThankYou: '/Thankyou',
   STORIES: '/stories',
-  PRIVACY_POLICY: '/privacy-policy.html',
+  PRIVACY_POLICY: 'javascript:void(0)',///privacy-policy.html',
   TERMS_OF_USE: '/terms-and-conditions.html',
+  PKHGTERMS_OF_USE: '/termsandcondition.html',
   PATAGONIA_CUSTOM_REQUEST_FORM: '/Custom-Requests',
   REQUEST_THANKYOU: '/request-thankyou.html',
 };
@@ -98,6 +99,16 @@ export const __SpecialBreadCrumbsPaths = [
   {
     path: [paths.REQUEST_THANKYOU],
     name: 'Request Thankyou',
+    directTo: null,
+  },
+  {
+    path: [paths.TERMS_OF_USE],
+    name: 'Term & Condition',
+    directTo: null,
+  },
+  {
+    path: [paths.PRIVACY_POLICY],
+    name: 'Privacy Policy',
     directTo: null,
   },
 ];

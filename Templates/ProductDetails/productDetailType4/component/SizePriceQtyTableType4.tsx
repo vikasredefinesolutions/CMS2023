@@ -13,10 +13,6 @@ const SizePriceQtyTable4: React.FC<_SizePriceQtyTableProps> = ({
     (state) => state.product.product,
   );
 
-  const { price: discountedPrice } = useTypedSelector_v2(
-    (state) => state.product.toCheckout,
-  );
-
   const { color } = useTypedSelector_v2((state) => state.product.selected);
   return (
     <div className='mt-[15px] text-default-text border border-gray-border'>
@@ -35,7 +31,6 @@ const SizePriceQtyTable4: React.FC<_SizePriceQtyTableProps> = ({
                 </div>
               ));
             }
-
             return <></>;
           })}
         </div>
@@ -73,7 +68,9 @@ const SizePriceQtyTable4: React.FC<_SizePriceQtyTableProps> = ({
 
               return inventory?.inventory > 0 ? (
                 <div className='p-2 w-1/2 md:w-auto'>
-                  <div>{inventory?.inventory}</div>
+                  <div>
+                    {inventory?.inventory > 250 ? '250+' : inventory.inventory}{' '}
+                  </div>
                   <EditInput
                     sizeAttributeOptionId={inventory.attributeOptionId}
                     qty={inventory?.inventory || 0}

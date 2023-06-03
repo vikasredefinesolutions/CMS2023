@@ -131,7 +131,7 @@ const ForgotModal: React.FC<_ModalProps> = ({ modalHandler }) => {
                   ) : ( */}
                   <div className=''>
                     <button
-                      className='btn btn-md btn-secondary w-full'
+                      className='btn btn-md btn-secondary w-full pk-hg-primary'
                       onClick={() => forgotPassword(Email)}
                     >
                       {__pagesText.productInfo.forgotModal.forgotPassword}{' '}

@@ -50,7 +50,7 @@ const LoggedInMenu: React.FC = () => {
             title={__pagesText.Headers.myAccountTittle}
           >
             <span className='text-[12px] hidden xl:inline-block whitespace-nowrap tracking-[1px]'>
-              {__pagesText.Headers.myAccountTittle}
+              {__pagesText.Headers.myAccountTittle.toUpperCase()}
             </span>
             <span className='xl:hidden material-icons text-[30px]'>
               {__pagesText.Headers.loginIcon}
@@ -61,9 +61,9 @@ const LoggedInMenu: React.FC = () => {
         {focus && (
           <div className='text-xs uppercase absolute right-0 top-full bg-white z-40 w-[220px]'>
             <ul className='border-[3px] border-[#000000]'>
-              <li className='border-t border-t-gray-300'>
+              <li className='border-t border-t-gray-300 pt-[10px]'>
                 <Link href={paths.loggedInMenu.order}>
-                  <a className='flex items-center p-2 gap-2.5 text-[#000000] hover:text-[#000000]'>
+                  <a className='flex items-center p-2 gap-3.5 text-[#000000] hover:text-[#000000]'>
                     <span className=''>
                       <NxtImage
                         src={__StaticImg.loggedInMenu.order.src}
@@ -78,9 +78,9 @@ const LoggedInMenu: React.FC = () => {
                   </a>
                 </Link>
               </li>
-              <li className=''>
+              <li className='pt-[10px]'>
                 <Link href={paths.myAccount.manage_logo}>
-                  <a className='flex items-center p-2 gap-2.5 text-[#000000] hover:text-[#000000]'>
+                  <a className='flex items-center p-2 gap-3.5 text-[#000000] hover:text-[#000000]'>
                     <span className=''>
                       <NxtImage
                         src='/assets/images/PKhealth/manage-logo.png'
@@ -88,14 +88,14 @@ const LoggedInMenu: React.FC = () => {
                         className={''}
                         isStatic={true}
                         useNextImage={false}
-                        title={__pagesText.Headers.logoLocation}
+                        title={__pagesText.Headers.manageLoco}
                       />
                     </span>
-                    <span className=''>{__pagesText.Headers.logoLocation}</span>
+                    <span className=''>{__pagesText.Headers.manageLoco}</span>
                   </a>
                 </Link>
               </li>
-              <li className=''>
+              <li className='pt-[10px]'>
                 <Link href={paths.loggedInMenu.settings}>
                   <a className='flex items-center p-2 gap-2.5 text-[#000000] hover:text-[#000000]'>
                     <span className=''>
@@ -114,7 +114,7 @@ const LoggedInMenu: React.FC = () => {
                   </a>
                 </Link>
               </li>
-              <li className='border-t border-t-gray-300'>
+              <li className='border-t border-t-gray-300 pt-[10px] pb-[10px]'>
                 <div
                   onClick={() => logoutHandler()}
                   className='flex items-center p-2 gap-2.5 text-[#000000] hover:text-[#000000]'
@@ -129,7 +129,7 @@ const LoggedInMenu: React.FC = () => {
                       title={__pagesText.Headers.signOut}
                     />
                   </span>
-                  <span className=''> {__pagesText.Headers.signOut}</span>
+                  <span className=''> {__pagesText.Headers.logOut}</span>
                 </div>
               </li>
             </ul>

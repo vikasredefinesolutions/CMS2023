@@ -165,7 +165,7 @@ const CartType5: React.FC<_CartProps> = ({
                     {productPolicy &&
                       productPolicy?.map((policy: BrandPolicyViewModel) => {
                         return policy.policyWithCheckBox ? (
-                          <div className='' key={policy.name}>
+                          <div className='mt-[20px] ' key={policy.name}>
                             <input
                               className='w-4 h-4 rounded mr-2'
                               type='checkbox'
@@ -173,7 +173,7 @@ const CartType5: React.FC<_CartProps> = ({
                               value={policy.name || ''}
                               onChange={(event) => handlecheck(event)}
                             />
-                            <strong className='mt-[20px] text-medium-text font-[600]'>
+                            <strong className='text-medium-text font-[600]'>
                               {policy.policyMessage}
                               <span className='text-red-600 p-1'>*</span>
                             </strong>
@@ -181,8 +181,8 @@ const CartType5: React.FC<_CartProps> = ({
                         ) : (
                           policy.policyMessage != '' &&
                             policy.policyMessage != ' ' && (
-                              <div className='' key={policy.name}>
-                                <strong className='mt-[20px] text-medium-text font-[600]'>
+                              <div className='mt-[20px] ' key={policy.name}>
+                                <strong className=' text-medium-text font-[600]'>
                                   {policy.policyMessage}
                                   <span className='text-red-600 p-1'>*</span>
                                 </strong>
@@ -207,11 +207,11 @@ const CartType5: React.FC<_CartProps> = ({
                         />
                       </div>
                     )}
-                    <div className='my-4'>
+                    <div className=' pb-30'>
                       <button
                         id='checkout'
                         key={'/checkout'}
-                        className={`mt-4 w-full `}
+                        className={`my-4 w-full `}
                         disabled={!buttonDisabed}
                         onClick={() => router.push(`${paths.CHECKOUT}`)}
                       >

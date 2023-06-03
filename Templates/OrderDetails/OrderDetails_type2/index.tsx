@@ -114,10 +114,12 @@ const OrderDetails_type2: React.FC = () => {
               <div className='bg-[#ffffff]'>
                 <div className='mb-[20px]'>
                   <Link href={paths.myAccount.orders} title=''>
-                    Go Back to all orders
+                    <a className='!text-anchor !text-anchor-hover'>
+                    &lt; Go Back to all orders
+                    </a>
                   </Link>
                 </div>
-                <div className='mb-[20px]'>
+                <div className='mb-[20px] text-[16px] border-b border-black pb-[20px]'>
                   {`Order: # ${order.billing.id} placed on ${moment(
                     order?.billing?.orderDate,
                   ).format(
@@ -126,7 +128,7 @@ const OrderDetails_type2: React.FC = () => {
                 </div>
                 <ul
                   role='list'
-                  className='overflow-hidden border border-gray-border p-[15px] md:p-[30px]'
+                  className='overflow-hidden p-[15px] md:p-[30px]'
                 >
                   {order.product.map((item, index) => {
                     return <OrD_ItemDetails key={index} item={item} />;

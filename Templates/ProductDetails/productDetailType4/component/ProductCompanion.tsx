@@ -12,7 +12,7 @@ const ProductCompanion: React.FC<_ProductCompanion> = ({ product }) => {
       <div className=''>
         <div className='pt-[15px] text-default-text'>
           <div className='inline-block font-semibold'>
-            {__pagesText.productInfo.companionProduct} :
+            {__pagesText.productInfo.companionProduct}:
           </div>
           <div className='mt-[5px]'>
             <a

@@ -215,6 +215,10 @@ export const productSlice = createSlice({
       state,
       { payload }: _Product_UpdateLogoDetails_Actions,
     ) => {
+      if (payload.type === 'Set_Logo_Details') {
+        state.som_logos.details = payload.data;
+      }
+
       if (payload.type === 'Location_Update_Pending') {
         state.som_logos.choosedLogoCompletionPending = payload.pending;
       }
@@ -267,13 +271,13 @@ export const productSlice = createSlice({
       if (payload.type === 'Update_TotalPrice_ByLogo') {
         const price = payload.logo.price === 'FREE' ? 0 : payload.logo.price;
         const addOrSubtract = payload.logo.addOrSubtract;
-
         if (addOrSubtract === 'add') {
           state.toCheckout = {
             ...state.toCheckout,
-            additionalLogoCharge:
-              state.toCheckout.additionalLogoCharge +
-              price * state.toCheckout.totalQty,
+            additionalLogoCharge: state.toCheckout.additionalLogoCharge
+              ? state.toCheckout.additionalLogoCharge +
+                price * state.toCheckout.totalQty
+              : price * state.toCheckout.totalQty,
             totalPrice:
               state.toCheckout.totalPrice + price * state.toCheckout.totalQty,
             logo: {
@@ -344,7 +348,7 @@ export const productSlice = createSlice({
         state.som_logos = {
           prices: null,
           details: null,
-          allowNextLogo: false,
+          allowNextLogo: payload.allowNextLogo ? true : false,
           availableOptions: payload.data,
           choosedLogoCompletionPending: null,
 
@@ -956,6 +960,85 @@ export const productSlice = createSlice({
       state.toCheckout.price = productPrice;
       state.toCheckout.totalQty = totalQty;
       state.toCheckout.totalPrice = totalPrice;
+      state.toCheckout.additionalSewOutCharges = updateSewOutCharge;
+    },
+    updateQuantityOnly: (
+      state,
+      action: {
+        payload: {
+          attributeOptionId: number;
+          size: string;
+          qty: number;
+          price: number;
+          sewOutCharges: number;
+        };
+      },
+    ) => {
+      let productName = action.payload.size;
+      let sizeAttributeOptionid = action.payload.attributeOptionId;
+      let productPrice = action.payload.price;
+      let productQty = action.payload.qty;
+      let totalQty = 0;
+      let updatedSizeQtys;
+      let sewOutCharges = action.payload.sewOutCharges;
+
+      if (state.toCheckout.sizeQtys === null) {
+        // IT CHECKOUT ARRAY DO NOT EXIST
+        updatedSizeQtys = [
+          {
+            attributeOptionId: sizeAttributeOptionid,
+            size: productName,
+            qty: productQty,
+            price: productPrice,
+          },
+        ];
+        totalQty = productQty;
+      } else {
+        // IF PRODUCT ALREDY EXISTS
+        updatedSizeQtys = state.toCheckout.sizeQtys?.map((product) => {
+          if (product.size === productName) {
+            totalQty += productQty;
+            return {
+              ...product,
+              qty: productQty,
+            };
+          }
+          totalQty += product.qty;
+          return product;
+        });
+
+        // IF PRODUCT DO NOT EXIST IN THE CHECKOUT ARRAY
+        const doesItemExist = state.toCheckout.sizeQtys.find(
+          (product) => product.size === productName,
+        );
+
+        if (!doesItemExist) {
+          updatedSizeQtys.push({
+            attributeOptionId: sizeAttributeOptionid,
+            size: productName,
+            qty: productQty,
+            price: productPrice,
+          });
+          totalQty += productQty;
+        }
+      }
+      let updateSewOutCharge = 0;
+
+      state.som_logos.details?.forEach((item) => {
+        if (item.isSewOut) {
+          updateSewOutCharge = updateSewOutCharge + sewOutCharges * totalQty;
+        }
+      });
+
+      if (totalQty >= state.toCheckout.minQty) {
+        state.toCheckout.allowAddToCart = true;
+      }
+
+      if (totalQty < state.toCheckout.minQty) {
+        state.toCheckout.allowAddToCart = false;
+      }
+      state.toCheckout.sizeQtys = updatedSizeQtys || null;
+      state.toCheckout.totalQty = totalQty;
       state.toCheckout.additionalSewOutCharges = updateSewOutCharge;
     },
     // updateSbsState: (state, action:{

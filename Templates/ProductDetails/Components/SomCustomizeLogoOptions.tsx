@@ -35,6 +35,7 @@ const SomCustomizeLogoOptions: React.FC<{
     useActions_v2();
   const { getDetailsLogo } = LogoSetterToStore();
   const { som_logos } = useTypedSelector_v2((state) => state.product);
+  const { secondLogoCharge } = useTypedSelector_v2((state) => state.store);
   const [logoCharges, setLogoCharges] = useState<logocharges>({
     isFirstLogoFree: false,
     isLogoSetupCharges: false,
@@ -95,20 +96,63 @@ const SomCustomizeLogoOptions: React.FC<{
       if (isLater) {
         setNowOrLater('later');
       } else {
-        setNowOrLater('now');
-        setInitialValues(new Array(details?.length).fill(''));
         setLogoEditDetails(details);
+        if (details) {
+          const filteredLogoLoations = logoLocation.filter(
+            (item) =>
+              !details.find(
+                (dLogo) => dLogo.selectedLocation.label === item.name,
+              ),
+          );
+
+          product_updateLogoDetails({
+            type: 'Reset_Locations',
+            allowNextLogo: true,
+            data: filteredLogoLoations?.map((logo) => ({
+              image: {
+                url: logo.image,
+                alt: logo.image,
+              },
+              label: logo.name,
+              value: logo.name,
+              price: logo.price,
+              cost: logo.cost,
+            })),
+          });
+          product_updateLogoDetails({
+            type: 'Set_Logo_Details',
+            data: details.map((item) => ({
+              status: item?.logoStatus,
+              location: {
+                imageUrl: item?.selectedLocation?.image.url ?? '',
+                name: item?.selectedLocation?.label ?? '',
+                value: item?.selectedLocation?.value ?? '',
+              },
+              title: item?.fileToUpload?.name,
+              filePath: item?.fileToUpload?.previewURL,
+              date: '',
+              price: item?.selectedLocation?.price,
+              quantity: 0,
+              isSewOut: item.isSewOut,
+              sewOutAmount: item.sewOutAmount,
+              reUsableCustomerLogo: 0,
+            })),
+          });
+        }
+        setInitialValues(new Array(details?.length).fill(''));
+        setNowOrLater('now');
       }
     }
   }, [editSizes, logoLocation]);
 
   const showPrice = (price: 'FREE' | number) => {
     if (price === 'FREE') return `FREE`;
-    return `${currency}${price.toFixed(2)}`;
+    return `${currency}${price?.toFixed(2)}`;
   };
 
   const logoNowOrLaterHandler = (action: 'now' | 'later') => {
     if (action === 'later') {
+      setInitialValues(['']);
       setNowOrLater('later');
       product_updateLogoDetails({
         type: 'Upload_Logo',
@@ -118,6 +162,7 @@ const SomCustomizeLogoOptions: React.FC<{
     }
 
     if (action === 'now') {
+      setLogoEditDetails(null);
       setNowOrLater('now');
       product_updateLogoDetails({
         type: 'Reset_Locations',
@@ -214,33 +259,15 @@ const SomCustomizeLogoOptions: React.FC<{
                                 price={
                                   logoCharges.isFirstLogoFree && index === 0
                                     ? 'FREE'
-                                    : logoCharges.isLogoSetupCharges &&
-                                      logoCharges.logoSetupCharges
-                                    ? logoCharges.logoSetupCharges
-                                    : 0
+                                    : secondLogoCharge
                                 }
-                                onRemove={() => {
-                                  arrayHelpers.remove(index);
-                                  product_updateLogoDetails({
-                                    type: 'Remove_SOM_logo',
-                                    logoIndex: index,
-                                  });
-                                  product_updateLogoDetails({
-                                    type: 'Allow_Next_Logo',
-                                    allow: true,
-                                  });
-                                }}
+                                onRemove={arrayHelpers}
                                 title={`${numberToOrdinalString(
                                   index + 1,
                                 )} Logo (${
                                   logoCharges.isFirstLogoFree && index === 0
                                     ? 'FREE'
-                                    : showPrice(
-                                        logoCharges.isLogoSetupCharges &&
-                                          logoCharges.logoSetupCharges
-                                          ? logoCharges.logoSetupCharges
-                                          : 0,
-                                      )
+                                    : showPrice(secondLogoCharge)
                                 })`}
                                 id={`${index}-id`}
                                 name={`${index}-name`}
@@ -263,10 +290,7 @@ const SomCustomizeLogoOptions: React.FC<{
                                       values.logos.length === 0 &&
                                       logoCharges.isFirstLogoFree
                                         ? 'FREE'
-                                        : logoCharges.isLogoSetupCharges &&
-                                          logoCharges.logoSetupCharges
-                                        ? logoCharges.logoSetupCharges
-                                        : 0,
+                                        : secondLogoCharge,
                                   }}
                                   arrayHelpers={arrayHelpers}
                                 />

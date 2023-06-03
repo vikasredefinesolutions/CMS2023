@@ -122,16 +122,16 @@ const MyCartIcon: React.FC = () => {
             </div>
             <div className='border-t first:border-t-0 border-[#758592] pt-[15px] first:pt-[0px]'>
               <div className='mb-3 text-right'>
-                <div className='text-slate-200	font-[400]'>
+                <div className='text-slate-200 text-gray-text	font-[400] tracking-[3px]'>
                   {totalCartQty} {__pagesText.Headers.totalItemInCartMessage}
                 </div>
-                <div className='text-[16px]'>
-                  {__pagesText.Headers.total} <Price value={totalPrice} />
+                <div className='text-[16px]  tracking-[3px]'>
+                  {__pagesText.Headers.total} <span className='text-tertiary  tracking-[3px]'><Price value={totalPrice} /></span>
                 </div>
               </div>
               <div className=''>
                 <Link href={paths.CHECKOUT} className=''>
-                  <a className='btn btn-secondary w-full text-center'>
+                  <a className='btn pk-hg-primary w-full text-center'>
                     {__pagesText.Headers.checkoutNow}
                   </a>
                 </Link>

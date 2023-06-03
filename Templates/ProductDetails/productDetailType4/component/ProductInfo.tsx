@@ -1,3 +1,4 @@
+import ForgotModal from '@appComponents/modals/forgotModal';
 import LoginModal from '@appComponents/modals/loginModal';
 import { _modals } from '@appComponents/modals/modal';
 import Price from '@appComponents/Price';
@@ -85,7 +86,7 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
       return;
     }
     if (totalinvetory === 0) {
-      router.push('/contact-request');
+      router.push(`contact-request.html?name=${product.name}`);
       return;
     }
     let GAAddToCartPaylod: any = { shoppingCartItemsModel: [] };
@@ -334,9 +335,7 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
           />
         )}
         {userId && <Inventory productId={product.id} storeCode={storeCode} />}
-        {product?.companionProductName !== null ? (
-          <ProductCompanion product={product} />
-        ) : null}
+        {product.companionProductName && <ProductCompanion product={product} />}
         {userId && (
           <div className='mt-[15px] text-default-text bg-light-gray p-[15px] flex flex-wrap items-end justify-between gap-[10px] mb-[20px]'>
             <div className=''>
@@ -369,6 +368,7 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
         </form>
       </div>
       {openModal === 'login' && <LoginModal modalHandler={modalHandler} />}
+      {openModal === 'forgot' && <ForgotModal modalHandler={modalHandler} />}
     </>
   );
 };

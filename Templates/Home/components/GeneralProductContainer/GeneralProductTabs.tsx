@@ -22,6 +22,7 @@ interface _props {
   showPrice: string;
   showBrandLogo: string;
   footerTabing: string;
+  productToDisplay: string;
 }
 
 // ** Styled Tab component
@@ -45,6 +46,7 @@ const ProductsInfoTabs: React.FC<_props> = (props) => {
     showPrice,
     showBrandLogo,
     footerTabing,
+    productToDisplay,
   } = props;
 
   // ** State
@@ -135,8 +137,9 @@ const ProductsInfoTabs: React.FC<_props> = (props) => {
                     showButton={showButton}
                     showPrice={showPrice}
                     showBrandLogo={showBrandLogo}
-                    productsData={product?.data}
+                    productsData={product}
                     footerTabing={footerTabing}
+                    productToDisplay={productToDisplay}
                   />
                 </TabPanel>
               </Fragment>

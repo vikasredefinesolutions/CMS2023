@@ -19,7 +19,7 @@ const CompareProduct_Type1: React.FC<_CompareProductprops> = (props) => {
   const [products, setProducts] = useState<_CompareProducts | null>(
     props.products,
   );
-  const { showModal, setShowLoader } = useActions_v2();
+  const { showModal, setShowLoader, hideModal } = useActions_v2();
   const storeId = useTypedSelector_v2((state) => state.store.id);
   const validationSchema = Yup.object().shape({
     email: Yup.string().email().required(__ValidationText.email.required),
@@ -149,143 +149,176 @@ const CompareProduct_Type1: React.FC<_CompareProductprops> = (props) => {
             Compare Products
           </span>
         </div>
-        <div className='relative overflow-auto border border-gray-border'>
-          <table className='w-full'>
-            {products?.details && products.details.length > 0 ? (
-              <tbody className='divide-y divide-y-gray-border'>
-                <DisplayCompareImage onRemove={removeHandler} />
-                <tr className='divide-x divide-x-gray-border text-center text-default-text'>
-                  <td style={{ verticalAlign: 'top' }}>
-                    <div className='p-[8px]'>Title</div>
-                  </td>
-                  {products?.details?.map((product, index) => (
-                    <td
-                      key={index}
-                      className=''
-                      style={{ verticalAlign: 'top' }}
-                    >
-                      <div className='p-[8px]'>
-                        <a href={product.seName} title={product.name}>
-                          {product.name}
-                        </a>
-                      </div>
-                    </td>
-                  ))}
-                </tr>
-                <tr className='divide-x divide-x-gray-border text-center text-default-text'>
-                  <td className=''>
-                    <div className='p-[8px]'>SKU</div>
-                  </td>
-                  {products?.details?.map((product, index) => (
-                    <td key={index} className=''>
-                      <div className='p-[8px]'>{product.sku}</div>
-                    </td>
-                  ))}
-                </tr>
-                <tr className='divide-x divide-x-gray-border text-center text-default-text'>
-                  <td className=''>
-                    <div className='p-[8px]'>Price</div>
-                  </td>
-                  {products?.details?.map((product, index) => (
-                    <td key={index} className=''>
-                      <div className='p-[8px]'>
-                        MSRP{' '}
-                        <Price
-                          value={undefined}
-                          prices={{
-                            msrp: +product.msrp,
-                            salePrice: +product.salePrice,
-                          }}
-                        />
-                      </div>
-                    </td>
-                  ))}
-                </tr>
-                <tr className='divide-x divide-x-gray-border text-center text-default-text'>
-                  <td className=''>
-                    <div className='p-[8px]'>Color</div>
-                  </td>
-                  {products?.colors?.map((colors, index) => (
-                    <AllColors
-                      key={index}
-                      color={colors}
-                      index={index}
-                      seName={
-                        (products.details && products.details[index].seName) ||
-                        '/'
-                      }
-                    />
-                  ))}
-                </tr>
-                <tr className='divide-x divide-x-gray-border text-center text-default-text'>
-                  <td className=''>
-                    <div className='p-[8px]'>Size</div>
-                  </td>
-                  {products?.inventory?.map((inventory, index) => {
-                    if (inventory === null) {
-                      return (
-                        <td key={index} className=''>
-                          <div className='p-2 flex flex-wrap gap-2 justify-center'>
-                            "-"
+        {products?.details && products.details.length <= 1 ? (
+          <div className='relative overflow-auto border border-gray-border'>
+            <div className='text-center pb-[10px] border-b-[1.4px] border-[#000000] relative '>
+              Please select two or more products to Add to Compare to use this
+              feature.
+            </div>
+          </div>
+        ) : (
+          <>
+            {' '}
+            <div className='relative overflow-auto border border-gray-border'>
+              <table className='w-full'>
+                {products?.details && products.details.length > 0 ? (
+                  <tbody className='divide-y divide-y-gray-border'>
+                    <DisplayCompareImage onRemove={removeHandler} />
+                    <tr className='divide-x divide-x-gray-border text-center text-default-text'>
+                      <td style={{ verticalAlign: 'top' }}>
+                        <div className='p-[8px]'>Title</div>
+                      </td>
+                      {products?.details?.map((product, index) => (
+                        <td
+                          key={index}
+                          className=''
+                          style={{ verticalAlign: 'top' }}
+                        >
+                          <div className='p-[8px]'>
+                            <a href={product.seName} title={product.name}>
+                              {product.name}
+                            </a>
                           </div>
                         </td>
-                      );
-                    }
-                    return inventory.sizes.map((sizes, sIndex) => (
-                      <AllSizes key={sIndex} index={index} sizes={sizes} />
-                    ));
-                  })}
-                </tr>
-                <tr className='divide-x divide-x-gray-border text-center text-default-text'>
-                  <td className='pb-[10px]'>
-                    <div className='p-[8px]'>Description</div>
-                  </td>
-                  {products?.details?.map((product, index) => (
-                    <td key={index} className='pb-[10px]'>
-                      <div
-                        className='p-[8px]'
-                        dangerouslySetInnerHTML={{
-                          __html: product.description,
+                      ))}
+                    </tr>
+                    <tr className='divide-x divide-x-gray-border text-center text-default-text'>
+                      <td className=''>
+                        <div className='p-[8px]'>SKU</div>
+                      </td>
+                      {products?.details?.map((product, index) => (
+                        <td key={index} className=''>
+                          <div className='p-[8px]'>{product.sku}</div>
+                        </td>
+                      ))}
+                    </tr>
+                    <tr className='divide-x divide-x-gray-border text-center text-default-text'>
+                      <td className=''>
+                        <div className='p-[8px]'>Price</div>
+                      </td>
+                      {products?.details?.map((product, index) => (
+                        <td key={index} className=''>
+                          <div className='p-[8px]'>
+                            MSRP{' '}
+                            <Price
+                              value={undefined}
+                              prices={{
+                                msrp: +product.msrp,
+                                salePrice: +product.salePrice,
+                              }}
+                            />
+                          </div>
+                        </td>
+                      ))}
+                    </tr>
+                    <tr className='divide-x divide-x-gray-border text-center text-default-text'>
+                      <td className=''>
+                        <div className='p-[8px]'>Color</div>
+                      </td>
+                      {products?.colors?.map((colors, index) => (
+                        <AllColors
+                          key={index}
+                          color={colors}
+                          index={index}
+                          seName={
+                            (products.details &&
+                              products.details[index].seName) ||
+                            '/'
+                          }
+                        />
+                      ))}
+                    </tr>
+                    <tr className='divide-x divide-x-gray-border text-center text-default-text'>
+                      <td className=''>
+                        <div className='p-[8px]'>Size</div>
+                      </td>
+                      {products?.inventory?.map((inventory, index) => {
+                        if (inventory === null) {
+                          return (
+                            <td key={index} className=''>
+                              <div className='p-2 flex flex-wrap gap-2 justify-center'>
+                                "-"
+                              </div>
+                            </td>
+                          );
+                        }
+                        return inventory.sizes.map((sizes, sIndex) => (
+                          <AllSizes key={sIndex} index={index} sizes={sizes} />
+                        ));
+                      })}
+                    </tr>
+                    <tr className='divide-x divide-x-gray-border text-center text-default-text'>
+                      <td className='pb-[10px]'>
+                        <div className='p-[8px]'>Description</div>
+                      </td>
+                      {products?.details?.map((product, index) => (
+                        <td key={index} className='pb-[10px]'>
+                          <div
+                            className='p-[8px]'
+                            dangerouslySetInnerHTML={{
+                              __html: product.description,
+                            }}
+                          ></div>
+                        </td>
+                      ))}
+                    </tr>
+                  </tbody>
+                ) : (
+                  <h3>No Result(s) Found.</h3>
+                )}
+              </table>
+            </div>
+            <div className=' mt-[30px] mb-[30px]  gap-2 '>
+              <Formik
+                initialValues={{ email: '' }}
+                onSubmit={sendEmailHandler}
+                validationSchema={validationSchema}
+              >
+                {({ values, handleChange }) => {
+                  return (
+                    <Form className='flex flex-wrap mt-[2px] text-center justify-center'>
+                      <input
+                        className='form-input sm:max-w-xs max-w-[200px]'
+                        placeholder='Enter Email to get this link'
+                        type='text'
+                        name='email'
+                        autoComplete='off'
+                        value={values.email}
+                        onChange={handleChange}
+                      />
+
+                      <button
+                        type='submit'
+                        className='btn btn-primary mx-[10px]'
+                      >
+                        SEND LINK
+                      </button>
+                      <button
+                        type='button'
+                        className='btn btn-primary'
+                        onClick={() => {
+                          navigator.clipboard
+                            .writeText(router.asPath)
+                            .then(() =>
+                              showModal({
+                                message: 'Link copy successfully.',
+                                title: 'Information',
+                              }),
+                            );
+                          setTimeout(() => hideModal(), 1000);
                         }}
-                      ></div>
-                    </td>
-                  ))}
-                </tr>
-              </tbody>
-            ) : (
-              <h3>No Result(s) Found.</h3>
-            )}
-          </table>
-        </div>
-        <div className='text-center mt-[30px] mb-[30px] flex gap-2 justify-center'>
-          <Formik
-            initialValues={{ email: '' }}
-            onSubmit={sendEmailHandler}
-            validationSchema={validationSchema}
-          >
-            {({ values, handleChange }) => {
-              return (
-                <Form className='flex flex-wrap mt-[2px]'>
-                  <input
-                    className='form-input sm:max-w-xs max-w-[200px]'
-                    placeholder='Enter Email to get this link'
-                    type='text'
-                    name='email'
-                    autoComplete='off'
-                    value={values.email}
-                    onChange={handleChange}
-                  />
+                      >
+                        COPY LINK
+                      </button>
 
-                  <button type='submit' className='btn btn-primary'>
-                    SEND LINK
-                  </button>
-
-                  <ErrorMessage name={'email'} className='text-rose-500' />
-                </Form>
-              );
-            }}
-          </Formik>
-        </div>
+                      <ErrorMessage name={'email'} className='text-rose-500' />
+                    </Form>
+                  );
+                }}
+              </Formik>
+            </div>
+          </>
+        )}
       </div>
     </section>
   );

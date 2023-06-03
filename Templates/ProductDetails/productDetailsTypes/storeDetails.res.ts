@@ -64,6 +64,8 @@ export interface _StoreDetails {
   logoSetupCharges: number;
   isSewOutEnable: boolean;
   sewOutCharges: number;
+  firstLogoCharge: number;
+  secondLogoCharge: number;
 }
 
 export interface StoreType {

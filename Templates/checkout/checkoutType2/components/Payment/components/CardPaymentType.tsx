@@ -1,13 +1,11 @@
-import noImg from '@images/no.png';
-import yesImg from '@images/yes.png';
 import NxtImage from '@appComponents/reUsable/Image';
 import { cardType } from '@constants/common.constant';
-import { paymentMethodCustom } from '@constants/enum';
-import { __pagesText } from '@constants/pages.text';
-import { useState, useEffect } from 'react';
-import { paymentProps } from '..';
 import CheckoutController from '@controllers/checkoutController';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
+import noImg from '@images/no.png';
+import yesImg from '@images/yes.png';
+import { useEffect, useState } from 'react';
+import { paymentProps } from '..';
 
 const CardPaymentType: paymentProps = ({
   updatePaymentMethod,
@@ -96,7 +94,7 @@ const CardPaymentType: paymentProps = ({
     const date = new Date();
     const givenMonth =
       +cardValidation.cardExpirationMonth < 10
-        ? `0${cardValidation.cardExpirationMonth}`
+        ? `${cardValidation.cardExpirationMonth}`
         : `${cardValidation.cardExpirationMonth}`;
     const givendate = cardValidation.cardExpirationYear.toString() + givenMonth;
     const month =

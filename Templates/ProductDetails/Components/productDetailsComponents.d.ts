@@ -133,7 +133,7 @@ export interface _SOMLogoOptionProps {
   name: string;
   textIndex: number;
   price: 'FREE' | number;
-  onRemove: () => void;
+  onRemove: any;
   editDetails: LogoDetails | null;
 }
 

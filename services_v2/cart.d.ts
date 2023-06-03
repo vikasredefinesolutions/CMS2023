@@ -8,6 +8,7 @@ export interface ShoppingCartItemDetailsViewModel {
   price: number;
   shoppingCartLineOnePersonViewModel: ShoppingCartLinePersonViewModel[];
   shoppingCartLineTwoPersonViewModel: ShoppingCartLinePersonViewModel[];
+  unitPrice?: string | number;
 }
 
 export interface ShoppingCartLinePersonViewModel {

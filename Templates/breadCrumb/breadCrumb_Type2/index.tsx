@@ -1,4 +1,3 @@
-import NxtImage from '@appComponents/reUsable/Image';
 import { __pagesText } from '@constants/pages.text';
 import { paths } from '@constants/paths.constant';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
@@ -77,23 +76,7 @@ const BreadCrumb_Type2: NextPage<_BreadCrumbProps> = ({
               </>
             </ol>
           </nav>
-          {showBorderAndLogo && view !== 'MOBILE' && (
-            <div className='text-center w-auto product-brand-logo'>
-              <Link href={`/${product.brand?.name}.html`}>
-                <a>
-                  <NxtImage
-                    src={product.brand?.url3 || ''}
-                    title={product.brand?.name || ''}
-                    className='inline-block'
-                    // height={100}
-                    // width={100}
-                    alt=''
-                    useNextImage={false}
-                  />
-                </a>
-              </Link>
-            </div>
-          )}
+         
         </div>
       </div>
     </>

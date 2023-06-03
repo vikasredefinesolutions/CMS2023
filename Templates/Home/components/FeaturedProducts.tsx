@@ -16,8 +16,15 @@ const FeaturedProducts: React.FC<_props> = (props) => {
       {fTitle && (
         <div
           className={`pkhg-featured-title pkhg-featured-title peter-millar-promotional-embroidered-clothing-nw ${dataArr?.sectionTitle_final_class?.value}`}
-        > {storeCode === 'PKHG' ? <><span>{fTitle}</span></> : <> {fTitle}</>}
-         
+        >
+          {' '}
+          {storeCode === 'PKHG' ? (
+            <>
+              <span>{fTitle}</span>
+            </>
+          ) : (
+            <> {fTitle}</>
+          )}
         </div>
       )}
 
@@ -39,12 +46,15 @@ const FeaturedProducts: React.FC<_props> = (props) => {
             }
             showButton={dataArr?.featuredproducts_show_button?.value}
             showBrandLogo={dataArr?.featuredproducts_show_brand_logo?.value}
+            productToDisplay={
+              dataArr?.featuredproducts_product_to_display?.value
+            }
           />
         ) : (
           <div className='relative pt-[30px] '>
             <BrandProductListing
               showBorder={dataArr?.featuredproducts_show_border?.value}
-              productsData={dataArr?.featuredproducts?.value[0]?.data}
+              productsData={dataArr?.featuredproducts?.value[0]}
               customMessage={dataArr?.featuredproducts_custom_message?.value}
               footerTabing={
                 dataArr?.featuredproducts_footer_tabing_display?.value
@@ -58,6 +68,9 @@ const FeaturedProducts: React.FC<_props> = (props) => {
               }
               showButton={dataArr?.featuredproducts_show_button?.value}
               showBrandLogo={dataArr?.featuredproducts_show_brand_logo?.value}
+              productToDisplay={
+                dataArr?.featuredproducts_product_to_display?.value
+              }
             />
           </div>
         )}

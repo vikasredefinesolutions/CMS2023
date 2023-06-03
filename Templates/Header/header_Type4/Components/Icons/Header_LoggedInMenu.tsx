@@ -80,7 +80,8 @@ const LoggedInMenu: React.FC = () => {
                 </Link>
               </li>
               <li className='border-t border-t-gray-300'>
-                <Link href={paths.loggedInMenu.help}>
+              {/* {paths.loggedInMenu.help} */}
+                <Link href="javascript:void(0)"> 
                   <a className='flex items-center p-2 gap-2.5 text-primary hover:primary-link'>
                     <span className=''>
                       <NxtImage

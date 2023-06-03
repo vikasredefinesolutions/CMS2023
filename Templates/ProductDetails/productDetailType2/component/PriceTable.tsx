@@ -44,8 +44,8 @@ const QtyPriceTable: React.FC<{ storeCode: string }> = ({ storeCode }) => {
     <>
       {customerId !== null && (
         <div className='pt-[15px] text-default-text font-medium'>
-          <div className='bg-light-gray py-[5px] text-center'>
-            {__pagesText.productInfo.quantity}
+          <div className='bg-light-gray py-[5px] text-center font-[500]'>
+            {__pagesText.productInfo.quantityDisc}
           </div>
           <div className='flex flex-wrap justify-center items-center border border-gray-border text-center p-[10px] md:divide-x md:divide-gray-border gap-y-[10px]'>
             {discounts?.subRows?.map((column, index) => {

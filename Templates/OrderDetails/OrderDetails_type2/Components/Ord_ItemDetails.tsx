@@ -33,9 +33,10 @@ const OrD_ItemDetails: React.FC<_Props> = ({ item }) => {
             <div className='text-sub-text font-semibold mb-[10px]'>
               <Link
                 href={'/'}
-                className='!text-anchor hover:!text-anchor-hover'
-              >
+                className='!text-anchor hover:!text-anchor-hover font-bold'
+              ><a className='font-bold'>
                 {item.productName}
+                </a>
               </Link>
             </div>
             <div className='text-default-text mb-[10px]'>

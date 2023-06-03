@@ -1,4 +1,6 @@
+import { _Store } from '@configs/page.config';
 import { _BrandProps, _BrandsTemplates } from '@definations/brand';
+import { useTypedSelector_v2 } from '@hooks_v2/index';
 import React from 'react';
 import BrandsType1 from './Brands_type1';
 import BrandsType2 from './Brands_type2';
@@ -13,8 +15,14 @@ const brandsTemplates: _BrandsTemplates = {
 };
 
 const BrandsListingTemplate: React.FC<
-  _BrandProps & { id: 'type1' | 'type3' }
-> = ({ id = 'type1', ...rest }) => {
+  _BrandProps & { id: 'type1' | 'type3' | 'type4' }
+> = ({ id, ...rest }) => {
+  const storeCode = useTypedSelector_v2((state) => state.store.code);
+  if (storeCode == _Store.type4) {
+    id = 'type4';
+  } else {
+    id = 'type1';
+  }
   const Template = brandsTemplates[id];
 
   return <Template {...rest} />;

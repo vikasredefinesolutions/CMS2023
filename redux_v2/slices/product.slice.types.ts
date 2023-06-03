@@ -67,6 +67,7 @@ export interface _Product_UpdateLogoDetails_Actions {
     | {
         type: 'Reset_Locations';
         data: _AvailableLocationDetails[];
+        allowNextLogo?: boolean;
       }
     | {
         type: 'Update_Location_Options';
@@ -97,6 +98,10 @@ export interface _Product_UpdateLogoDetails_Actions {
     | {
         type: 'Remove_SOM_logo';
         logoIndex: number;
+      }
+    | {
+        type: 'Set_Logo_Details';
+        data: any[];
       };
 }
 export interface _Product_UpdateFirstLogoPrice {

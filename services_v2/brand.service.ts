@@ -27,7 +27,7 @@ export const FetchDIBrands = async (storeId: string, sequence: number) => {
 // Added Any for now - husain - 20-3-23
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const FetchDataByBrand = async (body: any) => {
-  const url = '/StoreProduct/getfeaturedproductitemsbytagname.json';
+  const url = '/StoreProduct/getfeaturedproductitemsbytagnameandsename.json';
   const res: newFetauredItemResponse[] = await SendAsync({
     url: url,
     method: 'POST',

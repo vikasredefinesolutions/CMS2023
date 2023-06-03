@@ -24,10 +24,7 @@ const SelectOrInput: React.FC<_SelectOrInputProps> = ({
   );
 
   const { sewOutCharges } = useTypedSelector_v2((state) => state.store);
-  const { updateQuantities, updatePrice } = useActions_v2();
-  const { attributeOptionId } = useTypedSelector_v2(
-    (state) => state.product.selected.color,
-  );
+  const { updateQuantities, updatePrice, updateQuantityOnly } = useActions_v2();
 
   const newprice = useTypedSelector_v2(
     (state) => state.product.toCheckout.price,
@@ -191,7 +188,7 @@ const SelectOrInput: React.FC<_SelectOrInputProps> = ({
 
   useEffect(() => {
     if (defaultQty > 0) {
-      updateQuantities({
+      updateQuantityOnly({
         attributeOptionId: sizeAttributeOptionId,
         size: size,
         qty: +defaultQty || 0,

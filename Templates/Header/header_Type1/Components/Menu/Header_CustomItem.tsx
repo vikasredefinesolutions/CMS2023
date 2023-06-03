@@ -111,7 +111,7 @@ const Custom: React.FC<_props> = ({
             <div className='relative bg-gray-100 z-50'>
               <div className='max-w-7xl mx-auto'>
                 <div
-                  className='border-t first:border-t-0 py-5 px-5'
+                  className='border-t first:border-t-0'
                   dangerouslySetInnerHTML={{ __html: content }}
                 />
               </div>

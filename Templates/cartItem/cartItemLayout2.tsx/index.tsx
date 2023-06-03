@@ -1,4 +1,3 @@
-import { __pagesText } from '@constants/pages.text';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import { ShoppingCartItemDetailsViewModel, _CartItem } from '@services/cart';
 import { FC } from 'react';
@@ -18,15 +17,15 @@ const CIlayout2: FC<_CartProps> = (props) => {
 
   return (
     <>
-      <div className='bg-light-gray w-full mb-[30px]'>
-        <div className='pl-[15px] pr-[15px] pt-[15px] pb-[15px]'>
-          <div className='pt-[10px]'>
+      <div className='w-full mb-[30px]'>
+        <div className='pl-[15px] pr-[15px] pb-[15px]'>
+          {/* <div className='pt-[10px]'>
             <div className='pb-[10px] text-title-text'>
               {__pagesText.CheckoutPage.OrderReview}
             </div>
-          </div>
-          <div className='border-t border-[#ececec] mt-[15px]'>
-            <div className='bg-[#ffffff] pl-[15px] pr-[15px] pt-[15px] pb-[15px] mt-[15px]'>
+          </div> */}
+          <div className=''>
+            <div className='bg-[#ffffff] pl-[15px] pr-[15px] pb-[15px] mt-[15px]'>
               <ul className='overflow-hidden border border-gray-border p-[15px] md:p-[30px]'>
                 {cartData &&
                   cartData.map((item: _CartItem, cartItemIndex: number) => (

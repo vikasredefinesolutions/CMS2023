@@ -13,8 +13,8 @@ const CustomRequest_Type3: React.FC = () => {
         </div>
       </section>
       <section className=''>
-        <div className='container mx-auto mb-[30px] max-w-5xl'>
-          <div className='bg-light-gray p-[15px] lg:p-[30px]'>
+        <div className='container mx-auto mb-[30px]'>
+          <div className='bg-light-gray p-[15px] lg:p-[30px] max-w-5xl mx-auto'>
             <CustomRequestForm />
           </div>
         </div>

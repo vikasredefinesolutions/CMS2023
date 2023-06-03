@@ -26,7 +26,8 @@ const InventoryAvailability: React.FC<_props> = ({
   const comingprice = useTypedSelector_v2(
     (state) => state.product.toCheckout.price,
   );
-
+  const blockInvalidChar = (e: any) =>
+    ['e', 'E', '+', '-', '.'].includes(e.key) && e.preventDefault();
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue(+event.target.value);
     if (+event.target.value > qty) {
@@ -51,17 +52,25 @@ const InventoryAvailability: React.FC<_props> = ({
     }
   };
 
+  const alertHandle = (e: any, qty: number) => {
+    if (e.target.value > qty) {
+      alert(`Only ${qty} Size Avaliable`);
+    }
+  };
+
   return (
     <>
       <div className='mb-2'>{qty < dimax ? qty : `${dimax}+`}</div>
       <div className=''>
         <input
           type='number'
+          onKeyDown={blockInvalidChar}
           className='form-input !px-[10px] !inline-block !w-[65px]'
           placeholder='0'
           min={0}
           value={value > 0 ? value : ''}
           max={qty}
+          onInput={(e) => alertHandle(e, qty)}
           onChange={handleChange}
         />
       </div>

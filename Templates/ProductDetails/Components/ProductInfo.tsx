@@ -56,7 +56,7 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
     let text = 'START ORDER';
 
     if (isEmployeeLoggedIn) {
-      text = 'START OVER';
+      text = 'START ORDER';
     }
     if (product.isDiscontinue) {
       text = 'Discontinued';

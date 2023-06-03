@@ -104,17 +104,22 @@ export const updateSetProperties = (element) => {
     let Button_className = '';
     let Button1_className = '';
     let Button2_className = '';
+    let Button3_className = '';
 
     let Button_parent;
     let Button1_parent;
     let Button2_parent;
+    let Button3_parent;
+
     let btnStyle = '';
     let btn1Style = '';
     let btn2Style = '';
+    let btn3Style = '';
 
     let btnPadding = false;
     let btn1Padding = false;
     let btn2Padding = false;
+    let btn3Padding = false;
 
     Object.entries(element.selectedVal).map(([key, value]) => {
       if (value.type == 'btn_size') {
@@ -123,6 +128,7 @@ export const updateSetProperties = (element) => {
         if (buttonId === 'Button') Button_className += ' ' + value.value;
         else if (buttonId === 'Button1') Button1_className += ' ' + value.value;
         else if (buttonId === 'Button2') Button2_className += ' ' + value.value;
+        else if (buttonId === 'Button3') Button3_className += ' ' + value.value;
       }
 
       if (value.type == 'btn_alignment') {
@@ -130,6 +136,7 @@ export const updateSetProperties = (element) => {
         if (buttonId === 'Button') Button_parent += ' ' + value.value;
         else if (buttonId === 'Button1') Button1_parent += ' ' + value.value;
         else if (buttonId === 'Button2') Button2_parent += ' ' + value.value;
+        else if (buttonId === 'Button3') Button3_parent += ' ' + value.value;
       }
 
       if (value.type == 'btn_transform') {
@@ -137,6 +144,8 @@ export const updateSetProperties = (element) => {
         if (buttonId === 'Button') Button_className += ' ' + value.value;
         else if (buttonId === 'Button1') Button1_className += ' ' + value.value;
         else if (buttonId === 'Button2') Button2_className += ' ' + value.value;
+        else if (buttonId === 'Button3') Button3_className += ' ' + value.value;
+
       }
 
       if (value.type == 'btn_link') {
@@ -158,6 +167,10 @@ export const updateSetProperties = (element) => {
         } else if (buttonId === 'Button2') {
           Button2_className += ' ' + value.value;
           btn2Style = value.value;
+        }
+        else if (buttonId === 'Button3') {
+          Button3_className += ' ' + value.value;
+          btn3Style = value.value;
         }
       }
 
@@ -190,6 +203,10 @@ export const updateSetProperties = (element) => {
           btn2Padding = true;
           Button2_className += ' ' + value.value;
         }
+        else if (buttonId === 'Button3') {
+          btn3Padding = true;
+          Button3_className += ' ' + value.value;
+        }
       }
       if (value.type == 'btn_top_padding') {
         buttonId = key.replace('_top_padding', '');
@@ -203,6 +220,10 @@ export const updateSetProperties = (element) => {
           Button2_className += ' ' + value.value;
           btn2Padding = true;
         }
+        else if (buttonId === 'Button3') {
+          Button3_className += ' ' + value.value;
+          btn3Padding = true;
+        }
       }
       if (value.type == 'btn_right_padding') {
         buttonId = key.replace('_right_padding', '');
@@ -212,9 +233,10 @@ export const updateSetProperties = (element) => {
         } else if (buttonId === 'Button1') {
           Button1_className += ' ' + value.value;
           btn1Padding = true;
-        } else if (buttonId === 'Button2') {
-          Button2_className += ' ' + value.value;
-          btn2Padding = true;
+        } 
+        else if (buttonId === 'Button3') {
+          Button3_className += ' ' + value.value;
+          btn3Padding = true;
         }
       }
       if (value.type == 'btn_bottom_padding') {
@@ -229,30 +251,38 @@ export const updateSetProperties = (element) => {
           Button2_className += ' ' + value.value;
           btn2Padding = true;
         }
+        else if (buttonId === 'Button3') {
+          Button3_className += ' ' + value.value;
+          btn3Padding = true;
+        }
       }
       if (value.type == 'btn_left_margin') {
         buttonId = key.replace('_left_margin', '');
         if (buttonId === 'Button') Button_className += ' ' + value.value;
         else if (buttonId === 'Button1') Button1_className += ' ' + value.value;
         else if (buttonId === 'Button2') Button2_className += ' ' + value.value;
+        else if (buttonId === 'Button3') Button3_className += ' ' + value.value;
       }
       if (value.type == 'btn_top_margin') {
         buttonId = key.replace('_top_margin', '');
         if (buttonId === 'Button') Button_className += ' ' + value.value;
         else if (buttonId === 'Button1') Button1_className += ' ' + value.value;
         else if (buttonId === 'Button2') Button2_className += ' ' + value.value;
+        else if (buttonId === 'Button3') Button3_className += ' ' + value.value;
       }
       if (value.type == 'btn_right_margin') {
         buttonId = key.replace('_right_margin', '');
         if (buttonId === 'Button') Button_className += ' ' + value.value;
         else if (buttonId === 'Button1') Button1_className += ' ' + value.value;
         else if (buttonId === 'Button2') Button2_className += ' ' + value.value;
+        else if (buttonId === 'Button3') Button3_className += ' ' + value.value;
       }
       if (value.type == 'btn_bottom_margin') {
         buttonId = key.replace('_bottom_margin', '');
         if (buttonId === 'Button') Button_className += ' ' + value.value;
         else if (buttonId === 'Button1') Button1_className += ' ' + value.value;
         else if (buttonId === 'Button2') Button2_className += ' ' + value.value;
+        else if (buttonId === 'Button3') Button3_className += ' ' + value.value;
       }
 
       if (value.type == 'btn_font_family') {
@@ -260,6 +290,7 @@ export const updateSetProperties = (element) => {
         if (buttonId === 'Button') Button_className += ' ' + value.value;
         else if (buttonId === 'Button1') Button1_className += ' ' + value.value;
         else if (buttonId === 'Button2') Button2_className += ' ' + value.value;
+        else if (buttonId === 'Button3') Button3_className += ' ' + value.value;
       }
 
       if (value.type == 'btn_font_size') {
@@ -267,6 +298,7 @@ export const updateSetProperties = (element) => {
         if (buttonId === 'Button') Button_className += ' ' + value.value;
         else if (buttonId === 'Button1') Button1_className += ' ' + value.value;
         else if (buttonId === 'Button2') Button2_className += ' ' + value.value;
+        else if (buttonId === 'Button3') Button3_className += ' ' + value.value;
       }
 
       if (value.type == 'btn_font_weight') {
@@ -274,6 +306,7 @@ export const updateSetProperties = (element) => {
         if (buttonId === 'Button') Button_className += ' ' + value.value;
         else if (buttonId === 'Button1') Button1_className += ' ' + value.value;
         else if (buttonId === 'Button2') Button2_className += ' ' + value.value;
+        else if (buttonId === 'Button3') Button3_className += ' ' + value.value;
       }
 
       if (value.type == 'btn_line_height') {
@@ -281,6 +314,7 @@ export const updateSetProperties = (element) => {
         if (buttonId === 'Button') Button_className += ' ' + value.value;
         else if (buttonId === 'Button1') Button1_className += ' ' + value.value;
         else if (buttonId === 'Button2') Button2_className += ' ' + value.value;
+        else if (buttonId === 'Button3') Button3_className += ' ' + value.value;
       }
       
       if (value.type == 'btn_letter_spacing') {
@@ -288,6 +322,7 @@ export const updateSetProperties = (element) => {
         if (buttonId === 'Button') Button_className += ' tracking-[' + value.value+']';
         else if (buttonId === 'Button1') Button1_className += ' tracking-[' + value.value+']';
         else if (buttonId === 'Button2') Button2_className += ' tracking-[' + value.value+']';
+        else if (buttonId === 'Button3') Button3_className += ' tracking-[' + value.value+']';
       }
     });
 
@@ -325,6 +360,18 @@ export const updateSetProperties = (element) => {
       x.querySelectorAll('#Button2')[0].className = Button2_className;
       if (x.querySelectorAll('#Button2Parent').length > 0) {
         x.querySelectorAll('#Button2Parent')[0].className = Button2_parent;
+      }
+    }
+
+    if (x.querySelectorAll('#Button3').length > 0) {
+      if (btn3Style === '')
+        Button3_className += ' inline-block custbtn-primary';
+      if (!btn3Padding) {
+        Button3_className += ' pt-[10px] pb-[10px] pl-[20px] pr-[20px]';
+      }
+      x.querySelectorAll('#Button3')[0].className = Button2_className;
+      if (x.querySelectorAll('#Button3Parent').length > 0) {
+        x.querySelectorAll('#Button3Parent')[0].className = Button2_parent;
       }
     }
 

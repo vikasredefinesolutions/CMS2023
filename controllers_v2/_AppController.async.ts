@@ -212,6 +212,8 @@ export const fetchStoreDetails = async (
     bothLogin: false,
     logoUrl: '',
     isLinepersonalization: false,
+    firstLogoCharge: 0,
+    secondLogoCharge: 0,
   };
   const adminConfigs: {
     blobUrlRootDirectory: string;
@@ -227,6 +229,8 @@ export const fetchStoreDetails = async (
         if (response[0].status === 'fulfilled' && response[0].value) {
           const res = response[0].value;
           store.storeId = res.id;
+          store.firstLogoCharge = res.firstLogoCharge;
+          store.secondLogoCharge = res.secondLogoCharge;
           store.code = res.code;
           store.isAttributeSaparateProduct = res.isAttributeSaparateProduct;
           store.cartCharges = {

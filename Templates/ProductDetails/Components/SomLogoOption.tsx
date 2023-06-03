@@ -80,6 +80,8 @@ const SomLogoOption: React.FC<_SOMLogoOptionProps> = ({
     }[]
   >([]);
 
+  const { som_logos } = useTypedSelector_v2((state) => state.product);
+
   useEffect(() => {
     if (editDetails) {
       setSelectedLocation(editDetails.selectedLocation);
@@ -399,7 +401,14 @@ const SomLogoOption: React.FC<_SOMLogoOptionProps> = ({
               className='text-rose-600'
               type='button'
               onClick={() => {
-                removeHandler();
+                product_updateLogoDetails({
+                  type: 'Remove_SOM_logo',
+                  logoIndex: index,
+                });
+                product_updateLogoDetails({
+                  type: 'Allow_Next_Logo',
+                  allow: true,
+                });
                 product_updateLogoDetails({
                   type: 'Update_TotalPrice_ByLogo',
                   logo: {
@@ -408,6 +417,19 @@ const SomLogoOption: React.FC<_SOMLogoOptionProps> = ({
                     index,
                   },
                 });
+
+                product_updateLogoDetails({
+                  type: 'Update_Location_Options',
+                  location: {
+                    addOrRemove: 'ADD',
+                    price: selectedLocation!.price,
+                    cost: selectedLocation!.cost,
+                    value: selectedLocation!.value,
+                    label: selectedLocation!.label,
+                    image: selectedLocation!.image,
+                  },
+                });
+                removeHandler.remove(index);
               }}
             >
               {__pagesText.productInfo.somLogoOption.remove}
@@ -561,6 +583,9 @@ const SomLogoOption: React.FC<_SOMLogoOptionProps> = ({
                   });
                 }
               }}
+              checked={
+                som_logos?.details ? som_logos.details[index].isSewOut : false
+              }
               className='mr-1 '
             />
             SewOut (Extra ${sewOutCharges.toFixed(2)} per Piece)

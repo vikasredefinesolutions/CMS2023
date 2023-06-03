@@ -15,7 +15,7 @@ const LoginIcon: React.FC = () => {
     if (!!empId) {
       return `LOGIN CONTINUE AS GUEST`;
     }
-    return 'Login';
+    return 'LOGIN';
   };
 
   const toggleLoginModal = () => {

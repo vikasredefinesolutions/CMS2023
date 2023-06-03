@@ -22,11 +22,6 @@ const BrandsType4: React.FC<_BrandProps> = (props) => {
     <>
       <section className='pt-[30px] md:pt-[50px] brand-logo-list white-title bg-primary'>
         <div className='container mx-auto '>
-          <div className='text-center pb-[40px]'>
-            <div className='text-large-text text-white mb-[10px]'>
-              Our Exclusive Brands You Can Buy Online
-            </div>
-          </div>
           <div className='brand-image-list'>
             <ul className='flex flex-wrap justify-center'>
               {brandImages &&

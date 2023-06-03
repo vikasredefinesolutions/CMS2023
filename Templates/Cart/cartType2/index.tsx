@@ -19,6 +19,7 @@ import React, { useEffect, useState } from 'react';
 import { _CartProps } from '../Cart';
 import CT1_EmployeeLoginCart from '../Cart_Type1/components/CT1_EL_Cart';
 import EmptyCart from '../components/emptyCart';
+
 const CartType2: React.FC<_CartProps> = ({
   templateId,
   showLoaderOrEmptyText,

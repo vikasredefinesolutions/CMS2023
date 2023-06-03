@@ -1,4 +1,3 @@
-import WishlistButton from '@appComponents/ui/Wishlist';
 import { _OtherImage, _ProductColor } from '@definations/APIs/colors.res';
 import { _ProductImgProps } from '@templates/ProductDetails/Components/productDetailsComponents';
 import NxtImage from 'appComponents_v2/reUsable/Image';
@@ -98,21 +97,6 @@ const ProductImg: React.FC<_ProductImgProps> = ({ product }) => {
             })}
         </div>
 
-        <div className='absolute right-[10px] top-[25px] w-6 h-6'>
-          <button className=''>
-            <WishlistButton
-              {...{
-                productId: product?.id,
-                name: product?.name,
-                color: selectedColor.name,
-                price: product?.salePrice,
-                wishlistId: wishlistId,
-              }}
-              iswishlist={wishlistPresent}
-              brandId={brandId ? brandId : 0}
-            />
-          </button>
-        </div>
       </div>
       <div className='col-span-12 flex flex-wrap justify-center'>
         {colors &&

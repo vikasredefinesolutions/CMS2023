@@ -144,7 +144,9 @@ const CheckoutTemplate: FC<_Props> = ({ templateId }) => {
       router.push(paths.CART);
     }
   }, [cartData, isCartLoading]);
+
   const storeCode = useTypedSelector_v2((state) => state.store.code);
+
   const CheckoutSelectedTemplate =
     checkoutTemplates[
       `type${templateId}` as 'type1' | 'type2' | 'type3' | 'type4' | 'type5'

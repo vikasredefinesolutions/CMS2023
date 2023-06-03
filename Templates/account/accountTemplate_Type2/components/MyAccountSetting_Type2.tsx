@@ -568,7 +568,7 @@ const MyAccountSetting_Type2 = () => {
                               e.preventDefault();
                               setActiveEditBox(true);
                             }}
-                            className='btn btn-secondary btn-md'
+                            className='btn btn-primary btn-md'
                           >
                             {__pagesText.accountPage.profileEdit}
                           </button>
@@ -597,7 +597,7 @@ const MyAccountSetting_Type2 = () => {
                                 customer?.birthDate &&
                                   setMonth(customer.birthDate.split('-')[1]);
                               }}
-                              className='ml-2 btn btn-secondary'
+                              className='ml-2 btn btn-primary'
                             >
                               {__pagesText.accountPage.cancelBtn}
                             </button>
@@ -630,7 +630,7 @@ const MyAccountSetting_Type2 = () => {
                         </td>
                         <td className='text-left p-[10px] w-[300px]'>
                           <button
-                            className='btn btn-sm btn-secondary text-default-text mr-[5px]'
+                            className='btn btn-sm btn-primary text-default-text mr-[5px]'
                             type='button'
                             onClick={() => {
                               router.push({
@@ -644,7 +644,7 @@ const MyAccountSetting_Type2 = () => {
                             Edit
                           </button>
                           <button
-                            className='btn btn-sm btn-secondary text-default-text mr-[5px]'
+                            className='btn btn-sm btn-primary text-default-text mr-[5px]'
                             type='button'
                             onClick={() => {
                               deleteAddress(ele.id, ele.rowVersion);
@@ -656,7 +656,7 @@ const MyAccountSetting_Type2 = () => {
                             'Primary Address'
                           ) : (
                             <button
-                              className='btn btn-sm btn-secondary text-default-text'
+                              className='btn btn-sm btn-primary text-default-text'
                               type='button'
                               onClick={() => {
                                 updatePrimaryStatus(ele);
@@ -679,7 +679,7 @@ const MyAccountSetting_Type2 = () => {
                     });
                   }}
                   type='button'
-                  className='btn btn-secondary'
+                  className='btn btn-primary'
                 >
                   ADD SHIPPING ADDRESS
                 </button>
@@ -707,7 +707,7 @@ const MyAccountSetting_Type2 = () => {
                         </td>
                         <td className='text-left p-[10px] w-[300px]'>
                           <button
-                            className='btn btn-sm btn-secondary text-default-text mr-[5px]'
+                            className='btn btn-sm btn-primary text-default-text mr-[5px]'
                             type='button'
                             onClick={() => {
                               router.push({
@@ -721,7 +721,7 @@ const MyAccountSetting_Type2 = () => {
                             Edit
                           </button>
                           <button
-                            className='btn btn-sm btn-secondary text-default-text mr-[5px]'
+                            className='btn btn-sm btn-primary text-default-text mr-[5px]'
                             type='button'
                           >
                             Delete
@@ -730,7 +730,7 @@ const MyAccountSetting_Type2 = () => {
                             'Primary Address'
                           ) : (
                             <button
-                              className='btn btn-sm btn-secondary text-default-text mr-[5px]'
+                              className='btn btn-sm btn-primary text-default-text mr-[5px]'
                               type='button'
                               onClick={() => {
                                 updatePrimaryStatus(ele);
@@ -753,7 +753,7 @@ const MyAccountSetting_Type2 = () => {
                     });
                   }}
                   type='button'
-                  className='btn btn-secondary'
+                  className='btn btn-primary'
                 >
                   ADD BILLING ADDRESS
                 </button>

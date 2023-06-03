@@ -1,6 +1,6 @@
 import { __pagesText } from '@constants/pages.text';
 import { Form, Formik } from 'formik';
-import React from 'react';
+import React, { useRef } from 'react';
 
 interface _props {
   screen?: 'MOBILE' | 'DESKTOP';
@@ -12,6 +12,7 @@ const SearchBar: React.FC<_props> = ({
   screen = 'DESKTOP',
   onSearchInput = () => {},
 }) => {
+  const searchRef = useRef<HTMLInputElement>(null);
   const searchHandler = (value: { text: string }) => {
     // SearchFor(value);
     onSearchInput(value.text as string);
@@ -29,6 +30,7 @@ const SearchBar: React.FC<_props> = ({
                   <div className=''>
                     <div className='border border-tertiary border-sm pt-[5px] pb-[4px] pl-[10px] pr-[30px] text-tertiary relative'>
                       <input
+                        ref={searchRef}
                         type='text'
                         name='text'
                         min={1}
@@ -46,7 +48,10 @@ const SearchBar: React.FC<_props> = ({
                           handleReset();
                         }}
                       >
-                        <span className='material-icons text-tertiary font-[900]'>
+                        <span
+                          className='material-icons text-tertiary font-[900]'
+                          onClick={() => searchRef?.current?.focus()}
+                        >
                           {__pagesText.Headers.searchIcon}
                         </span>
                       </button>
@@ -69,6 +74,7 @@ const SearchBar: React.FC<_props> = ({
               <div>
                 <div className='border border-tertiary pt-[5px] pb-[4px] pl-[10px] pr-[30px] text-[#ffffff] relative'>
                   <input
+                    ref={searchRef}
                     type='text'
                     name='text'
                     min={1}
@@ -81,12 +87,15 @@ const SearchBar: React.FC<_props> = ({
                   />
                   <button
                     className='w-[24px] h-[24px] absolute right-[6px] top-[6px]'
-                    onClick={() => {
-                      handleSubmit();
-                      handleReset();
-                    }}
+                    // onClick={() => {
+                    //   handleSubmit();
+                    //   handleReset();
+                    // }}
                   >
-                    <span className='material-icons text-tertiary hover:text-primary-hover font-[900]'>
+                    <span
+                      className='material-icons text-tertiary hover:text-primary-hover font-[900]'
+                      onClick={() => searchRef?.current?.focus()}
+                    >
                       {__pagesText.Headers.searchIcon}
                     </span>
                   </button>

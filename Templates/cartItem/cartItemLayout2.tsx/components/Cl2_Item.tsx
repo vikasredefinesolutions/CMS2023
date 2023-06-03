@@ -395,7 +395,7 @@ const CL2_Item: React.FC<_CartItem & _Props> = (props) => {
         </div>
         <div className='w-full lg:w-3/4 pl-[12px] pr-[12px]'>
           <div className='flex flex-wrap justify-between items-center'>
-            <div className='text-sub-text font-semibold mb-[10px]'>
+            <div className='text-sub-text !font-semibold mb-[10px]'>
               <Link href={`/${props.seName}`}>
                 <a className='!text-anchor hover:!text-anchor-hover'>
                   {props.productName}
@@ -448,7 +448,7 @@ const CL2_Item: React.FC<_CartItem & _Props> = (props) => {
                             <div className='text-default-text'>Qty</div>
                             <form>
                               <input
-                                className='text-default-text pl-[5px] pr-[5px] pt-[5px] pb-[5px] w-[60px] mr-2 rounded border-[#000000]'
+                                className='text-default-text pl-[5px] pr-[5px] pt-[5px] pb-[5px] w-[60px] mr-2 border border-black'
                                 defaultValue={view.qty}
                                 data-valueofinput={view.qty}
                                 onChange={(e) => {

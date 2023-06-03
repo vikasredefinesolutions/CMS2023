@@ -12,9 +12,9 @@ import { getWishlist } from '@services/wishlist.service';
 import { paths } from 'constants_v2/paths.constant';
 import { Formik } from 'formik';
 import {
+  KlaviyoScriptTag,
   deleteCookie,
   extractCookies,
-  KlaviyoScriptTag,
   setCookie,
 } from 'helpers_v2/common.helper';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
@@ -285,7 +285,7 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
                                 {
                                   __pagesText.productInfo.loginModal
                                     .forgotPassword
-                                }
+                                }--
                               </button>
                             </div>
                           </div>
@@ -342,7 +342,7 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
                           </div>
                           <div className='mt-[10px] text-extra-small-text text-center'>
                             {__pagesText.productInfo.loginModal.clickMessage}{' '}
-                            <Link href={paths.TERMS_OF_USE}>
+                            <Link href={paths.PKHGTERMS_OF_USE}>
                               <a
                                 className='text-anchor'
                                 onClick={() => modalHandler(null)}

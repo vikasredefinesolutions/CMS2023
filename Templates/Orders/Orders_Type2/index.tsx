@@ -352,8 +352,9 @@ const Orders_Type2: React.FC = () => {
                           <td className='border-t border-r last:border-r-0 border-gray-border p-[10px]'>
                             <Link
                               href={`${paths.myAccount.order_details}?ordernumber=${order.id}`}
-                            >
+                            ><a className='!text-anchor hover:!text-anchor-hover font-bold'>
                               {order.id}
+                              </a>
                             </Link>
                           </td>
                           <td className='border-t border-r last:border-r-0 border-gray-border p-[10px]'>

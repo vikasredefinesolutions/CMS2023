@@ -75,7 +75,11 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
 
     switch (paymentMethod) {
       case paymentEnum.creditCard:
-        setCardDetails((prev) => ({ ...prev, [name]: value }));
+        if (name == 'cardExpirationYear') {
+          setCardDetails((prev) => ({ ...prev, [name]: '20' + value }));
+        } else {
+          setCardDetails((prev) => ({ ...prev, [name]: value }));
+        }
         break;
       case paymentEnum.purchaseOrder:
         setPurchaseOrder(value);
@@ -279,7 +283,6 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
   const [showShippingMethod, setShowShippingMethod] = useState<boolean>(true);
 
   const placeOrder = async (selectedShippingMOodel: _shippingMethod) => {
-    let userNewId = 0;
     setShowLoader(true);
 
     if (shippingAddress && billingAddress && customer) {
@@ -433,14 +436,15 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
   };
   const reviewOrder = async () => {
     if (!employeeLogin.isPaymentPending) {
-      const yearFull =
-        cardDetails.cardExpirationYear.length == 2
-          ? `20${cardDetails.cardExpirationYear}`
-          : cardDetails.cardExpirationYear;
-      const givenDate = `${yearFull}${cardDetails.cardExpirationMonth}`;
+      const givenDate = `${cardDetails.cardExpirationYear}${cardDetails.cardExpirationMonth}`;
       const currentYear = new Date().getFullYear().toString();
-      const currentMonth = new Date().getMonth() + 1;
+      const date = new Date();
+      const currentMonth =
+        date.getMonth() + 1 < 10
+          ? `0${date.getMonth() + 1}`
+          : `${date.getMonth() + 1}`;
       const currentDate = currentYear + currentMonth.toString();
+
       if (paymentEnum.creditCard === paymentMethod) {
         if (+currentDate > +givenDate) {
           showModal({
