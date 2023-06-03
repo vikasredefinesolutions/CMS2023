@@ -118,10 +118,8 @@ const SignUp_type1: React.FC = () => {
   const userId = useTypedSelector_v2((state) => state.user.id);
   const [country, setCountry] = useState<_Country[]>([]);
   const [state, setState] = useState<_State[]>([]);
-
   const storeCode = useTypedSelector_v2((state) => state.store.code);
-  // const state = useTypedSelector_v2((state) => state);
-  // console.log('state', state);
+  const user = useTypedSelector_v2((state) => state.user);
 
   const loginSubmitHandler = async (enteredInputs: _CNA_StoreCustomerModel) => {
     const location = await getLocation();
@@ -239,6 +237,11 @@ const SignUp_type1: React.FC = () => {
 
     return res;
   };
+  useEffect(() => {
+    if (user.id) {
+      router.push('/');
+    }
+  }, [user.id]);
 
   useEffect(() => {
     FetchCountriesList().then((response) => {

@@ -6,18 +6,21 @@ import { _ContactRequest } from '@definations/contactRequest.type';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import { SendAsync } from '@utils/axios.util';
 import { Form, Formik } from 'formik';
+import { useState } from 'react';
 import * as Yup from 'yup';
 
 export const RequestContactForm = () => {
   const { setShowLoader, showModal } = useActions_v2();
 
   const storeId = useTypedSelector_v2((state) => state.store.id);
-  const initialValues = {
-    name: '',
-    companyName: '',
-    email: '',
+  const { user } = useTypedSelector_v2((state) => state);
+  const [initialValues, setinitialValues] = useState({
+    name: user.customer ? user.customer.name : '',
+    companyName: user.customer ? user.customer.companyName : '',
+    email: user.customer ? user.customer.email : '',
     comment: '',
-  };
+  });
+
   const _ContactRequestSchema = Yup.object().shape({
     name: Yup.string()
       .trim()
@@ -96,92 +99,151 @@ export const RequestContactForm = () => {
   return (
     <>
       <section className='container pl-[15px] pr-[15px] mx-auto'>
-        <div className='text-center text-2xl-text pb-[20px]'>
-          {' '}
+        {' '}
+        <div className='max-w-6 mx-auto'>
           {__pagesText.requestConsultation.heading}
-        </div>
-        <div className='text-center text-2xl-text pb-[20px]'>
-          <div className='pt-[12px] pb-[12px] mx-[15px]'>
-            <div className='flex flex-wrap bg-light-gray py-[15px] px-[15px]'>
-              <div className='w-full pt-[15px] pl-[15px] pr-[15px] mb-[30px] text-default-text text-left'>
-                {/* //TODO:CHECK TO FETCH THIS TEXT */}
-                <p>
-                  Please enter all information below and click "submit" to send
-                  us your request.Someone will contact you ASAP with
-                  information.
-                </p>
-                <p>
-                  Driving Impressions is a leading supplier working directly
-                  with ASI and PPAI distributors, along with contract print and
-                  embroidery shops and other promotional product resellers. We
-                  are located in East Providence, RI and have full warehousing
-                  and decorating capabilities - including 18 heads of embroidery
-                  and heat transfer presses.
-                </p>
-                <p>If you have any questions, contact us at 888.737.4864</p>
-              </div>
-              <Formik
-                initialValues={initialValues}
-                onSubmit={submitHandler}
-                validationSchema={_ContactRequestSchema}
-              >
-                {({ values, handleChange, setFieldValue }) => {
-                  return (
-                    <Form>
-                      <div className=''>
-                        <div className='container mx-auto'>
-                          <div className='flex items-stretch flex-wrap'>
-                            <div className='w-full text-left'>
-                              <div className='flex flex-wrap gap-y-4'>
-                                <div className='w-full bg-light-gray text-base font-medium text-gray-700'>
-                                  {' '}
-                                  {
-                                    __pagesText.requestConsultation
-                                      .contactInformation
-                                  }{' '}
-                                </div>
-                                <div className='w-full'>
-                                  <label
-                                    htmlFor='Your Name'
-                                    className='block text-base font-medium text-gray-700'
-                                  >
+          <div className='text-center pb-[20px]'>
+            <div className='pt-[12px] pb-[12px] mx-[15px]'>
+              <div className='flex flex-wrap bg-light-gray py-[15px] px-[15px]'>
+                <div className='w-full pt-[15px] pl-[15px] pr-[15px] mb-[30px] text-default-text text-left'>
+                  {/* //TODO:CHECK TO FETCH THIS TEXT */}
+                  <p>
+                    Please enter all information below and click "submit" to
+                    send us your request.Someone will contact you ASAP with
+                    information.
+                  </p>
+                  <p>
+                    Driving Impressions is a leading supplier working directly
+                    with ASI and PPAI distributors, along with contract print
+                    and embroidery shops and other promotional product
+                    resellers. We are located in East Providence, RI and have
+                    full warehousing and decorating capabilities - including 18
+                    heads of embroidery and heat transfer presses.
+                  </p>
+                  <p>If you have any questions, contact us at 888.737.4864</p>
+                </div>
+                <Formik
+                  initialValues={initialValues}
+                  onSubmit={submitHandler}
+                  validationSchema={_ContactRequestSchema}
+                >
+                  {({ values, handleChange, setFieldValue }) => {
+                    return (
+                      <Form>
+                        <div className=''>
+                          <div className='container mx-auto'>
+                            <div className='flex items-stretch flex-wrap'>
+                              <div className='w-full text-left'>
+                                <div className='flex flex-wrap gap-y-4'>
+                                  <div className='w-full bg-light-gray text-base font-medium text-gray-700'>
                                     {' '}
-                                    Your Name{' '}
-                                    <span className='text-red-500'>*</span>{' '}
-                                  </label>
-                                  <div className='w-full md:w-[50%]'>
-                                    <RequestInput
-                                      placeHolder={'Your Name'}
-                                      name={'name'}
-                                      value={values.name}
-                                      onChange={handleChange}
-                                      type={'text'}
-                                      required={true}
-                                      className='text-medium-text border border-[#ababab] rounded pt-[12px] pb-[12px] pl-[12px] pr-[12px] w-full'
-                                    />
+                                    {
+                                      __pagesText.requestConsultation
+                                        .contactInformation
+                                    }{' '}
                                   </div>
-                                </div>
-                                <div className='w-full'>
-                                  <label
-                                    htmlFor='Your Email'
-                                    className='block text-base font-medium text-gray-700'
-                                  >
-                                    {' '}
-                                    Your Email{' '}
-                                    <span className='text-red-500'>*</span>{' '}
-                                  </label>
-                                  <div className='w-full md:w-[50%]'>
-                                    <RequestInput
-                                      placeHolder={'Email'}
-                                      name={'email'}
-                                      value={values.email}
-                                      onChange={handleChange}
-                                      type={'text'}
-                                      required={true}
+                                  <div className='w-full'>
+                                    <label
+                                      htmlFor='Your Name'
+                                      className='block text-base font-medium text-gray-700'
+                                    >
+                                      {' '}
+                                      Your Name{' '}
+                                      <span className='text-red-500'>
+                                        *
+                                      </span>{' '}
+                                    </label>
+                                    <div className='w-full md:w-[50%]'>
+                                      <RequestInput
+                                        placeHolder={'Your Name'}
+                                        name={'name'}
+                                        value={values.name}
+                                        onChange={handleChange}
+                                        type={'text'}
+                                        required={true}
+                                        className='form-input'
+                                      />
+                                    </div>
+                                  </div>
+                                  <div className='w-full'>
+                                    <label
+                                      htmlFor='Your Email'
+                                      className='block text-base font-medium text-gray-700'
+                                    >
+                                      {' '}
+                                      Your Email{' '}
+                                      <span className='text-red-500'>
+                                        *
+                                      </span>{' '}
+                                    </label>
+                                    <div className='w-full md:w-[50%]'>
+                                      <RequestInput
+                                        placeHolder={'Email'}
+                                        name={'email'}
+                                        value={values.email}
+                                        onChange={handleChange}
+                                        type={'text'}
+                                        required={true}
+                                        className={'form-input'}
+                                      />
+                                    </div>
+                                  </div>
+                                  <div className='w-full'>
+                                    <label
+                                      htmlFor='Company Name / ASI# or PPAI#:'
+                                      className='block text-base font-medium text-gray-700'
+                                    >
+                                      {' '}
+                                      Company Name / ASI# or PPAI#:{' '}
+                                      <span className='text-red-500'>
+                                        *
+                                      </span>{' '}
+                                    </label>
+                                    <div className='w-full md:w-[50%]'>
+                                      <RequestInput
+                                        placeHolder={'Company'}
+                                        name={'companyName'}
+                                        value={values.companyName}
+                                        onChange={handleChange}
+                                        type={'text'}
+                                        required={true}
+                                        className={'form-input'}
+                                      />
+                                    </div>
+                                  </div>{' '}
+                                  {/* </div>
+                                   */}
+                                  <div className='w-full'>
+                                    <label
+                                      htmlFor='Message'
+                                      className='block text-base font-medium text-gray-700'
+                                    >
+                                      {' '}
+                                      Message:{' '}
+                                      <span className='text-red-500'>
+                                        *
+                                      </span>{' '}
+                                    </label>
+                                    <div className='w-full'>
+                                      <textarea
+                                        placeholder='Message here'
+                                        className='form-input'
+                                        name={'comment'}
+                                        value={values.comment}
+                                        onChange={handleChange}
+                                      ></textarea>
+                                    </div>
+                                  </div>
+                                  <div className='w-full text-left'>
+                                    <button
+                                      type='submit'
                                       className={
-                                        'text-medium-text border border-[#ababab] rounded pt-[12px] pb-[12px] pl-[12px] pr-[12px] w-full'
+                                        'btn btn-md btn-secondary mb-[15px]'
                                       }
-                                    />
+                                    >
+                                      {' '}
+                                      SUBMIT{' '}
+                                    </button>
                                   </div>
                                 </div>
                                 <div className='w-full'>
@@ -218,22 +280,21 @@ export const RequestContactForm = () => {
                                     Message:{' '}
                                     <span className='text-red-500'>*</span>{' '}
                                   </label>
-                                  <div className='w-full md:w-[50%]'>
+                                  <div className='w-full'>
                                     <textarea
                                       placeholder='Message here'
                                       className='text-medium-text border border-[#ababab] rounded pt-[12px] pb-[12px] pl-[12px] pr-[12px] w-full'
                                       name={'comment'}
                                       value={values.comment}
                                       onChange={handleChange}
+                                      rows={5}
                                     ></textarea>
                                   </div>
                                 </div>
                                 <div className='w-full text-left'>
                                   <button
                                     type='submit'
-                                    className={
-                                      'btn btn-md btn-secondary mb-[15px]'
-                                    }
+                                    className={'btn btn-primary mb-[15px]'}
                                   >
                                     {' '}
                                     SUBMIT{' '}
@@ -243,11 +304,11 @@ export const RequestContactForm = () => {
                             </div>
                           </div>
                         </div>
-                      </div>
-                    </Form>
-                  );
-                }}
-              </Formik>
+                      </Form>
+                    );
+                  }}
+                </Formik>
+              </div>
             </div>
           </div>
         </div>
