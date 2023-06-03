@@ -109,7 +109,7 @@ const SomActionsHandler: React.FC<_SOMActionHandlerProps> = ({
   };
 
   const addToCartHandler = async (totalQty: number) => {
-    if (!toCheckout.allowAddToCart) {
+    if (!toCheckout.allowAddToCart && !isEmployeeLoggedIn) {
       setShowLoader(false);
       setShowRequiredModal('quantity');
       return;
@@ -128,6 +128,7 @@ const SomActionsHandler: React.FC<_SOMActionHandlerProps> = ({
     }
 
     if (!toCheckout.sizeQtys) {
+      setShowRequiredModal('quantity');
       setShowLoader(false);
       return;
     }

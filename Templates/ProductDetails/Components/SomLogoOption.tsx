@@ -60,7 +60,7 @@ const SomLogoOption: React.FC<_SOMLogoOptionProps> = ({
   }>(null);
   const [logoToBeSubmitted, setLogoToBeSubmitted] =
     useState<ApprovedLogoItem | null>(null);
-  const store = useTypedSelector_v2((state) => state.store);
+  const { mediaBaseUrl } = useTypedSelector_v2((state) => state.store);
   const [fileToUpload, setFileToUpload] = useState<{
     name: string;
     type: string;
@@ -131,11 +131,11 @@ const SomLogoOption: React.FC<_SOMLogoOptionProps> = ({
       label: (
         <div className='flex items-center '>
           <img
-            alt={item.image.alt}
+            alt={item?.image?.alt}
             src={
-              item.image.url.startsWith('assets')
+              item?.image?.url?.startsWith('assets')
                 ? item.image.url
-                : `${store.mediaBaseUrl}${item.image.url}`
+                : `${mediaBaseUrl}${item.image.url}`
             }
             height='60px'
             width='60px'
@@ -390,7 +390,6 @@ const SomLogoOption: React.FC<_SOMLogoOptionProps> = ({
   //   };
   //   // eslint-disable-next-line react-hooks/exhaustive-deps
   // }, []);
-
   return (
     <div className='p-2 mb-2 border bg-gray-50 border-slate-200'>
       <div className='flex items-center justify-between mb-2 gap-2'>
@@ -429,6 +428,26 @@ const SomLogoOption: React.FC<_SOMLogoOptionProps> = ({
                     image: selectedLocation!.image,
                   },
                 });
+                if (som_logos.details && som_logos.details.length - 1 > index) {
+                  const constructedLocation: any = som_logos.details[index + 1];
+                  setSelectedLocation({
+                    price: constructedLocation?.price,
+                    cost: constructedLocation?.price,
+                    label: constructedLocation?.location?.name,
+                    value: constructedLocation?.location?.value,
+                    show: !!constructedLocation?.status,
+                    image: {
+                      url: constructedLocation?.location?.filePath,
+                      alt: constructedLocation?.location?.name,
+                    },
+                  });
+                  setFileToUpload({
+                    name: constructedLocation?.title,
+                    previewURL: mediaBaseUrl + constructedLocation?.filePath,
+                    type: constructedLocation?.location?.name,
+                  });
+                }
+
                 removeHandler.remove(index);
               }}
             >
@@ -481,11 +500,12 @@ const SomLogoOption: React.FC<_SOMLogoOptionProps> = ({
             {logoStatus === 'submitted' && (
               <div className=''>
                 <img
+                  key={fileToUpload?.previewURL}
                   className='w-14 max-h-14'
                   src={
                     fileToUpload?.previewURL
-                      ? fileToUpload?.previewURL
-                      : `${store.mediaBaseUrl}${logoToBeSubmitted?.logo}`
+                      ? fileToUpload.previewURL
+                      : `${mediaBaseUrl}${logoToBeSubmitted?.logo}`
                   }
                   alt=''
                 />
@@ -534,7 +554,7 @@ const SomLogoOption: React.FC<_SOMLogoOptionProps> = ({
               <div key={val.id} onClick={() => submitFromLibrary(val)}>
                 <img
                   className='h-20 w-20 cursor-pointer'
-                  src={`${store.mediaBaseUrl}${val.logo}`}
+                  src={`${mediaBaseUrl}${val.logo}`}
                   alt={val.logo}
                 />
               </div>
