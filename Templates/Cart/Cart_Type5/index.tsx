@@ -179,14 +179,15 @@ const CartType5: React.FC<_CartProps> = ({
                             </strong>
                           </div>
                         ) : (
-                          policy.policyMessage.trim() != '' && (
-                            <div className='' key={policy.name}>
-                              <strong className='mt-[20px] text-medium-text font-[600]'>
-                                {policy.policyMessage}
-                                <span className='text-red-600 p-1'>*</span>
-                              </strong>
-                            </div>
-                          )
+                          policy.policyMessage != '' &&
+                            policy.policyMessage != ' ' && (
+                              <div className='' key={policy.name}>
+                                <strong className='mt-[20px] text-medium-text font-[600]'>
+                                  {policy.policyMessage}
+                                  <span className='text-red-600 p-1'>*</span>
+                                </strong>
+                              </div>
+                            )
                         );
                       })}
                     {endUserDisplay && (
