@@ -285,7 +285,7 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
                                 {
                                   __pagesText.productInfo.loginModal
                                     .forgotPassword
-                                }--
+                                }
                               </button>
                             </div>
                           </div>
