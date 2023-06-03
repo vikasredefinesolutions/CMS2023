@@ -75,9 +75,9 @@ const Custom: React.FC<_props> = ({
   }
   if (view === 'DESKTOP') {
     return (
-      <Link href={`${url}`} className='flex'>
-        <>
-          <div className='relative '>
+      <>
+        <div className='relative '>
+          <Link href={`${url}`} className='flex'>
             <button
               onMouseOver={() => setFocus(true)}
               title={title}
@@ -93,20 +93,21 @@ const Custom: React.FC<_props> = ({
                 {title}
               </span>
             </button>
-          </div>
-          {focus && (
-            <div
-              onMouseOver={() => setFocus(true)}
-              onMouseLeave={() => setFocus(false)}
-              // x-transition:enter="transition ease-out duration-200"
-              // x-transition:enter-start="opacity-0"
-              // x-transition:enter-end="opacity-100"
-              // x-transition:leave="transition ease-in duration-150"
-              // x-transition:leave-start="opacity-100"
-              // x-transition:leave-end="opacity-0"
-              // className='absolute top-full left-[20%] xl:left-[43%] w-screen max-w-[600px] sm:text-[14px]'
-            >
-              {/* <div className='absolute inset-0 top-1/2 bg-white shadow'></div> */}
+          </Link>
+        </div>
+        {focus && (
+          <div
+            onMouseOver={() => setFocus(true)}
+            onMouseLeave={() => setFocus(false)}
+            // x-transition:enter="transition ease-out duration-200"
+            // x-transition:enter-start="opacity-0"
+            // x-transition:enter-end="opacity-100"
+            // x-transition:leave="transition ease-in duration-150"
+            // x-transition:leave-start="opacity-100"
+            // x-transition:leave-end="opacity-0"
+            // className='absolute top-full left-[20%] xl:left-[43%] w-screen max-w-[600px] sm:text-[14px]'
+          >
+            <div className='absolute inset-0 top-full bg-white shadow'>
               <div className='relative bg-gray-100 z-50 p-[15px] pt-[0px]'>
                 <div className=''>
                   <div
@@ -116,9 +117,9 @@ const Custom: React.FC<_props> = ({
                 </div>
               </div>
             </div>
-          )}
-        </>
-      </Link>
+          </div>
+        )}
+      </>
     );
   }
 

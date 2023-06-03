@@ -22,7 +22,7 @@ const Inventory: React.FC<{
     <div className='pt-[15px] text-default-text'>
       <div className='flex flex-wrap items-center bg-light-gray py-[5px] mb-[10px] !font-bold'>
         <div className='px-[15px] w-1/3'>Size</div>
-        <div className='px-[15px] w-1/3 text-center'>Availability</div>
+        <div className='px-[15px] w-1/3 text-center'></div>
         <div className='px-[15px] w-1/3 text-right'>QTY.</div>
       </div>
       {inventory?.inventory

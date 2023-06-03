@@ -34,9 +34,7 @@ const InventoryAvailability: React.FC<_props> = ({
   return (
     <div className='flex flex-wrap items-center border-b border-b-gray-border pl-[10px]'>
       <div className='w-1/3 pt-[10px] pb-[10px]'>{size}</div>
-      <div className='w-1/3 pt-[10px] pb-[10px] text-center text-green-700'>
-        {qty}
-      </div>
+      <div className='w-1/3 pt-[10px] pb-[10px] text-center text-green-700'></div>
       <div className='w-1/3 pt-[10px] pb-[10px] text-right'>
         <input
           type='number'
