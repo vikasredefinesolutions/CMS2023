@@ -85,6 +85,8 @@ export const phonePattern2 = /^\(?([0-9]{3})\)?[.]([0-9]{3})[.]([0-9]{4})$/; //M
 export const phonePattern3 = /^\(?([0-9]{3})\)?[ ]([0-9]{3})[ ]([0-9]{4})$/; //Matches xxx xxx xxxx
 export const phonePattern4 = /^[0-9]{10}$/; //Matches xxxxxxxxxx
 
+export const EMAIL_REGEX = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
 export const CG_STORE_CODE = 21;
 export const GG_STORE_CODE = 2;
 

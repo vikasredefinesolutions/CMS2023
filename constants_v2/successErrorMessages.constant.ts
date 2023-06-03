@@ -75,3 +75,7 @@ export const addUserMessages = {
   email: { required: 'Email is required' },
   role: { required: 'Role is required' },
 };
+
+export const subscribeSuccessMessages = {
+  subscribeToLetter: 'You have been subscribed successfully.',
+};

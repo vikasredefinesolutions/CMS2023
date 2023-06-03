@@ -1,4 +1,5 @@
 import { _Country, _Industry, _State } from '@definations/app.type';
+import { SendAsync } from '@utils/axios.util';
 import { CallAPI_v2 } from 'helpers_v2/api.helper';
 
 export type _GeneralAPIs =
@@ -10,6 +11,19 @@ export type _GeneralAPIs =
 export interface _GeneralService {
   service: 'general';
   api: _GeneralAPIs;
+}
+export interface _SubscribeToNewsletter {
+  subscribeModel: {
+    rowVersion: string;
+    location: string;
+    ipAddress: string;
+    macAddress: string;
+    id: number;
+    email: string;
+    isSubscribe: boolean;
+    storeId: number;
+    recStatus: string;
+  };
 }
 
 export const UploadImage = async ({
@@ -85,4 +99,13 @@ export const FetchIndustriesList = async (): Promise<_Industry[] | null> => {
   });
 
   return response;
+};
+
+export const SubsribeToNewsLetter = async (payload: _SubscribeToNewsletter) => {
+  const res = await SendAsync<_SubscribeToNewsletter>({
+    url: '/Subscribe/CreateSubscribe.json',
+    method: 'POST',
+    data: payload,
+  });
+  return res;
 };
