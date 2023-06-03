@@ -252,7 +252,7 @@ export const boximage = (dataArr, selectedObj) => {
       let headLine = '';
       let textBg = 'text-center bg-white w-full';
 
-      let fontSize = 'text-base';
+      let fontSize = 'text-base ';
       let bgOpacity = 1;
       let bgColor = '';
       let textHPos = '';
@@ -348,7 +348,7 @@ export const boximage = (dataArr, selectedObj) => {
         headLine += '</div>';
         headLine += '</div>';
         headLine += '</div>';
-      } else if(buttonHTML) {
+      } else if (buttonHTML) {
         clName = 'flex relative w-full text-white';
         headLine +=
           '<div class="flex absolute ' +
@@ -377,7 +377,8 @@ export const boximage = (dataArr, selectedObj) => {
 
       if (item.Image !== undefined) {
         strHTML += '<div class="' + clName + '">';
-        strHTML += '<a title="' + item.Image_alt + '" href="'+item.Image_link+'">';
+        strHTML +=
+          '<a title="' + item.Image_alt + '" href="' + item.Image_link + '">';
         strHTML +=
           '<img class="w-full" alt="' +
           item?.Image_alt +
