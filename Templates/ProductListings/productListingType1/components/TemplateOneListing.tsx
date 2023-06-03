@@ -232,6 +232,16 @@ const TemplateOneListing = ({
                             ? ' border-secondary'
                             : 'border-light-gray'
                         }`}
+                        onMouseOver={() =>
+                          setMainImageUrl(subRow?.imageName ?? '')
+                        }
+                        onMouseLeave={() =>
+                          setMainImageUrl(
+                            currentProduct?.imageName
+                              ? currentProduct?.imageName
+                              : '',
+                          )
+                        }
                         onClick={() => {
                           colorChangeHandler(
                             product.id,
