@@ -1,4 +1,11 @@
 /* eslint-disable no-unused-vars */
+import {
+  phonePattern1,
+  phonePattern2,
+  phonePattern3,
+  phonePattern4,
+} from '@constants/global.constant';
+import { __ValidationText } from '@constants/validation.text';
 import { addressMessages } from '@constants/validationMessages';
 import { AddUpdateAddressRequest } from '@definations/APIs/address.req';
 import { FetchCountriesList, FetchStatesList } from '@services/general.service';
@@ -66,7 +73,22 @@ const AddressForm: React.FC<Props> = ({
     city: Yup.string().required(addressMessages.city.required),
     state: Yup.string().required(addressMessages.state.required),
     postalCode: Yup.string().required(addressMessages.postalCode.required),
-    phone: Yup.string().required(addressMessages.phone.required),
+    phone: Yup.string()
+      .required(__ValidationText.signUp.storeCustomerAddress.phone.required)
+      .test(
+        'phone-test',
+        __ValidationText.signUp.storeCustomerAddress.phone.valid,
+        (value) => {
+          if (
+            phonePattern1.test(value || '') ||
+            phonePattern2.test(value || '') ||
+            phonePattern3.test(value || '') ||
+            phonePattern4.test(value || '')
+          )
+            return true;
+          return false;
+        },
+      ),
     fax: Yup.string().required(addressMessages.fax.required),
     countryName: Yup.string().required(addressMessages.countryName.required),
     companyName: Yup.string().required(addressMessages.companyName.required),

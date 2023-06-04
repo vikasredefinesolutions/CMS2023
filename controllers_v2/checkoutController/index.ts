@@ -814,7 +814,7 @@ const CheckoutController = () => {
             country:
               shippingCountry === null ? ' ' : shippingAdress?.countryName,
             zipCode: shippingAdress?.postalCode || '',
-            customerID: userId,
+            customerID: userId || customerId || 0,
             storeId: storeId,
             ordertotalwithoutshipppingcharge: totalPrice,
             shippingType: shippingChargeType,

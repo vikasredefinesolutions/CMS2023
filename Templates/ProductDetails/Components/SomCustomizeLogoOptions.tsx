@@ -104,7 +104,6 @@ const SomCustomizeLogoOptions: React.FC<{
                 (dLogo) => dLogo.selectedLocation.label === item.name,
               ),
           );
-
           product_updateLogoDetails({
             type: 'Reset_Locations',
             allowNextLogo: true,
@@ -134,7 +133,7 @@ const SomCustomizeLogoOptions: React.FC<{
               price: item?.selectedLocation?.price,
               quantity: 0,
               isSewOut: item.isSewOut,
-              sewOutAmount: item.sewOutAmount,
+              sewOutAmount: item.sewOutAmount * totalQty,
               reUsableCustomerLogo: 0,
             })),
           });

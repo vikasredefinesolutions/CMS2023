@@ -257,12 +257,18 @@ export const productSlice = createSlice({
       if (payload.type === 'Remove_SOM_logo') {
         if (state.som_logos.details && payload.logoIndex) {
           const logos = [...state.som_logos.details];
-          state.toCheckout.additionalSewOutCharges =
-            state.toCheckout.additionalSewOutCharges -
-            logos[payload.logoIndex]?.sewOutAmount;
-          state.toCheckout.totalPrice =
-            state.toCheckout.totalPrice -
-            logos[payload.logoIndex]?.sewOutAmount;
+          if (
+            payload.logoStatus === 'later' ||
+            payload.logoStatus === 'submitted'
+          ) {
+            state.toCheckout.additionalSewOutCharges =
+              state.toCheckout.additionalSewOutCharges -
+              logos[payload.logoIndex]?.sewOutAmount;
+            state.toCheckout.totalPrice =
+              state.toCheckout.totalPrice -
+              logos[payload.logoIndex]?.sewOutAmount;
+          }
+
           logos.splice(payload.logoIndex, 1);
           state.som_logos.details = logos;
         }
@@ -288,7 +294,11 @@ export const productSlice = createSlice({
           };
         }
 
-        if (addOrSubtract === 'subtract') {
+        if (
+          (addOrSubtract === 'subtract' &&
+            payload.logo.logoStatus === 'later') ||
+          payload.logo.logoStatus === 'submitted'
+        ) {
           const remainingPrices = state.toCheckout.logo.price?.filter(
             (price, index) => {
               if (index === payload.logo.index) return false;

@@ -108,6 +108,9 @@ const SlugSingleProductListing: React.FC<_props> = (props) => {
                     </Link>
                   </div>
                 )}
+                <div className='mb-2 font-semibold uppercase isinput'>
+                  {customMessage ?? ''}
+                </div>
                 {showPrice == __pagesConstant?.show?.No ? (
                   ''
                 ) : (
@@ -126,9 +129,6 @@ const SlugSingleProductListing: React.FC<_props> = (props) => {
                     </span>
                   </div>
                 )}
-                <div className='mb-2 font-semibold uppercase isinput'>
-                  {customMessage ?? ''}
-                </div>
                 {showSplitProducts == __pagesConstant?.show?.No ? (
                   ''
                 ) : (

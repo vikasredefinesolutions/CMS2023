@@ -87,7 +87,10 @@ const BrandProductListing: React.FC<_props> = (props) => {
           : productsData?.selectedProducts
               .map((product: any) => product?.seName)
               .join(','),
-      type: productsData?.displayMethod,
+      type:
+        productsData?.displayMethod == 'dynamic'
+          ? productsData?.productType
+          : productsData?.displayMethod,
       storeId: storeId,
       tagName: productToDisplay ?? 'featured',
       maximumItemsForFetch: productsData?.productCount,

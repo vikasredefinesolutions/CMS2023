@@ -19,7 +19,13 @@ import * as yup from 'yup';
 import OrderSummary from './components/OrderSummary';
 import PaymentType from './components/Payment';
 
-import { __Cookie } from '@constants/global.constant';
+import {
+  __Cookie,
+  phonePattern1,
+  phonePattern2,
+  phonePattern3,
+  phonePattern4,
+} from '@constants/global.constant';
 import { __pagesConstant } from '@constants/pages.constant';
 import { paths } from '@constants/paths.constant';
 import { AddOrderDefault } from '@constants/payloads/checkout';
@@ -36,6 +42,7 @@ import {
 import { placeOrder as placeOrderService } from '@services/checkout.service';
 import AddressFormPk from './components/Form';
 
+import { __ValidationText } from '@constants/validation.text';
 import getLocation from '@helpers/getLocation';
 import { Klaviyo_PlaceOrder } from '@services/klaviyo.service';
 import { GetStoreCustomer } from '@services/user.service';
@@ -246,7 +253,23 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
     zipCode: yup.string().required('Required Field'),
     country: yup.string().required('Required field'),
     state: yup.string().required('Required field'),
-    phone: yup.number().required('Required field'),
+    phone: yup
+      .string()
+      .required(__ValidationText.signUp.storeCustomerAddress.phone.required)
+      .test(
+        'phone-test',
+        __ValidationText.signUp.storeCustomerAddress.phone.valid,
+        (value) => {
+          if (
+            phonePattern1.test(value || '') ||
+            phonePattern2.test(value || '') ||
+            phonePattern3.test(value || '') ||
+            phonePattern4.test(value || '')
+          )
+            return true;
+          return false;
+        },
+      ),
   });
 
   const Billingformik = useFormik({

@@ -395,7 +395,7 @@ const ChekoutType5: React.FC<_Props> = ({ templateId }) => {
             country:
               shippingCountry === null ? ' ' : shippingAdress?.countryName,
             zipCode: shippingAdress?.postalCode || '',
-            customerID: userId,
+            customerID: userId || 0,
             storeId: storeId,
             ordertotalwithoutshipppingcharge: totalPrice,
             shippingType: shippingChargeType,

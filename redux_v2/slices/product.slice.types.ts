@@ -89,6 +89,7 @@ export interface _Product_UpdateLogoDetails_Actions {
           addOrSubtract: 'add' | 'subtract';
           price: 'FREE' | number;
           index: number;
+          logoStatus: null | 'submitted' | 'later';
         };
       }
     | {
@@ -98,6 +99,7 @@ export interface _Product_UpdateLogoDetails_Actions {
     | {
         type: 'Remove_SOM_logo';
         logoIndex: number;
+        logoStatus: null | 'submitted' | 'later';
       }
     | {
         type: 'Set_Logo_Details';

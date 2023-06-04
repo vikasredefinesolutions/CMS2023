@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { __console_v2 } from '@configs/console.config';
 import { _showConsoles } from '@configs/show.config';
-import { __Login } from '@constants/global.constant';
 import { __SuccessErrorText } from '@constants/successError.text';
 import {
   UserCreateResponse,
@@ -386,7 +385,7 @@ export const UpdateUserData = async (payload: {
   gender: string;
   companyName: string;
   password: string;
-  birthDate?: string | null;
+  birthDate?: Date;
 }): Promise<any | null> => {
   try {
     const url = '/StoreCustomer/updateaccountsettingsinfo.json';

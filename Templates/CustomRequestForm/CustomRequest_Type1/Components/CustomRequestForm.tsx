@@ -1,4 +1,11 @@
 import { __length, __messages } from '@constants/form.config';
+import {
+  phonePattern1,
+  phonePattern2,
+  phonePattern3,
+  phonePattern4,
+} from '@constants/global.constant';
+import { __ValidationText } from '@constants/validation.text';
 import { CustomRequestMessage } from '@constants/validationMessages';
 import getLocation from '@helpers/getLocation';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
@@ -17,7 +24,22 @@ const validationSchema = Yup.object().shape({
   organizationName: Yup.string().required(
     CustomRequestMessage.organizationName.required,
   ),
-  phone: Yup.string().required(CustomRequestMessage.phone.required),
+  phone: Yup.string()
+    .required(__ValidationText.signUp.storeCustomerAddress.phone.required)
+    .test(
+      'phone-test',
+      __ValidationText.signUp.storeCustomerAddress.phone.valid,
+      (value) => {
+        if (
+          phonePattern1.test(value || '') ||
+          phonePattern2.test(value || '') ||
+          phonePattern3.test(value || '') ||
+          phonePattern4.test(value || '')
+        )
+          return true;
+        return false;
+      },
+    ),
   email: Yup.string()
     .email(__messages.email.validRequest)
     .max(__length.email.max)

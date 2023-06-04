@@ -78,7 +78,7 @@ export const __ValidationText = {
       address2: { required: 'Enter your address.' },
       city: { required: 'Enter your city.' },
       state: { required: 'Select your state.' },
-      postalCode: { required: 'Enter your zipcode.' },
+      postalCode: { required: 'Enter your zipcode.', maxLength: 9 },
       phone: {
         required: 'Enter your phone Number.',
         valid:

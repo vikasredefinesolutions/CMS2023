@@ -30,17 +30,20 @@ const MyAccountSetting_Type2 = () => {
   const { setShowLoader, showModal, updateCustomer, getStoreCustomer } =
     useActions_v2();
   const customer = useTypedSelector_v2((state) => state.user.customer);
-  const [activeEditBox, setActiveEditBox] = useState(false);
-  const [day, setDay] = useState('');
-  const [month, setMonth] = useState('');
-  const [year, setYear] = useState('');
-  const [showInfo, setShowInfo] = useState(false);
-  const [showInfo2, setShowInfo2] = useState(false);
-  const [genderId, setGenderId] = useState(customer?.gender);
-  const [showPassword, setShowPassword] = useState(false);
-  const [editPassword, setEditPassword] = useState('');
-  const [showPasswordUpdate, setShowPasswordUpdate] = useState(false);
-  const [newPassword, setNewPassword] = useState('');
+  const [activeEditBox, setActiveEditBox] = useState<boolean>(false);
+  const [day, setDay] = useState<string>('');
+  const [month, setMonth] = useState<string>('');
+  const [year, setYear] = useState<string>('');
+  const [showInfo, setShowInfo] = useState<boolean>(false);
+  const [showInfo2, setShowInfo2] = useState<boolean>(false);
+  const [genderId, setGenderId] = useState<string>(
+    customer?.gender ? customer.gender : '',
+  );
+  const [currentPass, setCurrentPass] = useState<string>('');
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [editPassword, setEditPassword] = useState<string>('');
+  const [showPasswordUpdate, setShowPasswordUpdate] = useState<boolean>(false);
+  const [newPassword, setNewPassword] = useState<string>('');
   const [initialValues, setInitialValues] = useState<SettingForm>(initValue);
   const [shipAddress, setShipAddress] = useState<any>([]);
   const [billingAddress, setBilingAddress] = useState<any>([]);
@@ -56,7 +59,7 @@ const MyAccountSetting_Type2 = () => {
   }, [editPassword, activeEditBox]);
 
   useEffect(() => {
-    setGenderId(customer?.gender);
+    setGenderId(customer?.gender ? customer.gender : '');
     customer?.birthDate && setYear(customer.birthDate.split('-')[0]);
     customer?.birthDate && setDay(customer.birthDate.split('-')[2].slice(0, 2));
     customer?.birthDate && setMonth(customer.birthDate.split('-')[1]);
@@ -92,6 +95,7 @@ const MyAccountSetting_Type2 = () => {
         setEditPassword('');
         passDecryptFunction(res?.password).then((res) => {
           setInitialValues({ ...initialValues, password: res ? res : '' });
+          setCurrentPass(res ? res : '');
         });
         setShowPasswordUpdate(false);
         showModal({
@@ -137,6 +141,7 @@ const MyAccountSetting_Type2 = () => {
   useEffect(() => {
     if (customer) {
       passDecryptFunction(customer.password).then((res) => {
+        setCurrentPass(res ? res : '');
         setInitialValues({
           firstName: customer.firstname,
           lastName: customer.lastName,
@@ -167,10 +172,13 @@ const MyAccountSetting_Type2 = () => {
     try {
       const res = await UpdateUserData({
         ...value,
-        password: newPassword,
+        password: currentPass,
         customerId: customer?.id || 0,
         gender: genderId ? genderId : 'Male',
-        birthDate: `${day}/${month}/${year}`,
+        birthDate:
+          day && month && year
+            ? new Date(`${year}-${month}-${day}`)
+            : new Date(),
       });
 
       if (res) {
@@ -547,8 +555,9 @@ const MyAccountSetting_Type2 = () => {
                           <div className='m:col-span-1'>
                             <button
                               type='button'
-                              onClick={() => {
+                              onClick={(e) => {
                                 updatePassword(setFieldValue);
+                                handleReset(e);
                               }}
                               className='m-r-10 btn btn-primary '
                             >
@@ -585,7 +594,9 @@ const MyAccountSetting_Type2 = () => {
                               onClick={(e) => {
                                 setActiveEditBox(false);
                                 handleReset(e);
-                                setGenderId(customer?.gender);
+                                setGenderId(
+                                  customer?.gender ? customer.gender : '',
+                                );
                                 customer?.birthDate &&
                                   setYear(customer.birthDate.split('-')[0]);
                                 customer?.birthDate &&

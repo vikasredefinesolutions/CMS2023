@@ -281,7 +281,7 @@ const CT1_EL_Item: React.FC<_CartItem & _Props> = (item) => {
                 </div>
                 <div className='text-normal-text w-16 text-center'></div>
                 <div className='text-normal-text w-20 text-right'>
-                  <Price value={details.totalPrice} />
+                  <Price value={item.productTotal} />
                 </div>
               </div>
               {item.itemNote && (

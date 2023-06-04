@@ -3,8 +3,15 @@ import { UploadImage } from '@services/file.service';
 import { _CustomerOrderPayload } from '@services/product';
 import { CustomerProductOrder } from '@services/product.service';
 // import { UploadImage } from '@services/general.service';
+import {
+  phonePattern1,
+  phonePattern2,
+  phonePattern3,
+  phonePattern4,
+} from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
 import { paths } from '@constants/paths.constant';
+import { __ValidationText } from '@constants/validation.text';
 import { getLocationWithZipCode } from '@services/user.service';
 import { Form, Formik } from 'formik';
 import { useRouter } from 'next/router';
@@ -18,13 +25,33 @@ const validationSchema = Yup.object().shape({
   firstName: Yup.string().required(),
   lastName: Yup.string().required(),
   organizationName: Yup.string().required(),
-  phone: Yup.string().required(),
+  phone: Yup.string()
+    .required(__ValidationText.signUp.storeCustomerAddress.phone.required)
+    .test(
+      'phone-test',
+      __ValidationText.signUp.storeCustomerAddress.phone.valid,
+      (value) => {
+        if (
+          phonePattern1.test(value || '') ||
+          phonePattern2.test(value || '') ||
+          phonePattern3.test(value || '') ||
+          phonePattern4.test(value || '')
+        )
+          return true;
+        return false;
+      },
+    ),
   email: Yup.string().email().required(),
   shipFirstName: Yup.string().required(),
   shipLastName: Yup.string().required(),
   address1: Yup.string().required(),
   city: Yup.string().required(),
-  zipCode: Yup.string().required(),
+  zipCode: Yup.string()
+    .required(__ValidationText.signUp.storeCustomerAddress.postalCode.required)
+    .max(
+      __ValidationText.signUp.storeCustomerAddress.postalCode.maxLength,
+      'Postal code must be less than 9',
+    ),
   countryName: Yup.string().required(),
   stateName: Yup.string().required(),
   itemName: Yup.string().required(),

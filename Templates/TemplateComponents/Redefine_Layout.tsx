@@ -121,11 +121,12 @@ const Layout: React.FC<_props & _StoreCache> = ({
   }, [router.asPath]);
 
   const isbreadcrumbShow = pageMetaData?.isbreadcrumbShow;
-  
+
   const showBreadcrumb =
     router.pathname !== paths.CHECKOUT &&
     router.asPath != paths.BRAND &&
-    router.pathname !== paths.PRODUCT_COMPARE && router.pathname !== paths.CATALOGS;
+    router.pathname !== paths.PRODUCT_COMPARE &&
+    router.pathname !== paths.CATALOGS;
   return (
     <>
       <Header
@@ -145,7 +146,11 @@ const Layout: React.FC<_props & _StoreCache> = ({
       pageMetaData.type.toLowerCase() === 'topic'
         ? isbreadcrumbShow && isbreadcrumbShow == 'Y'
         : true) &&
-        showBreadcrumb && <><BreadCrumb breadCrumbid={breadCrumbTemplateId} /></>}
+        showBreadcrumb && (
+          <>
+            <BreadCrumb breadCrumbid={breadCrumbTemplateId} />
+          </>
+        )}
       <SuccessErrorModal />
       {storeTypeId == storeBuilderTypeId ? (
         <>

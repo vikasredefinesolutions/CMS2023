@@ -33,7 +33,7 @@ const Checkout: NextPage<{ templateId: number }> = ({ templateId }) => {
     <>
       <SeoHead title={'Checkout'} keywords={''} description={''} />
       <div>
-        <CheckoutTemplate templateId={5} />
+        <CheckoutTemplate templateId={templateId} />
       </div>
     </>
   );

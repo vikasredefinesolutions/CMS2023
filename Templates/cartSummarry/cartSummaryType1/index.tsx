@@ -173,7 +173,7 @@ const CartSummarryType1: FC<_props> = ({ selectedShippingModel }) => {
           <div className='flex items-center justify-between pt-[15px] pb-[20px]'>
             <dt className='text-normal-text'>Subtotal:</dt>
             <dd className='text-normal-text'>
-              <Price value={subTotal} />
+              <Price value={subTotal + totalLogoCharges} />
             </dd>
           </div>
           {totalLineCharges > 0 && (

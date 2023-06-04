@@ -112,7 +112,7 @@ export interface _SelectedTab {
   selectedProducts: any;
   tabName: string;
   tabing: string;
-  proudctType?: string;
+  productType?: string;
   selectedBrands?: { value: string; label: string }[];
   label: string;
 }

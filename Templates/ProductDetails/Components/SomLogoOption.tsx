@@ -83,12 +83,29 @@ const SomLogoOption: React.FC<_SOMLogoOptionProps> = ({
   const { som_logos } = useTypedSelector_v2((state) => state.product);
 
   useEffect(() => {
-    if (editDetails) {
-      setSelectedLocation(editDetails.selectedLocation);
-      setFileToUpload(editDetails.fileToUpload);
-      setLogoStatus(editDetails.logoStatus as null | 'submitted' | 'later');
+    if (som_logos?.details?.length && som_logos.details[index]) {
+      const constructedLocation: any = som_logos.details[index];
+      setLogoStatus(constructedLocation?.status);
+      setSelectedLocation({
+        price: constructedLocation?.price,
+        cost: constructedLocation?.price,
+        label: constructedLocation?.location?.name,
+        value: constructedLocation?.location?.value,
+        show: !!constructedLocation?.status,
+        image: {
+          url: constructedLocation?.location?.filePath,
+          alt: constructedLocation?.location?.name,
+        },
+      });
+      setFileToUpload({
+        name: constructedLocation?.title,
+        previewURL: constructedLocation?.filePath?.includes('http')
+          ? constructedLocation?.filePath
+          : mediaBaseUrl + constructedLocation?.filePath,
+        type: constructedLocation?.location?.name,
+      });
     }
-  }, [editDetails]);
+  }, [index]);
 
   const availableOptions = useTypedSelector_v2(
     (state) => state.product.som_logos.availableOptions,
@@ -135,7 +152,7 @@ const SomLogoOption: React.FC<_SOMLogoOptionProps> = ({
             src={
               item?.image?.url?.startsWith('assets')
                 ? item.image.url
-                : `${mediaBaseUrl}${item.image.url}`
+                : `${mediaBaseUrl}${item?.image?.url}`
             }
             height='60px'
             width='60px'
@@ -221,6 +238,7 @@ const SomLogoOption: React.FC<_SOMLogoOptionProps> = ({
             addOrSubtract: 'add',
             price: logoPrice,
             index,
+            logoStatus,
           },
         });
 
@@ -269,6 +287,7 @@ const SomLogoOption: React.FC<_SOMLogoOptionProps> = ({
             addOrSubtract: 'add',
             price: logoPrice,
             index,
+            logoStatus,
           },
         });
         return;
@@ -403,6 +422,7 @@ const SomLogoOption: React.FC<_SOMLogoOptionProps> = ({
                 product_updateLogoDetails({
                   type: 'Remove_SOM_logo',
                   logoIndex: index,
+                  logoStatus,
                 });
                 product_updateLogoDetails({
                   type: 'Allow_Next_Logo',
@@ -414,22 +434,12 @@ const SomLogoOption: React.FC<_SOMLogoOptionProps> = ({
                     addOrSubtract: 'subtract',
                     price: logoPrice,
                     index,
-                  },
-                });
-
-                product_updateLogoDetails({
-                  type: 'Update_Location_Options',
-                  location: {
-                    addOrRemove: 'ADD',
-                    price: selectedLocation!.price,
-                    cost: selectedLocation!.cost,
-                    value: selectedLocation!.value,
-                    label: selectedLocation!.label,
-                    image: selectedLocation!.image,
+                    logoStatus,
                   },
                 });
                 if (som_logos.details && som_logos.details.length - 1 > index) {
                   const constructedLocation: any = som_logos.details[index + 1];
+                  setLogoStatus(constructedLocation?.status);
                   setSelectedLocation({
                     price: constructedLocation?.price,
                     cost: constructedLocation?.price,
@@ -446,6 +456,20 @@ const SomLogoOption: React.FC<_SOMLogoOptionProps> = ({
                     previewURL: mediaBaseUrl + constructedLocation?.filePath,
                     type: constructedLocation?.location?.name,
                   });
+                } else {
+                  setLogoStatus(null);
+                  setSelectedLocation({
+                    price: 0,
+                    cost: 0,
+                    label: '',
+                    value: '',
+                    show: false,
+                    image: {
+                      url: '',
+                      alt: '',
+                    },
+                  });
+                  setFileToUpload(null);
                 }
 
                 removeHandler.remove(index);
@@ -604,7 +628,7 @@ const SomLogoOption: React.FC<_SOMLogoOptionProps> = ({
                 }
               }}
               checked={
-                som_logos?.details ? som_logos.details[index].isSewOut : false
+                som_logos?.details ? som_logos?.details[index]?.isSewOut : false
               }
               className='mr-1 '
             />

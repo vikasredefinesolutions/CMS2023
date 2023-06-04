@@ -1,5 +1,12 @@
 import { UserAddressType } from '@constants/enum';
+import {
+  phonePattern1,
+  phonePattern2,
+  phonePattern3,
+  phonePattern4,
+} from '@constants/global.constant';
 import { paths } from '@constants/paths.constant';
+import { __ValidationText } from '@constants/validation.text';
 import { addressMessages } from '@constants/validationMessages';
 import { CustomerAddress } from '@definations/APIs/user.res';
 import { _Country, _State } from '@definations/app.type';
@@ -89,8 +96,28 @@ const Index = () => {
     address1: Yup.string().required(addressMessages.address1.required),
     city: Yup.string().required(addressMessages.city.required),
     state: Yup.string().required(addressMessages.state.required),
-    postalCode: Yup.string().required(addressMessages.postalCode.required),
-    phone: Yup.string().required(addressMessages.phone.required),
+    postalCode: Yup.string()
+      .required(addressMessages.postalCode.required)
+      .max(
+        __ValidationText.signUp.storeCustomerAddress.postalCode.maxLength,
+        'Postal code must be less than 9',
+      ),
+    phone: Yup.string()
+      .required(__ValidationText.signUp.storeCustomerAddress.phone.required)
+      .test(
+        'phone-test',
+        __ValidationText.signUp.storeCustomerAddress.phone.valid,
+        (value) => {
+          if (
+            phonePattern1.test(value || '') ||
+            phonePattern2.test(value || '') ||
+            phonePattern3.test(value || '') ||
+            phonePattern4.test(value || '')
+          )
+            return true;
+          return false;
+        },
+      ),
     countryName: Yup.string().required(addressMessages.countryName.required),
   });
 
@@ -193,10 +220,9 @@ const Index = () => {
           });
         });
     }
-    let cake = await getStoreCustomer(customerId || 0);
-    // console.log(cake, '<----------cake os here');
+    await getStoreCustomer(customerId || 0);
     setShowLoader(false);
-    router.push('/myaccount/Address');
+    router.push(paths.myAccount.account_settings);
   };
 
   return (

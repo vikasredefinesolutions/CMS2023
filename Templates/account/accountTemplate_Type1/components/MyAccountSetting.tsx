@@ -1,6 +1,9 @@
 import { _Store } from '@configs/page.config';
 import { __pagesText } from '@constants/pages.text';
-import { editAccountMessage } from '@constants/validation.text';
+import {
+  __ValidationText,
+  editAccountMessage,
+} from '@constants/validation.text';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import {
   UpdateUserData,
@@ -47,6 +50,9 @@ const AccountSetting = () => {
   };
 
   const updatePassword = async () => {
+    if (newPassword.length < 6) {
+      return alert(__ValidationText.signUp.password.required);
+    }
     try {
       const res = await UpdateUserPassword({
         email: customer?.email || '',
@@ -80,7 +86,7 @@ const AccountSetting = () => {
     firstName: Yup.string().required(editAccountMessage.firstName),
     lastName: Yup.string().required(editAccountMessage.lastName),
     companyName: Yup.string().required(editAccountMessage.companyName),
-    password: Yup.string().length(8).required(editAccountMessage.password),
+    password: Yup.string().length(6).required(editAccountMessage.password),
     gender: Yup.string(),
   });
 

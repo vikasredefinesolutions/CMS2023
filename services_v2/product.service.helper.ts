@@ -113,7 +113,11 @@ export const singleColor_addToCart_PayloadGenerator = async (
             logoPositionImage: logo.positionImage.path,
             originalLogoFilePath: logo.filePathUrl,
             isSewOut: logo.isSewOut,
-            sewOutAmount: logo.sewOutAmount,
+            sewOutAmount: logo.sewOutAmount
+              ? isupdate
+                ? logo.sewOutAmount / totalQty
+                : logo.sewOutAmount / logo.qty
+              : 0,
             reUsableCustomerLogo: 0,
           };
         });
