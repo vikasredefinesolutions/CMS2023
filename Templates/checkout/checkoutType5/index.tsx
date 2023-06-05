@@ -167,6 +167,9 @@ const ChekoutType5: React.FC<_Props> = ({ templateId }) => {
     totalLogoCharges,
   } = GetCartTotals();
 
+  const handlePurchase = (purchaseNumber: string) => {
+    setPurchaseOrder(purchaseNumber);
+  };
   const changeAddresHandler = (address: AddressType) => {
     addressType === UserAddressType.SHIPPINGADDRESS
       ? setShippingAdress(address)
@@ -332,7 +335,6 @@ const ChekoutType5: React.FC<_Props> = ({ templateId }) => {
     let { totalPrice } = { totalPrice: 200 };
     if (totalPrice > 0) {
       if (paymentEnum.creditCard === paymentMethod) {
-        setPurchaseOrder('');
         if (
           (cardDetails &&
             Object.values(cardDetails).some((x) => x === null || x === '')) ||
@@ -442,15 +444,6 @@ const ChekoutType5: React.FC<_Props> = ({ templateId }) => {
           showModal({
             message:
               'Error in Credit Card information. Please verify and try again.',
-            title: 'Error',
-          });
-          return;
-        }
-      }
-      if (paymentEnum.purchaseOrder == paymentMethod) {
-        if (purchaseOrder.length <= 0) {
-          showModal({
-            message: 'Invalid Purchase Order Details',
             title: 'Error',
           });
           return;
@@ -571,6 +564,8 @@ const ChekoutType5: React.FC<_Props> = ({ templateId }) => {
     };
 
     if (paymentMethod === paymentEnum.creditCard) {
+      // console.log('purchase order', purchaseOrder);
+
       return { ...card, AuthorizationPNREF: purchaseOrder };
     }
 
@@ -607,6 +602,8 @@ const ChekoutType5: React.FC<_Props> = ({ templateId }) => {
 
   const placeOrder = async (selectedShippingMOodel: _shippingMethod) => {
     // const shippingData = await fetchShipping(price);
+    // console.log('selected shipping', selectedShippingMOodel);
+
     let userNewId = 0;
     setShowLoader(true);
 
@@ -666,7 +663,9 @@ const ChekoutType5: React.FC<_Props> = ({ templateId }) => {
         couponDiscountAmount: discount,
         orderStatus: __pagesConstant.checkoutPage.orderStatus,
         transactionStatus: __pagesConstant.checkoutPage.transactionStatus,
-        shippingMethod: selectedShippingMOodel.name,
+        shippingMethod: selectedShippingMOodel
+          ? selectedShippingMOodel.name
+          : '',
         endUserName: endUserNameS,
         logoFinalTotal: totalLogoCharges,
         lineFinalTotal: totalLineCharges,
@@ -679,13 +678,15 @@ const ChekoutType5: React.FC<_Props> = ({ templateId }) => {
           : 0,
 
         // EMPLOYEE LOGIN SPECIFIC
-        empSourceName: employeeLogin.source.value,
-        empSourceMedium: employeeLogin.sourceMedium.value,
+        empSourceName: employeeLogin.source.label,
+        empSourceMedium: employeeLogin.sourceMedium.label,
         empSalesRap: employeeLogin.salesRep.label,
         salesRepName: employeeLogin.salesRep.label,
         salesAgentId: +employeeLogin.salesRep.value,
         isAllowPo: employeeLogin.allowPo,
       };
+
+      // console.log('payload', orderModel);
 
       try {
         await placeOrderService({
@@ -745,8 +746,6 @@ const ChekoutType5: React.FC<_Props> = ({ templateId }) => {
           setCardDetails((prev) => ({ ...prev, [name]: value }));
         }
         break;
-      case paymentEnum.purchaseOrder:
-        setPurchaseOrder(value);
     }
   };
 
@@ -766,6 +765,9 @@ const ChekoutType5: React.FC<_Props> = ({ templateId }) => {
       remove_EnduserName('endusername');
     }
   }, []);
+
+  // console.log('purchase porder', purchaseOrder);
+
   return (
     <>
       {' '}
@@ -899,7 +901,7 @@ const ChekoutType5: React.FC<_Props> = ({ templateId }) => {
 
                         <div className='flex flex-wrap items-center justify-between pt-[10px]'>
                           <div className='pb-[10px] text-default-text'>
-                            {shippingMethod &&
+                            {shippingMethod.length > 0 &&
                               shippingMethod[0].name !== '' &&
                               shippingMethod.map(
                                 (el: _shippingMethod, index: number) => (
@@ -1075,6 +1077,7 @@ const ChekoutType5: React.FC<_Props> = ({ templateId }) => {
                           changeHandler={paymentFieldUpdateHandler}
                           updatePaymentMethod={setPaymentMethod}
                           purchaseOrder={purchaseOrder}
+                          setPurchaseOrder={handlePurchase}
                         />
                         <PaymentType1
                           changeHandler={paymentFieldUpdateHandler}

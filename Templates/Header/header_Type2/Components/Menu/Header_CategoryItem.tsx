@@ -77,8 +77,8 @@ const Header_Category: React.FC<_props> = ({ content, title, url }) => {
   }
   if (view === 'DESKTOP') {
     return (
-      <Link href={`${url}`} className='flex'>
-        <>
+      <>
+        <Link href={`${url}`} className='flex'>
           <div className='relative '>
             <button
               title={title}
@@ -97,28 +97,46 @@ const Header_Category: React.FC<_props> = ({ content, title, url }) => {
               </span>
             </button>
           </div>
-          {focus && (
-            <div
-              onMouseOver={() => setFocus(true)}
-              onMouseLeave={() => setFocus(false)}
-              //   x-transition:enter="transition ease-out duration-200"
-              //   x-transition:enter-start="opacity-0"
-              //   x-transition:enter-end="opacity-100"
-              //   x-transition:leave="transition ease-in duration-150"
-              //   x-transition:leave-start="opacity-100"
-              //   x-transition:leave-end="opacity-0"
-              className='absolute top-full left-[20%] xl:left-[31%] w-screen max-w-[600px] sm:text-[14px]'
-            >
-              <div className='relative bg-gray-100 z-50 p-[15px] pt-[0px]'>
-                <div className=''>
-                  <div className='flex flex-wrap'>
-                    <ul
-                      role='list'
-                      aria-labelledby='desktop-featured-heading-1'
-                      className='w-full lg:w-1/2 text-[13px] pl-[0px] pr-[0px]'
-                    >
-                      {content?.map((item, index) => {
-                        if (index > content.length / 2) return <></>;
+        </Link>
+        {focus && (
+          <div
+            onMouseOver={() => setFocus(true)}
+            onMouseLeave={() => setFocus(false)}
+            //   x-transition:enter="transition ease-out duration-200"
+            //   x-transition:enter-start="opacity-0"
+            //   x-transition:enter-end="opacity-100"
+            //   x-transition:leave="transition ease-in duration-150"
+            //   x-transition:leave-start="opacity-100"
+            //   x-transition:leave-end="opacity-0"
+            className='absolute top-full left-[20%] xl:left-[31%] w-screen max-w-[600px] sm:text-[14px]'
+          >
+            <div className='relative bg-gray-100 z-50 p-[15px] pt-[0px]'>
+              <div className=''>
+                <div className='flex flex-wrap'>
+                  <ul
+                    role='list'
+                    aria-labelledby='desktop-featured-heading-1'
+                    className='w-full lg:w-1/2 text-[13px] pl-[0px] pr-[0px]'
+                  >
+                    {content?.map((item, index) => {
+                      if (index > content.length / 2) return <></>;
+                      return (
+                        <SubMenuItem
+                          key={index}
+                          view={view}
+                          itemLabel={capitalizeFirstLetter(item.categoryName)}
+                          itemUrl={`${item.seName}.html?v=product-list`}
+                          type={'CATEGORY'}
+                        />
+                      );
+                    })}
+                  </ul>
+                  <ul className='w-full lg:w-1/2 text-[13px] pl-[20px] pr-[20px]'>
+                    {content?.map((item, index) => {
+                      if (
+                        index >= content.length / 2 &&
+                        index <= (content.length / 2) * 2 + 1
+                      )
                         return (
                           <SubMenuItem
                             key={index}
@@ -128,34 +146,14 @@ const Header_Category: React.FC<_props> = ({ content, title, url }) => {
                             type={'CATEGORY'}
                           />
                         );
-                      })}
-                    </ul>
-                    <ul className='w-full lg:w-1/2 text-[13px] pl-[20px] pr-[20px]'>
-                      {content?.map((item, index) => {
-                        if (
-                          index >= content.length / 2 &&
-                          index <= (content.length / 2) * 2 + 1
-                        )
-                          return (
-                            <SubMenuItem
-                              key={index}
-                              view={view}
-                              itemLabel={capitalizeFirstLetter(
-                                item.categoryName,
-                              )}
-                              itemUrl={`${item.seName}.html?v=product-list`}
-                              type={'CATEGORY'}
-                            />
-                          );
-                      })}
-                    </ul>
-                  </div>
+                    })}
+                  </ul>
                 </div>
               </div>
             </div>
-          )}
-        </>
-      </Link>
+          </div>
+        )}
+      </>
     );
   }
 

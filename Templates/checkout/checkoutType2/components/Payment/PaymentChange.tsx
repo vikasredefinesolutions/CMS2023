@@ -1,8 +1,7 @@
-import NxtImage from '@appComponents/reUsable/Image';
 import { paymentMethodCustom } from '@constants/enum';
-import { _Country, _State } from '@definations/app.type';
-import { FetchCountriesList, FetchStatesList } from '@services/general.service';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { useTypedSelector_v2 } from '@hooks_v2/index';
+import { ChangeEvent } from 'react';
+import CO2_EL_PaymentOption from '../CO2_EL_PaymentOption';
 import AddressFormPk from '../Form';
 
 interface _PaymentProps {
@@ -38,25 +37,8 @@ const PaymentChange: React.FC<_PaymentProps> = ({
   paymentMethod,
   useShippingAddress,
 }) => {
-  const [countries, setCountries] = useState<_Country[] | []>([]);
-
-  const [state, setState] = useState<_State[] | []>([]);
-  const [selectedCountry, setSelectedCountry] = useState<_Country>({
-    id: 0,
-    name: '',
-    countryCode: '',
-  });
-
-  useEffect(() => {
-    FetchCountriesList().then((res) => {
-      if (res) {
-        setCountries(res);
-        FetchStatesList(res[0].id).then((res) =>
-          res ? setState(res) : setState([]),
-        );
-      }
-    });
-  }, [selectedCountry.id]);
+  const employeeLogin = useTypedSelector_v2((state) => state.employee.loggedIn);
+  const { el } = useTypedSelector_v2((state) => state.checkout);
 
   return (
     <>
@@ -70,7 +52,7 @@ const PaymentChange: React.FC<_PaymentProps> = ({
               <img src='/norton.png' />
             </div>
           </div>
-          {changeBillingAddress && (
+          {!employeeLogin && changeBillingAddress && (
             <div className='mb-[20px]' id='BillingShippingAddress'>
               <input
                 type='checkbox'
@@ -78,12 +60,38 @@ const PaymentChange: React.FC<_PaymentProps> = ({
                 name=''
                 onClick={() => {
                   setChangeBillingAddress(!changeBillingAddress);
+                  setUseShippingAddress(!useShippingAddress);
                 }}
               />
               <label className=''>Billing & Shipping Address is the same</label>
             </div>
           )}
-          {changeBillingAddress && (
+
+          {employeeLogin && (
+            <div className='mb-[20px]' id='BillingShippingAddress'>
+              <input
+                type='checkbox'
+                id='BillingShippingAddressChk'
+                name=''
+                onClick={() => {
+                  setChangeBillingAddress(!changeBillingAddress);
+                  setUseShippingAddress(!useShippingAddress);
+                }}
+                checked={changeBillingAddress}
+              />
+              <label className=''>Billing & Shipping Address is the same</label>
+            </div>
+          )}
+
+          {!employeeLogin && changeBillingAddress && (
+            <>
+              <div className='pt-[10px] border-b border-[#ececec]'>
+                <div className='pb-[10px] text-title-text'>Billing Address</div>
+              </div>
+              <AddressFormPk addressformik={BillingFormik} />
+            </>
+          )}
+          {employeeLogin && !changeBillingAddress && (
             <>
               <div className='pt-[10px] border-b border-[#ececec]'>
                 <div className='pb-[10px] text-title-text'>Billing Address</div>
@@ -93,18 +101,22 @@ const PaymentChange: React.FC<_PaymentProps> = ({
           )}
         </>
       }
+
       <div className='flex justify-between flex-wrap items-center mt-[12px]  flex-wrap'>
         <div className='mb-[15px] w-full'>
           <button
             className={`bg-[#ffffff] flex items-center font-semibold text-normal-text pl-[10px] pr-[10px] pb-[10px] pt-[10px] border border-[#000000] ${
-              paymentMethod == paymentMethodCustom.creditCard
-                ? 'bg-gray-500 text-[#fff]'
+              el.isPaymentPending
+                ? 'opacity-50'
+                : paymentMethod == paymentMethodCustom.creditCard
+                ? 'bg-gray-200 text-[#fff]'
                 : ''
             }`}
+            disabled={el.isPaymentPending}
             onClick={() => updatePaymentMethod(paymentMethodCustom.creditCard)}
           >
             <span className='mr-[10px]'>
-              <NxtImage className='' alt='credit card' src={'//cards.jpg'} />
+              <img className='' src='/cards.jpg' alt='/credit card' />
             </span>
             <span>SELECT CREDIT CARD</span>
           </button>
@@ -112,21 +124,22 @@ const PaymentChange: React.FC<_PaymentProps> = ({
         <div className='mb-[15px]'>
           <button
             className={`bg-[#ffffff] flex flex-wrap items-center font-semibold text-normal-text pl-[10px] pr-[10px] pb-[10px] pt-[10px] border border-[#000000] ${
-              paymentMethod == paymentMethodCustom.purchaseOrder
-                ? 'bg-gray-500'
+              el.isPaymentPending
+                ? 'opacity-50'
+                : paymentMethod == paymentMethodCustom.purchaseOrder
+                ? 'bg-gray-200 text-[#fff]'
                 : ''
             }`}
+            disabled={el.isPaymentPending}
             onClick={() =>
               updatePaymentMethod(paymentMethodCustom.purchaseOrder)
             }
           >
-            <span className='mr-[10px]'>
-              <NxtImage className='' alt='credit card' src={'//cards.jpg'} />
-            </span>
             <span>SELECT PURCHASE ORDER</span>
           </button>
         </div>
       </div>
+      {employeeLogin && <CO2_EL_PaymentOption />}
     </>
   );
 };

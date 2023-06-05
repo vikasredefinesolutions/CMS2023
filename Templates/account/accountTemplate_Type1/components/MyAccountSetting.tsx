@@ -23,17 +23,21 @@ const initValue = {
 
 type SettingForm = typeof initValue;
 const AccountSetting = () => {
-  const { showModal } = useActions_v2();
+  const { showModal, setShowLoader } = useActions_v2();
   const customer = useTypedSelector_v2((state) => state.user.customer);
   const { code: storeCode } = useTypedSelector_v2((state) => state.store);
-  const [activeEditBox, setActiveEditBox] = useState(false);
-  const [showInfo, setShowInfo] = useState(false);
-  const [genderId, setGenderId] = useState(customer?.gender);
-  const [showPassword, setShowPassword] = useState(false);
-  const [showPasswordUpdate, setShowPasswordUpdate] = useState(false);
-  const [newPassword, setNewPassword] = useState('');
-  const [currentPass, setCurrentPass] = useState('');
+  const [activeEditBox, setActiveEditBox] = useState<boolean>(false);
+  const [showInfo, setShowInfo] = useState<boolean>(false);
+  const [genderId, setGenderId] = useState<string>(
+    customer?.gender ? customer.gender : '',
+  );
+  const [disableFeature, setDisableFeature] = useState<boolean>(false);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [showPasswordUpdate, setShowPasswordUpdate] = useState<boolean>(false);
+  const [newPassword, setNewPassword] = useState<string>('');
+  const [currentPass, setCurrentPass] = useState<string>('');
   const [initialValues, setInitialValues] = useState<SettingForm>(initValue);
+
   useEffect(() => {
     if (activeEditBox) {
       setShowPasswordUpdate(true);
@@ -49,10 +53,12 @@ const AccountSetting = () => {
     return response;
   };
 
-  const updatePassword = async () => {
-    if (newPassword.length < 6) {
+  const updatePassword = async (setFieldValue: any) => {
+    if (newPassword && newPassword.length < 6) {
       return alert(__ValidationText.signUp.password.required);
     }
+    setDisableFeature(true);
+
     try {
       const res = await UpdateUserPassword({
         email: customer?.email || '',
@@ -63,6 +69,7 @@ const AccountSetting = () => {
         setNewPassword('');
         await passDecryptFunction(res?.password).then((response) => {
           setCurrentPass(response ? response : '');
+          setFieldValue('password', response);
         });
         setShowPasswordUpdate(false);
 
@@ -70,6 +77,8 @@ const AccountSetting = () => {
           message: 'Password Updated Successfully',
           title: 'Updated',
         });
+        setDisableFeature(false);
+
         setActiveEditBox(false);
       } else {
         showModal({
@@ -86,7 +95,10 @@ const AccountSetting = () => {
     firstName: Yup.string().required(editAccountMessage.firstName),
     lastName: Yup.string().required(editAccountMessage.lastName),
     companyName: Yup.string().required(editAccountMessage.companyName),
-    password: Yup.string().length(6).required(editAccountMessage.password),
+    password: Yup.string()
+      .required(editAccountMessage.password)
+      .min(__ValidationText.signUp.password.minLength)
+      .max(__ValidationText.signUp.password.maxLength),
     gender: Yup.string(),
   });
 
@@ -105,10 +117,11 @@ const AccountSetting = () => {
   }, [customer]);
 
   useEffect(() => {
-    setGenderId(customer?.gender);
+    setGenderId(customer?.gender ? customer.gender : '');
   }, [customer?.gender]);
 
   const submitHandler = async (value: SettingForm) => {
+    setDisableFeature(true);
     try {
       const res = await UpdateUserData({
         ...value,
@@ -123,6 +136,7 @@ const AccountSetting = () => {
         });
         setActiveEditBox(false);
       }
+      setDisableFeature(false);
     } catch (error) {
       showModal({ message: 'Password Update Failed', title: 'Failed' });
     }
@@ -337,9 +351,10 @@ const AccountSetting = () => {
                               type='button'
                               onClick={(e) => {
                                 handleReset(e);
-                                updatePassword();
+                                updatePassword(setFieldValue);
                               }}
-                              className='m-r-10 btn btn-secondary '
+                              className={`m-r-10 btn btn-secondary`}
+                              disabled={disableFeature}
                             >
                               {__pagesText.accountPage.passwordChange}
                             </button>
@@ -392,6 +407,7 @@ const AccountSetting = () => {
                             <button
                               type='submit'
                               className='mr-2 btn btn-primary'
+                              disabled={disableFeature}
                             >
                               {__pagesText.accountPage.saveBtn}
                             </button>
@@ -401,7 +417,9 @@ const AccountSetting = () => {
                               onClick={() => {
                                 setActiveEditBox(false);
                                 handleReset();
-                                setGenderId(customer?.gender);
+                                setGenderId(
+                                  customer?.gender ? customer.gender : '',
+                                );
                                 setTimeout(() => setErrors({}), 1000);
                               }}
                               className='ml-2 btn btn-secondary'

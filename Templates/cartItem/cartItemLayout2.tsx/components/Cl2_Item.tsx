@@ -12,12 +12,7 @@ import {
 } from '@constants/successError.text';
 import { captureRemoveItemEvent } from '@controllers/cartController';
 import { _ProductColor } from '@definations/APIs/colors.res';
-import { _ProductDiscountTable } from '@definations/APIs/discountTable.res';
-import { _ProductInventoryTransfomed } from '@definations/APIs/inventory.res';
-import {
-  _ProductDetails,
-  _ProductDoNotExist,
-} from '@definations/APIs/productDetail.res';
+import { _ProductDetails } from '@definations/APIs/productDetail.res';
 import {
   GetCustomerId,
   useActions_v2,
@@ -37,12 +32,6 @@ import {
   removeParticularSizeProduct,
   updateCartQuantity,
 } from '@services/cart.service';
-import {
-  FetchColors,
-  FetchDiscountTablePrices,
-  FetchInventoryById,
-  FetchProductById,
-} from '@services/product.service';
 import { _CartLinePersonDetailModel } from '@services/product.service.type';
 import Personalizing from '@templates/cartItem/cartItemLayout2.tsx/components/Personalizing';
 import Link from 'next/link';
@@ -116,21 +105,6 @@ const CL2_Item: React.FC<_CartItem & _Props> = (props) => {
     setShowLoader(false);
   };
 
-  const updateCartSlice = (product: _CartItem) => {
-    const obj = {
-      totalQty: product.totalQty,
-      sizeQtys: product.shoppingCartItemDetailsViewModels.map((res) => ({
-        attributeOptionId: res.attributeOptionId,
-        size: res.attributeOptionValue,
-        qty: res.qty,
-        price: res.price,
-      })),
-      totalPrice: product.totalPrice,
-    };
-
-    updateCheckoutObject(obj);
-  };
-
   const updateProductSlice = (
     product: _ProductDetails,
     colors: _ProductColor[],
@@ -158,89 +132,6 @@ const CL2_Item: React.FC<_CartItem & _Props> = (props) => {
         },
       },
     });
-  };
-
-  const fetchProductDetails = async ({
-    seName,
-    productId,
-    unitPrice,
-    colorAttributeOptionId,
-  }: {
-    seName: string;
-    unitPrice: number;
-    productId: number;
-    colorAttributeOptionId: string;
-  }) => {
-    let product: _ProductDetails | _ProductDoNotExist | null = null;
-    let inventory: _ProductInventoryTransfomed | null = null;
-    let colors: _ProductColor[] | null = null;
-    let discountTable: _ProductDiscountTable | null = null;
-
-    product_setValues({
-      type: 'PRICE_ON_EDIT',
-      data: { unitPrice: unitPrice },
-    });
-
-    await Promise.allSettled([
-      FetchProductById({
-        seName: seName,
-        storeId: storeId,
-        productId: 0, // Not required when fetched by seName
-      }),
-      FetchInventoryById({
-        productId: productId,
-        attributeOptionId: [+colorAttributeOptionId],
-      }),
-      FetchColors({
-        productId: productId,
-        storeId: storeId,
-        isAttributeSaparateProduct: isAttributeSaparateProduct,
-      }),
-      FetchDiscountTablePrices({
-        storeId: storeId,
-        seName: seName,
-        customerId: +customerId,
-        attributeOptionId: +colorAttributeOptionId,
-      }),
-    ])
-      .then((values) => {
-        product = values[0].status === 'fulfilled' ? values[0].value : null;
-        inventory = values[1].status === 'fulfilled' ? values[1].value : null;
-        colors = values[2].status === 'fulfilled' ? values[2].value : null;
-        discountTable =
-          values[3].status === 'fulfilled' ? values[3].value : null;
-
-        if (isUserLoggedIn && discountTable) {
-          // Discount table should be updated before updating product details.
-          product_storeData({
-            type: 'DISOCUNT_TABLE_PRICES',
-            data: discountTable,
-          });
-        }
-
-        if (product && product.id && colors) {
-          updateProductSlice(product, colors);
-          setProductForSOM(product);
-        }
-
-        if (inventory) {
-          product_storeData({
-            type: 'INVENTORY_LIST',
-            data: inventory,
-          });
-        }
-
-        if (colors) {
-          //  selected color
-          setColor(colors[0]);
-        }
-      })
-      .catch(() =>
-        showModal({
-          message: __SuccessErrorText.SomethingWentWrong,
-          title: 'error',
-        }),
-      );
   };
 
   const handleSizeRemove = (view: any, item: any) => {
@@ -284,7 +175,7 @@ const CL2_Item: React.FC<_CartItem & _Props> = (props) => {
       setSizeId(size.filter((id) => id !== itemId));
     }
   };
-  const handleUpdateQuantity = (
+  const handleUpdateQuantity = async (
     e: any,
     attributeOptionId: string | number,
     cartLogoPersonId: number,
@@ -298,7 +189,6 @@ const CL2_Item: React.FC<_CartItem & _Props> = (props) => {
         attributeOptionId: attributeOptionId,
       },
     };
-    // console.log('PAYLOAD , sizenumber', updateCartQuantity(payload));
     const confirmRes = confirm(cartQuantityUpdateConfirmMessage);
     if (confirmRes) {
       setShowLoader(true);
@@ -448,9 +338,18 @@ const CL2_Item: React.FC<_CartItem & _Props> = (props) => {
                             <div className='text-default-text'>Qty</div>
                             <form>
                               <input
+                                type='number'
                                 className='text-default-text pl-[5px] pr-[5px] pt-[5px] pb-[5px] w-[60px] mr-2 border border-black'
                                 defaultValue={view.qty}
                                 data-valueofinput={view.qty}
+                                min={1}
+                                onKeyDown={(e) => {
+                                  if (
+                                    ['e', 'E', '+', '-', '.'].includes(e.key)
+                                  ) {
+                                    e.preventDefault();
+                                  }
+                                }}
                                 onChange={(e) => {
                                   valueRef.current = {
                                     ...valueRef.current,
@@ -465,21 +364,22 @@ const CL2_Item: React.FC<_CartItem & _Props> = (props) => {
                                   );
                                 }}
                               />
-                              {sizeId.find((el) => el === view.id) && (
-                                <button
-                                  onClick={(e) => {
-                                    handleUpdateQuantity(
-                                      e,
-                                      +props.attributeOptionId,
-                                      view.id,
-                                      valueRef.current[view.id.toString()],
-                                    );
-                                  }}
-                                  className='btn btn-sm btn-primary'
-                                >
-                                  UPDATE
-                                </button>
-                              )}
+                              {sizeId.find((el) => el === view.id) &&
+                                valueRef.current[view.id.toString()] !== 0 && (
+                                  <button
+                                    onClick={(e) => {
+                                      handleUpdateQuantity(
+                                        e,
+                                        +props.attributeOptionId,
+                                        view.id,
+                                        valueRef.current[view.id.toString()],
+                                      );
+                                    }}
+                                    className='btn btn-sm btn-primary'
+                                  >
+                                    UPDATE
+                                  </button>
+                                )}
                             </form>
                           </div>
                           <div className='w-full md:w-1/3 flex flex-wrap items-center justify-between gap-2 pl-[5px] pr-[5px] mb-[10px]'>

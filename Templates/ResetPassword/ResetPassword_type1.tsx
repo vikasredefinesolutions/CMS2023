@@ -13,7 +13,10 @@ import { useRouter } from 'next/router';
 import * as Yup from 'yup';
 
 const validationSchema = Yup.object().shape({
-  password: Yup.string().required(__ValidationText.resetPassword.password),
+  password: Yup.string()
+    .required(__ValidationText.resetPassword.password)
+    .min(__ValidationText.signUp.password.minLength)
+    .max(__ValidationText.signUp.password.maxLength),
   cPassword: Yup.string().test(
     'passwords-match',
     __ValidationText.resetPassword.confirmPassword.mustMatch,

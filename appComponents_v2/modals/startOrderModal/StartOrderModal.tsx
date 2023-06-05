@@ -215,19 +215,37 @@ const StartOrderModal: React.FC<_startOrderModalProps> = (props) => {
                       }
                     </h2>
                   </div>
-                  <div>
-                    <DiscountPricing
-                      title={'selectsizeandquanity'}
-                      storeCode={storeCode ? storeCode : ''}
-                      showMsrpLine={false}
-                      modalHandler={modalHandler}
-                      price={{
-                        msrp: product.msrp,
-                        salePrice: product.salePrice,
-                      }}
-                      isSpecialBrand={product.isSpecialBrand}
-                    />
-                  </div>
+                  {storeCode == _Store.type4 ? (
+                    product.isSpecialBrand && (
+                      <div>
+                        <DiscountPricing
+                          title={'selectsizeandquanity'}
+                          storeCode={storeCode ? storeCode : ''}
+                          showMsrpLine={false}
+                          modalHandler={modalHandler}
+                          price={{
+                            msrp: product.msrp,
+                            salePrice: product.salePrice,
+                          }}
+                          isSpecialBrand={product.isSpecialBrand}
+                        />
+                      </div>
+                    )
+                  ) : (
+                    <div>
+                      <DiscountPricing
+                        title={'selectsizeandquanity'}
+                        storeCode={storeCode ? storeCode : ''}
+                        showMsrpLine={false}
+                        modalHandler={modalHandler}
+                        price={{
+                          msrp: product.msrp,
+                          salePrice: product.salePrice,
+                        }}
+                        isSpecialBrand={product.isSpecialBrand}
+                      />
+                    </div>
+                  )}
                 </div>
                 {storeCode !== _Store.type4 ? (
                   <SizePriceQtyTable

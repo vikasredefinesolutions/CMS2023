@@ -72,44 +72,30 @@ const ProductImg: React.FC<_ProductImgProps> = ({ product }) => {
           />
         </div>
         <div className='hidden md:block sub-image absolute left-[10px] top-[15px] w-[70px]'>
-          {selectedColor?.moreImages
-            ?.map((img, index) => ({ ...img, id: index }))
-            .map((img) => {
-              const highlight =
-                img.id === selectedImage.id
-                  ? 'border-secondary'
-                  : 'border-gray-border';
-              return (
-                <div
-                  className={`md:border hover:border-secondary p-[3px] mt-[5px] mb-[5px] last:mb-0 cursor-pointer ${highlight}`}
-                  key={img.id + img.imageUrl}
-                  onClick={() => selectImgHandler(img)}
-                >
-                  <NxtImage
-                    src={img.imageUrl}
-                    alt={img.altTag}
-                    className={`w-full ${highlight} object-center object-cover`}
-                    title={img.altTag}
-                  />
-                </div>
-              );
-            })}
+          {selectedColor.moreImages.length > 1 &&
+            selectedColor?.moreImages
+              ?.map((img, index) => ({ ...img, id: index }))
+              .map((img) => {
+                const highlight =
+                  img.id === selectedImage.id
+                    ? 'border-secondary'
+                    : 'border-gray-border';
+                return (
+                  <div
+                    className={`md:border hover:border-secondary p-[3px] mt-[5px] mb-[5px] last:mb-0 cursor-pointer ${highlight}`}
+                    key={img.id + img.imageUrl}
+                    onClick={() => selectImgHandler(img)}
+                  >
+                    <NxtImage
+                      src={img.imageUrl}
+                      alt={img.altTag}
+                      className={`w-full ${highlight} object-center object-cover`}
+                      title={img.altTag}
+                    />
+                  </div>
+                );
+              })}
         </div>
-        {/* <div className='absolute right-[10px] top-[25px] w-6 h-6'>
-          <button className=''>
-            <WishlistButton
-              {...{
-                productId: product?.id,
-                name: product?.name,
-                color: selectedColor.name,
-                price: product?.salePrice,
-                wishlistId: wishlistId,
-              }}
-              iswishlist={wishlistPresent}
-              brandId={brandId ? brandId : 0}
-            />
-          </button>
-        </div> */}
       </div>
       <div className='col-span-12 text-center pt-[20px]'>
         <div className='text-title-text'>Available Colors:</div>

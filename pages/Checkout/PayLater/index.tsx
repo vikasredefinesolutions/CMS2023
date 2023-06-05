@@ -2,6 +2,7 @@ import SeoHead from '@appComponents/reUsable/SeoHead';
 import { SpinnerComponent } from '@appComponents/ui/spinner';
 import { _defaultTemplates } from '@configs/template.config';
 import { __Cookie, __Cookie_Expiry } from '@constants/global.constant';
+
 import { paths } from '@constants/paths.constant';
 import {
   UserType,
@@ -12,7 +13,11 @@ import { WishlistType } from '@definations/wishlist.type';
 import { setCookie } from '@helpers/common.helper';
 import { useActions_v2 } from '@hooks_v2/index';
 import { FetchPageThemeConfigs } from '@services/product.service';
-import { FetchOrderDetails, GetStoreCustomer } from '@services/user.service';
+import {
+  FetchOrderDetails,
+  GetStoreCustomer,
+  getDecryptPassword,
+} from '@services/user.service';
 import { getWishlist } from '@services/wishlist.service';
 import PaylaterTemplate from '@templates/Paylater';
 import { GetServerSideProps, GetServerSidePropsResult, NextPage } from 'next';
@@ -23,7 +28,7 @@ import { _globalStore } from 'store.global';
 const Checkout: NextPage<{ templateId: number }> = ({ templateId }) => {
   const router = useRouter();
   const { logInUser, updateCustomer, updateWishListData } = useActions_v2();
-  const orderNumber = router.query.OrderNumber;
+  const encryptedOrderId = router.query.OrderNumber as string;
 
   const [orderDetails, setOrderDetails] = useState<
     | {
@@ -91,10 +96,30 @@ const Checkout: NextPage<{ templateId: number }> = ({ templateId }) => {
     router.push(paths.HOME);
   };
 
+  const fetchOrderDetailsByDecrypting = async ({
+    encryptedOrderId,
+  }: {
+    encryptedOrderId: string;
+  }): Promise<{
+    billing: _MyAcc_OrderBillingDetails;
+    product: _MyAcc_OrderProductDetails[];
+  } | null> => {
+    const decrptedOrderId = await getDecryptPassword({
+      password: encryptedOrderId,
+    });
+
+    if (!decrptedOrderId) {
+      return null;
+    }
+
+    return FetchOrderDetails({ orderId: +decrptedOrderId });
+  };
+
   useEffect(() => {
-    if (orderNumber) {
+    if (encryptedOrderId) {
       // Call Order API
-      FetchOrderDetails({ orderId: +orderNumber })
+
+      fetchOrderDetailsByDecrypting({ encryptedOrderId })
         .then((res) => {
           if (!res) {
             handleRedirect('UNEXPECTED_ERROR');
@@ -116,7 +141,7 @@ const Checkout: NextPage<{ templateId: number }> = ({ templateId }) => {
         .finally(() => {});
     }
 
-    if (!orderNumber) {
+    if (!encryptedOrderId) {
       handleRedirect('NO_ORDER_ID_FOUND');
     }
   }, []);

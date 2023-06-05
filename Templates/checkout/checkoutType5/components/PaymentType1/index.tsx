@@ -19,6 +19,7 @@ export type paymentProps = FC<{
   };
   paymentMethod?: paymentMethodCustom;
   purchaseOrder?: string;
+  setPurchaseOrder?: (args: string) => void;
   /* eslint-enable no-unused-vars */
 }>;
 

@@ -4,16 +4,17 @@ import { _ModalProps } from '@appComponents/modals/modal';
 import { __length, __messages } from '@constants/form.config';
 import { __Cookie, __Cookie_Expiry } from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
+import { __ValidationText } from '@constants/validation.text';
 // import { Input } from '@mui/material';
 import { updateCartByNewUserId } from '@services/cart.service';
 import { GetStoreCustomer, signInUser } from '@services/user.service';
 import { getWishlist } from '@services/wishlist.service';
 import { ErrorMessage, Formik } from 'formik';
 import {
+  KlaviyoScriptTag,
   deleteCookie,
   extractCookies,
-  KlaviyoScriptTag,
-  setCookie
+  setCookie,
 } from 'helpers_v2/common.helper';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
 import { useRouter } from 'next/router';
@@ -29,7 +30,11 @@ const validationSchema = Yup.object().shape({
     .min(__length.email.min)
     .required(__messages.email.required)
     .nullable(),
-  password: Yup.string().required(__messages.password.required).nullable(),
+  password: Yup.string()
+    .required(__messages.password.required)
+    .min(__ValidationText.signUp.password.minLength)
+    .max(__ValidationText.signUp.password.maxLength)
+    .nullable(),
 });
 
 const LoginComp: React.FC<_ModalProps> = ({ modalHandler }) => {
@@ -183,7 +188,7 @@ const LoginComp: React.FC<_ModalProps> = ({ modalHandler }) => {
                           handleChange(ev);
                         }}
                         type='checkbox'
-                        id="ChkKeepMeLogged"
+                        id='ChkKeepMeLogged'
                         name='keepMeLoggedIn'
                       />
                       <label htmlFor='ChkKeepMeLogged'>

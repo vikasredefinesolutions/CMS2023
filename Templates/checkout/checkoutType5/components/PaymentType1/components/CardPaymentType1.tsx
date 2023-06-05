@@ -98,7 +98,7 @@ const CardPaymentType1: paymentProps = ({
           Payment
         </div>
         <div>
-          {!customer?.isUseNet ? (
+          {customer?.isUseNet ? (
             <div className='w-full flex justify-end'>
               <button
                 className='!text-anchor hover:!text-anchor-hover underline'

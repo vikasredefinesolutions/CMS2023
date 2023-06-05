@@ -40,6 +40,7 @@ const MyAccountTabsType3: React.FC = () => {
       updateEmployeeV2('CLEAN_UP');
       product_employeeLogin('MinQtyToOne_CleanUp');
       localStorage.removeItem(__LocalStorage.empData);
+      localStorage.removeItem(__LocalStorage.empGuest);
     }
     logoutClearCart();
     setWishListEmpty([]);

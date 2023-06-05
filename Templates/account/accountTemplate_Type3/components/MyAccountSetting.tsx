@@ -1,11 +1,14 @@
 import { _Store } from '@configs/page.config';
 import { __pagesText } from '@constants/pages.text';
-import { editAccountMessage } from '@constants/validation.text';
+import {
+  __ValidationText,
+  editAccountMessage,
+} from '@constants/validation.text';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import {
-  getDecryptPassword,
   UpdateUserData,
   UpdateUserPassword,
+  getDecryptPassword,
 } from '@services/user.service';
 import { ErrorMessage, Form, Formik } from 'formik';
 import { useEffect, useState } from 'react';
@@ -80,7 +83,10 @@ const AccountSetting = () => {
     firstName: Yup.string().required(editAccountMessage.firstName),
     lastName: Yup.string().required(editAccountMessage.lastName),
     companyName: Yup.string().required(editAccountMessage.companyName),
-    password: Yup.string().required(editAccountMessage.password),
+    password: Yup.string()
+      .required(editAccountMessage.password)
+      .min(__ValidationText.signUp.password.minLength)
+      .max(__ValidationText.signUp.password.maxLength),
     gender: Yup.string(),
   });
 

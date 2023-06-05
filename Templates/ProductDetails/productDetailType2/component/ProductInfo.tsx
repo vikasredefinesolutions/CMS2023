@@ -40,6 +40,7 @@ const ProductInfo: React.FC<_Props> = ({
   const { showModal } = useActions_v2();
   const { sizeChart } = useTypedSelector_v2((state) => state.product.product);
   const [isVisible, setIsVisible] = useState(false);
+  const { isEmpGuest } = useTypedSelector_v2((state) => state.employee);
 
   const modalHandler = (param: null | _modals) => {
     if (param) {
@@ -50,6 +51,15 @@ const ProductInfo: React.FC<_Props> = ({
   };
   const buyNowHandler = (e: any) => {
     e?.preventDefault();
+    if (isEmpGuest && totalQty > 0) {
+      return setShowLogoComponent(true);
+    }
+    if (isEmpGuest && !totalQty) {
+      return showModal({
+        message: `Please enter quantity greater than or equal to ${minQty}.`,
+        title: 'Required Quantity',
+      });
+    }
     const isLoggedIn = !!userId;
     if (isLoggedIn === false) {
       modalHandler('login');
@@ -90,10 +100,6 @@ const ProductInfo: React.FC<_Props> = ({
 
   const { image } = useTypedSelector_v2((state) => state.product.selected);
 
-  const isEmployeeGuestLoggedIn = useTypedSelector_v2(
-    (state) => state.employee.isEmpGuest,
-  );
-
   useEffect(() => {
     const handleScroll = () => {
       const element = document.getElementById('mainContent');
@@ -120,7 +126,7 @@ const ProductInfo: React.FC<_Props> = ({
       btnText = 'CUSTOMIZE NOW AND ADD TO CART';
     }
 
-    if (isEmployeeGuestLoggedIn) {
+    if (isEmpGuest) {
       disableBtn = false;
       btnText = 'CUSTOMIZE NOW AND ADD TO CART';
     }
@@ -200,8 +206,14 @@ const ProductInfo: React.FC<_Props> = ({
               {' '}
               {__pagesText.productInfo.msrp}
             </span>
-
-            <span className='ml-[4px]'>
+            :
+            <span
+              className={`ml-[4px] ${isEmpGuest ? 'line-through' : ''} ${
+                pricePerItem < (product ? product?.msrp : 0)
+                  ? 'line-through'
+                  : ''
+              }`}
+            >
               <i>
                 <Price
                   value={undefined}
@@ -209,7 +221,6 @@ const ProductInfo: React.FC<_Props> = ({
                     msrp: product ? product.msrp : 0,
                     salePrice: product ? product.salePrice : 0,
                   }}
-                  addColon={true}
                 />{' '}
               </i>
             </span>

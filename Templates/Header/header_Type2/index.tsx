@@ -58,6 +58,7 @@ const Header_Type2: NextPage<_HeaderProps> = ({
     product_employeeLogin('MinQtyToOne_CleanUp');
 
     localStorage.removeItem(__LocalStorage.empData);
+    localStorage.removeItem(__LocalStorage.empGuest);
     router.push(paths.HOME);
   };
 
@@ -87,7 +88,7 @@ const Header_Type2: NextPage<_HeaderProps> = ({
                               className='text-quaternary hover:text-anchor-hover flex items-center'
                               onClick={logoutEmployeeHandler}
                             >
-                              <span className='text-[12px] inline-block whitespace-nowrap tracking-[1px]'>
+                              <span className='text-[12px] inline-block whitespace-nowrap tracking-[1px] text-[#7BC24E]'>
                                 (LogOut)
                               </span>
                             </button>

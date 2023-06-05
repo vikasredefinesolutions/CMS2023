@@ -101,6 +101,11 @@ const _SignupSchema = Yup.object().shape({
             return false;
           },
         ),
+
+      postalCode: Yup.string().max(
+        __ValidationText.signUp.storeCustomerAddress.postalCode.maxLength,
+        'Postal code must be less than 9',
+      ),
     }),
   ),
 });
@@ -270,7 +275,7 @@ const SignUp_type1: React.FC = () => {
     <>
       <section className='pt-[40px] pb-[30px]'>
         <div className='container mx-auto'>
-          <div className='text-4xl text-center '>
+          <div className='text-2xl-text text-center '>
             <h1>CREATE NEW CUSTOMER ACCOUNT</h1>
           </div>
         </div>

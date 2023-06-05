@@ -95,7 +95,7 @@ class MyDocument extends Document {
           <link
             rel='stylesheet'
             type='text/css'
-            href={`${_globalStore.blobUrl}/${_globalStore.blobUrlRootDirectory}/${_globalStore.companyId}/store/${_globalStore.storeId}/css/custom.css`}
+            href={`${_globalStore.blobUrl}/${_globalStore.blobUrlRootDirectory}/${_globalStore.companyId}/store/${_globalStore.storeId}/css/custom.css?${Math.random()}`}
           />
 
           {/* -----------------------SLIDER STYLESHEETS------------------------- */}

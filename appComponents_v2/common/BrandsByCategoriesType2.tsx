@@ -13,18 +13,18 @@ const categories: { label: _Category; classes: string }[] = [
   {
     label: 'Featured',
     classes:
-      'bg-secondary hover:text-[#000000]  block pt-[16px] pb-[16px] pl-[40px] pr-[40px] text-center font-[600]',
+      'bg-primary hover:text-[#000000]  block pt-[16px] pb-[16px] pl-[40px] pr-[40px] text-center font-[600]',
   },
 
   {
     label: 'Apparel',
     classes:
-      'bg-primary hover:bg-primary-hover block pt-[16px] pb-[16px] pl-[40px] pr-[40px] text-center text-white font-[600] hover:text-[#ffffff]',
+      'bg-tertiary hover:bg-primary-hover block pt-[16px] pb-[16px] pl-[40px] pr-[40px] text-center text-white font-[600] hover:text-[#ffffff]',
   },
   {
     label: 'Accessories',
     classes:
-      'bg-default hover:bg-default-hover block pt-[16px] pb-[16px] pl-[40px] pr-[40px] text-center text-white font-[600] hover:text-[#ffffff]',
+      'bg-secondary hover:bg-default-hover block pt-[16px] pb-[16px] pl-[40px] pr-[40px] text-center text-white font-[600] hover:text-[#ffffff]',
   },
 ];
 
@@ -43,25 +43,25 @@ const categoriesWithBrands: {
     category: 'Featured',
     brandsIDs: [
       {
-        staticImagePath: '',
+        staticImagePath: 'https://headlesscdn-c2fyfua9dca0dthr.z01.azurefd.net/storagemedia/1/brand/logo_515.png',
         id: 49,
         brandName: 'Patagonia',
         seName: 'patagonia',
       },
       {
-        staticImagePath: '',
+        staticImagePath: 'https://headlesscdn-c2fyfua9dca0dthr.z01.azurefd.net/storagemedia/1/brand/black_brand_20.png',
         id: 10,
         brandName: 'YETI',
         seName: 'yeti',
       },
       {
-        staticImagePath: '',
+        staticImagePath: 'https://headlesscdn-c2fyfua9dca0dthr.z01.azurefd.net/storagemedia/1/brand/black_brand_11.png',
         id: 9,
         brandName: 'Nike',
         seName: 'nike',
       },
       {
-        staticImagePath: '',
+        staticImagePath: 'https://headlesscdn-c2fyfua9dca0dthr.z01.azurefd.net/storagemedia/1/brand/black_brand_2.png',
         id: 28,
         brandName: 'Peter Millar',
         seName: 'peter-millar',
@@ -72,25 +72,25 @@ const categoriesWithBrands: {
     category: 'Apparel',
     brandsIDs: [
       {
-        staticImagePath: '',
+        staticImagePath: 'https://headlesscdn-c2fyfua9dca0dthr.z01.azurefd.net/storagemedia/1/brand/logo_181.png',
         id: 21,
         brandName: 'STIO',
         seName: 'stio',
       },
       {
-        staticImagePath: '',
+        staticImagePath: 'https://headlesscdn-c2fyfua9dca0dthr.z01.azurefd.net/storagemedia/1/brand/black_brand_180.png',
         id: 45,
         brandName: 'Marine Layer',
         seName: 'marine-layer',
       },
       {
-        staticImagePath: '',
+        staticImagePath: 'https://headlesscdn-c2fyfua9dca0dthr.z01.azurefd.net/storagemedia/1/brand/black_brand_29.png',
         id: 15,
         brandName: 'Eddie Bauer',
         seName: 'eddie-bauer',
       },
       {
-        staticImagePath: '',
+        staticImagePath: 'https://headlesscdn-c2fyfua9dca0dthr.z01.azurefd.net/storagemedia/1/brand/black_brand_8.png',
         id: 4,
         brandName: 'adidas',
         seName: 'adidas',
@@ -101,25 +101,25 @@ const categoriesWithBrands: {
     category: 'Accessories',
     brandsIDs: [
       {
-        staticImagePath: '',
+        staticImagePath: 'https://headlesscdn-c2fyfua9dca0dthr.z01.azurefd.net/storagemedia/1/brand/black_brand_24.png',
         id: 533,
         brandName: 'Ogio',
         seName: 'ogio',
       },
       {
-        staticImagePath: '',
+        staticImagePath: 'https://headlesscdn-c2fyfua9dca0dthr.z01.azurefd.net/storagemedia/1/brand/logo_37.png',
         id: 63,
         brandName: 'Swell',
         seName: 'swell',
       },
       {
-        staticImagePath: '',
+        staticImagePath: 'https://headlesscdn-c2fyfua9dca0dthr.z01.azurefd.net/storagemedia/1/brand/logo_38.png',
         id: 537,
         brandName: 'Camelbak',
         seName: 'camelbak',
       },
       {
-        staticImagePath: '',
+        staticImagePath: 'https://headlesscdn-c2fyfua9dca0dthr.z01.azurefd.net/storagemedia/1/brand/logo_65.png',
         id: 26,
         brandName: 'Tile',
         seName: 'tile',
@@ -134,11 +134,11 @@ const BrandsByCategoriesType2: React.FC<_Props> = ({ brands }) => {
   const activeTabColor = () => {
     switch (activeTab) {
       case 'Featured':
-        return 'bg-secondary';
+        return 'bg-primary';
       case 'Apparel':
         return 'bg-tertiary';
       case 'Accessories':
-        return 'bg-default';
+        return 'bg-secondary';
     }
   };
 
@@ -146,11 +146,15 @@ const BrandsByCategoriesType2: React.FC<_Props> = ({ brands }) => {
     <section className='relative pt-[40px] pb-[40px]'>
       <div className='overflow-x-hidden'>
         <div className='w-full'>
-          <div className='mt-[12px] mb-[12px] text-center'>
-            <span className='material-icons text-[40px] text-primary'>
-              local_offer
-            </span>
-          </div>
+          <div className="mt-3 mb-3  text-center">
+            <span className="material-icons text-[40px] text-[#003a70]">local_offer</span>
+        </div>
+        <div className="mb-3 text-center">
+          <a title="" target="" href="javascript:void(0);"
+            className="btn btn-primary bg-gray-100 uppercase py-2 px-10 text-sm text-[#006CD1]" data-nofollow="N">
+            Shop HEALTHCARE BRANDS BY CATEGORY
+          </a>
+        </div>
           <div className='mb-[12px] text-large-text font-[600] mt-[12px] text-center'>
             <h2>Level-Up with Custom Healthcare Apparel and Accessories</h2>
           </div>

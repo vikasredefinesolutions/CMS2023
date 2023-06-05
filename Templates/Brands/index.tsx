@@ -15,16 +15,17 @@ const brandsTemplates: _BrandsTemplates = {
 };
 
 const BrandsListingTemplate: React.FC<
-  _BrandProps & { id: 'type1' | 'type3' | 'type4' }
+  _BrandProps & { id: 'type1' | 'type2' | 'type3' | 'type4' }
 > = ({ id, ...rest }) => {
   const storeCode = useTypedSelector_v2((state) => state.store.code);
   if (storeCode == _Store.type4) {
     id = 'type4';
+  } else if (storeCode == 'PKHG') {
+    id = 'type2';
   } else {
     id = 'type1';
   }
   const Template = brandsTemplates[id];
-console.log(Template);
   return <Template {...rest} />;
 };
 

@@ -5,6 +5,7 @@ const PurchaseOrderType1: paymentProps = ({
   changeHandler,
   updatePaymentMethod,
   purchaseOrder,
+  setPurchaseOrder,
 }) => {
   const isEmployeeLoggedIn = useTypedSelector_v2(
     (state) => !!state.employee.empId,
@@ -23,6 +24,7 @@ const PurchaseOrderType1: paymentProps = ({
           name='EnterPONumber'
           placeholder=' '
           required={true}
+          value={purchaseOrder}
           disabled={employeeLogin.isPaymentPending}
           className='pt-[15px] pb-[0px] block w-full px-[8px] h-[48px] mt-[0px] text-sub-text text-[18px] text-[#000000] bg-transparent border-0 appearance-none focus:outline-none focus:ring-0'
           defaultValue={purchaseOrder ? purchaseOrder : ''}

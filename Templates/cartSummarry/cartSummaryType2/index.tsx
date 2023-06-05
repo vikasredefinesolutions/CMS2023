@@ -1,165 +1,37 @@
 import Price from '@appComponents/reUsable/Price';
+import { PKHG_MINIMUM_QTY } from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
 import { paths } from '@constants/paths.constant';
 import { _shippingMethod } from '@controllers/checkoutController';
-import SummarryController from '@controllers/summarryController';
-import { Form, Formik } from 'formik';
-import { GetCartTotals, useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
-import Link from 'next/link';
-import { FC, useState } from 'react';
+import { GetCartTotals, useTypedSelector_v2 } from 'hooks_v2';
+import { useRouter } from 'next/router';
+import { FC } from 'react';
 
 interface _props {
   selectedShippingModel: _shippingMethod;
 }
 
 const CartSummarryType2: FC<_props> = ({ selectedShippingModel }) => {
-  const { update_checkoutEmployeeLogin } = useActions_v2();
-  const couponDetails = useTypedSelector_v2((state) => state.cart.discount);
-  const isEmployeeLoggedIn = useTypedSelector_v2(
-    (state) => !!state.employee.empId,
-  );
-  const currentPage = useTypedSelector_v2((state) => state.store.currentPage);
-  const { el: employeeLogin } = useTypedSelector_v2((state) => state.checkout);
-  const [textOrNumber, setTextOrNumber] = useState<'number' | 'text'>('text');
+  const router = useRouter();
+
+  const employeeLogin = useTypedSelector_v2((state) => state.employee.empId);
   // Functions
   const {
-    coupon,
-    successMessage,
-    setCoupon,
-    applyCouponHandler,
-    removeCouponCodeHandler,
-  } = SummarryController();
-  const {
+    totalQty,
     totalPrice,
     subTotal,
-    logoSetupCharges,
     smallRunFee,
-    salesTax,
-    totalLogoCharges,
     totalLineCharges,
-    totalQty,
+    merchandisePrice,
+    firstLogoPrice,
+    secondLogoPrice,
+    thirdLogoPrice,
+    fourthLogoPrice,
+    fifthLogoPrice,
+    sixthLogoPrice,
+    seventhLogoPrice,
+    discount,
   } = GetCartTotals();
-
-  // const { cartQty } = useTypedSelector_v2((state) => state.cart);
-  // const { fetchShipping } = CheckoutController();
-  // useEffect(() => {
-  //   if (cartQty) {
-  //     fetchShipping(subTotal);
-  //   }
-  // }, [subTotal]);
-  const getNewShippingCost = (shippingCost: number): number => {
-    if (isEmployeeLoggedIn) {
-      return employeeLogin.shippingPrice;
-    }
-
-    return shippingCost;
-  };
-
-  const ShippingHTML = (userShippingPrice: number) => {
-    if (isEmployeeLoggedIn && currentPage === 'CHECKOUT') {
-      const price =
-        textOrNumber === 'text' && employeeLogin.shippingPrice === 0
-          ? 'FREE'
-          : employeeLogin.shippingPrice.toFixed(2);
-
-      return (
-        <div className='border-t border-gray-200 flex items-center justify-between pt-[10px] pb-[10px]'>
-          <dt className='text-normal-text flex items-center tracking-normal pb-[10px]'>
-            <span>Shipping</span>
-          </dt>
-          <dd className='text-normal-text tracking-normal'>
-            <div className='form-group m-b-10 pl-[15px] relative max-w-[100px]'>
-              <span className='absolute left-[0px] top-[12px] text-normal-text flex items-center tracking-normal'>
-                $
-              </span>
-              <Formik
-                initialValues={{ shipping: price }}
-                onSubmit={(values) => {
-                  setTextOrNumber('text');
-                  update_checkoutEmployeeLogin({
-                    type: 'SHIPPING_PRICE',
-                    value: +(+values.shipping).toFixed(2),
-                  });
-                }}
-                enableReinitialize
-              >
-                {({ handleChange, values, setFieldValue, submitForm }) => {
-                  return (
-                    <Form>
-                      <input
-                        className='border border-gray-border text-right focus:border-gray-border rounded w-full px-2 py-2'
-                        value={values.shipping}
-                        name={'shipping'}
-                        type={textOrNumber}
-                        onChange={(event) => {
-                          if (textOrNumber === 'text') {
-                            setTextOrNumber('number');
-                          }
-                          if ('FREE'.includes(event.target.value[0])) {
-                            setFieldValue('number', '0');
-                            return;
-                          }
-                          handleChange(event);
-                        }}
-                        onBlur={() => submitForm()}
-                        placeholder=''
-                      />
-                    </Form>
-                  );
-                }}
-              </Formik>
-            </div>
-          </dd>
-        </div>
-      );
-    }
-
-    return (
-      <div className='border-t border-gray-200 flex items-center justify-between pt-[10px] pb-[10px]'>
-        <dt className='text-normal-text flex items-center'>
-          <span>Shipping</span>
-        </dt>
-        <dd className='text-normal-text'>
-          {userShippingPrice === 0 ? (
-            'FREE'
-          ) : (
-            <Price value={userShippingPrice} />
-          )}
-        </dd>
-      </div>
-    );
-  };
-
-  const addBottomPadding = couponDetails?.amount ? '' : 'pb-[20px]';
-
-  const decideValue = (args: {
-    message: string | null;
-    currentValue: string;
-    active: number | undefined;
-  }) => {
-    if (args.message) {
-      return args.message; // will show for 3 secs after applying the code
-    }
-
-    let text = '';
-    if (args.currentValue) {
-      text = args.currentValue;
-    }
-    if (args.active) {
-      text = coupon;
-    }
-    return text;
-  };
-
-  const showUpdateBtn = () => {
-    if (successMessage) {
-      return false;
-    }
-    if (coupon) {
-      return true;
-    }
-    return false;
-  };
 
   return (
     <>
@@ -173,36 +45,93 @@ const CartSummarryType2: FC<_props> = ({ selectedShippingModel }) => {
             <dt className=''>Merchandise</dt>
             <dd className=''>
               {' '}
-              <Price value={totalPrice} />
+              <Price value={merchandisePrice} />
             </dd>
           </div>
-          <div className='flex items-center justify-between pt-[15px]'>
-            <dt className=''>Discount</dt>
-            <dd className=''>-$90.00</dd>
-          </div>
+          {merchandisePrice - subTotal > 0 && (
+            <div className='flex items-center justify-between pt-[15px]'>
+              <dt className=''>Discount</dt>
+              <dd className=''>
+                -<Price value={merchandisePrice - subTotal} />
+              </dd>
+            </div>
+          )}
           <div className='w-full pl-[15px] pr-[15px] border-b border-gray-border mt-[10px]'></div>
           <div className='flex items-center justify-between pt-[15px]'>
             <dt className=''>
               <span>Subtotal</span>
             </dt>
             <dd className=''>
-              <Price value={totalPrice - 0} />
+              <Price value={subTotal} />
             </dd>
           </div>
+
           <div className='flex items-center justify-between pt-[15px]'>
             <dt className=''>
               <span>First Logo</span>
             </dt>
-            <dd className=''>FREE</dd>
+            <dd className=''>
+              {firstLogoPrice > 0 ? <Price value={firstLogoPrice} /> : 0}
+            </dd>
           </div>
-          {totalLogoCharges > 0 && (
+          {secondLogoPrice > 0 && (
             <div className='flex items-center justify-between pt-[15px]'>
               <dt className=''>
                 <span>Second Logo</span>
               </dt>
               <dd className=''>
-                {' '}
-                <Price value={totalLogoCharges} />
+                <Price value={secondLogoPrice} />
+              </dd>
+            </div>
+          )}
+
+          {thirdLogoPrice > 0 && (
+            <div className='flex items-center justify-between pt-[15px]'>
+              <dt className=''>
+                <span>Third Logo</span>
+              </dt>
+              <dd className=''>
+                <Price value={thirdLogoPrice} />
+              </dd>
+            </div>
+          )}
+          {fourthLogoPrice > 0 && (
+            <div className='flex items-center justify-between pt-[15px]'>
+              <dt className=''>
+                <span>Fourth Logo</span>
+              </dt>
+              <dd className=''>
+                <Price value={fourthLogoPrice} />
+              </dd>
+            </div>
+          )}
+          {fifthLogoPrice > 0 && (
+            <div className='flex items-center justify-between pt-[15px]'>
+              <dt className=''>
+                <span>Fifth Logo</span>
+              </dt>
+              <dd className=''>
+                <Price value={fifthLogoPrice} />
+              </dd>
+            </div>
+          )}
+          {sixthLogoPrice > 0 && (
+            <div className='flex items-center justify-between pt-[15px]'>
+              <dt className=''>
+                <span>Sixth Logo</span>
+              </dt>
+              <dd className=''>
+                <Price value={sixthLogoPrice} />
+              </dd>
+            </div>
+          )}
+          {seventhLogoPrice > 0 && (
+            <div className='flex items-center justify-between pt-[15px]'>
+              <dt className=''>
+                <span>Seventh Logo</span>
+              </dt>
+              <dd className=''>
+                <Price value={seventhLogoPrice} />
               </dd>
             </div>
           )}
@@ -224,7 +153,7 @@ const CartSummarryType2: FC<_props> = ({ selectedShippingModel }) => {
               </dt>
               <dd className=''>
                 {' '}
-                {totalQty > 10 ? 'FREE' : <Price value={smallRunFee} />}
+                <Price value={smallRunFee} />
               </dd>
             </div>
           )}
@@ -234,20 +163,24 @@ const CartSummarryType2: FC<_props> = ({ selectedShippingModel }) => {
               <span>Estimated Total</span>
             </dt>
             <dd className='font-semibold'>
-              <Price
-                value={
-                  totalPrice + getNewShippingCost(selectedShippingModel.price)
-                }
-              />
+              <Price value={totalPrice} />
             </dd>
           </div>
           <div className=''>
             <div className='mt-[16px]'>
-              <Link className='' href={paths.CHECKOUT}>
-                <a className='btn btn-lg btn-primary w-full !flex flex-wrap justify-center items-center'>
-                  CHECKOUT NOW
-                </a>
-              </Link>
+              <button
+                onClick={() => router.push(paths.CHECKOUT)}
+                disabled={employeeLogin ? false : totalQty < PKHG_MINIMUM_QTY}
+                className={`btn btn-lg btn-primary w-full !flex flex-wrap justify-center items-center ${
+                  employeeLogin
+                    ? ''
+                    : totalQty < PKHG_MINIMUM_QTY
+                    ? 'opacity-50'
+                    : ''
+                }`}
+              >
+                CHECKOUT NOW
+              </button>
             </div>
           </div>
         </dl>

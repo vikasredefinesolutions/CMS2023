@@ -2,7 +2,6 @@ import AddAddressModal from '@appComponents/modals/addAddressModal';
 import { checkoutPages, UserAddressType } from '@constants/enum';
 import { __pagesText } from '@constants/pages.text';
 import CartItem from '@templates/cartItem';
-import CartSummarry from '@templates/cartSummarry';
 import AddAddress from './components/AddAddressType1';
 import CheckoutAddress from './components/AddressType1';
 import CreatePassword from './components/CreatePasswprdType1';
@@ -19,6 +18,7 @@ import CheckoutController, {
 import { GetCartTotals, useTypedSelector_v2 } from '@hooks_v2/index';
 import { useEffect } from 'react';
 import CT1_EL_Dropdowns from './components/CO1_EL_Dropdowns';
+import OrderSummaryType1 from './OrderSummary';
 
 interface _Props {
   templateId: number;
@@ -67,6 +67,8 @@ const ChekoutType1: React.FC<_Props> = ({ templateId }) => {
     fetchShipping,
     shippingMethod,
     setSelectedShipping,
+    setSalesTax,
+    salesTax,
   } = CheckoutController();
   const userId = useTypedSelector_v2((state) => state.user.id);
   const isEmployeeLoggedIn = useTypedSelector_v2(
@@ -457,7 +459,14 @@ const ChekoutType1: React.FC<_Props> = ({ templateId }) => {
             )}
           </div>
           <div className='w-full md:w-4/12 lg:w-[27%] pl-[15px] pr-[15px]'>
-            <CartSummarry selectedShippingModel={selectedShipping} />
+            <OrderSummaryType1
+              selectedShippingModel={selectedShipping}
+              salesTax={salesTax}
+              setSalesTax={setSalesTax}
+              billingAddressCode={
+                billingAdress?.postalCode ? billingAdress.postalCode : '0'
+              }
+            />
             {isEmployeeLoggedIn && <CT1_EL_Dropdowns />}
             <div id='OrderNoteDiv mt-[20px]'>
               <div className='text-sub-text font-bold &nbsp;trsacking-normal mb-[5px]'>

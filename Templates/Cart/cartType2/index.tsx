@@ -17,8 +17,8 @@ import CartItem from 'Templates/cartItem';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import { _CartProps } from '../Cart';
-import CT1_EmployeeLoginCart from '../Cart_Type1/components/CT1_EL_Cart';
 import EmptyCart from '../components/emptyCart';
+import CT2_EL_Cart from './Components/CT2_EL_Cart';
 
 const CartType2: React.FC<_CartProps> = ({
   templateId,
@@ -81,7 +81,7 @@ const CartType2: React.FC<_CartProps> = ({
   }
 
   if (isEmployeeLoggedIn) {
-    return <CT1_EmployeeLoginCart cartItems={cartData} />;
+    return <CT2_EL_Cart cartItems={cartData} />;
   }
 
   return (

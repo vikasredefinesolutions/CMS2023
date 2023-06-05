@@ -88,8 +88,8 @@ const Brand: React.FC<_props> = ({ url, title, content }) => {
 
   if (view === 'DESKTOP') {
     return (
-      <Link href={url}>
-        <>
+      <>
+        <Link href={url}>
           <div className='relative '>
             <button
               title={title}
@@ -108,57 +108,79 @@ const Brand: React.FC<_props> = ({ url, title, content }) => {
               </span>
             </button>
           </div>
-          {focus && (
-            <div
-              onMouseOver={() => setFocus(true)}
-              onMouseLeave={() => setFocus(false)}
-              //     x-transition:enter="transition ease-out duration-200"
-              //     x-transition:enter-start="opacity-0"
-              //     x-transition:enter-end="opacity-100"
-              //     x-transition:leave="transition ease-in duration-150"
-              //     x-transition:leave-start="opacity-100"
-              //     x-transition:leave-end="opacity-0"
-              className='absolute top-full  w-screen max-w-[700px] sm:text-[13px]'
-            >
-              <div className='relative bg-gray-100 z-50 p-[15px]'>
+        </Link>
+        {focus && (
+          <div
+            onMouseOver={() => setFocus(true)}
+            onMouseLeave={() => setFocus(false)}
+            //     x-transition:enter="transition ease-out duration-200"
+            //     x-transition:enter-start="opacity-0"
+            //     x-transition:enter-end="opacity-100"
+            //     x-transition:leave="transition ease-in duration-150"
+            //     x-transition:leave-start="opacity-100"
+            //     x-transition:leave-end="opacity-0"
+            className='absolute top-full w-screen max-w-[700px] sm:text-[13px] left-[20%] xl:left-[23%]'
+          >
+            <div className='relative bg-gray-100 z-50 p-[15px]'>
+              <div className=''>
+                {content && content.length > 0 && (
+                  <div className='flex flex-wrap pb-[10px] border-b border-b-default mb-[10px] '>
+                    {content
+                      ?.filter(
+                        (brand) =>
+                          brand.brandBlackColorImageUrl &&
+                          __pagesConstant._header.PKbrandImage.includes(
+                            brand.seName,
+                          ),
+                      )
+                      .sort(function (a, b) {
+                        return (
+                          __pagesConstant._header.PKbrandImage.indexOf(
+                            a.seName,
+                          ) -
+                          __pagesConstant._header.PKbrandImage.indexOf(b.seName)
+                        );
+                      })
+                      ?.map((brand) => (
+                        <BrandImage
+                          key={brand.id}
+                          url={
+                            brand.brandCollectionUrl
+                              ? `${brand.brandCollectionUrl}.html`
+                              : `${brand.seName}.html?v=product-list`
+                          }
+                          alt={capitalizeFirstLetter(brand.brandName)}
+                          src={brand.brandBlackColorImageUrl}
+                        />
+                      ))}
+                  </div>
+                )}
                 <div className=''>
-                  {content && content.length > 0 && (
-                    <div className='flex flex-wrap pb-[10px] border-b border-b-default mb-[10px] '>
-                      {content
-                        ?.filter(
-                          (brand) =>
-                            brand.brandBlackColorImageUrl &&
-                            __pagesConstant._header.PKbrandImage.includes(
-                              brand.seName,
-                            ),
-                        )
-                        .sort(function (a, b) {
-                          return (
-                            __pagesConstant._header.PKbrandImage.indexOf(
-                              a.seName,
-                            ) -
-                            __pagesConstant._header.PKbrandImage.indexOf(b.seName)
-                          );
-                        })
-                        ?.map((brand) => (
-                          <BrandImage
+                  <div className='flex flex-wrap'>
+                    <ul className='w-full lg:w-1/2 text-[13px] pl-[20px] pr-[20px'>
+                      {content?.map((brand, index) => {
+                        if (index > content.length / 3 + 1) return <></>;
+                        return (
+                          <SubMenuItem
+                            view={view}
                             key={brand.id}
-                            url={
+                            itemLabel={capitalizeFirstLetter(brand.brandName)}
+                            itemUrl={
                               brand.brandCollectionUrl
                                 ? `${brand.brandCollectionUrl}.html`
                                 : `${brand.seName}.html?v=product-list`
                             }
-                            alt={capitalizeFirstLetter(brand.brandName)}
-                            src={brand.brandBlackColorImageUrl}
+                            type={'BRAND'}
                           />
-                        ))}
-                    </div>
-                  )}
-                  <div className=''>
-                    <div className='flex flex-wrap'>
-                      <ul className='w-full lg:w-1/2 text-[13px] pl-[20px] pr-[20px'>
-                        {content?.map((brand, index) => {
-                          if (index > content.length / 3 + 1) return <></>;
+                        );
+                      })}
+                    </ul>
+                    <ul className='w-full lg:w-1/3 text-[13px] pl-[20px] pr-[20px]'>
+                      {content?.map((brand, index) => {
+                        if (
+                          index >= content.length / 3 + 1 &&
+                          index <= (content.length / 3) * 2 + 1
+                        )
                           return (
                             <SubMenuItem
                               view={view}
@@ -172,59 +194,33 @@ const Brand: React.FC<_props> = ({ url, title, content }) => {
                               type={'BRAND'}
                             />
                           );
-                        })}
-                      </ul>
-                      <ul className='w-full lg:w-1/3 text-[13px] pl-[20px] pr-[20px]'>
-                        {content?.map((brand, index) => {
-                          if (
-                            index >= content.length / 3 + 1 &&
-                            index <= (content.length / 3) * 2 + 1
-                          )
-                            return (
-                              <SubMenuItem
-                                view={view}
-                                key={brand.id}
-                                itemLabel={capitalizeFirstLetter(
-                                  brand.brandName,
-                                )}
-                                itemUrl={
-                                  brand.brandCollectionUrl
-                                    ? `${brand.brandCollectionUrl}.html`
-                                    : `${brand.seName}.html?v=product-list`
-                                }
-                                type={'BRAND'}
-                              />
-                            );
-                        })}
-                      </ul>
-                      <ul className='w-full lg:w-1/3 text-[13px] pl-[20px] pr-[20px]'>
-                        {content?.map((brand, index) => {
-                          if (index > (content.length / 3) * 2 + 1)
-                            return (
-                              <SubMenuItem
-                                view={view}
-                                key={brand.id}
-                                itemLabel={capitalizeFirstLetter(
-                                  brand.brandName,
-                                )}
-                                itemUrl={
-                                  brand.brandCollectionUrl
-                                    ? `${brand.brandCollectionUrl}.html`
-                                    : `${brand.seName}.html?v=product-list`
-                                }
-                                type={'BRAND'}
-                              />
-                            );
-                        })}
-                      </ul>
-                    </div>
+                      })}
+                    </ul>
+                    <ul className='w-full lg:w-1/3 text-[13px] pl-[20px] pr-[20px]'>
+                      {content?.map((brand, index) => {
+                        if (index > (content.length / 3) * 2 + 1)
+                          return (
+                            <SubMenuItem
+                              view={view}
+                              key={brand.id}
+                              itemLabel={capitalizeFirstLetter(brand.brandName)}
+                              itemUrl={
+                                brand.brandCollectionUrl
+                                  ? `${brand.brandCollectionUrl}.html`
+                                  : `${brand.seName}.html?v=product-list`
+                              }
+                              type={'BRAND'}
+                            />
+                          );
+                      })}
+                    </ul>
                   </div>
                 </div>
               </div>
             </div>
-          )}
-        </>
-      </Link>
+          </div>
+        )}
+      </>
     );
   }
 

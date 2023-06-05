@@ -1,5 +1,6 @@
 import { __pagesText } from '@constants/pages.text';
 import { paths } from '@constants/paths.constant';
+import { __ValidationText } from '@constants/validation.text';
 import getLocation from '@helpers/getLocation';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import {
@@ -76,6 +77,16 @@ const MyAccountSetting_Type2 = () => {
     setBilingAddress(billingAddressArr ? billingAddressArr : []);
   }, [customer]);
 
+  useEffect(() => {
+    if (shipAddress.length === 1) {
+      !shipAddress[0].isDefault && updatePrimaryStatus(shipAddress[0]);
+    }
+
+    if (billingAddress.length === 1) {
+      !billingAddress[0].isDefault && updatePrimaryStatus(billingAddress[0]);
+    }
+  }, [shipAddress, billingAddress]);
+
   const passDecryptFunction = async (pass: string) => {
     const response = await getDecryptPassword({
       password: pass ? pass : '',
@@ -134,9 +145,13 @@ const MyAccountSetting_Type2 = () => {
   };
 
   const validationSchema = Yup.object().shape({
-    firstName: Yup.string().required(),
-    lastName: Yup.string().required(),
-    companyName: Yup.string().required(),
+    firstName: Yup.string().required(
+      __ValidationText.signUp.firstName.required,
+    ),
+    lastName: Yup.string().required(__ValidationText.signUp.lastName.required),
+    companyName: Yup.string().required(
+      __ValidationText.signUp.companyName.required,
+    ),
   });
   useEffect(() => {
     if (customer) {
@@ -220,6 +235,8 @@ const MyAccountSetting_Type2 = () => {
                 handleBlur,
                 handleReset,
                 setFieldValue,
+                touched,
+                errors,
               }) => (
                 <Form>
                   <div className='mb-[24px] mt-[24px]'>
@@ -244,6 +261,11 @@ const MyAccountSetting_Type2 = () => {
                           onBlur={handleBlur}
                         />
                       </div>
+                      {touched.firstName && errors.firstName && (
+                        <p className='text-red-500 text-xs mt-1'>
+                          {errors.firstName}
+                        </p>
+                      )}
                     </div>
                     <div className='mt-[20px] flex flex-wrap items-center gap-[8px] max-w-3xl'>
                       <label className='text-default-text font-[600] w-full md:w-1/3 md:text-right'>
@@ -266,6 +288,11 @@ const MyAccountSetting_Type2 = () => {
                           onBlur={handleBlur}
                         />
                       </div>
+                      {touched.lastName && errors.lastName && (
+                        <p className='text-red-500 text-xs mt-1'>
+                          {errors.lastName}
+                        </p>
+                      )}
                     </div>
                     <hr className='mt-[20px]'></hr>
                     <div className='mt-[20px] flex flex-wrap items-center gap-[8px] max-w-3xl'>
@@ -387,10 +414,9 @@ const MyAccountSetting_Type2 = () => {
                       <div className='grow'>
                         <input
                           type='text'
-                          id='companyu-name'
+                          id='companyName'
                           name='companyName'
                           placeholder='Enter Company Name'
-                          // value="johnthomas@ecommerce.com"
                           value={values.companyName}
                           style={
                             !activeEditBox ? { backgroundColor: '#eee' } : {}
@@ -401,6 +427,11 @@ const MyAccountSetting_Type2 = () => {
                           onBlur={handleBlur}
                         />
                       </div>
+                      {touched.companyName && errors.companyName && (
+                        <p className='text-red-500 text-xs mt-1'>
+                          {errors.companyName}
+                        </p>
+                      )}
                     </div>
                     <hr className='mt-[20px]'></hr>
                     <div className=''>
@@ -434,6 +465,7 @@ const MyAccountSetting_Type2 = () => {
 
                           <div className='absolute top-2 right-10'>
                             <button
+                              type='button'
                               onMouseOver={() => setShowInfo(true)}
                               onMouseLeave={() => setShowInfo(false)}
                               className=''

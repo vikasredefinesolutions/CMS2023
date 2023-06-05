@@ -6,6 +6,8 @@ export interface _CreateAccRes {
 }
 
 export interface _AccCreated_without {
+  errors: any;
+  data: null;
   item1: {
     id: number;
     email: string;

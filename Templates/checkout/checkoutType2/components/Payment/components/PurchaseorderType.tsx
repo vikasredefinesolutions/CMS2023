@@ -1,8 +1,9 @@
-import { paymentProps } from '..';
-import { useState } from 'react';
 import NxtImage from '@appComponents/reUsable/Image';
+import { useTypedSelector_v2 } from '@hooks_v2/index';
 import noImg from '@images/no.png';
 import yesImg from '@images/yes.png';
+import { useState } from 'react';
+import { paymentProps } from '..';
 
 const PurchaseOrderType: paymentProps = ({
   changeHandler,
@@ -14,9 +15,15 @@ const PurchaseOrderType: paymentProps = ({
     purchaseOrder ? purchaseOrder : '',
   );
 
+  const { el: employeeLogin } = useTypedSelector_v2((state) => state.checkout);
+
   return (
     <div id='PurchaseOrder'>
-      <div className=' ml-[-15px] mr-[-15px] w-full'>
+      <div
+        className={`ml-[-15px] mr-[-15px] w-full ${
+          employeeLogin.isPaymentPending ? 'hidden' : ''
+        }`}
+      >
         <div className='mb-[15px] w-full pl-[15px] pr-[15px]'>
           <label
             htmlFor='creditCardHolder'

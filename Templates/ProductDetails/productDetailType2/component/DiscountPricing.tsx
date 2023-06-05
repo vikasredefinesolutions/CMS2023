@@ -7,6 +7,7 @@ const DiscountPricing: React.FC<
   _DiscountPricingProps & { storeCode: string }
 > = ({ price, showLogin, storeCode, showMsrpLine, modalHandler }) => {
   const [showMsg, setShowMsg] = useState(false);
+  const { isEmpGuest } = useTypedSelector_v2((state) => state.employee);
 
   const { minQty } = useTypedSelector_v2((state) => state.product.toCheckout);
 
@@ -14,21 +15,24 @@ const DiscountPricing: React.FC<
   return (
     <>
       <div className='pt-[15px] text-default-text' x-data='{open : false}'>
-        <div
-          className='flex flex-wrap items-center cursor-pointer'
-          onClick={() => setShowMsg(!showMsg)}
-        >
-          <span className='material-icons-outlined'>
-            {showMsg ? 'remove' : 'add'}
-          </span>{' '}
-          <span className='font-bold'>
-            {__pagesText.productInfo.discountPricing.minimumOrderQuantity}
-          </span>
-          <span className='pl-[5px]'>
-            {' '}
-            {` ${minQty ? minQty : 4} ${unitUnits} per color`}
-          </span>
-        </div>
+        {!isEmpGuest && (
+          <div
+            className='flex flex-wrap items-center cursor-pointer'
+            onClick={() => setShowMsg(!showMsg)}
+          >
+            <span className='material-icons-outlined'>
+              {showMsg ? 'remove' : 'add'}
+            </span>{' '}
+            <span className='font-bold'>
+              {__pagesText.productInfo.discountPricing.minimumOrderQuantity}
+            </span>
+            <span className='pl-[5px]'>
+              {' '}
+              {` ${minQty ? minQty : 4} ${unitUnits} per color`}
+            </span>
+          </div>
+        )}
+
         {showMsg ? (
           <div className='text-extra-small-text py-4' x-show='open'>
             {__pagesText.productInfo.discountPricing.startshowMsg}

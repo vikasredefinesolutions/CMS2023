@@ -1,3 +1,4 @@
+import NxtImage from '@appComponents/reUsable/Image';
 import { PersonalizationFont } from '@services/cart';
 import { getPersonalizationFont } from '@services/cart.service';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
@@ -30,7 +31,7 @@ const PersonalizeFontModal: React.FC<_SizeChartModalProps> = ({
   const clientSideMediaBaseUrl = useTypedSelector_v2(
     (state) => state.store.mediaBaseUrl,
   );
-  console.log(clientSideMediaBaseUrl);
+  // console.log(clientSideMediaBaseUrl);
   return (
     <div
       id='PersonalizeFontsModal'
@@ -66,7 +67,11 @@ const PersonalizeFontModal: React.FC<_SizeChartModalProps> = ({
               {personalizationFontsData.map((el) => (
                 <div className='mb-6 last:mb-0'>
                   <div className=''>
-                    <img src={`${clientSideMediaBaseUrl}${el.image}`} />
+                    <NxtImage
+                      className='w-full mx-auto'
+                      src={el.image}
+                      alt={el.name}
+                    />
                   </div>
                   <div className='p-2 bg-gray-100'>{el.name}</div>
                 </div>

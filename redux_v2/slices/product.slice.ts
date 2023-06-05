@@ -941,11 +941,15 @@ export const productSlice = createSlice({
         state.toCheckout.allowAddToCart = true;
       }
 
+      const allDiscounts = state.product.discounts;
+
       if (totalQty < state.toCheckout.minQty) {
+        productPrice = allDiscounts?.subRows
+          ? +allDiscounts?.subRows[0].discountPrice
+          : productPrice;
         state.toCheckout.allowAddToCart = false;
       }
 
-      const allDiscounts = state.product.discounts;
       let foundThePrice = false;
 
       allDiscounts?.subRows.forEach((discount) => {
@@ -1250,8 +1254,7 @@ export const productSlice = createSlice({
         }
       });
 
-      let totalPrice =
-        totalQty * state.toCheckout.price + updateAdditionalLogoCharge;
+      let totalPrice = totalQty * productPrice + updateAdditionalLogoCharge;
 
       // STATE UPDATES
 

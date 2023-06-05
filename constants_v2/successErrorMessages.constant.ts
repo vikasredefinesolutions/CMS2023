@@ -17,7 +17,7 @@ export const checkoutUserLoginMessages = {
 
 export const checkoutPasswordMessages = {
   password: {
-    min: 'Password must be 3 characters at minimum',
+    min: 'Password must be 6 characters at minimum',
     required: 'Password is required',
   },
 };

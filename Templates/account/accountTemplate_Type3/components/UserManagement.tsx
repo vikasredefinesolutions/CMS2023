@@ -12,9 +12,9 @@ import getLocation from '@helpers/getLocation';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import {
   AddCustomerUser,
+  UpdateCustomerUser,
   deleteCustomerUserList,
   getCustomerUserList,
-  UpdateCustomerUser,
 } from '@services/customerUser.service';
 import {
   CustomerAddResponse,
@@ -60,6 +60,7 @@ const UserManagement = () => {
       updateEmployeeV2('CLEAN_UP');
       product_employeeLogin('MinQtyToOne_CleanUp');
       localStorage.removeItem(__LocalStorage.empData);
+      localStorage.removeItem(__LocalStorage.empGuest);
     }
 
     logoutClearCart();

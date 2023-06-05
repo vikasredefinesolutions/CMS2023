@@ -8,7 +8,7 @@ import { useTypedSelector_v2 } from '@hooks_v2/index';
 import { GetlAllProductList } from '@templates/ProductListings/ProductListingType';
 import ProductBoxController from '@templates/ProductListings/productListingType1/components/productBoxController';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { _globalStore } from 'store.global';
 
 let mediaBaseUrl = _globalStore.blobUrl;
@@ -32,6 +32,7 @@ const TemplateFourListing = ({
   compareCheckBoxHandler: (sku: string) => void;
   index: number | string;
 }) => {
+  let flag: boolean = false;
   const { currentProduct, origin, setCurrentProduct } = ProductBoxController({
     product,
     colorChangeHandler,
@@ -40,14 +41,24 @@ const TemplateFourListing = ({
   const { isAttributeSaparateProduct } = useTypedSelector_v2(
     (state) => state.store,
   );
-  const [mainImageUrl, setMainImageUrl] = useState<string>('');
+  const [mainImageUrl, setMainImageUrl] = useState<string>(
+    currentProduct?.imageName ? currentProduct.imageName : '',
+  );
   mediaBaseUrl = mediaBaseUrl || store.mediaBaseUrl;
   // let flag:boolean = product.getProductImageOptionList.length > 4 ? true : false;
   // let countImage:Number = product.getProductImageOptionList.length - 4;
-  let flag: boolean = false;
+
+  useEffect(() => {
+    setCurrentProduct(
+      product.getProductImageOptionList && product.getProductImageOptionList[0],
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [product]);
+
   if (!currentProduct) {
     return <></>;
   }
+
   return (
     <li className='text-center'>
       <div className='flex justify-center w-full border border-gray-border'>
@@ -59,9 +70,7 @@ const TemplateFourListing = ({
             >
               <a style={{ display: 'block' }}>
                 <NxtImage
-                  src={
-                    currentProduct?.imageName ? currentProduct?.imageName : ''
-                  }
+                  src={mainImageUrl}
                   alt=''
                   className='w-auto h-auto m-auto max-h-full'
                   key={currentProduct?.id}
@@ -161,7 +170,7 @@ const TemplateFourListing = ({
                 }
               </label>
             </div>
-            
+
             <ul
               role='list'
               className='flex flex-wrap items-center mt-[12px] justify-center space-x-1'
@@ -222,6 +231,16 @@ const TemplateFourListing = ({
                           ? ' border-secondary'
                           : 'border-light-gray'
                       }`}
+                      onMouseOver={() =>
+                        setMainImageUrl(subRow?.imageName ?? '')
+                      }
+                      onMouseLeave={() =>
+                        setMainImageUrl(
+                          currentProduct?.imageName
+                            ? currentProduct?.imageName
+                            : '',
+                        )
+                      }
                       onClick={() => {
                         colorChangeHandler(
                           product.id,

@@ -21,11 +21,7 @@ const Home = (props) => {
   const router = useRouter();
   const storeCode = useTypedSelector_v2((state) => state.store.code);
 
-  // const pathArray = document.location.pathname.split('/');
-  // const slug = pathArray.at(-1);
-  // const [pageData, setPageData] = useState([]);
 
-  // const [componentHtml, setComponentHtml] = useState([]);
 
   useEffect(() => {
     if (router.asPath === paths.HOME) 
@@ -258,6 +254,7 @@ const Home = (props) => {
           />          
         )}*/}
             <main>
+             
               {pageData?.components && pageData?.components.length > 0 ? (
                 pageData.components.map((componentValue, index) => {
                   if (typeof componentValue.selectedVal == 'string') {

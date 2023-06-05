@@ -79,3 +79,22 @@ export const FetchEmployeesList = async (): Promise<_ValueLabelPair[]> => {
 
   return response;
 };
+
+export const FetchSalesTax = async ({
+  customerId,
+  zipCode,
+  logoTotal,
+  lineTotal,
+  logoSetupCharge,
+  shippingCharges,
+  smallRunFee,
+}: any): Promise<number> => {
+  const url = `Store/Getsalestax/${customerId}/${zipCode}/${logoTotal}/${lineTotal}/${logoSetupCharge}/${shippingCharges}/${smallRunFee}.json`;
+
+  const response = await SendAsync<number>({
+    url: url,
+    method: 'GET',
+  });
+
+  return response;
+};

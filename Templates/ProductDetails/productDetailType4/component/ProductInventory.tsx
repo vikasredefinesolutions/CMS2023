@@ -18,6 +18,8 @@ const Inventory: React.FC<{
     updatePrice({ price: price?.msrp || 0 });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [price?.msrp]);
+  const { brand } = useTypedSelector_v2((state) => state.product.product);
+
   return (
     <div className='mt-[15px] text-default-text border border-gray-border'>
       <div className='hidden md:flex flex-wrap gap-y-5 bg-primary text-white'>
@@ -25,17 +27,20 @@ const Inventory: React.FC<{
           <div className='font-semibold'>Color</div>
         </div>
         <div
-          className={`lex flex-wrap md:grid md:grid-cols-${inventory?.sizes[0]?.sizeArr.length} justify-evenly text-center gap-y-5 w-full md:w-10/12`}
+          className={`lex flex-wrap md:grid md:grid-cols-${
+            inventory?.sizes[0]?.sizeArr.length
+          } justify-evenly  gap-y-5 w-full md:w-10/12 ${
+            inventory?.sizes[0]?.sizeArr.length ? 'text-left' : 'text-center'
+          }`}
         >
           {inventory?.sizes.map((product) => {
             if (product.colorAttributeOptionId === color.attributeOptionId) {
               return product.sizeArr.map((size, index) => (
                 <div key={index} className={` p-2 w-1/2 md:w-auto`}>
-                  <div className='font-semibold'>{size}</div>
+                  <div className='font-semibold'>{size} </div>
                 </div>
               ));
             }
-
             return <></>;
           })}
         </div>
@@ -77,7 +82,14 @@ const Inventory: React.FC<{
                       item.name === size,
                   );
                   return inv > 0 ? (
-                    <div key={index} className='p-2 w-1/2 md:w-auto'>
+                    <div
+                      key={index}
+                      className={`p-2 w-1/2 md:w-auto ${
+                        inventory?.sizes[0]?.sizeArr.length
+                          ? 'text-left'
+                          : 'text-center'
+                      }`}
+                    >
                       <InventoryAvailability
                         size={size}
                         qty={inv}
@@ -86,6 +98,7 @@ const Inventory: React.FC<{
                         attributeOptionId={foundedSize[0].attributeOptionId}
                         val={0}
                         editDetails={editDetails}
+                        brandName={brand?.name}
                       />
                     </div>
                   ) : (

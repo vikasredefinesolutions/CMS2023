@@ -54,7 +54,7 @@ const BannerType1: React.FC<_BannerComponentProps> = ({
                         <ImageComponent
                           title={banner[0].name}
                           className='lg:object-cover lg:max-w-none bg-white'
-                          src={banner[0]?.brandImage || banner[0].banner}
+                          src={banner[0]?.brandLogo || banner[0].banner}
                           alt={''}
                           useNextImage={false}
                         />

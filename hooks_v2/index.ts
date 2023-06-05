@@ -77,6 +77,7 @@ export const GetCartTotals = () => {
     couponDiscount = discountObj.amount;
   }
   let priceObject = {
+    merchandisePrice: 0,
     totalPrice: 0,
     subTotal: 0,
     smallRunFee: 0,
@@ -88,6 +89,13 @@ export const GetCartTotals = () => {
     totalLineCharges: 0,
     totalLogoCharges: 0,
     sewOutTotal: 0,
+    firstLogoPrice: 0,
+    secondLogoPrice: 0,
+    thirdLogoPrice: 0,
+    fourthLogoPrice: 0,
+    fifthLogoPrice: 0,
+    sixthLogoPrice: 0,
+    seventhLogoPrice: 0,
   };
   if (cart && cart.length > 0) {
     cart.forEach((res) => {
@@ -96,7 +104,25 @@ export const GetCartTotals = () => {
       priceObject.totalQty += res.totalQty;
       priceObject.totalLineCharges += res.lineTotalPrice;
       priceObject.totalLogoCharges += res.logoTotalPrice;
-      priceObject.sewOutTotal += res?.sewOutTotal;
+      priceObject.merchandisePrice +=
+        res.msrp !== 0 ? res?.msrp * res.totalQty : res.productTotal;
+      res?.shoppingCartLogoPersonViewModels.forEach((item, index) => {
+        if (index === 0) {
+          priceObject.firstLogoPrice += item.logoPrice;
+        } else if (index === 1) {
+          priceObject.secondLogoPrice += item.logoPrice;
+        } else if (index === 2) {
+          priceObject.thirdLogoPrice += item.logoPrice;
+        } else if (index === 3) {
+          priceObject.fourthLogoPrice += item.logoPrice;
+        } else if (index === 4) {
+          priceObject.fifthLogoPrice += item.logoPrice;
+        } else if (index === 5) {
+          priceObject.sixthLogoPrice += item.logoPrice;
+        } else if (index === 6) {
+          priceObject.seventhLogoPrice += item.logoPrice;
+        }
+      });
     });
 
     if (store.cartCharges) {
@@ -117,9 +143,6 @@ export const GetCartTotals = () => {
         priceObject.totalPrice += logoSetupCharges;
         priceObject.logoSetupCharges = logoSetupCharges;
       }
-    }
-    if (priceObject.sewOutTotal > 0) {
-      priceObject.totalPrice += priceObject.sewOutTotal;
     }
     priceObject.totalPrice -= couponDiscount;
     if (useBalance) {

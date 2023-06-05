@@ -16,8 +16,8 @@ let mediaBaseUrl = _globalStore.blobUrl;
 
 const ThankYouProductTable: React.FC<_props> = ({ product }) => {
   const store = useTypedSelector_v2((state) => state.store);
-  mediaBaseUrl = mediaBaseUrl || store.mediaBaseUrl;
-
+  mediaBaseUrl = store.mediaBaseUrl || mediaBaseUrl;
+  console.log('---here ---', mediaBaseUrl);
   return (
     <>
       <div className='flex justify-between py-[10px]'>

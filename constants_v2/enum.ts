@@ -58,3 +58,5 @@ export enum Sorting {
 }
 
 export const dimax = 250;
+export const maxPeter = 50;
+export const brandname = 'Peter Millar';

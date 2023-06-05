@@ -3,7 +3,6 @@ import LogosToPrint from '@appComponents/CustomizeLogo/LogosToPrint';
 import NxtImage from '@appComponents/reUsable/Image';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import { FetchLogoLocationByProductId } from '@services/product.service';
-import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
 interface logocharges {
@@ -48,13 +47,15 @@ const CustomizeLogo: React.FC<_Props> = ({
     productId: 0,
   });
 
-  const router = useRouter();
   const { color: productColor } = useTypedSelector_v2(
     (state) => state.product.selected,
   );
   const [showOrSelect, setShowOrSelect] = useState<'SHOW' | 'SELECT'>('SELECT');
 
   const { clearLogoUploadHistory } = useActions_v2();
+  const { firstLogoCharge, secondLogoCharge } = useTypedSelector_v2(
+    (state) => state.store,
+  );
 
   useEffect(() => {
     if (productID) {
@@ -72,8 +73,12 @@ const CustomizeLogo: React.FC<_Props> = ({
             smallRunFeesCharges: res.smallRunFeesCharges,
             productId: res.productId,
           });
-          // console.log(res.subRow);
-          clearLogoUploadHistory(res?.subRow);
+          const constructedSubRows = res?.subRow?.map((item, index) => ({
+            ...item,
+            price: index === 0 ? firstLogoCharge : secondLogoCharge,
+            cost: index === 0 ? firstLogoCharge : secondLogoCharge,
+          }));
+          clearLogoUploadHistory(constructedSubRows);
         }
       });
     }
@@ -131,19 +136,17 @@ const CustomizeLogo: React.FC<_Props> = ({
                   })}
               </div>
             </div>
-            {availableLocation && availableLocation?.length > 0 && (
-              <div>
-                {showOrSelect === 'SELECT' && (
-                  <CustomizeLogoSteps
-                    setShowOrSelect={setShowOrSelect}
-                    firstLogoFree={logoCharges.isFirstLogoFree}
-                  />
-                )}
-                {showOrSelect === 'SHOW' && (
-                  <LogosToPrint setShowOrSelect={setShowOrSelect} />
-                )}
-              </div>
-            )}
+            <div>
+              {showOrSelect === 'SELECT' && (
+                <CustomizeLogoSteps
+                  setShowOrSelect={setShowOrSelect}
+                  firstLogoFree={logoCharges.isFirstLogoFree}
+                />
+              )}
+              {showOrSelect === 'SHOW' && (
+                <LogosToPrint setShowOrSelect={setShowOrSelect} />
+              )}
+            </div>
             {/* <button
               className='btn btn-primary btn-md'
               onClick={() => setShowLogoComponent(false)}

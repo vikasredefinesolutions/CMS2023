@@ -83,6 +83,7 @@ const CheckoutController = () => {
   const [currentPage, setCurrentPage] = useState(checkoutPages.login);
   const [allowGuest, setAllowGuest] = useState(true);
   const [customerEmail, setCustomerEmail] = useState('');
+  const [salesTax, setSalesTax] = useState<number>(0);
   const [createAccountPassword, setCreateAccountPassword] = useState({
     password: '',
     confirmPassword: '',
@@ -146,8 +147,11 @@ const CheckoutController = () => {
   const { cartCharges, isSewOutEnable } = useTypedSelector_v2(
     (state) => state.store,
   );
-  const { loggedIn: isEmployeeLoggedIn, isLoadingComplete } =
-    useTypedSelector_v2((state) => state.employee);
+  const {
+    loggedIn: isEmployeeLoggedIn,
+    isLoadingComplete,
+    empId,
+  } = useTypedSelector_v2((state) => state.employee);
   const useBalance = useTypedSelector_v2(
     (state) => state.cart.userCreditBalance.useBalance,
   );
@@ -161,7 +165,6 @@ const CheckoutController = () => {
   const {
     totalPrice,
     subTotal,
-    salesTax,
     discount,
     creditBalance,
     totalLineCharges,
@@ -585,11 +588,11 @@ const CheckoutController = () => {
     product_employeeLogin('MinQtyToOne_CleanUp');
     logoutClearCart();
     logInUser('CLEAN_UP');
-    router.push(`/${paths.THANK_YOU}?orderNumber=${id}`);
-
     setCookie(__Cookie.userId, '', 'EPOCH');
     deleteCookie(__Cookie.tempCustomerId);
     localStorage.removeItem(__LocalStorage.empData);
+    localStorage.removeItem(__LocalStorage.empGuest);
+    router.push(`/${paths.THANK_YOU}?orderNumber=${id}`);
   };
 
   const checkPayment = () => {
@@ -1010,8 +1013,9 @@ const CheckoutController = () => {
           : 0,
 
         // EMPLOYEE LOGIN SPECIFIC
-        empSourceName: employeeLogin.source.value,
-        empSourceMedium: employeeLogin.sourceMedium.value,
+        employeeID: empId ? empId : 0,
+        empSourceName: employeeLogin.source.label,
+        empSourceMedium: employeeLogin.sourceMedium.label,
         empSalesRap: employeeLogin.salesRep.label,
         salesRepName: employeeLogin.salesRep.label,
         salesAgentId: +employeeLogin.salesRep.value,
@@ -1030,7 +1034,8 @@ const CheckoutController = () => {
                 orderNumber: res.id,
               });
               if (isEmployeeLoggedIn) {
-                logout_EmployeeLogin(res.id);
+                setShowLoader(false);
+                return logout_EmployeeLogin(res.id);
               }
               setShowLoader(false);
               router.push(`/${paths.THANK_YOU}?orderNumber=${res.id}`);
@@ -1215,6 +1220,8 @@ const CheckoutController = () => {
     addPaymentDetails,
     getEnduser,
     setEndUserDisplay,
+    setSalesTax,
+    salesTax,
   };
 };
 

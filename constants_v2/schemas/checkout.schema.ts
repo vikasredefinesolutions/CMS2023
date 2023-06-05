@@ -13,13 +13,13 @@ export const checkoutEmailvalidationSchema = Yup.object().shape({
 
 export const checkoutPasswordValidationSchema = Yup.object().shape({
   password: Yup.string()
-    .min(3, checkoutPasswordMessages.password.min)
+    .min(6, checkoutPasswordMessages.password.min)
     .required(checkoutPasswordMessages.password.required),
 });
 
 export const checkoutNewAccountPasswordValidationSchema = Yup.object().shape({
   password: Yup.string()
-    .min(3, checkoutNewAccountPasswordMessages.password.min)
+    .min(6, checkoutNewAccountPasswordMessages.password.min)
     .required(checkoutNewAccountPasswordMessages.password.required),
   confirmPassword: Yup.string()
     .required(checkoutNewAccountPasswordMessages.passwordConfirmation.required)

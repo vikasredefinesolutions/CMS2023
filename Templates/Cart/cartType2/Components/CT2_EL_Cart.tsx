@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
 
-import { paths } from '@constants/paths.constant';
 import { _CartItem } from '@services/cart';
-import Link from 'next/link';
 
 import AddOTFItemNo from '@appComponents/modals/addOtfItem';
-import { __pagesText } from '@constants/pages.text';
+import { paths } from '@constants/paths.constant';
 import CheckoutController from '@controllers/checkoutController';
 import { GetCartTotals, useTypedSelector_v2 } from '@hooks_v2/index';
 import {
@@ -19,7 +17,8 @@ import {
   getPersonalizationLocation,
 } from '@services/cart.service';
 import CartSummarryType2 from '@templates/cartSummarry/cartSummaryType2';
-import CT1_EL_Item from '../../Cart_Type1/components/CT1_EL_Item';
+import Link from 'next/link';
+import CT2_EL_CartItem from './CT2_EL_CartItem';
 
 interface _Props {
   cartItems: _CartItem[];
@@ -63,61 +62,60 @@ const CT2_EL_Cart: React.FC<_Props> = ({ cartItems }) => {
     }
   }, [totalPrice, shippingAdress]);
   return (
-    <section id='' className='mt-[20px]'>
-      <div className='bg-white'>
-        <div className='container mx-auto'>
-          <div className='flex flex-wrap -mx-3 -mt-3 cart-box'>
-            <section
-              aria-labelledby='cart-heading'
-              className='w-full lg:w-8/12 md:w-7/12 pl-[15px] pr-[15px] mt-[15px]'
-            >
-              <h2 id='cart-heading' className='sr-only'>
-                Items in your shopping cart
-              </h2>
-              <div className='bg-light-gray w-full mb-[30px]'>
-                <div className='pl-[15px] pr-[15px] pt-[15px] pb-[15px]'>
-                  <div className='pt-[10px]'>
-                    <div className='pb-[10px] text-title-text'>
-                      {__pagesText.CheckoutPage.OrderReview}
-                    </div>
-                  </div>
-                  <div className='border-t border-[#ececec] mt-[15px]'>
-                    <div className='bg-[#ffffff] pl-[15px] pr-[15px] pt-[15px] pb-[15px] mt-[15px]'>
-                      <ul className='overflow-hidden border border-gray-border p-[15px] md:p-[30px]'>
-                        {cartItems &&
-                          cartItems.map((item: _CartItem, index: number) => (
-                            <CT1_EL_Item
-                              availableFont={availableFont}
-                              availableLocation={availableLocation}
-                              availableColor={availableColor}
-                              key={index}
-                              {...item}
-                            />
-                          ))}
-                      </ul>
-                    </div>
+    <div className='flex-grow-0'>
+      <section id='' className='mt-[10px]'>
+        <div className='bg-[#ffffff]'>
+          <div className='container mx-auto'>
+            <div className='flex flex-wrap mt-[-12px] relative mx-[-15px]'>
+              <div
+                aria-labelledby='cart-heading'
+                className='w-full lg:w-8/12 pl-[15px] pr-[15px] mt-[12px]'
+              >
+                <div className='flex justify-center items-center w-full pl-[16px] pr-[16px] pt-[16px] pb-[16px] mb-[20px] '>
+                  <div className='text-2xl mr-3'>
+                    <button
+                      onClick={() => setShowOTF('OTF')}
+                      className='btn btn-lg btn-primary !flex items-center justify-center w-full !p-1 text-sm border-2 border-black'
+                    >
+                      Add OTF Items
+                    </button>
                   </div>
                 </div>
+                <div className='border border-gray-200'>
+                  <ul role='list' className='overflow-hidden'>
+                    {cartItems.map((item, index) => (
+                      <CT2_EL_CartItem
+                        availableFont={availableFont}
+                        availableLocation={availableLocation}
+                        availableColor={availableColor}
+                        key={index}
+                        {...item}
+                      />
+                    ))}
+                  </ul>
+                </div>
+                <div className='mt-[16px] mb-[16px]'>
+                  <Link href={paths.HOME}>
+                    <a className='btn btn-lg btn-primary cursor-pointer'>
+                      CONTINUE SHOPPING
+                    </a>
+                  </Link>
+                </div>
               </div>
-              <div className='mt-[16px] mb-[16px]'>
-                <Link href={paths.HOME}>
-                  <a className='btn btn-lg btn-secondary'>KEEP SHOPPING</a>
-                </Link>
+              <div
+                aria-labelledby='summary-heading'
+                className='w-full sticky overflow-auto lg:w-4/12 pl-[12px] pr-[12px] mt-3'
+              >
+                <CartSummarryType2 selectedShippingModel={selectedShipping} />
               </div>
-            </section>
-            <section
-              aria-labelledby='summary-heading'
-              className='w-full lg:w-4/12 md:w-5/12 pl-[15px] pr-[15px] mt-[15px]'
-            >
-              <CartSummarryType2 selectedShippingModel={selectedShipping} />
-            </section>
+            </div>
           </div>
         </div>
-      </div>
+      </section>
       {showOTF === 'OTF' && (
         <AddOTFItemNo closeModal={() => setShowOTF(null)} />
       )}
-    </section>
+    </div>
   );
 };
 

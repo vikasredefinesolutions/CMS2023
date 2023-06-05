@@ -5,7 +5,12 @@ Created Date: 16th September 2022
 Modified By: <Modified By Name>
 Modified Date: <Modified Date> */
 //import { useEffect, useState } from 'react';
+import ForgotModal from '@appComponents/modals/forgotModal';
+import LoginModal from '@appComponents/modals/loginModal';
 import * as helper from '@templates/Home/components/Helper';
+import { useTypedSelector_v2 } from 'hooks_v2';
+import { useState } from 'react';
+
 
 const ElementAccordionDisplay = ({ selected_Values, acValues }) => {
   const iconArr = {
@@ -18,6 +23,14 @@ const ElementAccordionDisplay = ({ selected_Values, acValues }) => {
     add: 'remove',
     remove: 'add'
   };
+  const [showModal, setShowModal] = useState(null);
+
+  const { id: loggedIn } = useTypedSelector_v2((state) => state.user);
+  const toggleLoginModal = (event) => {
+  
+    setShowModal('login');
+  };
+
 
   const showHideAccordion = (event) => {
     const parentselector = document.querySelectorAll('.ac-description');
@@ -169,24 +182,46 @@ const ElementAccordionDisplay = ({ selected_Values, acValues }) => {
                 key={index}
                 className={`mb-4 overflow-hidden last:mb-0 cursor-pointer ${liClass}`}
                 style={{ borderColor: tmpTitleBorderColor }}
-                onClick={showHideAccordion}
+                onClick={(acValue.secure === 'Yes' && !loggedIn) ? toggleLoginModal : showHideAccordion}
               >
-                <button
-                  className={`w-full flex justify-between items-center ${titleClass} pointer-events-none`}
-                  style={{
-                    background: tmpTitleBgOption === 'Color' ? tmpTitleBg : '',
-                    color: titleColor,
-                  }}
-                >
-                  {/* <div className='text-defaule-text'> */}
-                  <div className='text-defaule-text pointer-events-none'>
-                    {acValue.title}
-                  </div>
-                  {/* </div> */}
-                  <span className='material-icons-outlined ml-3 pointer-class pointer-events-none'>
-                    {helper.getSymbol(acValue.icon, acValue.openstatus)}
-                  </span>
-                </button>
+                {
+                  (acValue.secure === 'Yes' && !loggedIn) ? <> 
+                    <button
+                        className={`w-full flex justify-between items-center ${titleClass} pointer-events-none`}
+                        style={{
+                          background: tmpTitleBgOption === 'Color' ? tmpTitleBg : '',
+                          color: titleColor,
+                        }}
+                      >
+                            {/* <div className='text-defaule-text'> */}
+                            <div className=' secondary-link pointer-events-none font-normal'>
+                              {acValue.title}
+                            </div>
+                            {/* </div> */}
+                           
+                      </button>
+                  </>
+                  :
+                  <>
+                      <button
+                      className={`w-full flex justify-between items-center ${titleClass} pointer-events-none`}
+                      style={{
+                        background: tmpTitleBgOption === 'Color' ? tmpTitleBg : '',
+                        color: titleColor,
+                      }}
+                    >
+                          {/* <div className='text-defaule-text'> */}
+                          <div className='text-defaule-text pointer-events-none'>
+                            {acValue.title}
+                          </div>
+                          {/* </div> */}
+                          <span className='material-icons-outlined ml-3 pointer-class pointer-events-none'>
+                            {helper.getSymbol(acValue.icon, acValue.openstatus)}
+                          </span>
+                    </button>
+                  </>
+                }
+                
                 <div
                   className={`ac-description ${
                     acValue.openstatus != 'Yes' ? 'hidden' : ''
@@ -203,6 +238,9 @@ const ElementAccordionDisplay = ({ selected_Values, acValues }) => {
           })}
         </>
       )}
+
+{showModal === 'login' && <LoginModal modalHandler={setShowModal} />}
+        {showModal === 'forgot' && <ForgotModal modalHandler={setShowModal} />}
     </>
   );
 };

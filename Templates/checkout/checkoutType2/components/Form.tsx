@@ -1,5 +1,6 @@
 import { _Country, _State } from '@definations/app.type';
 import { FetchCountriesList, FetchStatesList } from '@services/general.service';
+import { getLocationWithZipCode } from '@services/user.service';
 import React, { useEffect, useState } from 'react';
 
 interface _Props {
@@ -10,6 +11,32 @@ const AddressFormPk: React.FC<_Props> = ({ addressformik }) => {
   const [countries, setCountries] = useState<_Country[] | []>([]);
   const [stateList, setStateList] = useState<_State[] | []>([]);
   const [countryId, setCountryId] = useState<number>(0);
+
+  const getStateCountry = async (zipCode: string) => {
+    const res = await getLocationWithZipCode(zipCode);
+
+    return res;
+  };
+
+  const customHandleBlur = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
+    addressformik.handleBlur(e);
+
+    getStateCountry(e.target.value).then((res) => {
+      if (res?.countryId) {
+        addressformik.setFieldValue('city', res.cityName);
+        addressformik.setFieldValue('countryName', res.countryName);
+        FetchStatesList(res.countryId).then((response) => {
+          if (response) {
+            setStateList(response);
+
+            addressformik.setFieldValue('state', res.stateName);
+          }
+        });
+      }
+    });
+  };
   useEffect(() => {
     FetchCountriesList().then((res) => {
       if (res) {
@@ -110,10 +137,10 @@ const AddressFormPk: React.FC<_Props> = ({ addressformik }) => {
               <label className='mb-[4px] text-normal-text'>Zip Code*</label>
               <div className='flex flex-wrap justify-between items-center'>
                 <input
-                  onBlur={addressformik.handleBlur}
                   onChange={addressformik.handleChange}
                   name='postalCode'
                   placeholder=' '
+                  onBlur={customHandleBlur}
                   value={addressformik.values.postalCode}
                   className='form-input  !w-[calc(100%-40px)]'
                 />

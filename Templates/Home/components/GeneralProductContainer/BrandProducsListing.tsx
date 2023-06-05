@@ -79,6 +79,18 @@ const BrandProductListing: React.FC<_props> = (props) => {
   const storeId = useTypedSelector_v2((state) => state.store.id);
   const cacheData = useTypedSelector_v2((state) => state.cache.cacheData);
 
+  const tagNameFunc = () => {
+    if (productsData?.displayMethod == 'manual') {
+      return '';
+    } else if (productsData?.displayMethod == 'dynamic') {
+      if (productToDisplay) {
+        return productToDisplay;
+      } else {
+        return 'featured';
+      }
+    }
+  };
+
   const fetchBrandData = async () => {
     let body = {
       sename:
@@ -92,7 +104,7 @@ const BrandProductListing: React.FC<_props> = (props) => {
           ? productsData?.productType
           : productsData?.displayMethod,
       storeId: storeId,
-      tagName: productToDisplay ?? 'featured',
+      tagName: tagNameFunc(),
       maximumItemsForFetch: productsData?.productCount,
     };
     if (body.storeId) {
@@ -100,7 +112,7 @@ const BrandProductListing: React.FC<_props> = (props) => {
       storeData({
         [productsData?.tabName]: data,
       });
-      console.log(data, 'dataaa');
+      // console.log(data, 'dataaa');
       setBrandsData(data);
     }
     setLoading(false);

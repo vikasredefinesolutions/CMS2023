@@ -234,6 +234,10 @@ export const updateSetProperties = (element) => {
           Button1_className += ' ' + value.value;
           btn1Padding = true;
         } 
+        else if (buttonId === 'Button2') {
+          Button2_className += ' ' + value.value;
+          btn2Padding = true;
+        } 
         else if (buttonId === 'Button3') {
           Button3_className += ' ' + value.value;
           btn3Padding = true;

@@ -1,5 +1,6 @@
 import { employeeData } from '@constants/common.constant';
 import { __LocalStorage } from '@constants/global.constant';
+import { CheckCustomerAlreadyExistResponse } from '@definations/APIs/checkout.res';
 import { extractFromLocalStorage } from '@helpers/common.helper';
 import { useActions_v2 } from '@hooks_v2/index';
 import CryptoJS from 'crypto-js';
@@ -14,7 +15,8 @@ export type EmployeeDataObject = {
 };
 const EmployeeController = () => {
   const router = useRouter();
-  const { updateEmployeeV2, product_employeeLogin } = useActions_v2();
+  const { updateEmployeeV2, product_employeeLogin, employee_Login } =
+    useActions_v2();
   let empData = router.query.id;
 
   const decryptData = () => {
@@ -52,6 +54,11 @@ const EmployeeController = () => {
       __LocalStorage.empData,
     );
 
+    const empGuestData =
+      extractFromLocalStorage<CheckCustomerAlreadyExistResponse>(
+        __LocalStorage.empGuest,
+      );
+
     if (newsavedEmpData) {
       updateEmployeeV2({
         empId: newsavedEmpData.id,
@@ -62,6 +69,9 @@ const EmployeeController = () => {
         },
       });
       product_employeeLogin('MinQtyToOne');
+    }
+    if (empGuestData) {
+      employee_Login({ isGuest: empGuestData.isGuestCustomer });
     }
   }, []);
 };

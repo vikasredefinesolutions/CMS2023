@@ -126,7 +126,10 @@ const CardPaymentType: paymentProps = ({
   }, [cardValidation]);
 
   return (
-    <div id='PaymentCard'>
+    <div
+      id='PaymentCard'
+      className={`${employeeLogin.isPaymentPending ? 'hidden' : ''}`}
+    >
       <div className='flex flex-wrap ml-[-15px] mr-[-15px]'>
         <div className='mb-[15px] w-full md:w-6/12 pl-[15px] pr-[15px]'>
           <label

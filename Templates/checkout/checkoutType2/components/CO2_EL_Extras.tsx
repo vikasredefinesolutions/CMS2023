@@ -30,7 +30,7 @@ interface _Select {
   noOptionFound: string;
 }
 
-export const _CO1_EL_Fields: Array<_Select> = [
+export const _CO2_EL_Fields: Array<_Select> = [
   {
     label: 'Source',
     supressedLabel: '',
@@ -57,19 +57,19 @@ export const _CO1_EL_Fields: Array<_Select> = [
   },
 ];
 
-export interface _CO1_EL_InitialValues {
+export interface _CO2_EL_InitialValues {
   source: string | undefined;
   sourceMedium: string | undefined;
   salesRep: string | undefined;
 }
 
-export const CO1_EL_InitialValues: _CO1_EL_InitialValues = {
+export const CO2_EL_InitialValues: _CO2_EL_InitialValues = {
   source: undefined,
   sourceMedium: undefined,
   salesRep: undefined,
 };
 
-export const CO1_El_Select: React.FC<_SelectProps> = ({
+export const CO2_El_Select: React.FC<_SelectProps> = ({
   label,
   name,
   options,
@@ -79,7 +79,6 @@ export const CO1_El_Select: React.FC<_SelectProps> = ({
   supressedLabel,
   onBlur,
 }) => {
-  console.log(value);
   return (
     <div className='relative z-0 w-full mb-[20px] border border-gray-border rounded mb-[20px] last:mb-[0px]'>
       <select
@@ -107,10 +106,10 @@ export const CO1_El_Select: React.FC<_SelectProps> = ({
         className='left-[8px] absolute duration-300 top-[11px] -z-1 origin-0 text-[#000000] text-[18px]'
       >
         {supressedLabel.length > 0 ? (
-          <>
+          <sup className='flex w-full mt-[10px]'>
             {supressedLabel}
             {required && <span className='text-rose-500'>*</span>}
-          </>
+          </sup>
         ) : (
           <>
             {label}
@@ -127,6 +126,6 @@ export const CO1_El_Select: React.FC<_SelectProps> = ({
   );
 };
 
-export const CO1_EL_ValidationSchema = Yup.object().shape({
+export const CO2_EL_ValidationSchema = Yup.object().shape({
   salesRep: Yup.string().required(),
 });

@@ -28,6 +28,7 @@ export const FetchDIBrands = async (storeId: string, sequence: number) => {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const FetchDataByBrand = async (body: any) => {
   const url = '/StoreProduct/getfeaturedproductitemsbytagnameandsename.json';
+  console.log('=>>>>>>>>>>>>>>>>>>>>', body);
   const res: newFetauredItemResponse[] = await SendAsync({
     url: url,
     method: 'POST',

@@ -20,6 +20,8 @@ const CompareProduct_Type1: React.FC<_CompareProductprops> = (props) => {
     props.products,
   );
   const { showModal, setShowLoader, hideModal } = useActions_v2();
+  const { id } = useTypedSelector_v2((state) => state.user);
+  const userEmail = useTypedSelector_v2((state) => state.user.customer?.email);
   const storeId = useTypedSelector_v2((state) => state.store.id);
   const validationSchema = Yup.object().shape({
     email: Yup.string().email().required(__ValidationText.email.required),
@@ -109,7 +111,7 @@ const CompareProduct_Type1: React.FC<_CompareProductprops> = (props) => {
   const sendEmailHandler = async (values: { email: string }) => {
     const obj = {
       storeId: storeId,
-      Email: values.email,
+      Email: id ? (userEmail ? userEmail : values.email) : values.email,
       Link: window.location.href,
     };
     setShowLoader(true);
@@ -277,15 +279,19 @@ const CompareProduct_Type1: React.FC<_CompareProductprops> = (props) => {
                 {({ values, handleChange }) => {
                   return (
                     <Form className='flex flex-wrap mt-[2px] text-center justify-center'>
-                      <input
-                        className='form-input sm:max-w-xs max-w-[200px]'
-                        placeholder='Enter Email to get this link'
-                        type='text'
-                        name='email'
-                        autoComplete='off'
-                        value={values.email}
-                        onChange={handleChange}
-                      />
+                      {!id ? (
+                        <input
+                          className='form-input sm:max-w-xs max-w-[200px]'
+                          placeholder='Enter Email to get this link'
+                          type='text'
+                          name='email'
+                          autoComplete='off'
+                          value={values.email}
+                          onChange={handleChange}
+                        />
+                      ) : (
+                        <></>
+                      )}
 
                       <button
                         type='submit'

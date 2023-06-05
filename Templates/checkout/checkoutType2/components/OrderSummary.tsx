@@ -2,31 +2,274 @@ import Price from '@appComponents/reUsable/Price';
 import { checkoutPages } from '@constants/enum';
 import { __pagesText } from '@constants/pages.text';
 import { _shippingMethod } from '@controllers/checkoutController';
-import { GetCartTotals, useTypedSelector_v2 } from '@hooks_v2/index';
+import {
+  GetCartTotals,
+  useActions_v2,
+  useTypedSelector_v2,
+} from '@hooks_v2/index';
+import { FetchSalesTax } from '@services/checkout.service';
+import { Form, Formik } from 'formik';
+import { useEffect, useState } from 'react';
+import CO2_EL_Dropdowns from './CO2_EL_Dropdowns';
 
 interface _props {
   placeOrder: (args: _shippingMethod) => void;
   currentpage: number;
   selectedShipModel: _shippingMethod;
+  billingAddressCode: string;
+  salesTax: number;
+  setSalesTax: (args: number) => void;
 }
+
 const OrderSummary: React.FC<_props> = ({
   placeOrder,
   currentpage,
   selectedShipModel,
+  setSalesTax,
+  salesTax,
+  billingAddressCode,
 }) => {
+  let smallRunFeeCharge = 0;
   const {
     totalPrice,
-    subTotal,
-    logoSetupCharges,
-    smallRunFee,
-    salesTax,
-    discount,
     creditBalance,
+    merchandisePrice,
+    totalLineCharges,
+    totalLogoCharges,
   } = GetCartTotals();
+
+  const { id: customerID } = useTypedSelector_v2((state) => state.user);
+  const { el: employeeLogin } = useTypedSelector_v2((state) => state.checkout);
+  const smallRunFee = useTypedSelector_v2(
+    (state) => state.store.cartCharges?.smallRunFeesCharges,
+  );
+  smallRunFeeCharge =
+    smallRunFee && smallRunFee > 0 ? smallRunFee : employeeLogin.smallRunFee;
+  const currentPage = useTypedSelector_v2((state) => state.store.currentPage);
+  const logoSetupCharges = useTypedSelector_v2(
+    (state) => state.store.cartCharges?.logoSetupCharges,
+  );
+  const [textOrNumberSmallRun, setTextOrNumberSmallRun] = useState<
+    'number' | 'text'
+  >('text');
+  const [textOrNumberShippingCost, setTextOrNumberShippingCost] = useState<
+    'number' | 'text'
+  >('text');
+  const { update_checkoutEmployeeLogin } = useActions_v2();
+
+  const [shippingChargesCost, setShippingChargesCost] = useState<number>(0);
+  const [smallRunCost, setSmallRunCost] = useState<number>(
+    smallRunFee ? smallRunFee : 0,
+  );
+
+  useEffect(() => {
+    FetchSalesTax({
+      customerId: customerID,
+      zipCode: billingAddressCode,
+      logoTotal: totalLogoCharges.toFixed(2),
+      lineTotal: totalLineCharges.toFixed(2),
+      logoSetupCharge: logoSetupCharges?.toFixed(2),
+      shippingCharges: shippingChargesCost?.toFixed(2),
+      smallRunFee: smallRunCost?.toFixed(2),
+    }).then((res) => setSalesTax(res));
+  }, [billingAddressCode, smallRunCost, shippingChargesCost]);
+
+  const disablePlaceOrder = (): boolean => {
+    let disable = false;
+    if (isEmployeeLoggedIn) {
+      disable = !!!employeeLogin.salesRep.value;
+    }
+
+    return disable;
+  };
+
+  const getNewShippingCost = (shippingCost: number): number => {
+    if (isEmployeeLoggedIn) {
+      return employeeLogin.shippingPrice;
+    }
+
+    return shippingCost;
+  };
+
+  const getNewSmallRunFee = (smallRunFee: number): number => {
+    if (isEmployeeLoggedIn) {
+      return employeeLogin.smallRunFee;
+    }
+
+    return smallRunFee;
+  };
+  const ShippingHTML = (userShippingPrice: number) => {
+    if (isEmployeeLoggedIn && currentPage === 'CHECKOUT') {
+      const price =
+        textOrNumberShippingCost === 'text' && employeeLogin.shippingPrice === 0
+          ? 'FREE'
+          : employeeLogin.shippingPrice.toFixed(2);
+
+      return (
+        <div className='border-t border-gray-200 flex items-center justify-between pt-[10px] pb-[10px]'>
+          <dt className='text-normal-text flex items-center tracking-normal pb-[10px]'>
+            <span>Shipping</span>
+          </dt>
+          <dd className='text-normal-text tracking-normal'>
+            <div className='form-group m-b-10 pl-[15px] relative max-w-[100px]'>
+              <span className='absolute left-[0px] top-[12px] text-normal-text flex items-center tracking-normal'>
+                $
+              </span>
+              <Formik
+                key='shipping'
+                initialValues={{ shipping: price }}
+                onSubmit={(values) => {
+                  const price =
+                    values.shipping === 'FREE' ? 0 : values.shipping;
+                  update_checkoutEmployeeLogin({
+                    type: 'SHIPPING_PRICE',
+                    value: +(+price).toFixed(2),
+                  });
+                }}
+                enableReinitialize
+              >
+                {({ values, setFieldValue, submitForm }) => {
+                  return (
+                    <Form key='shipping'>
+                      <input
+                        className='border border-gray-border text-right focus:border-gray-border rounded w-full px-2 py-2'
+                        value={values.shipping}
+                        min={0}
+                        name={'shipping'}
+                        type={textOrNumberShippingCost}
+                        onFocus={() => {
+                          if (textOrNumberSmallRun === 'text') {
+                            setFieldValue('shipping', 0);
+                            setTextOrNumberShippingCost('number');
+                          }
+                        }}
+                        onChange={(event) => {
+                          if (Number(event.target.value) < 0)
+                            return setFieldValue('shipping', 0);
+                          setFieldValue('shipping', event.target.value);
+                        }}
+                        onBlur={() => {
+                          setFieldValue(
+                            'shipping',
+                            Number(values.shipping).toFixed(2),
+                          );
+                          setShippingChargesCost(+values.shipping);
+                          submitForm();
+                        }}
+                        placeholder=''
+                      />
+                    </Form>
+                  );
+                }}
+              </Formik>
+            </div>
+          </dd>
+        </div>
+      );
+    }
+
+    return (
+      <div className='border-t border-gray-200 flex items-center justify-between pt-[10px] pb-[10px]'>
+        <dt className='text-normal-text flex items-center'>
+          <span>Shipping</span>
+        </dt>
+        <dd className='text-normal-text'>
+          {userShippingPrice === 0 ? (
+            'FREE'
+          ) : (
+            <Price value={userShippingPrice} />
+          )}
+        </dd>
+      </div>
+    );
+  };
+
+  const smallRunHtml = (userSmallRun: number) => {
+    if (isEmployeeLoggedIn && currentPage === 'CHECKOUT') {
+      const price =
+        textOrNumberSmallRun === 'text' && employeeLogin.smallRunFee === 0
+          ? 'FREE'
+          : employeeLogin.smallRunFee.toFixed(2);
+      return (
+        <div className='flex items-center justify-between pt-[15px] pb-[10px]'>
+          <dt className='text-normal-text flex items-center tracking-normal pb-[10px]'>
+            <span>Small Run Fee</span>
+          </dt>
+          <dd className='text-normal-text tracking-normal'>
+            <div className='form-group m-b-10 pl-[15px] relative max-w-[100px]'>
+              <span className='absolute left-[0px] top-[12px] text-normal-text flex items-center tracking-normal'>
+                $
+              </span>
+              <Formik
+                key='smallRun'
+                initialValues={{ smallRun: price }}
+                onSubmit={(values) => {
+                  setTextOrNumberSmallRun('number');
+                  update_checkoutEmployeeLogin({
+                    type: 'SMALL_RUN_FEE',
+                    value: +(+values.smallRun).toFixed(2),
+                  });
+                }}
+                enableReinitialize
+              >
+                {({ values, setFieldValue, submitForm }) => {
+                  return (
+                    <Form>
+                      <input
+                        className='border border-gray-border text-right focus:border-gray-border rounded w-full px-2 py-2'
+                        value={values.smallRun}
+                        name={'smallRun'}
+                        min={0}
+                        type={textOrNumberSmallRun}
+                        onFocus={() => {
+                          if (textOrNumberSmallRun === 'text') {
+                            setFieldValue('smallRun', 0);
+                            setTextOrNumberShippingCost('number');
+                          }
+                        }}
+                        onChange={(event) => {
+                          if (Number(event.target.value) < 0)
+                            return setFieldValue('smallRun', 0);
+                          setFieldValue('smallRun', event.target.value);
+                        }}
+                        onBlur={() => {
+                          setFieldValue(
+                            'smallRun',
+                            Number(values.smallRun).toFixed(2),
+                          );
+                          setSmallRunCost(+values.smallRun);
+                          submitForm();
+                        }}
+                        placeholder=''
+                      />
+                    </Form>
+                  );
+                }}
+              </Formik>
+            </div>
+          </dd>
+        </div>
+      );
+    }
+
+    return (
+      <div className=' flex items-center justify-between pt-[15px] '>
+        <dt className='text-normal-text flex items-center'>
+          <span>Small Run Fee</span>
+        </dt>
+        <dd className=''>
+          {userSmallRun === 0 ? 'FREE' : <Price value={userSmallRun} />}
+        </dd>
+      </div>
+    );
+  };
 
   // console.log('selectedShipModel', selectedShipModel);
 
-  const storeId = useTypedSelector_v2((state) => state.store.id);
+  const { id: storeId } = useTypedSelector_v2((state) => state.store);
+  const isEmployeeLoggedIn = useTypedSelector_v2(
+    (state) => state.employee.loggedIn,
+  );
 
   return (
     <section className='w-full lg:w-4/12 md:w-5/12 pl-[15px] pr-[15px] mt-[15px]'>
@@ -41,12 +284,12 @@ const OrderSummary: React.FC<_props> = ({
               <div className='flex items-center justify-between pt-[15px]'>
                 <dt>{__pagesText.CheckoutPage.orderSummary.Merchandise}</dt>
                 {/* <dt>{subTotal + discount}</dt> */}
-                <Price value={subTotal + discount} />
+                <Price value={merchandisePrice} />
               </div>
               <div className='flex items-center justify-between pt-[15px]'>
                 <dt>{__pagesText.CheckoutPage.orderSummary.Discount}</dt>
                 {/* <dt>{discount}</dt> */}
-                <Price value={discount} />
+                - <Price value={merchandisePrice - totalPrice} />
               </div>
             </>
           )}
@@ -54,7 +297,7 @@ const OrderSummary: React.FC<_props> = ({
           <div className='flex items-center justify-between pt-[15px]'>
             <dt>{__pagesText.CheckoutPage.orderSummary.Subtotal}</dt>
             {/* <dt>{subTotal}</dt> */}
-            <Price value={subTotal} />
+            <Price value={totalPrice} />
           </div>
           {storeId !== 11 && (
             <>
@@ -67,16 +310,10 @@ const OrderSummary: React.FC<_props> = ({
                 <dt>{__pagesText.CheckoutPage.orderSummary.SecondLogo}</dt>
                 <Price value={''} />
               </div>
-              <div className='flex items-center justify-between pt-[15px]'>
-                <dt>{__pagesText.CheckoutPage.orderSummary.SmallRunFee}</dt>
-                <Price value={smallRunFee} />
-              </div>
+              {smallRunHtml(smallRunFee ? smallRunFee : 0)}
             </>
           )}
-          <div className='flex items-center justify-between pt-[15px]'>
-            <dt>{__pagesText.CheckoutPage.orderSummary.ShippingHandling}</dt>
-            <Price value={selectedShipModel.price} />
-          </div>
+          {ShippingHTML(getNewShippingCost(selectedShipModel?.price))}
           <div className='flex items-center justify-between pt-[15px]'>
             <dt>{__pagesText.CheckoutPage.orderSummary.Tax}</dt>
             <Price value={salesTax} />
@@ -91,9 +328,19 @@ const OrderSummary: React.FC<_props> = ({
               {__pagesText.CheckoutPage.orderSummary.EstimatedTotal}
             </dt>
             <dt className='font-semibold'>
-              <Price value={totalPrice} />
+              <Price
+                value={
+                  totalPrice +
+                  getNewShippingCost(selectedShipModel?.price) +
+                  getNewSmallRunFee(smallRunFeeCharge) +
+                  salesTax
+                }
+              />
             </dt>
           </div>
+
+          {isEmployeeLoggedIn && <CO2_EL_Dropdowns />}
+
           <div className='mt-[16px]'>
             <div className=' text-rose-600 mb-[10px]'>
               {__pagesText.CheckoutPage.orderSummary.CartSummarryInstruction}
@@ -101,12 +348,15 @@ const OrderSummary: React.FC<_props> = ({
           </div>
           <div className='mt-[16px] mb-[16px]'>
             {currentpage === checkoutPages.reviewOrder && (
-              <div
-                className='btn btn-lg btn-primary w-full text-center'
+              <button
+                className={`btn btn-lg !w-full text-center btn-secondary mb-[8px] ${
+                  disablePlaceOrder() ? 'opacity-50' : ''
+                }`}
+                disabled={disablePlaceOrder()}
                 onClick={() => placeOrder(selectedShipModel)}
               >
                 {__pagesText.CheckoutPage.placeOrder}
-              </div>
+              </button>
             )}
           </div>
         </dl>

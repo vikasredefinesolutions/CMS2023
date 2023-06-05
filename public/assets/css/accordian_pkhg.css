@@ -130,3 +130,12 @@
 .layout3_sidebar .MuiPaper-root {
   margin-bottom: 16px !important;
 }
+
+@media (min-width: 1280px) {
+  .xl\:left-\[24\%\] {
+    left: 23%;
+  }
+}
+.xl\:left-\[20\%\] {
+  left: 20%;
+}

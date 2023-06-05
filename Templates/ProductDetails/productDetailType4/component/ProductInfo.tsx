@@ -1,6 +1,7 @@
 import ForgotModal from '@appComponents/modals/forgotModal';
 import LoginModal from '@appComponents/modals/loginModal';
 import { _modals } from '@appComponents/modals/modal';
+import RequiredInventoryModal from '@appComponents/modals/RequiredInventoryModal';
 import Price from '@appComponents/Price';
 import { storeBuilderTypeId } from '@configs/page.config';
 import { __Cookie } from '@constants/global.constant';
@@ -61,6 +62,7 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
   const { colors, inventory } = useTypedSelector_v2(
     (state) => state.product.product,
   );
+  const unitUnits = minQty > 1 ? 'units' : 'unit';
   const selectedProduct = useTypedSelector_v2(
     (state) => state.product.selected,
   );
@@ -68,6 +70,7 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
   const isEmployeeLoggedIn = useTypedSelector_v2(
     (state) => state.employee.loggedIn,
   );
+
   const modalHandler = (param: null | _modals) => {
     if (param) {
       setOpenModal(param);
@@ -78,6 +81,10 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
   useEffect(() => {
     clearToCheckout();
   }, []);
+
+  const [requiredData, setRequiredData] = useState<
+    { name: string; min: number }[]
+  >([]);
 
   const buyNowHandler = (e: any, isLoggedIn: boolean) => {
     e.preventDefault();
@@ -91,6 +98,7 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
     }
     let GAAddToCartPaylod: any = { shoppingCartItemsModel: [] };
     const selectedProducts: _Selectedproduct_v2[] = [];
+
     colors &&
       colors?.forEach((color) => {
         if (sizeQtys && sizeQtys.map((c) => c.color).includes(color.name)) {
@@ -112,6 +120,22 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
           });
         }
       });
+
+    let dataArray: { name: string; min: number }[] = [];
+
+    selectedProducts.forEach((el) => {
+      if (el.sizeQtys[0].qty < el.color.minQuantity) {
+        dataArray.push({
+          name: el.color.name,
+          min: el.color.minQuantity,
+        });
+      }
+    });
+    if (dataArray.length > 0) {
+      setRequiredData(dataArray);
+      setOpenModal('availableInventory');
+      return;
+    }
 
     if (isLoggedIn === true) {
       const addToCartHandler = async () => {
@@ -257,10 +281,7 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
       // router.push(`${paths.CUSTOMIZE_LOGO}/${product?.id}`);
     }
   };
-  const goToProduct = (seName: string | null) => {
-    if (seName === null) return;
-    router.push(`${seName}`);
-  };
+
   let totalinvetory = 0;
   const data = inventory?.inventory?.map((inv) => {
     totalinvetory = totalinvetory + inv.inventory;
@@ -278,6 +299,7 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
       return __pagesText.productInfo.checkInventoryPricing;
     }
   };
+
   return (
     <>
       <div className='col-span-1 mt-[15px] pl-[0px] pr-[0px] md:pl-[15px] md:pr-[15px] sm:pl-[0px] sm:pr-[0px] lg:mt-[0px]'>
@@ -310,6 +332,16 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
               />
             </span>
           </div>
+          {!product.isSpecialBrand && (
+            <div className='pt-[15px] text-default-text'>
+              <span className='ml-[4px]'>
+                <span className='mr-1'>
+                  {__pagesText.productInfo.discountPricing.minimumOrder}
+                </span>
+                {` ${minQty} ${unitUnits} per color `}
+              </span>
+            </div>
+          )}
         </div>
         {/* <DiscountPricing
           storeCode={storeCode}
@@ -321,7 +353,8 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
           showLogin={product ? !product.isDiscontinue : false}
           modalHandler={modalHandler}
         /> */}
-        {userId && (
+
+        {userId && product.isSpecialBrand && (
           <DiscountPricing
             title={'selectsizeandquanity'}
             storeCode={storeCode ? storeCode : ''}
@@ -368,6 +401,12 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
         </form>
       </div>
       {openModal === 'login' && <LoginModal modalHandler={modalHandler} />}
+      {openModal === 'availableInventory' && (
+        <RequiredInventoryModal
+          data={requiredData}
+          closeModal={() => modalHandler(null)}
+        />
+      )}
       {openModal === 'forgot' && <ForgotModal modalHandler={modalHandler} />}
     </>
   );

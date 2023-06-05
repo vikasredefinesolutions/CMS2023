@@ -12,7 +12,7 @@ import * as Yup from 'yup';
 const validationSchema = Yup.object().shape({
   password: Yup.string()
     .required('Enter a password')
-    .min(8, 'Password must contain 8 characters'),
+    .min(6, 'Password must contain 6 characters'),
 });
 
 const ThankYouCreatePassword: React.FC = () => {

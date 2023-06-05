@@ -35,6 +35,7 @@ export interface _Checkout_Initials {
   el: {
     shippingPrice: number;
     allowPo: boolean;
+    smallRunFee: number;
     isPaymentPending: boolean;
     salesRep: {
       value: string;
@@ -72,6 +73,7 @@ const initialState: _Checkout_Initials = {
   orderNotes: '',
   el: {
     shippingPrice: 0,
+    smallRunFee: 0,
     allowPo: false,
     isPaymentPending: false,
     salesRep: {
@@ -196,6 +198,9 @@ export const checkoutSlice = createSlice({
         state.el = JSON.parse(JSON.stringify(initialState.el));
         return;
       }
+      if (payload.type === 'SMALL_RUN_FEE') {
+        state.el.smallRunFee = payload.value;
+      }
       if (payload.type === 'ALLOW_PO') {
         state.el.allowPo = payload.value;
         return;
@@ -233,6 +238,10 @@ type _Update_CO_EL_Actions =
   | {
       type: 'ALLOW_PO';
       value: boolean;
+    }
+  | {
+      type: 'SMALL_RUN_FEE';
+      value: number;
     }
   | {
       type: 'PAYMENT_PENDING';

@@ -10,6 +10,9 @@ const Inventory: React.FC<{
   const { price, inventory } = useTypedSelector_v2(
     (state) => state.product.product,
   );
+  const isEmployeeLoggedIn = useTypedSelector_v2(
+    (state) => !!state.employee.empId,
+  );
 
   const { updatePrice } = useActions_v2();
 
@@ -28,10 +31,16 @@ const Inventory: React.FC<{
       {inventory?.inventory
         .filter((el) => el.colorAttributeOptionId == +attributeOptionId)
         .map((elem) => {
-          return elem.inventory ? (
+          let isInventoryAvailable = !!elem.inventory;
+
+          if (isEmployeeLoggedIn) {
+            isInventoryAvailable = true;
+          }
+
+          return isInventoryAvailable ? (
             <InventoryAvailability
               size={elem.name}
-              qty={elem.inventory}
+              inventoryInStock={elem.inventory}
               price={price?.msrp || 0}
               attributeOptionId={elem.attributeOptionId}
             />

@@ -4,26 +4,37 @@ import {
   GetCartTotals,
   GetCustomerId,
   useActions_v2,
-  useTypedSelector_v2
+  useTypedSelector_v2,
 } from 'hooks_v2';
 // import { useActions_v2, useTypedSelector_v2 } from '@src/hooks';
+import LoginModal from '@appComponents/modals/loginModal';
 import NxtImage from '@appComponents/reUsable/Image';
 import Price from '@appComponents/reUsable/Price';
 import { __pagesText } from '@constants/pages.text';
+import { _modals } from '@definations/product.type';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 
 const MyCartIcon: React.FC = () => {
   const { fetchCartDetails } = useActions_v2();
   const [totalCartQty, setTotalCartQty] = useState(0);
+  const [openModal, setOpenModal] = useState<null | _modals>(null);
 
   const customerId = GetCustomerId();
+  const modalHandler = (param: null | _modals) => {
+    if (param) {
+      setOpenModal(param);
+      return;
+    }
+    setOpenModal(null);
+  };
 
   const isEmployeeLoggedIn = useTypedSelector_v2(
     (state) => state.employee.loggedIn,
   );
   const cartData = useTypedSelector_v2((state) => state.cart.cart);
-
+  const router = useRouter();
   const { totalPrice, totalQty } = GetCartTotals();
   const [Focus, setFocus] = useState(false);
 
@@ -50,20 +61,27 @@ const MyCartIcon: React.FC = () => {
       x-data='{ open: false }'
     >
       <div className='flow-root relative pl-[15px]' x-data='{ open: false }'>
-        <Link href={paths.CART}>
-          <a className='text-quaternary group flex items-center relative pt-[8px] pb-[8px]'>
-            <span className='inline-flex items-center justify-center w-[30px] h-[30px]'>
-              {/*  img link  */}
-              <span className='material-icons'>
-                {' '}
-                <img src="/assets/images/PKhealth/cart-icon-pkhg.png" />
-              </span>
-            </span>{' '}
-            <span className='absolute right-[-5px] top-[1px] rounded-full flex items-center justify-center bg-secondary text-[9px] text-[#000000] pl-[4px] pr-[4px] pt-[2px] pb-[2px] leading-[10px]'>
-              {totalCartQty}
+        <div
+          className='text-quaternary group flex items-center relative mt-[-6px] pt-[8px] pb-[8px]'
+          onClick={() => {
+            if (customerId) {
+              router.push(`/${paths.CART}`);
+            } else {
+              setOpenModal('login');
+            }
+          }}
+        >
+          <span className='inline-flex items-center justify-center w-[30px] h-[30px]  cursor-pointer'>
+            {/*  img link  */}
+            <span className='material-icons'>
+              {' '}
+              <img src='/assets/images/PKhealth/cart-icon-pkhg.png' />
             </span>
-          </a>
-        </Link>
+          </span>{' '}
+          <span className='absolute right-[-5px] top-[1px] rounded-full flex items-center justify-center bg-secondary text-[9px] text-[#000000] pl-[4px] pr-[4px] pt-[2px] pb-[2px] leading-[10px]'>
+            {totalCartQty}
+          </span>
+        </div>
       </div>
       {Focus && totalCartQty > 0 && (
         <div className='absolute top-full right-0 w-80 text-sm shadow-[0_0px_5px_rgb(0,0,0,0.5)] border border-[#f4ede6] tracking-[1px] '>
@@ -126,7 +144,10 @@ const MyCartIcon: React.FC = () => {
                   {totalCartQty} {__pagesText.Headers.totalItemInCartMessage}
                 </div>
                 <div className='text-[16px]  tracking-[3px]'>
-                  {__pagesText.Headers.total} <span className='text-tertiary  tracking-[3px]'><Price value={totalPrice} /></span>
+                  {__pagesText.Headers.total}{' '}
+                  <span className='text-tertiary  tracking-[3px]'>
+                    <Price value={totalPrice} />
+                  </span>
                 </div>
               </div>
               <div className=''>
@@ -140,6 +161,7 @@ const MyCartIcon: React.FC = () => {
           </div>
         </div>
       )}
+      {openModal === 'login' && <LoginModal modalHandler={modalHandler} />}
     </div>
   );
 };

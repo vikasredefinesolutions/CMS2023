@@ -285,7 +285,7 @@ const TemplateFiveListing = ({
                   <>
                     <Link key={product.id} href={`/${product.sename}.html`}>
                       <li
-                        className={`w-7 h-7 border-2 border-primary hover:border-primary`}
+                        className={`w-7 h-7 border-2 border-primary hover:border-tertiary`}
                       >
                         <NxtImage
                           src={`${mediaBaseUrl}${currentProduct.imageName}`}
@@ -300,7 +300,7 @@ const TemplateFiveListing = ({
                       index < listing_max_showcolors - 1 ? (
                         <Link href={`/${subRow.seName}.html`}>
                           <li
-                            className={`w-7 h-7 border-2 border-primary hover:border-primary cursor-pointer`}
+                            className={`w-7 h-7 border-2 border-primary hover:border-tertiary cursor-pointer`}
                             key={`${index}_${subRow.prodcutId}`}
                             onMouseOver={() => setMainImageUrl(subRow.imageurl)}
                             onMouseLeave={() =>
@@ -329,7 +329,7 @@ const TemplateFiveListing = ({
                   product.getProductImageOptionList.map((subRow, index) =>
                     index < listing_max_showcolors ? (
                       <li
-                        className={`w-7 h-7 border-2 hover:border-primary ${
+                        className={`w-7 h-7 border-2 hover:border-tertiary ${
                           subRow.id === currentProduct.id
                             ? ' border-primary'
                             : 'border-secondary'

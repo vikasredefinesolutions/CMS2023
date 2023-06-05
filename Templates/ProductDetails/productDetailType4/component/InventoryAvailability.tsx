@@ -1,4 +1,4 @@
-import { dimax } from '@constants/enum';
+import { brandname, dimax, maxPeter } from '@constants/enum';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import { _CartItem } from '@services/cart';
 import { useState } from 'react';
@@ -10,6 +10,7 @@ interface _props {
   attributeOptionId: number;
   val: number;
   editDetails?: _CartItem;
+  brandName: string | null | undefined;
 }
 const InventoryAvailability: React.FC<_props> = ({
   size,
@@ -19,6 +20,7 @@ const InventoryAvailability: React.FC<_props> = ({
   attributeOptionId,
   val,
   editDetails,
+  brandName,
 }) => {
   const { updateQuantities, updateQuantities3 } = useActions_v2();
   const [value, setValue] = useState<number>(val);
@@ -60,7 +62,11 @@ const InventoryAvailability: React.FC<_props> = ({
 
   return (
     <>
-      <div className='mb-2'>{qty < dimax ? qty : `${dimax}+`}</div>
+      {brandName == brandname ? (
+        <div className='mb-2'>{qty < maxPeter ? qty : `${maxPeter}+`}</div>
+      ) : (
+        <div className='mb-2'>{qty < dimax ? qty : `${dimax}+`}</div>
+      )}
       <div className=''>
         <input
           type='number'

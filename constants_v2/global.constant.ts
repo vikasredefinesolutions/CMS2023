@@ -36,6 +36,7 @@ export const __LocalStorage = {
   compareProducts: '_cmpPdts',
   tempCustomerId: 'tempCustomerId',
   empData: 'empData',
+  empGuest: 'empGuest',
 };
 
 export const __Params = {
@@ -89,6 +90,8 @@ export const EMAIL_REGEX = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
 export const CG_STORE_CODE = 21;
 export const GG_STORE_CODE = 2;
+
+export const PKHG_MINIMUM_QTY = 10;
 
 export const states: Option[] = [
   { text: 'State/Provice *', value: '' },
