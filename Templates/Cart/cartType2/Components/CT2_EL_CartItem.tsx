@@ -34,7 +34,7 @@ import {
   create_cartLogoPersonDetailModels,
   create_cartLogoPersonModel,
   initialSizeWithPriceNQtyGetter,
-} from '../../Cart_Type1/Components/CT1_EL_Extras';
+} from '../../Cart_Type1/components/CT1_EL_Extras';
 import CT2_EL_SizeQtyPrice from './CT2_EL_SizeQtyPrice';
 
 interface _Props {
