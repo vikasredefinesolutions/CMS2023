@@ -144,7 +144,10 @@ const CustomizeLogo: React.FC<_Props> = ({
                 />
               )}
               {showOrSelect === 'SHOW' && (
-                <LogosToPrint setShowOrSelect={setShowOrSelect} />
+                <LogosToPrint
+                  setShowOrSelect={setShowOrSelect}
+                  setShowLogoComponent={setShowLogoComponent}
+                />
               )}
             </div>
             {/* <button

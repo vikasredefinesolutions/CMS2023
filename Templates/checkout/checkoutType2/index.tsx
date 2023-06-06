@@ -611,6 +611,7 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
           phone: ShippingFormik.values.Phone,
           fax: ShippingFormik.values.fax ? ShippingFormik.values.fax : '',
           countryName: ShippingFormik.values.CountryName,
+
           countryCode: ShippingFormik.values.countryCode || '',
           addressType: UserAddressType.BILLINGADDRESS,
           isDefault: true,
@@ -645,9 +646,9 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
           city: ShippingFormik.values.city,
           state: ShippingFormik.values.state,
           postalCode: ShippingFormik.values.postalCode,
-          phone: ShippingFormik.values.phone,
+          phone: ShippingFormik.values.Phone,
           fax: ShippingFormik.values.fax ? ShippingFormik.values.fax : '',
-          countryName: ShippingFormik.values.countryName,
+          countryName: ShippingFormik.values.CountryName,
           countryCode: ShippingFormik.values.countryCode || '',
           addressType: UserAddressType.SHIPPINGADDRESS,
           isDefault: true,
@@ -673,9 +674,9 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
           city: Billingformik.values.city,
           state: Billingformik.values.state,
           postalCode: Billingformik.values.postalCode,
-          phone: Billingformik.values.phone,
+          phone: Billingformik.values.Phone,
           fax: Billingformik.values.fax ? Billingformik.values.fax : '',
-          countryName: Billingformik.values.countryName,
+          countryName: Billingformik.values.CountryName,
           countryCode: Billingformik.values.countryCode || '',
           addressType: UserAddressType.BILLINGADDRESS,
           isDefault: true,
@@ -908,7 +909,7 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
                           </div>
                           <div className=''>
                             <button
-                              className='btn btn-lg btn-secondary'
+                              className='btn btn-lg btn-primary'
                               onClick={() => setshowPayment(true)}
                             >
                               {__pagesText.CheckoutPage.GoToPayment}
@@ -981,7 +982,7 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
                         />
                         <div className='max-w-[278px]'>
                           <button
-                            className='btn btn-lg !w-full text-center btn-secondary mb-[8px]'
+                            className='btn btn-lg !w-full text-center btn-primary mb-[8px]'
                             id='btn-review-order'
                             onClick={() => {
                               reviewOrder();

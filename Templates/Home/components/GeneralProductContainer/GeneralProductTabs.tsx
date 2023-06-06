@@ -3,6 +3,7 @@ import React, { Fragment, useEffect, useState } from 'react';
 
 // ** MUI Imports
 import { __pagesConstant } from '@constants/pages.constant';
+import { newFetauredItemResponse } from '@definations/productList.type';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
@@ -23,6 +24,7 @@ interface _props {
   showBrandLogo: string;
   footerTabing: string;
   productToDisplay: string;
+  featuredItems: { [x: string]: newFetauredItemResponse[] };
 }
 
 // ** Styled Tab component
@@ -47,6 +49,7 @@ const ProductsInfoTabs: React.FC<_props> = (props) => {
     showBrandLogo,
     footerTabing,
     productToDisplay,
+    featuredItems,
   } = props;
 
   // ** State
@@ -131,6 +134,7 @@ const ProductsInfoTabs: React.FC<_props> = (props) => {
                 <TabPanel sx={{ p: 0 }} value={product.index}>
                   <BrandProductListing
                     customMessage={customMessage}
+                    featuredItems={featuredItems}
                     showBorder={showBorder}
                     showProductName={showProductName}
                     showSplitProducts={showSplitProducts}

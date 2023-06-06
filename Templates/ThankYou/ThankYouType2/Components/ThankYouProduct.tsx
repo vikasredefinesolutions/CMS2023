@@ -24,7 +24,7 @@ const ThankYouProduct: React.FC<_props> = ({ product }) => {
     <>
       <li className='flex pt-[20px] pb-[20px] flex-wrap md:pl-[15px] md:pr-[15px]'>
         <div className='w-full lg:w-4/12 px-[15px] mt-[15px]'>
-          <Link href={product.seName == null ? '' : product.seName}>
+          <Link href={`/${product.seName}.html`}>
             <div>
               <NxtImage
                 src={product.colorImage}
@@ -36,7 +36,7 @@ const ThankYouProduct: React.FC<_props> = ({ product }) => {
         </div>
         <div className='w-full lg:w-8/12 md:pl-[15px] md:pr-[15px] mt-[15px]'>
           <div className='text-sub-text font-[600]'>
-            <Link href={product.seName ? product.seName : ''}>
+            <Link href={`/${product.seName}.html`}>
               <a className='text-black hover:text-anchor-hover'>
                 {product.productName}
               </a>

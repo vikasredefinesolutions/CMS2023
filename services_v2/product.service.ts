@@ -518,8 +518,7 @@ export const SendCompareLinkByEmail = async (payload: {
     },
     request: {
       url: url,
-      method: 'POST',
-      data: payload,
+      method: 'GET',
     },
   });
 

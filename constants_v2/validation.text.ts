@@ -54,10 +54,18 @@ export const __ValidationText = {
       maxLength: 40,
     },
     Gender: { required: 'Select gender' },
+    jobTitle: {
+      required: 'Please enter job title',
+    },
     companyName: {
       required: 'Enter your company name',
       minLength: 3,
       maxLength: 40,
+    },
+    industryType: {
+
+      required: 'Select Industry Type.',
+
     },
     companyId: { required: 'Select an Industry' },
     email: {

@@ -125,7 +125,9 @@ const ResetPassword_type1: React.FC<{ token: string }> = ({ token }) => {
                         <div className='mt-[15px]'>
                           <button
                             type={'submit'}
-                            className='btn btn-secondary btn-md w-full'
+                            className={`btn ${
+                              storeId === 7 ? 'btn-primary' : 'btn-secondary'
+                            } btn-md w-full`}
                           >
                             RESET PASSWORD
                           </button>

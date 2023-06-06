@@ -151,6 +151,7 @@ export interface _Product_SizeQtys {
   qty: number;
   price: number;
   color?: string | undefined;
+  aditionalCharges?: number | undefined;
 }
 
 export interface _AvailableLocationDetailsOtherStores {

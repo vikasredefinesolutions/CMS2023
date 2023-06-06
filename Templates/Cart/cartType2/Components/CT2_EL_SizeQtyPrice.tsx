@@ -55,7 +55,7 @@ const CT2_EL_SizeQtyPrice: React.FC<_Props> = ({
   const storeId = useTypedSelector_v2((state) => state.store.id);
   const cartData = useTypedSelector_v2((state) => state.cart.cart);
 
-  const handleRemoveItem = async (itemId: number) => {
+  const handleRemoveItem = (itemId: number) => {
     const userConfirmsToDelete = confirm(cartRemoveConfirmMessage);
     if (userConfirmsToDelete) {
       setShowLoader(true);
@@ -81,20 +81,18 @@ const CT2_EL_SizeQtyPrice: React.FC<_Props> = ({
     });
     setShowLoader(false);
   };
-  const handleSizeRemove = (view: any, item: any) => {
-    // console.log(view);
+  const handleSizeRemove = async (view: any, item: any) => {
+    if (item.shoppingCartItemDetailsViewModels.length === 1) {
+      return handleRemoveItem(item.shoppingCartItemsId);
+    }
     const payload = {
       deletecartlogopersonmodel: {
         cartLogoPersonId: view,
         attributeOptionId: +item.attributeOptionId,
       },
     };
-    // console.log(payload, 'payload');
     const confirmRes = confirm(cartRemoveConfirmMessage);
     if (confirmRes) {
-      if (item.shoppingCartItemDetailsViewModels.length === 1) {
-        return handleRemoveItem(item.shoppingCartItemsId);
-      }
       setShowLoader(true);
       removeParticularSizeProduct(payload)
         .then((res) => {

@@ -1,8 +1,6 @@
 import WishlistButton from '@appComponents/ui/Wishlist';
 import { _OtherImage } from '@definations/APIs/colors.res';
-import SocialShare from '@templates/Home/components/SocialShare';
 import { _ProductImgProps } from '@templates/ProductDetails/Components/productDetailsComponents';
-import Image from 'appComponents_v2/reUsable/Image';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
 import React, { useEffect, useState } from 'react';
 import InnerImageZoom from 'react-inner-image-zoom';
@@ -102,8 +100,8 @@ const ProductImg: React.FC<_ProductImgProps> = ({ product }) => {
                     className={`md:border hover:border-secondary p-[3px] mt-[5px] mb-[5px] last:mb-0 bg-white cursor-pointer ${highlight}`}
                     onClick={() => selectImgHandler(img)}
                   >
-                    <Image
-                      src={img.imageUrl}
+                    <img
+                      src={`${mediaBaseUrl}${img.imageUrl}`}
                       alt={img.altTag}
                       className='w-full object-center object-cover'
                       title={img.altTag}
@@ -130,7 +128,7 @@ const ProductImg: React.FC<_ProductImgProps> = ({ product }) => {
         </div>
       </div>
       {/* Social Media third Party */}
-      <SocialShare />
+      {/* <SocialShare /> */}
     </div>
   );
 };

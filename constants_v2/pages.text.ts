@@ -143,6 +143,7 @@ export const __pagesText = {
     checkInventoryPricing: 'Check Inventory And Your Pricing',
     addTocart: 'ADD TO CART',
     contactUs: 'Contact us for Available Inventory',
+    callUs: 'CALL US FOR PRICE',
     Discontinued: 'Discontinued',
     somLogoOption: {
       addLogoLater: 'Add Logo Later',
@@ -166,7 +167,7 @@ export const __pagesText = {
       reviews: 'reviews',
     },
     quantity: 'Quantity:',
-    quantityDisc: "QUANTITY DISCOUNT",
+    quantityDisc: 'QUANTITY DISCOUNT',
     price: 'Price:',
     visibility: 'visibility',
     confirm: 'Confirm',
@@ -500,6 +501,10 @@ export const __pagesText = {
     wishlist: 'WISHLIST',
     removeButton: 'Remove',
     viewButton: 'View',
+    emptyWishlistEmptyTitle: 'Wishlist is Empty.',
+    emptyWishlistEmptyDescription: `There's nothing in your wishlist.`,
+    notToWorry: 'Not to worry: we have lots of other great finds.',
+    startShopping: 'START SHOPPING',
   },
   PageNotFound: {
     pageNotFound: 'PAGE NOT FOUND',

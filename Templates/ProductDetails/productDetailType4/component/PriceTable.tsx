@@ -42,7 +42,11 @@ const QtyPriceTable: React.FC<{
         }),
       );
     }
-  }, [selectedColor.attributeOptionId, customerId, selectedColor]);
+  }, [
+    selectedColor.attributeOptionId,
+    customerId,
+    selectedColor.productSEName,
+  ]);
 
   return (
     <>

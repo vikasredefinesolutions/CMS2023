@@ -2,7 +2,7 @@ import { UserAddressType } from '@constants/enum';
 import {
   __Cookie,
   __Cookie_Expiry,
-  __UserMessages,
+  __UserMessages
 } from '@constants/global.constant';
 import { paths } from '@constants/paths.constant';
 import { _Industry } from '@definations/app.type';
@@ -10,7 +10,7 @@ import {
   KlaviyoScriptTag,
   deleteCookie,
   extractCookies,
-  setCookie,
+  setCookie
 } from '@helpers/common.helper';
 import getLocation from '@helpers/getLocation';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
@@ -18,14 +18,14 @@ import { updateCartByNewUserId } from '@services/cart.service';
 import {
   FetchCountriesList,
   FetchIndustriesList,
-  FetchStatesList,
+  FetchStatesList
 } from '@services/general.service';
 import { _CreateNewAccount_Payload } from '@services/payloads/createNewAccount.payload';
 import {
   CreateNewAccount,
   GetStoreCustomer,
   getLocationWithZipCode,
-  signInUser,
+  signInUser
 } from '@services/user.service';
 import { getWishlist } from '@services/wishlist.service';
 import { Form, Formik } from 'formik';
@@ -34,7 +34,7 @@ import React, { useEffect, useState } from 'react';
 import {
   _SU2_InitialValues,
   _Signup2Schema,
-  su2_initialValues,
+  su2_initialValues
 } from './SU2.extras';
 
 const SignUp_type2: React.FC = () => {
@@ -263,6 +263,7 @@ const SignUp_type2: React.FC = () => {
               touched,
               errors,
             }) => {
+              console.log(errors)
               return (
                 <Form>
                   <div className='flex flex-wrap -mx-3 gap-y-6'>
@@ -292,7 +293,7 @@ const SignUp_type2: React.FC = () => {
 
                     <div className='w-full lg:w-1/2 px-3'>
                       <label className='mb-[4px] text-normal-text'>
-                        Organization Name
+                        Organization Name <span className='text-rose-500'>*</span>
                       </label>
                       <div className=''>
                         <input
@@ -322,6 +323,9 @@ const SignUp_type2: React.FC = () => {
                           onChange={handleChange}
                           onBlur={handleBlur}
                         />
+                     </div>
+                      <div className='text-red-500 text-s'>
+                        {touched.departmentName && errors.departmentName}
                       </div>
                     </div>
 
@@ -350,7 +354,7 @@ const SignUp_type2: React.FC = () => {
                         </span>
                       </button>
                       <div className='text-red-500 text-s'>
-                        {touched.firstname && errors.firstname}
+                        {touched.password && errors.password}
                       </div>
                     </div>
 
@@ -434,7 +438,7 @@ const SignUp_type2: React.FC = () => {
 
                     <div className='w-full lg:w-1/2 px-3'>
                       <label className='mb-[4px] text-normal-text'>
-                        Zip Code
+                        Zip Code <span className='text-rose-500'>*</span>
                       </label>
                       <div className=''>
                         <input
@@ -449,10 +453,13 @@ const SignUp_type2: React.FC = () => {
                           className='form-input !w-[calc(100%-40px)]'
                         />
                       </div>
+                      <div className='text-red-500 text-s'>
+                        {touched.zipCode && errors.zipCode}
+                      </div>
                     </div>
 
                     <div className='w-full lg:w-1/2 px-3'>
-                      <label className='mb-[4px] text-normal-text'>City</label>
+                      <label className='mb-[4px] text-normal-text'>City  <span className='text-rose-500'>*</span></label>
                       <div className=''>
                         <input
                           id=''
@@ -464,10 +471,13 @@ const SignUp_type2: React.FC = () => {
                           className='form-input !w-[calc(100%-40px)]'
                         />
                       </div>
+                      <div className='text-red-500 text-s'>
+                        {touched.cityName && errors.cityName}
+                      </div>
                     </div>
 
                     <div className='w-full lg:w-1/2 px-3'>
-                      <label className='mb-[4px] text-normal-text'>State</label>
+                      <label className='mb-[4px] text-normal-text'>State  <span className='text-rose-500'>*</span></label>
                       <div className=''>
                         <select
                           className='form-input !w-[calc(100%-40px)]'
@@ -492,11 +502,14 @@ const SignUp_type2: React.FC = () => {
                           </>
                         </select>
                       </div>
+                      <div className='text-red-500 text-s'>
+                        {touched.state && errors.state}
+                      </div>
                     </div>
 
                     <div className='w-full lg:w-1/2 px-3'>
                       <label className='mb-[4px] text-normal-text'>
-                        Country
+                        Country <span className='text-rose-500'>*</span>
                       </label>
                       <div className=''>
                         <select
@@ -524,6 +537,9 @@ const SignUp_type2: React.FC = () => {
                             ))}
                           </>
                         </select>
+                      </div>
+                      <div className='text-red-500 text-s'>
+                        {touched.country && errors.country}
                       </div>
                     </div>
 

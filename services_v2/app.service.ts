@@ -19,14 +19,13 @@ export const GetStoreID = async (
   domain: string,
 ): Promise<_StoreDetails | null> => {
   const url = `Store/getstorebydomain.json`;
-
+console.log(url);
   try {
     const response = await SendAsync<_StoreDetails>({
       url: url,
       method: 'POST',
       data: { url: domain },
     });
-
     return response;
   } catch (error) {
     return null;

@@ -43,19 +43,28 @@ const BannerType4: React.FC<_BannerComponentProps> = ({
           </>
         )}
         <div className='container pl-[15px] pr-[15px] mx-auto'>
-          <div className='items-center sm:pl-[40px] sm:pr-[40px] sm:pt-[40px] sm:pb-[40px] md:pl-[40px] md:pr-[0px] md:pt-[35px] md:pb-[40px] pl-[0px] pr-[0px] pt-[16px] pb-[16px] bg-light-gray'>
+          <div className={`${banner[0] && banner[0].brandImage ? 'items-center sm:pl-[20px] sm:pr-[20px] sm:pt-[20px] sm:pb-[20px] md:pl-[20px] md:pr-[0px] md:pt-[20px] md:pb-[15px] pl-[0px] pr-[0px] pt-[16px] pb-[16px] bg-light-gray' : 'items-center sm:pl-[40px] sm:pr-[40px] sm:pt-[40px] sm:pb-[40px] md:pl-[40px] md:pr-[0px] md:pt-[35px] md:pb-[40px] pl-[0px] pr-[0px] pt-[16px] pb-[16px] bg-light-gray'}`}>
             <div className='flex flex-wrap items-center gap-y-[40px]'>
               <div className='w-full text-[#000000] md:pl-[0px] md:pr-[0px] pl-[16px] pr-[16px]'>
+              {banner[0] && (banner[0].brandImage || banner[0].banner) ? (
                 <div className='text-2xl-text pb-[10px]'>
-                  <img src={`${mediaBaseUrl}${banner[0].brandImage}`} />
+                  <img src={`${mediaBaseUrl}${banner[0].brandImage}`} className='max-h-[100px]' />
+                </div>) : (
+                  <div className='text-2xl-text pb-[10px]'>
+                  {banner[0].name}
                 </div>
-                <div className='text-sub-text pb-[5px]'>{banner[0].h2}</div>
-                <div
-                  className='text-default-text font-default-text text-color-default-text'
-                  dangerouslySetInnerHTML={{
-                    __html: banner[0].description,
-                  }}
-                ></div>
+                ) }
+                {banner[0].h2 && 
+                  <div className='text-sub-text pb-[5px]'>{banner[0].h2}</div>
+                }
+                {banner[0].description && 
+                    <div
+                      className='text-default-text font-default-text text-color-default-text'
+                      dangerouslySetInnerHTML={{
+                        __html: banner[0].description,
+                      }}
+                    ></div>
+                }
               </div>
             </div>
           </div>

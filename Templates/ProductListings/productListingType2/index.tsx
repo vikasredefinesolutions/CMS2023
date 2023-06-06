@@ -1,6 +1,6 @@
 import { __pagesText } from '@constants/pages.text';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
-import React, { Fragment, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { _ListingProps } from '../ProductListingType';
 import FilterBarTypeTwo from './components/FilterBarTypeTwo';
 import FilterChipsTypeTwo from './components/FilterChipsTypeTwo';
@@ -109,15 +109,14 @@ const ProductListingType2: React.FC<_ListingProps> = ({
                         }
                       >
                         {products.map((product, index) => (
-                          <Fragment key={index}>
-                            <TemplateTwoListing
-                              productView={productView}
-                              skuList={skuList}
-                              compareCheckBoxHandler={compareCheckBoxHandler}
-                              product={product}
-                              colorChangeHandler={colorChangeHandler}
-                            />
-                          </Fragment>
+                          <TemplateTwoListing
+                            key={product.id}
+                            productView={productView}
+                            skuList={skuList}
+                            compareCheckBoxHandler={compareCheckBoxHandler}
+                            product={product}
+                            colorChangeHandler={colorChangeHandler}
+                          />
                         ))}
                       </ul>
                     </div>

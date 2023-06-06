@@ -85,8 +85,10 @@ const Header_Category: React.FC<_props> = ({ content, title, url }) => {
               type='button'
               onMouseOver={() => setFocus(true)}
               onMouseLeave={() => setFocus(false)}
-              className={`relative text-[12px] xl:text-[14px] xl:ml-[21px] xl:mr-[20px] ml-[5px] mr-[5px] tracking-[2px] z-10 flex items-center font-[400] border-0 pt-[10px] pb-[10px] border-transparent hover:border-primary text-quaternary before:absolute before:bottom-[0px] before:content-[''] before:border-y-solid before:border-t-transparent before:border-x-transparent before:h-0 before:w-0 before:border-b-gray-100 before:border-[10px] before:left-1/2 before:-translate-x-1/2 before:inline-block ${
-                focus ? '' : 'before:hidden'
+              className={`relative text-[12px] xl:text-[14px] xl:ml-[21px] xl:mr-[20px] ml-[5px] mr-[5px] tracking-[2px] z-10 flex items-center font-[400] border-0 pt-[10px] pb-[10px] border-transparent hover:border-primary text-quaternary ${
+                focus
+                  ? ` before:absolute before:bottom-[0px] before:content-[''] before:border-y-solid before:border-t-transparent before:border-x-transparent before:h-0 before:w-0 before:border-b-gray-100 before:border-[10px] before:left-1/2 before:-translate-x-1/2 before:inline-block`
+                  : ` before:hidden `
               }`}
             >
               <span
@@ -134,7 +136,7 @@ const Header_Category: React.FC<_props> = ({ content, title, url }) => {
                   <ul className='w-full lg:w-1/2 text-[13px] pl-[20px] pr-[20px]'>
                     {content?.map((item, index) => {
                       if (
-                        index >= content.length / 2 &&
+                        index > content.length / 2 &&
                         index <= (content.length / 2) * 2 + 1
                       )
                         return (

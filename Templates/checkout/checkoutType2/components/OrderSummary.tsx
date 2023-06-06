@@ -349,7 +349,7 @@ const OrderSummary: React.FC<_props> = ({
           <div className='mt-[16px] mb-[16px]'>
             {currentpage === checkoutPages.reviewOrder && (
               <button
-                className={`btn btn-lg !w-full text-center btn-secondary mb-[8px] ${
+                className={`btn btn-lg !w-full text-center btn-primary mb-[8px] ${
                   disablePlaceOrder() ? 'opacity-50' : ''
                 }`}
                 disabled={disablePlaceOrder()}

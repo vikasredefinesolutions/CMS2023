@@ -397,8 +397,8 @@ export function domainToShow(payload: {
 }): string {
   let domain = __domain.localDomain; // DEFAULT DOMAIN
 
-  if (payload.showProd && payload.domain) {
-    domain = payload.domain;
+  if (payload.showProd) {
+    domain = payload.domain!;
   }
 
   conditionalLog_V2({
@@ -584,7 +584,11 @@ export const getAddToCartObject = async (product: _Props): Promise<CartReq> => {
         attributeOptionId: res.attributeOptionId,
         attributeOptionValue: res.size,
         code: '',
-        price: price ? price : res.price,
+        price: price
+          ? price
+          : res.aditionalCharges
+          ? res.price + res.aditionalCharges
+          : res.price,
         quantity: res.qty,
         estimateDate: new Date(),
         isEmployeeLoginPrice: 0,

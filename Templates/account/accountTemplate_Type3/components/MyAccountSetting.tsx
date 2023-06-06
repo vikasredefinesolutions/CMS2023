@@ -378,7 +378,7 @@ const AccountSetting = () => {
                             }}
                             className='btn btn-primary btn-md'
                           >
-                            {__pagesText.accountPage.profileEdit}
+                            {__pagesText.accountPage.profileEdit}--
                           </button>
                         ) : (
                           <>

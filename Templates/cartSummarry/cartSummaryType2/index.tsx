@@ -71,7 +71,7 @@ const CartSummarryType2: FC<_props> = ({ selectedShippingModel }) => {
               <span>First Logo</span>
             </dt>
             <dd className=''>
-              {firstLogoPrice > 0 ? <Price value={firstLogoPrice} /> : 0}
+              {firstLogoPrice > 0 ? <Price value={firstLogoPrice} /> : 'FREE'}
             </dd>
           </div>
           {secondLogoPrice > 0 && (

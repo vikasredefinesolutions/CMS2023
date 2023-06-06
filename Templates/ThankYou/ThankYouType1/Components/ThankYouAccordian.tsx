@@ -6,15 +6,15 @@ import {
 } from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
 import { __ValidationText } from '@constants/validation.text';
+import { KlaviyoScriptTag, setCookie } from '@helpers/common.helper';
 import {
-  KlaviyoScriptTag,
-  deleteCookie,
-  extractCookies,
-  setCookie,
-} from '@helpers/common.helper';
-import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
+  GetCustomerId,
+  useActions_v2,
+  useTypedSelector_v2,
+} from '@hooks_v2/index';
 import { fetchCartDetails } from '@redux/asyncActions/cart.async';
 import { updateCartByNewUserId } from '@services/cart.service';
+import { checkCustomerAlreadyExist } from '@services/checkout.service';
 import {
   GetStoreCustomer,
   createAccountWithoutCompany,
@@ -24,7 +24,7 @@ import { getWishlist } from '@services/wishlist.service';
 import { _ThankYouProps } from '@templates/ThankYou/ThankYou';
 import { Form, Formik } from 'formik';
 import { useRouter } from 'next/router';
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import * as Yup from 'yup';
 import ThankYouSubTotal from '../../CommonComponents/ThankYouSubTotal';
 import ThankYouProduct from './ThankYouProduct';
@@ -33,12 +33,18 @@ const ThankYouAccordian: React.FC<_ThankYouProps> = ({ order }) => {
   const [showAccordian, setshowAccordian] = useState<boolean>(true);
 
   const guest = useTypedSelector_v2((state) => state.cart);
+  const [isguest, setIsGuest] = useState<boolean>();
   const storeId = useTypedSelector_v2((state) => state.store.id);
+  const cusID = GetCustomerId();
   const { loggedIn: isEmployeeLoggedIn, isLoadingComplete } =
     useTypedSelector_v2((state) => state.employee);
-  const { logInUser, updateWishListData, setShowLoader, showModal } =
-    useActions_v2();
-  const user = useTypedSelector_v2((state) => state.user);
+  const {
+    logInUser,
+    updateWishListData,
+    setShowLoader,
+    showModal,
+    updateCustomer,
+  } = useActions_v2();
   const router = useRouter();
 
   const initialValues = {
@@ -51,6 +57,18 @@ const ThankYouAccordian: React.FC<_ThankYouProps> = ({ order }) => {
       .max(__ValidationText.signUp.password.maxLength)
       .nullable(),
   });
+  useEffect(() => {
+    checkCustomerAlreadyExist(order?.billing?.billingEmail, storeId).then(
+      (res) => {
+        if (res) {
+          setIsGuest(res.isCustomerExist);
+        }
+      },
+    );
+
+    return () => {};
+  }, []);
+
   const submitHandler = async (values: any) => {
     const addAccount = {
       storeCustomerGuestModel: {
@@ -81,25 +99,18 @@ const ThankYouAccordian: React.FC<_ThankYouProps> = ({ order }) => {
                 });
                 setCookie(__Cookie.userId, user.id, __Cookie_Expiry.userId);
 
-                GetStoreCustomer(+user.id).then((res) => {
+                GetStoreCustomer(+user.id).then(async (res) => {
                   if (res === null) return;
-                  if (localStorage) {
-                    const tempCustomerId = extractCookies(
-                      __Cookie.tempCustomerId,
-                      'browserCookie',
-                    ).tempCustomerId;
-
-                    if (tempCustomerId) {
-                      updateCartByNewUserId(~~tempCustomerId, res.id).then(
-                        () => {
-                          fetchCartDetails({
-                            customerId: res.id,
-                            isEmployeeLoggedIn: isEmployeeLoggedIn,
-                          });
-                        },
-                      );
-                      deleteCookie(__Cookie.tempCustomerId);
-                    }
+                  if (order.billing && res) {
+                    await updateCartByNewUserId(
+                      order.billing?.customerID,
+                      res.id,
+                    ).then((rest) => {
+                      fetchCartDetails({
+                        customerId: res.id,
+                        isEmployeeLoggedIn: isEmployeeLoggedIn,
+                      });
+                    });
                   }
 
                   const userInfo = {
@@ -113,6 +124,8 @@ const ThankYouAccordian: React.FC<_ThankYouProps> = ({ order }) => {
                   };
 
                   KlaviyoScriptTag(['identify', userInfo]);
+
+                  updateCustomer({ customer: res });
 
                   getWishlist(res.id).then((wishListResponse) => {
                     updateWishListData(wishListResponse);
@@ -139,7 +152,6 @@ const ThankYouAccordian: React.FC<_ThankYouProps> = ({ order }) => {
         }
       })
       .catch((error) => {
-        console.log(error, 'error');
         const keyRes = Object.keys(error).find((obj) =>
           obj.includes('storeCustomerGuestModel.'),
         );
@@ -152,7 +164,7 @@ const ThankYouAccordian: React.FC<_ThankYouProps> = ({ order }) => {
   };
   return (
     <>
-      {guest.isCustomerExist !== true ? (
+      {!isguest ? (
         <>
           <div className='text-title-text mb-[10px] mt-[20px]'>
             Save your information for next time

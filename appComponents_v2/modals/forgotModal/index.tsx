@@ -35,6 +35,7 @@ const ForgotModal: React.FC<_ModalProps> = ({ modalHandler }) => {
         setErrorStatement(true);
       }
     } else {
+      alert('Email Cannot be empty');
       setErrorStatement(true);
     }
   };
@@ -131,7 +132,9 @@ const ForgotModal: React.FC<_ModalProps> = ({ modalHandler }) => {
                   ) : ( */}
                   <div className=''>
                     <button
-                      className='btn btn-md btn-secondary w-full pk-hg-primary'
+                      className={`btn btn-md ${
+                        storeId === 7 ? 'btn-primary' : 'btn-secondary'
+                      } w-full pk-hg-primary`}
                       onClick={() => forgotPassword(Email)}
                     >
                       {__pagesText.productInfo.forgotModal.forgotPassword}{' '}

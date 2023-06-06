@@ -50,6 +50,14 @@ const Header_Type5: NextPage<_HeaderProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [width]);
 
+  const showComponent = () => {
+    if (router.asPath === paths.CHECKOUT) {
+      return false;
+    }
+
+    return true;
+  };
+
   return (
     <div
       className={`bg-[${headerBgColor}] sticky top-7 z-40  shadow-[0_0px_5px_rgba(0,0,0,0.12)]`}
@@ -58,7 +66,7 @@ const Header_Type5: NextPage<_HeaderProps> = ({
       {/* <NotificationBar /> */}
 
       <div className={`bg-[${headerBgColor}]`}>
-        {isMobileView && router.asPath != paths.CHECKOUT && (
+        {isMobileView && showComponent() && (
           <Header_MenuItems
             showSideMenu={showSideMenu}
             // storeCode={storeCode}
@@ -124,9 +132,9 @@ const Header_Type5: NextPage<_HeaderProps> = ({
                     <div className='w-1/2 md:w-1/3 flex items-center justify-end'>
                       <div className='flex divide-x gap-[10px]'>
                         {/* <div className='flex items-center '> */}
-                        <LoginIcon />
-                        <LoggedInMenu />
-                        <WishListIcon />
+                        {showComponent() && <LoginIcon />}
+                        {showComponent() && <LoggedInMenu />}
+                        {showComponent() && <WishListIcon />}
                         <MyCartIcon />
                         {/* </div> */}
                       </div>
@@ -134,11 +142,13 @@ const Header_Type5: NextPage<_HeaderProps> = ({
                   </div>
                 </div>
 
-                {isMobileView && <SearchBar screen={'MOBILE'} />}
+                {isMobileView && showComponent() && (
+                  <SearchBar screen={'MOBILE'} />
+                )}
               </div>
               {isMobileView
                 ? null
-                : router.asPath != paths.CHECKOUT && (
+                : showComponent() && (
                     <Header_MenuItems
                       showSideMenu={showSideMenu}
                       screen='DESKTOP'

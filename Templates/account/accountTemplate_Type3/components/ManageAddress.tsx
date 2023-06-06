@@ -10,9 +10,9 @@ import EditIcon from '@mui/icons-material/Edit';
 import { FormControlLabel } from '@mui/material';
 import {
   CreateUserAddress,
+  UpdateUserAddress,
   deleteCustomerAddress,
   udpateIsDefaultAddress,
-  UpdateUserAddress,
 } from '@services/address.service';
 import { GetAdminCustomerUsers } from '@services/user.service';
 import { useEffect, useState } from 'react';
@@ -175,25 +175,6 @@ const ManageAddress = () => {
                   Billing Address
                 </button>
               </li>
-              {customer?.customerRoleId === 0 ||
-              customer?.customerRoleId === 2 ? (
-                <li className='font-semibold mt-8 sm:mt-0 md:mt-0 lg:mt-0'>
-                  <button
-                    onClick={() => setShowTab(UserAddressType.OTHERUSERADDRESS)}
-                    className={`tab py-2 px-2 block btn-lg  ${
-                      showTab === UserAddressType.SHIPPINGADDRESS ||
-                      showTab === UserAddressType.BILLINGADDRESS
-                        ? 'btn-secondary border-spacing-0'
-                        : 'text-black py-[15px] block text-center uppercase btn-primary'
-                    } uppercase`}
-                    style={{ borderWidth: '0px' }}
-                  >
-                    Other User Address
-                  </button>
-                </li>
-              ) : (
-                <></>
-              )}
             </ul>
             <div className='mx-auto pt-[40px] max-w-[1050px]'>
               <div className='panel-01 tab-content pb-4'>

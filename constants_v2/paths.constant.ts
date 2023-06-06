@@ -101,14 +101,4 @@ export const __SpecialBreadCrumbsPaths = [
     name: 'Request Thankyou',
     directTo: null,
   },
-  {
-    path: [paths.TERMS_OF_USE],
-    name: 'Term & Condition',
-    directTo: null,
-  },
-  {
-    path: [paths.PRIVACY_POLICY],
-    name: 'Privacy Policy',
-    directTo: null,
-  },
 ];

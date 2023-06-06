@@ -1,14 +1,16 @@
 import { _SelectedBrands } from '@definations/APIs/storeDetails.res';
+import { newFetauredItemResponse } from '@definations/productList.type';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import React from 'react';
 import BrandProductListing from './GeneralProductContainer/BrandProducsListing';
 import ProductsInfoTabs from './GeneralProductContainer/GeneralProductTabs';
 interface _props {
   dataArr: _SelectedBrands;
+  featuredItems: { [x: string]: newFetauredItemResponse[] };
 }
 
 const FeaturedProducts: React.FC<_props> = (props) => {
-  const { dataArr } = props;
+  const { dataArr, featuredItems } = props;
   const storeCode = useTypedSelector_v2((state) => state.store.code);
   let fTitle = dataArr?.sectionTitle?.value;
   return (
@@ -34,6 +36,7 @@ const FeaturedProducts: React.FC<_props> = (props) => {
         dataArr.featuredproducts.value.length > 1 ? (
           <ProductsInfoTabs
             data={dataArr?.featuredproducts?.value}
+            featuredItems={featuredItems}
             showBorder={dataArr?.featuredproducts_show_border?.value}
             customMessage={dataArr?.featuredproducts_custom_message?.value}
             showProductName={dataArr?.featuredproducts_show_product_name?.value}
@@ -54,6 +57,7 @@ const FeaturedProducts: React.FC<_props> = (props) => {
           <div className='relative pt-[30px] '>
             <BrandProductListing
               showBorder={dataArr?.featuredproducts_show_border?.value}
+              featuredItems={featuredItems}
               productsData={dataArr?.featuredproducts?.value[0]}
               customMessage={dataArr?.featuredproducts_custom_message?.value}
               footerTabing={

@@ -10,9 +10,9 @@ import {
   PersonalizationLocation,
 } from '@services/cart';
 import CartSummarryType5 from '@templates/cartSummarry/cartSummaryType5';
+import CartItem from 'Templates/cartItem';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
-import CartItem from 'Templates/cartItem';
 import { _CartProps } from '../Cart';
 import EmptyCart from '../components/emptyCart';
 

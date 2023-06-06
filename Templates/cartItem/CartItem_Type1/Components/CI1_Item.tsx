@@ -410,7 +410,7 @@ const CI1_Item: React.FC<_CartItem & _Props> = (props) => {
                             <div className='mb-3 flex'>
                               {_item.logoImagePath === '' ? (
                                 <NxtImage
-                                  className='w-14 h-12'
+                                  className='w-[60px]'
                                   src='/assets/images/logo-to-be-submitted.webp'
                                   title=''
                                   alt={_item.logoImagePath}
@@ -418,7 +418,7 @@ const CI1_Item: React.FC<_CartItem & _Props> = (props) => {
                                 />
                               ) : (
                                 <NxtImage
-                                  className='w-14 h-12'
+                                  className='w-[60px]'
                                   src={_item.logoImagePath}
                                   title=''
                                   alt={_item.logoImagePath}

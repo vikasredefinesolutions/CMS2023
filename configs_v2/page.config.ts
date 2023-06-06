@@ -3,8 +3,8 @@
 export const _Store = {
   type1: 'CG',
   type2: 'GG',
-  type3: 'PKHG',
   type4: 'DI',
+  type3: 'PKHG',
 };
 
 export const _StoreDomains = {
@@ -31,8 +31,8 @@ export const _StoreDomains = {
   domain18: 'theHardFordClaimsapparel', // CLOSED
   domain19: 'theHardFordJuniorfireMarshal', // CLOSED
   domain20: 'theHardFordVolshirt', // CLOSED
-  // domain21: 'corporategear.online',
-  domain21: 'cg.redefinecommerce.info',
+  domain21: 'corporategear.online',
+  // domain21: 'cg.redefinecommerce.info',
   domain22: 'humanadev.parsonskellogg.com',
   domain23: 'ussaClaimsApparel',
   domain24: 'ussaMilitarysAffairs',
@@ -40,6 +40,7 @@ export const _StoreDomains = {
   domain26: 'healthypoints',
   domain27: 'bainCapital',
   domain28: 'bc.redefinecommerce.info',
+  domain29: 'pkhealthgear.redefinecommerce.info',
 };
 
 ////////////////////////////////////////////////////////////////////// bb
@@ -49,7 +50,7 @@ export const _StoreDomains = {
 //////////////////////////////////////////////////////////////////////
 
 export const __domain = {
-  isSiteLive: true,
+  isSiteLive: false,
   localDomain: _StoreDomains.domain5,
 };
 

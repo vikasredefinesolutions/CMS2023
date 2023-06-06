@@ -9,7 +9,7 @@
 
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable no-unused-vars */
-import React, { Fragment } from 'react';
+import React from 'react';
 // import { GetlAllProductList, _ListingProps } from '../productListing';
 
 import { __pagesText } from '@constants/pages.text';
@@ -107,16 +107,15 @@ const ProductListingType4: React.FC<_ListingProps> = ({
                         className='grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 lg:gap-8 mb-8'
                       >
                         {products.map((product, index) => (
-                          <Fragment key={index}>
-                            <TemplateFourListing
-                              productView={productView}
-                              skuList={skuList}
-                              compareCheckBoxHandler={compareCheckBoxHandler}
-                              product={product}
-                              colorChangeHandler={colorChangeHandler}
-                              index={index}
-                            />
-                          </Fragment>
+                          <TemplateFourListing
+                            productView={productView}
+                            skuList={skuList}
+                            compareCheckBoxHandler={compareCheckBoxHandler}
+                            product={product}
+                            colorChangeHandler={colorChangeHandler}
+                            index={index}
+                            key={product.id}
+                          />
                         ))}
                       </ul>
                     </div>

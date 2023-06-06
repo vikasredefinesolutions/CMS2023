@@ -1,6 +1,5 @@
 import { generateImageUrl } from '@helpers/common.helper';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
-import NextImage from 'next/image';
 import React from 'react';
 import { _globalStore } from 'store.global';
 import { _Imageprops } from './reUsable.d';
@@ -23,23 +22,23 @@ const NxtImage: React.FC<_Imageprops> = ({
   mediaBaseUrl = mediaBaseUrl || clientSideMediaBaseUrl;
   const imageUrl = generateImageUrl(src, isStatic, mediaBaseUrl);
 
-  if (useNextImage) {
-    return (
-      <div style={{ width: '100%' }} className={className}>
-        <NextImage
-          title={title}
-          src={imageUrl}
-          layout={layout}
-          alt={alt || ''}
-          key={cKey || 0}
-          loading={'eager'}
-          width={width || 1}
-          height={height || 1}
-          objectFit={'contain'}
-        />
-      </div>
-    );
-  }
+  // if (useNextImage) {
+  //   return (
+  //     <div style={{ width: '100%' }} className={className}>
+  //       <NextImage
+  //         title={title}
+  //         src={imageUrl}
+  //         layout={layout}
+  //         alt={alt || ''}
+  //         key={cKey || 0}
+  //         loading={'eager'}
+  //         width={width || 1}
+  //         height={height || 1}
+  //         objectFit={'contain'}
+  //       />
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className={className}>

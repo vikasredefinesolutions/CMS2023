@@ -20,7 +20,7 @@ const CardPaymentType1: paymentProps = ({
   const [input, setInput] = useState<number | string>(
     cardDetails?.cardNumber ? cardDetails?.cardNumber : '',
   );
-  const [cvv, setcvv] = useState<number | string>(
+  const [cvv, setcvv] = useState<string>(
     cardDetails?.cardVarificationCode ? cardDetails?.cardVarificationCode : '',
   );
   const { blockInvalidChar } = CheckoutController();
@@ -188,17 +188,18 @@ const CardPaymentType1: paymentProps = ({
                     ? true
                     : false;
                 if (selected) {
-                  return (
-                    <option key={index} value={index + 1} selected>
-                      {index + 1}
-                    </option>
+                  return (index < 9 ? <><option key={index} value={`0${index + 1}`} selected>
+                    {`0${index + 1}`}
+                  </option></> : <><option key={index} value={index + 1} selected>
+                  {index + 1}
+                </option></>
                   );
                 }
-                return (
-                  <option key={index} value={index + 1}>
-                    {index + 1}
-                  </option>
-                );
+                return (index < 9 ? <>
+                  <option key={index} value={`0${index + 1}`}>
+                    {`0${index + 1}`}
+                  </option></> : <><option key={index} value={index + 1}>{index + 1}</option></>
+              );
               })}
             </select>
             <label
@@ -253,7 +254,7 @@ const CardPaymentType1: paymentProps = ({
           <div className='relative z-0 w-full mb-[20px] border border-gray-border rounded'>
             <input
               onBlur={changeHandler}
-              onChange={handleCVV}
+              onChange={(event) => setcvv(event?.target.value)}
               name='cardVarificationCode'
               onKeyDown={blockInvalidChar}
               placeholder=' '
@@ -262,7 +263,7 @@ const CardPaymentType1: paymentProps = ({
               maxLength={3}
               // value={cvv}
               value={cvv}
-              type='number'
+              type='text'
               className='apperance  pt-[15px] pb-[0px] block w-full px-[8px] h-[48px] mt-[0px] text-sub-text text-[18px] text-[#000000] bg-transparent border-0 appearance-none focus:outline-none focus:ring-0'
             />
             <label

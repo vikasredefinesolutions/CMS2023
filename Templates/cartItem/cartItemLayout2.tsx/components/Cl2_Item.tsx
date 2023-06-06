@@ -667,7 +667,7 @@ const CL2_Item: React.FC<_CartItem & _Props> = (props) => {
                   setCartLinePersonModels([]);
                   setKeepPersonalizing(!keepPersonalizing);
                 }}
-                className='btn btn-lg btn-secondary uppercase'
+                className='btn btn-lg btn-primary uppercase'
               >
                 Personalize Your Item
               </button>

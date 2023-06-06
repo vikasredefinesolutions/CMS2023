@@ -213,7 +213,7 @@ const RedefineCustomApp = ({
       let x = document.querySelector('#spy');
       // alert(x)
       if (x) {
-        if (window.pageYOffset > 70) {
+        if (window.pageYOffset > 230) {
           x.classList.add('fix');
         } else {
           x.classList.remove('fix');

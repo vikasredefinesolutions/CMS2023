@@ -90,7 +90,7 @@ const categoriesWithBrands: {
         seName: 'eddie-bauer',
       },
       {
-        staticImagePath: 'https://headlesscdn-c2fyfua9dca0dthr.z01.azurefd.net/storagemedia/1/brand/black_brand_8.png',
+        staticImagePath: '/assets/images/PKhealth/adidas.png',
         id: 4,
         brandName: 'adidas',
         seName: 'adidas',
@@ -130,7 +130,6 @@ const categoriesWithBrands: {
 
 const BrandsByCategoriesType2: React.FC<_Props> = ({ brands }) => {
   const [activeTab, setActiveTab] = useState<_Category>('Featured');
-
   const activeTabColor = () => {
     switch (activeTab) {
       case 'Featured':

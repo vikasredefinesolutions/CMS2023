@@ -34,7 +34,7 @@ import {
   create_cartLogoPersonDetailModels,
   create_cartLogoPersonModel,
   initialSizeWithPriceNQtyGetter,
-} from '../../Cart_Type1/components/CT1_EL_Extras';
+} from '../../Cart_Type1/Components/CT1_EL_Extras';
 import CT2_EL_SizeQtyPrice from './CT2_EL_SizeQtyPrice';
 
 interface _Props {
@@ -449,10 +449,12 @@ const CT2_EL_CartItem: React.FC<_CartItem & _Props> = (item) => {
           item.shoppingCartLogoPersonViewModels.length >= 1 &&
           item.shoppingCartLogoPersonViewModels[0].logoName !==
             CustomizeLaterMain &&
+          item.availableColor.length > 0 &&
+          item.availableFont.length > 0 &&
+          item.availableLocation.length > 0 &&
           item.isBrandPersonalization && (
-            <div className='mt-[12px] lg:ml-[20px] mb-[20px] text-center p-[2px] text-sm cursor-pointer'>
-              <span
-                className='!w-full btn btn-sm btn-secondary uppercase text-md'
+            <div className='mt-[20px] mb-[20px] text-center w-full pl-[12px] pr-[12px]'>
+              <button
                 onClick={(e) => {
                   e.preventDefault();
                   setPersonalizationArray(
@@ -461,14 +463,14 @@ const CT2_EL_CartItem: React.FC<_CartItem & _Props> = (item) => {
                   setCartLinePersonModels([]);
                   setKeepPersonalizing(!keepPersonalizing);
                 }}
+                className='btn btn-lg btn-primary uppercase'
               >
                 {__pagesText.cart.personalize}
                 <br />
                 {__pagesText.cart.yourItem}
-              </span>
+              </button>
             </div>
           )}
-
         {keepPersonalizing && (
           <Personalizing
             item={{ ...rest }}

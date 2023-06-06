@@ -1,5 +1,6 @@
 import Price from '@appComponents/Price';
 import PersonalizeFontModal from '@appComponents/modals/PersonalizeFontModal/PersonalizeFontModal';
+import ForgotModal from '@appComponents/modals/forgotModal';
 import LoginModal from '@appComponents/modals/loginModal';
 import { _modals } from '@appComponents/modals/modal';
 import SizeChartModal from '@appComponents/modals/sizeChartModal/SizeChartModal';
@@ -315,6 +316,8 @@ const ProductInfo: React.FC<_Props> = ({
         <PersonalizeFontModal modalHandler={modalHandler} />
       )}
       {openModal === 'login' && <LoginModal modalHandler={modalHandler} />}
+      {openModal === 'login' && <LoginModal modalHandler={modalHandler} />}
+      {openModal === 'forgot' && <ForgotModal modalHandler={modalHandler} />}
       {isVisible && (
         <BuyNowHeader
           msrp={product?.msrp || 0}

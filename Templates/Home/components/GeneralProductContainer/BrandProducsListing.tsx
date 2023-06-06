@@ -1,11 +1,6 @@
 import FeaturedSkeleton from '@appComponents/Loading/Skeleton';
 import { newFetauredItemResponse } from '@definations/productList.type';
-import {
-  useActions_v2,
-  useTypedSelector_v2,
-  useWindowDimensions_v2,
-} from '@hooks_v2/index';
-import { FetchDataByBrand } from '@services/brand.service';
+import { useTypedSelector_v2, useWindowDimensions_v2 } from '@hooks_v2/index';
 import { _SelectedTab } from '@templates/ProductDetails/productDetailsTypes/storeDetails.res';
 import React, { Fragment, useEffect, useRef, useState } from 'react';
 import 'react-loading-skeleton/dist/skeleton.css';
@@ -23,6 +18,7 @@ interface _props {
   showBrandLogo: string;
   footerTabing: string;
   productToDisplay: string;
+  featuredItems: { [x: string]: newFetauredItemResponse[] };
 }
 interface _carouselProps {
   sliderSettings: {
@@ -48,6 +44,7 @@ const BrandProductListing: React.FC<_props> = (props) => {
     showBrandLogo,
     footerTabing,
     productToDisplay,
+    featuredItems,
   } = props;
 
   const { width } = useWindowDimensions_v2();
@@ -67,7 +64,6 @@ const BrandProductListing: React.FC<_props> = (props) => {
   const [featuredProductCarouselSetting, setFeaturedProductCarouselSetting] =
     useState<_carouselProps>(Settings);
 
-  const [loading, setLoading] = useState<boolean>(false);
   const [brandsData, setBrandsData] = useState<newFetauredItemResponse[] | []>(
     [],
   );
@@ -75,58 +71,12 @@ const BrandProductListing: React.FC<_props> = (props) => {
   const sliderRef = useRef<null | Slider>(null);
 
   // ** redux
-  const { storeData } = useActions_v2();
   const storeId = useTypedSelector_v2((state) => state.store.id);
-  const cacheData = useTypedSelector_v2((state) => state.cache.cacheData);
-
-  const tagNameFunc = () => {
-    if (productsData?.displayMethod == 'manual') {
-      return '';
-    } else if (productsData?.displayMethod == 'dynamic') {
-      if (productToDisplay) {
-        return productToDisplay;
-      } else {
-        return 'featured';
-      }
-    }
-  };
-
-  const fetchBrandData = async () => {
-    let body = {
-      sename:
-        productsData?.displayMethod == 'dynamic'
-          ? productsData?.selectedBrands?.map((brand) => brand.value).join(',')
-          : productsData?.selectedProducts
-              .map((product: any) => product?.seName)
-              .join(','),
-      type:
-        productsData?.displayMethod == 'dynamic'
-          ? productsData?.productType
-          : productsData?.displayMethod,
-      storeId: storeId,
-      tagName: tagNameFunc(),
-      maximumItemsForFetch: productsData?.productCount,
-    };
-    if (body.storeId) {
-      const data: newFetauredItemResponse[] = await FetchDataByBrand(body);
-      storeData({
-        [productsData?.tabName]: data,
-      });
-      // console.log(data, 'dataaa');
-      setBrandsData(data);
-    }
-    setLoading(false);
-  };
 
   // Fetching products by brand
   useEffect(() => {
-    if (productsData?.tabName in cacheData) {
-      setLoading(false);
-      setBrandsData(cacheData[productsData?.tabName]);
-    } else {
-      setLoading(true);
-      fetchBrandData();
-    }
+    if(featuredItems)
+      setBrandsData(featuredItems[productsData?.tabName]);
   }, [productsData?.tabName, storeId]);
 
   useEffect(() => {

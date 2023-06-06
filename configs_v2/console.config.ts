@@ -21,7 +21,7 @@ export const __console_v2: __Console = {
   },
   app: {
     service: {
-      GetStoreID: false,
+      GetStoreID: true,
       FetchThemeConfigs: false,
     },
   },

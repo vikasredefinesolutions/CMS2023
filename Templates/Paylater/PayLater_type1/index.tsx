@@ -95,9 +95,12 @@ const PaylaterType1: React.FC<_Props> = ({ orderDetails }) => {
     return '';
   };
 
-  const handleRedirect = (reason: 'UNEXPECTED_ERROR' | 'PAYMENT_COMPLETE') => {
+  const handleRedirect = (
+    reason: 'UNEXPECTED_ERROR' | 'PAYMENT_COMPLETE',
+    orderId?: number,
+  ) => {
     if (reason === 'PAYMENT_COMPLETE') {
-      router.push(paths.myAccount.order_details);
+      router.push(paths.THANK_YOU + `?orderNumber=${orderId}`);
       return;
     }
 
@@ -137,7 +140,7 @@ const PaylaterType1: React.FC<_Props> = ({ orderDetails }) => {
       orderModelPayment: payload,
     })
       .then(() => {
-        handleRedirect('PAYMENT_COMPLETE');
+        handleRedirect('PAYMENT_COMPLETE', orderDetails.billing?.id);
       })
       .catch((error) => {
         console.log('ERROR ===>', error);

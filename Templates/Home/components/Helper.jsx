@@ -330,7 +330,7 @@ export const updateSetProperties = (element) => {
       }
     });
 
-    if (x.querySelectorAll('#Button').length > 0) {
+    if (x && x.querySelectorAll('#Button').length > 0) {
       if (btnStyle === '') Button_className += ' inline-block custbtn-primary';
       if (!btnPadding) {
         Button_className += ' pt-[10px] pb-[10px] pl-[20px] pr-[20px]';
@@ -341,7 +341,7 @@ export const updateSetProperties = (element) => {
       }
     }
 
-    if (x.querySelectorAll('#Button1').length > 0) {
+    if (x && x.querySelectorAll('#Button1').length > 0) {
       if (btn1Style === '')
         Button1_className += ' inline-block custbtn-primary';
 
@@ -355,7 +355,7 @@ export const updateSetProperties = (element) => {
       }
     }
 
-    if (x.querySelectorAll('#Button2').length > 0) {
+    if (x && x.querySelectorAll('#Button2').length > 0) {
       if (btn2Style === '')
         Button2_className += ' inline-block custbtn-primary';
       if (!btn2Padding) {
@@ -367,7 +367,7 @@ export const updateSetProperties = (element) => {
       }
     }
 
-    if (x.querySelectorAll('#Button3').length > 0) {
+    if (x && x.querySelectorAll('#Button3').length > 0) {
       if (btn3Style === '')
         Button3_className += ' inline-block custbtn-primary';
       if (!btn3Padding) {
@@ -1211,10 +1211,17 @@ export const updateSetProperties = (element) => {
 
       if (value.type == 'text') {
         if (x.querySelectorAll('#' + key).length > 0) {
-          x.querySelectorAll('#' + key)[0].innerHTML = value.value;
+          if(value.value)
+            x.querySelectorAll('#' + key)[0].innerHTML = value.value;
+          else
+          {
+            if(x.querySelectorAll('#'+key+'_pos').length > 0)
+            {
+              x.querySelectorAll('#'+key+'_pos')[0].remove();
+            }
+          }        
         }
       }
-
       // if (value.type == 'btn_size') {
       //   let propName = key.replace('_size', '');
       //   if (x.querySelectorAll('#' + propName).length > 0) {

@@ -49,15 +49,14 @@ import { placeOrder as placeOrderService } from '@services/checkout.service';
 import { Klaviyo_PlaceOrder } from '@services/klaviyo.service';
 import { GetStoreCustomer } from '@services/user.service';
 import CartItem from '@templates/cartItem';
-import CartSummarryType5 from '@templates/cartSummarry/cartSummaryType5';
 import _ from 'lodash';
 import { useRouter } from 'next/router';
 import { ChangeEvent, useEffect, useState } from 'react';
-import AddAddress from './components/AddAddressType1';
 import CheckoutAddress from './components/AddressType1';
-import CT1_EL_Dropdowns from './components/CO1_EL_Dropdowns';
-import PaymentType1 from './components/PaymentType1';
-import PurchaseOrderType1 from './components/PaymentType1/components/PurchaseOrderType1';
+import CO5_AddAddressForm from './components/CO5_AddAddressForm';
+import CO5_AvailablePaymentMethods from './components/CO5_AvailablePaymentMethods';
+import CO5_PoReferenceNumber from './components/CO5_PoReferenceNumber';
+import OrderSummaryType5 from './components/OrderSummary';
 
 interface _Props {
   templateId: number;
@@ -65,6 +64,8 @@ interface _Props {
 
 const ChekoutType5: React.FC<_Props> = ({ templateId }) => {
   const router = useRouter();
+
+  const [salesTax, setSalesTax] = useState<number>(0);
   const { currentPage, setCurrentPage } = CheckoutController();
   const [showAddAddressModal, setShowAddAddressModal] = useState(false);
   const [addressEditData, setAddressEditData] =
@@ -97,7 +98,6 @@ const ChekoutType5: React.FC<_Props> = ({ templateId }) => {
   const [endUserNameS, setEndUserName] = useState<string>('');
   const [useShippingAddress, setShippingAddress] = useState(true);
   const [orderNote, setorderNotes] = useState<string>('');
-  const [purchaseOrder, setPurchaseOrder] = useState('');
   const [cardDetails, setCardDetails] = useState<CreditCardDetailsType>({
     cardNumber: '',
     cardVarificationCode: '',
@@ -121,6 +121,7 @@ const ChekoutType5: React.FC<_Props> = ({ templateId }) => {
   const [billAddress, setBillAddress] = useState<AddressType | null>(null);
   const userId = useTypedSelector_v2((state) => state.user.id);
   const isLoggedIn = Boolean(userId);
+  const [poAkaRefNumber, setPoAkaRefNumber] = useState<string>('');
 
   const storeId = useTypedSelector_v2((state) => state.store.id);
   const isEmployeeLoggedIn = useTypedSelector_v2(
@@ -130,7 +131,9 @@ const ChekoutType5: React.FC<_Props> = ({ templateId }) => {
   const { el: employeeLogin } = useTypedSelector_v2((state) => state.checkout);
   const billingForm = CheckoutAddressForm({});
   const shippingForm = CheckoutAddressForm({});
-  const [paymentMethod, setPaymentMethod] = useState(paymentEnum.creditCard);
+  const [paymentMethod, setPaymentMethod] = useState<
+    paymentEnum.creditCard | paymentEnum.netNumber
+  >(paymentEnum.creditCard);
   const customer = useTypedSelector_v2((state) => state.user.customer);
   const addressArray = customer?.customerAddress || [];
   const { shippingChargeType } = useTypedSelector_v2((state) => state.store);
@@ -149,10 +152,8 @@ const ChekoutType5: React.FC<_Props> = ({ templateId }) => {
     logoutClearCart,
     logInUser,
     updateCustomer,
-    updateWishListData,
     getStoreCustomer,
     update_checkoutEmployeeLogin,
-    customerCreditBalanceUpdate,
     updateEmployeeV2,
     product_employeeLogin,
   } = useActions_v2();
@@ -160,16 +161,12 @@ const ChekoutType5: React.FC<_Props> = ({ templateId }) => {
   const {
     totalPrice,
     subTotal,
-    salesTax,
     discount,
     creditBalance,
     totalLineCharges,
     totalLogoCharges,
   } = GetCartTotals();
 
-  const handlePurchase = (purchaseNumber: string) => {
-    setPurchaseOrder(purchaseNumber);
-  };
   const changeAddresHandler = (address: AddressType) => {
     addressType === UserAddressType.SHIPPINGADDRESS
       ? setShippingAdress(address)
@@ -242,6 +239,7 @@ const ChekoutType5: React.FC<_Props> = ({ templateId }) => {
       }
     }
   }, [totalPrice, shippingAdress]);
+
   useEffect(() => {
     if (isLoggedIn && customer) {
       if (customer.customerAddress.length > 0) {
@@ -353,23 +351,6 @@ const ChekoutType5: React.FC<_Props> = ({ templateId }) => {
             title: 'Error',
           });
           return;
-        }
-      } else if (paymentEnum.purchaseOrder === paymentMethod) {
-        setCardDetails({
-          cardNumber: '',
-          cardVarificationCode: '',
-          cardExpirationMonth: '',
-          cardExpirationYear: '',
-        });
-
-        if (purchaseOrder.length <= 0) {
-          showModal({
-            message: 'Invalid Purchase Order Details',
-            title: 'Warning',
-          });
-          return;
-        } else if (purchaseOrder.length > 0) {
-          return true;
         }
       } else if (paymentEnum.netNumber == paymentMethod) {
         return true;
@@ -541,37 +522,27 @@ const ChekoutType5: React.FC<_Props> = ({ templateId }) => {
   };
 
   const addPaymentDetails = () => {
-    if (employeeLogin.isPaymentPending) {
-      return {
-        paymentMethod: 'PAYMENTPENDING',
-      };
-    }
-
-    const purchaseOrderObj = {
-      AuthorizationPNREF: purchaseOrder,
-      isCreditLimit: false,
-    };
-
-    const card = {
-      cardType: detectCardType(),
-      cardNumber: cardDetails.cardNumber,
-      cardVarificationCode: cardDetails.cardVarificationCode,
-      cardExpirationMonth: cardDetails.cardExpirationMonth,
-      cardExpirationYear: cardDetails.cardExpirationYear,
-      isCreditLimit: false,
-      paymentMethod: PaymentMethod.CREDITCARD,
-      paymentGateway: PaymentMethod.CHARGELOGIC,
-    };
+    // const purchaseOrderObj = {
+    //   AuthorizationPNREF: purchaseOrder,
+    //   isCreditLimit: false,
+    // };
 
     if (paymentMethod === paymentEnum.creditCard) {
-      // console.log('purchase order', purchaseOrder);
-
-      return { ...card, AuthorizationPNREF: purchaseOrder };
+      // return { ...card, AuthorizationPNREF: purchaseOrder };
+      return {
+        cardType: detectCardType(),
+        cardNumber: cardDetails.cardNumber,
+        cardVarificationCode: cardDetails.cardVarificationCode,
+        cardExpirationMonth: cardDetails.cardExpirationMonth,
+        cardExpirationYear: cardDetails.cardExpirationYear,
+        isCreditLimit: false,
+        paymentMethod: PaymentMethod.CREDITCARD,
+        paymentGateway: PaymentMethod.CHARGELOGIC,
+      };
     }
 
     if (paymentMethod === paymentEnum.netNumber) {
       return {
-        ...purchaseOrderObj,
         paymentMethod: 'netpayment',
         paymentGateway: PaymentMethod.PREPAYMENT,
       };
@@ -740,11 +711,7 @@ const ChekoutType5: React.FC<_Props> = ({ templateId }) => {
 
     switch (paymentMethod) {
       case paymentEnum.creditCard:
-        if (name == 'EnterPONumber') {
-          setPurchaseOrder(value);
-        } else {
-          setCardDetails((prev) => ({ ...prev, [name]: value }));
-        }
+        setCardDetails((prev) => ({ ...prev, [name]: value }));
         break;
     }
   };
@@ -840,10 +807,9 @@ const ChekoutType5: React.FC<_Props> = ({ templateId }) => {
 
                     <div className=' flex-1 w-full md:w-6/12 mt-[15px] ml-[15px] mr-[15px] mb-[30px]'>
                       <div className='pl-[15px] pr-[15px] pt-[15px] pb-[15px] '>
-                        <PurchaseOrderType1
-                          changeHandler={paymentFieldUpdateHandler}
-                          updatePaymentMethod={setPaymentMethod}
-                          purchaseOrder={purchaseOrder}
+                        <CO5_PoReferenceNumber
+                          poRefNumber={poAkaRefNumber}
+                          onChange={(event) => event.target.value}
                         />
                         <div className='flex flex-wrap items-center justify-between pt-[10px] border-b border-[#ececec]'>
                           <div className='pb-[10px] text-title-text'>
@@ -863,8 +829,8 @@ const ChekoutType5: React.FC<_Props> = ({ templateId }) => {
                         <div className='flex flex-wrap items-center justify-between pt-[10px]'>
                           <div className='pb-[10px] text-default-text'>
                             {/* {__pagesText.CheckoutPage.paymentInfo} */}
-                            {cardDetails.cardNumber && (
-                              <>
+                            {paymentMethod === paymentEnum.creditCard &&
+                              cardDetails.cardNumber && (
                                 <div className='flex flex-wrap'>
                                   <div>
                                     <NxtImage
@@ -879,22 +845,10 @@ const ChekoutType5: React.FC<_Props> = ({ templateId }) => {
                                     <p>{`${cardDetails.cardExpirationMonth}/${cardDetails.cardExpirationYear}`}</p>
                                   </div>
                                 </div>
-                              </>
-                            )}
-                            {purchaseOrder && (
-                              <>
-                                <p>
-                                  {`PO: `}
-                                  {purchaseOrder}
-                                </p>
-                              </>
-                            )}
-                            {paymentEnum.netNumber == paymentMethod && (
-                              <>
-                                <div className='text-default-text'>
-                                  Using Net
-                                </div>
-                              </>
+                              )}
+
+                            {paymentMethod === paymentEnum.netNumber && (
+                              <div className='text-default-text'>Using Net</div>
                             )}
                           </div>
                         </div>
@@ -1055,7 +1009,7 @@ const ChekoutType5: React.FC<_Props> = ({ templateId }) => {
                     <div className='flex flex-wrap -mx-[15px] -mt-[21px]'>
                       <div className='w-full lg:w-1/2 pl-[15px] pr-[15px] pt-[15px] pb-[15px]'>
                         {showAddAddress ? (
-                          <AddAddress
+                          <CO5_AddAddressForm
                             refrence={shippingForm}
                             title={'Shipping Address'}
                             isBillingForm={false}
@@ -1073,22 +1027,21 @@ const ChekoutType5: React.FC<_Props> = ({ templateId }) => {
                         )}
                       </div>
                       <div className='w-full lg:w-1/2 pl-[15px] pr-[15px] pt-[15px] pb-[15px]'>
-                        <PurchaseOrderType1
-                          changeHandler={paymentFieldUpdateHandler}
-                          updatePaymentMethod={setPaymentMethod}
-                          purchaseOrder={purchaseOrder}
-                          setPurchaseOrder={handlePurchase}
+                        <CO5_PoReferenceNumber
+                          onChange={(event) =>
+                            setPoAkaRefNumber(event.target.value)
+                          }
+                          poRefNumber={poAkaRefNumber}
                         />
-                        <PaymentType1
+                        <CO5_AvailablePaymentMethods
                           changeHandler={paymentFieldUpdateHandler}
                           updatePaymentMethod={setPaymentMethod}
-                          purchaseOrder={purchaseOrder}
+                          cardDetails={cardDetails}
                           paymentMethod={paymentMethod}
                           detectCardType={detectCardType}
-                          cardDetails={cardDetails}
                         />
                         {showAddAddress && !billingAdress ? (
-                          <AddAddress
+                          <CO5_AddAddressForm
                             setAddressType={setAddressType}
                             refrence={billingForm}
                             title={'Billing Address'}
@@ -1108,6 +1061,9 @@ const ChekoutType5: React.FC<_Props> = ({ templateId }) => {
                             changeClickHandler={() =>
                               setAddressType(UserAddressType.BILLINGADDRESS)
                             }
+                            editShipping={() => {
+                              setAddressType(UserAddressType.SHIPPINGADDRESS);
+                            }}
                           />
                         )}
                       </div>
@@ -1118,8 +1074,16 @@ const ChekoutType5: React.FC<_Props> = ({ templateId }) => {
             )}
           </div>
           <div className='w-full md:w-4/12 lg:w-[27%] pl-[15px] pr-[15px]'>
-            <CartSummarryType5 selectedShippingModel={selectedShipping} />
-            {isEmployeeLoggedIn && <CT1_EL_Dropdowns />}
+            <OrderSummaryType5
+              currentpage={currentPage}
+              selectedShipModel={selectedShipping}
+              placeOrder={placeOrder}
+              salesTax={salesTax}
+              setSalesTax={setSalesTax}
+              billingAddressCode={
+                billingAdress?.postalCode ? billingAdress.postalCode : '0'
+              }
+            />
 
             <div className='text-medium-text font-semibold mb-[20px]'>
               <div className='text-rose-500'>{__pagesText.dicheckoutNote}</div>

@@ -99,6 +99,7 @@ const Inventory: React.FC<{
                         val={0}
                         editDetails={editDetails}
                         brandName={brand?.name}
+                        rest={foundedSize}
                       />
                     </div>
                   ) : (

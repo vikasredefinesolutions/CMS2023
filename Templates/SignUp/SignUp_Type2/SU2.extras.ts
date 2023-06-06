@@ -180,7 +180,7 @@ export const su2_initialValues: _SU2_InitialValues = {
 export const _Signup2Schema = Yup.object().shape({
   industryType: Yup.string()
     .trim()
-    .required(__ValidationText.signUp.companyName.required),
+    .required(__ValidationText.signUp.industryType.required),
   organizationName: Yup.string()
     .trim()
     .required(__ValidationText.signUp.companyName.required),
@@ -204,32 +204,27 @@ export const _Signup2Schema = Yup.object().shape({
     .required(__ValidationText.signUp.email.required),
   companyAddress: Yup.string()
     .trim()
-    .required(__ValidationText.signUp.companyName.required)
-    .min(__ValidationText.signUp.companyName.minLength)
-    .max(__ValidationText.signUp.companyName.maxLength),
+    .required(__ValidationText.signUp.storeCustomerAddress.address1.required),
   zipCode: Yup.string()
     .trim()
-    .required(__ValidationText.signUp.companyId.required)
-    .min(__ValidationText.signUp.companyName.minLength)
-    .max(__ValidationText.signUp.companyName.maxLength),
+    .required(__ValidationText.signUp.storeCustomerAddress.postalCode.required)
+    .max(__ValidationText.signUp.storeCustomerAddress.postalCode.maxLength),
   cityName: Yup.string()
     .trim()
-    .required(__ValidationText.signUp.companyId.required),
+    .required(__ValidationText.signUp.storeCustomerAddress.city.required),
   state: Yup.string()
     .trim()
-    .required(__ValidationText.signUp.companyId.required),
-
+    .required(__ValidationText.signUp.storeCustomerAddress.state.required),
   country: Yup.string()
     .trim()
-    .required(__ValidationText.signUp.companyId.required),
+    .required(__ValidationText.signUp.storeCustomerAddress.countryName.required),
   phoneNumber: Yup.string()
     .trim()
-    .required(__ValidationText.signUp.companyId.required)
-    .min(__ValidationText.signUp.companyName.minLength)
-    .max(__ValidationText.signUp.companyName.maxLength),
+    .required(__ValidationText.signUp.storeCustomerAddress.phone.required)
+    .min(__ValidationText.signUp.storeCustomerAddress.phone.length)
+    .max(__ValidationText.signUp.storeCustomerAddress.phone.length),
   usersMessage: Yup.string()
     .trim()
-    .required(__ValidationText.signUp.companyId.required)
     .min(__ValidationText.signUp.companyName.minLength)
     .max(__ValidationText.signUp.companyName.maxLength),
   password: Yup.string()

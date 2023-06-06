@@ -23,6 +23,7 @@ interface logocharges {
 const CustomizeLogo: NextPage = () => {
   const [firstLogoFree, setFirstLogoFree] = useState<boolean>(true);
   const { sizeQtys } = useTypedSelector_v2((state) => state.product.toCheckout);
+  const [showLogoComponent, setShowLogoComponent] = useState<boolean>(false);
   const availableLocation = useTypedSelector_v2(
     (state) => state.product.toCheckout.availableOptions,
   );
@@ -134,7 +135,10 @@ const CustomizeLogo: NextPage = () => {
                   />
                 )}
                 {showOrSelect === 'SHOW' && (
-                  <LogosToPrint setShowOrSelect={setShowOrSelect} />
+                  <LogosToPrint
+                    setShowOrSelect={setShowOrSelect}
+                    setShowLogoComponent={setShowLogoComponent}
+                  />
                 )}
               </div>
             )}

@@ -10,6 +10,7 @@ const CheckoutAddress = ({
   changeClickHandler,
   setAddressType,
   setBillingAdress,
+  editShipping,
 }: {
   address: AddressType | null;
   addressType: 1 | 2;
@@ -23,6 +24,7 @@ const CheckoutAddress = ({
   setShippingAddress?: (arg: boolean) => void;
   useShippingAddress?: boolean;
   changeClickHandler: () => void;
+  editShipping?: () => void;
 }) => {
   const userId = useTypedSelector_v2((state) => state.user.id);
   return (
@@ -39,6 +41,17 @@ const CheckoutAddress = ({
               data-modal-toggle='shippingaddressModal'
             >
               Change
+            </button>
+          </div>
+        )}
+        {useShippingAddress && (
+          <div>
+            <button
+              onClick={editShipping}
+              className='ml-4 text-anchor underline'
+              data-modal-toggle='shippingaddressModal'
+            >
+              Edit
             </button>
           </div>
         )}

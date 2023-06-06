@@ -112,7 +112,7 @@ const CompareProduct_Type1: React.FC<_CompareProductprops> = (props) => {
     const obj = {
       storeId: storeId,
       Email: id ? (userEmail ? userEmail : values.email) : values.email,
-      Link: window.location.href,
+      Link: encodeURIComponent(window.location.href),
     };
     setShowLoader(true);
     SendCompareLinkByEmail(obj)
@@ -272,14 +272,14 @@ const CompareProduct_Type1: React.FC<_CompareProductprops> = (props) => {
             </div>
             <div className=' mt-[30px] mb-[30px]  gap-2 '>
               <Formik
-                initialValues={{ email: '' }}
-                onSubmit={sendEmailHandler}
+                initialValues={{ email: userEmail ? userEmail : '' }}
+                onSubmit={() => {}}
                 validationSchema={validationSchema}
               >
-                {({ values, handleChange }) => {
+                {({ values, handleChange, setFieldValue }) => {
                   return (
                     <Form className='flex flex-wrap mt-[2px] text-center justify-center'>
-                      {!id ? (
+                      {!userEmail ? (
                         <input
                           className='form-input sm:max-w-xs max-w-[200px]'
                           placeholder='Enter Email to get this link'
@@ -296,6 +296,12 @@ const CompareProduct_Type1: React.FC<_CompareProductprops> = (props) => {
                       <button
                         type='submit'
                         className='btn btn-primary mx-[10px]'
+                        onClick={() => {
+                          const val = {
+                            email: userEmail ? userEmail : values.email,
+                          };
+                          val.email && sendEmailHandler(val);
+                        }}
                       >
                         SEND LINK
                       </button>
@@ -304,7 +310,7 @@ const CompareProduct_Type1: React.FC<_CompareProductprops> = (props) => {
                         className='btn btn-primary'
                         onClick={() => {
                           navigator.clipboard
-                            .writeText(router.asPath)
+                            .writeText(window.location.href)
                             .then(() =>
                               showModal({
                                 message: 'Link copy successfully.',
@@ -317,7 +323,14 @@ const CompareProduct_Type1: React.FC<_CompareProductprops> = (props) => {
                         COPY LINK
                       </button>
 
-                      <ErrorMessage name={'email'} className='text-rose-500' />
+                      {!userEmail && (
+                        <div className='mt-3 mx-2'>
+                          <ErrorMessage
+                            name={'email'}
+                            className='text-rose-500'
+                          />
+                        </div>
+                      )}
                     </Form>
                   );
                 }}

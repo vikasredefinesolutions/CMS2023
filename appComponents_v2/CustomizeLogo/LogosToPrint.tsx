@@ -18,8 +18,12 @@ import { _globalStore } from 'store.global';
 let mediaBaseURL = _globalStore.blobUrl;
 interface _props {
   setShowOrSelect: React.Dispatch<React.SetStateAction<'SHOW' | 'SELECT'>>;
+  setShowLogoComponent: React.Dispatch<React.SetStateAction<boolean>>;
 }
-const LogosToPrint: React.FC<_props> = ({ setShowOrSelect }) => {
+const LogosToPrint: React.FC<_props> = ({
+  setShowOrSelect,
+  setShowLogoComponent,
+}) => {
   const router = useRouter();
   const selectedLogos = useTypedSelector_v2(
     (state) => state.product.toCheckout.logos,
@@ -27,8 +31,6 @@ const LogosToPrint: React.FC<_props> = ({ setShowOrSelect }) => {
   const { isSewOutEnable, sewOutCharges } = useTypedSelector_v2(
     (state) => state.store,
   );
-  const cartData = useTypedSelector_v2((state) => state.cart.cart);
-
   const { availableOptions } = useTypedSelector_v2(
     (state) => state.product.toCheckout,
   );
@@ -48,7 +50,8 @@ const LogosToPrint: React.FC<_props> = ({ setShowOrSelect }) => {
   const loggedIN_userId = useTypedSelector_v2((state) => state.user.id);
 
   mediaBaseURL = store.mediaBaseUrl || mediaBaseURL;
-  const { showModal, setShowLoader, fetchCartDetails } = useActions_v2();
+  const { showModal, setShowLoader, fetchCartDetails, clearToCheckout } =
+    useActions_v2();
 
   const addToCartHandler = async () => {
     setShowLoader(true);
@@ -157,6 +160,9 @@ const LogosToPrint: React.FC<_props> = ({ setShowOrSelect }) => {
               message: __pagesText.cart.successMessage,
               title: 'Success',
             });
+            setShowLogoComponent(false);
+            clearToCheckout();
+
             router.push(paths.CART);
           })
           .catch((err) => {

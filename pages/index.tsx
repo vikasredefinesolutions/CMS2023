@@ -1,6 +1,6 @@
 import SeoHead from '@appComponents/reUsable/SeoHead';
 import { __Error, __pageTypeConstant } from '@constants/global.constant';
-import { _FeaturedProduct } from '@definations/APIs/storeDetails.res';
+import { newFetauredItemResponse } from '@definations/productList.type';
 import { _GetPageType } from '@definations/slug.type';
 import {
   GTMHomeScriptForAllStores,
@@ -8,9 +8,11 @@ import {
 } from '@helpers/common.helper';
 import { highLightError } from '@helpers/console.helper';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
+import { FetchDataByBrand } from '@services/brand.service';
 import { getPageComponents } from '@services/home.service';
 import { FetchPageType } from '@services/slug.service';
 import Home from '@templates/Home';
+import { _SelectedTab } from '@templates/ProductDetails/productDetailsTypes/storeDetails.res';
 import { GetServerSideProps, GetServerSidePropsResult, NextPage } from 'next';
 import { useEffect, useRef } from 'react';
 import { _globalStore } from 'store.global';
@@ -19,7 +21,7 @@ export interface _Slug_CMS_Props {
   page: 'ALL_CMS_PAGES';
   data: {
     components: any;
-    featuredItems: null | Array<_FeaturedProduct[] | null>;
+    featuredItems: { [x: string]: newFetauredItemResponse[] } | [];
   };
   metaData: _GetPageType;
 }
@@ -31,6 +33,7 @@ type _HomeProps =
     };
 
 const DefaultHomePage: NextPage<_HomeProps> = (props) => {
+  
   const { id: customerId } = useTypedSelector_v2((state) => state.user);
   const { id: storeId } = useTypedSelector_v2((state) => state.store);
   const isCaptured = useRef(false);
@@ -42,6 +45,22 @@ const DefaultHomePage: NextPage<_HomeProps> = (props) => {
       GTMHomeScriptForCG('HomePage', storeId, customerId || 0);
     }
   }, [storeId, customerId]);
+
+  useEffect(() => {
+    if ('data' in props) {
+      let featuredProduct =
+        props &&
+        props.data?.components.find(
+          (comp: any) => comp.name == 'Featured Products',
+        );
+      if (featuredProduct) {
+        localStorage.setItem(
+          'Featured Products',
+          JSON.stringify(featuredProduct?.selectedVal),
+        );
+      }
+    }
+  }, [props]);
 
   if ('error' in props) {
     return <>{props.error}</>;
@@ -106,6 +125,7 @@ export const getServerSideProps: GetServerSideProps = async (): Promise<
     storeId: store.storeId,
     slug: '/',
   });
+  let data: { [x: string]: newFetauredItemResponse[] } = {};
 
   if (pageMetaData === null) {
     highLightError({
@@ -133,12 +153,87 @@ export const getServerSideProps: GetServerSideProps = async (): Promise<
       type: '',
     });
 
+    if (components.length > 0) {
+      const featuredProducts = components.find(
+        (comp: any) => comp.name == 'Featured Products',
+      );
+
+      if (
+        featuredProducts?.selectedVal &&
+        featuredProducts?.selectedVal.length > 0
+      ) {
+        let productsData = JSON.parse(featuredProducts?.selectedVal);
+        if (
+          productsData?.featuredproducts &&
+          productsData?.featuredproducts?.value
+        ) {
+          const bodyArr = productsData.featuredproducts?.value.map(
+            (tab: _SelectedTab) => {
+              const tagNameFunc = () => {
+                if (tab.displayMethod == 'manual') {
+                  return '';
+                } else if (tab.displayMethod == 'dynamic') {
+                  if (components?.featuredproducts_product_to_display?.value) {
+                    return components?.featuredproducts_product_to_display
+                      ?.value;
+                  } else {
+                    return 'featured';
+                  }
+                }
+              };
+
+              let body = {
+                sename:
+                  tab.displayMethod == 'dynamic'
+                    ? tab.selectedBrands
+                        ?.map(
+                          (brand: { value: string; label: string }) =>
+                            brand.value,
+                        )
+                        .join(',')
+                    : tab.selectedProducts
+                        .map((product: any) => product?.seName)
+                        .join(','),
+                type:
+                  tab.displayMethod == 'dynamic'
+                    ? tab.productType
+                    : tab.displayMethod,
+                storeId: _globalStore.storeId,
+                tagName: tagNameFunc(),
+                maximumItemsForFetch: tab.productCount,
+              };
+              return body;
+            },
+          );
+
+          const TabingApiArray = bodyArr.map(
+            async (body: {
+              sename: string;
+              type: string;
+              storeId: number;
+              tagName: string;
+              maximumItemsForFetch: number | string;
+            }) => {
+              return await FetchDataByBrand(body);
+            },
+          );
+          if (TabingApiArray.length > 0) {
+            const allTabingData = await Promise.all(TabingApiArray);
+            productsData.featuredproducts?.value.map(
+              (tab: _SelectedTab, index: number) => {
+                data[tab?.tabName] = allTabingData[index];
+              },
+            );
+          }
+        }
+      }
+    }
     return {
       props: {
         page: 'ALL_CMS_PAGES',
         data: {
           components: components,
-          featuredItems: [],
+          featuredItems: data,
         },
         metaData: pageMetaData,
       },

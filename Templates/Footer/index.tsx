@@ -6,7 +6,7 @@ import { _FetchStoreConfigurations } from '@definations/store.type';
 import getLocation from '@helpers/getLocation';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import { SubsribeToNewsLetter } from '@services/general.service';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 interface _props {
   data: _FetchStoreConfigurations | null;
 }
@@ -21,6 +21,8 @@ const Footer: React.FC<_props> = ({ data: dataFromRoot }) => {
   const { currentPage, id: storeId } = useTypedSelector_v2(
     (state) => state.store,
   );
+
+  const isEventListnerSet = useRef(false);
 
   useEffect(() => {
     if (dataFromRoot) {
@@ -38,8 +40,8 @@ const Footer: React.FC<_props> = ({ data: dataFromRoot }) => {
       const location = await getLocation();
       const payload = {
         subscribeModel: {
-          rowVersion: 'abc',
-          location: location.country_code,
+          rowVersion: '',
+          location: location.ip_address,
           ipAddress: location.ip_address,
           macAddress: '00-00-00-00-00-00',
           id: 0,
@@ -67,18 +69,28 @@ const Footer: React.FC<_props> = ({ data: dataFromRoot }) => {
   };
 
   useEffect(() => {
-    const subscribeEmailInput = document.getElementById(
+    let subscribeEmailInput: HTMLElement | null = document.getElementById(
       'email_newsletter_input',
     );
-    subscribeEmailInput?.addEventListener('input', (event) =>
-      handleEmailChange((event.target as HTMLInputElement).value),
+    let subscribeBtn: HTMLElement | null = document.getElementById(
+      'email_newsletter_btn',
     );
-    const subscribeBtn = document.getElementById('email_newsletter_btn');
-    subscribeBtn?.addEventListener('click', (event) => {
-      event.stopPropagation();
-      event.preventDefault();
-      handleSubscribeToLetter((subscribeEmailInput as HTMLInputElement)?.value);
-    });
+    if (!isEventListnerSet.current && subscribeBtn && subscribeEmailInput) {
+      isEventListnerSet.current = true;
+
+      subscribeEmailInput?.addEventListener('input', (event) =>
+        handleEmailChange((event.target as HTMLInputElement).value),
+      );
+      subscribeBtn = document.getElementById('email_newsletter_btn');
+      subscribeBtn?.addEventListener('click', (event) => {
+        event.stopPropagation();
+        event.preventDefault();
+        handleSubscribeToLetter(
+          (subscribeEmailInput as HTMLInputElement)?.value,
+        );
+      });
+    }
+
     return () => {
       subscribeEmailInput?.removeEventListener('input', (event) =>
         handleEmailChange((event.target as HTMLInputElement).value),

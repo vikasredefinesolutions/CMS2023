@@ -47,7 +47,7 @@ const ThankYouProduct: React.FC<_props> = ({ product }) => {
                   padding: ' 100% 0px 0px',
                 }}
               ></span>
-              <Link href={product.seName == null ? '' : product.seName}>
+              <Link href={`/${product.seName}.html`}>
                 <img
                   alt='products'
                   sizes='100vw'
@@ -78,7 +78,7 @@ const ThankYouProduct: React.FC<_props> = ({ product }) => {
         </div>
         <div className='w-full lg:w-4/6 pl-[15px] pr-[15px] flex flex-wrap lg:justify-between'>
           <div className='text-title-text font-semibold mb-[10px]'>
-            <Link href={product.seName ? product.seName : ''}>
+            <Link href={`/${product.seName}.html`}>
               <a className='text-[#000000]'>{product.productName}</a>
             </Link>
           </div>

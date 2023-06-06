@@ -291,7 +291,7 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
       return __pagesText.productInfo.Discontinued;
     } else if (userId) {
       if (totalinvetory == 0) {
-        return __pagesText.productInfo.contactUs;
+        return __pagesText.productInfo.callUs;
       } else {
         return __pagesText.productInfo.addTocart;
       }
@@ -374,12 +374,23 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
             <div className=''>
               <TotalQtySelected total={totalCheckout.totalQty} />
               <div className=''>
+                {/* {totalQty ? (
+                  <p>{totalCheckout.totalPrice / totalCheckout.totalQty}</p>
+                ) : (
+                  <p>{pricePerItem}</p>
+                )} */}
                 <DiscountPrice
                   storeCode={storeCode}
                   ourCost={product?.ourCost || 0}
                   msrp={product?.msrp || 0}
                   imap={product?.imap || 0}
-                  salePrice={pricePerItem || 0}
+                  salePrice={
+                    totalQty
+                      ? Math.abs(
+                          totalCheckout.totalPrice / totalCheckout.totalQty,
+                        )
+                      : pricePerItem || 0
+                  }
                 />
               </div>
             </div>

@@ -5,7 +5,7 @@ import { _HeaderProps, _MenuItems } from '@definations/header.type';
 import {
   useActions_v2,
   useTypedSelector_v2,
-  useWindowDimensions_v2
+  useWindowDimensions_v2,
 } from '@hooks_v2/index';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
@@ -35,6 +35,15 @@ const Header_Type4: NextPage<_HeaderProps> = ({
   const [isMobileView, setIsMobileView] = useState<boolean>(
     width <= __pagesConstant._header.mobileBreakPoint,
   );
+
+  const showComponent = (): boolean => {
+    if (router.asPath === paths.CHECKOUT) {
+      return false;
+    }
+
+    return true;
+  };
+
   useEffect(() => {
     const isMobile = width <= __pagesConstant._header.mobileBreakPoint;
     const showMobile = isMobile ? 'MOBILE' : 'DESKTOP';
@@ -44,14 +53,11 @@ const Header_Type4: NextPage<_HeaderProps> = ({
   }, [width]);
 
   return (
-    <div
-      className='bg-primary sticky top-0 z-40'
-      id='mobile_menu_box'
-    >
+    <div className='bg-primary sticky top-0 z-40' id='mobile_menu_box'>
       {/* <NotificationBar /> */}
 
       <div className='bg-primary'>
-        {isMobileView && router.asPath != paths.CHECKOUT && (
+        {isMobileView && showComponent() && (
           <Header_MenuItems
             showSideMenu={showSideMenu}
             // storeCode={storeCode}
@@ -61,7 +67,10 @@ const Header_Type4: NextPage<_HeaderProps> = ({
         )}
 
         <div className='fixed z-40 lg:hidden'></div>
-        <header className='relative trancking-[1px]' id={`${storeCode === 'DI' ? 'spy' : ''}`}>
+        <header
+          className='relative trancking-[1px]'
+          id={`${storeCode === 'DI' ? 'spy' : ''}`}
+        >
           <nav aria-label='Top'>
             <div>
               <div className='container pl-[15px] pr-[15px] mx-auto'>
@@ -90,32 +99,35 @@ const Header_Type4: NextPage<_HeaderProps> = ({
                     <div className='h-full hidden lg:flex items-center flex-1'>
                       <div className=''>
                         <div className='h-full flex header-nav relative'>
-                          {isMobileView
-                            ? null
-                            : router.asPath != paths.CHECKOUT && (
-                                <Header_MenuItems
-                                  showSideMenu={showSideMenu}
-                                  screen='DESKTOP'
-                                  menuItems={menuItems as _MenuItems}
-                                />
-                              )}
+                          {!isMobileView && showComponent() ? (
+                            <Header_MenuItems
+                              showSideMenu={showSideMenu}
+                              screen='DESKTOP'
+                              menuItems={menuItems as _MenuItems}
+                            />
+                          ) : null}
                         </div>
                       </div>
                     </div>
                     <div className='flex items-center justify-end'>
                       <div className='flex items-center'>
                         <div className='flex items-center'>
-                          {isMobileView ? null : (
+                          {!isMobileView && showComponent() ? (
                             <SearchBar screen={'DESKTOP'} />
-                          )}
-                          <LoginIcon />
-                          <LoggedInMenu />
+                          ) : null}
+                          {showComponent() && <LoginIcon />}
+                          {showComponent() && <LoggedInMenu />}
                           <MyCartIcon />
-                          <div className="pl-[15px] order-1 sm:order-4">
-                                                <a href="/patagonia-sustainability-initiatives.html">
-                                                    <img src="/assets/images/di/for-the-planet.png" alt="" />
-                                                </a>
-                                            </div>
+                          {showComponent() && (
+                            <div className='pl-[15px] order-1 sm:order-4'>
+                              <a href='/patagonia-sustainability-initiatives.html'>
+                                <img
+                                  src='/assets/images/di/for-the-planet.png'
+                                  alt=''
+                                />
+                              </a>
+                            </div>
+                          )}
                           {/* <div className='lg:hidden pl-[15px]'>
                             {router.asPath !== paths.CHECKOUT && <MenuIcon />}
                           </div> */}
@@ -123,11 +135,15 @@ const Header_Type4: NextPage<_HeaderProps> = ({
                       </div>
                     </div>
                   </div>
-                  <CompanyInfo
-                    phoneNumber={storePhoneNumber}
-                    email={storeEmail}
-                  />
-                  {isMobileView ? <SearchBar screen={'MOBILE'} /> : null}
+                  {showComponent() && (
+                    <CompanyInfo
+                      phoneNumber={storePhoneNumber}
+                      email={storeEmail}
+                    />
+                  )}
+                  {showComponent() && isMobileView ? (
+                    <SearchBar screen={'MOBILE'} />
+                  ) : null}
                 </div>
               </div>
             </div>

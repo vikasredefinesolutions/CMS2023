@@ -230,6 +230,7 @@ const Index = () => {
       {edit === paths.myAccount.editShippingAddress ||
       edit === paths.myAccount.editBillingAddress ? (
         <>
+        <div className='container mx-auto'>
           <div className='w-4/4 lg:w-4/5'>
             <Formik
               onSubmit={submitHandler}
@@ -509,6 +510,7 @@ const Index = () => {
                 </>
               )}
             </Formik>
+          </div>
           </div>
         </>
       ) : (

@@ -2,7 +2,7 @@ import Price from '@appComponents/reUsable/Price';
 import { Form, Formik } from 'formik';
 import React from 'react';
 import * as Yup from 'yup';
-import { _SetState_Details } from './CT1_EL_Cart';
+import { _SetState_Details } from './CT1_EL_Extras';
 
 const _QtyNUnitPriceYupSchema = Yup.object().shape({
   unitPrice: Yup.number().required().min(0),

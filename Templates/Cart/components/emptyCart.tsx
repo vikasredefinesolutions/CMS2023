@@ -24,7 +24,7 @@ const EmptyCart = () => {
           </div>
           <div className='mt-[20px]'>
             <Link title='' href={paths.HOME}>
-              <a className='btn btn-md btn-secondary'>
+              <a className='btn btn-md btn-primary'>
                 {' '}
                 {__pagesText.cart.startShopping}
               </a>
@@ -33,7 +33,7 @@ const EmptyCart = () => {
           {isEmployeeLoggedIn && (
             <div className='mt-[20px]'>
               <div onClick={() => setShowOTF('OTF')}>
-                <span className='btn btn-md btn-secondary'>ADD OTF ITEMS</span>
+                <span className='btn btn-md btn-primary'>ADD OTF ITEMS</span>
               </div>
             </div>
           )}

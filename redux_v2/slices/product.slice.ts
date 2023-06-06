@@ -1153,6 +1153,8 @@ export const productSlice = createSlice({
           qty: number;
           price: number;
           color: string;
+          aditionalCharges: number;
+          totalQty: number;
         };
       },
     ) => {
@@ -1184,12 +1186,16 @@ export const productSlice = createSlice({
             price: productPrice,
 
             color: color,
+            aditionalCharges: action.payload.aditionalCharges,
           },
         ];
 
         totalQty = productQty;
       } else {
         updatedSizeQtys = state.toCheckout.sizeQtys?.map((product) => {
+          let additionalValue = product.aditionalCharges
+            ? product.aditionalCharges
+            : 0;
           product.price = productPrice;
 
           if (product.size === productName && product.color === color) {
@@ -1201,6 +1207,7 @@ export const productSlice = createSlice({
               qty: productQty,
 
               price: productPrice,
+              aditionalCharges: action.payload.aditionalCharges,
             };
           }
 
@@ -1224,6 +1231,7 @@ export const productSlice = createSlice({
             price: productPrice,
 
             color: color,
+            aditionalCharges: action.payload.aditionalCharges,
           });
 
           totalQty += productQty;
@@ -1233,8 +1241,13 @@ export const productSlice = createSlice({
       // LOGO CHARGE
 
       let updateAdditionalLogoCharge = 0;
-
       const allDiscounts = state.product.discounts;
+
+      if (totalQty < state.toCheckout.minQty) {
+        productPrice = state.product.price?.msrp
+          ? state.product.price?.msrp
+          : productPrice;
+      }
 
       let foundThePrice = false;
 
@@ -1246,9 +1259,9 @@ export const productSlice = createSlice({
         if (totalQty >= bulkQtyDiscount) {
           productPrice = +discount.discountPrice;
         } else {
-          productPrice = state.product.price?.msrp
-            ? state.product.price.msrp
-            : 0;
+          // productPrice = state.product.price?.msrp
+          //   ? state.product.price.msrp
+          //   : 0;
 
           foundThePrice = true;
         }
@@ -1256,17 +1269,37 @@ export const productSlice = createSlice({
 
       let totalPrice = totalQty * productPrice + updateAdditionalLogoCharge;
 
+      let priceVal = 0;
+      updatedSizeQtys.forEach((el) => {
+        // console.log('exists inside', el);
+        if (el.aditionalCharges) {
+          priceVal += (el.price + el.aditionalCharges) * el.qty;
+        } else {
+          priceVal += el.price * el.qty;
+        }
+      });
+
+      const newUpdatedSize = updatedSizeQtys.filter((el) => el.qty !== 0);
+
+      console.log(
+        'statrt',
+        updatedSizeQtys,
+        totalPrice,
+        priceVal,
+        newUpdatedSize,
+      );
+
       // STATE UPDATES
 
       state.toCheckout.additionalLogoCharge = updateAdditionalLogoCharge;
 
-      state.toCheckout.sizeQtys = updatedSizeQtys || null;
+      state.toCheckout.sizeQtys = newUpdatedSize || null;
 
       state.toCheckout.price = productPrice;
 
       state.toCheckout.totalQty = totalQty;
 
-      state.toCheckout.totalPrice = totalPrice;
+      state.toCheckout.totalPrice = priceVal;
     },
     updateLogoDetails: (
       state,
