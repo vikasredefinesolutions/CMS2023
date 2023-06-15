@@ -53,8 +53,9 @@ export const getServerSideProps = async (context: any) => {
   // obj = {
   //   pos: params.get('pos'),
   //   return_url: params.get('return_url'),
-  //   params: JSON.parse(params.get('params') || ''),
+  //   // params: JSON.parse(params.get('params') || ''),
   // };
+  // console.log(obj);
 
   // let a = `${JSON.stringify(obj)}`;
   // let b = '';
