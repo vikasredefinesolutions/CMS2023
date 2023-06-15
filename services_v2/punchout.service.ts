@@ -6,7 +6,7 @@ export const PunchoutPostApi = async (body: string) => {
   const res: any = await SendAsync<AxiosRequestConfig>({
     url: url,
     method: 'POST',
-    data: body,
+    data: { returnUrl: body },
   });
   return res;
 };
