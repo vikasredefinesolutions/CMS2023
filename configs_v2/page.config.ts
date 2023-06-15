@@ -50,8 +50,8 @@ export const _StoreDomains = {
 //////////////////////////////////////////////////////////////////////
 
 export const __domain = {
-  isSiteLive: false,
-  localDomain: _StoreDomains.domain5,
+  isSiteLive: true,
+  localDomain: _StoreDomains.domain22,
 };
 
 export const defaultCountry = 1;
