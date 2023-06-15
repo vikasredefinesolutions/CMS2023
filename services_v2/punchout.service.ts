@@ -1,13 +1,16 @@
-import { SendAsync } from '@utils/axios.util';
-import { AxiosRequestConfig } from 'axios';
-
 export const PunchoutPostApi = async (body: string) => {
-  console.log(body, 'JS....................');
-  const url = '/Punchout/index.json';
-  const res: any = await SendAsync<AxiosRequestConfig>({
-    url: url,
+  let res = '';
+  const url =
+    'https://front-staging.parsonskellogg.services/Punchout/index.json';
+  const response = await fetch(url, {
     method: 'POST',
-    data: JSON.stringify(body),
-  });
+    headers: {
+      'Content-Type': 'application/json-patch+json',
+    },
+    body: JSON.stringify(body),
+  })
+    .then((res) => res.json())
+    .then((data) => (res = data.data));
+
   return res;
 };
