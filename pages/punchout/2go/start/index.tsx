@@ -1,3 +1,5 @@
+import getRawBody from 'raw-body';
+
 const Punchout = (props: any) => {
   console.log(props.body, 'body is console');
   // let config = {
@@ -45,8 +47,8 @@ const Punchout = (props: any) => {
 export default Punchout;
 
 export const getServerSideProps = async (context: any) => {
-  // const body = await getRawBody(context?.req);
-  // const params = new URLSearchParams(body.toString());
+  const body = await getRawBody(context?.req);
+  const params = new URLSearchParams(body.toString());
   // let obj: Record<string, any> = {};
   // obj = {
   //   pos: params.get('pos'),
@@ -61,5 +63,5 @@ export const getServerSideProps = async (context: any) => {
   //   .toString()
   //   .replace('###StoreUrl###', `https://${context.req.headers.host}`);
 
-  return { props: { body: context?.req, returnUrl: 'xml' } };
+  return { props: { body: params, returnUrl: 'xml' } };
 };
