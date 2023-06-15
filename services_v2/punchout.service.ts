@@ -10,7 +10,7 @@ export const PunchoutPostApi = async (body: string) => {
       'Content-Type': 'application/json-patch+json',
       'Access-Control-Allow-Origin': '*',
     },
-    body: JSON.stringify(body),
+    body: `${JSON.stringify(body)}`,
   })
     .then((res) => res.json())
     .then((data) => (res = data.data));
