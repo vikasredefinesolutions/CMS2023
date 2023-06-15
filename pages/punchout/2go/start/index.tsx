@@ -40,7 +40,6 @@ const Punchout = (props: any) => {
   //     .catch((error) => console.log('error', error));
   // }
 
-  console.log(props, 'these are props for new body');
   return <>This page exists and getting response</>;
 };
 
