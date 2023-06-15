@@ -5,8 +5,10 @@ export const PunchoutPostApi = async (body: string) => {
     'https://front-staging.parsonskellogg.services/Punchout/index.json';
   const response = await fetch(url, {
     method: 'POST',
+    mode: 'cors',
     headers: {
       'Content-Type': 'application/json-patch+json',
+      'Access-Control-Allow-Origin': '*',
     },
     body: JSON.stringify(body),
   })
