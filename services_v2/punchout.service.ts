@@ -1,7 +1,7 @@
 export const PunchoutPostApi = async (body: string) => {
   let res = '';
   const url =
-    'https://https://front-staging.parsonskellogg.services/Punchout/index.json';
+    'https://front-staging.parsonskellogg.services/Punchout/index.json';
   const response = await fetch(url, {
     headers: {
       'Content-Type': 'application/json-patch+json',
