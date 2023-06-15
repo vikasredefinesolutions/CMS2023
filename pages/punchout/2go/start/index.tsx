@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 const Punchout = (props: any) => {
   console.log(props.body, 'body is console and console is body');
   const [returnXml, setReturnXml] = useState<any>('');
-  let returnxml = '';
+  // let returnxml = '';
   // let config = {
   //   method: 'post',
   //   maxBodyLength: Infinity,
@@ -28,6 +28,7 @@ const Punchout = (props: any) => {
     };
     console.log(obj, 'object ');
     let a = `${JSON.stringify(obj)}`;
+    console.log(a, 'aaaaaaaaaaaaaa');
     let b = '';
     const fetchData = async (a: any) => {
       b = await PunchoutPostApi(a);
