@@ -1,4 +1,3 @@
-import { PunchoutPostApi } from '@services/punchout.service';
 import axios from 'axios';
 import getRawBody from 'raw-body';
 
@@ -50,20 +49,20 @@ export default Punchout;
 
 export const getServerSideProps = async (context: any) => {
   const body = await getRawBody(context?.req);
-  const params = new URLSearchParams(body.toString());
-  let obj: Record<string, any> = {};
-  obj = {
-    pos: params.get('pos'),
-    return_url: params.get('return_url'),
-    params: JSON.parse(params.get('params') || ''),
-  };
+  // const params = new URLSearchParams(body.toString());
+  // let obj: Record<string, any> = {};
+  // obj = {
+  //   pos: params.get('pos'),
+  //   return_url: params.get('return_url'),
+  //   params: JSON.parse(params.get('params') || ''),
+  // };
 
-  let a = `${JSON.stringify(obj)}`;
-  let b = '';
-  b = await PunchoutPostApi(a);
-  let returnxml = b
-    .toString()
-    .replace('###StoreUrl###', `https://${context.req.headers.host}`);
+  // let a = `${JSON.stringify(obj)}`;
+  // let b = '';
+  // b = await PunchoutPostApi(a);
+  // let returnxml = b
+  //   .toString()
+  //   .replace('###StoreUrl###', `https://${context.req.headers.host}`);
 
-  return { props: { body: returnxml, returnUrl: obj.return_url } };
+  return { props: { body: body, returnUrl: 'xml' } };
 };
