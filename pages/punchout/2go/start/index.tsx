@@ -1,26 +1,25 @@
-import axios from 'axios';
 import getRawBody from 'raw-body';
 
 const Punchout = (props: any) => {
   console.log(props.body, 'body is console');
-  let config = {
-    method: 'post',
-    maxBodyLength: Infinity,
-    url: props.returnUrl,
-    withCredentials: false,
-    headers: {
-      'Content-Type': 'application/xml',
-      'Access-Control-Allow-Origin': '*',
-    },
-    data: props.body,
-  };
+  // let config = {
+  //   method: 'post',
+  //   maxBodyLength: Infinity,
+  //   url: props.returnUrl,
+  //   withCredentials: false,
+  //   headers: {
+  //     'Content-Type': 'application/xml',
+  //     'Access-Control-Allow-Origin': '*',
+  //   },
+  //   data: props.body,
+  // };
 
-  axios
-    .request(config)
-    .then((response) => {
-      console.log(JSON.stringify(response.data));
-    })
-    .catch((err) => console.log(err));
+  // axios
+  //   .request(config)
+  //   .then((response) => {
+  //     console.log(JSON.stringify(response.data));
+  //   })
+  //   .catch((err) => console.log(err));
   // const myHeaders = new Headers();
   // myHeaders.append('Content-Type', 'application/xml');
   // myHeaders.append('Access-Control-Allow-Origin', ' no-cors');
