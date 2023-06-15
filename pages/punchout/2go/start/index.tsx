@@ -1,7 +1,7 @@
 import getRawBody from 'raw-body';
 
 const Punchout = (props: any) => {
-  console.log(props.body, 'body is console');
+  console.log(props.body, 'body is console and console is body');
   // let config = {
   //   method: 'post',
   //   maxBodyLength: Infinity,
