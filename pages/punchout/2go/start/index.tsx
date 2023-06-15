@@ -1,5 +1,3 @@
-import getRawBody from 'raw-body';
-
 const Punchout = (props: any) => {
   console.log(props.body, 'body is console');
   // let config = {
@@ -40,14 +38,14 @@ const Punchout = (props: any) => {
   //     .catch((error) => console.log('error', error));
   // }
 
-  console.log(props, 'these are props');
+  console.log(props, 'these are props for new body');
   return <>This page exists and getting response</>;
 };
 
 export default Punchout;
 
 export const getServerSideProps = async (context: any) => {
-  const body = await getRawBody(context?.req);
+  // const body = await getRawBody(context?.req);
   // const params = new URLSearchParams(body.toString());
   // let obj: Record<string, any> = {};
   // obj = {
