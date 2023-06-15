@@ -63,5 +63,5 @@ export const getServerSideProps = async (context: any) => {
   //   .toString()
   //   .replace('###StoreUrl###', `https://${context.req.headers.host}`);
 
-  return { props: { body: params, returnUrl: 'xml' } };
+  return { props: { body: body.toString(), returnUrl: 'xml' } };
 };
