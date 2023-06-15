@@ -1,4 +1,5 @@
 import getRawBody from 'raw-body';
+import { useEffect } from 'react';
 
 const Punchout = (props: any) => {
   console.log(props.body, 'body is console and console is body');
@@ -13,6 +14,16 @@ const Punchout = (props: any) => {
   //   },
   //   data: props.body,
   // };
+  useEffect(() => {
+    const params = new URLSearchParams(props.body);
+    let obj: Record<string, any> = {};
+    obj = {
+      pos: params.get('pos'),
+      return_url: params.get('return_url'),
+      params: JSON.parse(params.get('params') || ''),
+    };
+    console.log(obj);
+  });
 
   // axios
   //   .request(config)
