@@ -20,9 +20,10 @@ const Punchout = (props: any) => {
     let b = '';
     const fetchData = async (a: any) => {
       b = await PunchoutPostApi(a);
-      setReturnXml(
-        b.toString().replace('###StoreUrl###', `https://${props.returnUrl}`),
-      );
+      console.log(b, 'coming from backend'),
+        setReturnXml(
+          b.toString().replace('###StoreUrl###', `https://${props.returnUrl}`),
+        );
     };
     fetchData(a);
     let config = {
