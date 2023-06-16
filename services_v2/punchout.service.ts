@@ -1,5 +1,4 @@
 export const PunchoutPostApi = async (body: string) => {
-  console.log(body, 'bodyyyyyyyyyyyyyyyyyyyyyyyyyyy');
   let res = '';
   const url =
     'https://front-staging.parsonskellogg.services/Punchout/index.json';
