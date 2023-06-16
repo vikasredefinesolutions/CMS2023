@@ -29,7 +29,7 @@ const Punchout = (props: any) => {
     let config = {
       method: 'post',
       maxBodyLength: Infinity,
-      url: props.returnUrl,
+      url: obj.return_url,
       withCredentials: false,
       headers: {
         'Content-Type': 'application/xml',
