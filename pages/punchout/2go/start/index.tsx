@@ -34,7 +34,7 @@ const Punchout = (props: any) => {
         'Content-Type': 'application/xml',
         'Access-Control-Allow-Origin': '*',
       },
-      data: b,
+      data: returnXml,
     };
     axios
       .request(config)
