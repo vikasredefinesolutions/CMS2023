@@ -89,6 +89,7 @@ const Header_Type6: NextPage<_HeaderProps> = ({
                   <CompanyInfo
                     phoneNumber={storePhoneNumber}
                     email={storeEmail}
+                    headerTextColor={headerTextColor}
                   />
                 ) : null}
                 <div className=''>
