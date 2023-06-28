@@ -35,8 +35,8 @@ export const _StoreDomains = {
   domain18: 'theHardFordClaimsapparel', // CLOSED
   domain19: 'theHardFordJuniorfireMarshal', // CLOSED
   domain20: 'theHardFordVolshirt', // CLOSED
-  //domain21: 'corporategear.online',
-  domain21: 'www.corporategear.com',
+  domain21: 'corporategear.online',
+ // domain21: 'www.corporategear.com',
   domain22: 'humanadev.parsonskellogg.com',
   domain23: 'https://bbcprod.parsonskellogg.com',
   domain24: 'ussaMilitarysAffairs',
