@@ -1,5 +1,6 @@
 import { generateImageUrl } from '@helpers/common.helper';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
+import Image from 'next/image';
 import React from 'react';
 import { _globalStore } from 'store.global';
 import { _Imageprops } from './reUsable.d';
@@ -27,15 +28,22 @@ const NxtImage: React.FC<_Imageprops> = ({
 
   if (extraUrlPath) {
     return (
-      <img
-        itemProp='image'
-        src={(extraUrlPath + imageUrl) as string}
-        alt={alt || ''}
-        title={title || ''}
-        className={className}
-      />
+
+      <Image 
+				src={(extraUrlPath + imageUrl) as string}
+				alt={alt || ''}
+				layout="fill" // we'll talk about this in a little bit
+			/>
+     
     );
   }
+   // <img
+      //   itemProp='image'
+      //   src={(extraUrlPath + imageUrl) as string}
+      //   alt={alt || ''}
+      //   title={title || ''}
+      //   className={className}
+      // />
   return (
     <img
       itemProp='image'
