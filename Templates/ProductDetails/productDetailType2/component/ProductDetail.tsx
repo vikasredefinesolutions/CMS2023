@@ -20,6 +20,9 @@ const ProductDetail: React.FC<_Props> = ({
     <>
       <div className='container mx-auto mt-[15px]'>
         <div className='lg:grid lg:grid-cols-2 lg:items-start pb-[20px]'>
+          <div className='lg:hidden md-block w-full'>
+            <div className='text-2xl-text mb-[20px]'>{product?.name}</div>
+          </div>
           <ProductImg product={product!} />
           <ProductInfo
             product={product}

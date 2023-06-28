@@ -4,19 +4,32 @@ import SubMenuItem from '@header/header_Type2/Components/Menu/Header_SubMenuItem
 import { capitalizeFirstLetter } from '@helpers/common.helper';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
 import Link from 'next/link';
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 interface _props {
   title: string;
   url: string;
   content: _MenuCategory[] | null;
+  openTab: string;
+  setOpenTab: (arg: string) => void;
 }
 
-const Header_Category: React.FC<_props> = ({ content, title, url }) => {
+const Header_Category: React.FC<_props> = ({ content, title, url, openTab,
+  setOpenTab, }) => {
   const { view } = useTypedSelector_v2((state) => state.store);
   const { toggleSideMenu } = useActions_v2();
   const [focus, setFocus] = useState(false);
   const [showAllItems, setShowAllItems] = useState<boolean>(false);
-
+  const [Subtab, setSubTab] = useState<string>('');
+  const [showtab, setShowTab] = useState<boolean>(false);
+  useEffect(() => {
+    if (openTab == title) {
+      setShowTab(true);
+      setShowAllItems(true);
+    } else {
+      setShowTab(false);
+      setShowAllItems(false);
+    }
+  }, [openTab]);
   if (view === 'MOBILE') {
     return (
       <>
@@ -26,13 +39,16 @@ const Header_Category: React.FC<_props> = ({ content, title, url }) => {
             title={title}
             type='button'
             className='relative text-[14px] pl-[25px] mr-[5px] flex items-center pt-[15px] pb-[15px] grow'
-            onClick={() => setShowAllItems((show) => !show)}
+            onClick={() => {
+              setOpenTab(title);
+              setShowAllItems((show) => !show);
+            }}
           >
             <span
               className='material-icons-outlined text-[16px] font-[600] mr-[5px] absolute left-[5px] top-1/2 -translate-y-1/2'
               x-html="open1 == true ? 'remove' : 'add'"
             >
-              {showAllItems == true ? 'remove' : 'add'}
+              {showAllItems == true && showtab ? 'remove' : 'add'}
             </span>
             <div className=''>{title}</div>
           </button>
@@ -40,13 +56,13 @@ const Header_Category: React.FC<_props> = ({ content, title, url }) => {
             className='text-[12px] mr-[5px] underline'
             onClick={() => toggleSideMenu('CLOSE')}
           >
-            <Link href={`${url}`}>
+            <Link href={`/${url}.html?v=product-list`}>
               <a>{__pagesText.Headers.mobileViewAll}</a>
             </Link>
           </div>
           {/* </div> */}
         </div>
-        {showAllItems && (
+        {showAllItems && showtab && (
           <div className='text-[14px]' x-show='open1'>
             <div className='relative bg-light-gray'>
               <div className=''>
@@ -64,6 +80,8 @@ const Header_Category: React.FC<_props> = ({ content, title, url }) => {
                         itemUrl={`${item.seName}.html?v=product-list`}
                         type={'CATEGORY'}
                         itemId={item.id}
+                        setSubTab={setSubTab}
+                        Subtab={Subtab}
                       />
                     );
                   })}

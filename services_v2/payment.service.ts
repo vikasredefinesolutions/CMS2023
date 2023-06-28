@@ -21,5 +21,5 @@ export const getCustomerAllowBalance = async (
     url: url,
     method: 'GET',
   });
-  return +res.data;
+  return res;
 };

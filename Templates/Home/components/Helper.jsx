@@ -19,8 +19,7 @@ export const getSymbol = (symbol, status) => {
   } else if (symbol === 'addcircle') {
     if (status === 'Yes') returnSymbol = 'remove_circle';
     else returnSymbol = 'add_circle';
-  }
-  else if (symbol === 'add') {
+  } else if (symbol === 'add') {
     if (status === 'Yes') returnSymbol = 'remove';
     else returnSymbol = 'add';
   } else {
@@ -145,7 +144,6 @@ export const updateSetProperties = (element) => {
         else if (buttonId === 'Button1') Button1_className += ' ' + value.value;
         else if (buttonId === 'Button2') Button2_className += ' ' + value.value;
         else if (buttonId === 'Button3') Button3_className += ' ' + value.value;
-
       }
 
       if (value.type == 'btn_link') {
@@ -167,8 +165,7 @@ export const updateSetProperties = (element) => {
         } else if (buttonId === 'Button2') {
           Button2_className += ' ' + value.value;
           btn2Style = value.value;
-        }
-        else if (buttonId === 'Button3') {
+        } else if (buttonId === 'Button3') {
           Button3_className += ' ' + value.value;
           btn3Style = value.value;
         }
@@ -202,8 +199,7 @@ export const updateSetProperties = (element) => {
         } else if (buttonId === 'Button2') {
           btn2Padding = true;
           Button2_className += ' ' + value.value;
-        }
-        else if (buttonId === 'Button3') {
+        } else if (buttonId === 'Button3') {
           btn3Padding = true;
           Button3_className += ' ' + value.value;
         }
@@ -219,8 +215,7 @@ export const updateSetProperties = (element) => {
         } else if (buttonId === 'Button2') {
           Button2_className += ' ' + value.value;
           btn2Padding = true;
-        }
-        else if (buttonId === 'Button3') {
+        } else if (buttonId === 'Button3') {
           Button3_className += ' ' + value.value;
           btn3Padding = true;
         }
@@ -233,12 +228,10 @@ export const updateSetProperties = (element) => {
         } else if (buttonId === 'Button1') {
           Button1_className += ' ' + value.value;
           btn1Padding = true;
-        } 
-        else if (buttonId === 'Button2') {
+        } else if (buttonId === 'Button2') {
           Button2_className += ' ' + value.value;
           btn2Padding = true;
-        } 
-        else if (buttonId === 'Button3') {
+        } else if (buttonId === 'Button3') {
           Button3_className += ' ' + value.value;
           btn3Padding = true;
         }
@@ -254,8 +247,7 @@ export const updateSetProperties = (element) => {
         } else if (buttonId === 'Button2') {
           Button2_className += ' ' + value.value;
           btn2Padding = true;
-        }
-        else if (buttonId === 'Button3') {
+        } else if (buttonId === 'Button3') {
           Button3_className += ' ' + value.value;
           btn3Padding = true;
         }
@@ -320,13 +312,17 @@ export const updateSetProperties = (element) => {
         else if (buttonId === 'Button2') Button2_className += ' ' + value.value;
         else if (buttonId === 'Button3') Button3_className += ' ' + value.value;
       }
-      
+
       if (value.type == 'btn_letter_spacing') {
         buttonId = key.replace('_letter_spacing', '');
-        if (buttonId === 'Button') Button_className += ' tracking-[' + value.value+']';
-        else if (buttonId === 'Button1') Button1_className += ' tracking-[' + value.value+']';
-        else if (buttonId === 'Button2') Button2_className += ' tracking-[' + value.value+']';
-        else if (buttonId === 'Button3') Button3_className += ' tracking-[' + value.value+']';
+        if (buttonId === 'Button')
+          Button_className += ' tracking-[' + value.value + ']';
+        else if (buttonId === 'Button1')
+          Button1_className += ' tracking-[' + value.value + ']';
+        else if (buttonId === 'Button2')
+          Button2_className += ' tracking-[' + value.value + ']';
+        else if (buttonId === 'Button3')
+          Button3_className += ' tracking-[' + value.value + ']';
       }
     });
 
@@ -387,7 +383,28 @@ export const updateSetProperties = (element) => {
 
       if (value.type == 'text') {
         if (x.querySelectorAll('#' + key).length > 0) {
-          x.querySelectorAll('#' + key)[0].innerHTML = value.value;
+          let tag = '';
+          if (Object.keys(element.selectedVal).includes(key + '_header_tag')) {
+            Object.entries(element.selectedVal).map(([keyq, valueq]) => {
+              if (keyq === key + '_header_tag' && valueq.value !== '') {
+                tag += valueq.value;
+              }
+            });
+          }
+          if (value.value) {
+            if (tag) {
+              x.querySelectorAll('#' + key)[0].innerHTML =
+                '<' + tag + '>' + value.value + '</' + tag + '>';
+            } else {
+              x.querySelectorAll('#' + key)[0].innerHTML = value.value;
+            }
+          } else {
+            if (x.querySelectorAll('#' + key + '_pos').length > 0) {
+              x.querySelectorAll('#' + key + '_pos')[0].remove();
+            }
+            if (x.querySelectorAll('#' + key).length > 0)
+              x.querySelectorAll('#' + key)[0].innerHTML = '';
+          }
         }
       }
 
@@ -401,15 +418,15 @@ export const updateSetProperties = (element) => {
             x.querySelectorAll('#leftContent')[0].classList.remove('lg:w-1/2');
             x.querySelectorAll('#rightContent')[0].classList.remove('lg:w-1/2');
           }
-          if(x && x.querySelectorAll('#centerContentNew').length > 0)
-          {
-              x.querySelectorAll('#centerContentNew')[0].classList.remove('hidden');
-              x.querySelectorAll('#leftContent')[0].classList.add('lg:w-1/3');
-              x.querySelectorAll('#rightContent')[0].classList.add('lg:w-1/3');
-  
-              x.querySelectorAll('#leftContent')[0].classList.remove('lg:w-1/2');
-              x.querySelectorAll('#rightContent')[0].classList.remove('lg:w-1/2');
+          if (x && x.querySelectorAll('#centerContentNew').length > 0) {
+            x.querySelectorAll('#centerContentNew')[0].classList.remove(
+              'hidden',
+            );
+            x.querySelectorAll('#leftContent')[0].classList.add('lg:w-1/3');
+            x.querySelectorAll('#rightContent')[0].classList.add('lg:w-1/3');
 
+            x.querySelectorAll('#leftContent')[0].classList.remove('lg:w-1/2');
+            x.querySelectorAll('#rightContent')[0].classList.remove('lg:w-1/2');
           }
           if (x && x.querySelectorAll('#centerBox').length > 0) {
             x.querySelectorAll('#centerBox')[0].classList.remove('hidden');
@@ -428,31 +445,23 @@ export const updateSetProperties = (element) => {
             x.querySelectorAll('#leftContent')[0].classList.remove('lg:w-1/3');
             x.querySelectorAll('#rightContent')[0].classList.remove('lg:w-1/3');
           }
-          if(x && x.querySelectorAll('#centerContentNew').length > 0)
-                  {
-                    x.querySelectorAll('#centerContentNew')[0].classList.add('hidden');
-                    let largeImage = "Left";
-                    if(element.selectedVal.columnCount_large_image)
-                      largeImage = element.selectedVal.columnCount_large_image.value;
+          if (x && x.querySelectorAll('#centerContentNew').length > 0) {
+            x.querySelectorAll('#centerContentNew')[0].classList.add('hidden');
+            let largeImage = 'Left';
+            if (element.selectedVal.columnCount_large_image)
+              largeImage = element.selectedVal.columnCount_large_image.value;
 
-                    
+            x.querySelectorAll('#leftContent')[0].classList.remove('lg:w-1/3');
+            x.querySelectorAll('#rightContent')[0].classList.remove('lg:w-1/3');
 
-                   
-
-                    x.querySelectorAll('#leftContent')[0].classList.remove('lg:w-1/3');
-                    x.querySelectorAll('#rightContent')[0].classList.remove('lg:w-1/3');
-
-                    if(largeImage === 'Left')
-                    {
-                      x.querySelectorAll('#leftContent')[0].classList.add('lg:w-2/3');
-                      x.querySelectorAll('#rightContent')[0].classList.add('lg:w-1/3');
-                    }
-                    else
-                    {
-                      x.querySelectorAll('#leftContent')[0].classList.add('lg:w-1/3');
-                      x.querySelectorAll('#rightContent')[0].classList.add('lg:w-2/3');
-                    }
-                  }
+            if (largeImage === 'Left') {
+              x.querySelectorAll('#leftContent')[0].classList.add('lg:w-2/3');
+              x.querySelectorAll('#rightContent')[0].classList.add('lg:w-1/3');
+            } else {
+              x.querySelectorAll('#leftContent')[0].classList.add('lg:w-1/3');
+              x.querySelectorAll('#rightContent')[0].classList.add('lg:w-2/3');
+            }
+          }
           if (x && x.querySelectorAll('#centerBox').length > 0) {
             x.querySelectorAll('#centerBox')[0].classList.add('hidden');
             x.querySelectorAll('#leftBox')[0].classList.add('lg:w-1/2');
@@ -489,7 +498,7 @@ export const updateSetProperties = (element) => {
             if (keyq == bgPropertyName) {
               icon = valueq.value;
             }
-            if (keyq == bgPropertyName+'_image_or_icon') {
+            if (keyq == bgPropertyName + '_image_or_icon') {
               imageOrIcon = valueq.value;
             }
             if (keyq == bgPropertyName + '_type') {
@@ -534,8 +543,7 @@ export const updateSetProperties = (element) => {
           });
           // console.log(element.selected_Values, 'KE', iconType);
           let className = '';
-          if(imageOrIcon === 'Icon')
-          {
+          if (imageOrIcon === 'Icon') {
             if (iconType == 'fontawesome') {
               className += '';
             } else if (iconType == 'googlematerial') {
@@ -550,7 +558,6 @@ export const updateSetProperties = (element) => {
               className += ' ' + iconFontWeight;
             }
           }
-
 
           if (iconLeftPadding) {
             className += ' ' + iconLeftPadding;
@@ -578,17 +585,14 @@ export const updateSetProperties = (element) => {
           }
 
           let iconStr = '';
-          if(imageOrIcon === 'Icon')
-          {
-              iconStr = '<span class="'+className+'"';
-              if(iconFontColor)
-                  iconStr += ' style="color: '+iconFontColor+';"';
-              iconStr += '>'+icon+'</span>';    
-          }
-          else
-          {
-              iconStr = '<span class="'+className+'"';
-              iconStr += '><img src="'+icon+'" /></span>';   
+          if (imageOrIcon === 'Icon') {
+            iconStr = '<span class="' + className + '"';
+            if (iconFontColor)
+              iconStr += ' style="color: ' + iconFontColor + ';"';
+            iconStr += '>' + icon + '</span>';
+          } else {
+            iconStr = '<span class="' + className + '"';
+            iconStr += '><img src="' + icon + '" /></span>';
           }
           //let x = ReactDOM.findDOMNode(props.refArray.current[props.currentComponent]);
           if (x && x.querySelectorAll('#' + key).length > 0)
@@ -617,7 +621,8 @@ export const updateSetProperties = (element) => {
         if (
           propName !== 'Button' &&
           propName !== 'Button1' &&
-          propName !== 'Button2' && propName !== 'Image1'
+          propName !== 'Button2' &&
+          propName !== 'Image1'
         ) {
           if (
             value.value !== '' &&
@@ -692,19 +697,22 @@ export const updateSetProperties = (element) => {
           if (Object.keys(element.selectedVal).includes(key + '_is_centered')) {
             Object.entries(element.selectedVal).map(([keyq, valueq]) => {
               if (keyq == key + '_is_centered') {
-                if(x.querySelectorAll('#is_centered').length > 0)
-                {
-                    if(valueq.value)
-                    {
-                      x.querySelectorAll('#is_centered')[0].classList.add('items-center');
-                      x.querySelectorAll('#right-section')[0].classList.remove('items-center');
-                    }
-                    else
-                    {
-                      x.querySelectorAll('#is_centered')[0].classList.remove('items-center');
-                      x.querySelectorAll('#right-section')[0].classList.add('items-center');
-
-                    }
+                if (x.querySelectorAll('#is_centered').length > 0) {
+                  if (valueq.value) {
+                    x.querySelectorAll('#is_centered')[0].classList.add(
+                      'items-center',
+                    );
+                    x.querySelectorAll('#right-section')[0].classList.remove(
+                      'items-center',
+                    );
+                  } else {
+                    x.querySelectorAll('#is_centered')[0].classList.remove(
+                      'items-center',
+                    );
+                    x.querySelectorAll('#right-section')[0].classList.add(
+                      'items-center',
+                    );
+                  }
                 }
               }
             });
@@ -835,7 +843,10 @@ export const updateSetProperties = (element) => {
           }
 
           if (objName.ImageAsBG !== undefined) {
-            x.querySelectorAll('#' + key)[0].innerHTML = '<a href="'+link + '"><div class="absolute inset-0 bg-cover ' +
+            x.querySelectorAll('#' + key)[0].innerHTML =
+              '<a href="' +
+              link +
+              '"><div class="absolute inset-0 bg-cover ' +
               effectClass +
               '" style="background-image: url(\'' +
               value.value +
@@ -921,7 +932,7 @@ export const updateSetProperties = (element) => {
                 }
               }
               if (
-                 Object.keys(element.selectedVal).includes(key + '_image_size')
+                Object.keys(element.selectedVal).includes(key + '_image_size')
               ) {
                 Object.entries(element.selectedVal).map(([keyq, valueq]) => {
                   if (keyq == key + '_image_size') {
@@ -937,111 +948,162 @@ export const updateSetProperties = (element) => {
                   '<a href="' + link + '"class="inline-block group ';
                 var endTag = '/> </a>';
               }
-              if(Object.keys(element.selectedVal).includes(key+"_left_padding"))
-              {
-                Object.entries(element.selectedVal).map(([keyq, valueq]) => { if(keyq == key+"_left_padding") { classAlign += ' ' + valueq.value; } }) 
-              }
-              if(Object.keys(element.selectedVal).includes(key+"_right_padding"))
-              {
-                Object.entries(element.selectedVal).map(([keyq, valueq]) => { if(keyq == key+"_right_padding") { classAlign += ' ' + valueq.value; } }) 
-              }
-              if(Object.keys(element.selectedVal).includes(key+"_top_padding"))
-              {
-                Object.entries(element.selectedVal).map(([keyq, valueq]) => { if(keyq == key+"_top_padding") { classAlign += ' ' + valueq.value; } }) 
-              }
-              if(Object.keys(element.selectedVal).includes(key+"_bottom_padding"))
-              {
-                Object.entries(element.selectedVal).map(([keyq, valueq]) => { if(keyq == key+"_bottom_padding") { classAlign += ' ' + valueq.value; } }) 
-              }
-              if(Object.keys(element.selectedVal).includes(key+"_left_margin"))
-              {
-                Object.entries(element.selectedVal).map(([keyq, valueq]) => { if(keyq == key+"_left_margin") { classAlign += ' ' + valueq.value; } }) 
-              }
-              if(Object.keys(element.selectedVal).includes(key+"_right_margin"))
-              {
-                Object.entries(element.selectedVal).map(([keyq, valueq]) => { if(keyq == key+"_right_margin") { classAlign += ' ' + valueq.value; } }) 
-              }
-              if(Object.keys(element.selectedVal).includes(key+"_top_margin"))
-              {
-                Object.entries(element.selectedVal).map(([keyq, valueq]) => { if(keyq == key+"_top_margin") { classAlign += ' ' + valueq.value; } }) 
-              }
-              if(Object.keys(element.selectedVal).includes(key+"_bottom_margin"))
-              {
-                Object.entries(element.selectedVal).map(([keyq, valueq]) => { if(keyq == key+"_bottom_margin") { classAlign += ' ' + valueq.value; } }) 
-              }
-              let imgStr = starttag +
-              imageSize +
-              '" id="' +
-              key +
-              '_img_link"><img id="' +
-              key +
-              '_img" class="' +
-              effectClass +
-              ' ' +
-              imgClass +
-              '" src="' +
-              value.value +
-              '" alt="' +
-              alt +
-              '" title="' +
-              alt +
-              '"' +
-              endTag;
-              
-              if(x.querySelectorAll('#'+key+'Position').length > 0)
-              {
-                  let strText = x.querySelectorAll('#Text'+key+'Position')[0].innerHTML;
-                  let imageTextPosition = 'Top';
-                  if(Object.keys(element.selectedVal).includes(key+'_image_text_position'))
-                  {
-                    Object.entries(element.selectedVal).map(([keyq, valueq]) => { if(keyq == key+'_image_text_position') { imageTextPosition = valueq.value; } }) 
+              if (
+                Object.keys(element.selectedVal).includes(key + '_left_padding')
+              ) {
+                Object.entries(element.selectedVal).map(([keyq, valueq]) => {
+                  if (keyq == key + '_left_padding') {
+                    classAlign += ' ' + valueq.value;
                   }
-                  let finalHTML = '';
-                  //console.log("CC",key, element.selected_Values);
-                 
-                  if(imageTextPosition === 'Top')
-                  {
-                      finalHTML += '<div class="p-[15px]" id="Text'+key+'Position">';
-                      finalHTML += strText;
-                      finalHTML += '</div>';
-                      finalHTML += '<div class="'+classAlign+'" id="'+key+'">';
-                      finalHTML += imgStr;
-                      finalHTML += '</div>';
-                  }
-                  else
-                  {
-                      finalHTML += '<div class="'+classAlign+'" id="'+key+'">';
-                      finalHTML += imgStr;
-                      finalHTML += '</div>';
-                      finalHTML += '<div class="p-[15px]" id="Text'+key+'Position">';
-                      finalHTML += strText;
-                      finalHTML += '</div>';
-                  }
-                  x.querySelectorAll('#'+key+'Position')[0].innerHTML = finalHTML;
+                });
               }
-              else
-              {
+              if (
+                Object.keys(element.selectedVal).includes(
+                  key + '_right_padding',
+                )
+              ) {
+                Object.entries(element.selectedVal).map(([keyq, valueq]) => {
+                  if (keyq == key + '_right_padding') {
+                    classAlign += ' ' + valueq.value;
+                  }
+                });
+              }
+              if (
+                Object.keys(element.selectedVal).includes(key + '_top_padding')
+              ) {
+                Object.entries(element.selectedVal).map(([keyq, valueq]) => {
+                  if (keyq == key + '_top_padding') {
+                    classAlign += ' ' + valueq.value;
+                  }
+                });
+              }
+              if (
+                Object.keys(element.selectedVal).includes(
+                  key + '_bottom_padding',
+                )
+              ) {
+                Object.entries(element.selectedVal).map(([keyq, valueq]) => {
+                  if (keyq == key + '_bottom_padding') {
+                    classAlign += ' ' + valueq.value;
+                  }
+                });
+              }
+              if (
+                Object.keys(element.selectedVal).includes(key + '_left_margin')
+              ) {
+                Object.entries(element.selectedVal).map(([keyq, valueq]) => {
+                  if (keyq == key + '_left_margin') {
+                    classAlign += ' ' + valueq.value;
+                  }
+                });
+              }
+              if (
+                Object.keys(element.selectedVal).includes(key + '_right_margin')
+              ) {
+                Object.entries(element.selectedVal).map(([keyq, valueq]) => {
+                  if (keyq == key + '_right_margin') {
+                    classAlign += ' ' + valueq.value;
+                  }
+                });
+              }
+              if (
+                Object.keys(element.selectedVal).includes(key + '_top_margin')
+              ) {
+                Object.entries(element.selectedVal).map(([keyq, valueq]) => {
+                  if (keyq == key + '_top_margin') {
+                    classAlign += ' ' + valueq.value;
+                  }
+                });
+              }
+              if (
+                Object.keys(element.selectedVal).includes(
+                  key + '_bottom_margin',
+                )
+              ) {
+                Object.entries(element.selectedVal).map(([keyq, valueq]) => {
+                  if (keyq == key + '_bottom_margin') {
+                    classAlign += ' ' + valueq.value;
+                  }
+                });
+              }
+              let imgStr =
+                starttag +
+                imageSize +
+                '" id="' +
+                key +
+                '_img_link"><img id="' +
+                key +
+                '_img" class="' +
+                effectClass +
+                ' ' +
+                imgClass +
+                '" src="' +
+                value.value +
+                '" alt="' +
+                alt +
+                '" title="' +
+                alt +
+                '"' +
+                endTag;
+
+              if (x.querySelectorAll('#' + key + 'Position').length > 0) {
+                let strText = x.querySelectorAll('#Text' + key + 'Position')[0]
+                  .innerHTML;
+                let imageTextPosition = 'Top';
+                if (
+                  Object.keys(element.selectedVal).includes(
+                    key + '_image_text_position',
+                  )
+                ) {
+                  Object.entries(element.selectedVal).map(([keyq, valueq]) => {
+                    if (keyq == key + '_image_text_position') {
+                      imageTextPosition = valueq.value;
+                    }
+                  });
+                }
+                let finalHTML = '';
+                //console.log("CC",key, element.selected_Values);
+
+                if (imageTextPosition === 'Top') {
+                  finalHTML +=
+                    '<div class="p-[15px]" id="Text' + key + 'Position">';
+                  finalHTML += strText;
+                  finalHTML += '</div>';
+                  finalHTML +=
+                    '<div class="' + classAlign + '" id="' + key + '">';
+                  finalHTML += imgStr;
+                  finalHTML += '</div>';
+                } else {
+                  finalHTML +=
+                    '<div class="' + classAlign + '" id="' + key + '">';
+                  finalHTML += imgStr;
+                  finalHTML += '</div>';
+                  finalHTML +=
+                    '<div class="p-[15px]" id="Text' + key + 'Position">';
+                  finalHTML += strText;
+                  finalHTML += '</div>';
+                }
+                x.querySelectorAll('#' + key + 'Position')[0].innerHTML =
+                  finalHTML;
+              } else {
                 x.querySelectorAll('#' + key)[0].className = classAlign;
-              
+
                 x.querySelectorAll('#' + key)[0].innerHTML = imgStr;
               }
 
               // if(imageSize == '')
               //   imageSize = 'max-w-none';
-              
             }
           }
         }
       }
-      if(value.type === 'imagehide')
-          {
-              if(value.value)
-              {
-                let k =  key.replace('_image_hide', '');
-                if(x.querySelectorAll("#" + k).length > 0)
-                   x.querySelectorAll('#' + k)[0].className = 'hidden';
-              }
-          }
+      if (value.type === 'imagehide') {
+        if (value.value) {
+          let k = key.replace('_image_hide', '');
+          if (x.querySelectorAll('#' + k).length > 0)
+            x.querySelectorAll('#' + k)[0].className = 'hidden';
+        }
+      }
 
       // if (value.type == 'alt') {
       //   //let propname = key.replace("_alt", "");
@@ -1211,15 +1273,27 @@ export const updateSetProperties = (element) => {
 
       if (value.type == 'text') {
         if (x.querySelectorAll('#' + key).length > 0) {
-          if(value.value)
-            x.querySelectorAll('#' + key)[0].innerHTML = value.value;
-          else
-          {
-            if(x.querySelectorAll('#'+key+'_pos').length > 0)
-            {
-              x.querySelectorAll('#'+key+'_pos')[0].remove();
+          let tag = '';
+          if (Object.keys(element.selectedVal).includes(key + '_header_tag')) {
+            Object.entries(element.selectedVal).map(([keyq, valueq]) => {
+              if (keyq === key + '_header_tag' && valueq.value !== '') {
+                tag += valueq.value;
+              }
+            });
+          }
+          if (value.value) {
+            if (tag) {
+              x.querySelectorAll('#' + key)[0].innerHTML =
+                '<' + tag + '>' + value.value + '</' + tag + '>';
+            } else {
+              x.querySelectorAll('#' + key)[0].innerHTML = value.value;
             }
-          }        
+          } else {
+            if (x.querySelectorAll('#' + key + '_pos').length > 0) {
+              x.querySelectorAll('#' + key + '_pos')[0].remove();
+            }
+            x.querySelectorAll('#' + key)[0].innerHTML = '';
+          }
         }
       }
       // if (value.type == 'btn_size') {
@@ -1458,25 +1532,28 @@ export const updateSetProperties = (element) => {
     ) {
       if (
         element.selectedVal.ElementConfiguration_final_class.value.trim() !== ''
-      )
-      {
-        if(!imgDisplay)
+      ) {
+        if (!imgDisplay)
           x.querySelectorAll('#right-section')[0].className =
-          element.selectedVal.ElementConfiguration_final_class.value.trim() + ' w-full';
+            element.selectedVal.ElementConfiguration_final_class.value.trim() +
+            ' w-full';
         else
-            x.querySelectorAll('#right-section')[0].className =
-          element.selectedVal.ElementConfiguration_final_class.value.trim();
-
+          x.querySelectorAll('#right-section')[0].className =
+            element.selectedVal.ElementConfiguration_final_class.value.trim();
       }
     }
 
-    if(Object.keys(element.selectedVal).includes('ElementConfiguration_text_section_bg'))
-        {
-            if(element.selectedVal.ElementConfiguration_text_section_bg.value)
-            {
-                x.querySelectorAll('#right-section')[0].style = 'background: ' + element.selectedVal.ElementConfiguration_text_section_bg.value;
-            }
-        }
+    if (
+      Object.keys(element.selectedVal).includes(
+        'ElementConfiguration_text_section_bg',
+      )
+    ) {
+      if (element.selectedVal.ElementConfiguration_text_section_bg.value) {
+        x.querySelectorAll('#right-section')[0].style =
+          'background: ' +
+          element.selectedVal.ElementConfiguration_text_section_bg.value;
+      }
+    }
 
     if (
       Object.keys(element.selectedVal).includes(
@@ -1671,12 +1748,17 @@ export const displaySection = (obj, side, x) => {
   let strHTML = '';
   if (obj.contentType == 'Image') {
     strHTML += '<div class="flex">';
-    strHTML +=
-      '<a title="' +
-      obj.image_alt +
-      '" href="' +
-      obj.image_link +
-      '" class="hrefurl no-underline">';
+    if (obj.image_link != '') {
+      strHTML +=
+        '<a title="' +
+        obj.image_alt +
+        '" href="' +
+        obj.image_link +
+        '" class="hrefurl no-underline">';
+    } else {
+      strHTML += '<div>';
+    }
+
     strHTML +=
       '<img class="w-full" src="' +
       obj.image +
@@ -1698,7 +1780,12 @@ export const displaySection = (obj, side, x) => {
     strHTML += '</div>';
 
     //strHTML += '</div>';
-    strHTML += '</a>';
+    if (obj.image_link != '') {
+      strHTML += '</a>';
+    } else {
+      strHTML += '</div>';
+    }
+
     strHTML += '</div>';
   } else {
     strHTML += '<div class="p-4 lg:p-8 flex w-full items-center">';

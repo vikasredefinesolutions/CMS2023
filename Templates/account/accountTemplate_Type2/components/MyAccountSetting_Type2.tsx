@@ -145,10 +145,12 @@ const MyAccountSetting_Type2 = () => {
   };
 
   const validationSchema = Yup.object().shape({
-    firstName: Yup.string().required(
-      __ValidationText.signUp.firstName.required,
-    ),
-    lastName: Yup.string().required(__ValidationText.signUp.lastName.required),
+    firstName: Yup.string()
+      .required(__ValidationText.signUp.firstName.required)
+      .min(__ValidationText.signUp.firstName.minLength),
+    lastName: Yup.string()
+      .required(__ValidationText.signUp.lastName.required)
+      .min(__ValidationText.signUp.lastName.minLength),
     companyName: Yup.string().required(
       __ValidationText.signUp.companyName.required,
     ),
@@ -340,7 +342,7 @@ const MyAccountSetting_Type2 = () => {
                         {__pagesText.accountPage.birthDay}{' '}
                       </label>
                       <div className='grow'>
-                        <div className='flex flex-wrap mx-[-10px]'>
+                        <div className='flex flex-wrap ml-[-10px] mr-[-10px]'>
                           <div className='w-1/3 px-[10px]'>
                             <select
                               onChange={(e) => setMonth(e.target.value)}
@@ -492,12 +494,12 @@ const MyAccountSetting_Type2 = () => {
                                   <span className='w-full pt-[4px] pb-[4px] block'>
                                     {__pagesText.accountPage.eightMore}
                                   </span>
-                                  <span className='w-full pt-[4px] pb-[4px] block'>
+                                  {/* <span className='w-full pt-[4px] pb-[4px] block'>
                                     {__pagesText.accountPage.upperOrLowerCase}
                                   </span>
                                   <span className='w-full pt-[4px] pb-[4px] block'>
                                     {__pagesText.accountPage.atLeastOneNumber}
-                                  </span>
+                                  </span> */}
                                 </div>
                               </div>
                             </div>
@@ -549,6 +551,7 @@ const MyAccountSetting_Type2 = () => {
                               onMouseOver={() => setShowInfo2(true)}
                               onMouseLeave={() => setShowInfo2(false)}
                               className=''
+                              type='button'
                               aria-haspopup='true'
                             >
                               <span className='material-icons-outlined ml-2 text-gray-400 focus:outline-none hover:text-indigo-500 transition-colors'>
@@ -572,12 +575,12 @@ const MyAccountSetting_Type2 = () => {
                                   <span className='w-full pt-[4px] pb-[4px] block'>
                                     {__pagesText.accountPage.eightMore}
                                   </span>
-                                  <span className='w-full pt-[4px] pb-[4px] block'>
+                                  {/* <span className='w-full pt-[4px] pb-[4px] block'>
                                     {__pagesText.accountPage.upperOrLowerCase}
                                   </span>
                                   <span className='w-full pt-[4px] pb-[4px] block'>
                                     {__pagesText.accountPage.atLeastOneNumber}
-                                  </span>
+                                  </span> */}
                                 </div>
                               </div>
                             </div>
@@ -661,11 +664,13 @@ const MyAccountSetting_Type2 = () => {
                   {shipAddress.map((ele: any) => {
                     return (
                       <tr>
-                        <td className='text-left p-[10px]'>{ele.firstname}</td>
+                        <td className='text-left p-[10px]'>
+                          {ele.firstname} {ele.lastName}
+                        </td>
                         <td className='text-left p-[10px]'>
                           {[
                             ele.address1,
-                            ele.address2,
+                            !(ele.address2 === ' ') && ele.address2,
                             ele.city,
                             ele.countryName,
                             ele.postalCode,
@@ -686,15 +691,17 @@ const MyAccountSetting_Type2 = () => {
                           >
                             Edit
                           </button>
-                          <button
-                            className='btn btn-sm btn-primary text-default-text mr-[5px]'
-                            type='button'
-                            onClick={() => {
-                              deleteAddress(ele.id, ele.rowVersion);
-                            }}
-                          >
-                            Delete
-                          </button>
+                          {!ele.isDefault && (
+                            <button
+                              className='btn btn-sm btn-primary text-default-text mr-[5px]'
+                              type='button'
+                              onClick={() => {
+                                deleteAddress(ele.id, ele.rowVersion);
+                              }}
+                            >
+                              Delete
+                            </button>
+                          )}
                           {ele.isDefault ? (
                             'Primary Address'
                           ) : (
@@ -742,7 +749,7 @@ const MyAccountSetting_Type2 = () => {
                         <td className='text-left p-[10px]'>
                           {[
                             ele.address1,
-                            ele.address2,
+                            !(ele.address2 === ' ') && ele.address2,
                             ele.city,
                             ele.countryName,
                             ele.postalCode,
@@ -763,12 +770,17 @@ const MyAccountSetting_Type2 = () => {
                           >
                             Edit
                           </button>
-                          <button
-                            className='btn btn-sm btn-primary text-default-text mr-[5px]'
-                            type='button'
-                          >
-                            Delete
-                          </button>
+                          {!ele.isDefault && (
+                            <button
+                              className='btn btn-sm btn-primary text-default-text mr-[5px]'
+                              type='button'
+                              onClick={() => {
+                                deleteAddress(ele.id, ele.rowVersion);
+                              }}
+                            >
+                              Delete
+                            </button>
+                          )}
                           {ele.isDefault ? (
                             'Primary Address'
                           ) : (

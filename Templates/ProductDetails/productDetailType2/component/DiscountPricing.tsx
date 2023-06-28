@@ -28,7 +28,8 @@ const DiscountPricing: React.FC<
             </span>
             <span className='pl-[5px]'>
               {' '}
-              {` ${minQty ? minQty : 4} ${unitUnits} per color`}
+              {/* {` ${minQty ? minQty : 4} ${unitUnits} per color`} */}
+              {` 4 ${unitUnits} per color` }
             </span>
           </div>
         )}
@@ -36,7 +37,8 @@ const DiscountPricing: React.FC<
         {showMsg ? (
           <div className='text-extra-small-text py-4' x-show='open'>
             {__pagesText.productInfo.discountPricing.startshowMsg}
-            {minQty ? minQty : 4}
+            {/* {minQty ? minQty : 4} */}
+            4
             {__pagesText.productInfo.discountPricing.endShowMsg}
           </div>
         ) : (

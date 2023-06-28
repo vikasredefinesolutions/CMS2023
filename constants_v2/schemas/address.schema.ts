@@ -9,8 +9,18 @@ import { __ValidationText } from '@constants/validation.text';
 import * as Yup from 'yup';
 
 export const AddressValidationSchema = Yup.object().shape({
-  firstname: Yup.string().required(addressMessages.firstName.required),
-  lastName: Yup.string().required(addressMessages.lastName.required),
+  firstname: Yup.string()
+    .required(addressMessages.firstName.required)
+    .min(
+      addressMessages.firstName.firstNameminLength,
+      addressMessages.firstName.minValidation,
+    ),
+  lastName: Yup.string()
+    .required(addressMessages.lastName.required)
+    .min(
+      addressMessages.lastName.lastNameminLength,
+      addressMessages.lastName.minValidation,
+    ),
   address1: Yup.string().required(addressMessages.address1.required),
   address2: Yup.string(),
   city: Yup.string().required(addressMessages.city.required),

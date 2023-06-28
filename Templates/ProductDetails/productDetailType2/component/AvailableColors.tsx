@@ -1,13 +1,13 @@
+import NxtImage from '@appComponents/reUsable/Image';
 import { __pagesConstant } from '@constants/pages.constant';
 import { __pagesText } from '@constants/pages.text';
 import { _ProductColor } from '@definations/APIs/colors.res';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
-import ColorImage from './ColorImage';
 const AvailableColors: React.FC = () => {
   const router = useRouter();
-  const { setColor } = useActions_v2();
+  const { setColor, clearToCheckout } = useActions_v2();
   const selectedColor = useTypedSelector_v2(
     (state) => state.product.selected.color,
   );
@@ -18,6 +18,7 @@ const AvailableColors: React.FC = () => {
       setColor(product);
       return;
     }
+    clearToCheckout();
     router.push(`${product.productSEName}.html`);
   };
   if (colors === null) return <></>;
@@ -27,12 +28,13 @@ const AvailableColors: React.FC = () => {
 
   return (
     <>
-      <div className='flex flex-wrap items-center pt-[15px]'>
+      <div className='flex pt-[15px]'>
         <div className='text-default-text w-[90px]'>
-          <span className=''>
+          <span className='mr-[5px]'>
             {' '}
             {__pagesText.productInfo.availableColors.onlycolor}
           </span>
+          <span>:</span>
         </div>
         <div className='flex flex-wrap text-center available-colors text-default-text ml-[4px] gap-[5px]'>
           {!showAllColors &&
@@ -50,7 +52,12 @@ const AvailableColors: React.FC = () => {
                   <div
                     className={`w-[32px] h-[32px] p-[1px] border-2  hover:border-primary cursor-pointer ${highlight}`}
                   >
-                    <ColorImage product={product} />
+                    <NxtImage
+                      title={`${product.name}`}
+                      src={product.imageUrl}
+                      alt={product.altTag}
+                      className='max-h-full m-auto'
+                    />
                   </div>
                 </div>
               ) : (
@@ -59,27 +66,35 @@ const AvailableColors: React.FC = () => {
             })}
         </div>
         {/* No CSS for this button in HTML files */}
-        {showAllColors &&
-          colors.map((product, index) => {
-            const highlight =
-              product.attributeOptionId === selectedColor?.attributeOptionId
-                ? 'border-primary'
-                : 'border-slate-200';
+        <div className='flex flex-wrap text-center available-colors text-default-text ml-[4px] gap-[5px]'>
+          {showAllColors &&
+            colors.map((product, index) => {
+              const highlight =
+                product.attributeOptionId === selectedColor?.attributeOptionId
+                  ? 'border-primary'
+                  : 'border-slate-200';
 
-            return (
-              <div
-                className=''
-                key={product.attributeOptionId}
-                onClick={() => handleChooseColor(product)}
-              >
+              return (
                 <div
-                  className={`w-[32px] h-[32px] p-[1px] border-2  hover:border-primary cursor-pointer ${highlight}`}
+                  className=''
+                  key={product.attributeOptionId}
+                  onClick={() => handleChooseColor(product)}
                 >
-                  <ColorImage product={product} />
+                  <div
+                    className={`w-[32px] h-[32px] p-[1px] border-2  hover:border-primary cursor-pointer ${highlight}`}
+                  >
+                    {/* <ColorImage product={product} /> */}
+                    <NxtImage
+                      title={`${product.name}`}
+                      src={product.imageUrl}
+                      alt={product.altTag}
+                      className='max-h-full m-auto'
+                    />
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
+        </div>
         {showAllColorsButton && (
           <div className='text-right text-anchor hover:text-anchor-hover'>
             <button

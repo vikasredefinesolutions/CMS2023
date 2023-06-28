@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable no-unused-vars */
 import { _Store } from '@configs/page.config';
-import { __Login } from '@constants/common.constant';
+import { _STORE_EMAIL, __Login } from '@constants/common.constant';
 import { __length, __messages } from '@constants/form.config';
 import {
   __Cookie,
@@ -12,15 +12,17 @@ import { __pagesText } from '@constants/pages.text';
 import { fetchCartDetails } from '@redux/asyncActions/cart.async';
 import { updateCartByNewUserId } from '@services/cart.service';
 import { checkCustomerAlreadyExist } from '@services/checkout.service';
+import { getCustomerAllowBalance } from '@services/payment.service';
 import { fetchThirdpartyservice } from '@services/thirdparty.service';
 import { GetStoreCustomer, signInUser } from '@services/user.service';
 import { getWishlist } from '@services/wishlist.service';
+import SignUp_type5 from '@templates/SignUp/SignUp_Type5';
 import { paths } from 'constants_v2/paths.constant';
-import { Formik, FormikValues } from 'formik';
+import { Form, Formik, FormikValues } from 'formik';
 import {
+  KlaviyoScriptTag,
   deleteCookie,
   extractCookies,
-  KlaviyoScriptTag,
   setCookie,
 } from 'helpers_v2/common.helper';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
@@ -56,15 +58,24 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
     updateWishListData,
     showModal,
     employee_Login,
+    customerCreditBalanceUpdate,
+    customerUseCreditBalance,
+    setRedirectPagePath,
   } = useActions_v2();
   const bothLogin = useTypedSelector_v2((state) => state.store.bothLogin);
   const [showErroMsg, setErrorMsg] = useState<null | string>(null);
   const { id: storeId } = useTypedSelector_v2((state) => state.store);
   const storeCode = useTypedSelector_v2((state) => state.store.code);
+
+  const { redirectPath } = useTypedSelector_v2((state) => state.home);
   // const storeEmail = useTypedSelector_v2((state) => state.store.email_address);
   const { phone_number: storePhoneNumber, email_address: storeEmail } =
     useTypedSelector_v2((state) => state.store);
   const { empId } = useTypedSelector_v2((state) => state.employee);
+
+  const [showSection, setShowSection] = useState<
+    'Login' | 'Register' | 'Submit' | 'Success'
+  >('Login');
 
   const signInHandler = (enteredInputs: {
     userName: string;
@@ -89,45 +100,61 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
             id: +user.id,
           });
           setCookie(__Cookie.userId, user.id, __Cookie_Expiry.userId);
+          if (storeCode !== 'PKHG') {
+            GetStoreCustomer(+user.id).then((res) => {
+              if (res === null) return;
+              if (localStorage) {
+                const tempCustomerId = extractCookies(
+                  __Cookie.tempCustomerId,
+                  'browserCookie',
+                ).tempCustomerId;
 
-          GetStoreCustomer(+user.id).then((res) => {
-            if (res === null) return;
-            if (localStorage) {
-              const tempCustomerId = extractCookies(
-                __Cookie.tempCustomerId,
-                'browserCookie',
-              ).tempCustomerId;
+                if (tempCustomerId) {
+                  updateCartByNewUserId(~~tempCustomerId, res.id);
+                  fetchCartDetails({
+                    customerId: res.id,
+                    isEmployeeLoggedIn: false,
+                  });
+                  if (router.pathname === paths.CART) {
+                    router.reload();
+                  }
 
-              if (tempCustomerId) {
-                updateCartByNewUserId(~~tempCustomerId, res.id);
-                fetchCartDetails({
-                  customerId: res.id,
-                  isEmployeeLoggedIn: false,
-                });
-                if (router.pathname === paths.CART) {
-                  router.reload();
+                  deleteCookie(__Cookie.tempCustomerId);
                 }
-
-                deleteCookie(__Cookie.tempCustomerId);
               }
-            }
 
-            const userInfo = {
-              $email: res.email,
-              $first_name: res.firstname,
-              $last_name: res.lastName,
-              $phone_number: '',
-              $organization: res.companyName,
-              $title: 'title',
-              $timestamp: new Date(),
-            };
+              const userInfo = {
+                $email: res.email,
+                $first_name: res.firstname,
+                $last_name: res.lastName,
+                $phone_number: '',
+                $organization: res.companyName,
+                $title: 'title',
+                $timestamp: new Date(),
+              };
 
-            KlaviyoScriptTag(['identify', userInfo]);
-            updateCustomer({ customer: res });
-            getWishlist(res.id).then((wishListResponse) => {
-              updateWishListData(wishListResponse);
+              KlaviyoScriptTag(['identify', userInfo]);
+              updateCustomer({ customer: res });
+              getWishlist(res.id).then((wishListResponse) => {
+                updateWishListData(wishListResponse);
+              });
+              if (res.id) {
+                getCustomerAllowBalance(res.id)
+                  .then((response) => {
+                    if (response && typeof response === 'number') {
+                      customerCreditBalanceUpdate(response);
+                      customerUseCreditBalance(true);
+                    }
+                  })
+                  .finally(() => {
+                    if (redirectPath) {
+                      setRedirectPagePath('');
+                      router.push(redirectPath);
+                    }
+                  });
+              }
             });
-          });
+          }
         }
       })
       .finally(() => {
@@ -135,6 +162,7 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
         // CartController();
       });
   };
+
   const SamlloginHandler = () => {
     fetchThirdpartyservice({ storeId }).then((ThirdpartyServices) => {
       ThirdpartyServices.map((service) => {
@@ -151,19 +179,15 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
       values.userName,
       storeId,
     );
-    if (
-      isEmployeeExits &&
-      isEmployeeExits.id &&
-      (isEmployeeExits.isCustomerExist || isEmployeeExits.isGuestCustomer)
-    ) {
+    if (isEmployeeExits && isEmployeeExits.isCustomerExist) {
       const encodeEmpGuestData = encodeURIComponent(
         JSON.stringify(isEmployeeExits),
       );
       localStorage.setItem(__LocalStorage.empGuest, encodeEmpGuestData);
-      employee_Login({ isGuest: isEmployeeExits.isGuestCustomer });
       logInUser({
         id: +isEmployeeExits.id,
       });
+      employee_Login({ isGuest: true });
       setCookie(
         __Cookie.userId,
         `${isEmployeeExits.id}`,
@@ -190,7 +214,14 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
 
       const guestDetails = await GetStoreCustomer(isEmployeeExits.id);
       if (guestDetails) updateCustomer({ customer: guestDetails });
+    } else {
+      localStorage.setItem(
+        __LocalStorage.guestEmailID,
+        JSON.stringify({ onlyEmail: true, email: values.userName }),
+      );
+      employee_Login({ isGuest: true });
     }
+
     modalHandler(null);
     setShowLoader(false);
     try {
@@ -200,6 +231,20 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
     }
   };
 
+  const checkCustomEmail = (
+    email: string,
+    domain: _STORE_EMAIL | undefined,
+  ) => {
+    if (!domain) return;
+    const result = new RegExp("^\\w+([-+.']w+)*@" + domain + '.com$').test(
+      email.trim(),
+    );
+    if (!result) {
+      setErrorMsg(`Please enter ${domain} email address.`);
+    }
+    return;
+  };
+
   return (
     <>
       <div
@@ -207,9 +252,7 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
         className=' overflow-y-auto overflow-x-hidden fixed z-50 justify-center items-center h-modal inset-0 text-default-text'
       >
         <div className='w-full h-full bg-[#000000] bg-opacity-[0.50] flex items-center justify-center'>
-          <div
-            className={`relative px-[16px] w-full max-w-2xl h-full md:h-auto`}
-          >
+          <div className={`relative px-[16px] w-full max-w-2xl h-auto`}>
             <div className='relative bg-[#ffffff] shadow max-h-screen overflow-y-auto h-full rounded-md'>
               <div className='flex justify-between items-center p-[15px] rounded-t border-b sticky top-0 left-0 bg-[#ffffff] z-50'>
                 <div className='font-[600] text-medium-text'>
@@ -234,316 +277,337 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
                   </svg>
                 </button>
               </div>
+              {/* login section */}
+              {showSection == 'Login' && (
+                <div className='p-[25px]'>
+                  <div className='mb-[10px] font-[700] text-lg text-center'>
+                    {storeCode === 'PKHG' ? (
+                      <>
+                        <p
+                          className='!font-normal text-left text-default-text'
+                          dangerouslySetInnerHTML={{
+                            __html:
+                              __pagesText.productInfo.loginModal.pkIntroText,
+                          }}
+                        />
+                      </>
+                    ) : (
+                      <>{__pagesText.productInfo.loginModal.signIn}</>
+                    )}
+                  </div>
+                  {storeCode === 'PKHG' && empId ? (
+                    <Formik
+                      initialValues={{
+                        userName: '',
+                      }}
+                      onSubmit={empGuestSignInHandler}
+                      validationSchema={empGuestvalidationSchema}
+                    >
+                      {({ values, handleChange }) => {
+                        return (
+                          <>
+                            <Form>
+                              {showErroMsg && (
+                                <span className='mb-1 text-rose-500'>
+                                  {showErroMsg}
+                                </span>
+                              )}
+                              <div className='Login-Main'>
+                                <Input
+                                  label={''}
+                                  id='email-address'
+                                  placeHolder={
+                                    __pagesText.productInfo.loginModal
+                                      .emailPlaceHolder
+                                  }
+                                  name={'userName'}
+                                  value={values.userName}
+                                  onChange={handleChange}
+                                  type={'email'}
+                                  required={true}
+                                />
 
-              <div className='p-[25px]'>
-                <div className='mb-[10px] font-[700] text-lg text-center'>
-                  {storeCode === 'PKHG' ? (
-                    <>
-                      <p
-                        className='!font-normal text-left text-default-text'
-                        dangerouslySetInnerHTML={{
-                          __html:
-                            __pagesText.productInfo.loginModal.pkIntroText,
-                        }}
-                      />
-                    </>
+                                <div className='mb-[20px]'>
+                                  <button
+                                    className={`btn btn-md btn-secondary  w-full pk-hg-primary`}
+                                    type='submit'
+                                  >
+                                    {__pagesText.productInfo.loginModal.shopNow}
+                                  </button>
+                                </div>
+
+                                <div className='mt-[10px] text-extra-small-text text-center'>
+                                  {
+                                    __pagesText.productInfo.loginModal
+                                      .clickMessage
+                                  }{' '}
+                                  <Link href={paths.TERMS_OF_USE}>
+                                    <a
+                                      className='text-anchor'
+                                      onClick={() => modalHandler(null)}
+                                    >
+                                      {
+                                        __pagesText.productInfo.loginModal
+                                          .termsOfUse
+                                      }
+                                    </a>
+                                  </Link>{' '}
+                                  {__pagesText.productInfo.loginModal.and}{' '}
+                                  <Link href={paths.PRIVACY_POLICY}>
+                                    <a
+                                      className='text-anchor'
+                                      onClick={() => modalHandler(null)}
+                                    >
+                                      {
+                                        __pagesText.productInfo.loginModal
+                                          .privacyPolicy
+                                      }
+                                    </a>
+                                  </Link>
+                                  .
+                                </div>
+                              </div>
+                            </Form>
+                          </>
+                        );
+                      }}
+                    </Formik>
                   ) : (
-                    <>{__pagesText.productInfo.loginModal.signIn}</>
-                  )}
-                </div>
-                {storeCode === 'PKHG' && empId ? (
-                  <Formik
-                    initialValues={{
-                      userName: '',
-                    }}
-                    onSubmit={empGuestSignInHandler}
-                    validationSchema={empGuestvalidationSchema}
-                  >
-                    {({ values, handleChange, handleSubmit }) => {
-                      return (
-                        <>
-                          {showErroMsg && (
-                            <span className='mb-1 text-rose-500'>
-                              {showErroMsg}
-                            </span>
-                          )}
-                          <div className='Login-Main'>
-                            <Input
-                              label={''}
-                              id='email-address'
-                              placeHolder={
-                                __pagesText.productInfo.loginModal
-                                  .emailPlaceHolder
-                              }
-                              name={'userName'}
-                              value={values.userName}
-                              onChange={handleChange}
-                              type={'email'}
-                              required={true}
-                            />
-
-                            <div className='mb-[20px]'>
-                              <button
-                                className={`btn btn-md btn-secondary  w-full pk-hg-primary`}
-                                type='submit'
-                                onClick={() => handleSubmit()}
-                              >
-                                {__pagesText.productInfo.loginModal.shopNow}
-                              </button>
-                            </div>
-
-                            <div className='mt-[10px] text-extra-small-text text-center'>
-                              {__pagesText.productInfo.loginModal.clickMessage}{' '}
-                              <Link href={paths.TERMS_OF_USE}>
-                                <a
-                                  className='text-anchor'
-                                  onClick={() => modalHandler(null)}
-                                >
-                                  {
+                    <Formik
+                      initialValues={{
+                        userName: '',
+                        password: '',
+                        keepMeLoggedIn: false,
+                      }}
+                      onSubmit={signInHandler}
+                      validationSchema={validationSchema}
+                    >
+                      {({ values, handleChange, handleSubmit }) => {
+                        return (
+                          <>
+                            <Form>
+                              {showErroMsg && (
+                                <span className='mb-1 text-rose-500'>
+                                  {showErroMsg}
+                                </span>
+                              )}
+                              <div className='Login-Main'>
+                                <Input
+                                  label={''}
+                                  id='email-address-login'
+                                  placeHolder={
                                     __pagesText.productInfo.loginModal
-                                      .termsOfUse
+                                      .emailPlaceHolder
                                   }
-                                </a>
-                              </Link>{' '}
-                              {__pagesText.productInfo.loginModal.and}{' '}
-                              <Link href={paths.PRIVACY_POLICY}>
-                                <a
-                                  className='text-anchor'
-                                  onClick={() => modalHandler(null)}
-                                >
-                                  {
-                                    __pagesText.productInfo.loginModal
-                                      .privacyPolicy
-                                  }
-                                </a>
-                              </Link>
-                              .
-                            </div>
-                          </div>
-                        </>
-                      );
-                    }}
-                  </Formik>
-                ) : (
-                  <Formik
-                    initialValues={{
-                      userName: '',
-                      password: '',
-                      keepMeLoggedIn: false,
-                    }}
-                    onSubmit={signInHandler}
-                    validationSchema={validationSchema}
-                  >
-                    {({ values, handleChange, handleSubmit }) => {
-                      return (
-                        <>
-                          {showErroMsg && (
-                            <span className='mb-1 text-rose-500'>
-                              {showErroMsg}
-                            </span>
-                          )}
-                          <div className='Login-Main'>
-                            <Input
-                              label={''}
-                              id='email-address0'
-                              placeHolder={
-                                __pagesText.productInfo.loginModal
-                                  .emailPlaceHolder
-                              }
-                              name={'userName'}
-                              value={values.userName}
-                              onChange={(ev) => {
-                                if (showErroMsg) {
-                                  setErrorMsg(null);
-                                }
-                                handleChange(ev);
-                              }}
-                              type={'email'}
-                              required={false}
-                            />
-
-                            <Input
-                              label={''}
-                              placeHolder={
-                                __pagesText.productInfo.loginModal
-                                  .passwordPlaceHolder
-                              }
-                              id='password'
-                              name={'password'}
-                              value={values.password}
-                              onChange={(ev) => {
-                                if (showErroMsg) {
-                                  setErrorMsg(null);
-                                }
-                                handleChange(ev);
-                              }}
-                              type={'password'}
-                              required={false}
-                            />
-
-                            <div className='mb-[20px]'>
-                              <button
-                                disabled={!!showErroMsg}
-                                className={`btn ${
-                                  storeCode == _Store.type4
-                                    ? 'btn-primary'
-                                    : 'btn-md btn-secondary'
-                                }   w-full pk-hg-primary`}
-                                type='submit'
-                                onClick={() => {
-                                  handleSubmit();
-                                }}
-                              >
-                                {__pagesText.productInfo.loginModal.shopNow}
-                              </button>
-                            </div>
-
-                            <div className='flex justify-between items-center pb-[10px]'>
-                              <div className='mb-[10px] flex items-center gap-1'>
-                                <input
-                                  checked={values.keepMeLoggedIn}
+                                  name={'userName'}
+                                  value={values.userName}
                                   onChange={(ev) => {
                                     if (showErroMsg) {
                                       setErrorMsg(null);
                                     }
                                     handleChange(ev);
                                   }}
-                                  type='checkbox'
-                                  id='ChkKeepMeLogged'
-                                  name='keepMeLoggedIn'
+                                  type={'email'}
+                                  required={false}
+                                  onBlur={(e) =>
+                                    checkCustomEmail(
+                                      e.target.value,
+                                      (_STORE_EMAIL as any)[storeCode],
+                                    )
+                                  }
                                 />
-                                <label htmlFor='ChkKeepMeLogged'>
-                                  {
-                                    __pagesText.productInfo.loginModal
-                                      .keepMeLoggedIn
-                                  }
-                                </label>
-                              </div>
 
-                              <div className='mb-[10px]'>
-                                <button
-                                  onClick={() => modalHandler('forgot')}
-                                  className='text-anchor'
-                                >
-                                  {
+                                <Input
+                                  label={''}
+                                  placeHolder={
                                     __pagesText.productInfo.loginModal
-                                      .forgotPassword
+                                      .passwordPlaceHolder
                                   }
-                                </button>
-                              </div>
-                            </div>
+                                  id='password'
+                                  name={'password'}
+                                  value={values.password}
+                                  onChange={(ev) => {
+                                    if (showErroMsg) {
+                                      setErrorMsg(null);
+                                    }
+                                    handleChange(ev);
+                                  }}
+                                  type={'password'}
+                                  required={false}
+                                />
 
-                            {bothLogin && (
-                              <div className='mb-4'>
-                                <button
-                                  onClick={SamlloginHandler}
-                                  className='btn btn-md btn-secondary w-full'
-                                  type='button'
+                                <div className='mb-[20px]'>
+                                  <button
+                                    disabled={!!showErroMsg}
+                                    className={`btn ${
+                                      storeCode == _Store.type4
+                                        ? 'btn-primary'
+                                        : 'btn-md btn-secondary'
+                                    }   w-full pk-hg-primary`}
+                                    type='submit'
+                                  >
+                                    {__pagesText.productInfo.loginModal.shopNow}
+                                  </button>
+                                </div>
+
+                                <div className='flex justify-between items-center pb-[10px]'>
+                                  <div className='mb-[10px] flex items-center gap-1'>
+                                    <input
+                                      checked={values.keepMeLoggedIn}
+                                      onChange={(ev) => {
+                                        if (showErroMsg) {
+                                          setErrorMsg(null);
+                                        }
+                                        handleChange(ev);
+                                      }}
+                                      type='checkbox'
+                                      id='ChkKeepMeLogged'
+                                      name='keepMeLoggedIn'
+                                    />
+                                    <label htmlFor='ChkKeepMeLogged'>
+                                      {
+                                        __pagesText.productInfo.loginModal
+                                          .keepMeLoggedIn
+                                      }
+                                    </label>
+                                  </div>
+
+                                  <div className='mb-[10px]'>
+                                    <button
+                                      onClick={() => modalHandler('forgot')}
+                                      className='text-anchor'
+                                    >
+                                      {
+                                        __pagesText.productInfo.loginModal
+                                          .forgotPassword
+                                      }
+                                    </button>
+                                  </div>
+                                </div>
+
+                                {bothLogin && (
+                                  <div className='mb-4'>
+                                    <button
+                                      onClick={SamlloginHandler}
+                                      className='btn btn-md btn-secondary w-full'
+                                      type='button'
+                                    >
+                                      {
+                                        __pagesText.productInfo.loginModal
+                                          .samllogin
+                                      }
+                                    </button>
+                                  </div>
+                                )}
+                                <div className='mb-4'>
+                                  <button
+                                    onClick={() => {
+                                      if (storeCode == _Store.type3) {
+                                        setShowSection('Register');
+                                      } else {
+                                        modalHandler(null);
+                                        router.push(paths.SIGN_UP);
+                                      }
+                                    }}
+                                    className={`btn ${
+                                      storeCode == _Store.type4
+                                        ? 'btn-primary'
+                                        : 'btn-md btn-secondary'
+                                    }   w-full pk-hg-primary`}
+                                  >
+                                    {storeCode === 'DI'
+                                      ? __pagesText.productInfo.loginModal
+                                          .requestLogin
+                                      : __pagesText.productInfo.loginModal
+                                          .createNewAccount}
+                                  </button>
+                                </div>
+
+                                <div
+                                  className={`${
+                                    storeCode == _Store.type4
+                                      ? 'mb-4'
+                                      : 'hidden'
+                                  }`}
                                 >
-                                  {__pagesText.productInfo.loginModal.samllogin}
-                                </button>
+                                  <button
+                                    type='button'
+                                    onClick={() => {
+                                      showModal({
+                                        message: `Please contact Driving Impressions at ${storeEmail} or ${storePhoneNumber} For Driving Impression Account`,
+                                        title: 'Information',
+                                      });
+                                    }}
+                                    className={`btn ${
+                                      storeCode == _Store.type4
+                                        ? 'btn-primary'
+                                        : 'btn-md btn-secondary'
+                                    }   w-full pk-hg-primary`}
+                                  >
+                                    {
+                                      __pagesText.productInfo.loginModal
+                                        .newCustomer
+                                    }
+                                  </button>
+                                </div>
+
+                                {(storeCode === 'PKHG' ||
+                                  storeCode === 'DI' ||
+                                  storeCode === 'CG') && (
+                                  <div className='mt-[10px] text-extra-small-text text-center'>
+                                    {
+                                      __pagesText.productInfo.loginModal
+                                        .clickMessage
+                                    }{' '}
+                                    <Link
+                                      href={`${
+                                        storeCode == _Store.type3
+                                          ? paths.PKHGTERMS_OF_USE
+                                          : paths.TERMS_OF_USE
+                                      }`}
+                                    >
+                                      <a
+                                        className='text-anchor'
+                                        onClick={() => modalHandler(null)}
+                                      >
+                                        {
+                                          __pagesText.productInfo.loginModal
+                                            .termsOfUse
+                                        }
+                                      </a>
+                                    </Link>{' '}
+                                    {__pagesText.productInfo.loginModal.and}{' '}
+                                    <a
+                                      href={paths?.PRIVACY_POLICY}
+                                      className='text-anchor'
+                                    >
+                                      {
+                                        __pagesText.productInfo.loginModal
+                                          .privacyPolicy
+                                      }
+                                    </a>
+                                  </div>
+                                )}
                               </div>
-                            )}
-                            <div className='mb-4'>
-                              <button
-                                onClick={() => {
-                                  modalHandler(null);
-                                  router.push(paths.SIGN_UP);
-                                }}
-                                className={`btn ${
-                                  storeCode == _Store.type4
-                                    ? 'btn-primary'
-                                    : 'btn-md btn-secondary'
-                                }   w-full pk-hg-primary`}
-                              >
-                                {
-                                  __pagesText.productInfo.loginModal
-                                    .createNewAccount
-                                }
-                              </button>
-                            </div>
-                            {/* <div
-                              className={`${
-                                storeCode == _Store.type4 ? 'mb-4' : 'hidden'
-                              }`}
-                            >
-                              <button
-                                onClick={() => {
-                                  showModal({
-                                    message: `Please contact Driving Impressions at ${storeEmail} or ${storePhoneNumber} For Driving Impression Account`,
-                                    title: 'Information',
-                                  });
-                                }}
-                                className={`btn ${
-                                  storeCode == _Store.type4
-                                    ? 'btn-primary'
-                                    : 'btn-md btn-secondary'
-                                }   w-full pk-hg-primary`}
-                              >
-                                {__pagesText.productInfo.loginModal.newCustomer}
-                              </button>
-                            </div> */}
-                            <div
-                              className={`${
-                                storeCode == _Store.type4 ? 'mb-4' : 'hidden'
-                              }`}
-                            >
-                              <button
-                                onClick={() => {
-                                  showModal({
-                                    message: `Please contact Driving Impressions at ${storeEmail} or ${storePhoneNumber} For Driving Impression Account`,
-                                    title: 'Information',
-                                  });
-                                }}
-                                className={`btn ${
-                                  storeCode == _Store.type4
-                                    ? 'btn-primary'
-                                    : 'btn-md btn-secondary'
-                                }   w-full pk-hg-primary`}
-                              >
-                                {__pagesText.productInfo.loginModal.newCustomer}
-                              </button>
-                            </div>
-                            <div className='mt-[10px] text-extra-small-text text-center'>
-                              {__pagesText.productInfo.loginModal.clickMessage}{' '}
-                              <Link
-                                href={`${
-                                  storeCode == _Store.type3
-                                    ? paths.PKHGTERMS_OF_USE
-                                    : paths.TERMS_OF_USE
-                                }`}
-                              >
-                                <a
-                                  className='text-anchor'
-                                  onClick={() => modalHandler(null)}
-                                >
-                                  {
-                                    __pagesText.productInfo.loginModal
-                                      .termsOfUse
-                                  }
-                                </a>
-                              </Link>{' '}
-                              {__pagesText.productInfo.loginModal.and}{' '}
-                              <Link href={paths.PRIVACY_POLICY}>
-                                <a
-                                  className='text-anchor'
-                                  onClick={() => modalHandler(null)}
-                                >
-                                  {
-                                    __pagesText.productInfo.loginModal
-                                      .privacyPolicy
-                                  }
-                                </a>
-                              </Link>
-                              .
-                            </div>
-                          </div>
-                        </>
-                      );
-                    }}
-                  </Formik>
-                )}
-              </div>
+                            </Form>
+                          </>
+                        );
+                      }}
+                    </Formik>
+                  )}
+                </div>
+              )}
+
+              {/* register section */}
+              {(showSection === 'Register' || showSection === 'Submit') && (
+                <div className='pt-[15px] pb-[15px]'>
+                  <SignUp_type5
+                    setShowSection={setShowSection}
+                    showSection={showSection}
+                    modalHandler={modalHandler}
+                  />
+                </div>
+              )}
             </div>
           </div>
         </div>

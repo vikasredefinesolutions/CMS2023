@@ -157,7 +157,7 @@ const SubMenuItem: React.FC<_props> = ({
         >
           {/* <span className='material-icons-outlined text-lg'>chevron_right</span> */}
           <Link
-            href={`/${itemUrl}`}
+            href={`/${itemUrl}.html`}
             className='text-anchor hover:text-anchor-hover'
           >
             <a

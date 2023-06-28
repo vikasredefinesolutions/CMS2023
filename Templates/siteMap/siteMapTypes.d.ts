@@ -4,7 +4,7 @@ export type _CategorySiteMap = {
   parentCategoryId: number;
   sename: string;
   storeId: number;
-  subRows: [];
+  subRows: _CategorySiteMap[];
 };
 export type _pagesSiteMap = {
   id: number;

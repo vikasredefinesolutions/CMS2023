@@ -20,7 +20,6 @@ interface _props {
   showButton: string;
   showPrice: string;
   showBrandLogo: string;
-  footerTabing: string;
   showBorder: string;
 }
 
@@ -33,7 +32,6 @@ const SlugSingleProductListing: React.FC<_props> = (props) => {
     showButton,
     showPrice,
     showBrandLogo,
-    footerTabing,
     showBorder,
   } = props;
   const customerId = useTypedSelector_v2((state) => state.user.id);
@@ -66,12 +64,15 @@ const SlugSingleProductListing: React.FC<_props> = (props) => {
                   href={`${encodeURIComponent(product?.productSEName)}.html`}
                   className='hrefurl'
                 >
-                  <a style={{ display: 'block' }}>
+                  <a
+                    style={{ display: 'block' }}
+                    className='w-auto h-auto m-auto max-h-[348px]'
+                  >
                     <ImageComponent
                       src={store.mediaBaseUrl + mainImageUrl}
                       alt={product?.productName}
                       title={product?.productName}
-                      className='w-auto h-auto m-auto max-h-[348px]'
+                      className='max-h-[348px] !inline-black m-auto'
                       height={350}
                       width={350}
                       key={currentProduct?.productId}

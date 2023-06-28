@@ -7,12 +7,15 @@ interface _props {
 
 const ColorImage: React.FC<_props> = ({ product }) => {
   return (
-    <NxtImage
-      title={`${product.name}`}
-      src={product.imageUrl}
-      alt={product.altTag}
-      className='w-full object-center object-cover cursor-pointer'
-    />
+    <>
+      {' '}
+      <NxtImage
+        title={`${product.name}`}
+        src={product.imageUrl}
+        alt={product.altTag}
+        className='max-h-full m-auto'
+      />
+    </>
   );
 };
 export default ColorImage;

@@ -11,6 +11,7 @@ import ReCAPTCHA from 'react-google-recaptcha';
 import * as Yup from 'yup';
 
 import {
+  __Cookie,
   phonePattern1,
   phonePattern2,
   phonePattern3,
@@ -19,6 +20,7 @@ import {
 import { __pagesText } from '@constants/pages.text';
 import { __ValidationText } from '@constants/validation.text';
 import { _SubmitConsultationPayload } from '@definations/requestConsultation.type';
+import { extractCookies } from '@helpers/common.helper';
 import { SumbitRequestConsultationDetails } from '@services/product.service';
 import Ecommerce_RequestSubmitted from './Ecommerce_RequestSubmitted';
 import RequestInput from './RequestInput';
@@ -103,7 +105,7 @@ const RequestConsultationForm: React.FC<{
   >(null);
   const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
   const { setShowLoader, showModal } = useActions_v2();
-  const { id: storeId } = useTypedSelector_v2((state) => state.store);
+  const { id: storeId, gclid } = useTypedSelector_v2((state) => state.store);
 
   const captchaHandler = (value: any) => {
     setverifiedRecaptch('VALID');
@@ -117,7 +119,10 @@ const RequestConsultationForm: React.FC<{
     setShowLoader(true);
 
     const location = await getLocation();
-
+    const visitorInCookie = extractCookies(
+      __Cookie.visitorId,
+      'browserCookie',
+    ).visitorId;
     const payload: _SubmitConsultationPayload = {
       consultationModel: {
         id: 0,
@@ -139,6 +144,8 @@ const RequestConsultationForm: React.FC<{
         message: value.message,
         recStatus: 'A',
         status: '',
+        gclid: gclid,
+        visitorId: visitorInCookie || '',
       },
     };
 

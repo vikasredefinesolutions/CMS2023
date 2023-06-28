@@ -26,7 +26,6 @@ import {
   PersonalizationColor,
   PersonalizationFont,
   PersonalizationLocation,
-  ShoppingCartItemDetailsViewModel,
 } from '@services/cart';
 import { deleteItemCart } from '@services/cart.service';
 import {
@@ -35,7 +34,6 @@ import {
   FetchInventoryById,
   FetchProductById,
 } from '@services/product.service';
-import { _CartLinePersonDetailModel } from '@services/product.service.type';
 import Link from 'next/link';
 import { _globalStore } from 'store.global';
 
@@ -47,6 +45,7 @@ type _Props = {
   availableColor: [] | PersonalizationColor[];
   cartItemIndex: number;
   isEditable: boolean;
+  brandName?: string;
 };
 
 const CI5_Item: React.FC<_CartItem & _Props> = (props) => {
@@ -64,8 +63,6 @@ const CI5_Item: React.FC<_CartItem & _Props> = (props) => {
 
   // Global State
   const {
-    isLinepersonalization,
-    code: storeCode,
     mediaBaseUrl: clientSideMediaBaseUrl,
     isAttributeSaparateProduct,
     id: storeId,
@@ -81,14 +78,6 @@ const CI5_Item: React.FC<_CartItem & _Props> = (props) => {
     null,
   );
   const [keepPersonalizing, setKeepPersonalizing] = useState<boolean>(false);
-  const [personalizationArray, setPersonalizationArray] = useState<
-    ShoppingCartItemDetailsViewModel[] | []
-  >([]);
-  const [cartLinePersonModels, setCartLinePersonModels] = useState<
-    _CartLinePersonDetailModel[] | []
-  >([]);
-
-  const customer = useTypedSelector_v2((state) => state.user.customer);
 
   // Imported Functions
   const customerId = GetCustomerId();
@@ -264,22 +253,24 @@ const CI5_Item: React.FC<_CartItem & _Props> = (props) => {
     <>
       <li className='flex flex-wrap pl-[20px] pr-[20px] ml-[-15px] mr-[-15px] mb-[40px]'>
         <div className='w-full lg:w-2/6 pl-[15px] pr-[15px]'>
-          <div className='w-full'>
-            <Image
-              src={
-                props.colorImage
-                  ? props.colorImage
-                  : '/assets/images/image_not_available.jpg'
-              }
-              alt={props.productName}
-              className=''
-              isStatic={!Boolean(props.colorImage)}
-            />
-          </div>
+          <Link href={`/${props.seName}.html`}>
+            <div className='w-full cursor-pointer'>
+              <Image
+                src={
+                  props.colorImage
+                    ? props.colorImage
+                    : '/assets/images/image_not_available.jpg'
+                }
+                alt={props.productName}
+                className='max-h-[348px] !inline-black m-auto'
+                isStatic={!Boolean(props.colorImage)}
+              />
+            </div>
+          </Link>
         </div>
         <div className='w-full lg:w-4/6 pl-[0px] pr-[0px] flex flex-wrap lg:justify-between'>
           <div className='text-title-text font-semibold mb-[10px]'>
-            <Link href={`/${props.seName}`} className='text-[#000000]'>
+            <Link href={`/${props.seName}.html`} className='text-[#000000]'>
               {props.productName}
             </Link>
           </div>
@@ -300,7 +291,7 @@ const CI5_Item: React.FC<_CartItem & _Props> = (props) => {
             </div>
             <div className='lg:w-1/3 w-full'>
               <div className='font-[600] text-normal-text text-right'>
-                <span className=''>Item Total:</span>
+                <span className='font-semibold'>Item Total:</span>
                 <span className='pt-[4px] block'>
                   <Price value={props.totalPrice} />
                 </span>
@@ -314,20 +305,14 @@ const CI5_Item: React.FC<_CartItem & _Props> = (props) => {
                   Item Details
                 </div>
                 <div className='flex justify-between py-2'>
-                  <div className='text-normal-text font-semibold w-1/3'>
-                    Size
-                  </div>
-                  <div className='text-normal-text font-semibold w-1/3 text-center'>
-                    Qty
-                  </div>
+                  <div className=' font-semibold w-1/3'>Size</div>
+                  <div className=' font-semibold w-1/3 text-center'>Qty</div>
                   {isEmployeeLoggedIn && (
-                    <div className='text-normal-text font-semibold w-1/3 text-right'>
+                    <div className='font-semibold w-1/3 text-right'>
                       Unit Price
                     </div>
                   )}
-                  <div className='text-normal-text font-semibold w-1/3 text-right'>
-                    Price
-                  </div>
+                  <div className='font-semibold w-1/3 text-right'>Price</div>
                 </div>
                 {props.shoppingCartItemDetailsViewModels.map((view) => {
                   return (
@@ -350,7 +335,7 @@ const CI5_Item: React.FC<_CartItem & _Props> = (props) => {
                   );
                 })}
                 <div className='flex justify-between py-3 border-t border-b'>
-                  <div className='text-normal-text w-30'>Product Total:</div>
+                  <div className=' w-30 font-semibold'>Product Total:</div>
                   <div className='text-normal-text w-16 text-center'>
                     {props.totalQty}
                   </div>
@@ -362,7 +347,7 @@ const CI5_Item: React.FC<_CartItem & _Props> = (props) => {
 
                 {props.itemNote && (
                   <div className='flex  py-3 border-t border-b'>
-                    <div className='text-normal-text w-30 font-bold'>
+                    <div className='text-normal-text w-30 font-semibold'>
                       Item Note:
                     </div>
                     <div className='text-normal-text px-3  text-center'>

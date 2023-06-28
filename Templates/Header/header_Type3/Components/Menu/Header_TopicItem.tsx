@@ -1,7 +1,9 @@
+import LoginModal from '@appComponents/modals/loginModal';
+import { UCA } from '@constants/global.constant';
+import { _modals } from '@definations/product.type';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useState } from 'react';
 
 interface _props {
   title: string;
@@ -14,8 +16,16 @@ const Topic: React.FC<_props> = ({ title, url }) => {
 
   // --------------------------------------------------------------
   // const storeLayout = useTypedSelector_v2((state) => state.store.layout);
-  const view = useTypedSelector_v2((state) => state.store.view);
-
+  const { view, code } = useTypedSelector_v2((state) => state.store);
+  const { id: customeId } = useTypedSelector_v2((state) => state.user);
+  const [openModal, setOpenModal] = useState<null | _modals>(null);
+  const modalHandler = (param: null | _modals) => {
+    if (param) {
+      setOpenModal(param);
+      return;
+    }
+    setOpenModal(null);
+  };
   // --------------------------------------------------------------
   // const [focus, setFocus] = useState<boolean>(false);
 
@@ -42,7 +52,21 @@ const Topic: React.FC<_props> = ({ title, url }) => {
 
   if (view === 'DESKTOP') {
     return (
-      <Link href={`${url}`} className='flex'>
+      <div
+        className='flex'
+        onClick={() => {
+          if (code === 'CYX' || code === UCA) {
+            if (customeId) {
+              router.push(`/${url}`);
+            } else {
+              setOpenModal('login');
+              // router.push(`/${url}`);
+            }
+          } else {
+            router.push(`/${url}`);
+          }
+        }}
+      >
         <div className=''>
           <button
             title={title}
@@ -56,7 +80,8 @@ const Topic: React.FC<_props> = ({ title, url }) => {
             </span>
           </button>
         </div>
-      </Link>
+        {openModal === 'login' && <LoginModal modalHandler={modalHandler} />}
+      </div>
     );
   }
 

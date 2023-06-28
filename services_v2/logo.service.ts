@@ -53,7 +53,7 @@ export const getLogoDetailsList = async (
   payload: FetchLogoPayload,
 ): Promise<LogoList | null> => {
   try {
-    const url = `/StoreCustomerLogo/list.json`;
+    const url = `/StoreCustomerLogo/listallcustomerlogo.json`;
     const res = await SendAsync<LogoList>({
       url: url,
       method: 'POST',

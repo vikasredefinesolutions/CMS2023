@@ -24,3 +24,7 @@ export const commonMessage = {
 export const storeRequestMessages = {
   requestCreated: 'Store request created successfully',
 };
+
+export const __error = {
+  invalidPO: 'Please enter correct PO number!!!',
+};

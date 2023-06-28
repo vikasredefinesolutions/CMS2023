@@ -14,7 +14,7 @@ const CO5_NetPaymentOption: React.FC<_Props> = ({ updatePaymentMethod }) => {
         <div>
           <div className='w-full flex justify-end'>
             <button
-              className='!text-anchor hover:!text-anchor-hover underline'
+              className='hover:text-secondary text-tertiary underline'
               id='btn-use-credit-card'
               onClick={() =>
                 updatePaymentMethod(paymentMethodCustom.creditCard)

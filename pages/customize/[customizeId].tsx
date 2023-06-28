@@ -132,6 +132,7 @@ const CustomizeLogo: NextPage = () => {
                   <CustomizeLogoSteps
                     setShowOrSelect={setShowOrSelect}
                     firstLogoFree={logoCharges.isFirstLogoFree}
+                    setShowLogoComponent={setShowLogoComponent}
                   />
                 )}
                 {showOrSelect === 'SHOW' && (

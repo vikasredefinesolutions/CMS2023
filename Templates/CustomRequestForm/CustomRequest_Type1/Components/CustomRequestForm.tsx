@@ -12,6 +12,7 @@ import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import { UploadImage } from '@services/file.service';
 import { _CustomerOrderPayload } from '@services/product';
 import { CustomerProductOrder } from '@services/product.service';
+import router from 'next/router';
 // import { UploadImage } from '@services/general.service';
 import { Form, Formik } from 'formik';
 import React, { useState } from 'react';
@@ -19,8 +20,18 @@ import ReCAPTCHA from 'react-google-recaptcha';
 import * as Yup from 'yup';
 
 const validationSchema = Yup.object().shape({
-  firstName: Yup.string().required(CustomRequestMessage.firstName.required),
-  lastName: Yup.string().required(CustomRequestMessage.lastName.required),
+  firstName: Yup.string()
+    .required(CustomRequestMessage.firstName.required)
+    .min(
+      CustomRequestMessage.firstName.minlength,
+      CustomRequestMessage.firstName.minValidation,
+    ),
+  lastName: Yup.string()
+    .required(CustomRequestMessage.lastName.required)
+    .min(
+      CustomRequestMessage.lastName.minlength,
+      CustomRequestMessage.lastName.minValidation,
+    ),
   organizationName: Yup.string().required(
     CustomRequestMessage.organizationName.required,
   ),
@@ -48,9 +59,8 @@ const validationSchema = Yup.object().shape({
     .nullable(),
   itemName: Yup.string().required(CustomRequestMessage.itemName.required),
   brandPreferences: Yup.string(),
-  budgetPerItem: Yup.string(),
+  budgetPerItem: Yup.number().required(CustomRequestMessage.budget.required),
   additionalComments: Yup.string(),
-  itemColor: Yup.string().required(CustomRequestMessage.itemColor.required),
   sizeQty: Yup.string().required(CustomRequestMessage.sizeQty.required),
 });
 
@@ -110,8 +120,8 @@ const CustomRequestForm: React.FC = () => {
         email: values.email,
         phone: values.phone,
         inHandDate: new Date(),
-        shipFirstName: '',
-        shipLastName: '',
+        shipFirstName: values.firstName,
+        shipLastName: values.lastName,
         shipAddress1: '',
         shipZipCode: '',
         shipCity: '',
@@ -136,9 +146,16 @@ const CustomRequestForm: React.FC = () => {
     };
     CustomerProductOrder(payload2)
       .then((res) => {
+        showModal({
+          title: 'Success',
+          message: 'Form submited successfully',
+        });
         setInitialValues(_initialValues);
       })
-      .finally(() => setShowLoader(false));
+      .finally(() => {
+        setShowLoader(false);
+        router.push('/');
+      });
   };
 
   const fileReader = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -329,7 +346,7 @@ const CustomRequestForm: React.FC = () => {
 
                 <div className='w-full lg:w-1/2 px-[15px]'>
                   <label className='block text-default-text font-mediut'>
-                    Budget Per Item
+                    Budget Per Item <span className='text-red-600'>*</span> :
                   </label>
                   <div className='mt-2'>
                     <input
@@ -341,6 +358,11 @@ const CustomRequestForm: React.FC = () => {
                       className='form-input'
                     />
                   </div>
+                  {touched.budgetPerItem && errors.budgetPerItem && (
+                    <p className='text-red-500 text-xs mt-1'>
+                      {errors.budgetPerItem}
+                    </p>
+                  )}
                 </div>
 
                 <div className='w-full lg:w-1/2 px-[15px]'>

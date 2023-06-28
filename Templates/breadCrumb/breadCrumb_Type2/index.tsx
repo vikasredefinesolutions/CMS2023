@@ -1,3 +1,5 @@
+import NxtImage from '@appComponents/reUsable/Image';
+import { _Store } from '@configs/page.config';
 import { __pagesText } from '@constants/pages.text';
 import { paths } from '@constants/paths.constant';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
@@ -14,7 +16,7 @@ const BreadCrumb_Type2: NextPage<_BreadCrumbProps> = ({
   const router = useRouter();
   const product = useTypedSelector_v2((state) => state.product.product);
   const [showBorderAndLogo, setShowBorderAndLogo] = useState<boolean>(false);
-  const { view } = useTypedSelector_v2((state) => state.store);
+  const { view, code: storeCode } = useTypedSelector_v2((state) => state.store);
   useEffect(() => {
     if (
       pageType == 'product' ||
@@ -28,7 +30,7 @@ const BreadCrumb_Type2: NextPage<_BreadCrumbProps> = ({
   return (
     <>
       <div className='container mx-auto'>
-        <div className='flex flex-wrap justify-between py-[20px] breadcrumbs2'>
+        <div className='flex flex-wrap justify-between pt-[15px] pb-[10px] border-b border-gray-border mb-[15px] breadcrumbs2'>
           <nav
             className='flex flex-wrap items-center text-extra-small-text'
             aria-label='Breadcrumb'
@@ -44,12 +46,12 @@ const BreadCrumb_Type2: NextPage<_BreadCrumbProps> = ({
                 &lt;&lt; {__pagesText.BreadCrumbs.back}
               </div>
             )}
-            <ol className='inline-flex items-center'>
+            <ol className='inline-flex items-center flex-wrap gap-y-1'>
               <>
                 {breadCrumbs.map((item, index) => (
                   <li
                     key={index}
-                    className={`inline-flex items-center ${
+                    className={`flex flex-wrap items-center gap-y-2 ${
                       index > 0 && 'pl-[6px]'
                     } `}
                     aria-current='page'
@@ -58,13 +60,13 @@ const BreadCrumb_Type2: NextPage<_BreadCrumbProps> = ({
                       {index > 0 && <span className=' text-anchor'>/</span>}
                       <Link
                         href={item.url}
-                        className='inline-flex items-center'
+                        className='inline-flex items-center '
                       >
                         <a
                           className={`${
                             index == breadCrumbs.length - 1
-                              ? 'ml-[6px] text-gray-text'
-                              : 'ml-[6px] text-anchor'
+                              ? 'ml-[6px] text-tertiary'
+                              : 'ml-[6px] text-anchor hover:text-anchor-hover'
                           } `}
                         >
                           {item.name}
@@ -76,7 +78,21 @@ const BreadCrumb_Type2: NextPage<_BreadCrumbProps> = ({
               </>
             </ol>
           </nav>
-         
+          {storeCode == _Store.type4 &&
+            showBorderAndLogo &&
+            view !== 'MOBILE' && (
+              <div className='text-center w-auto product-brand-logo flex items-center justify-center '>
+                <NxtImage
+                  src={product.brand?.url3 || ''}
+                  title={product.brand?.name || ''}
+                  className='inline-block'
+                  // height={100}
+                  // width={100}
+                  alt=''
+                  useNextImage={false}
+                />
+              </div>
+            )}
         </div>
       </div>
     </>

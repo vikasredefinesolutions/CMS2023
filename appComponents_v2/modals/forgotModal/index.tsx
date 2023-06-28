@@ -1,12 +1,13 @@
 /* eslint-disable no-unused-vars */
 import { _ModalProps } from '@appComponents/modals/modal';
 import { __pagesText } from '@constants/pages.text';
-import { useTypedSelector_v2 } from '@hooks_v2/index';
+import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import { ForgetCustomerPassword } from '@services/customerUser.service';
 import React, { useState } from 'react';
 
 const ForgotModal: React.FC<_ModalProps> = ({ modalHandler }) => {
   const { id: storeId } = useTypedSelector_v2((state) => state.store);
+  const { setShowLoader } = useActions_v2();
   const [Email, setEmail] = useState('');
   const [FinalMessage, setFinalMessage] = useState(false);
   const [Error, setError] = useState(false);
@@ -19,7 +20,9 @@ const ForgotModal: React.FC<_ModalProps> = ({ modalHandler }) => {
       );
       if (email.match(regex)) {
         try {
+          setShowLoader(true)
           const res = await ForgetCustomerPassword({ email, storeId });
+          setShowLoader(false)
           if (res?.issend) {
             setError(false);
             setFinalMessage(true);
@@ -29,6 +32,7 @@ const ForgotModal: React.FC<_ModalProps> = ({ modalHandler }) => {
             setFinalMessage(false);
           }
         } catch (error) {
+          setShowLoader(false)
           console.log(error);
         }
       } else {

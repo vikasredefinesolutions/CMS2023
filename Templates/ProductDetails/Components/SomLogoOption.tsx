@@ -93,7 +93,7 @@ const SomLogoOption: React.FC<_SOMLogoOptionProps> = ({
         value: constructedLocation?.location?.value,
         show: !!constructedLocation?.status,
         image: {
-          url: constructedLocation?.location?.filePath,
+          url: constructedLocation?.location?.imageUrl,
           alt: constructedLocation?.location?.name,
         },
       });
@@ -212,7 +212,6 @@ const SomLogoOption: React.FC<_SOMLogoOptionProps> = ({
           folderPath: imageFolderPath,
           files: event.currentTarget?.files[0],
         });
-
         product_updateLogoDetails({
           type: 'Upload_Logo',
           logo: {

@@ -431,9 +431,9 @@ const Personalizing: FC<_Props> = ({
         : personalizationArray[index].shoppingCartLineTwoPersonViewModel[
             lineIndex
           ];
-    if (lineObject.linetext === '') {
-      return;
-    }
+    // if (lineObject.linetext === '') {
+    //   return;
+    // }
 
     let newArr: _CartLinePersonDetailModel[] | [] = cartLinePersonModels;
 
@@ -449,18 +449,29 @@ const Personalizing: FC<_Props> = ({
           id: lineObject.id,
           cartLinePersonId: lineObject.cartLinePersonId,
           shoppingCartItemsId: shoppingCartItemsId,
-          linePrice: name === 'lineone' ? firstLineCharges : secondLineCharges,
+          linePrice:
+            lineObject.linetext !== ''
+              ? name === 'lineone'
+                ? firstLineCharges
+                : secondLineCharges
+              : 0,
           lineQty: 1,
           lineAboveLogo: 0,
           lineIndividually: 1,
           lineNumber: name === 'lineone' ? 1 : 2,
           lineText: lineObject.linetext,
-          lineTotal: name === 'lineone' ? firstLineCharges : secondLineCharges,
-          lineFont: lineObject.linefont,
-          lineColor: lineObject.linecolor,
+          lineTotal:
+            lineObject.linetext !== ''
+              ? name === 'lineone'
+                ? firstLineCharges
+                : secondLineCharges
+              : 0,
+          lineFont: lineObject.linetext !== '' ? lineObject.linefont : '',
+          lineColor: lineObject.linetext !== '' ? lineObject.linecolor : '',
           linePriceDouble: 0,
           logoCartId: 0,
-          personalizeLocation: selectedLocation,
+          personalizeLocation:
+            lineObject.linetext !== '' ? selectedLocation : '',
           parentId: lineObject.parentId,
         },
       ]);

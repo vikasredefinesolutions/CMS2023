@@ -54,7 +54,7 @@ const DiscountPricing: React.FC<
           <a
             href='javascript:void(0);'
             onClick={() => setShowMsg((show) => !show)}
-            className='text-white py-[5px] md:px-[10px] flex flex-wrap text-default-text font-semibold uppercase items-center'
+            className='text-tertiary hover:text-white py-[5px] md:px-[10px] flex flex-wrap text-default-text font-semibold uppercase items-center'
           >
             <span className='mr-1'>
               {__pagesText.productInfo.discountPricing.minimumOrder}

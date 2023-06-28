@@ -1,14 +1,15 @@
 import { _Store } from '@configs/page.config';
 import { __pagesText } from '@constants/pages.text';
 import {
-  __ValidationText,
   editAccountMessage,
+  __ValidationText,
 } from '@constants/validation.text';
+import { UserType } from '@definations/APIs/user.res';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import {
+  getDecryptPassword,
   UpdateUserData,
   UpdateUserPassword,
-  getDecryptPassword,
 } from '@services/user.service';
 import { ErrorMessage, Form, Formik } from 'formik';
 import { useEffect, useState } from 'react';
@@ -23,7 +24,7 @@ const initValue = {
 
 type SettingForm = typeof initValue;
 const AccountSetting = () => {
-  const { showModal, setShowLoader } = useActions_v2();
+  const { showModal, setShowLoader, updateCustomer } = useActions_v2();
   const customer = useTypedSelector_v2((state) => state.user.customer);
   const { code: storeCode } = useTypedSelector_v2((state) => state.store);
   const [activeEditBox, setActiveEditBox] = useState<boolean>(false);
@@ -92,11 +93,21 @@ const AccountSetting = () => {
   };
 
   const validationSchema = Yup.object().shape({
-    firstName: Yup.string().required(editAccountMessage.firstName),
-    lastName: Yup.string().required(editAccountMessage.lastName),
-    companyName: Yup.string().required(editAccountMessage.companyName),
+    firstName: Yup.string()
+      .required(editAccountMessage.firstName.required)
+      .min(
+        editAccountMessage.firstName.firstNameminLength,
+        editAccountMessage.firstName.minValidation,
+      ),
+    lastName: Yup.string()
+      .required(editAccountMessage.lastName.required)
+      .min(
+        editAccountMessage.lastName.lastNameminLength,
+        editAccountMessage.lastName.minValidation,
+      ),
+    companyName: Yup.string().required(editAccountMessage.companyName.required),
     password: Yup.string()
-      .required(editAccountMessage.password)
+      .required(editAccountMessage.password.required)
       .min(__ValidationText.signUp.password.minLength)
       .max(__ValidationText.signUp.password.maxLength),
     gender: Yup.string(),
@@ -123,13 +134,23 @@ const AccountSetting = () => {
   const submitHandler = async (value: SettingForm) => {
     setDisableFeature(true);
     try {
-      const res = await UpdateUserData({
+      const res: UserType = await UpdateUserData({
         ...value,
         password: currentPass,
         customerId: customer?.id || 0,
         gender: genderId ? genderId : customer?.gender || '',
       });
       if (res) {
+        updateCustomer({
+          customer: {
+            ...res,
+            firstname: res.firstname,
+            lastName: res.lastName,
+            email: res.email,
+            companyName: res.companyName ? res.companyName : value.companyName,
+            password: res.password,
+          },
+        });
         showModal({
           message: 'Updated User Details Successfully',
           title: 'Updated',

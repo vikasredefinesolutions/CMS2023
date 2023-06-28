@@ -1,4 +1,5 @@
 import NxtImage from '@appComponents/reUsable/Image';
+import { brandname, dimax, maxPeter } from '@constants/enum';
 import { _SizePriceQtyTableProps } from '@templates/ProductDetails/Components/productDetailsComponents';
 import { useTypedSelector_v2 } from 'hooks_v2';
 import React from 'react';
@@ -8,12 +9,13 @@ import EditInput from './EditInput';
 const SizePriceQtyTable4: React.FC<_SizePriceQtyTableProps> = ({
   editDetails,
   isSpecialBrand,
+  brandName,
 }) => {
   const { price, inventory } = useTypedSelector_v2(
     (state) => state.product.product,
   );
-
   const { color } = useTypedSelector_v2((state) => state.product.selected);
+
   return (
     <div className='mt-[15px] text-default-text border border-gray-border'>
       <div className='hidden md:flex flex-wrap gap-y-5 bg-primary text-white'>
@@ -37,7 +39,7 @@ const SizePriceQtyTable4: React.FC<_SizePriceQtyTableProps> = ({
       </div>
       <div
         key={color.attributeOptionId}
-        className='flex flex-wrap gap-y-5 border-b last:border-b-0 border-b-gray-300 mb-5 md:mb-0'
+        className='flex flex-wrap gap-y-5 border-b last:border-b-0 border-b-gray-300 mb-5 md:mb-0  bg-light-gray'
       >
         <div className='p-2 w-full md:w-2/12 text-center md:text-left'>
           <div className='mb-1 text-center w-10 h-10 mx-auto md:m-0 border-gray-300 p-1 bg-white'>
@@ -51,7 +53,7 @@ const SizePriceQtyTable4: React.FC<_SizePriceQtyTableProps> = ({
           <div className=''>{color.name}</div>
         </div>
         <div
-          className={`flex flex-wrap md:grid md:grid-cols-${inventory?.sizes[0]?.sizeArr.length} justify-evenly text-center gap-y-5 w-full md:w-10/12`}
+          className={`flex flex-wrap md:grid md:grid-cols-${inventory?.sizes[0]?.sizeArr.length} justify-evenly text-center gap-y-5 w-full md:w-10/12 tesingclassname`}
         >
           {inventory?.inventory
             .filter(
@@ -68,8 +70,23 @@ const SizePriceQtyTable4: React.FC<_SizePriceQtyTableProps> = ({
 
               return inventory?.inventory > 0 ? (
                 <div className='p-2 w-1/2 md:w-auto'>
+                  <div className='mb-1 font-semibold md:hidden'>
+                    {inventory.name}
+                  </div>
                   <div>
-                    {inventory?.inventory > 250 ? '250+' : inventory.inventory}{' '}
+                    {brandName == brandname ? (
+                      <div className='mb-2'>
+                        {inventory.inventory < maxPeter
+                          ? inventory.inventory
+                          : `${maxPeter}+`}
+                      </div>
+                    ) : (
+                      <div className='mb-2'>
+                        {inventory.inventory < dimax
+                          ? inventory.inventory
+                          : `${dimax}+`}
+                      </div>
+                    )}
                   </div>
                   <EditInput
                     sizeAttributeOptionId={inventory.attributeOptionId}
@@ -83,7 +100,7 @@ const SizePriceQtyTable4: React.FC<_SizePriceQtyTableProps> = ({
                   />
                 </div>
               ) : (
-                <div className='p-2 w-1/2 md:w-1/6'>
+                <div className={`${'p-2 w-1/2 md:w-auto'}`}>
                   <div className='border-bottom p-b-10'>
                     <strong className='text-center center'> - </strong>{' '}
                   </div>

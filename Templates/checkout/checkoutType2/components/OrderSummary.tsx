@@ -1,9 +1,15 @@
 import Price from '@appComponents/reUsable/Price';
 import { checkoutPages } from '@constants/enum';
+import {
+  CYXTERA_CODE,
+  UNITI_CODE,
+  _Store_CODES,
+} from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
 import { _shippingMethod } from '@controllers/checkoutController';
 import {
   GetCartTotals,
+  GetCustomerId,
   useActions_v2,
   useTypedSelector_v2,
 } from '@hooks_v2/index';
@@ -16,18 +22,12 @@ interface _props {
   placeOrder: (args: _shippingMethod) => void;
   currentpage: number;
   selectedShipModel: _shippingMethod;
-  billingAddressCode: string;
-  salesTax: number;
-  setSalesTax: (args: number) => void;
 }
 
 const OrderSummary: React.FC<_props> = ({
   placeOrder,
   currentpage,
   selectedShipModel,
-  setSalesTax,
-  salesTax,
-  billingAddressCode,
 }) => {
   let smallRunFeeCharge = 0;
   const {
@@ -36,15 +36,25 @@ const OrderSummary: React.FC<_props> = ({
     merchandisePrice,
     totalLineCharges,
     totalLogoCharges,
+    subTotal,
+    firstLogoPrice,
+    secondLogoPrice,
   } = GetCartTotals();
 
-  const { id: customerID } = useTypedSelector_v2((state) => state.user);
-  const { el: employeeLogin } = useTypedSelector_v2((state) => state.checkout);
+  const customerID = GetCustomerId();
+  const {
+    el: employeeLogin,
+    charges,
+    address,
+  } = useTypedSelector_v2((state) => state.checkout);
   const smallRunFee = useTypedSelector_v2(
     (state) => state.store.cartCharges?.smallRunFeesCharges,
   );
-  smallRunFeeCharge =
-    smallRunFee && smallRunFee > 0 ? smallRunFee : employeeLogin.smallRunFee;
+
+  const { useBalance } = useTypedSelector_v2(
+    (state) => state.cart.userCreditBalance,
+  );
+
   const currentPage = useTypedSelector_v2((state) => state.store.currentPage);
   const logoSetupCharges = useTypedSelector_v2(
     (state) => state.store.cartCharges?.logoSetupCharges,
@@ -55,24 +65,38 @@ const OrderSummary: React.FC<_props> = ({
   const [textOrNumberShippingCost, setTextOrNumberShippingCost] = useState<
     'number' | 'text'
   >('text');
-  const { update_checkoutEmployeeLogin } = useActions_v2();
+  const { update_CheckoutEmployeeLogin, update_CheckoutCharges } =
+    useActions_v2();
 
-  const [shippingChargesCost, setShippingChargesCost] = useState<number>(0);
-  const [smallRunCost, setSmallRunCost] = useState<number>(
-    smallRunFee ? smallRunFee : 0,
-  );
+  const getNewShippingCost = (shippingCost: number): number => {
+    if (isEmployeeLoggedIn) {
+      return employeeLogin.shippingPrice;
+    }
+    return shippingCost;
+  };
+
+  const getNewSmallRunFee = (smallRunFee: number): number => {
+    if (isEmployeeLoggedIn) {
+      return employeeLogin.smallRunFee;
+    }
+    return smallRunFee;
+  };
 
   useEffect(() => {
     FetchSalesTax({
-      customerId: customerID,
-      zipCode: billingAddressCode,
+      customerId: customerID || 0,
+      zipCode: address.zipCode || 0,
       logoTotal: totalLogoCharges.toFixed(2),
       lineTotal: totalLineCharges.toFixed(2),
       logoSetupCharge: logoSetupCharges?.toFixed(2),
-      shippingCharges: shippingChargesCost?.toFixed(2),
-      smallRunFee: smallRunCost?.toFixed(2),
-    }).then((res) => setSalesTax(res));
-  }, [billingAddressCode, smallRunCost, shippingChargesCost]);
+      // Here shippingPrice will be get updated, even if the store do not use employee login.
+      // So, pass it as a dependency
+      shippingCharges: getNewShippingCost(selectedShipModel?.price || 0),
+      smallRunFee: getNewSmallRunFee(smallRunFeeCharge),
+    }).then((res) => {
+      update_CheckoutCharges({ type: 'SALES_TAX', cost: res });
+    });
+  }, [address.zipCode, employeeLogin.smallRunFee, employeeLogin.shippingPrice]);
 
   const disablePlaceOrder = (): boolean => {
     let disable = false;
@@ -83,21 +107,6 @@ const OrderSummary: React.FC<_props> = ({
     return disable;
   };
 
-  const getNewShippingCost = (shippingCost: number): number => {
-    if (isEmployeeLoggedIn) {
-      return employeeLogin.shippingPrice;
-    }
-
-    return shippingCost;
-  };
-
-  const getNewSmallRunFee = (smallRunFee: number): number => {
-    if (isEmployeeLoggedIn) {
-      return employeeLogin.smallRunFee;
-    }
-
-    return smallRunFee;
-  };
   const ShippingHTML = (userShippingPrice: number) => {
     if (isEmployeeLoggedIn && currentPage === 'CHECKOUT') {
       const price =
@@ -106,7 +115,13 @@ const OrderSummary: React.FC<_props> = ({
           : employeeLogin.shippingPrice.toFixed(2);
 
       return (
-        <div className='border-t border-gray-200 flex items-center justify-between pt-[10px] pb-[10px]'>
+        <div
+          className={`${
+            storeCode !== CYXTERA_CODE && storeCode !== UNITI_CODE
+              ? 'border-t border-gray-200'
+              : ''
+          }  flex items-center justify-between pt-[15px] pb-[10px]`}
+        >
           <dt className='text-normal-text flex items-center tracking-normal pb-[10px]'>
             <span>Shipping</span>
           </dt>
@@ -118,13 +133,19 @@ const OrderSummary: React.FC<_props> = ({
               <Formik
                 key='shipping'
                 initialValues={{ shipping: price }}
-                onSubmit={(values) => {
+                onSubmit={(values, { setFieldValue }) => {
                   const price =
                     values.shipping === 'FREE' ? 0 : values.shipping;
-                  update_checkoutEmployeeLogin({
+                  update_CheckoutEmployeeLogin({
                     type: 'SHIPPING_PRICE',
                     value: +(+price).toFixed(2),
                   });
+                  if (+values.shipping <= 0) {
+                    setTextOrNumberShippingCost('text');
+                    setFieldValue('shipping', 'FREE');
+                  } else {
+                    setTextOrNumberShippingCost('number');
+                  }
                 }}
                 enableReinitialize
               >
@@ -138,7 +159,7 @@ const OrderSummary: React.FC<_props> = ({
                         name={'shipping'}
                         type={textOrNumberShippingCost}
                         onFocus={() => {
-                          if (textOrNumberSmallRun === 'text') {
+                          if (textOrNumberShippingCost === 'text') {
                             setFieldValue('shipping', 0);
                             setTextOrNumberShippingCost('number');
                           }
@@ -153,7 +174,6 @@ const OrderSummary: React.FC<_props> = ({
                             'shipping',
                             Number(values.shipping).toFixed(2),
                           );
-                          setShippingChargesCost(+values.shipping);
                           submitForm();
                         }}
                         placeholder=''
@@ -169,9 +189,19 @@ const OrderSummary: React.FC<_props> = ({
     }
 
     return (
-      <div className='border-t border-gray-200 flex items-center justify-between pt-[10px] pb-[10px]'>
+      <div
+        className={`${
+          storeCode !== CYXTERA_CODE && storeCode !== UNITI_CODE
+            ? 'border-t border-gray-200'
+            : ''
+        }  flex items-center justify-between pt-[15px]`}
+      >
         <dt className='text-normal-text flex items-center'>
-          <span>Shipping</span>
+          <span>
+            {storeCode === _Store_CODES.PKHG
+              ? 'Shipping & Handling'
+              : 'Shipping'}
+          </span>
         </dt>
         <dd className='text-normal-text'>
           {userShippingPrice === 0 ? (
@@ -183,7 +213,6 @@ const OrderSummary: React.FC<_props> = ({
       </div>
     );
   };
-
   const smallRunHtml = (userSmallRun: number) => {
     if (isEmployeeLoggedIn && currentPage === 'CHECKOUT') {
       const price =
@@ -203,12 +232,17 @@ const OrderSummary: React.FC<_props> = ({
               <Formik
                 key='smallRun'
                 initialValues={{ smallRun: price }}
-                onSubmit={(values) => {
-                  setTextOrNumberSmallRun('number');
-                  update_checkoutEmployeeLogin({
+                onSubmit={(values, { setFieldValue }) => {
+                  update_CheckoutEmployeeLogin({
                     type: 'SMALL_RUN_FEE',
                     value: +(+values.smallRun).toFixed(2),
                   });
+                  if (+values.smallRun <= 0) {
+                    setTextOrNumberSmallRun('text');
+                    setFieldValue('smallRun', 'FREE');
+                  } else {
+                    setTextOrNumberSmallRun('number');
+                  }
                 }}
                 enableReinitialize
               >
@@ -224,7 +258,7 @@ const OrderSummary: React.FC<_props> = ({
                         onFocus={() => {
                           if (textOrNumberSmallRun === 'text') {
                             setFieldValue('smallRun', 0);
-                            setTextOrNumberShippingCost('number');
+                            setTextOrNumberSmallRun('number');
                           }
                         }}
                         onChange={(event) => {
@@ -237,7 +271,6 @@ const OrderSummary: React.FC<_props> = ({
                             'smallRun',
                             Number(values.smallRun).toFixed(2),
                           );
-                          setSmallRunCost(+values.smallRun);
                           submitForm();
                         }}
                         placeholder=''
@@ -253,7 +286,7 @@ const OrderSummary: React.FC<_props> = ({
     }
 
     return (
-      <div className=' flex items-center justify-between pt-[15px] '>
+      <div className=' flex items-center justify-between pt-[15px] pb-[15px]'>
         <dt className='text-normal-text flex items-center'>
           <span>Small Run Fee</span>
         </dt>
@@ -266,7 +299,7 @@ const OrderSummary: React.FC<_props> = ({
 
   // console.log('selectedShipModel', selectedShipModel);
 
-  const { id: storeId } = useTypedSelector_v2((state) => state.store);
+  const { code: storeCode } = useTypedSelector_v2((state) => state.store);
   const isEmployeeLoggedIn = useTypedSelector_v2(
     (state) => state.employee.loggedIn,
   );
@@ -279,7 +312,7 @@ const OrderSummary: React.FC<_props> = ({
         </div>
         <div className='w-full pl-[15px] pr-[15px] border-b border-gray-border mt-[10px] mb-[10px]'></div>
         <dl className='text-default-text'>
-          {storeId !== 11 && (
+          {storeCode !== CYXTERA_CODE && storeCode !== UNITI_CODE && (
             <>
               <div className='flex items-center justify-between pt-[15px]'>
                 <dt>{__pagesText.CheckoutPage.orderSummary.Merchandise}</dt>
@@ -289,39 +322,55 @@ const OrderSummary: React.FC<_props> = ({
               <div className='flex items-center justify-between pt-[15px]'>
                 <dt>{__pagesText.CheckoutPage.orderSummary.Discount}</dt>
                 {/* <dt>{discount}</dt> */}
-                - <Price value={merchandisePrice - totalPrice} />
+                -<Price value={merchandisePrice - subTotal} />
               </div>
             </>
           )}
-          <div className='w-full pl-[15px] pr-[15px] border-b border-gray-border mt-[10px]'></div>
+          <div className='w-full pl-[15px] pr-[15px] border-gray-border'></div>
           <div className='flex items-center justify-between pt-[15px]'>
             <dt>{__pagesText.CheckoutPage.orderSummary.Subtotal}</dt>
             {/* <dt>{subTotal}</dt> */}
-            <Price value={totalPrice} />
+            <Price value={subTotal} />
           </div>
-          {storeId !== 11 && (
+          {storeCode !== CYXTERA_CODE && storeCode !== UNITI_CODE && (
             <>
               {' '}
               <div className='flex items-center justify-between pt-[15px]'>
                 <dt>{__pagesText.CheckoutPage.orderSummary.FirstLogo}</dt>
-                <Price value={''} />
+                {firstLogoPrice > 0 ? <Price value={firstLogoPrice} /> : 'FREE'}
               </div>
-              <div className='flex items-center justify-between pt-[15px]'>
-                <dt>{__pagesText.CheckoutPage.orderSummary.SecondLogo}</dt>
-                <Price value={''} />
-              </div>
+              {secondLogoPrice > 0 && (
+                <div className='flex items-center justify-between pt-[15px]'>
+                  <dt>{__pagesText.CheckoutPage.orderSummary.SecondLogo}</dt>
+                  <Price value={secondLogoPrice} />
+                </div>
+              )}
+              {totalLineCharges > 0 && (
+                <div className='flex items-center justify-between pt-[15px]'>
+                  <dt>
+                    {__pagesText.CheckoutPage.orderSummary.LinePersonalization}
+                  </dt>
+                  <Price value={totalLineCharges} />
+                </div>
+              )}
               {smallRunHtml(smallRunFee ? smallRunFee : 0)}
             </>
           )}
           {ShippingHTML(getNewShippingCost(selectedShipModel?.price))}
           <div className='flex items-center justify-between pt-[15px]'>
             <dt>{__pagesText.CheckoutPage.orderSummary.Tax}</dt>
-            <Price value={salesTax} />
+            <Price value={charges.salesTax} />
           </div>
-          <div className='flex items-center justify-between pt-[15px]'>
-            <dt>{__pagesText.CheckoutPage.orderSummary.InternalCredit}</dt>
-            <Price value={creditBalance} />
-          </div>
+          {(storeCode === CYXTERA_CODE || storeCode === UNITI_CODE) &&
+          useBalance ? (
+            <div className='flex items-center justify-between pt-[15px]'>
+              <dt>{__pagesText.CheckoutPage.orderSummary.InternalCredit}</dt>
+              -<Price value={creditBalance} />
+            </div>
+          ) : (
+            <></>
+          )}
+
           <div className='w-full pl-[15px] pr-[15px] border-b border-gray-border mt-[10px]'></div>
           <div className='flex items-center justify-between pt-[15px] mb-[30px]'>
             <dt className='font-semibold'>
@@ -333,7 +382,7 @@ const OrderSummary: React.FC<_props> = ({
                   totalPrice +
                   getNewShippingCost(selectedShipModel?.price) +
                   getNewSmallRunFee(smallRunFeeCharge) +
-                  salesTax
+                  charges.salesTax
                 }
               />
             </dt>
@@ -341,11 +390,13 @@ const OrderSummary: React.FC<_props> = ({
 
           {isEmployeeLoggedIn && <CO2_EL_Dropdowns />}
 
-          <div className='mt-[16px]'>
-            <div className=' text-rose-600 mb-[10px]'>
-              {__pagesText.CheckoutPage.orderSummary.CartSummarryInstruction}
+          {storeCode !== CYXTERA_CODE && storeCode !== UNITI_CODE && (
+            <div className='mt-[16px]'>
+              <div className=' text-rose-600 mb-[10px]'>
+                {__pagesText.CheckoutPage.orderSummary.CartSummarryInstruction}
+              </div>
             </div>
-          </div>
+          )}
           <div className='mt-[16px] mb-[16px]'>
             {currentpage === checkoutPages.reviewOrder && (
               <button

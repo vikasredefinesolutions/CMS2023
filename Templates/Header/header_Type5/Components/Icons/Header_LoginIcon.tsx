@@ -1,5 +1,5 @@
 import ForgotModal from '@appComponents/modals/forgotModal';
-import LoginModal from '@appComponents/modals/loginModal';
+import LoginModal_Type2 from '@appComponents/modals/loginModal/LoginModal_Type2';
 import { __pagesText } from '@constants/pages.text';
 import { _modals } from '@definations/product.type';
 import { useTypedSelector_v2 } from 'hooks_v2';
@@ -35,7 +35,10 @@ const LoginIcon: React.FC = () => {
             account_circle
           </span>
         </button>
-        {showModal === 'login' && <LoginModal modalHandler={setShowModal} />}
+        {/* {showModal === 'login' && <LoginModal modalHandler={setShowModal} />} */}
+        {showModal === 'login' && (
+          <LoginModal_Type2 modalHandler={setShowModal} />
+        )}
         {showModal === 'forgot' && <ForgotModal modalHandler={setShowModal} />}
       </div>
     </div>

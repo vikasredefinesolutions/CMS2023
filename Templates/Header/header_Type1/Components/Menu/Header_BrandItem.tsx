@@ -65,7 +65,7 @@ const Brand: React.FC<_props> = ({
             <span className=''>{title}</span>
           </button>
           <div className='' onClick={() => toggleSideMenu('CLOSE')}>
-            <Link href={`${url}`} passHref>
+            <Link href={`/${url}`} passHref>
               <a className='text-[12px] mr-[5px] underline'>
                 {__pagesText.Headers.mobileViewAll}
               </a>
@@ -92,7 +92,7 @@ const Brand: React.FC<_props> = ({
                           itemUrl={
                             brand.brandCollectionUrl
                               ? `${brand.brandCollectionUrl}.html`
-                              : `${brand.seName}.html?v=product-list`
+                              : `${brand.seName}.html`
                           }
                           type={'BRAND'}
                         />{' '}
@@ -165,7 +165,7 @@ const Brand: React.FC<_props> = ({
                           url={
                             brand.brandCollectionUrl
                               ? `${brand.brandCollectionUrl}.html`
-                              : `${brand.seName}.html?v=product-list`
+                              : `${brand.seName}.html`
                           }
                           alt={capitalizeFirstLetter(brand.brandName)}
                           src={brand.brandBlackColorImageUrl}
@@ -185,8 +185,8 @@ const Brand: React.FC<_props> = ({
                             itemLabel={capitalizeFirstLetter(brand.brandName)}
                             itemUrl={
                               brand.brandCollectionUrl
-                                ? `${brand.brandCollectionUrl}.html`
-                                : `${brand.seName}.html?v=product-list`
+                                ? `${brand.brandCollectionUrl}`
+                                : `${brand.seName}.html`
                             }
                             type={'BRAND'}
                           />
@@ -208,7 +208,7 @@ const Brand: React.FC<_props> = ({
                                 )}
                                 itemUrl={
                                   brand.brandCollectionUrl
-                                    ? `${brand.brandCollectionUrl}.html`
+                                    ? `${brand.brandCollectionUrl}`
                                     : `${brand.seName}.html?v=product-list`
                                 }
                                 type={'BRAND'}
@@ -227,8 +227,8 @@ const Brand: React.FC<_props> = ({
                               itemLabel={capitalizeFirstLetter(brand.brandName)}
                               itemUrl={
                                 brand.brandCollectionUrl
-                                  ? `${brand.brandCollectionUrl}.html`
-                                  : `${brand.seName}.html?v=product-list`
+                                  ? `${brand.brandCollectionUrl}`
+                                  : `${brand.seName}.html`
                               }
                               type={'BRAND'}
                             />

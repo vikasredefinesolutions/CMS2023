@@ -76,7 +76,11 @@ const DiscountPricing: React.FC<
             <a
               href='javascript:void(0);'
               onClick={() => setShowMsg((show) => !show)}
-              className='text-[#ffffff] hover:text-[#ffffff] pt-[6px] pb-[2px] flex flex-wrap uppercase items-center text-small-text'
+              className={`${
+                storeCode == _Store.type4
+                  ? 'text-tertiary hover:text-white pt-[6px] pb-[2px] flex flex-wrap uppercase items-center text-small-text'
+                  : 'text-[#ffffff] hover:text-[#ffffff] pt-[6px] pb-[2px] flex flex-wrap uppercase items-center text-small-text '
+              }`}
             >
               <span className='mr-1'>
                 {__pagesText.productInfo.discountPricing.minimumOrder}

@@ -11,6 +11,8 @@ export interface _Imageprops {
   useNextImage?: boolean;
   layout?: 'intrinsic' | 'fill' | 'responsive';
   title?: string;
+  extraUrl?: boolean;
+  extraUrlPath?: string;
 }
 
 export interface _PriceProps {

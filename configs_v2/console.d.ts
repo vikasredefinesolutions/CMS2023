@@ -10,6 +10,7 @@ import { _GiftCardAPIs } from '@services/gift.service';
 import { _HeaderAPIs } from '@services/header.service';
 import { _LogoAPIs } from '@services/logo.service';
 import { _ProducDetailAPIs_V2 } from '@services/product.service';
+import { _StoreBuilderServices } from '@services/sb.service';
 import { _SlugAPIs_V2 } from '@services/slug.service';
 import { _StoryAPIs_V2 } from '@services/story.service';
 import { _UserAPIs_V2 } from '@services/user.service';
@@ -65,5 +66,8 @@ export interface __Console {
   Logo: { service: Record<_LogoAPIs, boolean> };
   Story: {
     service: Record<_StoryAPIs_V2, boolean>;
+  };
+  storeBuilder: {
+    service: Record<_StoreBuilderServices, boolean>;
   };
 }

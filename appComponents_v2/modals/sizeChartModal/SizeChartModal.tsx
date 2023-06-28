@@ -15,10 +15,10 @@ const SizeChart: React.FC<
     <div
       onClick={() => modalHandler(null)}
       id='sizechartModal'
-      className='overflow-y-auto overflow-x-hidden fixed right-0 left-0 top-4 z-50 justify-center items-center h-modal md:h-full md:inset-0 '
+      className='overflow-y-auto overflow-x-hidden fixed z-50 justify-center items-center h-modal md:h-full inset-0 '
     >
       <div className='w-full h-full bg-black bg-opacity-50 flex items-center justify-center'>
-        <div className='relative px-4 w-full max-w-3xl h-full md:h-auto'>
+        <div className='relative px-4 w-full max-w-3xl h-auto'>
           <div className='relative bg-white rounded-lg shadow max-h-screen overflow-y-auto'>
             <div className='flex justify-between items-start p-5 rounded-t border-b sticky top-0 left-0 bg-white'>
               <h3 className='text-xl font-semibold text-gray-900 lg:text-2xl'>

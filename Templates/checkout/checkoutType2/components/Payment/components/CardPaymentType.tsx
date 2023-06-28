@@ -36,7 +36,8 @@ const CardPaymentType: paymentProps = ({
   const [cardImage, setCardImage] = useState<boolean>(false);
 
   const handleCVV = (e: any) => {
-    if (!Number(e.target.value)) {
+    const regex = new RegExp('[0-9]').test(e.target.value);
+    if (!regex) {
       setcvv('');
       setcardValidation({
         ...cardValidation,
@@ -191,8 +192,13 @@ const CardPaymentType: paymentProps = ({
             <input
               onBlur={changeHandler}
               onKeyDown={blockInvalidChar}
-              onChange={handleCard}
+              onChange={(e) => {
+                changeHandler(e);
+                handleCard(e);
+              }}
               onFocus={() => setCardImage(true)}
+              autoComplete='off'
+              onContextMenu={(e) => e.preventDefault()}
               name='cardNumber'
               placeholder=' '
               required={true}
@@ -361,7 +367,9 @@ const CardPaymentType: paymentProps = ({
               onBlur={changeHandler}
               onChange={handleCVV}
               name='cardVarificationCode'
-              maxLength={3}
+              maxLength={
+                +`${detectCardType && detectCardType() === 'AMEX' ? 4 : 3}`
+              }
               value={cardValidation.cardVarificationCode}
               className='form-input !w-[calc(100%-40px)] appearance-none'
             />

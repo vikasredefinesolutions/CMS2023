@@ -26,7 +26,7 @@ const Header_Type4: NextPage<_HeaderProps> = ({
   const router = useRouter();
   const storeCode = useTypedSelector_v2((state) => state.store.code);
   const showSideMenu = useTypedSelector_v2((state) => state.modals.sideMenu);
-  const islogo = useTypedSelector_v2((state) => state.sbStore.isLogo);
+  const islogo = useTypedSelector_v2((state) => state.sbStore.store.isLogo);
   const storeTypeId = useTypedSelector_v2((state) => state.store.storeTypeId);
   const storeEmail = useTypedSelector_v2((state) => state.store.email_address);
   const storePhoneNumber = useTypedSelector_v2(
@@ -111,27 +111,25 @@ const Header_Type4: NextPage<_HeaderProps> = ({
                     </div>
                     <div className='flex items-center justify-end'>
                       <div className='flex items-center'>
-                        <div className='flex items-center'>
-                          {!isMobileView && showComponent() ? (
-                            <SearchBar screen={'DESKTOP'} />
-                          ) : null}
-                          {showComponent() && <LoginIcon />}
-                          {showComponent() && <LoggedInMenu />}
-                          <MyCartIcon />
-                          {showComponent() && (
-                            <div className='pl-[15px] order-1 sm:order-4'>
-                              <a href='/patagonia-sustainability-initiatives.html'>
-                                <img
-                                  src='/assets/images/di/for-the-planet.png'
-                                  alt=''
-                                />
-                              </a>
-                            </div>
-                          )}
-                          {/* <div className='lg:hidden pl-[15px]'>
+                        {showComponent() ? (
+                          <SearchBar screen={'DESKTOP'} />
+                        ) : null}
+                        {showComponent() && <LoginIcon />}
+                        {showComponent() && <LoggedInMenu />}
+                        <MyCartIcon />
+                        {showComponent() && (
+                          <div className='pl-[15px] order-1 sm:order-4 max-w-[100px]'>
+                            <a href='/patagonia-sustainability-initiatives.html'>
+                              <img
+                                src='/assets/images/di/for-the-planet.png'
+                                alt=''
+                              />
+                            </a>
+                          </div>
+                        )}
+                        {/* <div className='lg:hidden pl-[15px]'>
                             {router.asPath !== paths.CHECKOUT && <MenuIcon />}
                           </div> */}
-                        </div>
                       </div>
                     </div>
                   </div>

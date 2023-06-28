@@ -50,6 +50,8 @@ const UserManagement = () => {
   const isEmployeeLoggedIn = useTypedSelector_v2(
     (state) => state.employee.empId,
   );
+  const roles = useTypedSelector_v2((state) => state.user.roles);
+
   const closeModal = () => {
     setShowAddUserModal(false);
     setEditData(null);
@@ -138,7 +140,8 @@ const UserManagement = () => {
     setShowLoader(false);
   };
   const isAdmin =
-    customer?.customerRoleId === 0 || customer?.customerRoleId === 4
+    customer?.customerRoleId === 0 ||
+    customer?.customerRoleId === +roles.adminId
       ? true
       : false;
   const deleteUser = async (customerId: number) => {
@@ -187,7 +190,7 @@ const UserManagement = () => {
                         : '-'}
                     </div>
                     <div className='w-full lg:w-1/3'>
-                      {customer && customer.customerRoleId === 1
+                      {customer && customer.customerRoleId === +roles.customerId
                         ? 'You are a User'
                         : 'You have admin acceess'}
                     </div>

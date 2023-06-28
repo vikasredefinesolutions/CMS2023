@@ -111,7 +111,7 @@ const CustomizeLogo: React.FC<_Props> = ({
                 </div>
               </div>
               <div className='w-full md:w-10/12 sm:w-9/12 px-[15px] mb-[15px]'>
-                <div className='font-semibold text-sub-text mb-[10px]'>
+                <div className='font-semibold text-sub-text mb-[10px] '>
                   {productName}
                 </div>
                 <div className='mb-[10px]'>
@@ -128,6 +128,7 @@ const CustomizeLogo: React.FC<_Props> = ({
                   sizeQtys.length > 1 &&
                   sizeQtys.map((sizeQty, index) => {
                     if (index === 0) return <></>;
+                    if (sizeQty.qty == 0) return <></>;
                     return (
                       <div key={index} className='mb-[10px]'>
                         <span className='font-semibold ml-10'>{`${sizeQty.size} - ${sizeQty.qty}`}</span>
@@ -141,6 +142,7 @@ const CustomizeLogo: React.FC<_Props> = ({
                 <CustomizeLogoSteps
                   setShowOrSelect={setShowOrSelect}
                   firstLogoFree={logoCharges.isFirstLogoFree}
+                  setShowLogoComponent={setShowLogoComponent}
                 />
               )}
               {showOrSelect === 'SHOW' && (

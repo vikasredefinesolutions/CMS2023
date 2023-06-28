@@ -1,6 +1,8 @@
 import { _MenuItems } from '@definations/header.type';
 import MenuItem from '@header/header_Type2/Components/Menu//Header_MenuItem';
+import { useTypedSelector_v2 } from '@hooks_v2/index';
 import Backdrop from '@templates/Header/header_Type2/Components/Backdrop';
+import { useRouter } from 'next/router';
 import React, { Fragment, useEffect, useState } from 'react';
 import { CloseIcon } from '../Icons';
 
@@ -16,12 +18,18 @@ const MenuItems: React.FC<_props> = ({
   showSideMenu,
 }) => {
   const [menuItems, setMenuItems] = useState<null | _MenuItems>(null);
+  const mobileNumber=useTypedSelector_v2(state=>state.store.phone_number)
+  const [openTab, setOpenTab] = useState<string>('');
+  const router = useRouter();
+  useEffect(() => {
+    setOpenTab('');
+  }, [router.asPath]);
+
   useEffect(() => {
     if (menuItemsFromRoot) {
       setMenuItems(menuItemsFromRoot);
     }
   }, [menuItemsFromRoot]);
-
   if (!menuItems) return <></>;
 
   if (screen === 'MOBILE' && showSideMenu === 'CLOSE') return <></>;
@@ -32,7 +40,7 @@ const MenuItems: React.FC<_props> = ({
         className='fixed z-[100] lg:hidden inset-0 bg-[#000000] bg-opacity-50 '
         id='mobile_menu_box'
       >
-        <Backdrop />
+         <Backdrop setOpenTab={setOpenTab} />
         <div className='w-full max-w-xs bg-[#ffffff] h-screen overflow-x-scroll'>
           <div
             className='header-nav relative tracking-[1px]'
@@ -41,7 +49,7 @@ const MenuItems: React.FC<_props> = ({
             <CloseIcon />
 
             <div className='pt-[15px] pb-[15px] px-[10px] text-right'>
-              (877) 216-1011
+              {mobileNumber}
             </div>
             {menuItems.items_content?.map((menu, index) => {
               if (menu === null) {
@@ -55,6 +63,8 @@ const MenuItems: React.FC<_props> = ({
                     type={menu.type}
                     content={menu.items}
                     url={menu.seName}
+                    openTab={openTab}
+                    setOpenTab={setOpenTab}
                   />
                 </Fragment>
               );
@@ -80,6 +90,8 @@ const MenuItems: React.FC<_props> = ({
                     type={menu.type}
                     content={menu.items}
                     url={menu.seName}
+                    openTab={openTab}
+                    setOpenTab={setOpenTab}
                   />
                 </Fragment>
               );

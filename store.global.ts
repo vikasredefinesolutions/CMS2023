@@ -6,6 +6,10 @@ interface _Store {
   storeId: number;
   storeTypeId: number;
   isAttributeSaparateProduct: boolean;
+  domain: string;
+  // Store Builder
+  showHomePage: boolean;
+  filters: boolean;
 
   // Admin Configs
   blobUrl: string;
@@ -18,6 +22,7 @@ interface _Store {
   customFooterScript: string;
   customGlobalBodyScript: string;
   customGoogleVerification: string;
+  bacardiSelectedStore: string | null;
 
   // Google Tags
   googleTags: {
@@ -39,6 +44,7 @@ interface _Store {
 
   //Klaviyo Key
   klaviyoKey: string;
+  klaviyoKeyApi: string;
 
   set: (
     pair: // Store
@@ -46,7 +52,11 @@ interface _Store {
       | _StoreCode
       | _StoreTypeId
       | _StoreFavicon
+
+      // Store Builder
       | _StoreLogoUrl
+      | _ShowHomePage
+      | _ShowFilters
 
       // Admin Configs
       | _CompanyId
@@ -67,7 +77,10 @@ interface _Store {
       | _BottomHeaderGTMScript
       | _TopBodySnippetGTM
       | _HomePageGTMScript
-      | _KlaviyoKey,
+      | _KlaviyoKey
+      | _KlaviyoKeyApi
+      | _domain
+      | _BacardiSelectedStore,
   ) => void;
 }
 
@@ -78,12 +91,18 @@ export let _globalStore: _Store = {
   favicon: '',
   logoUrl: '',
   storeTypeId: 0,
+  domain: '',
   isAttributeSaparateProduct: false,
+
+  // Store Builder
+  showHomePage: true,
+  filters: false,
 
   // Admin Configs
   blobUrl: '',
   companyId: 0,
   blobUrlRootDirectory: '',
+  bacardiSelectedStore: '',
 
   // Custom Scripts
   googleFonts: '',
@@ -112,6 +131,8 @@ export let _globalStore: _Store = {
 
   //Klaviyo key
   klaviyoKey: '',
+
+  klaviyoKeyApi: '',
 
   set: (pair) => {
     _globalStore = { ..._globalStore, [pair.key]: pair.value };
@@ -146,6 +167,18 @@ interface _StoreLogoUrl {
 
 interface _isAttributeSaparateProduct {
   key: 'isAttributeSaparateProduct';
+  value: boolean;
+}
+
+// -------------------------------- Store Builder
+
+interface _ShowHomePage {
+  key: 'showHomePage';
+  value: boolean;
+}
+
+interface _ShowFilters {
+  key: 'filters';
   value: boolean;
 }
 
@@ -229,5 +262,20 @@ interface _HomePageGTMScript {
 
 interface _KlaviyoKey {
   key: 'klaviyoKey';
+  value: string | null;
+}
+
+interface _KlaviyoKeyApi {
+  key: 'klaviyoKeyApi';
+  value: string | null;
+}
+
+interface _domain {
+  key: 'domain';
+  value: string;
+}
+
+interface _BacardiSelectedStore {
+  key: 'bacardiSelectedStore';
   value: string | null;
 }

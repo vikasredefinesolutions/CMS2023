@@ -20,7 +20,7 @@ export const __pagesConstant = {
     similarProducts: {
       sliderSettings: {
         dots: false,
-        infinite: true,
+        infinite: false,
         speed: 500,
         slidesToShow: 5,
         slidesToScroll: 1,
@@ -118,3 +118,6 @@ export const __pagesConstant = {
     No: 'No',
   },
 };
+
+
+export const klaviyosearchStoreCodeArray = ['CG', 'GG', 'PKHG', 'DI'];

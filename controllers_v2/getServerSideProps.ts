@@ -22,10 +22,12 @@ import { GetServerSideProps, GetServerSidePropsResult } from 'next';
 import { _Slug_Props } from 'pages/[...slug-id]';
 import { getProductDetailProps } from './ProductController.async';
 
+import { storeBuilderTypeId } from '@configs/page.config';
 import { FetchDataByBrand } from '@services/brand.service';
-import { getGTMScript } from '@services/header.service';
+import { FetchBannerDetails, getGTMScript } from '@services/header.service';
 import { _SelectedTab } from '@templates/ProductDetails/productDetailsTypes/storeDetails.res';
 import { GetlAllProductList } from '@templates/ProductListings/ProductListingType';
+import { _Banner, _BrandTypes } from '@templates/banner';
 import { _globalStore } from 'store.global';
 import {
   _FetchPageThemeConfigs_ProductListing,
@@ -39,7 +41,26 @@ export const getServerSideProps: GetServerSideProps = async (
   context,
 ): Promise<GetServerSidePropsResult<_Slug_Props>> => {
   let { seName, otherParams } = extractSlugName(context.params);
-  let data: { [x: string]: newFetauredItemResponse[] } = {};
+  let allFeaturedProductComponentData: any = [];
+  let allFeaturedProductComponentBody: any = [];
+  let allTabingData: any = [];
+  let bodyArr: any = [];
+
+  /*if(!context.req.url?.includes('.html') && !context.req.url?.includes('not-found') && !context.req.url?.includes('.json'))
+  {
+    // return {
+    //   redirect: {
+    //     permanent: false,
+    //     destination: "/ "
+    //   }
+    // }
+    return {
+      redirect: {
+        permanent: true,
+        destination: "/not-found"
+      }
+    }
+  }*/
 
   let store = {
     storeCode: _globalStore.code,
@@ -51,7 +72,7 @@ export const getServerSideProps: GetServerSideProps = async (
 
   if (store.storeId === 0) {
     highLightError({
-      error: `No Store found. Can't proceed further`,
+      error: `No Store found. Can't proceed further => ${_globalStore.storeId}`,
       component: 'slug: getServerSideProps.tsx',
     });
     return {
@@ -134,7 +155,6 @@ export const getServerSideProps: GetServerSideProps = async (
   ////////////////////////////////////////////////
   /////////// Page Type Checks
   ////////////////////////////////////////////////
-
   if (pageMetaData.type === __pageTypeConstant.notFound) {
     return {
       notFound: true,
@@ -154,78 +174,106 @@ export const getServerSideProps: GetServerSideProps = async (
     });
 
     if (components.length > 0) {
-      const featuredProducts = components.find(
+      const featuredProducts = components.filter(
         (comp: any) => comp.name == 'Featured Products',
       );
+      if (featuredProducts.length > 0) {
+        allFeaturedProductComponentBody = featuredProducts?.map(
+          (featuredProduct: any, index: number) => {
+            let productsData = JSON.parse(featuredProduct?.selectedVal);
+            if (
+              productsData &&
+              productsData?.featuredproducts &&
+              productsData?.featuredproducts?.value?.length > 0
+            ) {
+              bodyArr = productsData.featuredproducts?.value.map(
+                (tab: _SelectedTab) => {
+                  const tagNameFunc = () => {
+                    if (tab.displayMethod == 'manual') {
+                      return '';
+                    } else if (tab.displayMethod == 'dynamic') {
+                      if (
+                        featuredProduct[index]
+                          ?.featuredproducts_product_to_display?.value
+                      ) {
+                        return featuredProduct[index]
+                          ?.featuredproducts_product_to_display?.value;
+                      } else {
+                        return 'featured';
+                      }
+                    }
+                  };
 
-      if (
-        featuredProducts?.selectedVal &&
-        featuredProducts?.selectedVal.length > 0
-      ) {
-        let productsData = JSON.parse(featuredProducts?.selectedVal);
-        if (
-          productsData?.featuredproducts &&
-          productsData?.featuredproducts?.value
-        ) {
-          const bodyArr = productsData.featuredproducts?.value.map(
-            (tab: _SelectedTab) => {
-              const tagNameFunc = () => {
-                if (tab.displayMethod == 'manual') {
-                  return '';
-                } else if (tab.displayMethod == 'dynamic') {
-                  if (components?.featuredproducts_product_to_display?.value) {
-                    return components?.featuredproducts_product_to_display
-                      ?.value;
-                  } else {
-                    return 'featured';
-                  }
-                }
-              };
-
-              let body = {
-                sename:
-                  tab.displayMethod == 'dynamic'
-                    ? tab.selectedBrands
-                        ?.map(
-                          (brand: { value: string; label: string }) =>
-                            brand.value,
-                        )
-                        .join(',')
-                    : tab.selectedProducts
-                        .map((product: any) => product?.seName)
-                        .join(','),
-                type:
-                  tab.displayMethod == 'dynamic'
-                    ? tab.productType
-                    : tab.displayMethod,
-                storeId: _globalStore.storeId,
-                tagName: tagNameFunc(),
-                maximumItemsForFetch: tab.productCount,
-              };
-              return body;
+                  let body = {
+                    sename:
+                      tab.displayMethod == 'dynamic'
+                        ? tab.selectedBrands
+                            ?.map(
+                              (brand: { value: string; label: string }) =>
+                                brand.value,
+                            )
+                            .join(',')
+                        : tab.selectedProducts
+                            .map((product: any) => product?.seName)
+                            .join(','),
+                    type:
+                      tab.displayMethod == 'dynamic'
+                        ? tab.productType
+                        : tab.displayMethod,
+                    storeId: _globalStore.storeId,
+                    tagName: tagNameFunc(),
+                    maximumItemsForFetch: tab.productCount,
+                  };
+                  return body;
+                },
+              );
+            }
+            return bodyArr;
+          },
+        );
+        if (allFeaturedProductComponentBody?.length > 0) {
+          let AllTabingApiArray = allFeaturedProductComponentBody.map(
+            (bodyArr: any) => {
+              let TabingApiArray = bodyArr.map(
+                async (body: {
+                  sename: string;
+                  type: string;
+                  storeId: number;
+                  tagName: string;
+                  maximumItemsForFetch: number | string;
+                }) => {
+                  return await FetchDataByBrand(body);
+                },
+              );
+              return TabingApiArray;
             },
           );
-
-          const TabingApiArray = bodyArr.map(
-            async (body: {
-              sename: string;
-              type: string;
-              storeId: number;
-              tagName: string;
-              maximumItemsForFetch: number | string;
-            }) => {
-              return await FetchDataByBrand(body);
-            },
-          );
-
-          if (TabingApiArray.length > 0) {
-            const allTabingData = await Promise.all(TabingApiArray);
-
-            productsData.featuredproducts?.value.map(
-              (tab: _SelectedTab, index: number) => {
-                data[tab?.tabName] = allTabingData[index];
-              },
+          if (AllTabingApiArray.length > 0) {
+            allTabingData = await Promise.all(
+              AllTabingApiArray.map(async (TabingApiArray: any) => {
+                return await Promise.all(TabingApiArray);
+              }),
             );
+
+            if (featuredProducts?.length > 0) {
+              allFeaturedProductComponentData = featuredProducts?.map(
+                (featuredProduct: any, index: number) => {
+                  let data: { [x: string]: newFetauredItemResponse[] } = {};
+                  let productsData = JSON.parse(featuredProduct?.selectedVal);
+                  if (
+                    productsData.featuredproducts &&
+                    productsData.featuredproducts?.value?.length > 0
+                  ) {
+                    productsData.featuredproducts?.value.map(
+                      (tab: _SelectedTab, ind: number) => {
+                        data[tab?.tabName] = allTabingData[index][ind];
+                      },
+                    );
+                  }
+                  return data;
+                },
+              );
+            }
           }
         }
       }
@@ -236,7 +284,7 @@ export const getServerSideProps: GetServerSideProps = async (
         page: 'ALL_CMS_PAGES',
         data: {
           components: components,
-          featuredItems: data,
+          featuredItems: allFeaturedProductComponentData,
         },
         metaData: pageMetaData,
       },
@@ -281,6 +329,24 @@ export const getServerSideProps: GetServerSideProps = async (
 
   ///////////////////////////////////////////////////////////////////////
   ///////////////////////////////////////////////////////////////////////
+  //////////         StoreBuilder - Product Listing
+  ///////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////
+
+  if (
+    _globalStore.storeTypeId === storeBuilderTypeId &&
+    !_globalStore.filters
+  ) {
+    return {
+      redirect: {
+        permanent: true,
+        destination: paths.SB_PRODUCT_LISTING,
+      },
+    };
+  }
+
+  ///////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////
   //////////         BRANDS - CATEGORY - PRODUCT LISTING
   ///////////////////////////////////////////////////////////////////////
   ///////////////////////////////////////////////////////////////////////
@@ -312,9 +378,22 @@ export const getServerSideProps: GetServerSideProps = async (
 
     const _filters: _Filter[] = [];
     let product: GetlAllProductList[] = [];
-    let configs: _FetchPageThemeConfigs_ProductListing | null = null;
+    let configs: _FetchPageThemeConfigs_ProductListing = {
+      templateID: '1',
+      breadCrumbTemplateId: '1',
+      bannertype: 'type1',
+    };
     let googleTagManagerResponseCommonData: any | null = null;
     let categoryComponents: any | null = null;
+    let bannerData: _Banner[] | null = null;
+
+    const getBannerContent = async () => {
+      return await FetchBannerDetails({
+        storeId: store.storeId,
+        isBrand: pageMetaData.type === __pageTypeConstant.brand,
+        sename: pageMetaData.slug,
+      });
+    };
 
     try {
       const filter = {
@@ -334,11 +413,31 @@ export const getServerSideProps: GetServerSideProps = async (
         ),
         FetchFiltersJSON(pageMetaData.type, filter),
         GetPageComponentsByCategoryId({ categoryId: pageMetaData.id }),
+        getBannerContent(),
       ]).then((values) => {
-        configs = values[0].status === 'fulfilled' ? values[0].value : null;
+        if (values[0].status === 'fulfilled') {
+          configs.templateID = values[0].value?.templateID || '1';
+          configs.bannertype = values[0].value?.bannertype || 'type1';
+          configs.breadCrumbTemplateId =
+            values[0].value?.breadCrumbTemplateId || '1';
+
+          if (values[0].value?.templateID) {
+            if (_globalStore.storeTypeId === storeBuilderTypeId) {
+              configs.templateID = '7';
+            }
+          }
+
+          if (values[0].value?.bannertype) {
+            if (_globalStore.storeTypeId === storeBuilderTypeId) {
+              configs.templateID = 'none';
+            }
+          }
+        }
+
         ProductFilt = values[1].status === 'fulfilled' ? values[1].value : null;
         categoryComponents =
           values[2].status === 'fulfilled' ? values[2].value : null;
+        bannerData = values[3].status === 'fulfilled' ? values[3].value : null;
       });
 
       if (ProductFilt) {
@@ -373,11 +472,12 @@ export const getServerSideProps: GetServerSideProps = async (
           brandId: pageMetaData.id,
           googleTagManagerResponseCommonData,
           categoryComponents: categoryComponents,
+          banner: bannerData,
         },
         metaData: pageMetaData,
         configs: {
-          templateId: configs!.templateID.toString(),
-          bannerType: configs!.bannertype,
+          templateId: configs.templateID,
+          bannerType: configs.bannertype as _BrandTypes & 'none',
         },
       },
     };

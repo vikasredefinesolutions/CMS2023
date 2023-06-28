@@ -5,10 +5,10 @@ import React from 'react';
 interface _Props {}
 
 const CO4_PasswordInput: React.FC<_Props> = () => {
-  const { update_CheckoutProps } = useActions_v2();
+  const { update_CheckoutAddress } = useActions_v2();
   const forgotPasswordHandler = () => {};
   const verifyPasswordHandler = (input: { emailPassword: string }) => {
-    // update_CheckoutProps({
+    // update_CheckoutAddress({
     //   showShippingDetails: true,
     // });
   };
@@ -80,7 +80,7 @@ const CO4_PasswordInput: React.FC<_Props> = () => {
         <div className=''>
           <button
             onClick={() => {
-              // update_CheckoutProps({
+              // update_CheckoutAddress({
               //   checkoutAsGuest: true,
               //   showShippingDetails: true,
               // });

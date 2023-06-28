@@ -10,11 +10,13 @@ import ShareLater from './ShareLater';
 interface _props {
   setShowOrSelect: React.Dispatch<React.SetStateAction<'SHOW' | 'SELECT'>>;
   firstLogoFree: boolean;
+  setShowLogoComponent: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const CustomizeLogoSteps: React.FC<_props> = ({
   setShowOrSelect,
   firstLogoFree,
+  setShowLogoComponent,
 }) => {
   const [step, setNextStep] = useState<_LogoSteps[]>(['SELECT_LOCATION']);
 
@@ -51,6 +53,7 @@ const CustomizeLogoSteps: React.FC<_props> = ({
           <ShareLater
             setNextStep={setNextStep}
             selectedLocation={selectedLocation}
+            setShowLogoComponent={setShowLogoComponent}
           />
         )}
       </div>

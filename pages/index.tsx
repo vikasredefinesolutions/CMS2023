@@ -1,5 +1,7 @@
+import ConfirmModal from '@appComponents/modals/paymentSuccessfullModal/paymentSuccessfullModal';
 import SeoHead from '@appComponents/reUsable/SeoHead';
 import { __Error, __pageTypeConstant } from '@constants/global.constant';
+import { paths } from '@constants/paths.constant';
 import { newFetauredItemResponse } from '@definations/productList.type';
 import { _GetPageType } from '@definations/slug.type';
 import {
@@ -7,14 +9,15 @@ import {
   GTMHomeScriptForCG,
 } from '@helpers/common.helper';
 import { highLightError } from '@helpers/console.helper';
-import { useTypedSelector_v2 } from '@hooks_v2/index';
+import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import { FetchDataByBrand } from '@services/brand.service';
 import { getPageComponents } from '@services/home.service';
 import { FetchPageType } from '@services/slug.service';
 import Home from '@templates/Home';
 import { _SelectedTab } from '@templates/ProductDetails/productDetailsTypes/storeDetails.res';
 import { GetServerSideProps, GetServerSidePropsResult, NextPage } from 'next';
-import { useEffect, useRef } from 'react';
+import { useRouter } from 'next/router';
+import { useEffect, useRef, useState } from 'react';
 import { _globalStore } from 'store.global';
 
 export interface _Slug_CMS_Props {
@@ -33,10 +36,16 @@ type _HomeProps =
     };
 
 const DefaultHomePage: NextPage<_HomeProps> = (props) => {
-  
   const { id: customerId } = useTypedSelector_v2((state) => state.user);
   const { id: storeId } = useTypedSelector_v2((state) => state.store);
   const isCaptured = useRef(false);
+  const { hideModal } = useActions_v2();
+  const [modalopen, setmodalopen] = useState<boolean>(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    hideModal();
+  }, []);
 
   useEffect(() => {
     if (storeId && !isCaptured.current) {
@@ -62,6 +71,17 @@ const DefaultHomePage: NextPage<_HomeProps> = (props) => {
     }
   }, [props]);
 
+  useEffect(() => {
+    if (
+      localStorage.getItem('OrderNumber') &&
+      router?.query &&
+      router?.query?.OrderNumber === localStorage.getItem('OrderNumber')
+    ) {
+      setmodalopen(true);
+      localStorage.removeItem('OrderNumber');
+    }
+  }, [router]);
+
   if ('error' in props) {
     return <>{props.error}</>;
   }
@@ -86,13 +106,15 @@ const DefaultHomePage: NextPage<_HomeProps> = (props) => {
             : 'Branded Promotional'
         }
       />
+
       <Home
         props={tprops}
         featuredItems={{
-          products: data.featuredItems,
+          products: data?.featuredItems,
           brands: null,
         }}
       />
+      {modalopen && <ConfirmModal setmodalopen={setmodalopen} />}
     </>
   );
 };
@@ -109,6 +131,14 @@ export const getServerSideProps: GetServerSideProps = async (): Promise<
     isAttributeSaparateProduct: _globalStore.isAttributeSaparateProduct,
   };
   // ---------------------------------------------------------------
+  if (!_globalStore.showHomePage) {
+    return {
+      redirect: {
+        permanent: true,
+        destination: paths.SB_PRODUCT_LISTING,
+      },
+    };
+  }
 
   if (store.storeId === 0) {
     highLightError({
@@ -125,7 +155,10 @@ export const getServerSideProps: GetServerSideProps = async (): Promise<
     storeId: store.storeId,
     slug: '/',
   });
-  let data: { [x: string]: newFetauredItemResponse[] } = {};
+  let allFeaturedProductComponentData: any = [];
+  let allFeaturedProductComponentBody: any = [];
+  let allTabingData: any = [];
+  let bodyArr: any = [];
 
   if (pageMetaData === null) {
     highLightError({
@@ -154,76 +187,106 @@ export const getServerSideProps: GetServerSideProps = async (): Promise<
     });
 
     if (components.length > 0) {
-      const featuredProducts = components.find(
+      const featuredProducts = components.filter(
         (comp: any) => comp.name == 'Featured Products',
       );
+      if (featuredProducts.length > 0) {
+        allFeaturedProductComponentBody = featuredProducts?.map(
+          (featuredProduct: any, index: number) => {
+            let productsData = JSON.parse(featuredProduct?.selectedVal);
+            if (
+              productsData &&
+              productsData?.featuredproducts &&
+              productsData?.featuredproducts?.value?.length > 0
+            ) {
+              bodyArr = productsData.featuredproducts?.value.map(
+                (tab: _SelectedTab) => {
+                  const tagNameFunc = () => {
+                    if (tab.displayMethod == 'manual') {
+                      return '';
+                    } else if (tab.displayMethod == 'dynamic') {
+                      if (
+                        featuredProduct[index]
+                          ?.featuredproducts_product_to_display?.value
+                      ) {
+                        return featuredProduct[index]
+                          ?.featuredproducts_product_to_display?.value;
+                      } else {
+                        return 'featured';
+                      }
+                    }
+                  };
 
-      if (
-        featuredProducts?.selectedVal &&
-        featuredProducts?.selectedVal.length > 0
-      ) {
-        let productsData = JSON.parse(featuredProducts?.selectedVal);
-        if (
-          productsData?.featuredproducts &&
-          productsData?.featuredproducts?.value
-        ) {
-          const bodyArr = productsData.featuredproducts?.value.map(
-            (tab: _SelectedTab) => {
-              const tagNameFunc = () => {
-                if (tab.displayMethod == 'manual') {
-                  return '';
-                } else if (tab.displayMethod == 'dynamic') {
-                  if (components?.featuredproducts_product_to_display?.value) {
-                    return components?.featuredproducts_product_to_display
-                      ?.value;
-                  } else {
-                    return 'featured';
-                  }
-                }
-              };
-
-              let body = {
-                sename:
-                  tab.displayMethod == 'dynamic'
-                    ? tab.selectedBrands
-                        ?.map(
-                          (brand: { value: string; label: string }) =>
-                            brand.value,
-                        )
-                        .join(',')
-                    : tab.selectedProducts
-                        .map((product: any) => product?.seName)
-                        .join(','),
-                type:
-                  tab.displayMethod == 'dynamic'
-                    ? tab.productType
-                    : tab.displayMethod,
-                storeId: _globalStore.storeId,
-                tagName: tagNameFunc(),
-                maximumItemsForFetch: tab.productCount,
-              };
-              return body;
+                  let body = {
+                    sename:
+                      tab.displayMethod == 'dynamic'
+                        ? tab.selectedBrands
+                            ?.map(
+                              (brand: { value: string; label: string }) =>
+                                brand.value,
+                            )
+                            .join(',')
+                        : tab.selectedProducts
+                            .map((product: any) => product?.seName)
+                            .join(','),
+                    type:
+                      tab.displayMethod == 'dynamic'
+                        ? tab.productType
+                        : tab.displayMethod,
+                    storeId: _globalStore.storeId,
+                    tagName: tagNameFunc(),
+                    maximumItemsForFetch: tab.productCount,
+                  };
+                  return body;
+                },
+              );
+            }
+            return bodyArr;
+          },
+        );
+        if (allFeaturedProductComponentBody?.length > 0) {
+          let AllTabingApiArray = allFeaturedProductComponentBody.map(
+            (bodyArr: any) => {
+              let TabingApiArray = bodyArr.map(
+                async (body: {
+                  sename: string;
+                  type: string;
+                  storeId: number;
+                  tagName: string;
+                  maximumItemsForFetch: number | string;
+                }) => {
+                  return await FetchDataByBrand(body);
+                },
+              );
+              return TabingApiArray;
             },
           );
-
-          const TabingApiArray = bodyArr.map(
-            async (body: {
-              sename: string;
-              type: string;
-              storeId: number;
-              tagName: string;
-              maximumItemsForFetch: number | string;
-            }) => {
-              return await FetchDataByBrand(body);
-            },
-          );
-          if (TabingApiArray.length > 0) {
-            const allTabingData = await Promise.all(TabingApiArray);
-            productsData.featuredproducts?.value.map(
-              (tab: _SelectedTab, index: number) => {
-                data[tab?.tabName] = allTabingData[index];
-              },
+          if (AllTabingApiArray.length > 0) {
+            allTabingData = await Promise.all(
+              AllTabingApiArray.map(async (TabingApiArray: any) => {
+                return await Promise.all(TabingApiArray);
+              }),
             );
+
+            if (featuredProducts?.length > 0) {
+              allFeaturedProductComponentData = featuredProducts?.map(
+                (featuredProduct: any, index: number) => {
+                  let data: { [x: string]: newFetauredItemResponse[] } = {};
+                  let productsData = JSON.parse(featuredProduct?.selectedVal);
+                  if (
+                    productsData.featuredproducts &&
+                    productsData.featuredproducts?.value?.length > 0
+                  ) {
+                    productsData.featuredproducts?.value.map(
+                      (tab: _SelectedTab, ind: number) => {
+                        data[tab?.tabName] = allTabingData[index][ind];
+                      },
+                    );
+                  }
+                  return data;
+                },
+              );
+            }
           }
         }
       }
@@ -233,7 +296,7 @@ export const getServerSideProps: GetServerSideProps = async (): Promise<
         page: 'ALL_CMS_PAGES',
         data: {
           components: components,
-          featuredItems: data,
+          featuredItems: allFeaturedProductComponentData,
         },
         metaData: pageMetaData,
       },

@@ -14,27 +14,30 @@ const SearchBar: React.FC<_props> = ({
 }) => {
   const searchRef = useRef<HTMLInputElement>(null);
   const searchHandler = (values: any) => {
-    // SearchFor(value);
     onSearchInput(values.text as string);
+    let x = searchRef.current;
+    if (x) {
+      if (
+        x?.value == '' ||
+        x?.value == 'Enter Search here' ||
+        x?.value.toString().toLowerCase().indexOf('enter search') > -1
+      ) {
+        alert('Please enter something to search');
+        return;
+      }
+      var str = x.value.replace(/^\s+|\s+$/g, '');
+      while (str.substring(str.length - 1, str.length) == ' ') {
+        str = str.substring(0, str.length - 1);
+      }
+      if (str.length < 3) {
+        alert('Please enter at least 3 characters to search');
+        return x.focus();
+      }
 
-    if (
-      values.text == '' ||
-      values.text == 'Enter Search here' ||
-      values.text.toString().toLowerCase().indexOf('enter search') > -1
-    ) {
-      alert('Please enter something to search');
+      window.location.href =
+        '/search/result.html?q=' +
+        encodeURIComponent(str.replace(/^\s+|\s+$/g, ''));
     }
-    var str = values.text.replace(/^\s+|\s+$/g, '');
-    while (str.substring(str.length - 1, str.length) == ' ') {
-      str = str.substring(0, str.length - 1);
-    }
-    if (str.length < 3) {
-      alert('Please enter at least 3 characters to search');
-      values.focus();
-    }
-
-    window.location.href =
-      '/' + encodeURIComponent(values.text.replace(/^\s+|\s+$/g, ''));
   };
 
   if (screen === 'MOBILE') {
@@ -51,7 +54,7 @@ const SearchBar: React.FC<_props> = ({
                         <input
                           ref={searchRef}
                           type='text'
-                          name='text'
+                          name='q'
                           min={1}
                           id='txtSearch'
                           placeholder={__pagesText.Headers.searchPlaceholder}
@@ -59,7 +62,7 @@ const SearchBar: React.FC<_props> = ({
                           className='outline-none w-full border-0 focus:ring-0 text-[14px] tracking-[1px] text-quaternary h-[26px] bg-none'
                           autoComplete='off'
                           maxLength={255}
-                          value={values.text}
+                          defaultValue={values.text}
                         />
                         <button
                           className='w-[24px] h-[24px] absolute right-[6px] top-[6px]'
@@ -98,7 +101,7 @@ const SearchBar: React.FC<_props> = ({
                     <input
                       ref={searchRef}
                       type='text'
-                      name='text'
+                      name='q'
                       min={1}
                       id='txtSearch'
                       placeholder={__pagesText.Headers.searchPlaceholder}
@@ -106,7 +109,7 @@ const SearchBar: React.FC<_props> = ({
                       className='outline-none w-full border-0 focus:ring-0 text-[14px] tracking-[1px] text-quaternary h-[26px] bg-none'
                       autoComplete='off'
                       maxLength={255}
-                      value={values.text}
+                      defaultValue={values.text}
                     />
                     <button
                       className='w-[24px] h-[24px] absolute right-[6px] top-[6px]'

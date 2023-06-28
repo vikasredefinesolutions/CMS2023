@@ -68,7 +68,7 @@ export interface _Selectedproduct_v2 {
   inventory: _ProductInventoryTransfomed | null;
   attributeOptionId?: number;
   productName?: string;
-  productQty?: any;
+  productQty: number;
 }
 
 // --------------------
@@ -86,4 +86,20 @@ export interface _ExpectedProductProps {
     SEO: null | _ProductSEO;
   } | null;
   store?: _StoreReturnType | null;
+}
+
+export interface _GiftDetailsProps {
+  giftData: {
+    id: number;
+    seName: string;
+    storeId: number;
+    name: string;
+    description: string;
+    shortDescription: string;
+    ourCost: string;
+    salePrice: string;
+    sku: string;
+    imageName: string;
+    giftCardEnddate: string;
+  };
 }

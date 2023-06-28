@@ -1,3 +1,4 @@
+import { storeBuilderTypeId } from '@configs/page.config';
 import { CG_STORE_CODE } from '@constants/global.constant';
 import { paths } from '@constants/paths.constant';
 import {
@@ -15,17 +16,33 @@ import CheckoutType2 from './checkoutType2';
 import CheckoutType3 from './checkoutType3';
 import CheckoutType4 from './checkoutType4';
 import CheckoutType5 from './checkoutType5';
+import CheckoutType6 from './checkoutType6';
+import CheckoutType7Refactor from './checkoutType7Refactor';
 
 interface _Props {
   templateId: number;
 }
 
+enum _CHECKOUT_TEMPLATE_ID {
+  CG = 1,
+  CYX = 7,
+  PKHG = 2,
+  UHP = 7,
+  SMH = 7,
+  DI = 5,
+  BB = 7,
+  USE = 6,
+  porsche = 7,
+  Uniti = 7,
+}
 export interface CTTemplates {
   type1: FC<_Props>;
   type2: FC<_Props>;
   type3: FC<_Props>;
   type4: FC<_Props>;
   type5: FC<_Props>;
+  type6: FC<_Props>;
+  type7: FC<_Props>;
 }
 
 const checkoutTemplates: CTTemplates = {
@@ -34,18 +51,23 @@ const checkoutTemplates: CTTemplates = {
   type3: CheckoutType3,
   type4: CheckoutType4,
   type5: CheckoutType5,
+  type6: CheckoutType6,
+  type7: CheckoutType7Refactor,
 };
 
-const CheckoutTemplate: FC<_Props> = ({ templateId }) => {
+const CheckoutTemplate: FC<_Props> = () => {
   const router = useRouter();
+  const store = useTypedSelector_v2((state) => state.store);
   const {
     cart: cartData,
     discount: cartDiscountDetails,
     isCartLoading,
   } = useTypedSelector_v2((state) => state.cart);
-  const { id: storeId, mediaBaseUrl } = useTypedSelector_v2(
-    (state) => state.store,
-  );
+  const {
+    id: storeId,
+    mediaBaseUrl,
+    storeTypeId,
+  } = useTypedSelector_v2((state) => state.store);
   const { id: customerId } = useTypedSelector_v2((state) => state.user);
   const isCaptured = useRef(false);
 
@@ -108,7 +130,7 @@ const CheckoutTemplate: FC<_Props> = ({ templateId }) => {
       isCaptured.current = true;
       const payload = {
         storeId: storeId,
-        customerId: customerId,
+        customerId: customerId || 0,
         ...(storeId !== CG_STORE_CODE
           ? {
               value: totalPrice || '',
@@ -141,17 +163,33 @@ const CheckoutTemplate: FC<_Props> = ({ templateId }) => {
 
   useEffect(() => {
     if (!isCartLoading && (!cartData?.length || cartData === null)) {
+      if (store.storeTypeId === storeBuilderTypeId) {
+        router.push(paths.SB_PRODUCT_LISTING);
+        return;
+      }
+
       router.push(paths.CART);
     }
   }, [cartData, isCartLoading]);
 
   const storeCode = useTypedSelector_v2((state) => state.store.code);
 
+  const templateId =
+    storeBuilderTypeId === storeTypeId
+      ? 6
+      : (_CHECKOUT_TEMPLATE_ID as any)[storeCode] || 7;
+
   const CheckoutSelectedTemplate =
     checkoutTemplates[
-      `type${templateId}` as 'type1' | 'type2' | 'type3' | 'type4' | 'type5'
+      `type${templateId}` as
+        | 'type1'
+        | 'type2'
+        | 'type3'
+        | 'type4'
+        | 'type5'
+        | 'type6'
+        | 'type7'
     ];
-
   return <CheckoutSelectedTemplate templateId={templateId} />;
 };
 

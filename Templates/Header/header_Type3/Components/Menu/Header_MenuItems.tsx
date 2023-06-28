@@ -2,6 +2,7 @@ import { companyInfo } from '@constants/common.constant';
 import { _MenuItems } from '@definations/header.type';
 import MenuItem from '@header/header_Type3/Components/Menu//Header_MenuItem';
 import Backdrop from '@templates/Header/header_Type3/Components/Backdrop';
+import { useRouter } from 'next/router';
 import React, { Fragment, useEffect, useState } from 'react';
 import { CloseIcon } from '../Icons';
 
@@ -17,6 +18,11 @@ const MenuItems: React.FC<_props> = ({
   showSideMenu,
 }) => {
   const [menuItems, setMenuItems] = useState<null | _MenuItems>(null);
+  const [openTab, setOpenTab] = useState<string>('');
+  const router = useRouter();
+  useEffect(() => {
+    setOpenTab('');
+  }, [router.asPath]);
   useEffect(() => {
     if (menuItemsFromRoot) {
       setMenuItems(menuItemsFromRoot);
@@ -33,7 +39,7 @@ const MenuItems: React.FC<_props> = ({
         className='fixed z-[100] lg:hidden inset-0 bg-[#000000] bg-opacity-50 '
         id='mobile_menu_box'
       >
-        <Backdrop />
+       <Backdrop setOpenTab={setOpenTab} />
         <div className='w-full max-w-xs bg-[#ffffff] h-screen overflow-x-scroll'>
           <div
             className='header-nav relative tracking-[1px]'
@@ -56,6 +62,8 @@ const MenuItems: React.FC<_props> = ({
                     type={menu.type}
                     content={menu.items}
                     url={menu.seName}
+                    openTab={openTab}
+                    setOpenTab={setOpenTab}
                   />
                 </Fragment>
               );
@@ -68,7 +76,7 @@ const MenuItems: React.FC<_props> = ({
   if (screen === 'DESKTOP') {
     return (
       <div className='hidden lg:block border-y border-y-gray-border ml-[10px] mr-[10px]'>
-        <div className='"h-full flex justify-center header-nav relative'>
+        <div className='h-full flex justify-center header-nav relative'>
           {menuItems.items_content?.map((menu, index) => {
             if (menu === null) {
               return <></>;
@@ -80,6 +88,8 @@ const MenuItems: React.FC<_props> = ({
                   type={menu.type}
                   content={menu.items}
                   url={menu.seName}
+                  openTab={openTab}
+                  setOpenTab={setOpenTab}
                 />
               </Fragment>
             );

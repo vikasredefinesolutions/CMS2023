@@ -18,8 +18,8 @@ const LoggedInMenu: React.FC = () => {
   } = useActions_v2();
   const { id: loggedIn, customer } = useTypedSelector_v2((state) => state.user);
   const [focus, setFocus] = useState(false);
-  const isEmployeeLoggedIn = useTypedSelector_v2(
-    (state) => state.employee.empId,
+  const { empId: isEmployeeLoggedIn } = useTypedSelector_v2(
+    (state) => state.employee,
   );
 
   const logoutHandler = () => {
@@ -28,6 +28,7 @@ const LoggedInMenu: React.FC = () => {
       product_employeeLogin('MinQtyToOne_CleanUp');
       localStorage.removeItem(__LocalStorage.empData);
       localStorage.removeItem(__LocalStorage.empGuest);
+      localStorage.removeItem(__LocalStorage.guestEmailID);
     }
 
     setFocus(false);
@@ -60,7 +61,7 @@ const LoggedInMenu: React.FC = () => {
         </Link>
 
         {focus && (
-          <div className='text-xs uppercase absolute right-0 top-full bg-white z-40 w-[220px]'>
+          <div className='text-xs uppercase absolute right-0 top-full bg-white z-40 w-[210px]'>
             <ul className='border-[3px] border-[#000000]'>
               <li className='border-t border-t-gray-300 pt-[10px]'>
                 <Link href={paths.loggedInMenu.order}>
@@ -118,7 +119,7 @@ const LoggedInMenu: React.FC = () => {
               <li className='border-t border-t-gray-300 pt-[10px] pb-[10px]'>
                 <div
                   onClick={() => logoutHandler()}
-                  className='flex items-center p-2 gap-2.5 text-[#000000] hover:text-[#000000]'
+                  className='flex items-center p-2 gap-2.5 text-[#000000] hover:text-[#000000] cursor-pointer'
                 >
                   <span className=''>
                     <NxtImage

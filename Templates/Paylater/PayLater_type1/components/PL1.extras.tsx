@@ -3,7 +3,7 @@ import { _MyAcc_OrderBillingDetails } from '@definations/APIs/user.res';
 
 export const ShippingAddressHTML = (billing: _MyAcc_OrderBillingDetails) => {
   return (
-    <div className='pl-[15px] pr-[15px] pt-[15px] pb-[15px]'>
+    <div className=''>
       <div className='flex flex-wrap items-center justify-between pt-[10px] border-b border-[#ececec]'>
         <div className='pb-[10px] text-title-text'>
           {__pagesText.CheckoutPage.ShippingAddress}

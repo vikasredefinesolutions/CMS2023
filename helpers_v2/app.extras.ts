@@ -1,4 +1,4 @@
-import { CG_STORE_CODE, __Cookie } from '@constants/global.constant';
+import { BACARDI, CG_STORE_CODE, __Cookie } from '@constants/global.constant';
 import * as _AppController from '@controllers/_AppController.async';
 import { _Expected_AppProps } from '@definations/app.type';
 import { _MenuItems } from '@definations/header.type';
@@ -44,38 +44,10 @@ export const expectedProps: _Expected_AppProps = {
     isLinepersonalization: false,
     firstLogoCharge: 0,
     secondLogoCharge: 0,
+    storeXPaymetnOptionListViewModels: [],
   },
   menuItems: null,
-  sbStore: {
-    id: null,
-    storeId: null,
-    organizationId: null,
-    sportId: null,
-    salesPersonId: 0,
-    salesCode: '',
-    directAccessURL: '',
-    estimateShipDate: '',
-    workOrder: null,
-    message: null,
-    isLogo: true,
-    messageTypeId: 0,
-    openStoreOn: '',
-    closeStoreOn: '',
-    serviceEmailId: 0,
-    serviceEmailSalesPersonId: 0,
-    servicePhoneId: 0,
-    servicePhoneSalesPersonId: 0,
-    logoUrl: '',
-    recStatus: null,
-    createdDate: null,
-    createdBy: null,
-    modifiedDate: null,
-    modifiedBy: null,
-    rowVersion: null,
-    location: null,
-    ipAddress: null,
-    macAddress: null,
-  },
+  sbStore: null,
   footerHTML: null,
   headerConfig: null,
   templateIDs: {
@@ -104,6 +76,10 @@ export interface _PropsToStoreAndGetFromCookies {
       favicon: string;
     };
     isAttributeSaparateProduct: boolean;
+  };
+  storeBuilder: {
+    showHomePage: boolean;
+    filters: boolean;
   };
   adminConfig: {
     imageFolderPath: string;
@@ -165,13 +141,24 @@ export const callConfigsAndRemainingStoreAPIsAndSetURls = async (
   };
   let headerConfig: _FetchStoreConfigurations | null = null;
 
+  const callMenuItemsAPI = async (): Promise<_MenuItems | null> => {
+    // if (storeDetails.storeTypeId === storeBuilderTypeId) {
+    //   return null;
+    // }
+
+    return await _AppController.fetchMenuItems(
+      storeDetails.storeId!,
+      storeDetails.code,
+    );
+  };
+
   await Promise.allSettled([
     FetchCompanyConfiguration(),
     getAllConfigurations({
       storeId: storeDetails.storeId!,
       configNames: ['footer', 'contactInfo', 'header_config', 'productListing'],
     }),
-    _AppController.fetchMenuItems(storeDetails.storeId!, storeDetails.code),
+    callMenuItemsAPI(),
   ])
     .then((values) => {
       companyId =
@@ -222,9 +209,14 @@ export const callConfigsAndRemainingStoreAPIsAndSetURls = async (
 export const extractAndfillCookiesIntoProps = (
   cookies: string | undefined,
 ): _PropsToStoreAndGetFromCookies => {
-  const { storeInfo, loggedIN, adminConfigs } = extractCookies(cookies);
+  const { storeInfo, loggedIN, adminConfigs, storeBuilderInfo } =
+    extractCookies(cookies);
 
   return {
+    storeBuilder: {
+      showHomePage: storeBuilderInfo?.showHomePage || false,
+      filters: storeBuilderInfo?.filters || false,
+    },
     store: {
       id: storeInfo?.storeId || null,
       storeTypeId: storeInfo?.storeTypeId || 0,
@@ -268,6 +260,10 @@ export const storeCookiesToDecreaseNoOfAPIRecalls = async (
         blobUrl: props.adminConfig.blobUrl,
         blobUrlRootDirectory: props.adminConfig.blobUrlDirectory,
         imageFolderP: props.adminConfig.imageFolderPath,
+        sb: {
+          displayHomePage: props.storeBuilder.showHomePage,
+          filters: props.storeBuilder.filters,
+        },
       },
     },
   });
@@ -279,13 +275,30 @@ export const passPropsToDocumentFile = ({
   gTags,
   adminConfigs,
   klaviyoKey,
+  domain,
+  bacardiSelectedStore,
+  storeBuilder,
 }: {
+  storeBuilder: { status: boolean; showHomePage: boolean; filters: boolean };
   customScripts: null | _CustomScriptConfigValue;
   gTags: null | _GoogleTagsConfigValue;
   store: _PropsToStoreAndGetFromCookies['store'];
   adminConfigs: _PropsToStoreAndGetFromCookies['adminConfig'];
   klaviyoKey: string | null;
+  domain: string;
+  bacardiSelectedStore: string;
 }): void => {
+  if (storeBuilder.status) {
+    _globalStore.set({
+      key: 'showHomePage',
+      value: storeBuilder.showHomePage,
+    });
+    _globalStore.set({
+      key: 'filters',
+      value: storeBuilder.filters,
+    });
+  }
+
   if (customScripts) {
     _globalStore.set({
       key: 'googleFonts',
@@ -358,10 +371,46 @@ export const passPropsToDocumentFile = ({
       value: adminConfigs.companyId,
     });
   }
+
+  if (store.code === BACARDI) {
+    _globalStore.set({
+      key: 'bacardiSelectedStore',
+      value: bacardiSelectedStore,
+    });
+  }
+
   _globalStore.set({
     key: 'klaviyoKey',
     value: klaviyoKey,
   });
+  _globalStore.set({
+    key: 'domain',
+    value: domain,
+  });
+  switch (store.code) {
+    case 'CG':
+      _globalStore.set({
+        key: 'klaviyoKeyApi',
+        value: 'klevu-14936563081965977',
+      });
+      break;
+    case 'DI':
+      _globalStore.set({
+        key: 'klaviyoKeyApi',
+        value: 'klevu-14903480948925715',
+      });
+      break;
+
+    case 'PKHG':
+      _globalStore.set({
+        key: 'klaviyoKeyApi',
+        value: 'klevu-15553979660205871',
+      });
+      break;
+
+    default:
+      break;
+  }
 };
 
 export const configsToCallEveryTime = async (

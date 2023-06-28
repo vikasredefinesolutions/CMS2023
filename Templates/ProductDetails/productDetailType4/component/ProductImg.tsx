@@ -61,7 +61,7 @@ const ProductImg: React.FC<_ProductImgProps> = ({ product }) => {
   // }, [customerId, wishlist]);
 
   return (
-    <div className='col-span-1 grid grid-cols-12 gap-[10px] lg:pr-[15px] pt-[8px]'>
+    <div className='col-span-1 grid grid-cols-12 gap-[10px] lg:pr-[15px] pr-[0px] pt-[8px]'>
       <div className='col-span-12 border border-gray-border relative'>
         <div className='main-image max-w-lg mx-auto'>
           <InnerImageZoom
@@ -82,14 +82,14 @@ const ProductImg: React.FC<_ProductImgProps> = ({ product }) => {
                     : 'border-gray-border';
                 return (
                   <div
-                    className={`md:border hover:border-secondary p-[3px] mt-[5px] mb-[5px] last:mb-0 cursor-pointer ${highlight}`}
+                    className={`md:border hover:border-primary p-[3px] mt-[5px] mb-[5px] last:mb-0 cursor-pointer ${highlight}`}
                     key={img.id + img.imageUrl}
                     onClick={() => selectImgHandler(img)}
                   >
                     <NxtImage
                       src={img.imageUrl}
                       alt={img.altTag}
-                      className={`w-full ${highlight} object-center object-cover`}
+                      className={`${highlight} max-h-full m-auto`}
                       title={img.altTag}
                     />
                   </div>
@@ -104,16 +104,19 @@ const ProductImg: React.FC<_ProductImgProps> = ({ product }) => {
         {colors &&
           colors.map((product, index) => {
             return (
-              <div
-                className={`border-2 hover:border-secondary mx-[5px] mb-[10px] p-[1px] w-[70px] max-h-[70px] ${
-                  selectedColor.attributeOptionId == product.attributeOptionId
-                    ? 'border-secondary'
-                    : 'border-gray-border'
-                }`}
-                onClick={() => setColor(product)}
-                key={product.attributeOptionId}
-              >
-                <ColorImage product={product} />
+              <div>
+                <div
+                  className={`border-2 hover:border-primary  mx-[5px] mb-[10px] p-[1px] w-[70px] max-h-[70px] ${
+                    selectedColor.attributeOptionId == product.attributeOptionId
+                      ? 'border-secondary'
+                      : 'border-gray-border'
+                  }`}
+                  onClick={() => setColor(product)}
+                  key={product.attributeOptionId}
+                >
+                  <ColorImage product={product} />
+                </div>
+                <div className='text-center w-[70px]'>{product.name}</div>
               </div>
             );
           })}

@@ -94,7 +94,7 @@ const WishlistType1: React.FC<_Wishlist> = ({
           ))}
         </div>
       ) : (
-        <div className='py-[30px] lg:py-[100px]'>
+        <div className='py-[30px] text-center lg:py-[100px]'>
           <div className='text-2xl-text'>
             {__pagesText.Wishlist.emptyWishlistEmptyTitle}
           </div>

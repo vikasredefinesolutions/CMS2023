@@ -67,6 +67,7 @@ const SU3_Input = ({
                 isPasswordVisible && 'text-indigo-500'
               }`}
               onClick={() => setIsPasswordVisible((prev) => !prev)}
+              type='button'
             >
               <span className='material-symbols-outlined text-base'>
                 visibility
@@ -76,6 +77,7 @@ const SU3_Input = ({
               <button
                 onMouseEnter={() => setIsPasswordHintVisible(true)}
                 onMouseLeave={() => setIsPasswordHintVisible(false)}
+                type='button'
               >
                 <span className='material-icons-outlined ml-2 text-base'>
                   info
@@ -89,7 +91,7 @@ const SU3_Input = ({
                         Your password must have :
                       </span>
                       <span className='w-full pt-1 pb-1 block'>
-                        8 Or more character
+                        6 Or more character
                       </span>
                       <span className='w-full pt-1 pb-1 block'>
                         Upper and lowercase letters

@@ -16,7 +16,7 @@ const BrandImage: React.FC<_props> = ({ url, src, alt }) => {
           className='inline-block hover:bg-white hover:shadow'
           href={`/${url}`}
         >
-          <div className='brand-logo max-w-[150px] mx-auto'>
+          <div className='max-w-[150px] mx-auto'>
             <NxtImage
               className='max-h-full'
               src={src}

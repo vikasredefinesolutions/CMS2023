@@ -45,7 +45,8 @@ const CardPaymentType1: paymentProps = ({
   };
 
   const handleCVV = (e: any) => {
-    if (!Number(e.target.value)) {
+    const regex = new RegExp('[0-9]').test(e.target.value);
+    if (!regex) {
       setcvv('');
       return;
     } else {
@@ -119,9 +120,14 @@ const CardPaymentType1: paymentProps = ({
         }`}
       >
         <input
+          autoComplete='off'
+          onContextMenu={(e) => e.preventDefault()}
           onBlur={changeHandler}
           onKeyDown={blockInvalidChar}
-          onChange={handleCard}
+          onChange={(e) => {
+            changeHandler(e);
+            handleCard(e);
+          }}
           name='cardNumber'
           placeholder=' '
           required={true}
@@ -188,18 +194,33 @@ const CardPaymentType1: paymentProps = ({
                     ? true
                     : false;
                 if (selected) {
-                  return (index < 9 ? <><option key={index} value={`0${index + 1}`} selected>
-                    {`0${index + 1}`}
-                  </option></> : <><option key={index} value={index + 1} selected>
-                  {index + 1}
-                </option></>
+                  return index < 9 ? (
+                    <>
+                      <option key={index} value={`0${index + 1}`} selected>
+                        {`0${index + 1}`}
+                      </option>
+                    </>
+                  ) : (
+                    <>
+                      <option key={index} value={index + 1} selected>
+                        {index + 1}
+                      </option>
+                    </>
                   );
                 }
-                return (index < 9 ? <>
-                  <option key={index} value={`0${index + 1}`}>
-                    {`0${index + 1}`}
-                  </option></> : <><option key={index} value={index + 1}>{index + 1}</option></>
-              );
+                return index < 9 ? (
+                  <>
+                    <option key={index} value={`0${index + 1}`}>
+                      {`0${index + 1}`}
+                    </option>
+                  </>
+                ) : (
+                  <>
+                    <option key={index} value={index + 1}>
+                      {index + 1}
+                    </option>
+                  </>
+                );
               })}
             </select>
             <label
@@ -254,16 +275,18 @@ const CardPaymentType1: paymentProps = ({
           <div className='relative z-0 w-full mb-[20px] border border-gray-border rounded'>
             <input
               onBlur={changeHandler}
-              onChange={(event) => setcvv(event?.target.value)}
+              onChange={handleCVV}
               name='cardVarificationCode'
               onKeyDown={blockInvalidChar}
               placeholder=' '
               disabled={employeeLogin.isPaymentPending}
               required={true}
-              maxLength={3}
+              maxLength={
+                +`${detectCardType && detectCardType() === 'AMEX' ? 4 : 3}`
+              }
               // value={cvv}
               value={cvv}
-              type='text'
+              type='number'
               className='apperance  pt-[15px] pb-[0px] block w-full px-[8px] h-[48px] mt-[0px] text-sub-text text-[18px] text-[#000000] bg-transparent border-0 appearance-none focus:outline-none focus:ring-0'
             />
             <label

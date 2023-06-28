@@ -14,16 +14,13 @@ interface _Props {
 
 const CheckoutType4: React.FC<_Props> = ({ templateId }) => {
   const sbStore = useTypedSelector_v2((state) => state.sbStore);
-  const { billingAddress, shippingAddress, payment } = useTypedSelector_v2(
-    (state) => state.checkout,
-  );
+  const { address, payment } = useTypedSelector_v2((state) => state.checkout);
 
   const [placeOrReviewBtn, setPlaceOrReviewBtn] = useState<
     'reviewBtn' | 'placeOrder'
   >('reviewBtn');
 
-  const enableReviewOrder =
-    !!billingAddress && !!shippingAddress && payment.valid;
+  const enableReviewOrder = !!address.billing && !!address.shipping;
 
   useEffect(() => {
     if (!enableReviewOrder) {

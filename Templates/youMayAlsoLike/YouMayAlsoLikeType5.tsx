@@ -42,13 +42,13 @@ const YouMayAlsoLikeType5: React.FC<_TemplateProps> = ({ productsData }) => {
                     __pagesConstant._productAlike.carouselCounter
                       ? 'absolute'
                       : 'hidden'
-                  } top-1/2 -translate-x-3.5 lg:-translate-x-1/2 -trnaslate-y-1/2 z-10 flex items-center left-0`}
+                  } top-1/2 -translate-y-1/2 z-10 flex items-center left-0`}
                 >
                   <button
                     onClick={() => goToPrevProduct()}
                     className='flex justify-center items-center w-6 h-6 focus:outline-none text-black'
                   >
-                    <span className='text-3xl leading-none absolute top-1/2 -translate-y-1/2 left-0 z-50 cursor-pointer material-icons-outlined slick-arrow'>
+                    <span className='text-3xl leading-none cursor-pointer material-icons-outlined slick-arrow'>
                       arrow_back_ios
                     </span>
                   </button>
@@ -72,14 +72,14 @@ const YouMayAlsoLikeType5: React.FC<_TemplateProps> = ({ productsData }) => {
                                   )}.html`}
                                   className='relative'
                                 >
-                                  <div>
-                                    {/* Issue: Using functional components as child of <Link/> causes ref-warnings */}
+                                  {/* Issue: Using functional components as child of <Link/> causes ref-warnings */}
+                                  <a>
                                     <NxtImage
                                       src={product.image}
                                       alt={product.name}
                                       className='w-auto h-auto max-h-max'
                                     />
-                                  </div>
+                                  </a>
                                 </Link>
                               </div>
                               <div className='mt-6 mb-[30px]'>
@@ -102,7 +102,9 @@ const YouMayAlsoLikeType5: React.FC<_TemplateProps> = ({ productsData }) => {
                                     <Price
                                       value={
                                         customerId
-                                          ? product.lowPrice
+                                          ? product.lowPrice != 0
+                                            ? product?.lowPrice
+                                            : product.msrp
                                           : product.msrp
                                       }
                                     />
@@ -122,13 +124,13 @@ const YouMayAlsoLikeType5: React.FC<_TemplateProps> = ({ productsData }) => {
                     __pagesConstant._productAlike.carouselCounter
                       ? 'absolute'
                       : 'hidden'
-                  }  top-1/2 -translate-x-3.5 lg:-translate-x-1/2 -trnaslate-y-1/2 right-0 z-10 flex items-center`}
+                  }  top-1/2 -translate-y-1/2 right-0 z-10 flex items-center`}
                 >
                   <button
                     onClick={() => goToNextProduct()}
                     className='flex justify-center items-center w-6 h-6 focus:outline-none text-black'
                   >
-                    <span className='chevron-right text-3xl leading-none absolute top-1/2 -translate-y-1/2 left-0 z-50 cursor-pointer material-icons-outlined slick-arrow'>
+                    <span className='chevron-right text-3xl leading-none cursor-pointer material-icons-outlined slick-arrow'>
                       arrow_forward_ios
                     </span>
                   </button>

@@ -16,6 +16,9 @@ export interface _ProductDetailsTemplates {
   type3: React.FC<_Props>;
   type4: React.FC<_Props>;
   type5: React.FC<_Props>;
+  type6: React.FC<_Props>;
+  type7: React.FC<_Props>;
+  type8: React.FC<_Props>;
 }
 export interface _sbsStore_props {
   id: number;

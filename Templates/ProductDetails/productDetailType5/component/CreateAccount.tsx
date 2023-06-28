@@ -168,15 +168,7 @@ const CreateAccount: React.FC = () => {
           onSubmit={loginSubmitHandler}
           validationSchema={_SignupSchema}
         >
-          {({
-            values,
-            handleChange,
-            setFieldValue,
-            touched,
-            errors,
-            handleBlur,
-            setFieldError,
-          }) => {
+          {({ values, handleChange, handleBlur }) => {
             return (
               <Form>
                 {/* <div className='mb-[10px]'>

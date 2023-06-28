@@ -89,7 +89,7 @@ const SelectLogo: React.FC<_props> = ({
 
   useEffect(() => {
     fetchLogoLibrary();
-  }, []);
+  }, [selectedLocation]);
 
   return (
     <>

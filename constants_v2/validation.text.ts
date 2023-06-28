@@ -4,12 +4,12 @@ export const __ValidationText = {
   requestConsultation: {
     firstName: {
       required: 'Enter your first name.',
-      minLength: 3,
+      minLength: 2,
       maxLength: 40,
     },
     lastName: {
       required: 'Enter your last name.',
-      minLength: 3,
+      minLength: 2,
       maxLength: 40,
     },
     companyName: {
@@ -23,6 +23,28 @@ export const __ValidationText = {
       invalid: '',
     },
 
+    itemColor: {
+      required: 'Item color is required',
+    },
+
+    city: {
+      required: 'City is required',
+    },
+
+    additionalComments: {
+      required: 'Comment is required',
+    },
+
+    country: {
+      required: 'Country is required',
+    },
+
+    stateName: {
+      required: 'State is required',
+    },
+    itemName: {
+      required: 'Item name is required',
+    },
     phone: {
       required: 'Enter your phone Number.',
       valid: 'Phone number is not valid',
@@ -39,18 +61,39 @@ export const __ValidationText = {
       required: 'In hands Date is required',
       min: 'In Hand Date Cannot be Past date',
     },
+
+    address: {
+      required: 'Address is required',
+    },
+
+    needByDate: {
+      required: 'Date is required',
+    },
+
+    targetAudience: {
+      required: 'Target audience field is required',
+    },
+
+    giveAway: {
+      required: 'Purpose fpor giveaway is required',
+    },
+
+    estimateBudget: {
+      required: 'Estimated budget is required',
+    },
+
     message: '',
     captcha: 'Captcha is not valid !',
   },
   signUp: {
     firstName: {
       required: 'Enter your first name.',
-      minLength: 3,
+      minLength: 2,
       maxLength: 40,
     },
     lastName: {
       required: 'Enter your last name.',
-      minLength: 3,
+      minLength: 2,
       maxLength: 40,
     },
     Gender: { required: 'Select gender' },
@@ -63,9 +106,7 @@ export const __ValidationText = {
       maxLength: 40,
     },
     industryType: {
-
       required: 'Select Industry Type.',
-
     },
     companyId: { required: 'Select an Industry' },
     email: {
@@ -98,7 +139,7 @@ export const __ValidationText = {
   },
   resetPassword: {
     password: { required: 'Please Enter more than 6 character' },
-    confirmPassword: { mustMatch: 'Enter your confirm password.' },
+    confirmPassword: { mustMatch: 'Your confirm password is not match' },
   },
   email: {
     required: 'Please enter a valid email address.',
@@ -113,9 +154,9 @@ export const __ValidationText = {
     invalid: 'The username or password is incorrect.',
   },
   contactRequest: {
-    name: { required: 'Enter your name.', minLength: 3, maxLength: 40 },
+    name: { required: 'Enter your name.', minLength: 2, maxLength: 40 },
     companyName: {
-      required: 'Enter your company name',
+      required: 'Enter your company name.',
       minLength: 3,
       maxLength: 40,
     },
@@ -151,8 +192,31 @@ export const addReviewMessages = {
   },
 };
 export const editAccountMessage = {
-  firstName: 'Please enter first name.',
-  lastName: 'Please enter last name.',
-  companyName: 'Please enter company name.',
-  password: 'Please enter password.',
+  firstName: {
+    required: 'Please Enter First Name.',
+    firstNameminLength: 2,
+    minValidation: 'First Name must be at least 2 characters',
+  },
+  lastName: {
+    required: 'Please Enter Last Name.',
+    lastNameminLength: 2,
+    minValidation: 'Last Name must be at least 2 characters',
+  },
+  companyName: { required: 'Please Enter Company Name.' },
+  password: { required: 'Please Enter Password.' },
+};
+
+export const CheckoutMessage = {
+  firstName: {
+    required: 'Please Enter First Name.',
+    minLength: 2,
+    minValidation: 'First Name must be at least 2 characters',
+  },
+  lastName: {
+    required: 'Please Enter Last Name.',
+    minLength: 2,
+    minValidation: 'Last Name must be at least 2 characters',
+  },
+  companyName: { required: 'Please Enter Company Name.' },
+  password: { required: 'Please Enter Password.' },
 };

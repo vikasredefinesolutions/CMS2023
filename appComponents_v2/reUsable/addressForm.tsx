@@ -1,85 +1,90 @@
-import { defaultCountry } from '@configs/page.config';
 import { AddressFormRefType } from '@controllers/checkoutController/CheckoutAddressForm';
+import { _Country, _State } from '@definations/app.type';
 import { FetchCountriesList, FetchStatesList } from '@services/general.service';
 import { getLocationWithZipCode } from '@services/user.service';
 import { useEffect, useState } from 'react';
-const AddressForm = (props: AddressFormRefType) => {
-  const {
-    values,
-    handleBlur,
-    handleChange,
-    handleSubmit,
-    touched,
-    errors,
-    setFieldValue,
-  } = props;
-  const [country, setCountry] = useState<
-    {
-      id: number;
-      name: string;
-    }[]
-  >([]);
+const AddressForm: React.FC<AddressFormRefType> = ({
+  values,
+  handleBlur,
+  handleChange,
+  handleSubmit,
+  touched,
+  errors,
+  setFieldValue,
+}) => {
+  const [country, setCountry] = useState<_Country[]>([]);
+  const [state, setState] = useState<_State[]>([]);
 
-  const [state, setState] = useState<
-    {
-      id: number;
-      name: string;
-    }[]
-  >([]);
+  const udpateStates = async (
+    countryId: number,
+    updateFormik: boolean = true,
+  ) => {
+    await FetchStatesList(countryId).then((res) => {
+      if (!res) return;
 
-  useEffect(() => {
-    FetchCountriesList().then((res) => res && setCountry(res));
-  }, []);
+      setState(res);
+
+      if (updateFormik) {
+        if (res.length === 0) {
+          setFieldValue('state', '');
+          return;
+        }
+        setFieldValue('state', res[0]?.name || '');
+      }
+    });
+  };
 
   const getStateCountryCityWithZipCode = async (zipCode: string) => {
-    const res = await getLocationWithZipCode(zipCode);
-    return res;
+    await getLocationWithZipCode(zipCode).then((res) => {
+      if (!res || !res?.countryId) return;
+
+      if (res.countryName !== values.countryName) {
+        setFieldValue('countryName', res?.countryName);
+        setFieldValue('countryCode', res.countryId);
+      }
+
+      udpateStates(res.countryId, false);
+      setFieldValue('state', res?.stateName);
+      setFieldValue('city', res?.cityName);
+    });
   };
 
   const customBlur = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     handleBlur(e);
-    const locationObj = getStateCountryCityWithZipCode(e.target.value).then(
-      (res) => {
-        if (res?.countryId) {
-          setFieldValue('state', res?.stateName);
-          setFieldValue('countryName', res?.countryName);
-          setFieldValue('city', res?.cityName);
-        }
-      },
-    );
+    getStateCountryCityWithZipCode(e.target.value);
   };
 
-  useEffect(() => {}, [country]);
+  // console.log('values ===> ', values.countryCode, values.countryName);
 
   useEffect(() => {
-    if (!values.countryName) {
-      setFieldValue(
-        'countryName',
-        country.find((res) => res.id === defaultCountry)?.name,
-      );
-    }
-    const obj = country.find((count) => count.name === values.countryName);
-    if (obj) {
-      FetchStatesList(obj.id).then((res) => {
-        if (res) {
-          setState(res);
-          !values.state && setFieldValue('state', res[0]?.name);
-          res.length == 0 && setFieldValue('state', '');
-        }
-      });
-    }
+    FetchCountriesList().then((res) => {
+      if (!res) return;
+
+      const stateId = res.find(
+        (cntry) => cntry.name === values.countryName,
+      )?.id;
+
+      udpateStates(stateId ? stateId : 0, false);
+      setCountry(res);
+      // setFieldValue('countryName', res[0].name);
+      // setFieldValue('countryCode', res[0].id);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
     if (values.companyName == null) {
       setFieldValue('companyName', '');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [values.countryName, country]);
+  }, []);
 
   return (
     <form onSubmit={handleSubmit} className='checkoutpage'>
-      <div className='flex flex-wrap mx-[-15px] gap-y-[20px]'>
-        <div className='w-full lg:w-1/2 pl-[12px] pr-[12px] mb-[15px]'>
+      <div className='flex flex-wrap mx-[-15px]'>
+        <div className='w-full lg:w-1/2 pl-[12px] pr-[12px] mb-[20px]'>
           <div>
             <div className='relative z-0 w-full border border-gray-border rounded'>
               <input
@@ -102,7 +107,7 @@ const AddressForm = (props: AddressFormRefType) => {
             </div>
           </div>
         </div>
-        <div className='w-full lg:w-1/2 pl-[12px] pr-[12px] mb-[15px]'>
+        <div className='w-full lg:w-1/2 pl-[12px] pr-[12px] mb-[20px]'>
           <div className='relative z-0 w-full border border-gray-border rounded'>
             <input
               onBlur={handleBlur}
@@ -260,7 +265,17 @@ const AddressForm = (props: AddressFormRefType) => {
           <div className='relative z-0 w-full border border-gray-border rounded'>
             <select
               onBlur={handleBlur}
-              onChange={handleChange}
+              onChange={(event) => {
+                const newCountry = country.find(
+                  (cntry) => cntry.name === event.target.value,
+                );
+
+                if (newCountry) {
+                  setFieldValue('countryCode', newCountry.id);
+                  udpateStates(newCountry.id);
+                }
+                handleChange(event);
+              }}
               name='countryName'
               value={values.countryName}
               className='pt-[15px] pb-[0px] block w-full px-[8px] h-[48px] mt-[0px] text-sub-text text-[18px] text-[#000000] bg-transparent border-0 appearance-none focus:outline-none focus:ring-0'

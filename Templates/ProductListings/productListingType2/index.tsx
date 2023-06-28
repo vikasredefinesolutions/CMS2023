@@ -53,21 +53,20 @@ const ProductListingType2: React.FC<_ListingProps> = ({
               <div className='flex flex-wrap lg:ml-[-16px] lg:mr-[-16px]'>
                 <div className='w-full xl:w-2/12 lg:w-3/12 lg:pl-[16px] lg:pr-[16px]'>
                   <div
-                    onClick={() => {}}
+                    onClick={() => setShowFilter(!showFilter)}
                     className='lg:hidden border-b border-b-neutral-300 p-2 sticky top-0 left-0 bg-primary flex items-center justify-between text-[#ffffff] z-1'
                   >
                     <div className='text-lg font-semibold text-[#ffffff]'>
                       Filters
                     </div>
-                    <div>
+                    <a href='javascript:void(0);' className='inline-flex'>
                       <span
                         className='material-symbols-outlined flex text-white'
                         // x-html="open == true ? 'remove' : 'add'"
-                        onClick={() => setShowFilter(!showFilter)}
                       >
                         {showFilter ? 'remove' : 'add'}
                       </span>
-                    </div>
+                    </a>
                   </div>
                   <div className='relative lg:block'>
                     {showFilter && (

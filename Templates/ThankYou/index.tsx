@@ -1,3 +1,10 @@
+import { storeBuilderTypeId } from '@configs/page.config';
+import {
+  CYXTERA_CODE,
+  PORSCHE,
+  SIMPLI_SAFE_CODE,
+  UNITI_CODE,
+} from '@constants/global.constant';
 import {
   _MyAcc_OrderBillingDetails,
   _MyAcc_OrderProductDetails,
@@ -12,6 +19,7 @@ import { _ThankYouTemplates } from './ThankYou';
 import ThankYouType1 from './ThankYouType1/ThankYou_Type1';
 import ThankYouType2 from './ThankYouType2/ThankYou_Type2';
 import ThankYouType3 from './ThankYouType3/ThankYou_Type3';
+import ThankYouType5 from './ThankYouType5';
 import ThankYouType4 from './ThankYou_Type4';
 
 interface _props {
@@ -24,13 +32,18 @@ interface _props {
 
 const ThankYouTemplates: _ThankYouTemplates = {
   type1: ThankYouType1,
-  type2: ThankYouType2,
+  type2: ThankYouType2, //for cyxtera, simplisafe and etc
   type3: ThankYouType3,
   type4: ThankYouType4,
+  type5: ThankYouType5,
 };
 
 const ThankYouTemplate: React.FC<_props> = ({ order, id }) => {
-  const { id: storeId } = useTypedSelector_v2((state) => state.store);
+  const {
+    id: storeId,
+    code: storeCode,
+    storeTypeId,
+  } = useTypedSelector_v2((state) => state.store);
   const { id: customerId } = useTypedSelector_v2((state) => state.user);
   const isCaptured = useRef(false);
   useEffect(() => {
@@ -39,13 +52,16 @@ const ThankYouTemplate: React.FC<_props> = ({ order, id }) => {
       isCaptured.current = true;
       const eventPayload = {
         storeId: storeId,
-        customerId: customerId,
+        customerId: customerId || 0,
         orderId: order?.billing?.id,
         orderedShoppingCartItems: order?.product.map((item) => ({
           productId: item.productId,
           productName: item.productName,
           colorVariants: item.attributeOptionValue,
-          price: item.productTotal,
+          price:
+            item.productTotal && item.totalQty
+              ? (item.productTotal / item.totalQty).toFixed(2)
+              : 0,
           quantity: item.totalQty,
         })),
       };
@@ -63,10 +79,18 @@ const ThankYouTemplate: React.FC<_props> = ({ order, id }) => {
   }, [order, id]);
 
   const ThankYouSelected = ThankYouTemplates[id];
-  return (
-    <>
-      <ThankYouSelected order={order} />
-    </>
+
+  if (storeTypeId === storeBuilderTypeId) {
+    return <ThankYouType5 order={order} />;
+  }
+
+  return storeCode === SIMPLI_SAFE_CODE ||
+    storeCode === CYXTERA_CODE ||
+    storeCode === UNITI_CODE ||
+    storeCode === PORSCHE ? (
+    <ThankYouType2 order={order} />
+  ) : (
+    <ThankYouSelected order={order} />
   );
 };
 

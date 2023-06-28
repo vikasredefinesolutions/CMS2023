@@ -2,8 +2,15 @@
 /* eslint-disable no-unused-vars */
 import NxtImage from '@appComponents/reUsable/Image';
 import Price from '@appComponents/reUsable/Price';
-import { listing_max_showcolors } from '@constants/global.constant';
+import {
+  BACARDI,
+  CYXTERA_CODE,
+  listing_max_showcolors,
+  UCA,
+  UNITI_CODE,
+} from '@constants/global.constant';
 import { splitproductList } from '@definations/productList.type';
+import { getCompareLink } from '@helpers/compare.helper';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import {
   GetlAllProductList,
@@ -11,6 +18,7 @@ import {
 } from '@templates/ProductListings/ProductListingType';
 import ProductBoxController from '@templates/ProductListings/productListingType1/components/productBoxController';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { _globalStore } from 'store.global';
 
 let mediaBaseUrl = _globalStore.blobUrl;
@@ -36,11 +44,16 @@ const TemplateThreeListing = ({
     product,
     colorChangeHandler,
   });
+
+  const router = useRouter();
   const store = useTypedSelector_v2((state) => state.store);
+  // console.log(store, '<-------------store');
   const { isAttributeSaparateProduct } = useTypedSelector_v2(
     (state) => state.store,
   );
   mediaBaseUrl = mediaBaseUrl || store.mediaBaseUrl;
+
+  const { code: storeCode } = useTypedSelector_v2((state) => state.store);
 
   // let flag:boolean = product.getProductImageOptionList.length > 4 ? true : false;
   // let countImage:Number = product.getProductImageOptionList.length - 4;
@@ -52,48 +65,82 @@ const TemplateThreeListing = ({
   return productView === 'grid' ? (
     <li className='text-center'>
       <div
-        className={`flex justify-center w-full hover:border-gray-300  hover:shadow-md ${
-          store.id !== 11 ? 'border border-gray-border' : ''
-        }`}
+        className={`flex justify-center w-full border border-transparent hover:border-gray-border hover:shadow-md`}
       >
         <div className='relative w-full mb-[20px]'>
-          <div className='w-full px-[30px] pt-[10px] cursor-pointer'>
-            <Link
-              href={`${origin}/${product.sename}.html`}
-              className='relative'
-            >
-              <a>
+          <div
+            className={`w-full ${
+              storeCode === BACARDI
+                ? 'px-[5px] pt-[5px]'
+                : ' px-[30px] pt-[10px]'
+            } cursor-pointer`}
+          >
+            <Link href={`${origin}/${product.sename}.html`}>
+              <a
+                title={product.name}
+                className='block'
+                href={`${origin}/${product.sename}.html`}
+              >
                 <NxtImage
                   src={
                     currentProduct?.imageName ? currentProduct?.imageName : ''
                   }
-                  alt=''
-                  className='w-auto h-auto max-h-max'
+                  alt={product.name}
+                  className={`${
+                    storeCode === BACARDI
+                      ? 'w-auto h-auto max-h-max'
+                      : 'max-h-[348px] m-auto cursor-pointer'
+                  }`}
                   key={currentProduct?.id}
                 />
               </a>
             </Link>
-            <div className='absolute left-7 top-7 h-8 flex gap-1'>
-              <div className='h-8'>
-                <img
-                  className='max-h-full inline-block'
-                  src='images/Sale.webp'
-                  alt=''
-                />
-              </div>
-            </div>
+            {product?.productTagViewModel?.map((tagsdetails) => {
+              return (
+                <div
+                  className={`${tagsdetails.tagPosition} h-8 flex gap-1 absolute`}
+                  data-imageUrl={`${tagsdetails.imagename}`}
+                >
+                  <div className='h-8'>
+                    <img
+                      src={`${mediaBaseUrl}${tagsdetails.imagename}`}
+                      className='max-h-full inline-block'
+                    ></img>
+                  </div>
+                </div>
+              );
+            })}
           </div>
-          <div className='mt-[20px] relative md:px-[30px] px-[15px]'>
-            <div className='mb-[10px] mt-[10px] h-[46px] text-medium-text'>
-              <a
-                href={`${origin}/${product.sename}.html`}
-                className='relative text-tertiary hover:tertiary-hover'
-              >
-                {product.name}
-              </a>
+          <div
+            className={`mt-[20px] relative ${
+              storeCode === BACARDI
+                ? ' md:px-[10px] px-[5px]'
+                : ' md:px-[30px] px-[15px]'
+            }`}
+          >
+            <div className='mb-[10px] mt-[10px] h-[46px] text-medium-text  overflow-hidden'>
+              <Link href={`${origin}/${product.sename}.html`}>
+                <a
+                  className={`relative ${
+                    storeCode === BACARDI
+                      ? 'text-default hover:default-hover'
+                      : 'text-anchor-hover hover:text-anchor'
+                  }`}
+                >
+                  {product.name}
+                </a>
+              </Link>
             </div>
-            <div className='mb-[12px] text-sub-text'>
-              <span className='text-primary'>
+            <div
+              className={`mb-[12px] text-sub-text ${
+                storeCode === BACARDI ? ' tracking-widest' : ''
+              }`}
+            >
+              <span
+                className={` ${
+                  storeCode === BACARDI ? ' text-[#3A5A78]' : 'text-primary'
+                }`}
+              >
                 <Price
                   value={undefined}
                   prices={{
@@ -103,29 +150,39 @@ const TemplateThreeListing = ({
                 />
               </span>
             </div>
-            {/* <div className='form-group mb-[12px] text-default-text'>
-              <label className='checkbox-inline'>
-                <input
-                  checked={skuList.includes(product?.sku ? product.sku : '')}
-                  onChange={() =>
-                    compareCheckBoxHandler(product?.sku ? product.sku : '')
+            {storeCode === BACARDI && (
+              <div className='form-group mb-[12px] text-small-text'>
+                <label className='checkbox-inline align-top'>
+                  <input
+                    checked={skuList.includes(product?.sku ? product.sku : '')}
+                    onChange={() =>
+                      compareCheckBoxHandler(product?.sku ? product.sku : '')
+                    }
+                    type='checkbox'
+                    className='w-4 h-4 mr-1 align-bottom'
+                  />{' '}
+                  {
+                    <>
+                      {skuList.length &&
+                      skuList.includes(product?.sku ? product.sku : '') ? (
+                        skuList.length === 1 ? (
+                          <span>
+                            Please select two or more products to Add to Compare
+                            to use this feature.
+                          </span>
+                        ) : (
+                          <Link href={getCompareLink()}>
+                            <span>Compare ({skuList.length})</span>
+                          </Link>
+                        )
+                      ) : (
+                        <>Add to Compare</>
+                      )}
+                    </>
                   }
-                  type='checkbox'
-                />{' '}
-                {
-                  <>
-                    {skuList.length &&
-                    skuList.includes(product?.sku ? product.sku : '') ? (
-                      <Link href={getCompareLink()}>
-                        <a>Compare {skuList.length}</a>
-                      </Link>
-                    ) : (
-                      <>Add to Compare</>
-                    )}
-                  </>
-                }
-              </label>
-            </div> */}
+                </label>
+              </div>
+            )}
             <ul
               role='list'
               className='flex flex-wrap items-center mt-[8px] justify-center space-x-1'
@@ -139,13 +196,23 @@ const TemplateThreeListing = ({
                       index < listing_max_showcolors ? (
                         <Link key={product.id} href={`/${subRow.seName}.html`}>
                           <li
-                            className={`w-7 h-7 border-2 hover:border-secondary cursor-pointer`}
+                            className={`w-[30px] h-[30px] p-[1px] border-2 ${
+                              storeCode === BACARDI
+                                ? ' hover:border-primary'
+                                : 'hover:border-secondary'
+                            }  cursor-pointer ${
+                              product.id === currentProduct.id
+                                ? storeCode === BACARDI
+                                  ? 'border-primary'
+                                  : 'border-secondary'
+                                : ''
+                            }`}
                             key={subRow.prodcutId}
                           >
                             <NxtImage
                               src={`${mediaBaseUrl}${subRow.imageurl}`}
-                              alt=''
-                              className=''
+                              alt={subRow.colorName}
+                              className='m-auto max-h-full'
                               title={subRow.colorName}
                             />
                           </li>
@@ -159,10 +226,16 @@ const TemplateThreeListing = ({
                     (subRow: GetProductImageOptionList, index: number) =>
                       index < listing_max_showcolors ? (
                         <li
-                          className={`w-7 h-7 border-2 hover:border-secondary cursor-pointer ${
+                          className={`w-[30px] h-[30px] p-[1px] border-2   ${
+                            storeCode === BACARDI
+                              ? ' hover:border-primary'
+                              : 'hover:border-secondary'
+                          } cursor-pointer ${
                             subRow.id === currentProduct.id
-                              ? ' border-secondary'
-                              : 'border-light-gray'
+                              ? storeCode === BACARDI
+                                ? 'border-primary'
+                                : 'border-secondary'
+                              : ''
                           }`}
                           onClick={() => {
                             colorChangeHandler(
@@ -177,7 +250,7 @@ const TemplateThreeListing = ({
                           <NxtImage
                             src={`${mediaBaseUrl}${subRow.imageName}`}
                             alt=''
-                            className=''
+                            className='m-auto max-h-full'
                             title={subRow.colorName}
                           />
                         </li>
@@ -187,7 +260,13 @@ const TemplateThreeListing = ({
                   )}
               {flag ? (
                 <Link key={product.id} href={`/${product.sename}.html`}>
-                  <li className='w-[28px] h-[28px] border-2 border-light-gray hover:border-secondary relative cursor-pointer'>
+                  <li
+                    className={`w-[28px] h-[28px] border-2 border-light-gray${
+                      storeCode === BACARDI
+                        ? ' hover:border-primary'
+                        : 'hover:border-secondary'
+                    } relative cursor-pointer`}
+                  >
                     <span
                       className='absolute inset-0 bg-primary text-xs bg-[#003a70] font-semibold flex items-center justify-center text-[#ffffff]'
                       title={` See Additional ${
@@ -206,6 +285,19 @@ const TemplateThreeListing = ({
                 </Link>
               ) : null}
             </ul>
+            {(store.code === CYXTERA_CODE ||
+              store.code === UCA ||
+              store.code == UNITI_CODE) && (
+              <div className='mt-[10px]'>
+                <button
+                  onClick={() => router.push(`/${product.sename}.html`)}
+                  className='btn btn-secondary'
+                >
+                  <i className='fa-solid fa-basket-shopping'></i>
+                  <span>Add To Cart</span>
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -230,23 +322,29 @@ const TemplateThreeListing = ({
                 />
               </a>
             </Link>
-            <div className='absolute left-7 top-7 h-8 flex gap-1'>
-              <div className='h-8'>
-                <img
-                  className='max-h-full inline-block'
-                  src='images/Sale.webp'
-                  alt=''
-                />
-              </div>
-            </div>
+            {product?.productTagViewModel?.map((tagsdetails) => {
+              return (
+                <div
+                  className={`${tagsdetails.tagPosition} h-8 flex gap-1 absolute`}
+                  data-imageUrl={`${tagsdetails.imagename}`}
+                >
+                  <div className='h-8'>
+                    <img
+                      src={`${mediaBaseUrl}${tagsdetails.imagename}`}
+                      className='max-h-full inline-block'
+                    ></img>
+                  </div>
+                </div>
+              );
+            })}
           </div>
 
           <div className='mt-[20px] relative md:px-[30px] px-[15px]'>
-            <div className='mb-[10px] mt-[10px] h-[46px] text-medium-text cursor-pointer'>
+            <div className='mb-[10px] mt-[10px] h-[46px] text-medium-text cursor-pointer overflow-hidden'>
               <a
                 key={product.id}
                 href={`${origin}/${product.sename}.html?v=product-detail&altview=1`}
-                className='relative text-tertiary hover:tertiary-hover'
+                className='relative text-anchor hover:text-anchor'
               >
                 {product.name}
               </a>
@@ -262,33 +360,42 @@ const TemplateThreeListing = ({
                 />
               </span>
             </div>
-            {/* <div className='form-group mb-[12px] text-default-text'>
-              <label className='checkbox-inline cursor-pointer'>
-                <input
-                  checked={skuList.includes(product?.sku ? product.sku : '')}
-                  onChange={() =>
-                    compareCheckBoxHandler(product?.sku ? product.sku : '')
+            {storeCode === BACARDI && (
+              <div className='form-group mb-[12px] text-small-text'>
+                <label className='checkbox-inline align-top'>
+                  <input
+                    checked={skuList.includes(product?.sku ? product.sku : '')}
+                    onChange={() =>
+                      compareCheckBoxHandler(product?.sku ? product.sku : '')
+                    }
+                    type='checkbox'
+                    className='w-4 h-4 mr-1 align-bottom'
+                  />{' '}
+                  {
+                    <>
+                      {skuList.length &&
+                      skuList.includes(product?.sku ? product.sku : '') ? (
+                        skuList.length === 1 ? (
+                          <span>
+                            Please select two or more products to Add to Compare
+                            to use this feature.
+                          </span>
+                        ) : (
+                          <Link href={getCompareLink()}>
+                            <span>Compare ({skuList.length})</span>
+                          </Link>
+                        )
+                      ) : (
+                        <>Add to Compare</>
+                      )}
+                    </>
                   }
-                  type='checkbox'
-                  className='cursor-pointer'
-                />{' '}
-                {
-                  <>
-                    {skuList.length &&
-                    skuList.includes(product?.sku ? product.sku : '') ? (
-                      <Link href={getCompareLink()}>
-                        <a>Compare {skuList.length}</a>
-                      </Link>
-                    ) : (
-                      <>Add to Compare</>
-                    )}
-                  </>
-                }
-              </label>
-            </div> */}
+                </label>
+              </div>
+            )}
             <ul
               role='list'
-              className='flex flex-wrap items-center mt-[12px] justify-center space-x-1'
+              className='flex flex-wrap items-center mt-[8px] space-x-1'
             >
               {isAttributeSaparateProduct &&
               product.splitproductList &&
@@ -296,15 +403,17 @@ const TemplateThreeListing = ({
                 <>
                   <Link key={product.id} href={`/${product.sename}.html`}>
                     <li
-                      className={`w-7 h-7 border-2  border-secondary
-                          
-           hover:border-secondary cursor-pointer`}
+                      className={`w-[30px] h-[30px] p-[1px] border-2  hover:border-secondary cursor-pointer ${
+                        product.id === currentProduct.id
+                          ? ' border-secondary'
+                          : ''
+                      }`}
                       key={product.id}
                     >
                       <NxtImage
                         src={`${mediaBaseUrl}${currentProduct.imageName}`}
                         alt=''
-                        className='w-auto h-auto max-h-max cursor-pointer flex items-center'
+                        className='m-auto max-h-full cursor-pointer'
                         title={product.name}
                       />
                     </li>
@@ -314,13 +423,17 @@ const TemplateThreeListing = ({
                     index < listing_max_showcolors - 1 ? (
                       <Link key={product.id} href={`/${subRow.seName}.html`}>
                         <li
-                          className={`w-7 h-7 border-2 hover:border-secondary cursor-pointer`}
+                          className={`w-[30px] h-[30px] p-[1px] border-2  hover:border-secondary cursor-pointer ${
+                            product.id === currentProduct.id
+                              ? 'border-secondary'
+                              : ''
+                          }`}
                           key={subRow.prodcutId}
                         >
                           <NxtImage
                             src={`${mediaBaseUrl}${subRow.imageurl}`}
-                            alt=''
-                            className=''
+                            alt={subRow.colorName}
+                            className='m-auto max-h-full'
                             title={subRow.colorName}
                           />
                         </li>
@@ -335,10 +448,10 @@ const TemplateThreeListing = ({
                 product.getProductImageOptionList.map((subRow, index) =>
                   index < listing_max_showcolors ? (
                     <li
-                      className={`w-7 h-7 border-2 hover:border-secondary cursor-pointer ${
+                      className={`w-[30px] h-[30px] p-[1px] border-2  hover:border-secondary cursor-pointer ${
                         subRow.id === currentProduct.id
-                          ? ' border-secondary'
-                          : 'border-light-gray'
+                          ? 'border-secondary'
+                          : ''
                       }`}
                       onClick={() => {
                         colorChangeHandler(
@@ -353,7 +466,7 @@ const TemplateThreeListing = ({
                       <NxtImage
                         src={`${mediaBaseUrl}${subRow.imageName}`}
                         alt=''
-                        className=''
+                        className='m-auto max-h-full'
                         title={subRow.colorName}
                       />
                     </li>
@@ -392,6 +505,19 @@ const TemplateThreeListing = ({
                 </Link>
               ) : null}
             </ul>
+            {(store.code === CYXTERA_CODE ||
+              store.code === UCA ||
+              store.code == UNITI_CODE) && (
+              <div className='mt-[10px]'>
+                <button
+                  onClick={() => router.push(`/${product.sename}.html`)}
+                  className='btn btn-secondary'
+                >
+                  <i className='fa-solid fa-basket-shopping'></i>
+                  <span>Add To Cart</span>
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>

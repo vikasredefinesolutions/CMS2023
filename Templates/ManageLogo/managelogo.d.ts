@@ -3,6 +3,7 @@ import { NextPage } from 'next';
 
 export interface _ManageLogoProps {
   logoList: LogoList | null;
+  fetchLogoDetails: () => void;
 }
 
 export interface _ManageLogoTemplates {

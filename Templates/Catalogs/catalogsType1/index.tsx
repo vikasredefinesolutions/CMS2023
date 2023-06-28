@@ -25,6 +25,7 @@ const CatalogDisplayBrandsType1: React.FC<_props> = ({ storeId }) => {
   };
 
   return (
+    brandImages && 
     <section className='container mx-auto pt-20 brand-logo-list white-title'>
       <div>
         <div className='text-center pb-8'>
@@ -63,7 +64,7 @@ const CatalogDisplayBrandsType1: React.FC<_props> = ({ storeId }) => {
           </ul>
         </div>
       </div>
-    </section>
+    </section> 
   );
 };
 

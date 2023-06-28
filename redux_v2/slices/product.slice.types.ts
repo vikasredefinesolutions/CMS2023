@@ -203,6 +203,7 @@ export interface _state_SelectedProduct {
   color: _ProductColor;
   inventory: null | _ProductInventoryTransfomed;
   sbState: any;
+  presentQty: number;
 }
 
 export interface _state_SOM_Logos_Container {
@@ -315,7 +316,15 @@ export interface _Product_UpdateSelectedValeus_Action {
   payload:
     | _UpdateSelectedValue_Color
     | _UpdateSelectedValue_Reset_All
-    | _UPDATE_BASIC_PRODUCT_DETAILS;
+    | _UPDATE_BASIC_PRODUCT_DETAILS
+    | {
+        type: 'PRICES';
+        price: {
+          msrp: number;
+          ourCost: number;
+          salePrice: number;
+        };
+      };
 }
 
 export interface _Product_SetValues_Action {

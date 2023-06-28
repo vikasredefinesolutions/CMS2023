@@ -7,7 +7,7 @@ import { SendCompareLinkByEmail } from '@services/product.service';
 import { ErrorMessage, Form, Formik } from 'formik';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import * as Yup from 'yup';
 import { _CompareProductprops } from '../CompareProduct';
 import AllColors from './Components/AllColors';
@@ -19,7 +19,8 @@ const CompareProduct_Type1: React.FC<_CompareProductprops> = (props) => {
   const [products, setProducts] = useState<_CompareProducts | null>(
     props.products,
   );
-  const { showModal, setShowLoader, hideModal } = useActions_v2();
+  const { showModal, setShowLoader, hideModal, updateCompareDisplayImage } =
+    useActions_v2();
   const { id } = useTypedSelector_v2((state) => state.user);
   const userEmail = useTypedSelector_v2((state) => state.user.customer?.email);
   const storeId = useTypedSelector_v2((state) => state.store.id);
@@ -35,10 +36,11 @@ const CompareProduct_Type1: React.FC<_CompareProductprops> = (props) => {
     }
 
     const querySkus = skuToKeep.toString();
+    router.replace(`${router.pathname}?SKU=${querySkus}`);
 
-    router.replace({ pathname: router.pathname, query: querySkus }, undefined, {
-      shallow: true,
-    });
+    // router.replace({ pathname: router.pathname, query: querySkus }, undefined, {
+    //   shallow: true,
+    // });
   };
 
   const removeSkuFromLocalStorage = (skuToKeep: string[] | 'REMOVE ALL') => {
@@ -83,6 +85,13 @@ const CompareProduct_Type1: React.FC<_CompareProductprops> = (props) => {
     if (skuToRemove) {
       const storedSKUs = localStorage.getItem(__LocalStorage.compareProducts);
 
+      updateCompareDisplayImage({
+        type: 'REMOVE',
+        data: {
+          index: indexToRemove,
+        },
+      });
+
       if (storedSKUs) {
         const skuStoredIdArr = JSON.parse(storedSKUs) as string[];
 
@@ -111,7 +120,7 @@ const CompareProduct_Type1: React.FC<_CompareProductprops> = (props) => {
   const sendEmailHandler = async (values: { email: string }) => {
     const obj = {
       storeId: storeId,
-      Email: id ? (userEmail ? userEmail : values.email) : values.email,
+      Email: id && userEmail ? userEmail : values.email,
       Link: encodeURIComponent(window.location.href),
     };
     setShowLoader(true);
@@ -120,7 +129,7 @@ const CompareProduct_Type1: React.FC<_CompareProductprops> = (props) => {
         if (res == true) {
           showModal({
             message: `Email Send Successfully `,
-            title: ``,
+            title: `Success`,
           });
         } else {
           showModal({
@@ -138,6 +147,19 @@ const CompareProduct_Type1: React.FC<_CompareProductprops> = (props) => {
       .finally(() => setShowLoader(false));
   };
 
+  const getCompareProductsText = useCallback(
+    (productLength: number) => {
+      if (productLength === 0)
+        return ` Please select two or more products to Add to Compare to use this
+    feature.`;
+
+      if (productLength === 1)
+        return ` Please select one more products to Add to Compare to use this
+      feature.`;
+    },
+    [products?.details?.length],
+  );
+
   return (
     <section className='pt-[20px]'>
       <Head>
@@ -154,11 +176,11 @@ const CompareProduct_Type1: React.FC<_CompareProductprops> = (props) => {
         {products?.details && products.details.length <= 1 ? (
           <div className='relative overflow-auto border border-gray-border'>
             <div className='text-center pb-[10px] border-b-[1.4px] border-[#000000] relative '>
-              Please select two or more products to Add to Compare to use this
-              feature.
+              {getCompareProductsText(products?.details?.length)}
             </div>
           </div>
-        ) : (
+        ) : null}
+        {products?.details && products.details.length >= 2 ? (
           <>
             {' '}
             <div className='relative overflow-auto border border-gray-border'>
@@ -273,10 +295,10 @@ const CompareProduct_Type1: React.FC<_CompareProductprops> = (props) => {
             <div className=' mt-[30px] mb-[30px]  gap-2 '>
               <Formik
                 initialValues={{ email: userEmail ? userEmail : '' }}
-                onSubmit={() => {}}
+                onSubmit={sendEmailHandler}
                 validationSchema={validationSchema}
               >
-                {({ values, handleChange, setFieldValue }) => {
+                {({ values, handleChange }) => {
                   return (
                     <Form className='flex flex-wrap mt-[2px] text-center justify-center'>
                       {!userEmail ? (
@@ -296,12 +318,6 @@ const CompareProduct_Type1: React.FC<_CompareProductprops> = (props) => {
                       <button
                         type='submit'
                         className='btn btn-primary mx-[10px]'
-                        onClick={() => {
-                          const val = {
-                            email: userEmail ? userEmail : values.email,
-                          };
-                          val.email && sendEmailHandler(val);
-                        }}
                       >
                         SEND LINK
                       </button>
@@ -337,7 +353,7 @@ const CompareProduct_Type1: React.FC<_CompareProductprops> = (props) => {
               </Formik>
             </div>
           </>
-        )}
+        ) : null}
       </div>
     </section>
   );

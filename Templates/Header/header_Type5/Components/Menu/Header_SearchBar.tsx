@@ -1,7 +1,6 @@
 import { __pagesText } from '@constants/pages.text';
 import { Form, Formik } from 'formik';
-import React from 'react';
-
+import React, { useRef } from 'react';
 interface _props {
   screen?: 'MOBILE' | 'DESKTOP';
   // eslint-disable-next-line no-unused-vars
@@ -12,17 +11,40 @@ const SearchBar: React.FC<_props> = ({
   screen = 'DESKTOP',
   onSearchInput = () => {},
 }) => {
+  const searchRef = useRef<HTMLInputElement>(null);
   const searchHandler = (value: { text: string }) => {
-    // SearchFor(value);
-    onSearchInput(value.text as string);
-    // .then().catch().finally;
+    
+   // onSearchInput(values.text as string);
+    let x = searchRef.current;
+    if(x)
+    {
+      if (
+        x?.value == '' ||
+        x?.value == 'Enter Search here' ||
+        x?.value.toString().toLowerCase().indexOf('enter search') > -1
+      ) {
+        alert('Please enter something to search');
+      }
+      var str = x.value.replace(/^\s+|\s+$/g, '');
+      while (str.substring(str.length - 1, str.length) == ' ') {
+        str = str.substring(0, str.length - 1);
+      }
+      if (str.length < 3) {
+        alert('Please enter at least 3 characters to search');
+        x.focus();
+      }
+  
+      window.location.href =
+        '/search/result.html?q=' +
+        encodeURIComponent(str.replace(/^\s+|\s+$/g, ''));
+    }
   };
 
   if (screen === 'MOBILE') {
     return (
       <>
         <Formik initialValues={{ text: '' }} onSubmit={searchHandler}>
-          {({ handleSubmit, handleChange, handleReset }) => {
+          {({ values, handleSubmit, handleChange, handleReset }) => {
             return (
               <Form>
                 <div className='sm:hidden'>
@@ -30,8 +52,9 @@ const SearchBar: React.FC<_props> = ({
                     <div>
                       <div className='border rounded-full border-gray-border pt-[5px] pb-[4px] pl-[15px] pr-[24px] text-quaternary relative'>
                         <input
+                          ref={searchRef}
                           type='text'
-                          name='text'
+                          name='q'
                           min={1}
                           id='txtSearch'
                           placeholder={__pagesText.Headers.searchPlaceholder}
@@ -39,6 +62,7 @@ const SearchBar: React.FC<_props> = ({
                           className='outline-none w-full border-0 focus:ring-0 text-[14px] tracking-[1px] text-quaternary h-[26px]'
                           autoComplete='off'
                           maxLength={255}
+                          defaultValue={values.text}
                         />
                         <button
                           className='w-[24px] h-[24px] absolute right-[6px] top-[6px]'
@@ -72,8 +96,9 @@ const SearchBar: React.FC<_props> = ({
                 <div>
                   <div className='border rounded-full border-gray-border pt-[5px] pb-[4px] pl-[15px] pr-[24px] text-tertiary relative'>
                     <input
+                      ref={searchRef}
                       type='text'
-                      name='text'
+                      name='q'
                       min={1}
                       id='txtSearch'
                       placeholder={__pagesText.Headers.searchPlaceholder}

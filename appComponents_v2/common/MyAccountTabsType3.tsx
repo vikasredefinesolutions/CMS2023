@@ -69,13 +69,13 @@ const MyAccountTabsType3: React.FC = () => {
                   return (
                     <li
                       key={index}
-                      className={`border-t border-transparent hover:border-black text-base font-semibold text-[#0a1c2b] hover:text-[#0a1c2b] focus:text-[#0a1c2b] px-[3%] py-2.5 whitespace-nowrap inline-block ${
+                      className={`border-t hover:border-black px-[40px] py-[13px] md:inline-block block text-center ${
                         tab.path === currentPath ? 'border-black border-t ' : ''
                       }`}
                     >
                       <button
                         onClick={logoutHandler}
-                        className={`text-[#0a1c2b] hover:text-[#0a1c2b] focus:text-[#0a1c2b] font-semibold ${
+                        className={`text-medium-text hover:text-medium-text focus:text-medium-text font-[600] ${
                           tab.path === currentPath ? 'active' : ''
                         }`}
                       >

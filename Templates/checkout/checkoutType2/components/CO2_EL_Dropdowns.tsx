@@ -1,4 +1,4 @@
-import { useActions_v2 } from '@hooks_v2/index';
+import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import {
   FetchEmpSourceList,
   FetchEmpSourceMediumList,
@@ -23,26 +23,27 @@ const CO2_EL_Dropdowns: React.FC<_Props> = () => {
   const [employeesList, setEmployeesList] = useState<_ValueLabelPair[]>([]);
   const [sourcesList, setSourcesList] = useState<_ValueLabelPair[]>([]);
   const [sourceMediumList, setSourceMedium] = useState<_ValueLabelPair[]>([]);
+  const { id: storeId } = useTypedSelector_v2((state) => state.store);
 
-  const { update_checkoutEmployeeLogin } = useActions_v2();
+  const { update_CheckoutEmployeeLogin } = useActions_v2();
 
   const submitHandler = (inputs: _CO2_EL_InitialValues) => {
     if (inputs.salesRep) {
-      update_checkoutEmployeeLogin({
+      update_CheckoutEmployeeLogin({
         type: 'SALES_REP',
         value: employeesList.find((item) => item.value === inputs.salesRep)!,
       });
     }
 
     if (inputs.source) {
-      update_checkoutEmployeeLogin({
+      update_CheckoutEmployeeLogin({
         type: 'SOURCE',
         value: sourcesList.find((item) => item.value === inputs.source)!,
       });
     }
 
     if (inputs.sourceMedium) {
-      update_checkoutEmployeeLogin({
+      update_CheckoutEmployeeLogin({
         type: 'SOURCE_MEDIUM',
         value: sourceMediumList.find(
           (item) => item.value === inputs.sourceMedium,
@@ -52,7 +53,10 @@ const CO2_EL_Dropdowns: React.FC<_Props> = () => {
   };
 
   const fetchDropdownsOptions = async () => {
-    await Promise.allSettled([FetchEmpSourceList(), FetchEmployeesList()])
+    await Promise.allSettled([
+      FetchEmpSourceList(storeId),
+      FetchEmployeesList(),
+    ])
       .then((values) => {
         const tempEmpSourceList =
           values[0].status === 'fulfilled' ? values[0].value : [];
@@ -121,7 +125,7 @@ const CO2_EL_Dropdowns: React.FC<_Props> = () => {
                         onChange={(event) => {
                           if (event.target.value === 'none') return;
                           if (field.name === 'source') {
-                            update_checkoutEmployeeLogin({
+                            update_CheckoutEmployeeLogin({
                               type: 'SOURCE_MEDIUM',
                               value: {
                                 value: '',

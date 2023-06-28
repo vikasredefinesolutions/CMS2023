@@ -57,7 +57,7 @@ const Custom: React.FC<_props> = ({
             className='text-[12px] mr-[5px] underline'
             onClick={() => toggleSideMenu('CLOSE')}
           >
-            <Link href={`${url}.html?v=product-list`} passHref>
+            <Link href={`/${url}.html?v=product-list`} passHref>
               <a>{__pagesText.Headers.mobileViewAll}</a>
             </Link>
           </a>
@@ -77,7 +77,7 @@ const Custom: React.FC<_props> = ({
     return (
       <>
         <div className='relative '>
-          <Link href={`${url}`} className='flex'>
+          <Link href={`/${url}`} className='flex'>
             <button
               onMouseOver={() => setFocus(true)}
               title={title}

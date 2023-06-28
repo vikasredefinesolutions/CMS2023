@@ -13,8 +13,9 @@ const ManageLogoTemplates: _ManageLogoTemplates = {
 interface _props {
   id: string;
   logoList: LogoList | null;
+  fetchLogoDetails: () => void;
 }
-const ManageLogo: React.FC<_props> = ({ id, logoList }) => {
+const ManageLogo: React.FC<_props> = ({ id, logoList, fetchLogoDetails }) => {
   const ManagelogoDeatils =
     ManageLogoTemplates[
       (`type${id}` as 'type1') || 'type2' || 'type3' || 'type4'
@@ -22,7 +23,10 @@ const ManageLogo: React.FC<_props> = ({ id, logoList }) => {
   return (
     <>
       {logoList && logoList.items.length > 0 ? (
-        <ManagelogoDeatils logoList={logoList} />
+        <ManagelogoDeatils
+          logoList={logoList}
+          fetchLogoDetails={fetchLogoDetails}
+        />
       ) : (
         <>
           <AccountTabs setype={id} />

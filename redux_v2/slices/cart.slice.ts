@@ -124,10 +124,21 @@ export const cartSlice = createSlice({
       state.cartQty = 0;
     },
     customerCreditBalanceUpdate: (state, { payload }) => {
-      state.userCreditBalance = payload;
+      state.userCreditBalance.allowedBalance = payload;
     },
+    customerUseCreditBalance: (state, { payload }) => {
+      state.userCreditBalance.useBalance = payload;
+    },
+
     cart_PageClosed: (state) => {
       state.lastUpdate = 0;
+    },
+    cart_UpdateItems: (
+      state,
+      { payload }: { payload: { items: _CartItem[] } },
+    ) => {
+      state.cart = payload.items;
+      state.cartQty = payload.items.length;
     },
   },
   extraReducers: (builder) => {

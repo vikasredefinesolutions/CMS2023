@@ -36,6 +36,7 @@ export enum paymentMethodCustom {
   purchaseOrder,
   creditWallet = 'Credit',
   netNumber = 'Net',
+  noPayemnt = 'noPayment',
 }
 
 export enum UserAddressType {
@@ -49,7 +50,13 @@ export enum CheckoutType {
   pkhealthgear = 'PKHG',
   driving = 'DI',
 }
-
+export enum CheckoutTypeTemplate {
+  CG = '1',
+  PKHG = '2',
+  DI = '5',
+  CYX = '2',
+  UHP = '7',
+}
 export enum Sorting {
   Ascending = 2,
   Descending = 3,
@@ -58,5 +65,6 @@ export enum Sorting {
 }
 
 export const dimax = 250;
+export const pkhealthmax = 250;
 export const maxPeter = 50;
 export const brandname = 'Peter Millar';

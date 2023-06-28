@@ -12,11 +12,9 @@ const BuyNowHeader = ({
   image: any;
   buyNowHandler: (event: any) => void;
 }) => {
-  const { totalPrice } = useTypedSelector_v2(
-    (state) => state.product.toCheckout,
-  );
+  const { totalQty } = useTypedSelector_v2((state) => state.product.toCheckout);
   return (
-    <div className='fixed top-0 left-0 right-0 pt-[10px] pb-[10px] z-[100] bg-white'>
+    <div className='fixed top-0 left-0 right-0 pt-[10px] pb-[10px] z-[100] bg-white hidden lg:block'>
       <div className='container mx-auto'>
         <div className='flex flex-wrap border-b border-gray-border justify-between gap-4 items-center'>
           <div className='flex flex-wrap items-center gap-4'>
@@ -33,7 +31,7 @@ const BuyNowHeader = ({
               <div className='text-anchor mb-[10px]'>{productName}</div>
 
               <div className='text-tertiary'>
-                ${totalPrice ? totalPrice : msrp}
+                ${totalQty > 1 ? msrp * totalQty : msrp}
               </div>
             </div>
           </div>

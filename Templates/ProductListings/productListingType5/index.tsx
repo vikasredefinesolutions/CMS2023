@@ -50,10 +50,10 @@ const ProductListingType5: React.FC<_ListingProps> = ({
               <h2 id='products-heading' className='sr-only'>
                 {__pagesText.productListing.products}
               </h2>
-              <div className='flex flex-wrap ml-[-16px] mr-[-16px]'>
-                <div className='w-full lg:w-3/12 pl-[16px] pr-[16px]'>
+              <div className='flex flex-wrap ml-[-15px] mr-[-15px]'>
+                <div className='w-full lg:w-3/12 pl-[15px] pr-[15px]'>
                   <div
-                    onClick={() => {}}
+                    onClick={() => setShowFilter(!showFilter)}
                     className='lg:hidden border-b border-b-neutral-300 p-2 sticky top-0 left-0 bg-primary flex items-center justify-between text-[#ffffff]'
                   >
                     <div className='text-lg font-semibold text-[#ffffff]'>
@@ -61,9 +61,8 @@ const ProductListingType5: React.FC<_ListingProps> = ({
                     </div>
                     <div>
                       <span
-                        className='material-symbols-outlined '
+                        className='material-symbols-outlined'
                         // x-html="open == true ? 'remove' : 'add'"
-                        onClick={() => setShowFilter(!showFilter)}
                       >
                         {showFilter ? 'remove' : 'add'}
                       </span>
@@ -79,7 +78,7 @@ const ProductListingType5: React.FC<_ListingProps> = ({
                     )}
                   </div>
                 </div>
-                <div className='w-full lg:w-9/12 pl-[16px] pr-[16px]'>
+                <div className='w-full lg:w-9/12 pl-[15px] pr-[15px]'>
                   <TemplateFiveFilterBar
                     {...{
                       totalCount,
@@ -137,7 +136,7 @@ const ProductListingType5: React.FC<_ListingProps> = ({
                         <button
                           type='submit'
                           onClick={loadMore}
-                          className='mt-[16px] btn btn-lg btn-secondary tracking-[1.4px] font-normal w-full max-w-[550px]'
+                          className='mt-[15px] btn btn-lg btn-secondary tracking-[1.4px] font-normal w-full max-w-[550px]'
                         >
                           <span className='inline-block w-[20px] h-[20px]'>
                             <img

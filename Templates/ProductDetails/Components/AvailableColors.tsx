@@ -1,10 +1,12 @@
-import Image from '@appComponents/reUsable/Image';
+import NxtImage from '@appComponents/reUsable/Image';
 import { __pagesConstant } from '@constants/pages.constant';
 import { __pagesText } from '@constants/pages.text';
 import { _ProductColor } from '@definations/APIs/colors.res';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
+const mediaExtraUrlDeatilThumbnail =
+  process.env.NEXT_PUBLIC_EXTRA_MEDIA_URL_DETAIL_THUMBNAIL;
 
 const AvailableColors: React.FC = () => {
   const { setColor } = useActions_v2();
@@ -57,11 +59,13 @@ const AvailableColors: React.FC = () => {
               <div
                 className={`w-[80px] h-[80px] mx-auto border-2  hover:border-secondary mb-[6px] cursor-pointer ${highlight}`}
               >
-                <Image
+                <NxtImage
                   title={`${product.name}`}
                   src={product.imageUrl}
-                  alt={product.altTag}
-                  className='w-full object-center object-cover'
+                  alt={`${product.name}`}
+                  className='max-h-full m-auto'
+                  extraUrl={true}
+                  extraUrlPath={mediaExtraUrlDeatilThumbnail}
                 />
               </div>
 

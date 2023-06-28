@@ -78,6 +78,9 @@ export interface _ProductListingTemplates {
   type3: React.FC<_ListingProps>;
   type4: React.FC<_ListingProps>;
   type5: React.FC<_ListingProps>;
+  type6: React.FC<_ListingProps>;
+  type7: React.FC<_ListingProps>;
+  type8: React.FC<_ListingProps>;
 }
 
 export interface LoginBar {
@@ -224,12 +227,12 @@ export interface StoreBrandProductPriceRangeViewModel {
 
 export interface GetProductImageOptionList {
   id: number;
-  imageName?: string;
+  imageName: string;
   colorName?: string;
   displayorder?: number;
   alttag?: string;
   attributeOptionID?: number;
-  imageUrl?: string;
+  imageUrl: string;
   attributeOptionName?: string;
   displayOrder?: number;
   altTag?: string;
@@ -239,7 +242,7 @@ export interface GetProductImageOptionList {
 export interface GetlAllProductList {
   isonlinebrand: boolean;
   brandUrl: string;
-  getProductImageOptionList?: GetProductImageOptionList[];
+  getProductImageOptionList: GetProductImageOptionList[] | [];
   id?: number;
   name: string;
   productTagViewModel: Array<{
@@ -270,6 +273,7 @@ export interface GetlAllProductList {
   brandName: string;
   index: number | string;
   lowPrice: number;
+  categoryName?: string;
   productBrandlogo: string | null;
 }
 
@@ -373,24 +377,3 @@ export interface CategoryFilter {
     | GetlAllProductList
   >;
 }
-
-// for banner
-
-export interface Welcome {
-  success: boolean;
-  data: _BannerRes[];
-  errors: Errors;
-  otherData: null;
-}
-
-export interface _BannerRes {
-  id: number;
-  brandLogo: string | null;
-  description: string;
-  banner: string;
-  seTitle: null;
-  seKeyWords: null;
-  seDescription: null;
-}
-
-export interface Errors {}

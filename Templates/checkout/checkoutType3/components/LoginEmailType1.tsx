@@ -1,5 +1,5 @@
 import { checkoutEmailvalidationSchema } from '@constants/schemas/checkout.schema';
-import { Formik } from 'formik';
+import { Form, Formik } from 'formik';
 import { FC } from 'react';
 
 const LoginEmail: FC<{
@@ -23,7 +23,7 @@ const LoginEmail: FC<{
           validationSchema={validationSchema}
         >
           {({ errors, handleSubmit, handleBlur, handleChange }) => (
-            <form onSubmit={handleSubmit}>
+            <Form>
               <div className='relative z-0 w-full border border-gray-border rounded'>
                 <input
                   name='email'
@@ -51,7 +51,7 @@ const LoginEmail: FC<{
                   START CHECKOUT
                 </button>
               </div>
-            </form>
+            </Form>
           )}
         </Formik>
         <div className='text-small-text tracking-normal'>

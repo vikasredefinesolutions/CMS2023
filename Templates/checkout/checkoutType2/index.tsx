@@ -1,4 +1,3 @@
-import NxtImage from '@appComponents/reUsable/Image';
 import {
   PaymentMethod,
   UserAddressType,
@@ -13,13 +12,13 @@ import {
   useTypedSelector_v2,
 } from '@hooks_v2/index';
 import CartItem from '@templates/cartItem';
-import _ from 'lodash';
 import { ChangeEvent, FC, useEffect, useState } from 'react';
 import * as yup from 'yup';
 import OrderSummary from './components/OrderSummary';
 import PaymentType from './components/Payment';
 
 import {
+  _Store_CODES,
   __Cookie,
   __LocalStorage,
   phonePattern1,
@@ -39,17 +38,21 @@ import { deleteCookie, setCookie } from '@helpers/common.helper';
 import {
   CreateUserAddress,
   GetShippingmethod,
+  UpdateUserAddress,
 } from '@services/address.service';
 import { placeOrder as placeOrderService } from '@services/checkout.service';
 import AddressFormPk from './components/Form';
 
-import { cardType } from '@constants/common.constant';
-import { __ValidationText } from '@constants/validation.text';
-import getLocation from '@helpers/getLocation';
+import { CheckoutMessage, __ValidationText } from '@constants/validation.text';
+import { AddressAPIRequest } from '@definations/APIs/address.req';
+import getLocation, { _location } from '@helpers/getLocation';
 import { Klaviyo_PlaceOrder } from '@services/klaviyo.service';
 import { GetStoreCustomer } from '@services/user.service';
+import { maxLengthCalculator } from '@templates/checkout/checkoutType6/CO6_Extras';
 import { useFormik } from 'formik';
+import _ from 'lodash';
 import { useRouter } from 'next/router';
+
 interface _Props {
   templateId: number;
 }
@@ -65,17 +68,33 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
     updateCustomer,
     updateEmployeeV2,
     product_employeeLogin,
+    update_CheckoutAddress,
     logInUser,
   } = useActions_v2();
   const {
     shippingChargeType,
     id: storeId,
+    code: storeCode,
     isSewOutEnable,
+    gclid,
   } = useTypedSelector_v2((state) => state.store);
-  const useBalance = useTypedSelector_v2(
-    (state) => state.cart.userCreditBalance.useBalance,
+
+  const { useBalance, allowedBalance } = useTypedSelector_v2(
+    (state) => state.cart.userCreditBalance,
   );
   const [paymentMethod, setPaymentMethod] = useState(paymentEnum.creditCard);
+  const [billingAddress, setBillingAddress] = useState<AddressType | null>(
+    null,
+  );
+  const [shippingAddress, setShippingAddress] = useState<AddressType | null>(
+    null,
+  );
+  const [selectedShipping, setSelectedShipping] = useState<
+    _shippingMethod | { name: ''; price: 0 }
+  >({ name: '', price: 0 });
+  const [showPayment, setshowPayment] = useState<boolean>(false);
+  const [showShippingMethod, setShowShippingMethod] = useState<boolean>(true);
+  const customerId = GetCustomerId();
 
   const [cardDetails, setCardDetails] = useState<CreditCardDetailsType2>({
     cardNumber: '',
@@ -84,6 +103,12 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
     cardExpirationYear: '',
     creditCardHolder: '',
   });
+  const [shippingMethod, setShippingMethod] = useState<_shippingMethod[] | []>([
+    {
+      name: '',
+      price: 0,
+    },
+  ]);
   const [purchaseOrder, setPurchaseOrder] = useState('');
 
   const paymentFieldUpdateHandler = (
@@ -93,6 +118,7 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
 
     switch (paymentMethod) {
       case paymentEnum.creditCard:
+        setPurchaseOrder('');
         if (name == 'cardExpirationYear') {
           setCardDetails((prev) => ({ ...prev, [name]: '20' + value }));
         } else {
@@ -100,12 +126,16 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
         }
         break;
       case paymentEnum.purchaseOrder:
+        setCardDetails({
+          cardNumber: '',
+          cardVarificationCode: '',
+          cardExpirationMonth: '',
+          cardExpirationYear: '',
+          creditCardHolder: '',
+        });
         setPurchaseOrder(value);
     }
   };
-  const [selectedShipping, setSelectedShipping] = useState<
-    _shippingMethod | { name: ''; price: 0 }
-  >({ name: '', price: 0 });
 
   const fetchShipping = async (
     totalPrice: number,
@@ -118,9 +148,11 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
             city: shippingAddress?.city || '',
             state: shippingAddress?.state || '',
             country:
-              shippingCountry === null ? ' ' : shippingAddress?.countryName,
+              shippingCountry === null
+                ? ' '
+                : shippingAddress?.countryName || '',
             zipCode: shippingAddress?.postalCode || '',
-            customerID: id,
+            customerID: customerId,
             storeId: storeId,
             ordertotalwithoutshipppingcharge: totalPrice,
             shippingType: shippingChargeType,
@@ -137,87 +169,38 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
     }
   };
 
-  const [shippingMethod, setShippingMethod] = useState<_shippingMethod[] | []>([
-    {
-      name: '',
-      price: 0,
-    },
-  ]);
-
   const {
     loggedIn: isEmployeeLoggedIn,
-    isLoadingComplete,
     empId,
+    guestLoginJustByEmail,
   } = useTypedSelector_v2((state) => state.employee);
 
-  const { el: employeeLogin } = useTypedSelector_v2((state) => state.checkout);
-
-  const { customer, id } = useTypedSelector_v2((state) => state.user);
-
-  const [billingAddress, setBillingAddress] = useState<AddressType | null>(
-    null,
+  const { el: employeeLogin, charges: checkoutCharges } = useTypedSelector_v2(
+    (state) => state.checkout,
   );
 
-  const [shippingAddress, setShippingAddress] = useState<AddressType | null>(
-    null,
-  );
-
-  const [initialShippingValues, setShippingInitial] = useState<any>({});
-  const [initialBillingValues, setBillingInitial] = useState<any>({});
-  const [salesTax, setSalesTax] = useState<number>(0);
+  const { customer } = useTypedSelector_v2((state) => state.user);
 
   useEffect(() => {
-    if (customer) {
-      const userAccBilling = customer?.customerAddress.find(
-        (el) =>
-          (el.isDefault && el.addressType == UserAddressType.BILLINGADDRESS) ||
-          el.addressType == UserAddressType.BILLINGADDRESS,
-      );
-      const userAccShipping = customer?.customerAddress.find(
-        (el) =>
-          (el.isDefault && el.addressType == UserAddressType.SHIPPINGADDRESS) ||
-          el.addressType == UserAddressType.SHIPPINGADDRESS,
-      );
-      if (userAccBilling) {
-        setBillingAddress(userAccBilling);
-        setBillingInitial({
-          firstname: userAccBilling ? userAccBilling?.firstname : '',
-          lastName: userAccBilling ? userAccBilling?.lastName : '',
-          email: userAccBilling ? userAccBilling?.email : '',
-          address1: userAccBilling ? userAccBilling?.address1 : '',
-          address2: userAccBilling ? userAccBilling?.address2 : '',
-          suite: userAccBilling ? userAccBilling?.suite : '',
-          city: userAccBilling ? userAccBilling?.city : '',
-          state: userAccBilling ? userAccBilling?.state : '',
-          postalCode: userAccBilling ? userAccBilling?.postalCode : '',
-          Phone: userAccBilling ? userAccBilling?.phone : '',
-          fax: userAccBilling ? userAccBilling?.fax : '',
-          CountryName: userAccBilling ? userAccBilling?.countryName : '',
-          isDefault: true,
-          companyName: userAccBilling ? userAccBilling?.companyName : '',
-          countryCode: userAccBilling ? userAccBilling?.countryCode : '',
-        });
-      }
-      if (userAccShipping) {
-        setShippingAddress(userAccShipping);
-        setShippingInitial({
-          firstname: userAccShipping ? userAccShipping?.firstname : '',
-          lastName: userAccShipping ? userAccShipping?.lastName : '',
-          email: userAccShipping ? userAccShipping?.email : '',
-          address1: userAccShipping ? userAccShipping?.address1 : '',
-          address2: userAccShipping ? userAccShipping?.address2 : '',
-          suite: userAccShipping ? userAccShipping?.suite : '',
-          city: userAccShipping ? userAccShipping?.city : '',
-          state: userAccShipping ? userAccShipping?.state : '',
-          postalCode: userAccShipping ? userAccShipping?.postalCode : '',
-          Phone: userAccShipping ? userAccShipping?.phone : '',
-          fax: userAccShipping ? userAccShipping?.fax : '',
-          CountryName: userAccShipping ? userAccShipping?.countryName : '',
-          isDefault: true,
-          companyName: userAccShipping ? userAccShipping?.companyName : '',
-          countryCode: userAccShipping ? userAccShipping?.countryCode : '',
-        });
-      }
+    if (!customer) return;
+
+    const billingAddressExist = customer?.customerAddress.find(
+      (address) =>
+        (address.isDefault &&
+          address.addressType == UserAddressType.BILLINGADDRESS) ||
+        address.addressType == UserAddressType.BILLINGADDRESS,
+    );
+    const shippingAddressExist = customer?.customerAddress.find(
+      (address) =>
+        (address.isDefault &&
+          address.addressType == UserAddressType.SHIPPINGADDRESS) ||
+        address.addressType == UserAddressType.SHIPPINGADDRESS,
+    );
+    if (billingAddressExist) {
+      setBillingAddress(billingAddressExist);
+    }
+    if (shippingAddressExist) {
+      setShippingAddress(shippingAddressExist);
     }
   }, [customer]);
 
@@ -225,6 +208,7 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
     if (employeeLogin.isPaymentPending) {
       return {
         paymentMethod: 'PAYMENTPENDING',
+        paymentGateway: 'PAYMENTPENDING',
       };
     }
 
@@ -273,15 +257,30 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
     useState<boolean>(false);
 
   const validationSchema = yup.object({
-    firstName: yup.string().required('Required field'),
-    lastName: yup.string().required('Required field'),
-    streetAddress: yup.string().required('Required field'),
-    city: yup.string().required('Required field'),
-    zipCode: yup.string().required('Required Field'),
-    country: yup.string().required('Required field'),
-    state: yup.string().required('Required field'),
+    firstname: yup
+      .string()
+      .trim()
+      .required('Required field')
+      .min(
+        CheckoutMessage.firstName.minLength,
+        CheckoutMessage.firstName.minValidation,
+      ),
+    lastName: yup
+      .string()
+      .trim()
+      .required('Required field')
+      .min(
+        CheckoutMessage.lastName.minLength,
+        CheckoutMessage.lastName.minValidation,
+      ),
+    address1: yup.string().trim().required('Required field'),
+    city: yup.string().trim().required('Required field'),
+    postalCode: yup.string().trim().required('Required Field'),
+    countryName: yup.string().trim().required('Required field'),
+    state: yup.string().trim().required('Required field'),
     phone: yup
       .string()
+      .trim()
       .required(__ValidationText.signUp.storeCustomerAddress.phone.required)
       .test(
         'phone-test',
@@ -299,8 +298,30 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
       ),
   });
 
+  const convertIntoInitials = (address: AddressType | null): AddressType => {
+    return {
+      firstname: address?.firstname || '',
+      lastName: address?.lastName || '',
+      address1: address?.address1 || '',
+      address2: address?.address2 || '',
+      city: address?.city || '',
+      state: address?.state || '',
+      postalCode: address?.postalCode || '',
+      phone: address?.phone || '',
+      countryName: address?.countryName || '',
+      countryCode: address?.countryCode || '',
+      id: address?.id || 0,
+      rowVersion: address?.rowVersion || '',
+      email: address?.email || '',
+      suite: address?.suite || '',
+      fax: address?.fax || '',
+      isDefault: address?.isDefault || false,
+      companyName: address?.companyName || '',
+    };
+  };
+
   const Billingformik = useFormik({
-    initialValues: initialBillingValues,
+    initialValues: convertIntoInitials(billingAddress),
     validationSchema: validationSchema,
     validateOnMount: true,
     enableReinitialize: true,
@@ -308,14 +329,14 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
   });
 
   const ShippingFormik = useFormik({
-    initialValues: initialShippingValues,
+    initialValues: convertIntoInitials(shippingAddress),
     validationSchema: validationSchema,
     validateOnMount: true,
     enableReinitialize: true,
-    onSubmit: (values) => {},
+    onSubmit: () => {},
   });
 
-  const [useShippingAddress, setUseShippingAddress] = useState<boolean>(true);
+  const [useShippingAddress, setUseShippingAddress] = useState<boolean>(false);
 
   const {
     totalPrice,
@@ -327,20 +348,18 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
     smallRunFee,
     creditBalance,
   } = GetCartTotals();
-  const [showPayment, setshowPayment] = useState<boolean>(false);
-  const [showShippingMethod, setShowShippingMethod] = useState<boolean>(true);
 
   const logout_EmployeeLogin = (id: string) => {
     updateEmployeeV2('CLEAN_UP');
     product_employeeLogin('MinQtyToOne_CleanUp');
     logoutClearCart();
     logInUser('CLEAN_UP');
-    router.push(`/${paths.THANK_YOU}?orderNumber=${id}`);
-
     setCookie(__Cookie.userId, '', 'EPOCH');
     deleteCookie(__Cookie.tempCustomerId);
-    localStorage.removeItem(__LocalStorage.empGuest);
+    localStorage.removeItem(__LocalStorage.guestEmailID);
     localStorage.removeItem(__LocalStorage.empData);
+    localStorage.removeItem(__LocalStorage.empGuest);
+    router.push(`/${paths.THANK_YOU}?orderNumber=${id}`);
   };
 
   const getNewShippingCost = (shippingCost: number): number => {
@@ -349,6 +368,14 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
     }
 
     return shippingCost;
+  };
+
+  const decideEmail = (loggedInCustomerEmail: string) => {
+    if (isEmployeeLoggedIn && guestLoginJustByEmail) {
+      return guestLoginJustByEmail;
+    }
+
+    return loggedInCustomerEmail;
   };
 
   const getNewSmallRunFee = (smallRunFee: number): number => {
@@ -367,23 +394,11 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
         ...AddOrderDefault,
         ...addPaymentDetails(),
         cardName: billingAddress.firstname + ' ' + billingAddress?.lastName,
-        ...(useBalance
-          ? {
-              isCreditLimit: true,
-              storeCredit: creditBalance,
-            }
-          : {}),
-        ...(useBalance && totalPrice === creditBalance
-          ? {
-              paymentMethod: PaymentMethod.PREPAYMENT,
-              paymentGateway: PaymentMethod.PREPAYMENT,
-            }
-          : {}),
         storeID: storeId,
         customerID: userID,
         firstName: customer?.firstname || billingAddress.firstname,
         lastName: customer?.lastName || billingAddress.lastName,
-        email: customer?.email,
+        email: decideEmail(customer?.email),
         billingEqualsShipping: useShippingAddress,
         billingEmail: billingAddress.email,
         billingFirstName: billingAddress.firstname,
@@ -397,7 +412,7 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
         billingZip: billingAddress.postalCode,
         billingCountry: billingAddress.countryName,
         billingPhone: billingAddress.phone,
-        shippingEmail: customer?.email,
+        shippingEmail: decideEmail(customer?.email),
         shippingFirstName: shippingAddress.firstname,
         shippingLastName: shippingAddress.lastName,
         shippingCompany: shippingAddress.companyName,
@@ -410,12 +425,12 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
         shippingCountry: shippingAddress.countryName,
         shippingPhone: shippingAddress.phone,
         orderSubtotal: subTotal,
-        orderTax: salesTax,
+        orderTax: checkoutCharges.salesTax,
         orderTotal:
           totalPrice +
           getNewSmallRunFee(smallRunFee) +
           getNewShippingCost(selectedShipping.price) +
-          salesTax,
+          checkoutCharges.salesTax,
         orderNotes: '',
         couponCode: '',
         couponDiscountAmount: discount,
@@ -430,15 +445,25 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
         orderLogoSetupFee: logoSetupCharges,
         sewOut: isSewOutEnable,
         sewOutTotal: 0,
-
-        // EMPLOYEE LOGIN SPECIFIC
-        employeeID: empId ? empId : 0,
+        employeeID: empId || 0,
         empSourceName: employeeLogin.source.label,
         empSourceMedium: employeeLogin.sourceMedium.label,
         empSalesRap: employeeLogin.salesRep.label,
         salesRepName: employeeLogin.salesRep.label,
         salesAgentId: +employeeLogin.salesRep.value,
         isAllowPo: employeeLogin.allowPo,
+
+        gclid: gclid,
+        ...(useBalance && {
+          isCreditLimit: true,
+          storeCredit: creditBalance,
+        }),
+        ...(useBalance && {
+          paymentMethod: PaymentMethod.PREPAYMENT,
+          paymentGateway: PaymentMethod.PREPAYMENT,
+          isCreditLimit: true,
+          orderTotal: creditBalance + totalPrice,
+        }),
       };
 
       try {
@@ -451,9 +476,9 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
                 orderNumber: res.id,
               });
               if (isEmployeeLoggedIn) {
-                logout_EmployeeLogin(res?.id);
                 setShowLoader(false);
-                return deleteCookie(__Cookie.tempCustomerId);
+                logout_EmployeeLogin(res?.id);
+                return router.push(`/${paths.THANK_YOU}?orderNumber=${res.id}`);
               }
               setShowLoader(false);
               logoutClearCart();
@@ -521,6 +546,97 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
     return '';
   };
 
+  const decideToAddOrUpdateTheAddress = async (
+    payload: AddressAPIRequest,
+    updateAddress: boolean,
+  ) => {
+    if (updateAddress) {
+      return UpdateUserAddress(payload);
+    }
+
+    return CreateUserAddress(payload);
+  };
+
+  const updateShippingAddressAsBillingAddress = async (
+    shippingPayload: AddressAPIRequest,
+  ) => {
+    const billingPayload: AddressAPIRequest = {
+      storeCustomerAddressModel: {
+        ...shippingPayload.storeCustomerAddressModel,
+        id: 0,
+        recStatus: 'A',
+        rowVersion: '',
+        isDefault: false,
+        addressType: UserAddressType.BILLINGADDRESS,
+      },
+    };
+
+    return await Promise.allSettled([
+      decideToAddOrUpdateTheAddress(shippingPayload, !!shippingAddress?.id),
+      CreateUserAddress(billingPayload),
+    ])
+      .then(() => GetStoreCustomer(+userID))
+      .then((response) => {
+        if (response === null) return;
+        updateCustomer({ customer: response });
+      })
+      .catch(() => {})
+      .finally(() => {
+        setShowLoader(false);
+      });
+  };
+
+  const updateBothAddress = async (
+    shippingPayload: AddressAPIRequest,
+    location: _location,
+  ) => {
+    const billingPayload: AddressAPIRequest = {
+      storeCustomerAddressModel: {
+        customerId: +userID,
+        email: decideEmail(customer?.email || ''),
+        //
+        firstname: Billingformik.values.firstname,
+        lastName: Billingformik.values.lastName,
+        address1: Billingformik.values.address1,
+        address2: Billingformik.values.address2,
+        city: Billingformik.values.city,
+        state: Billingformik.values.state,
+        postalCode: Billingformik.values.postalCode,
+        phone: Billingformik.values.phone,
+        countryName: Billingformik.values.countryName,
+        countryCode: Billingformik.values.countryCode || '',
+        // previous
+        id: billingAddress?.id || 0,
+        rowVersion: billingAddress?.rowVersion || '',
+        suite: billingAddress?.suite || '',
+        fax: billingAddress?.fax || '',
+        companyName: billingAddress?.companyName || '',
+        isDefault: billingAddress?.isDefault || true,
+        //
+        location: `${location.city}, ${location.region}, ${location.country}, ${location.postal_code}`,
+        ipAddress: location.ip_address,
+        // Static
+        recStatus: 'A',
+        macAddress: '00-00-00-00-00-00',
+        addressType: UserAddressType.BILLINGADDRESS,
+      },
+    };
+
+    return await Promise.allSettled([
+      decideToAddOrUpdateTheAddress(shippingPayload, !!shippingAddress?.id),
+      decideToAddOrUpdateTheAddress(billingPayload, !!billingAddress?.id),
+    ])
+      .then(() => GetStoreCustomer(+userID))
+      .then((response) => {
+        if (response === null) return;
+        updateCustomer({ customer: response });
+      })
+      .catch(() => {})
+      .finally(() => {
+        setShowLoader(false);
+      });
+  };
+
   const reviewOrder = async () => {
     if (!employeeLogin.isPaymentPending) {
       const givenDate = `${cardDetails.cardExpirationYear}${cardDetails.cardExpirationMonth}`;
@@ -536,18 +652,41 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
         if (+currentDate > +givenDate) {
           showModal({
             message:
-              'Error in Credit Card information. Please verify and try again.',
+              'Error in Credit Card Date information. Please verify and try again.',
             title: 'Error',
           });
           return;
         }
-        if (cardDetails.cardVarificationCode.length !== 3) {
+
+        const cardLength = maxLengthCalculator(
+          'ccNumber',
+          cardDetails.cardNumber,
+        );
+        if (cardDetails.cardNumber.length !== cardLength) {
           showModal({
             message:
-              'Error in Credit Card information. Please verify and try again.',
+              'Error in Credit Card Number information. Please verify and try again.',
             title: 'Error',
           });
           return;
+        }
+
+        const cvcLength = maxLengthCalculator('cvc', cardDetails.cardNumber);
+        if (cardDetails.cardVarificationCode.length !== cvcLength) {
+          showModal({
+            message:
+              'Error in Credit Card CVC information. Please verify and try again.',
+            title: 'Error',
+          });
+          return;
+        }
+
+        if (cardDetails.creditCardHolder.length < 2) {
+          return showModal({
+            message:
+              'Error in Credit Card Holder Name information. Please verify and try again.',
+            title: 'Error',
+          });
         }
       }
       if (paymentEnum.purchaseOrder == paymentMethod) {
@@ -561,142 +700,57 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
       }
     }
 
-    const data = await getLocation();
+    setShowLoader(true);
+    const location = await getLocation();
+    const shippingPayload: AddressAPIRequest = {
+      storeCustomerAddressModel: {
+        customerId: +userID,
+        email: decideEmail(customer?.email || ''),
+        //
+        firstname: ShippingFormik.values.firstname,
+        lastName: ShippingFormik.values.lastName,
+        address1: ShippingFormik.values.address1,
+        address2: ShippingFormik.values.address2,
+        city: ShippingFormik.values.city,
+        state: ShippingFormik.values.state,
+        postalCode: ShippingFormik.values.postalCode,
+        phone: ShippingFormik.values.phone,
+        countryName: ShippingFormik.values.countryName,
+        countryCode: ShippingFormik.values.countryCode || '',
+        //
+        location: `${location.city}, ${location.region}, ${location.country}, ${location.postal_code}`,
+        ipAddress: location.ip_address,
+        // previous data
+        id: shippingAddress?.id || 0,
+        fax: shippingAddress?.fax || '',
+        suite: shippingAddress?.suite || '',
+        rowVersion: shippingAddress?.rowVersion || '',
+        companyName: shippingAddress?.companyName || '',
+        isDefault: shippingAddress?.isDefault || true,
+        // Static
+        macAddress: '00-00-00-00-00-00',
+        recStatus: 'A',
+        addressType: UserAddressType.SHIPPINGADDRESS,
+      },
+    };
+
     if (useShippingAddress) {
-      const objShipping = {
-        storeCustomerAddressModel: {
-          id: 0,
-          rowVersion: '',
-          location: `${data.city}, ${data.region}, ${data.country}, ${data.postal_code}`,
-          ipAddress: data.ip_address,
-          macAddress: '00-00-00-00-00-00',
-          customerId: ~~userID,
-          firstname: ShippingFormik.values.firstname,
-          lastName: ShippingFormik.values.lastName,
-          email: customer?.email || '',
-          address1: ShippingFormik.values.address1,
-          address2: ShippingFormik.values.address2 || ' ',
-          suite: ' ',
-          city: ShippingFormik.values.city,
-          state: ShippingFormik.values.state,
-          postalCode: ShippingFormik.values.postalCode,
-          phone: ShippingFormik.values.Phone,
-          fax: ShippingFormik.values.fax ? ShippingFormik.values.fax : '',
-          countryName: ShippingFormik.values.CountryName,
-          countryCode: ShippingFormik.values.countryCode || '',
-          addressType: UserAddressType.SHIPPINGADDRESS,
-          isDefault: true,
-          recStatus: 'A',
-          companyName: ShippingFormik.values.companyName || ' ',
-        },
-      };
-
-      const objBilling = {
-        storeCustomerAddressModel: {
-          id: 0,
-          rowVersion: '',
-          location: `${data.city}, ${data.region}, ${data.country}, ${data.postal_code}`,
-          ipAddress: data.ip_address,
-          macAddress: '00-00-00-00-00-00',
-          customerId: ~~userID,
-          firstname: ShippingFormik.values.firstname,
-          lastName: ShippingFormik.values.lastName,
-          email: customer?.email || '',
-          address1: ShippingFormik.values.address1,
-          address2: ShippingFormik.values.address2 || ' ',
-          suite: ' ',
-          city: ShippingFormik.values.city,
-          state: ShippingFormik.values.state,
-          postalCode: ShippingFormik.values.postalCode,
-          phone: ShippingFormik.values.Phone,
-          fax: ShippingFormik.values.fax ? ShippingFormik.values.fax : '',
-          countryName: ShippingFormik.values.CountryName,
-
-          countryCode: ShippingFormik.values.countryCode || '',
-          addressType: UserAddressType.BILLINGADDRESS,
-          isDefault: true,
-          recStatus: 'A',
-          companyName: ShippingFormik.values.companyName || ' ',
-        },
-      };
-      const ShippingADD = await CreateUserAddress(objShipping);
-      const BillingADD = await CreateUserAddress(objBilling);
-
-      if (ShippingADD && BillingADD) {
-        GetStoreCustomer(+userID).then((res) => {
-          if (res === null) return;
-          updateCustomer({ customer: res });
-        });
-      }
-    } else {
-      const objShipping = {
-        storeCustomerAddressModel: {
-          id: 0,
-          rowVersion: '',
-          location: `${data.city}, ${data.region}, ${data.country}, ${data.postal_code}`,
-          ipAddress: data.ip_address,
-          macAddress: '00-00-00-00-00-00',
-          customerId: ~~userID,
-          firstname: ShippingFormik.values.firstname,
-          lastName: ShippingFormik.values.lastName,
-          email: customer?.email || '',
-          address1: ShippingFormik.values.address1,
-          address2: ShippingFormik.values.address2 || ' ',
-          suite: ' ',
-          city: ShippingFormik.values.city,
-          state: ShippingFormik.values.state,
-          postalCode: ShippingFormik.values.postalCode,
-          phone: ShippingFormik.values.Phone,
-          fax: ShippingFormik.values.fax ? ShippingFormik.values.fax : '',
-          countryName: ShippingFormik.values.CountryName,
-          countryCode: ShippingFormik.values.countryCode || '',
-          addressType: UserAddressType.SHIPPINGADDRESS,
-          isDefault: true,
-          recStatus: 'A',
-          companyName: ShippingFormik.values.companyName || ' ',
-        },
-      };
-
-      const objBilling = {
-        storeCustomerAddressModel: {
-          id: 0,
-          rowVersion: '',
-          location: `${data.city}, ${data.region}, ${data.country}, ${data.postal_code}`,
-          ipAddress: data.ip_address,
-          macAddress: '00-00-00-00-00-00',
-          customerId: ~~userID,
-          firstname: Billingformik.values.firstname,
-          lastName: Billingformik.values.lastName,
-          email: customer?.email || '',
-          address1: Billingformik.values.address1,
-          address2: Billingformik.values.address2 || ' ',
-          suite: ' ',
-          city: Billingformik.values.city,
-          state: Billingformik.values.state,
-          postalCode: Billingformik.values.postalCode,
-          phone: Billingformik.values.Phone,
-          fax: Billingformik.values.fax ? Billingformik.values.fax : '',
-          countryName: Billingformik.values.CountryName,
-          countryCode: Billingformik.values.countryCode || '',
-          addressType: UserAddressType.BILLINGADDRESS,
-          isDefault: true,
-          recStatus: 'A',
-          companyName: Billingformik.values.companyName || ' ',
-        },
-      };
-      const ShippingADD = await CreateUserAddress(objShipping);
-      const BillingADD = await CreateUserAddress(objBilling);
-
-      if (ShippingADD && BillingADD) {
-        GetStoreCustomer(+userID).then((res) => {
-          if (res === null) return;
-          updateCustomer({ customer: res });
-        });
-      }
+      await updateShippingAddressAsBillingAddress(shippingPayload);
+      setCurrentPage(checkoutPages.reviewOrder);
+      return;
     }
-
+    await updateBothAddress(shippingPayload, location);
     setCurrentPage(checkoutPages.reviewOrder);
   };
+
+  useEffect(() => {
+    if (billingAddress?.postalCode) {
+      update_CheckoutAddress({
+        type: 'ZIP_CODE',
+        value: billingAddress.postalCode,
+      });
+    }
+  }, [billingAddress, Billingformik.values.postalCode]);
 
   return (
     <section className='mt-[20px]'>
@@ -705,8 +759,8 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
           <div className='flex flex-wrap ml-[-15px] mr-[-15px] -mt-3 checkout-box'>
             {/* Billing Information */}
             <section className='w-full lg:w-8/12 md:w-7/12 pl-[15px] pr-[15px]'>
-              <div className='flex flex-wrap checkout-box ml-[-15px] mr-[-15px]'>
-                <div className='bg-light-gray flex-1 w-full md:w-6/12 mt-[15px] ml-[15px] mr-[15px] mb-[30px]'>
+              <div className='md:flex flex-wrap checkout-box'>
+                <div className='bg-light-gray flex-1 w-full md:w-6/12 mt-[15px] mr-[15px] mb-[30px]'>
                   {billingAddress && (
                     <div className='pl-[15px] pr-[15px] pt-[15px] pb-[15px]'>
                       <div className='flex flex-wrap items-center justify-between pt-[10px] border-b border-[#ececec]'>
@@ -717,7 +771,10 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
                           <div
                             onClick={() => {
                               setChangeBillingAddress(true);
-                              setShowShippingMethod(false);
+                              if (shippingAddress) {
+                                setShowShippingMethod(false);
+                              }
+
                               setCurrentPage(checkoutPages.address);
                               setshowPayment(true);
                             }}
@@ -729,10 +786,14 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
                       </div>
                       {billingAddress && (
                         <div className='text-default-text mt-[10px]'>
+                          {/* {console.log(billingAddress, '<-----billingAddress')} */}
                           {billingAddress?.firstname} {billingAddress?.lastName}
-                          <br />
-                          {billingAddress?.companyName}
-                          <br />
+                          {billingAddress?.companyName ? (
+                            <>
+                              <br />
+                              {billingAddress?.companyName}
+                            </>
+                          ) : null}
                           {billingAddress?.address1}
                           <br />
                           {[
@@ -750,43 +811,48 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
                   )}
                 </div>
                 {shippingAddress && (
-                  <div className='bg-light-gray flex-1 w-full md:w-6/12 mt-[15px] ml-[15px] mr-[15px] mb-[30px]'>
+                  <div className='bg-light-gray flex-1 w-full md:w-6/12 mt-[15px] mr-[15px] mb-[30px]'>
                     <div className='pl-[15px] pr-[15px] pt-[15px] pb-[15px]'>
-                      <div className='flex flex-wrap items-center justify-between pt-[10px] border-b border-[#ececec]'>
-                        <div className='pb-[10px] text-title-text'>
-                          {__pagesText.CheckoutPage.ShippingMethod}
+                      {
+                        <div className='flex flex-wrap items-center justify-between pt-[10px] border-b border-[#ececec]'>
+                          <div className='pb-[10px] text-title-text'>
+                            {__pagesText.CheckoutPage.ShippingMethod}
+                          </div>
+                          <div className='text-default-text'>
+                            <span
+                              className='!text-anchor hover:!text-anchor-hover cursor-pointer'
+                              onClick={() => {
+                                setShowShippingMethod(true);
+                                setshowPayment(false);
+                                setChangeBillingAddress(false);
+                                setCurrentPage(checkoutPages.address);
+                              }}
+                            >
+                              {__pagesText.CheckoutPage.Change}
+                            </span>
+                          </div>
                         </div>
-                        <div className='text-default-text'>
-                          <span
-                            className='!text-anchor hover:!text-anchor-hover'
-                            onClick={() => {
-                              setShowShippingMethod(true);
-                              setshowPayment(false);
-                              setChangeBillingAddress(false);
-                            }}
-                          >
-                            {__pagesText.CheckoutPage.Change}
+                      }
+                      {
+                        <div className='text-default-text mt-[10px] mb-[15px]'>
+                          <span>
+                            {__pagesText.CheckoutPage.ShippingMethod}
+                            {':'}
+                            {!_.isEmpty(selectedShipping) && (
+                              <span>{`${
+                                selectedShipping.name
+                              } ($${selectedShipping.price.toFixed(2)})`}</span>
+                            )}
                           </span>
                         </div>
-                      </div>
-                      <div className='text-default-text mt-[10px] mb-[15px]'>
-                        <span>
-                          {__pagesText.CheckoutPage.ShippingMethod}
-                          {':'}
-                          {!_.isEmpty(selectedShipping) && (
-                            <span>{`${
-                              selectedShipping.name
-                            } ($${selectedShipping.price.toFixed(2)})`}</span>
-                          )}
-                        </span>
-                      </div>
+                      }
                       <div className='flex flex-wrap items-center justify-between pt-[10px] border-b border-[#ececec]'>
                         <div className='pb-[10px] text-title-text'>
                           {__pagesText.CheckoutPage.PaymentMethod}
                         </div>
                         <div className='text-default-text'>
                           <span
-                            className='!text-anchor hover:!text-anchor-hover'
+                            className='!text-anchor hover:!text-anchor-hover cursor-pointer'
                             onClick={() => {
                               setChangeBillingAddress(false);
                               setCurrentPage(checkoutPages.address);
@@ -805,21 +871,17 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
                           {cardDetails.cardNumber && (
                             <>
                               <div className='flex flex-wrap'>
-                                <div>
-                                  <NxtImage
-                                    isStatic={true}
-                                    className=''
-                                    src={cardType[1].url}
-                                    alt=''
-                                  />
-                                </div>
-
-                                <div>
-                                  <p>Card :{cardDetails.cardNumber}</p>
-
+                                <div className='ml-[10px]'>
+                                  <p>Payment Method: CREDIT CARD</p>
                                   <p>
-                                    Expiry :
-                                    {`${cardDetails.cardExpirationMonth}/${cardDetails.cardExpirationYear}`}
+                                    Name on card: {cardDetails.creditCardHolder}
+                                  </p>
+                                  <p>
+                                    Card Number:{' '}
+                                    {Array.from({
+                                      length: cardDetails.cardNumber.length - 4,
+                                    }).map(() => 'X')}
+                                    {cardDetails.cardNumber.slice(-4)}
                                   </p>
                                 </div>
                               </div>
@@ -828,11 +890,8 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
 
                           {purchaseOrder && (
                             <>
-                              <p>
-                                {`PO: `}
-
-                                {purchaseOrder}
-                              </p>
+                              <p>Payment Method: PO</p>
+                              <p>PO Number: {purchaseOrder}</p>
                             </>
                           )}
                         </div>
@@ -855,14 +914,19 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
                   {showShippingMethod && (
                     <>
                       <div className='bg-light-gray w-full mb-[30px] opacity-100'>
-                        <div className='bg-light-gray flex-1 w-full md:w-full mt-[15px] ml-[15px] mr-[15px] mb-[30px]'>
-                          <div className='pl-[15px] pr-[15px] pt-[15px] pb-[15px]'>
+                        <div className='bg-light-gray flex-1 w-full md:w-full mt-[15px] mb-[30px] pl-[15px] pr-[15px]'>
+                          <div className='px-[5px] pt-[15px] pb-[15px]'>
                             <div className='flex flex-wrap items-center justify-between pt-[10px] border-b border-[#ececec]'>
                               <div className='pb-[10px] text-title-text'>
                                 {__pagesText.CheckoutPage.ShippingAddress}
                               </div>
                             </div>
-                            <AddressFormPk addressformik={ShippingFormik} />
+                            <AddressFormPk
+                              addressformik={ShippingFormik}
+                              values={ShippingFormik.values}
+                              touched={ShippingFormik.touched}
+                              errors={ShippingFormik.errors}
+                            />
                           </div>
                         </div>
                       </div>
@@ -901,7 +965,13 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
                                       className='ml-2 text-default-text'
                                     >
                                       {shippingMethod &&
-                                        `${el.name}($${el.price.toFixed(2)})`}
+                                        `${
+                                          el.name.toLowerCase() ===
+                                            'free shipping' &&
+                                          storeCode === _Store_CODES.PKHG
+                                            ? 'FedEX Ground'
+                                            : el.name
+                                        }($${el.price.toFixed(2)})`}
                                     </label>
                                   </div>
                                 ),
@@ -910,7 +980,18 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
                           <div className=''>
                             <button
                               className='btn btn-lg btn-primary'
-                              onClick={() => setshowPayment(true)}
+                              onClick={() => {
+                                ShippingFormik.submitForm();
+                                if (!ShippingFormik.isValid) {
+                                  showModal({
+                                    message:
+                                      'Some Error Occurred in Shipping Address Form',
+                                    title: 'Error',
+                                  });
+                                  return;
+                                }
+                                setshowPayment(true);
+                              }}
                             >
                               {__pagesText.CheckoutPage.GoToPayment}
                             </button>
@@ -979,12 +1060,40 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
                           useShippingAddress={useShippingAddress}
                           cardDetails={cardDetails}
                           purchaseOrder={purchaseOrder}
+                          billingAddress={billingAddress}
+                          setShippingAddress={setShippingAddress}
                         />
                         <div className='max-w-[278px]'>
                           <button
                             className='btn btn-lg !w-full text-center btn-primary mb-[8px]'
                             id='btn-review-order'
                             onClick={() => {
+                              ShippingFormik.submitForm();
+                              if (!ShippingFormik.isValid) {
+                                setShowShippingMethod(true);
+                                setChangeBillingAddress(false);
+                                setshowPayment(false);
+                                showModal({
+                                  message:
+                                    'Some Error Occurred in Shipping Address Form',
+                                  title: 'Error',
+                                });
+                                return;
+                              }
+
+                              Billingformik.submitForm();
+                              if (!Billingformik.isValid) {
+                                setChangeBillingAddress(true);
+                                setshowPayment(true);
+                                showModal({
+                                  message:
+                                    'Some Error Occurred in Billing Address Form',
+                                  title: 'Error',
+                                });
+                                return;
+                              }
+
+                              setBillingAddress(Billingformik.values);
                               reviewOrder();
                             }}
                           >
@@ -1023,11 +1132,6 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
               currentpage={currentPage}
               selectedShipModel={selectedShipping}
               placeOrder={placeOrder}
-              salesTax={salesTax}
-              setSalesTax={setSalesTax}
-              billingAddressCode={
-                billingAddress?.postalCode ? billingAddress.postalCode : '0'
-              }
             />
           </div>
         </div>

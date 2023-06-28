@@ -1,5 +1,6 @@
 import EyeButton from '@appComponents/Buttons/EyeButton';
 import InfoButton from '@appComponents/Buttons/InfoButton';
+import { EMAIL_REGEX } from '@constants/global.constant';
 import { ErrorMessage } from 'formik';
 import React, { useState } from 'react';
 import { _InputProps } from './switch.d';
@@ -13,8 +14,18 @@ const Input: React.FC<_InputProps> = ({
   onChange,
   required,
   placeHolder,
+  onBlur,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
+
+  const customBlurFunction = () => {
+    onBlur;
+    const emailCheck = typeof value === 'string' && value.match(EMAIL_REGEX);
+
+    if (!emailCheck) {
+      document.getElementById('email-address-login')?.focus();
+    }
+  };
 
   return (
     <>
@@ -37,6 +48,7 @@ const Input: React.FC<_InputProps> = ({
           value={value}
           onChange={onChange}
           className='form-input'
+          onBlur={id === 'email-address-login' ? customBlurFunction : onBlur}
         />
 
         {type === 'password' && (

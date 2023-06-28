@@ -2,6 +2,7 @@ import noImg from '@images/no.png';
 import yesImg from '@images/yes.png';
 
 import NxtImage from '@appComponents/reUsable/Image';
+import { ErrorMessage } from 'formik';
 import React, { useEffect, useState } from 'react';
 
 interface _props {
@@ -14,6 +15,7 @@ interface _props {
   required?: boolean;
   touched?: boolean;
   error?: string | null;
+  showIcon?: boolean;
   onBlur?: (e: React.FocusEvent<any, Element>) => void;
 }
 
@@ -27,6 +29,7 @@ const CustomInput: React.FC<_props> = ({
   required = false,
   touched,
   error,
+  showIcon = true,
   onBlur = (value: any) => value,
 }) => {
   const [correct, setCorrect] = useState<boolean | undefined>(false);
@@ -70,35 +73,37 @@ const CustomInput: React.FC<_props> = ({
               className='form-input mr-8'
             />
           )}
-          <div className='absolute w-6 h-6 right-0 top-2'>
-            {correct && (
-              <NxtImage
-                src={yesImg}
-                alt=''
-                className={''}
-                height={1}
-                isStatic={true}
-                width={1}
-              />
-            )}
-            {inCorrect && (
-              <NxtImage
-                src={noImg}
-                alt=''
-                className={''}
-                height={1}
-                isStatic
-                width={1}
-              />
-            )}
-          </div>
+          {showIcon && (
+            <div className='absolute w-6 h-6 right-0 top-2'>
+              {correct && (
+                <NxtImage
+                  src={yesImg}
+                  alt=''
+                  className={''}
+                  height={1}
+                  isStatic={true}
+                  width={1}
+                />
+              )}
+              {inCorrect && (
+                <NxtImage
+                  src={noImg}
+                  alt=''
+                  className={''}
+                  height={1}
+                  isStatic
+                  width={1}
+                />
+              )}
+            </div>
+          )}
 
           {/* No need to show error msg in PKHG Special request form as per live */}
-          {/* <ErrorMessage
+          <ErrorMessage
             className='text-rose-500'
             component={'span'}
             name={name}
-          /> */}
+          />
         </div>
       </div>
     </>

@@ -8,13 +8,18 @@ import { useEffect } from 'react';
 import { _globalStore } from 'store.global';
 
 const Checkout: NextPage<{ templateId: number }> = ({ templateId }) => {
-  const { store_CurrentPage, update_checkoutEmployeeLogin } = useActions_v2();
+  const {
+    store_CurrentPage,
+    update_CheckoutEmployeeLogin,
+    update_CheckoutCharges,
+  } = useActions_v2();
 
   useEffect(() => {
     store_CurrentPage('CHECKOUT');
     return () => {
       store_CurrentPage(null);
-      update_checkoutEmployeeLogin('CLEAN_ALL');
+      update_CheckoutEmployeeLogin('CLEAN_ALL');
+      update_CheckoutCharges('CLEAN_UP');
     };
   }, []);
 

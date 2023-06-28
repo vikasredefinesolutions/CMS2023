@@ -61,7 +61,7 @@ const Header_Category: React.FC<_props> = ({
             className='text-[12px] mr-[5px] underline'
             onClick={() => toggleSideMenu('CLOSE')}
           >
-            <Link href={`${url}.html?v=product-list`}>
+            <Link href={`/${url}.html?v=product-list`}>
               <a>{__pagesText.Headers.mobileViewAll}</a>
             </Link>
           </div>
@@ -92,7 +92,7 @@ const Header_Category: React.FC<_props> = ({
   if (view === 'DESKTOP') {
     return (
       <>
-        <Link href={`${url}.html`} className='flex'>
+        <Link href={`/${url}.html`} className='flex'>
           <div className='relative flex '>
             <button
               title={title}
@@ -187,7 +187,7 @@ const Header_Category: React.FC<_props> = ({
                     <div className='w-full lg:w-1/5 text-[15px] pl-[15px] pr-[15px]'></div>
                     <div className='w-full lg:w-1/5 text-[15px] pl-[15px] pr-[15px]'>
                       <ul className='border-t border-t-default'>
-                        <Link href={`${url}.html`}>
+                        <Link href={`/${url}.html`}>
                           <li className='flex pt-[10px]'>
                             <a
                               className='inline-block text-[15px] text-tertiary hover:text-tertiary-hover font-[500] tracking-[1px] leading-[18px]'
@@ -202,7 +202,7 @@ const Header_Category: React.FC<_props> = ({
                     </div>
                     <div className='w-full lg:w-1/5 text-[15px] pl-[15px] pr-[15px]'>
                       <ul className='border-t border-t-default'>
-                        <Link href={`${url}.html`}>
+                        <Link href={`/${url}.html`}>
                           <li className='flex pt-[10px]'>
                             <a
                               className='inline-block text-[15px] text-tertiary hover:text-tertiary-hover font-[500] tracking-[1px] leading-[18px]'

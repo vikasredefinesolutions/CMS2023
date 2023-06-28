@@ -1,16 +1,23 @@
-import NxtImage from '@appComponents/reUsable/Image';
 import { _ProductColor } from '@definations/APIs/colors.res';
-import { useActions_v2 } from '@hooks_v2/index';
+import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import React, { useEffect } from 'react';
+import { _globalStore } from 'store.global';
 
 interface _props {
   color: null | _ProductColor[];
   index: number;
   seName: string;
 }
+let mediaBaseUrl = _globalStore.blobUrl; // for server side
 
 const AllColors: React.FC<_props> = ({ color, index, seName }) => {
   const { updateCompareDisplayImage } = useActions_v2();
+
+  const clientSideMediaBaseUrl = useTypedSelector_v2(
+    (state) => state.store.mediaBaseUrl,
+  );
+
+  mediaBaseUrl = mediaBaseUrl || clientSideMediaBaseUrl;
 
   useEffect(() => {
     if (color !== null) {
@@ -39,14 +46,6 @@ const AllColors: React.FC<_props> = ({ color, index, seName }) => {
         },
       });
     }
-    return () => {
-      updateCompareDisplayImage({
-        type: 'REMOVE',
-        data: {
-          index: index,
-        },
-      });
-    };
   }, []);
 
   if (color === null) {
@@ -77,10 +76,11 @@ const AllColors: React.FC<_props> = ({ color, index, seName }) => {
             }
             className='w-[40px] h-[40px] border border-gray-border p-1 flex items-center justify-center'
           >
-            <NxtImage
-              src={color.imageUrl}
+            <img
+              className={'m-auto max-h-full'}
+              src={mediaBaseUrl + color.imageUrl}
               alt={color.name}
-              className={'inline-block max-h-full'}
+              title={color.name || ''}
             />
           </div>
         ))}

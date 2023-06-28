@@ -5,7 +5,7 @@ import { __ValidationText } from '@constants/validation.text';
 import { _ContactRequest } from '@definations/contactRequest.type';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import { SendAsync } from '@utils/axios.util';
-import { Form, Formik } from 'formik';
+import { ErrorMessage, Form, Formik } from 'formik';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import * as Yup from 'yup';
@@ -21,7 +21,9 @@ export const RequestContactForm = () => {
     name: user.customer ? user.customer.name : '',
     companyName: user.customer ? user.customer.companyName : '',
     email: user.customer ? user.customer.email : '',
-    comment: router.query.name ? router.query.name : '',
+    comment: router.query.name
+      ? `${router.query.name} (${router.query.sku})`
+      : '',
   });
 
   useEffect(() => {
@@ -115,7 +117,7 @@ export const RequestContactForm = () => {
     <>
       <section className='container pl-[15px] pr-[15px] mx-auto'>
         {' '}
-        <div className='max-w-6 mx-auto'>
+        <div className='max-w-6xl mx-auto'>
           {/* {__pagesText.requestConsultation.heading} */}
           <div className='text-center pb-[20px]'>
             <div className='pt-[12px] pb-[12px] mx-[15px]'>
@@ -209,7 +211,7 @@ export const RequestContactForm = () => {
                                       className='block text-base font-medium text-gray-700'
                                     >
                                       {' '}
-                                      Company Name / ASI# or PPAI#:{' '}
+                                      Company Name / ASI# or PPAI#{' '}
                                       <span className='text-red-500'>
                                         *
                                       </span>{' '}
@@ -222,9 +224,7 @@ export const RequestContactForm = () => {
                                         onChange={handleChange}
                                         type={'text'}
                                         required={true}
-                                        className={
-                                          'text-medium-text border border-[#ababab] rounded pt-[12px] pb-[12px] pl-[12px] pr-[12px] w-full'
-                                        }
+                                        className={'form-input'}
                                       />
                                     </div>
                                   </div>
@@ -234,7 +234,7 @@ export const RequestContactForm = () => {
                                       className='block text-base font-medium text-gray-700'
                                     >
                                       {' '}
-                                      Message:{' '}
+                                      Message{' '}
                                       <span className='text-red-500'>
                                         *
                                       </span>{' '}
@@ -242,12 +242,17 @@ export const RequestContactForm = () => {
                                     <div className='w-full'>
                                       <textarea
                                         placeholder='Message here'
-                                        className='text-medium-text border border-[#ababab] rounded pt-[12px] pb-[12px] pl-[12px] pr-[12px] w-full'
+                                        className='form-input'
                                         name={'comment'}
                                         value={values.comment}
                                         onChange={handleChange}
                                         rows={5}
                                       ></textarea>
+                                      <ErrorMessage
+                                        name={'comment'}
+                                        className='text-rose-500'
+                                        component={'p'}
+                                      />
                                     </div>
                                   </div>
                                   <div className='w-full text-left'>

@@ -7,7 +7,7 @@ const MenuIcon: React.FC = () => {
   return (
     <button
       type='button'
-      className='bg-[#ffffff] text-quaternary hover:text-gray-500 flex items-center'
+      className='text-quaternary hover:text-gray-500 flex items-center'
       onClick={() => toggleSideMenu('OPEN')}
     >
       <span className='sr-only'>Open menu</span>

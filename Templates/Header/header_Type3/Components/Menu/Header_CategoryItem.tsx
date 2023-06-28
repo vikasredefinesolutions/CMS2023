@@ -1,21 +1,54 @@
+import LoginModal from '@appComponents/modals/loginModal';
+import { UCA } from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
 import { _MenuCategory } from '@definations/header.type';
+import { _modals } from '@definations/product.type';
 import SubMenuItem from '@header/header_Type3/Components/Menu/Header_SubMenuItem';
 import { capitalizeFirstLetter } from '@helpers/common.helper';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
 import Link from 'next/link';
-import React, { useState } from 'react';
+import { useRouter } from 'next/router';
+import React, { useEffect, useState } from 'react';
 interface _props {
   title: string;
   url: string;
   content: _MenuCategory[] | null;
+  openTab: string;
+  setOpenTab: (arg: string) => void;
 }
 
-const Header_Category: React.FC<_props> = ({ content, title, url }) => {
-  const { view } = useTypedSelector_v2((state) => state.store);
-  const { toggleSideMenu } = useActions_v2();
+const Header_Category: React.FC<_props> = ({
+  content,
+  title,
+  url,
+  openTab,
+  setOpenTab,
+}) => {
+  const customerId = useTypedSelector_v2((state) => state.user.id);
+  const { view, code } = useTypedSelector_v2((state) => state.store);
+  const { toggleSideMenu, setRedirectPagePath } = useActions_v2();
   const [focus, setFocus] = useState(false);
   const [showAllItems, setShowAllItems] = useState<boolean>(false);
+  const [showtab, setShowTab] = useState<boolean>(false);
+  useEffect(() => {
+    if (openTab == title) {
+      setShowTab(true);
+      setShowAllItems(true);
+    } else {
+      setShowTab(false);
+      setShowAllItems(false);
+    }
+  }, [openTab]);
+  const [openModal, setOpenModal] = useState<null | _modals>(null);
+
+  const router = useRouter();
+  const modalHandler = (param: null | _modals) => {
+    if (param) {
+      setOpenModal(param);
+      return;
+    }
+    setOpenModal(null);
+  };
 
   if (view === 'MOBILE') {
     return (
@@ -26,13 +59,25 @@ const Header_Category: React.FC<_props> = ({ content, title, url }) => {
             title={title}
             type='button'
             className='relative text-[14px] pl-[25px] mr-[5px] flex items-center pt-[15px] pb-[15px] grow'
-            onClick={() => setShowAllItems((show) => !show)}
+            onClick={() => {
+              if (code === 'CYX' || code === UCA) {
+                if (customerId) {
+                  setOpenTab(title);
+                  setShowAllItems((show) => !show);
+                } else {
+                  setOpenModal('login');
+                }
+              } else {
+                setOpenTab(title);
+                setShowAllItems((show) => !show);
+              }
+            }}
           >
             <span
               className='material-icons-outlined text-[16px] font-[600] mr-[5px] absolute left-[5px] top-1/2 -translate-y-1/2'
               x-html="open1 == true ? 'remove' : 'add'"
             >
-              {showAllItems == true ? 'remove' : 'add'}
+              {showAllItems == true && showtab ? 'remove' : 'add'}
             </span>
             <div className=''>{title}</div>
           </button>
@@ -44,7 +89,7 @@ const Header_Category: React.FC<_props> = ({ content, title, url }) => {
           </div>
           {/* </div> */}
         </div>
-        {showAllItems && (
+        {showAllItems && showtab && (
           <div className='text-[14px]' x-show='open1'>
             <div className='relative bg-light-gray'>
               <div className=''>
@@ -70,13 +115,28 @@ const Header_Category: React.FC<_props> = ({ content, title, url }) => {
             </div>
           </div>
         )}
+        {openModal === 'login' && <LoginModal modalHandler={modalHandler} />}
       </>
     );
   }
   if (view === 'DESKTOP') {
     return (
-      <Link href={`${url}`} className='flex'>
-        <>
+      <>
+        <div
+          onClick={() => {
+            if (code === 'CYX' || code === UCA) {
+              if (customerId) {
+                setOpenTab(title);
+                setShowAllItems((show) => !show);
+              } else {
+                setOpenModal('login');
+              }
+            } else {
+              setOpenTab(title);
+              setShowAllItems((show) => !show);
+            }
+          }}
+        >
           <div className='relative '>
             <button
               title={title}
@@ -110,28 +170,26 @@ const Header_Category: React.FC<_props> = ({ content, title, url }) => {
               >
                 <div className='relative border border-gray-border bg-white z-50 p-[15px]'>
                   <div className=''>
-                    <div className='flex flex-wrap'>
-                      <ul
-                        role='list'
-                        aria-labelledby='desktop-featured-heading-1'
-                        className='w-full text-[13px]'
-                      >
-                        {content?.map((item, index) => {
-                          // if (index > content.length / 2) return <></>;
-                          return (
-                            <SubMenuItem
-                              key={index}
-                              view={view}
-                              itemLabel={capitalizeFirstLetter(
-                                item.categoryName,
-                              )}
-                              itemUrl={`${item.seName}.html?v=product-list`}
-                              type={'CATEGORY'}
-                            />
-                          );
-                        })}
-                      </ul>
-                      {/* <ul className='w-full lg:w-1/2 text-[13px] pl-[20px] pr-[20px]'>
+                    {/* <div className='flex flex-wrap'> */}
+                    <ul
+                      role='list'
+                      aria-labelledby='desktop-featured-heading-1'
+                      className='w-full text-[13px]'
+                    >
+                      {content?.map((item, index) => {
+                        // if (index > content.length / 2) return <></>;
+                        return (
+                          <SubMenuItem
+                            key={index}
+                            view={view}
+                            itemLabel={capitalizeFirstLetter(item.categoryName)}
+                            itemUrl={`${item.seName}.html?v=product-list`}
+                            type={'CATEGORY'}
+                          />
+                        );
+                      })}
+                    </ul>
+                    {/* <ul className='w-full lg:w-1/2 text-[13px] pl-[20px] pr-[20px]'>
                         {content?.map((item, index) => {
                           if (
                             index >= content.length / 2 &&
@@ -150,14 +208,15 @@ const Header_Category: React.FC<_props> = ({ content, title, url }) => {
                             );
                         })}
                       </ul> */}
-                    </div>
+                    {/* </div> */}
                   </div>
                 </div>
               </div>
             )}
           </div>
-        </>
-      </Link>
+        </div>
+        {openModal === 'login' && <LoginModal modalHandler={modalHandler} />}
+      </>
     );
   }
 

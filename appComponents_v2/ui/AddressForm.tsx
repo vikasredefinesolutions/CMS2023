@@ -65,8 +65,18 @@ const AddressForm: React.FC<Props> = ({
   const [showSecondLine, setShowSecondLine] = useState(false);
 
   const validationSchema = Yup.object().shape({
-    firstname: Yup.string().required(addressMessages.firstName.required),
-    lastName: Yup.string().required(addressMessages.lastName.required),
+    firstname: Yup.string()
+      .required(addressMessages.firstName.required)
+      .min(
+        addressMessages.firstName.minlength,
+        addressMessages.firstName.minValidation,
+      ),
+    lastName: Yup.string()
+      .required(addressMessages.lastName.required)
+      .min(
+        addressMessages.lastName.minlength,
+        addressMessages.lastName.minValidation,
+      ),
     email: Yup.string().email().required(addressMessages.email.required),
     address1: Yup.string().required(addressMessages.address1.required),
     address2: Yup.string(),

@@ -1,9 +1,9 @@
 import Price from '@appComponents/reUsable/Price';
-import { PKHG_MINIMUM_QTY } from '@constants/global.constant';
+import { PKHG_MINIMUM_QTY, SIMPLI_SAFE_CODE } from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
 import { paths } from '@constants/paths.constant';
 import { _shippingMethod } from '@controllers/checkoutController';
-import { GetCartTotals, useTypedSelector_v2 } from 'hooks_v2';
+import { GetCartTotals, useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
 
@@ -13,8 +13,12 @@ interface _props {
 
 const CartSummarryType2: FC<_props> = ({ selectedShippingModel }) => {
   const router = useRouter();
+  const { showModal } = useActions_v2();
 
-  const employeeLogin = useTypedSelector_v2((state) => state.employee.empId);
+  const isEmployeeLoggedIN = useTypedSelector_v2(
+    (state) => !!state.employee.empId,
+  );
+  const { code: storeCode } = useTypedSelector_v2((state) => state.store);
   // Functions
   const {
     totalQty,
@@ -30,9 +34,7 @@ const CartSummarryType2: FC<_props> = ({ selectedShippingModel }) => {
     fifthLogoPrice,
     sixthLogoPrice,
     seventhLogoPrice,
-    discount,
   } = GetCartTotals();
-
   return (
     <>
       <div className='border border-gray-border p-[15px]'>
@@ -41,22 +43,27 @@ const CartSummarryType2: FC<_props> = ({ selectedShippingModel }) => {
         </div>
         <div className='w-full pl-[15px] pr-[15px] border-b border-gray-border mt-[10px] mb-[10px]'></div>
         <dl className='text-default-text'>
-          <div className='flex items-center justify-between pt-[15px]'>
-            <dt className=''>Merchandise</dt>
-            <dd className=''>
+          {storeCode !== SIMPLI_SAFE_CODE && (
+            <>
               {' '}
-              <Price value={merchandisePrice} />
-            </dd>
-          </div>
-          {merchandisePrice - subTotal > 0 && (
-            <div className='flex items-center justify-between pt-[15px]'>
-              <dt className=''>Discount</dt>
-              <dd className=''>
-                -<Price value={merchandisePrice - subTotal} />
-              </dd>
-            </div>
+              <div className='flex items-center justify-between pt-[15px]'>
+                <dt className=''>Merchandise</dt>
+                <dd className=''>
+                  {' '}
+                  <Price value={merchandisePrice} />
+                </dd>
+              </div>
+              {merchandisePrice - subTotal > 0 && !isEmployeeLoggedIN && (
+                <div className='flex items-center justify-between pt-[15px]'>
+                  <dt className=''>Discount</dt>
+                  <dd className=''>
+                    -<Price value={merchandisePrice - subTotal} />
+                  </dd>
+                </div>
+              )}
+              <div className='w-full pl-[15px] pr-[15px] border-b border-gray-border mt-[10px]'></div>
+            </>
           )}
-          <div className='w-full pl-[15px] pr-[15px] border-b border-gray-border mt-[10px]'></div>
           <div className='flex items-center justify-between pt-[15px]'>
             <dt className=''>
               <span>Subtotal</span>
@@ -66,14 +73,16 @@ const CartSummarryType2: FC<_props> = ({ selectedShippingModel }) => {
             </dd>
           </div>
 
-          <div className='flex items-center justify-between pt-[15px]'>
-            <dt className=''>
-              <span>First Logo</span>
-            </dt>
-            <dd className=''>
-              {firstLogoPrice > 0 ? <Price value={firstLogoPrice} /> : 'FREE'}
-            </dd>
-          </div>
+          {storeCode !== SIMPLI_SAFE_CODE && (
+            <div className='flex items-center justify-between pt-[15px]'>
+              <dt className=''>
+                <span>First Logo</span>
+              </dt>
+              <dd className=''>
+                {firstLogoPrice > 0 ? <Price value={firstLogoPrice} /> : 'FREE'}
+              </dd>
+            </div>
+          )}
           {secondLogoPrice > 0 && (
             <div className='flex items-center justify-between pt-[15px]'>
               <dt className=''>
@@ -169,15 +178,22 @@ const CartSummarryType2: FC<_props> = ({ selectedShippingModel }) => {
           <div className=''>
             <div className='mt-[16px]'>
               <button
-                onClick={() => router.push(paths.CHECKOUT)}
-                disabled={employeeLogin ? false : totalQty < PKHG_MINIMUM_QTY}
-                className={`btn btn-lg btn-primary w-full !flex flex-wrap justify-center items-center ${
-                  employeeLogin
-                    ? ''
-                    : totalQty < PKHG_MINIMUM_QTY
-                    ? 'opacity-50'
-                    : ''
-                }`}
+                onClick={() => {
+                  if (
+                    !isEmployeeLoggedIN &&
+                    totalQty < PKHG_MINIMUM_QTY &&
+                    storeCode !== SIMPLI_SAFE_CODE
+                  ) {
+                    showModal({
+                      title: 'Min Quantity Alert',
+                      message:
+                        'Cart Quantity must be greater then or equal to 10',
+                    });
+                  } else {
+                    router.push(paths.CHECKOUT);
+                  }
+                }}
+                className={`btn btn-lg btn-primary w-full !flex flex-wrap justify-center items-center `}
               >
                 CHECKOUT NOW
               </button>

@@ -1,4 +1,5 @@
 import { storeBuilderTypeId } from '@configs/page.config';
+import { THD_STORE_CODE } from '@constants/global.constant';
 import { __pagesConstant } from '@constants/pages.constant';
 import { paths } from '@constants/paths.constant';
 import { _HeaderProps, _MenuItems } from '@definations/header.type';
@@ -12,6 +13,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import CompanyInfo from './Components/CompanyInfo';
 import {
+  HeaderContactUs,
   LoggedInMenu,
   LoginIcon,
   Logo,
@@ -32,13 +34,12 @@ const Header_Type3: NextPage<_HeaderProps> = ({
   const router = useRouter();
 
   const showSideMenu = useTypedSelector_v2((state) => state.modals.sideMenu);
-  const store = useTypedSelector_v2((state) => state.store);
   const storeEmail = useTypedSelector_v2((state) => state.store.email_address);
   const storePhoneNumber = useTypedSelector_v2(
     (state) => state.store.phone_number,
   );
-  const storeTypeId = useTypedSelector_v2((state) => state.store.storeTypeId);
-  const islogo = useTypedSelector_v2((state) => state.sbStore.isLogo);
+  const { storeTypeId, code } = useTypedSelector_v2((state) => state.store);
+  const islogo = useTypedSelector_v2((state) => state.sbStore.store.isLogo);
 
   const [isMobileView, setIsMobileView] = useState<boolean>(
     width <= __pagesConstant._header.mobileBreakPoint,
@@ -72,7 +73,7 @@ const Header_Type3: NextPage<_HeaderProps> = ({
         )}
 
         <div className='fixed z-40 lg:hidden'></div>
-        <header className='relative trancking-[1px]' id="spy">
+        <header className='relative trancking-[1px]' id='spy'>
           <nav className='container mx-auto'>
             <div
               className={`${headerBgColor ? '' : 'bg-[#ffffff]'}]`}
@@ -124,6 +125,7 @@ const Header_Type3: NextPage<_HeaderProps> = ({
                           )}
                           <LoginIcon />
                           <LoggedInMenu />
+                          {code === THD_STORE_CODE && <HeaderContactUs />}
                           <MyCartIcon />
                           <div className='lg:hidden pl-[15px]'>
                             {router.asPath !== paths.CHECKOUT && <MenuIcon />}
@@ -132,18 +134,18 @@ const Header_Type3: NextPage<_HeaderProps> = ({
                       </div>
                     </div>
                   </div>
-                  {isMobileView
-                    ? null
-                    : router.asPath != paths.CHECKOUT && (
-                        <Header_MenuItems
-                          showSideMenu={showSideMenu}
-                          screen='DESKTOP'
-                          menuItems={menuItems as _MenuItems}
-                        />
-                      )}
-                  <SearchBar screen={'MOBILE'} />
                 </div>
               </div>
+              {isMobileView
+                ? null
+                : router.asPath != paths.CHECKOUT && (
+                    <Header_MenuItems
+                      showSideMenu={showSideMenu}
+                      screen='DESKTOP'
+                      menuItems={menuItems as _MenuItems}
+                    />
+                  )}
+              <SearchBar screen={'MOBILE'} />
             </div>
           </nav>
         </header>

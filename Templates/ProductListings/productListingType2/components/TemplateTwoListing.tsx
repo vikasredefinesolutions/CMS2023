@@ -78,24 +78,21 @@ const TemplateTwoListing = ({
           <div className='w-full px-[30px] pt-[10px] cursor-pointer'>
             <Link key={product.id} href={`/${product.sename}.html`}>
               <div>
-                <NxtImage
-                  src={mainImageUrl}
-                  alt=''
-                  className='w-auto h-auto max-h-max cursor-pointer'
-                  cKey={currentProduct.id}
+                <a
+                  href={`/${product.sename}.html`}
                   title={product.name}
-                />
+                  style={{ display: 'block' }}
+                >
+                  <NxtImage
+                    src={mainImageUrl}
+                    alt={product.name}
+                    className='max-h-[348px] !inline-black m-auto cursor-pointer'
+                    cKey={currentProduct.id}
+                  />
+                </a>
               </div>
             </Link>
-            <div className='absolute left-7 top-7 h-8 flex gap-1'>
-              <div className='h-8'>
-                <img
-                  className='max-h-full inline-block'
-                  src='images/Sale.webp'
-                  alt=''
-                />
-              </div>
-            </div>
+            
           </div>
           <div className='mt-[20px] relative md:px-[30px] px-[15px]'>
             <div className='mb-[10px] mt-[10px] h-[46px] text-anchor hover:text-anchor-hover text-medium-text overflow-hidden'>
@@ -121,7 +118,7 @@ const TemplateTwoListing = ({
               </span>
             </div>
             <div className='form-group mb-[12px] text-default-text'>
-              <label className='checkbox-inline'>
+              <label className='checkbox-inline flex justify-center items-center gap-x-2'>
                 <input
                   checked={skuList.includes(product?.sku ? product.sku : '')}
                   onChange={() =>
@@ -158,7 +155,7 @@ const TemplateTwoListing = ({
                       <NxtImage
                         src={`${mediaBaseUrl}${currentProduct.imageName}`}
                         alt=''
-                        className=''
+                        className='max-h-full m-auto'
                         title={currentProduct.colorName}
                       />
                     </li>
@@ -182,7 +179,7 @@ const TemplateTwoListing = ({
                           <NxtImage
                             src={`${mediaBaseUrl}${subRow.imageurl}`}
                             alt=''
-                            className=''
+                            className='max-h-full m-auto'
                             title={subRow.colorName}
                           />
                         </Link>
@@ -198,9 +195,9 @@ const TemplateTwoListing = ({
                   (subRow: GetProductImageOptionList, index: number) =>
                     index < listing_max_showcolors ? (
                       <li
-                        className={`w-7 h-7 border-2 hover:border-secondary cursor-pointer ${
+                        className={`w-7 h-7 border-2 hover:border-primary cursor-pointer ${
                           subRow.id === currentProduct.id
-                            ? ' border-secondary'
+                            ? ' border-primary'
                             : 'border-light-gray'
                         }`}
                         onClick={() => {
@@ -255,7 +252,7 @@ const TemplateTwoListing = ({
               <NxtImage
                 src={mainImageUrl}
                 alt=''
-                className='w-auto h-auto max-h-max'
+                className='max-h-[348px] !inline-black m-auto'
                 key={currentProduct?.id}
               />
             </Link>
@@ -270,7 +267,7 @@ const TemplateTwoListing = ({
             </div>
           </div>
 
-          <div className='mt-[20px] relative md:px-[30px] px-[15px]'>
+          <div className='mt-[20px] relative md:px-[30px] px-[15px] max-w-xl'>
             <div className='mb-[10px] mt-[10px] text-anchor hover:text-anchor-hover text-medium-text cursor-pointer'>
               <Link
                 key={product.id}
@@ -282,18 +279,18 @@ const TemplateTwoListing = ({
             </div>
             <div className='mb-[12px] text-[#000000] text-default-text '>
               <span className=''>
-                MSRP&nbsp;
+                {customerId ? 'PRICE:' : 'MSRP:'}
                 <Price
                   value={undefined}
                   prices={{
-                    msrp: product.msrp,
+                    msrp: customerId ? product?.lowPrice : product.msrp,
                     salePrice: product.salePrice,
                   }}
                 />
               </span>
             </div>
             <div className='form-group mb-[12px] text-default-text'>
-              <label className='checkbox-inline cursor-pointer'>
+              <label className='checkbox-inline cursor-pointer flex items-center gap-2'>
                 <input
                   checked={skuList.includes(product?.sku ? product.sku : '')}
                   onChange={() =>
@@ -333,7 +330,7 @@ const TemplateTwoListing = ({
                       <NxtImage
                         src={`${mediaBaseUrl}${currentProduct.imageName}`}
                         alt=''
-                        className=''
+                        className='max-h-full m-auto'
                         title={product.name}
                       />
                     </Link>
@@ -357,7 +354,7 @@ const TemplateTwoListing = ({
                           <NxtImage
                             src={`${mediaBaseUrl}${subRow.imageurl}`}
                             alt=''
-                            className=''
+                            className='max-h-full m-auto'
                             title={subRow.colorName}
                           />
                         </Link>

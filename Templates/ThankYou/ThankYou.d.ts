@@ -16,4 +16,5 @@ export interface _ThankYouTemplates {
   type2: NextPage<_ThankYouProps>;
   type3: NextPage<_ThankYouProps>;
   type4: NextPage<_ThankYouProps>;
+  type5: NextPage<_ThankYouProps>;
 }

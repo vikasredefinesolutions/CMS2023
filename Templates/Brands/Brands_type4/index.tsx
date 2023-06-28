@@ -1,4 +1,5 @@
 import ImageComponent from '@appComponents/reUsable/Image';
+import SeoHead from '@appComponents/reUsable/SeoHead';
 import { _Brand, _BrandProps } from '@definations/brand';
 import { capitalizeFirstLetter } from '@helpers/common.helper';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
@@ -20,7 +21,12 @@ const BrandsType4: React.FC<_BrandProps> = (props) => {
 
   return (
     <>
-      <section className='pt-[30px] md:pt-[50px] brand-logo-list white-title bg-primary'>
+    <SeoHead
+    title={props.metaData.meta_Title}
+    description={props.metaData.meta_Description}
+    keywords={props.metaData.meta_Keywords}
+  />
+      <section className='pt-[30px] md:pt-[50px] pb-[30px] md:pb-[50px] brand-logo-list white-title bg-primary'>
         <div className='container mx-auto '>
           <div className='brand-image-list'>
             <ul className='flex flex-wrap justify-center'>

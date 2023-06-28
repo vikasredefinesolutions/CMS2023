@@ -33,19 +33,17 @@ const ProductCard = ({ product }: { product: _ProductsAlike }) => {
         <div className='flex text-center lg:w-auto mb-6'>
           <div className='relative pb-4 w-full'>
             <div className='w-full rounded-md overflow-hidden aspect-w-1 aspect-h-1'>
-              <div
-                className='relative cursor-pointer'
-                onClick={(e) => {
-                  e.stopPropagation();
-                  router.push(`${selectedProduct.seName}.html`);
-                }}
-              >
+              <div className='relative cursor-pointer'>
                 {/* Issue: Using functional components as child of <Link/> causes ref-warnings */}
-                <NxtImage
-                  src={selectedProduct.image}
-                  alt={selectedProduct.name}
-                  className='w-auto h-auto max-h-max'
-                />
+                <Link href={`${selectedProduct.seName}.html`}>
+                  <a>
+                    <NxtImage
+                      src={selectedProduct.image}
+                      alt={selectedProduct.name}
+                      className='max-h-[348px] !inline-black m-auto'
+                    />
+                  </a>
+                </Link>
               </div>
             </div>
             <div className='mt-6'>

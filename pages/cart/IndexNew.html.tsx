@@ -18,7 +18,7 @@ import { useEffect, useRef, useState } from 'react';
 import { _globalStore } from 'store.global';
 const Cart: NextPage<{ templateId: number }> = ({ templateId }) => {
   const isCaptured = useRef(false);
-  const { cart_PageClosed, fetchCartDetails, cleanUp_productSlice } =
+  const { cart_PageClosed, fetchCartDetails, update_productDetails } =
     useActions_v2();
 
   // global states
@@ -44,7 +44,7 @@ const Cart: NextPage<{ templateId: number }> = ({ templateId }) => {
       isCaptured.current = true;
       const payload = {
         storeId: storeId,
-        customerId: customerId,
+        customerId: customerId || 0,
         ...(storeId !== CG_STORE_CODE ? { value: '', coupon: '' } : {}),
         shoppingCartItemsModel: cartData?.map((item) => ({
           productId: item.productId,
@@ -101,7 +101,7 @@ const Cart: NextPage<{ templateId: number }> = ({ templateId }) => {
 
   useEffect(() => {
     return () => {
-      cleanUp_productSlice();
+      update_productDetails('CLEAN_UP');
       cart_PageClosed();
     };
   }, []);

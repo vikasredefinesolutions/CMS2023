@@ -102,7 +102,7 @@ const CT2_EL_CartItem: React.FC<_CartItem & _Props> = (item) => {
         isForm: false,
         shoppingCartItemModel: {
           id: item.shoppingCartItemsId,
-          price: details.totalPrice,
+          price: +(details.totalPrice / details.totalQty).toFixed(2),
           quantity: details.totalQty,
           discountPrice: item.discountPrice,
           logoTitle: item.productName,

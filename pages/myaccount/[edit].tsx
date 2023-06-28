@@ -91,12 +91,19 @@ const Index = () => {
   }, []);
 
   const validationSchema = Yup.object().shape({
-    firstName: Yup.string().required(addressMessages.firstName.required),
-    lastName: Yup.string(),
-    address1: Yup.string().required(addressMessages.address1.required),
-    city: Yup.string().required(addressMessages.city.required),
+    firstName: Yup.string()
+      .trim()
+      .required(addressMessages.firstName.required)
+      .min(
+        addressMessages.firstName.minlength,
+        addressMessages.firstName.minValidation,
+      ),
+    lastName: Yup.string().trim(),
+    address1: Yup.string().trim().required(addressMessages.address1.required),
+    city: Yup.string().trim().required(addressMessages.city.required),
     state: Yup.string().required(addressMessages.state.required),
     postalCode: Yup.string()
+      .trim()
       .required(addressMessages.postalCode.required)
       .max(
         __ValidationText.signUp.storeCustomerAddress.postalCode.maxLength,
@@ -104,6 +111,7 @@ const Index = () => {
       ),
     phone: Yup.string()
       .required(__ValidationText.signUp.storeCustomerAddress.phone.required)
+      .trim()
       .test(
         'phone-test',
         __ValidationText.signUp.storeCustomerAddress.phone.valid,
@@ -230,287 +238,301 @@ const Index = () => {
       {edit === paths.myAccount.editShippingAddress ||
       edit === paths.myAccount.editBillingAddress ? (
         <>
-        <div className='container mx-auto'>
-          <div className='w-4/4 lg:w-4/5'>
-            <Formik
-              onSubmit={submitHandler}
-              validationSchema={validationSchema}
-              initialValues={initialValues}
-              enableReinitialize
-            >
-              {({
-                errors,
-                touched,
-                values,
-                handleChange,
-                handleBlur,
-                handleSubmit,
-                submitForm,
-                isSubmitting,
-              }) => (
-                <>
-                  <form onSubmit={handleSubmit}>
-                    <div className='flex flex-wrap mx-[-15px]'>
-                      <div className='w-full md:w-2/4 px-[15px]'>
-                        <div className='mt-[20px] flex flex-wrap items-center gap-[8px]'>
-                          <label className='text-default-text font-[600] w-full md:w-full md:text-left'>
-                            First Name <span className='text-red-600'>*</span>
-                          </label>
-                          <div className='grow'>
-                            <input
-                              id='firstName'
-                              name='firstName'
-                              placeholder='Enter Your First Name'
-                              className='form-input'
-                              value={values.firstName}
-                              onChange={(e) => {
-                                handleChange(e);
-                              }}
-                              onBlur={handleBlur}
-                            />
+          <div className='container mx-auto'>
+            <div className='w-4/4 lg:w-4/5'>
+              <Formik
+                onSubmit={submitHandler}
+                validationSchema={validationSchema}
+                initialValues={initialValues}
+                enableReinitialize
+              >
+                {({
+                  errors,
+                  touched,
+                  values,
+                  handleChange,
+                  handleBlur,
+                  handleSubmit,
+                  submitForm,
+                  isSubmitting,
+                  setFieldValue,
+                }) => (
+                  <>
+                    <form onSubmit={handleSubmit}>
+                      <div className='flex flex-wrap mx-[-15px]'>
+                        <div className='w-full md:w-2/4 px-[15px]'>
+                          <div className='mt-[20px] flex flex-wrap items-center gap-[8px]'>
+                            <label className='text-default-text font-[600] w-full md:w-full md:text-left'>
+                              First Name <span className='text-red-600'>*</span>
+                            </label>
+                            <div className='grow'>
+                              <input
+                                id='firstName'
+                                name='firstName'
+                                placeholder='Enter Your First Name'
+                                className='form-input'
+                                value={values.firstName}
+                                onChange={(e) => {
+                                  handleChange(e);
+                                }}
+                                onBlur={handleBlur}
+                              />
+                            </div>
+                          </div>
+                          <div className='text-red-500 text-s mt-1'>
+                            {touched.firstName && errors.firstName}
                           </div>
                         </div>
-                        <div className='text-red-500 text-s mt-1'>
-                          {touched.firstName && errors.firstName}
+
+                        <div className='w-full md:w-2/4 px-[15px]'>
+                          <div className='mt-[20px] flex flex-wrap items-center gap-[8px]'>
+                            <label className='text-default-text font-[600] w-full md:w-full md:text-left'>
+                              Last Name
+                            </label>
+                            <div className='grow'>
+                              <input
+                                id='lastName'
+                                name='lastName'
+                                placeholder='Enter Your Last Name'
+                                className='form-input'
+                                value={values.lastName}
+                                onChange={(e) => {
+                                  handleChange(e);
+                                }}
+                                onBlur={handleBlur}
+                              />
+                            </div>
+                          </div>
+                          <div className='text-red-500 text-s mt-1'>
+                            {touched.lastName && errors.lastName}
+                          </div>
+                        </div>
+
+                        <div className='w-full md:w-4/4 px-[15px]'>
+                          <div className='mt-[20px] flex flex-wrap items-center gap-[8px]'>
+                            <label className='text-default-text font-[600] w-full md:w-full md:text-left'>
+                              Phone Number{' '}
+                              <span className='text-red-600'>*</span>
+                            </label>
+                            <div className='grow'>
+                              <input
+                                id='phone'
+                                name='phone'
+                                placeholder='1234567890'
+                                className='form-input bg-slate-400'
+                                value={values.phone}
+                                onChange={(e) => {
+                                  handleChange(e);
+                                }}
+                                onBlur={handleBlur}
+                              />
+                            </div>
+                            <div className='w-full md:w-full md:text-left grow'>
+                              <p>*For delivery questions only</p>
+                            </div>
+                          </div>
+                          <div className='text-red-500 text-s mt-1'>
+                            {touched.phone && errors.phone}
+                          </div>
+                        </div>
+
+                        <div className='w-full md:w-4/4 px-[15px]'>
+                          <div className='mt-[20px] flex flex-wrap items-center gap-[8px]'>
+                            <label className='text-default-text font-[600] w-full md:w-full md:text-left'>
+                              Street Address{' '}
+                              <span className='text-red-600'>*</span>
+                            </label>
+                            <div className='grow'>
+                              <input
+                                id='address1'
+                                name='address1'
+                                placeholder='132, Street'
+                                className='form-input'
+                                value={values.address1}
+                                onChange={(e) => {
+                                  handleChange(e);
+                                }}
+                                onBlur={handleBlur}
+                              />
+                            </div>
+                            <div className='w-full md:w-full md:text-left grow'>
+                              <p>*We cannot ship to PO boxes or APO/FPO</p>
+                            </div>
+                          </div>
+                          <div className='text-red-500 text-s mt-1'>
+                            {touched.address1 && errors.address1}
+                          </div>
+                        </div>
+
+                        <div className='w-full md:w-2/4 px-[15px]'>
+                          <div className='mt-[20px] flex flex-wrap items-center gap-[8px]'>
+                            <label className='text-default-text font-[600] w-full md:w-full md:text-left'>
+                              Apt, Suite
+                            </label>
+                            <div className='grow'>
+                              <input
+                                id='aptSuite'
+                                name='aptSuite'
+                                placeholder='12'
+                                className='form-input'
+                                value={values.aptSuite}
+                                onChange={(e) => {
+                                  handleChange(e);
+                                }}
+                                onBlur={handleBlur}
+                              />
+                            </div>
+                          </div>
+                          <div className='text-red-500 text-s mt-1'>
+                            {touched.aptSuite && errors.aptSuite}
+                          </div>
+                        </div>
+
+                        <div className='w-full md:w-2/4 px-[15px]'>
+                          <div className='mt-[20px] flex flex-wrap items-center gap-[8px]'>
+                            <label className='text-default-text font-[600] w-full md:w-full md:text-left'>
+                              ZIP Code <span className='text-red-600'>*</span>
+                            </label>
+                            <div className='grow'>
+                              <input
+                                id='postalCode'
+                                name='postalCode'
+                                placeholder='01234'
+                                className='form-input bg-slate-400'
+                                value={values.postalCode}
+                                onChange={(e) => {
+                                  handleChange(e);
+                                }}
+                                onBlur={handleBlur}
+                              />
+                            </div>
+                          </div>
+                          <div className='text-red-500 text-s mt-1'>
+                            {touched.postalCode && errors.postalCode}
+                          </div>
+                        </div>
+
+                        <div className='w-full md:w-1/3 px-[15px]'>
+                          <div className='mt-[20px] flex flex-wrap items-center gap-[8px]'>
+                            <label className='text-default-text font-[600] w-full md:w-full md:text-left'>
+                              City <span className='text-red-600'>*</span>
+                            </label>
+                            <div className='grow'>
+                              <input
+                                id='city'
+                                name='city'
+                                placeholder='City'
+                                value={values.city}
+                                className='form-input'
+                                onChange={(e) => {
+                                  handleChange(e);
+                                }}
+                                onBlur={handleBlur}
+                              />
+                            </div>
+                          </div>
+                          <div className='text-red-500 text-s mt-1'>
+                            {touched.city && errors.city}
+                          </div>
+                        </div>
+
+                        <div className='w-full md:w-1/3 px-[15px]'>
+                          <div className='mt-[20px] flex flex-wrap items-center gap-[8px]'>
+                            <label className='text-default-text font-[600] w-full md:w-full md:text-left'>
+                              State <span className='text-red-600'>*</span>
+                            </label>
+                            <div className='grow'>
+                              <select
+                                id='state'
+                                name='state'
+                                className='form-input'
+                                value={values.state}
+                                onChange={(e) => {
+                                  if (
+                                    e.target.value.toLowerCase() ===
+                                    'select state'
+                                  ) {
+                                    return setFieldValue('state', '');
+                                  }
+                                  handleChange(e);
+                                }}
+                                onBlur={handleBlur}
+                              >
+                                <option value=''>Select State</option>
+                                {state.map((res, index) => (
+                                  <option key={index}>{res?.name}</option>
+                                ))}
+                              </select>
+                            </div>
+                          </div>
+                          <div className='text-red-500 text-s mt-1'>
+                            {touched.state && errors.state}
+                          </div>
+                        </div>
+
+                        <div className='w-full md:w-1/3 px-[15px]'>
+                          <div className='mt-[20px] flex flex-wrap items-center gap-[8px]'>
+                            <label className='text-default-text font-[600] w-full md:w-full md:text-left'>
+                              Country <span className='text-red-600'>*</span>
+                            </label>
+                            <div className='grow'>
+                              <select
+                                id='country'
+                                name='countryName'
+                                className='form-input'
+                                value={values.countryName}
+                                onChange={(e) => {
+                                  if (
+                                    e.target.value.toLowerCase() ===
+                                    'select country'
+                                  ) {
+                                    return setFieldValue('countryName', '');
+                                  }
+                                  handleChange(e);
+                                  loadState(e.target.value);
+                                }}
+                                onBlur={handleBlur}
+                              >
+                                <option>Select Country</option>
+                                {country.map((res, index) => (
+                                  <option key={index}>{res?.name}</option>
+                                ))}
+                              </select>
+                            </div>
+                          </div>
+                          <div className='text-red-500 text-s mt-1'>
+                            {touched.countryName && errors.countryName}
+                          </div>
                         </div>
                       </div>
+                    </form>
 
-                      <div className='w-full md:w-2/4 px-[15px]'>
-                        <div className='mt-[20px] flex flex-wrap items-center gap-[8px]'>
-                          <label className='text-default-text font-[600] w-full md:w-full md:text-left'>
-                            Last Name
-                          </label>
-                          <div className='grow'>
-                            <input
-                              id='lastName'
-                              name='lastName'
-                              placeholder='Enter Your Last Name'
-                              className='form-input'
-                              value={values.lastName}
-                              onChange={(e) => {
-                                handleChange(e);
-                              }}
-                              onBlur={handleBlur}
-                            />
-                          </div>
-                        </div>
-                        <div className='text-red-500 text-s mt-1'>
-                          {touched.lastName && errors.lastName}
-                        </div>
-                      </div>
-
-                      <div className='w-full md:w-4/4 px-[15px]'>
-                        <div className='mt-[20px] flex flex-wrap items-center gap-[8px]'>
-                          <label className='text-default-text font-[600] w-full md:w-full md:text-left'>
-                            Phone Number <span className='text-red-600'>*</span>
-                          </label>
-                          <div className='grow'>
-                            <input
-                              id='phone'
-                              name='phone'
-                              placeholder='1234567890'
-                              className='form-input bg-slate-400'
-                              value={values.phone}
-                              onChange={(e) => {
-                                handleChange(e);
-                              }}
-                              onBlur={handleBlur}
-                            />
-                          </div>
-                          <div className='w-full md:w-full md:text-left grow'>
-                            <p>*For delivery questions only</p>
-                          </div>
-                        </div>
-                        <div className='text-red-500 text-s mt-1'>
-                          {touched.phone && errors.phone}
-                        </div>
-                      </div>
-
-                      <div className='w-full md:w-4/4 px-[15px]'>
-                        <div className='mt-[20px] flex flex-wrap items-center gap-[8px]'>
-                          <label className='text-default-text font-[600] w-full md:w-full md:text-left'>
-                            Street Address{' '}
-                            <span className='text-red-600'>*</span>
-                          </label>
-                          <div className='grow'>
-                            <input
-                              id='address1'
-                              name='address1'
-                              placeholder='132, Street'
-                              className='form-input'
-                              value={values.address1}
-                              onChange={(e) => {
-                                handleChange(e);
-                              }}
-                              onBlur={handleBlur}
-                            />
-                          </div>
-                          <div className='w-full md:w-full md:text-left grow'>
-                            <p>*We cannot ship to PO boxes or APO/FPO</p>
-                          </div>
-                        </div>
-                        <div className='text-red-500 text-s mt-1'>
-                          {touched.address1 && errors.address1}
-                        </div>
-                      </div>
-
-                      <div className='w-full md:w-2/4 px-[15px]'>
-                        <div className='mt-[20px] flex flex-wrap items-center gap-[8px]'>
-                          <label className='text-default-text font-[600] w-full md:w-full md:text-left'>
-                            Apt, Suite
-                          </label>
-                          <div className='grow'>
-                            <input
-                              id='aptSuite'
-                              name='aptSuite'
-                              placeholder='12'
-                              className='form-input'
-                              value={values.aptSuite}
-                              onChange={(e) => {
-                                handleChange(e);
-                              }}
-                              onBlur={handleBlur}
-                            />
-                          </div>
-                        </div>
-                        <div className='text-red-500 text-s mt-1'>
-                          {touched.aptSuite && errors.aptSuite}
-                        </div>
-                      </div>
-
-                      <div className='w-full md:w-2/4 px-[15px]'>
-                        <div className='mt-[20px] flex flex-wrap items-center gap-[8px]'>
-                          <label className='text-default-text font-[600] w-full md:w-full md:text-left'>
-                            ZIP Code <span className='text-red-600'>*</span>
-                          </label>
-                          <div className='grow'>
-                            <input
-                              id='postalCode'
-                              name='postalCode'
-                              placeholder='01234'
-                              className='form-input bg-slate-400'
-                              value={values.postalCode}
-                              onChange={(e) => {
-                                handleChange(e);
-                              }}
-                              onBlur={handleBlur}
-                            />
-                          </div>
-                        </div>
-                        <div className='text-red-500 text-s mt-1'>
-                          {touched.postalCode && errors.postalCode}
-                        </div>
-                      </div>
-
-                      <div className='w-full md:w-1/3 px-[15px]'>
-                        <div className='mt-[20px] flex flex-wrap items-center gap-[8px]'>
-                          <label className='text-default-text font-[600] w-full md:w-full md:text-left'>
-                            City <span className='text-red-600'>*</span>
-                          </label>
-                          <div className='grow'>
-                            <input
-                              id='city'
-                              name='city'
-                              placeholder='City'
-                              value={values.city}
-                              className='form-input'
-                              onChange={(e) => {
-                                handleChange(e);
-                              }}
-                              onBlur={handleBlur}
-                            />
-                          </div>
-                        </div>
-                        <div className='text-red-500 text-s mt-1'>
-                          {touched.city && errors.city}
-                        </div>
-                      </div>
-
-                      <div className='w-full md:w-1/3 px-[15px]'>
-                        <div className='mt-[20px] flex flex-wrap items-center gap-[8px]'>
-                          <label className='text-default-text font-[600] w-full md:w-full md:text-left'>
-                            State <span className='text-red-600'>*</span>
-                          </label>
-                          <div className='grow'>
-                            <select
-                              id='state'
-                              name='state'
-                              className='form-input'
-                              value={values.state}
-                              onChange={(e) => {
-                                handleChange(e);
-                              }}
-                              onBlur={handleBlur}
-                            >
-                              <option>Select State</option>
-                              {state.map((res, index) => (
-                                <option key={index}>{res?.name}</option>
-                              ))}
-                            </select>
-                          </div>
-                        </div>
-                        <div className='text-red-500 text-s mt-1'>
-                          {touched.state && errors.state}
-                        </div>
-                      </div>
-
-                      <div className='w-full md:w-1/3 px-[15px]'>
-                        <div className='mt-[20px] flex flex-wrap items-center gap-[8px]'>
-                          <label className='text-default-text font-[600] w-full md:w-full md:text-left'>
-                            Country <span className='text-red-600'>*</span>
-                          </label>
-                          <div className='grow'>
-                            <select
-                              id='country'
-                              name='countryName'
-                              className='form-input'
-                              value={values.countryName}
-                              onChange={(e) => {
-                                handleChange(e);
-                                loadState(e.target.value);
-                              }}
-                              onBlur={handleBlur}
-                            >
-                              <option>Select Country</option>
-                              {country.map((res, index) => (
-                                <option key={index}>{res?.name}</option>
-                              ))}
-                            </select>
-                          </div>
-                        </div>
-                        <div className='text-red-500 text-s mt-1'>
-                          {touched.countryName && errors.countryName}
+                    <div className='w-full text-center'>
+                      <div className='flex flex-wrap items-center gap-2 pt-[40px]'>
+                        <div className='grow'>
+                          <button
+                            type='submit'
+                            disabled={isSubmitting}
+                            onClick={submitForm}
+                            className='btn btn-primary'
+                          >
+                            Save
+                          </button>
+                          <button
+                            className='btn btn-secondary uppercase'
+                            onClick={() =>
+                              router.push(paths.myAccount.account_settings)
+                            }
+                          >
+                            Cancel
+                          </button>
                         </div>
                       </div>
                     </div>
-                  </form>
-
-                  <div className='w-full text-center'>
-                    <div className='flex flex-wrap items-center gap-2 pt-[40px]'>
-                      <div className='grow'>
-                        <button
-                          type='submit'
-                          disabled={isSubmitting}
-                          onClick={submitForm}
-                          className='btn btn-primary'
-                        >
-                          Save
-                        </button>
-                        <button
-                          className='btn btn-secondary uppercase'
-                          onClick={() =>
-                            router.push(paths.myAccount.account_settings)
-                          }
-                        >
-                          Cancel
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </>
-              )}
-            </Formik>
-          </div>
+                  </>
+                )}
+              </Formik>
+            </div>
           </div>
         </>
       ) : (

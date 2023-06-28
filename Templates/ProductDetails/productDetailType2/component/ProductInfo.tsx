@@ -7,6 +7,7 @@ import SizeChartModal from '@appComponents/modals/sizeChartModal/SizeChartModal'
 import { __pagesText } from '@constants/pages.text';
 import { _ProductDetails } from '@definations/APIs/productDetail.res';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
+import { FetchCustomerQuantityByProductId } from '@services/product.service';
 import { useEffect, useState } from 'react';
 import AvailableColors from './AvailableColors';
 import BuyNowHeader from './BuyNowHeader';
@@ -28,6 +29,41 @@ const ProductInfo: React.FC<_Props> = ({
   showLogoComponent,
 }) => {
   const [openModal, setOpenModal] = useState<null | _modals>(null);
+  const [currentPresentQty, setCurrentPresentQty] = useState<number>(0);
+  const QtyPresent = useTypedSelector_v2(
+    (state) => state.product.selected.presentQty,
+  );
+  const discountedPrice = useTypedSelector_v2(
+    (state) => state.product.toCheckout.price,
+  );
+  const { id: customerId } = useTypedSelector_v2((state) => state.user);
+
+  const { product_PresentQty, updateDiscountPrice } = useActions_v2();
+
+  useEffect(() => {
+    if (product && customerId) {
+      const payload = {
+        ProductId: product.id,
+        ShoppingCartItemsId: 0,
+        CustomerId: customerId,
+      };
+      FetchCustomerQuantityByProductId(payload).then((res) => {
+        const payload = {
+          presentQty: res ? res : 0,
+        };
+        setCurrentPresentQty(res ? res : 0);
+        product_PresentQty(payload);
+      });
+    }
+  }, [product, customerId]);
+
+  useEffect(() => {
+    const discountpayload = {
+      presentQty: QtyPresent,
+      price: discountedPrice,
+    };
+    updateDiscountPrice(discountpayload);
+  }, [currentPresentQty]);
   const {
     totalQty,
     minQty,
@@ -42,6 +78,9 @@ const ProductInfo: React.FC<_Props> = ({
   const { sizeChart } = useTypedSelector_v2((state) => state.product.product);
   const [isVisible, setIsVisible] = useState(false);
   const { isEmpGuest } = useTypedSelector_v2((state) => state.employee);
+  let disableBtn = product?.isDiscontinue;
+
+  const showUserAccessableComponents = userId || isEmpGuest;
 
   const modalHandler = (param: null | _modals) => {
     if (param) {
@@ -116,14 +155,14 @@ const ProductInfo: React.FC<_Props> = ({
 
   const BUY_NOW_BTN_HTML = (): React.ReactNode => {
     //if condition order matters here
-    let disableBtn = product?.isDiscontinue;
+
     let btnText = 'LOGIN TO SHOP NOW WITH LIVE INVENTORY';
 
     if (disableBtn) {
       btnText = 'Discontinued';
     }
 
-    if (userId) {
+    if (showUserAccessableComponents && !disableBtn) {
       btnText = 'CUSTOMIZE NOW AND ADD TO CART';
     }
 
@@ -148,7 +187,7 @@ const ProductInfo: React.FC<_Props> = ({
   return (
     <>
       <div className='col-span-1 mt-[15px] pl-[0px] pr-[0px] md:pl-[15px] md:pr-[15px] sm:pl-[0px] sm:pr-[0px] lg:mt-[0px]'>
-        <div className='hidden md:flex flex-wrap'>
+        <div className='hidden lg:flex flex-wrap'>
           <div className='w-full'>
             <h1 className='text-title-text'>{product?.name}</h1>
           </div>
@@ -261,7 +300,7 @@ const ProductInfo: React.FC<_Props> = ({
             Personalize
           </a>
         </div>
-        {userId && (
+        {showUserAccessableComponents && (
           <Inventory
             attributeOptionId={selectedColor.attributeOptionId}
             storeCode={''}
@@ -270,7 +309,7 @@ const ProductInfo: React.FC<_Props> = ({
 
         {/* only for substore */}
 
-        {userId ? (
+        {showUserAccessableComponents ? (
           <>
             {' '}
             <div className='pt-[15px] text-default-text'>
@@ -320,7 +359,7 @@ const ProductInfo: React.FC<_Props> = ({
       {openModal === 'forgot' && <ForgotModal modalHandler={modalHandler} />}
       {isVisible && (
         <BuyNowHeader
-          msrp={product?.msrp || 0}
+          msrp={pricePerItem || 0}
           productName={product?.name || ''}
           buyNowHandler={buyNowHandler}
           image={image}

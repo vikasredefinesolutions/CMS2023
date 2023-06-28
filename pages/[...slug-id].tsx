@@ -1,17 +1,19 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/rules-of-hooks */
 import SeoHead from '@appComponents/reUsable/SeoHead';
+import { storeBuilderTypeId } from '@configs/page.config';
 import { __Error, __pageTypeConstant } from '@constants/global.constant';
 import { getServerSideProps } from '@controllers/getServerSideProps';
 import { _FetchProductDetails } from '@controllers/ProductController.async';
 import { _ProductList_PropsData } from '@controllers/slug.extras';
 import { _GetPageType, _StoreCache } from '@definations/slug.type';
 import { useActions_v2 } from '@hooks_v2/index';
-import Banner from '@templates/banner';
+import Banner, { _BrandTypes } from '@templates/banner';
 import Home from '@templates/Home';
 import ProductDetails from '@templates/ProductDetails';
 import ProductListing from '@templates/ProductListings';
 import { NextPage } from 'next';
+import { useRouter } from 'next/router';
 import { _Slug_CMS_Props } from 'pages';
 import { useEffect } from 'react';
 import { _globalStore } from 'store.global';
@@ -30,7 +32,7 @@ export interface _Slug_ProductListing_Props {
   listingData: _ProductList_PropsData;
   metaData: _GetPageType;
   configs: {
-    bannerType: string;
+    bannerType: _BrandTypes & 'none';
     templateId: string;
   };
 }
@@ -44,10 +46,22 @@ export type _Slug_Props =
     };
 
 const SlugSearch: NextPage<_Slug_Props, _Slug_Props> = (props) => {
-  const { updatePageType } = useActions_v2();
+  const { updatePageType, topic_set_isCMS } = useActions_v2();
+  const router = useRouter();
+
+  // useEffect(() => {
+  //   if(!router.asPath.includes(".html") && !router.asPath.includes("not-found"))
+  //   {
+  //     router.push(paths.NOT_FOUND);
+  //   }
+  // }, [router.asPath])
+
   useEffect(() => {
     if ('metaData' in props) {
       updatePageType(props.metaData);
+    }
+    if ('page' in props && props.page === 'ALL_CMS_PAGES') {
+      topic_set_isCMS(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props]);
@@ -114,6 +128,12 @@ const SlugSearch: NextPage<_Slug_Props, _Slug_Props> = (props) => {
   if (page === 'PRODUCT_LISTING') {
     const { listingData, configs } = props;
 
+    const showBanner = () => {
+      if (_globalStore.storeTypeId === storeBuilderTypeId) return false;
+      if (configs.bannerType === 'none') return false;
+
+      return true;
+    };
 
     return (
       <>
@@ -122,12 +142,11 @@ const SlugSearch: NextPage<_Slug_Props, _Slug_Props> = (props) => {
           description={metaData.meta_Description}
           keywords={metaData.meta_Keywords}
         />
-        {configs.bannerType !== 'none' && (
+        {showBanner() && (
           <Banner
+            typeId={configs.bannerType}
             storeId={metaData.storeId}
-            slug={metaData.slug}
-            seType={metaData.type}
-            id={configs.bannerType}
+            content={listingData.banner}
           />
         )}
         <ProductListing
@@ -150,4 +169,3 @@ const SlugSearch: NextPage<_Slug_Props, _Slug_Props> = (props) => {
 
 export default SlugSearch;
 export { getServerSideProps };
-

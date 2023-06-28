@@ -59,8 +59,8 @@ const SideFiltersTypeTwo = ({
                               {val.name || val.colorCode ? (
                                 filter.label === 'Color' ? (
                                   <li
-                                    className={`flex items-center justify-center w-[30px] h-[30px] cursor-pointer p-[1px] border border-gray-border ${
-                                      checked && 'border-secondary'
+                                    className={`flex items-center justify-center w-[30px] h-[30px] cursor-pointer p-[2px] border border-gray-border hover:border-primary ${
+                                      checked && 'border-primary'
                                     }`}
                                     title={val.name}
                                   >

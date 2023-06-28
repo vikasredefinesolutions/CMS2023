@@ -35,7 +35,7 @@ const Header_Type5: NextPage<_HeaderProps> = ({
   // const storeName = useTypedSelector_v2((state) => state.store.storeName);
   const showSideMenu = useTypedSelector_v2((state) => state.modals.sideMenu);
   const storeTypeId = useTypedSelector_v2((state) => state.store.storeTypeId);
-  const islogo = useTypedSelector_v2((state) => state.sbStore.isLogo);
+  const islogo = useTypedSelector_v2((state) => state.sbStore.store.isLogo);
 
   // ------------------------------------------------------------------------
   const [isMobileView, setIsMobileView] = useState<boolean>(

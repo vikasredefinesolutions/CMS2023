@@ -1,3 +1,4 @@
+import { _Store } from '@configs/page.config';
 import { __pagesConstant } from '@constants/pages.constant';
 import { __pagesText } from '@constants/pages.text';
 import { _ProductColor } from '@definations/APIs/colors.res';
@@ -8,6 +9,7 @@ import ColorImage_Type3 from './ColorImage_Type3';
 
 // import ColorImage from './ColorImage';
 const AvailableColors_Type3: React.FC = () => {
+  const store_Code=useTypedSelector_v2(state=>state.store.code)
   const router = useRouter();
   const { setColor } = useActions_v2();
   const selectedColor = useTypedSelector_v2(
@@ -28,69 +30,60 @@ const AvailableColors_Type3: React.FC = () => {
     colorsCount > __pagesConstant._productDetails.imagesInRow;
 
   return (
-    <div className='flex flex-wrap items-center pb-[15px]'>
-      <div className='text-default-text w-[90px]'>
-        <span className=''>
-          {' '}
-          {__pagesText.productInfo.availableColors.colors}
-        </span>
-      </div>
-      <div className='flex flex-wrap text-center available-colors text-default-text ml-[4px] gap-[5px]'>
-        {colors.map((product, index) => {
-          const show =
-            showAllColors ||
-            index < __pagesConstant._productDetails.imagesInRow;
-          const highlight =
-            product.attributeOptionId === selectedColor?.attributeOptionId
-              ? 'border-primary'
-              : 'border-slate-200';
-          return (
-            <div
-              className=''
-              key={product.attributeOptionId}
-              onClick={() => handleChooseColor(product)}
-            >
+    <>
+      <div className='flex align-top mb-[15px]'>
+        <div className={`w-[128px] ${store_Code==_Store.type6?"text-sm":" text-default-text"}`}>
+          <span className={`${store_Code==_Store.type6?"text-sm":''}  font-semibold`}>
+            {' '}
+            {__pagesText.productInfo.availableColors.colors}
+          </span>
+        </div>
+        <div className={`flex flex-wrap gap-1 ${store_Code==_Store.type6?"text-sm":'text-default-text'} text-center`}>
+          {colors.map((product, index) => {
+            const show =
+              showAllColors ||
+              index < __pagesConstant._productDetails.imagesInRow;
+            const highlight =
+              product.attributeOptionId === selectedColor?.attributeOptionId
+                ? 'border-secondary'
+                : 'border-slate-200';
+            return (
               <div
-                className={`w-[32px] h-[32px] p-[1px] border-2  hover:border-primary cursor-pointer ${highlight}`}
+                className={`border border-gray-border hover:border-secondary p-[1px] w-[32px] h-[32px] cursor-pointer 111 ${highlight}`}
+                key={product.attributeOptionId}
+                onClick={() => handleChooseColor(product)}
               >
-                {/* <NxtImage
-                  title={`${product.name}`}
-                  src={product.imageUrl}
-                  alt={product.altTag}
-                  className='w-full object-center object-cover cursor-pointer'
-                /> */}
                 <ColorImage_Type3 product={product} />
               </div>
-            </div>
-          );
-        })}
-      </div>
-      {/* No CSS for this button in HTML files */}
-      {showAllColorsButton && (
-        <div className='text-right text-anchor hover:text-anchor-hover'>
-          <button
-            onClick={() => setShowAllColors((showAll) => !showAll)}
-            className=' underline'
-          >
-            {showAllColors ? (
-              <span className='span1'>
-                {__pagesText.productInfo.availableColors.showless}
-              </span>
-            ) : (
-              <>
-                <span className='span1'>
-                  {__pagesText.productInfo.availableColors.seeAll}
-                </span>
-                <span className='span2'> {colorsCount} </span>
-                <span className='span3'>
-                  {__pagesText.productInfo.availableColors.colors}
-                </span>
-              </>
-            )}
-          </button>
+            );
+          })}
         </div>
-      )}
-    </div>
+        {showAllColorsButton && (
+          <div className='text-right text-anchor hover:text-anchor-hover'>
+            <button
+              onClick={() => setShowAllColors((showAll) => !showAll)}
+              className=' underline'
+            >
+              {showAllColors ? (
+                <span className='span1'>
+                  {__pagesText.productInfo.availableColors.showless}
+                </span>
+              ) : (
+                <>
+                  <span className='span1'>
+                    {__pagesText.productInfo.availableColors.seeAll}
+                  </span>
+                  <span className='span2'> {colorsCount} </span>
+                  <span className='span3'>
+                    {__pagesText.productInfo.availableColors.colors}
+                  </span>
+                </>
+              )}
+            </button>
+          </div>
+        )}
+      </div>
+    </>
   );
 };
 

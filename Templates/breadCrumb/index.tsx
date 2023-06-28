@@ -1,35 +1,43 @@
-import { paths, __SpecialBreadCrumbsPaths } from '@constants/paths.constant';
+import { __SpecialBreadCrumbsPaths, paths } from '@constants/paths.constant';
 import { capitalizeFirstLetter } from '@helpers/common.helper';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import {
-  fetchCategoryByCategoryId,
   FetchCategoryByproductId,
+  fetchCategoryByCategoryId,
 } from '@services/product.service';
 
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import {
-  _breadCrumbs,
-  _BreadCrumbTemplates,
-  __BreadCrumbTemplatesProps,
-} from './breadcrumb';
 import BreadCrumb_Type1 from './breadCrumb_Type1';
 import BreadCrumb_Type2 from './breadCrumb_Type2';
 import BreadCrumb_Type3 from './breadCrumb_Type3';
 import BreadCrumb_Type4 from './breadCrumb_Type4';
+import BreadCrumb_Type5 from './breadCrumb_Type5';
+import {
+  _BreadCrumbTemplates,
+  __BreadCrumbTemplatesProps,
+  _breadCrumbs,
+} from './breadcrumb';
 
 const BreadCrumbTemplates: _BreadCrumbTemplates = {
   type1: BreadCrumb_Type1,
   type2: BreadCrumb_Type2,
   type3: BreadCrumb_Type3,
   type4: BreadCrumb_Type4,
+  type5: BreadCrumb_Type5,
 };
 
 const BreadCrumb: NextPage<__BreadCrumbTemplatesProps> = ({ breadCrumbid }) => {
   const breadCrumbtemplateid = breadCrumbid
-    ? (('type' + breadCrumbid) as 'type1' | 'type2' | 'type3' | 'type4')
+    ? (('type' + breadCrumbid) as
+        | 'type1'
+        | 'type2'
+        | 'type3'
+        | 'type4'
+        | 'type5')
     : 'type1';
+
   const BreadCrumbTemplate = BreadCrumbTemplates[breadCrumbtemplateid];
   const { product_storeCategory } = useActions_v2();
   //   const storeLayout = useTypedSelector_v2((state) => state.store.layout);
@@ -41,6 +49,7 @@ const BreadCrumb: NextPage<__BreadCrumbTemplatesProps> = ({ breadCrumbid }) => {
   const { id: productId, brand: brandDetails } = useTypedSelector_v2(
     (state) => state.product.product,
   );
+
   const getBreadCrubs = async () => {
     if (isCMSpage) {
       return [
@@ -124,9 +133,8 @@ const BreadCrumb: NextPage<__BreadCrumbTemplatesProps> = ({ breadCrumbid }) => {
 
   useEffect(() => {
     let callBreadCrumbAPI = true;
-
     __SpecialBreadCrumbsPaths.forEach((item) => {
-      if (item.path.includes(router.asPath)) {
+      if (item.path.includes(router.asPath.split('?')[0])) {
         callBreadCrumbAPI = false;
         if (item.name) {
           setBreadCrumbs([
@@ -134,12 +142,24 @@ const BreadCrumb: NextPage<__BreadCrumbTemplatesProps> = ({ breadCrumbid }) => {
             { name: item.name, url: item.directTo || '' },
           ]);
           return;
-        } else {
-          setBreadCrumbs([]); // to hide the breadCrumbs
         }
+      } else if (item.path.includes(router.pathname)) {
+        callBreadCrumbAPI = false;
+        setBreadCrumbs([
+          { name: 'Home', url: paths.HOME },
+          {
+            name:
+              item.name?.replace(
+                '{}',
+                (router?.query?.giftId as string) || '',
+              ) || '',
+            url: item.directTo || '',
+          },
+        ]);
+      } else {
+        setBreadCrumbs([]); // to hide the breadCrumbs
       }
     });
-
     if (callBreadCrumbAPI) {
       setTimeout(() => {
         getBreadCrubs().then((breadCrumbs) => {
@@ -150,6 +170,7 @@ const BreadCrumb: NextPage<__BreadCrumbTemplatesProps> = ({ breadCrumbid }) => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.asPath, pageType.slug, productId]);
+
   return (
     <BreadCrumbTemplate pageType={pageType.type} breadCrumbs={breadCrumbs} />
   );

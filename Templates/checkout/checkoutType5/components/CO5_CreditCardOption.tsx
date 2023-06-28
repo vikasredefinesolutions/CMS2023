@@ -54,7 +54,8 @@ const CO5_CreditCardOption: React.FC<_Props> = ({
   };
 
   const handleCVV = (e: any) => {
-    if (!Number(e.target.value)) {
+    const regex = new RegExp('[0-9]').test(e.target.value);
+    if (!regex) {
       setcvv('');
       return;
     } else {
@@ -109,7 +110,7 @@ const CO5_CreditCardOption: React.FC<_Props> = ({
           {customer?.isUseNet ? (
             <div className='w-full flex justify-end'>
               <button
-                className='!text-anchor hover:!text-anchor-hover underline'
+                className='hover:text-secondary text-tertiary underline'
                 id='btn-use-purchase-order'
                 onClick={() => setPaymentMethod(paymentMethodCustom.netNumber)}
               >
@@ -125,11 +126,16 @@ const CO5_CreditCardOption: React.FC<_Props> = ({
         <input
           onBlur={changeHandler}
           onKeyDown={blockInvalidChar}
-          onChange={handleCard}
+          onChange={(e) => {
+            changeHandler(e);
+            handleCard(e);
+          }}
           name='cardNumber'
           placeholder=' '
           required={true}
           value={input}
+          autoComplete='off'
+          onContextMenu={(e) => e.preventDefault()}
           maxLength={
             +`${detectCardType && detectCardType() === 'AMEX' ? 15 : 16}`
           }
@@ -246,7 +252,7 @@ const CO5_CreditCardOption: React.FC<_Props> = ({
             </label>
           </div>
         </div>
-        <div className='md:w-6/12 w-6/12 pl-[12px] pr-[12px]'>
+        <div className='md:w-6/12 w-full pl-[12px] pr-[12px]'>
           <div className='relative z-0 w-full mb-[20px] border border-gray-border rounded'>
             <input
               onBlur={changeHandler}
@@ -255,7 +261,9 @@ const CO5_CreditCardOption: React.FC<_Props> = ({
               onKeyDown={blockInvalidChar}
               placeholder=' '
               required={true}
-              maxLength={3}
+              maxLength={
+                +`${detectCardType && detectCardType() === 'AMEX' ? 4 : 3}`
+              }
               // value={cvv}
               value={cvv}
               type='number'

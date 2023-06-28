@@ -1,6 +1,7 @@
 import Price from '@appComponents/Price';
 import { __pagesText } from '@constants/pages.text';
 import { _MyAcc_OrderBillingDetails } from '@definations/APIs/user.res';
+import { useTypedSelector_v2 } from '@hooks_v2/index';
 import React from 'react';
 
 interface _props {
@@ -8,6 +9,7 @@ interface _props {
 }
 
 const ThankYouSubTotal: React.FC<_props> = ({ billing }) => {
+  const { code: storeCode } = useTypedSelector_v2((state) => state.store);
   return (
     <>
       <div className='flex justify-end text-medium-text'>
@@ -33,22 +35,26 @@ const ThankYouSubTotal: React.FC<_props> = ({ billing }) => {
               </div>
             ) : null}
 
-            <div className='flex justify-between pt-[8px]'>
-              <dt className='font-[600]'>
-                {__pagesText.ThankYouPage.TotalSummary.LinePersonalization}
-              </dt>
-              <dd>
-                <Price value={billing?.lineFinalTotal} />
-              </dd>
-            </div>
-            <div className='flex justify-between pt-[8px]'>
-              <dt className='font-[600]'>
-                {__pagesText.ThankYouPage.TotalSummary.LogoCost}
-              </dt>
-              <dd>
-                <Price value={billing?.logoFinalTotal} />
-              </dd>
-            </div>
+            {storeCode !== 'DI' && (
+              <div className='flex justify-between pt-[8px]'>
+                <dt className='font-[600]'>
+                  {__pagesText.ThankYouPage.TotalSummary.LinePersonalization}
+                </dt>
+                <dd>
+                  <Price value={billing?.lineFinalTotal} />
+                </dd>
+              </div>
+            )}
+            {storeCode !== 'DI' && (
+              <div className='flex justify-between pt-[8px]'>
+                <dt className='font-[600]'>
+                  {__pagesText.ThankYouPage.TotalSummary.LogoCost}
+                </dt>
+                <dd>
+                  <Price value={billing?.logoFinalTotal} />
+                </dd>
+              </div>
+            )}
             <div className='flex justify-between pt-[8px]'>
               <dt className='font-[600]'>
                 {__pagesText.ThankYouPage.TotalSummary.Shipping}
@@ -57,22 +63,26 @@ const ThankYouSubTotal: React.FC<_props> = ({ billing }) => {
                 <Price value={billing?.orderShippingCosts} />
               </dd>
             </div>
-            <div className='flex justify-between pt-[8px]'>
-              <dt className='font-[600]'>
-                {__pagesText.ThankYouPage.TotalSummary.Tax}
-              </dt>
-              <dd>
-                <Price value={billing?.orderTax} />
-              </dd>
-            </div>
-            <div className='flex justify-between pt-[8px]'>
-              <dt className='font-[600]'>
-                {__pagesText.ThankYouPage.TotalSummary.SewOut}
-              </dt>
-              <dd>
-                <Price value={billing?.sewoutTotal} />
-              </dd>
-            </div>
+            {storeCode !== 'DI' && (
+              <div className='flex justify-between pt-[8px]'>
+                <dt className='font-[600]'>
+                  {__pagesText.ThankYouPage.TotalSummary.Tax}
+                </dt>
+                <dd>
+                  <Price value={billing?.orderTax} />
+                </dd>
+              </div>
+            )}
+            {storeCode !== 'DI' && (
+              <div className='flex justify-between pt-[8px]'>
+                <dt className='font-[600]'>
+                  {__pagesText.ThankYouPage.TotalSummary.SewOut}
+                </dt>
+                <dd>
+                  <Price value={billing?.sewoutTotal} />
+                </dd>
+              </div>
+            )}
             {billing?.orderSmallRunFee && billing?.orderSmallRunFee > 0 ? (
               <div className='flex justify-between pt-[8px]'>
                 <dt className='font-[600]'>

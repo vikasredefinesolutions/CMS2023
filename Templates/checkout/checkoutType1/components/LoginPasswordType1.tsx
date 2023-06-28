@@ -1,6 +1,6 @@
 import ForgotModal from '@appComponents/modals/forgotModal';
 import { checkoutPasswordValidationSchema } from '@constants/schemas/checkout.schema';
-import { Formik } from 'formik';
+import { Form, Formik } from 'formik';
 import { FC, useState } from 'react';
 
 const LoginPassword: FC<{
@@ -27,7 +27,7 @@ const LoginPassword: FC<{
               onSubmit={loginCustomer}
             >
               {({ errors, handleSubmit, handleBlur, handleChange }) => (
-                <form onSubmit={handleSubmit}>
+                <Form onSubmit={handleSubmit}>
                   <div className='relative z-0 w-full mb-[20px] border border-gray-border rounded'>
                     <input
                       type='password'
@@ -70,7 +70,7 @@ const LoginPassword: FC<{
                       </a>
                     </div>
                   </div>
-                </form>
+                </Form>
               )}
             </Formik>
           </div>

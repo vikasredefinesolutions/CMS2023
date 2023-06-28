@@ -90,6 +90,7 @@ const SD_TemplateType1: React.FC<_Props> = ({ list, ...rest }) => {
         </div>
       </section>
       <Story_Stories stories={list} showByDefault={6} buttonType='PrevNext' />
+      
     </>
   );
 };

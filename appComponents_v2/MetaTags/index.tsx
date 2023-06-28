@@ -1,31 +1,22 @@
 // import { _GetPageType } from '@type/slug.type';
-import TwitterTags from '@appComponents/MetaTags//TwitterTags';
-import OgTags from '@appComponents/MetaTags/OgTags';
+import { __domain } from '@configs/page.config';
 import { _GetPageType } from '@definations/slug.type';
-import React, { useEffect, useState } from 'react';
-
+import Head from 'next/head';
+import { useRouter } from 'next/router';
+import React from 'react';
 interface _Props {
   storeName: string | null;
   pageMetaData: _GetPageType | null;
   routepath: string;
 }
 const Metatags: React.FC<_Props> = (props) => {
-  const [routeUrl, setRouteUrl] = useState<string>('');
-  useEffect(() => {
-    setRouteUrl(window.location.href);
-  }, [props.routepath]);
+  const router = useRouter();
+ 
   return (
     <>
-      <OgTags
-        storeName={props.storeName}
-        pageMetaData={props.pageMetaData}
-        routeUrl={routeUrl}
-      />
-      <TwitterTags
-        pageMetaData={props.pageMetaData}
-        routeUrl={routeUrl}
-        storeName={props.storeName}
-      />
+      <Head>
+        <link rel='canonical' href={`https://${__domain.localDomain}${router.asPath}`} />
+      </Head>
     </>
   );
 };

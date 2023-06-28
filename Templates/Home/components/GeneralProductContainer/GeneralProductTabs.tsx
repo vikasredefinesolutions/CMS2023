@@ -142,7 +142,6 @@ const ProductsInfoTabs: React.FC<_props> = (props) => {
                     showPrice={showPrice}
                     showBrandLogo={showBrandLogo}
                     productsData={product}
-                    footerTabing={footerTabing}
                     productToDisplay={productToDisplay}
                   />
                 </TabPanel>

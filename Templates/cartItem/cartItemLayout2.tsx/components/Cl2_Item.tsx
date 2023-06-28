@@ -11,8 +11,6 @@ import {
   commonMessage,
 } from '@constants/successError.text';
 import { captureRemoveItemEvent } from '@controllers/cartController';
-import { _ProductColor } from '@definations/APIs/colors.res';
-import { _ProductDetails } from '@definations/APIs/productDetail.res';
 import {
   GetCustomerId,
   useActions_v2,
@@ -49,16 +47,7 @@ type _Props = {
 };
 
 const CL2_Item: React.FC<_CartItem & _Props> = (props) => {
-  const {
-    setColor,
-    showModal,
-    setShowLoader,
-    fetchCartDetails,
-    product_setValues,
-    product_storeData,
-    updateCheckoutObject,
-    store_productDetails,
-  } = useActions_v2();
+  const { showModal, setShowLoader, fetchCartDetails } = useActions_v2();
   const cartData = useTypedSelector_v2((state) => state.cart.cart);
 
   // Global State
@@ -66,8 +55,8 @@ const CL2_Item: React.FC<_CartItem & _Props> = (props) => {
   const {
     isLinepersonalization,
     mediaBaseUrl: clientSideMediaBaseUrl,
-    isAttributeSaparateProduct,
     id: storeId,
+    currentPage,
   } = useTypedSelector_v2((state) => state.store);
 
   const valueRef = useRef<Record<string, undefined | number>>({});
@@ -77,13 +66,8 @@ const CL2_Item: React.FC<_CartItem & _Props> = (props) => {
   const isEmployeeLoggedIn = useTypedSelector_v2(
     (state) => state.employee.loggedIn,
   );
-  const isUserLoggedIn = useTypedSelector_v2((state) => !!state.user.id);
   mediaBaseUrl = mediaBaseUrl || clientSideMediaBaseUrl;
 
-  // Local State
-  const [productForSOM, setProductForSOM] = useState<_ProductDetails | null>(
-    null,
-  );
   const [keepPersonalizing, setKeepPersonalizing] = useState<boolean>(false);
   const [personalizationArray, setPersonalizationArray] = useState<
     ShoppingCartItemDetailsViewModel[] | []
@@ -103,35 +87,6 @@ const CL2_Item: React.FC<_CartItem & _Props> = (props) => {
       isEmployeeLoggedIn,
     });
     setShowLoader(false);
-  };
-
-  const updateProductSlice = (
-    product: _ProductDetails,
-    colors: _ProductColor[],
-  ) => {
-    store_productDetails({
-      brand: {
-        id: product.brandID,
-        name: product.brandName,
-        url: product.brandColorLogoUrl,
-        url2: product.brandImage,
-        url3: product.productBrandLogo,
-        brandSEname: product.brandSEname,
-      },
-      product: {
-        id: product.id,
-        name: product.name,
-        sizes: product.sizes,
-        sizeChart: null,
-        colors: colors,
-        customization: product.isEnableLogolocation,
-        price: {
-          msrp: product.msrp,
-          ourCost: product.ourCost,
-          salePrice: product.salePrice,
-        },
-      },
-    });
   };
 
   const handleSizeRemove = (view: any, item: any) => {
@@ -269,7 +224,6 @@ const CL2_Item: React.FC<_CartItem & _Props> = (props) => {
         });
     }
   };
-
   return (
     <li
       key={`${props.shoppingCartItemsId}`}
@@ -278,19 +232,33 @@ const CL2_Item: React.FC<_CartItem & _Props> = (props) => {
       <div className='flex flex-wrap pb-[20px] -mx-3'>
         <div className='w-full lg:w-1/4 pl-[12px] pr-[12px] mb-[10px] max-w-[300px] mx-auto'>
           <NxtImage
-            src={`${mediaBaseUrl}${props.colorImage}`}
+            src={
+              props.colorImage
+                ? `${mediaBaseUrl}${props.colorImage}`
+                : '/assets/images/image_not_available.jpg'
+            }
             alt="Patagonia Men's Better Sweater Jacket"
-            className='w-full'
+            isStatic={props.colorImage ? false : true}
+            className='max-h-[348px] !inline-black m-auto'
           />
         </div>
         <div className='w-full lg:w-3/4 pl-[12px] pr-[12px]'>
           <div className='flex flex-wrap justify-between items-center'>
             <div className='text-sub-text !font-semibold mb-[10px]'>
-              <Link href={`/${props.seName}`}>
-                <a className='!text-anchor hover:!text-anchor-hover'>
+              {props.seName ? (
+                <Link href={`/${props.seName}`}>
+                  <a className='!text-anchor hover:!text-anchor-hover'>
+                    {props.productName}
+                  </a>
+                </Link>
+              ) : (
+                <a
+                  className='!text-anchor hover:!text-anchor-hover'
+                  href='javascript:void(0);'
+                >
                   {props.productName}
                 </a>
-              </Link>
+              )}
             </div>
             <div className='text-default-text mb-[10px]'>
               <span className='font-semibold'>
@@ -305,14 +273,16 @@ const CL2_Item: React.FC<_CartItem & _Props> = (props) => {
                 {props.attributeOptionValue}
               </span>
             </div>
-            <div className='text-default-text mb-[10px]'>
-              <span
-                onClick={() => handleRemoveItem(props.shoppingCartItemsId)}
-                className='text-default-text !text-anchor hover:!text-anchor-hover cursor-pointer text-underline'
-              >
-                {__pagesText.cart.removeItem}
-              </span>
-            </div>
+            {currentPage !== 'CHECKOUT' && (
+              <div className='text-default-text mb-[10px]'>
+                <span
+                  onClick={() => handleRemoveItem(props.shoppingCartItemsId)}
+                  className='text-default-text !text-anchor hover:!text-anchor-hover cursor-pointer text-underline'
+                >
+                  {__pagesText.cart.removeItem}
+                </span>
+              </div>
+            )}
           </div>
           <div className='w-full flex flex-wrap'>
             <div className='w-full'>
@@ -336,66 +306,77 @@ const CL2_Item: React.FC<_CartItem & _Props> = (props) => {
                           </div>
                           <div className='w-full md:w-1/3 flex flex-wrap items-center gap-1 pl-[5px] pr-[5px] mb-[10px]'>
                             <div className='text-default-text'>Qty</div>
-                            <form>
-                              <input
-                                type='number'
-                                className='text-default-text pl-[5px] pr-[5px] pt-[5px] pb-[5px] w-[60px] mr-2 border border-black'
-                                defaultValue={view.qty}
-                                data-valueofinput={view.qty}
-                                min={1}
-                                onKeyDown={(e) => {
-                                  if (
-                                    ['e', 'E', '+', '-', '.'].includes(e.key)
-                                  ) {
-                                    e.preventDefault();
-                                  }
-                                }}
-                                onChange={(e) => {
-                                  valueRef.current = {
-                                    ...valueRef.current,
-                                    [`${view.id}`]: +e.target.value,
-                                  };
-                                }}
-                                onBlur={(e) => {
-                                  handleUpdate(
-                                    e.target.value,
-                                    view.qty,
-                                    view.id,
-                                  );
-                                }}
-                              />
-                              {sizeId.find((el) => el === view.id) &&
-                                valueRef.current[view.id.toString()] !== 0 && (
-                                  <button
-                                    onClick={(e) => {
-                                      handleUpdateQuantity(
-                                        e,
-                                        +props.attributeOptionId,
-                                        view.id,
-                                        valueRef.current[view.id.toString()],
-                                      );
-                                    }}
-                                    className='btn btn-sm btn-primary'
-                                  >
-                                    UPDATE
-                                  </button>
-                                )}
-                            </form>
+                            {currentPage === 'CHECKOUT' ? (
+                              <>{view.qty}</>
+                            ) : (
+                              <form>
+                                <input
+                                  type='number'
+                                  className='text-default-text pl-[5px] pr-[5px] pt-[5px] pb-[5px] w-[60px] mr-2 border border-black'
+                                  defaultValue={view.qty}
+                                  data-valueofinput={view.qty}
+                                  min={1}
+                                  onKeyDown={(e) => {
+                                    if (
+                                      ['e', 'E', '+', '-', '.'].includes(e.key)
+                                    ) {
+                                      e.preventDefault();
+                                    }
+                                  }}
+                                  onChange={(e) => {
+                                    valueRef.current = {
+                                      ...valueRef.current,
+                                      [`${view.id}`]: +e.target.value,
+                                    };
+                                  }}
+                                  onBlur={(e) => {
+                                    handleUpdate(
+                                      e.target.value,
+                                      view.qty,
+                                      view.id,
+                                    );
+                                  }}
+                                />
+                                {sizeId.find((el) => el === view.id) &&
+                                  valueRef.current[view.id.toString()] !==
+                                    0 && (
+                                    <button
+                                      onClick={(e) => {
+                                        handleUpdateQuantity(
+                                          e,
+                                          +props.attributeOptionId,
+                                          view.id,
+                                          valueRef.current[view.id.toString()],
+                                        );
+                                      }}
+                                      className='btn btn-sm btn-primary'
+                                    >
+                                      UPDATE
+                                    </button>
+                                  )}
+                              </form>
+                            )}
+                          </div>
+                          <div className='w-full md:w-1/3 flex flex-wrap items-center gap-1 pl-[5px] pr-[5px] mb-[10px]'>
+                            <div className='text-default-text'>Price</div>
+                            <Price value={view.unitPrice} />
                           </div>
                           <div className='w-full md:w-1/3 flex flex-wrap items-center justify-between gap-2 pl-[5px] pr-[5px] mb-[10px]'>
                             <div className='text-default-text'>
                               <Price value={view.price} />
                             </div>
-                            <div className='text-default-text'>
-                              <span
-                                className='!text-anchor hover:!text-anchor-hover cursor-pointer'
-                                onClick={() => {
-                                  handleSizeRemove(view, props);
-                                }}
-                              >
-                                {__pagesText.cart.remove}
-                              </span>
-                            </div>
+                            {currentPage !== 'CHECKOUT' && (
+                              <div className='text-default-text'>
+                                <span
+                                  className='!text-anchor hover:!text-anchor-hover cursor-pointer'
+                                  onClick={() => {
+                                    handleSizeRemove(view, props);
+                                  }}
+                                >
+                                  {__pagesText.cart.remove}
+                                </span>
+                              </div>
+                            )}
                           </div>
                         </div>
                       </>

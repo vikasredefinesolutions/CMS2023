@@ -1,15 +1,15 @@
 import {
   checkoutPages,
-  paymentMethodCustom as paymentEnum,
   PaymentMethod,
+  paymentMethodCustom as paymentEnum,
   UserAddressType,
 } from '@constants/enum';
 import {
+  CG_STORE_CODE,
   __Cookie,
   __Cookie_Expiry,
   __LocalStorage,
   __UserMessages,
-  CG_STORE_CODE,
 } from '@constants/global.constant';
 import { paths } from '@constants/paths.constant';
 
@@ -57,7 +57,7 @@ import { __pagesConstant } from '@constants/pages.constant';
 import { PaymentOptions } from '@definations/APIs/cart.req';
 import { CustomerAddress, UserType } from '@definations/APIs/user.res';
 import { WishlistType } from '@definations/wishlist.type';
-import { _CartItem, BrandPolicyViewModel } from '@services/cart';
+import { BrandPolicyViewModel, _CartItem } from '@services/cart';
 import { Klaviyo_PlaceOrder } from '@services/klaviyo.service';
 import {
   getCustomerAllowBalance,
@@ -79,11 +79,10 @@ const CheckoutController = () => {
   const [endUserNameS, setEndUserName] = useState<string>('');
   const [endUserDisplay, setEndUserDisplay] = useState<boolean>(false);
   const [productPolicy, setproductPolicy] = useState<BrandPolicyViewModel[]>();
-
+  const { charges } = useTypedSelector_v2((state) => state.checkout);
   const [currentPage, setCurrentPage] = useState(checkoutPages.login);
   const [allowGuest, setAllowGuest] = useState(true);
   const [customerEmail, setCustomerEmail] = useState('');
-  const [salesTax, setSalesTax] = useState<number>(0);
   const [createAccountPassword, setCreateAccountPassword] = useState({
     password: '',
     confirmPassword: '',
@@ -126,7 +125,7 @@ const CheckoutController = () => {
   const [selectedShipping, setSelectedShipping] = useState<
     _shippingMethod | { name: ''; price: 0 }
   >({ name: '', price: 0 });
-  const storeId = useTypedSelector_v2((state) => state.store.id);
+  const { id: storeId, gclid } = useTypedSelector_v2((state) => state.store);
   const {
     showModal,
     fetchCartDetails,
@@ -136,9 +135,10 @@ const CheckoutController = () => {
     updateCustomer,
     updateWishListData,
     getStoreCustomer,
-    update_checkoutEmployeeLogin,
+    update_CheckoutEmployeeLogin,
     customerCreditBalanceUpdate,
     updateEmployeeV2,
+    update_CheckoutAddress,
     product_employeeLogin,
   } = useActions_v2();
   const user = useTypedSelector_v2((state) => state.user);
@@ -306,6 +306,11 @@ const CheckoutController = () => {
   const blockInvalidChar = (e: any) =>
     ['e', 'E', '+', '-', '.'].includes(e.key) && e.preventDefault();
 
+  const continueAsGuest = () => {
+    setIsguestLogin(true);
+    setCurrentPage(checkoutPages.address);
+  };
+
   const loginSubmitHandler = async (enteredInputs: {
     pass: string;
     cpass: string;
@@ -462,6 +467,12 @@ const CheckoutController = () => {
         return;
       }
 
+      if (isEmployeeLoggedIn) {
+        setShowLoader(false);
+        continueAsGuest();
+        return;
+      }
+
       if (response.isCustomerExist) {
         setCurrentPage(checkoutPages.password);
       } else if (!response.isCustomerExist) {
@@ -473,7 +484,17 @@ const CheckoutController = () => {
     }
     setShowLoader(false);
   };
-
+  const sortingArrayObject = (a: string, b: string) => {
+    let fa = a.toLowerCase(),
+      fb = b.toLowerCase();
+    if (fa < fb) {
+      return -1;
+    }
+    if (fa > fb) {
+      return 1;
+    }
+    return 0;
+  };
   const getPolicyDetails = async (cartProducts: _CartItem[]) => {
     let policydetailsArray: BrandPolicyViewModel[] = [];
     cartProducts?.map((product) => {
@@ -486,7 +507,14 @@ const CheckoutController = () => {
         JSON.parse(item),
       );
 
-      setproductPolicy([...PolicyProduct]);
+      const policyWithCheckBoxTrue = PolicyProduct.filter(
+        (el) => el.policyWithCheckBox == true,
+      ).sort((a, b) => sortingArrayObject(a.name, b.name));
+
+      const policyWithCheckBoxfalse = PolicyProduct.filter(
+        (el) => el.policyWithCheckBox == false,
+      ).sort((a, b) => sortingArrayObject(a.name, b.name));
+      setproductPolicy([...policyWithCheckBoxfalse, ...policyWithCheckBoxTrue]);
     });
   };
 
@@ -504,11 +532,6 @@ const CheckoutController = () => {
       useBalance,
       allowedBalance,
     });
-  };
-
-  const continueAsGuest = () => {
-    setIsguestLogin(true);
-    setCurrentPage(checkoutPages.address);
   };
 
   const createAccountHandler = (arg: {
@@ -590,6 +613,7 @@ const CheckoutController = () => {
     logInUser('CLEAN_UP');
     setCookie(__Cookie.userId, '', 'EPOCH');
     deleteCookie(__Cookie.tempCustomerId);
+    localStorage.removeItem(__LocalStorage.guestEmailID);
     localStorage.removeItem(__LocalStorage.empData);
     localStorage.removeItem(__LocalStorage.empGuest);
     router.push(`/${paths.THANK_YOU}?orderNumber=${id}`);
@@ -597,7 +621,7 @@ const CheckoutController = () => {
 
   const checkPayment = () => {
     if (employeeLogin.isPaymentPending) {
-      // don't check payment details if employee is logged IN and selected payment pending .
+      // don't check payment details if employee is logged IN and selected payment pending.
       return true;
     }
 
@@ -608,9 +632,10 @@ const CheckoutController = () => {
         if (
           (cardDetails &&
             Object.values(cardDetails).some((x) => x === null || x === '')) ||
-          cardDetails.cardNumber.length !== 16
+          (cardDetails.cardNumber.length !== 16 &&
+            cardDetails.cardNumber.length !== 15)
         ) {
-          if (cardDetails.cardNumber.length < 16) {
+          if (cardDetails.cardNumber.length < 15) {
             showModal({
               message: 'Please enter valid card number',
               title: 'Error',
@@ -665,7 +690,7 @@ const CheckoutController = () => {
   const addShippingPaymentInfoEventHandle = (eventName: string) => {
     const eventPayload = {
       storeId: storeId,
-      customerId: customerId,
+      customerId: customerId || 0,
       ...(eventName === 'GoogleAddShippingInfoScript'
         ? { shippingTier: 'Free Shipping' }
         : { paymentType: paymentMethod }),
@@ -692,8 +717,15 @@ const CheckoutController = () => {
           : cardDetails.cardExpirationYear;
       const givenDate = `${yearFull}${cardDetails.cardExpirationMonth}`;
       const currentYear = new Date().getFullYear().toString();
-      const currentMonth = new Date().getMonth() + 1;
+      const date = new Date();
+
+      const currentMonth =
+        date.getMonth() + 1 < 10
+          ? `0${date.getMonth() + 1}`
+          : `${date.getMonth() + 1}`;
       const currentDate = currentYear + currentMonth.toString();
+      // console.log('card', givenDate, currentDate);
+
       if (paymentEnum.creditCard === paymentMethod) {
         if (+currentDate > +givenDate) {
           showModal({
@@ -703,7 +735,8 @@ const CheckoutController = () => {
           });
           return;
         }
-        if (cardDetails.cardVarificationCode.length !== 3) {
+        const maxCvvValue = detectCardType() == 'AMEX' ? 4 : 3;
+        if (cardDetails.cardVarificationCode.length !== maxCvvValue) {
           showModal({
             message:
               'Error in Credit Card information. Please verify and try again.',
@@ -785,8 +818,6 @@ const CheckoutController = () => {
 
           setCurrentPage(checkoutPages.reviewOrder);
         }
-      } else {
-        setCurrentPage(checkoutPages.reviewOrder);
       }
     } else {
       if (shippingAdress && billingAdress && checkPayment()) {
@@ -828,7 +859,7 @@ const CheckoutController = () => {
           setSelectedShipping(data[0]);
 
           if (data && data.length > 0 && data[0]?.price) {
-            update_checkoutEmployeeLogin({
+            update_CheckoutEmployeeLogin({
               type: 'SHIPPING_PRICE',
               value: data[0].price,
             });
@@ -845,6 +876,7 @@ const CheckoutController = () => {
     if (employeeLogin.isPaymentPending) {
       return {
         paymentMethod: 'PAYMENTPENDING',
+        paymentGateway: 'PAYMENTPENDING',
       };
     }
 
@@ -913,7 +945,7 @@ const CheckoutController = () => {
           position: '',
           navCustomerId: '',
           organizationName: '',
-          sewOut: isSewOutEnable,
+          sewout: isSewOutEnable,
           sewoutTotal: sewOutTotal,
 
           storeCustomerAddress: [
@@ -992,9 +1024,11 @@ const CheckoutController = () => {
         shippingCountry: shippingAdress.countryName,
         shippingPhone: shippingAdress.phone,
         orderSubtotal: subTotal,
-        orderTax: salesTax,
+        orderTax: charges.salesTax,
         orderTotal:
-          totalPrice + getNewShippingCost(selectedShippingMOodel?.price),
+          totalPrice +
+          getNewShippingCost(selectedShippingMOodel?.price) +
+          charges.salesTax,
         orderNotes: orderNote,
         couponCode: couponCode || '',
         couponDiscountAmount: discount,
@@ -1022,6 +1056,8 @@ const CheckoutController = () => {
         isAllowPo: employeeLogin.allowPo,
         sewOut: isSewOutEnable,
         sewoutTotal: sewOutTotal,
+
+        gclid: gclid,
       };
 
       try {
@@ -1154,6 +1190,15 @@ const CheckoutController = () => {
   };
 
   useEffect(() => {
+    if (billingAdress?.postalCode) {
+      update_CheckoutAddress({
+        type: 'ZIP_CODE',
+        value: billingAdress.postalCode,
+      });
+    }
+  }, [billingAdress, billingForm.values.postalCode]);
+
+  useEffect(() => {
     if (employeeLogin.isPaymentPending) {
       setCardDetails({
         cardNumber: '',
@@ -1220,8 +1265,6 @@ const CheckoutController = () => {
     addPaymentDetails,
     getEnduser,
     setEndUserDisplay,
-    setSalesTax,
-    salesTax,
   };
 };
 

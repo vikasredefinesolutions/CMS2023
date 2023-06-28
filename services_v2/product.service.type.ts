@@ -178,3 +178,26 @@ export interface _AddToCart_PayloadGenerator_Attributes {
     lineCartItems: [];
   };
 }
+
+// export interface searchProductlist  {
+//   products: searchproduct[]|[],
+// };
+export interface  searchproduct   {
+  id: number;
+  name: string,
+  description: string; ourSku: string;
+  ourCost: number;
+  msrp: number;
+  imap: number;
+  salePrice: number;
+  lowPrice: number;
+  seName:string;
+  getAttributeImageLists: [
+    {
+      id: number;
+      attributeOptionID: number;
+      attributeOptionName: string;
+      attributeImage: string
+    }
+  ]
+};

@@ -50,7 +50,7 @@ const StartOrderAvailableColors: React.FC = () => {
               <Image
                 src={color.imageUrl}
                 alt={color.altTag}
-                className='w-full object-center object-cover'
+                className='max-h-full m-auto'
               />
             </div>
 

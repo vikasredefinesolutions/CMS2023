@@ -1,16 +1,13 @@
 import MyAccountTabsType2 from '@appComponents/common/MyAccountTabsType2';
 import { __pagesConstant } from '@constants/pages.constant';
 import { paths } from '@constants/paths.constant';
-import { _MyAcc_OrderBillingDetails } from '@definations/APIs/user.res';
+import { _OrderDetailInList } from '@definations/APIs/user.res';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
-import {
-  FetchOrdersIdByCustomerId,
-  FetchOrdersIdByCustomerUserId,
-  OrderedBillingDetails,
-} from '@services/user.service';
+import { FetchOrdersList } from '@services/user.service';
+import { debounce } from 'lodash';
 import moment from 'moment';
 import Link from 'next/link';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 const Orders_Type2: React.FC = () => {
   const storeId = useTypedSelector_v2((state) => state.store.id);
@@ -18,19 +15,21 @@ const Orders_Type2: React.FC = () => {
   const customerRoleId = useTypedSelector_v2(
     (state) => state.user.customer?.customerRoleId,
   );
-  const [orderDetails, setOrderDetails] =
-    useState<Array<_MyAcc_OrderBillingDetails | null> | null>(null);
-  const isAdmin = customerRoleId == 0 || customerRoleId == 2 ? true : false;
+  const roles = useTypedSelector_v2((state) => state.user.roles);
 
-  const [showTab, setShowTab] = useState<'MyOwnOrders' | 'OtherUsersOrders'>(
-    'MyOwnOrders',
+  const [orderDetails, setOrderDetails] = useState<_OrderDetailInList[] | []>(
+    [],
   );
+  const isAdmin =
+    customerRoleId == 0 || customerRoleId == +roles.adminId ? true : false;
+
+  const [searchText, setSearchText] = useState<string>('');
 
   const [itemsOrder, setItemsOrder] = useState<{
     order: 'orderDate' | 'orderNumber' | 'orderStatus';
     ascDesc: 'asc' | 'desc';
   } | null>(null);
-
+  const [sortAsc, setSortAsc] = useState<string>('desc');
   const [listMetaInfo, setListMetaInfo] = useState<{
     pageNumber: number;
     totalCounts: number;
@@ -46,6 +45,54 @@ const Orders_Type2: React.FC = () => {
     itemsCountToShow: 10,
     totalPages: 1,
   });
+  const handleDebounceFn = (inputValue: string) => {
+    FetchOrdersList({
+      args: {
+        pageIndex: 0,
+        pageSize: 0,
+        pagingStrategy: 0,
+        sortingOptions: [
+          {
+            field: '',
+            direction: 0,
+            priority: 0,
+          },
+        ],
+        filteringOptions: [
+          {
+            field: inputValue ? 'orderNumber' : '',
+            operator: 0,
+            value: inputValue,
+          },
+        ],
+      },
+      storeID: storeId,
+      customerId: userId || 0,
+    }).then((res) => {
+      setOrderDetails(res?.items);
+      const defaultItemsToShowCount =
+        __pagesConstant._myAccount.ordersSection.table.select
+          .defaultSelectedOption;
+      setListMetaInfo({
+        pageNumber: 1,
+        totalCounts: res.items.length,
+        itemsCountToShow: defaultItemsToShowCount,
+        startIndex: res.items?.length > 1 ? 1 : 0,
+        endIndex:
+          res.items.length > defaultItemsToShowCount
+            ? defaultItemsToShowCount
+            : res.items.length,
+        totalPages: Math.ceil(res.items.length / defaultItemsToShowCount),
+      });
+    });
+  };
+
+  const debounceFn = useCallback(debounce(handleDebounceFn, 1000), []);
+
+  const handleChange = (event: any) => {
+    setSearchText(event.target.value);
+    debounceFn(event.target.value);
+  };
 
   const handleItemsQtyChange = (
     event: React.ChangeEvent<HTMLSelectElement>,
@@ -90,65 +137,89 @@ const Orders_Type2: React.FC = () => {
     return pageNumbers;
   };
 
-  const fetchMultipleBillingDetails = async (ids: number[] | null) => {
-    if (ids === null) {
-      setOrderDetails([]);
-      return;
-    }
-
-    let orders: Array<_MyAcc_OrderBillingDetails | null> = [];
-    const ordersToFetch = ids.map((id) => OrderedBillingDetails(id));
-
-    await Promise.allSettled(ordersToFetch).then((values) => {
-      values.map((value, index) => {
-        orders[index] = value.status === 'fulfilled' ? value.value : null;
-      });
-    });
-
-    setOrderDetails(orders);
-    const defaultItemsToShowCount =
-      __pagesConstant._myAccount.ordersSection.table.select
-        .defaultSelectedOption;
-    setListMetaInfo({
-      pageNumber: 1,
-      totalCounts: orders.length,
-      itemsCountToShow: defaultItemsToShowCount,
-      startIndex: orders?.length > 1 ? 1 : 0,
-      endIndex:
-        orders.length > defaultItemsToShowCount
-          ? defaultItemsToShowCount
-          : orders.length,
-      totalPages: Math.ceil(orders.length / defaultItemsToShowCount),
-    });
-  };
-
   const handleOrder = (action: 'orderDate' | 'orderNumber' | 'orderStatus') => {
     const itemOrd = action;
     const itemAscDesc = itemsOrder?.order === action ? 'desc' : 'asc';
+
+    if (orderDetails.length > 0) {
+    }
 
     setOrderDetails((orders) => {
       if (!orders) return [];
 
       if (itemOrd === 'orderDate') {
+        // const mainOrder = orders.sort((orderA, orderB) => {
+        //   if (moment(orderA!.orderDate) < moment(orderB!.orderDate)) return 1;
+        //   if (moment(orderA!.orderDate) > moment(orderB!.orderDate)) return -1;
+        //   return 1;
+        // });
         return orders.sort((orderA, orderB) => {
-          if (orderA!.orderDate > orderB!.orderDate) return -1;
-          if (orderA!.orderDate < orderB!.orderDate) return 1;
-          return 0;
+          if (sortAsc === 'asc') {
+            if (moment(orderA!.orderDate) > moment(orderB!.orderDate)) {
+              return 1;
+            } else if (moment(orderB!.orderDate) > moment(orderA!.orderDate)) {
+              return -1;
+            } else {
+              return 0;
+            }
+          } else if (sortAsc === 'desc') {
+            if (moment(orderA!.orderDate) < moment(orderB!.orderDate)) {
+              return 1;
+            } else if (moment(orderB!.orderDate) < moment(orderA!.orderDate)) {
+              return -1;
+            } else {
+              return 0;
+            }
+          } else {
+            return 0;
+          }
         });
       }
 
       if (itemOrd === 'orderNumber') {
         return orders.sort((orderA, orderB) => {
-          if (orderA!.id > orderB!.id) return -1;
-          if (orderA!.id < orderB!.id) return 1;
-          return 0;
+          if (sortAsc === 'asc') {
+            if (orderA!.orderNumber > orderB!.orderNumber) {
+              return 1;
+            } else if (orderB!.orderNumber > orderA!.orderNumber) {
+              return -1;
+            } else {
+              return 0;
+            }
+          } else if (sortAsc === 'desc') {
+            if (orderA!.orderNumber < orderB!.orderNumber) {
+              return 1;
+            } else if (orderB!.orderNumber < orderA!.orderNumber) {
+              return -1;
+            } else {
+              return 0;
+            }
+          } else {
+            return 0;
+          }
         });
       }
       if (itemOrd === 'orderStatus') {
         return orders.sort((orderA, orderB) => {
-          if (orderA!.orderStatus > orderB!.orderStatus) return -1;
-          if (orderA!.orderStatus < orderB!.orderStatus) return 1;
-          return 0;
+          if (sortAsc === 'asc') {
+            if (orderA!.orderStatus > orderB!.orderStatus) {
+              return 1;
+            } else if (orderB!.orderStatus > orderA!.orderStatus) {
+              return -1;
+            } else {
+              return 0;
+            }
+          } else if (sortAsc === 'desc') {
+            if (orderA!.orderStatus < orderB!.orderStatus) {
+              return 1;
+            } else if (orderB!.orderStatus < orderA!.orderStatus) {
+              return -1;
+            } else {
+              return 0;
+            }
+          } else {
+            return 0;
+          }
         });
       }
 
@@ -171,30 +242,51 @@ const Orders_Type2: React.FC = () => {
   };
 
   useEffect(() => {
-    setOrderDetails(null);
+    setOrderDetails([]);
     if (storeId && userId) {
-      if (showTab == 'MyOwnOrders') {
-        FetchOrdersIdByCustomerId({
-          storeId,
-          userId,
-        })
-          .then((ids) => fetchMultipleBillingDetails(ids))
-          .catch(() => setOrderDetails([]));
-        return;
-      }
-
-      if (showTab === 'OtherUsersOrders') {
-        FetchOrdersIdByCustomerUserId({
-          storeId,
-          userId,
-        })
-          .then((ids) => fetchMultipleBillingDetails(ids))
-          .catch(() => setOrderDetails([]));
-      }
+      FetchOrdersList({
+        args: {
+          pageIndex: 0,
+          pageSize: 0,
+          pagingStrategy: 0,
+          sortingOptions: [
+            {
+              field: '',
+              direction: 0,
+              priority: 0,
+            },
+          ],
+          filteringOptions: [
+            {
+              field: '',
+              operator: 0,
+              value: '',
+            },
+          ],
+        },
+        storeID: storeId,
+        customerId: userId,
+      }).then((res) => {
+        setOrderDetails(res?.items);
+        const defaultItemsToShowCount =
+          __pagesConstant._myAccount.ordersSection.table.select
+            .defaultSelectedOption;
+        setListMetaInfo({
+          pageNumber: 1,
+          totalCounts: res.items.length,
+          itemsCountToShow: defaultItemsToShowCount,
+          startIndex: res.items?.length > 1 ? 1 : 0,
+          endIndex:
+            res.items.length > defaultItemsToShowCount
+              ? defaultItemsToShowCount
+              : res.items.length,
+          totalPages: Math.ceil(res.items.length / defaultItemsToShowCount),
+        });
+      });
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [storeId, userId, showTab]);
+  }, [storeId, userId]);
 
   return (
     <MyAccountTabsType2>
@@ -226,14 +318,16 @@ const Orders_Type2: React.FC = () => {
                 </div>
                 <div className=''>entries</div>
               </div>
-              {/* <div className=''>
+
+              <div className=''>
                 <input
+                  type='text'
                   placeholder='Search'
-                  readOnly
+                  onChange={(e) => handleChange(e)}
                   className='form-input'
-                  value=''
+                  value={searchText}
                 />
-              </div> */}
+              </div>
             </div>
             <div className='overflow-auto max-h-screen border border-gray-border'>
               <table className='table table-auto border-collapse border-gray-border w-full text-default-text text-left'>
@@ -247,22 +341,24 @@ const Orders_Type2: React.FC = () => {
                         <span>Order Date</span>
                         <div className='flex flex-col pl-2'>
                           <span
-                            className={`material-icons-outlined text-sm h-2 leading-[10px] ${
+                            className={`material-icons-outlined text-sm h-2 leading-[10px] cursor-pointer ${
                               itemsOrder?.order === 'orderDate' &&
                               itemsOrder?.ascDesc !== 'asc'
                                 ? 'visible'
                                 : 'invisible'
                             }`}
+                            onClick={() => setSortAsc('asc')}
                           >
                             keyboard_arrow_up
                           </span>
                           <span
-                            className={`material-icons-outlined text-sm h-2 leading-[10px] ${
+                            className={`material-icons-outlined text-sm h-2 leading-[10px] cursor-pointer ${
                               itemsOrder?.order === 'orderDate' &&
                               itemsOrder?.ascDesc !== 'asc'
                                 ? 'visible'
                                 : 'invisible'
                             }`}
+                            onClick={() => setSortAsc('desc')}
                           >
                             keyboard_arrow_down
                           </span>
@@ -277,23 +373,29 @@ const Orders_Type2: React.FC = () => {
                         <span>Order #</span>
                         <div className='flex flex-col pl-2'>
                           <span
-                            className={`material-icons-outlined text-sm h-2 leading-[10px] ${
+                            className={`material-icons-outlined text-sm h-2 cursor-pointer leading-[10px] ${
                               itemsOrder?.order === 'orderNumber' &&
                               itemsOrder?.ascDesc !== 'asc'
                                 ? 'visible'
                                 : 'invisible'
                             }`}
+                            onClick={(e) => {
+                              setSortAsc('asc');
+                            }}
                           >
                             keyboard_arrow_up
                           </span>
 
                           <span
-                            className={`material-icons-outlined text-sm h-2 leading-[10px] ${
+                            className={`material-icons-outlined text-sm h-2 cursor-pointer leading-[10px] ${
                               itemsOrder?.order === 'orderNumber' &&
                               itemsOrder?.ascDesc !== 'asc'
                                 ? 'visible'
                                 : 'invisible'
                             }`}
+                            onClick={(e) => {
+                              setSortAsc('desc');
+                            }}
                           >
                             keyboard_arrow_down
                           </span>
@@ -308,7 +410,7 @@ const Orders_Type2: React.FC = () => {
                         <span>Order Status</span>
                         <div className='flex flex-col pl-2'>
                           <span
-                            className={`material-icons-outlined text-sm h-2 leading-[10px] ${
+                            className={`material-icons-outlined text-sm h-2 cursor-pointer leading-[10px] ${
                               itemsOrder?.order === 'orderStatus' &&
                               itemsOrder?.ascDesc !== 'asc'
                                 ? 'visible'
@@ -318,7 +420,7 @@ const Orders_Type2: React.FC = () => {
                             keyboard_arrow_up
                           </span>
                           <span
-                            className={`material-icons-outlined text-sm h-2 leading-[10px] ${
+                            className={`material-icons-outlined text-sm h-2 cursor-pointer leading-[10px] ${
                               itemsOrder?.order === 'orderStatus' &&
                               itemsOrder?.ascDesc !== 'asc'
                                 ? 'visible'
@@ -351,9 +453,10 @@ const Orders_Type2: React.FC = () => {
                           </td>
                           <td className='border-t border-r last:border-r-0 border-gray-border p-[10px]'>
                             <Link
-                              href={`${paths.myAccount.order_details}?ordernumber=${order.id}`}
-                            ><a className='!text-anchor hover:!text-anchor-hover font-bold'>
-                              {order.id}
+                              href={`${paths.myAccount.order_details}?ordernumber=${order.orderNumber}`}
+                            >
+                              <a className='!text-anchor hover:!text-anchor-hover font-bold'>
+                                {order.orderNumber}
                               </a>
                             </Link>
                           </td>
@@ -367,7 +470,12 @@ const Orders_Type2: React.FC = () => {
               </table>
             </div>
             <div className='flex flex-wrap items-center justify-between mt-[10px] gap-[10px] text-default-text'>
-              <div className=''>{`Showing ${listMetaInfo.startIndex} to ${listMetaInfo.endIndex} of ${listMetaInfo.totalCounts} entries`}</div>
+              <div className=''>{`Showing ${
+                orderDetails.length > 0 ? 1 : 0
+              } to ${listMetaInfo.endIndex} of ${
+                listMetaInfo.totalCounts
+              } entries`}</div>
+
               <div className='flex flex-wrap items-center gap-[5px]'>
                 <div className='flex flex-wrap border border-gray-border divide-x divide-gray-border'>
                   <div

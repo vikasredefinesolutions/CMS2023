@@ -12,6 +12,7 @@ export interface _InputProps {
   value: string | number;
   // eslint-disable-next-line no-unused-vars
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onBlur?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   type: 'text' | 'number' | 'password' | 'email';
   required: boolean;
   id: string;

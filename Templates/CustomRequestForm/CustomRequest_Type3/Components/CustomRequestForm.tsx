@@ -12,6 +12,7 @@ import {
 import { __pagesText } from '@constants/pages.text';
 import { paths } from '@constants/paths.constant';
 import { __ValidationText } from '@constants/validation.text';
+import { consultationProofMessages } from '@constants/validationMessages';
 import { getLocationWithZipCode } from '@services/user.service';
 import { Form, Formik } from 'formik';
 import { useRouter } from 'next/router';
@@ -22,9 +23,21 @@ import CustomInput from './CustomInput';
 import StateAndCountriesInput from './StateAndCountriesInput';
 
 const validationSchema = Yup.object().shape({
-  firstName: Yup.string().required(),
-  lastName: Yup.string().required(),
-  organizationName: Yup.string().required(),
+  firstName: Yup.string()
+    .required(__ValidationText.requestConsultation.firstName.required)
+    .min(
+      consultationProofMessages.firstName.minLength,
+      consultationProofMessages.firstName.minValidation,
+    ),
+  lastName: Yup.string()
+    .required(__ValidationText.requestConsultation.lastName.required)
+    .min(
+      consultationProofMessages.lastName.minLength,
+      consultationProofMessages.lastName.minValidation,
+    ),
+  organizationName: Yup.string().required(
+    __ValidationText.requestConsultation.companyName.required,
+  ),
   phone: Yup.string()
     .required(__ValidationText.signUp.storeCustomerAddress.phone.required)
     .test(
@@ -41,23 +54,45 @@ const validationSchema = Yup.object().shape({
         return false;
       },
     ),
-  email: Yup.string().email().required(),
-  shipFirstName: Yup.string().required(),
-  shipLastName: Yup.string().required(),
-  address1: Yup.string().required(),
-  city: Yup.string().required(),
+  email: Yup.string()
+    .email()
+    .required(__ValidationText.requestConsultation.email.required),
+  shipFirstName: Yup.string().required(
+    __ValidationText.requestConsultation.firstName.required,
+  ),
+  shipLastName: Yup.string().required(
+    __ValidationText.requestConsultation.lastName.required,
+  ),
+  address1: Yup.string().required(
+    __ValidationText.requestConsultation.address.required,
+  ),
+  city: Yup.string().required(
+    __ValidationText.requestConsultation.city.required,
+  ),
   zipCode: Yup.string()
     .required(__ValidationText.signUp.storeCustomerAddress.postalCode.required)
     .max(
       __ValidationText.signUp.storeCustomerAddress.postalCode.maxLength,
       'Postal code must be less than 9',
     ),
-  countryName: Yup.string().required(),
-  stateName: Yup.string().required(),
-  itemName: Yup.string().required(),
-  itemColor: Yup.string().required(),
-  sizeQty: Yup.string().required(),
-  needByDate: Yup.string().required(),
+  countryName: Yup.string().required(
+    __ValidationText.requestConsultation.country.required,
+  ),
+  stateName: Yup.string().required(
+    __ValidationText.requestConsultation.stateName.required,
+  ),
+  itemName: Yup.string().required(
+    __ValidationText.requestConsultation.itemName.required,
+  ),
+  itemColor: Yup.string().required(
+    __ValidationText.requestConsultation.itemColor.required,
+  ),
+  sizeQty: Yup.string().required(
+    __ValidationText.requestConsultation.desiredQty.required,
+  ),
+  needByDate: Yup.string().required(
+    __ValidationText.requestConsultation.needByDate.required,
+  ),
 });
 
 const _initialValues = {
@@ -310,8 +345,7 @@ const CustomRequestForm: React.FC = () => {
                     value={values.address2}
                     required
                     type='text'
-                    error={errors?.address2}
-                    touched={touched?.address2}
+                    showIcon={false}
                   />
                 </div>
                 <div className='w-full lg:w-1/2 px-[15px]'>

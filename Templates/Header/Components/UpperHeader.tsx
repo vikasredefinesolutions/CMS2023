@@ -36,6 +36,7 @@ const UpperHeader: React.FC<_props> = (headerContent) => {
 
     // setCookie(__Cookie.userId, '', 'EPOCH');
     // deleteCookie(__Cookie.tempCustomerId);
+    localStorage.removeItem(__LocalStorage.guestEmailID);
     localStorage.removeItem(__LocalStorage.empData);
     localStorage.removeItem(__LocalStorage.empGuest);
     router.push(paths.HOME);

@@ -116,11 +116,14 @@ const AddOTFItemNo = ({ closeModal }: { closeModal: () => void }) => {
     actions: FormikHelpers<_OTF_InitialValues>,
   ) => {
     setShowLoader(true);
-
     const sizes = values.size.split(',').filter((ele) => ele !== '');
     const qtys = values.qty.split(',').filter((ele) => ele !== '');
-
-    if (sizes.length !== qtys.length) {
+    if (qtys?.length && qtys.some((item) => +item <= 0)) {
+      confirm('Quantity should be greater than zero');
+      setShowLoader(false);
+      return;
+    }
+    if (values.size && sizes.length !== qtys.length) {
       confirm('Size and quantity length not matched');
       setShowLoader(false);
       return;

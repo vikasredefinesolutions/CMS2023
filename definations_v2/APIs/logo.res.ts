@@ -56,6 +56,7 @@ export interface Item {
   status: string;
   logoLocationImage: string;
   approvedLogo?: string;
+  isDefault: boolean;
 }
 
 export interface ApprovedLogoItem {

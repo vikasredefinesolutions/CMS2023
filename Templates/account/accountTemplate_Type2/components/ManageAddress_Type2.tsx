@@ -27,6 +27,7 @@ const ManageAddress_Type2 = () => {
   const [address, setAddress] = useState<CustomerAddress[] | null>(null);
   const [id, setId] = useState<number | null>(null);
   const router = useRouter();
+  const roles = useTypedSelector_v2((state) => state.user.roles);
 
   const customer = useTypedSelector_v2((state) => {
     return state.user.customer;
@@ -171,7 +172,7 @@ const ManageAddress_Type2 = () => {
                 </button>
               </li>
               {customer?.customerRoleId === 0 ||
-              customer?.customerRoleId === 2 ? (
+              customer?.customerRoleId === +roles.adminId ? (
                 <li className=''>
                   <button
                     onClick={() => setShowTab(UserAddressType.OTHERUSERADDRESS)}
@@ -222,7 +223,7 @@ const ManageAddress_Type2 = () => {
                           {showTab === UserAddressType.OTHERUSERADDRESS ? (
                             <></>
                           ) : (
-                            <div className='border-b last:border-b-0 border-[#d2d2d2] flex flex-wrap px-[20px] py-[10px]'>
+                            <div className='border-b last:border-b-0 border-[#d2d2d2] flex flex-wrap px-[20px] py-[10px] items-center'>
                               <div className='w-2/5 text-right'>
                                 Make Primary:
                               </div>

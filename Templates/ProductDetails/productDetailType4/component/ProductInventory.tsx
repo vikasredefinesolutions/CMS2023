@@ -1,7 +1,7 @@
 import NxtImage from '@appComponents/reUsable/Image';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import { _CartItem } from '@services/cart';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import InventoryAvailability from './InventoryAvailability';
 const Inventory: React.FC<{
   storeCode: string;
@@ -11,8 +11,10 @@ const Inventory: React.FC<{
   const { price, inventory } = useTypedSelector_v2(
     (state) => state.product.product,
   );
-  const { color } = useTypedSelector_v2((state) => state.product.selected);
+
+  const view = useTypedSelector_v2((state) => state.store.view);
   const { updatePrice } = useActions_v2();
+  const [sizes, setSizes] = useState<string[]>([]);
   const colors = useTypedSelector_v2((state) => state.product.product.colors);
   useEffect(() => {
     updatePrice({ price: price?.msrp || 0 });
@@ -20,6 +22,13 @@ const Inventory: React.FC<{
   }, [price?.msrp]);
   const { brand } = useTypedSelector_v2((state) => state.product.product);
 
+  useEffect(() => {
+    if (inventory?.sizes) {
+      const newval = [...inventory?.sizes];
+      const sorted = newval.sort((a, b) => b.sizeArr.length - a.sizeArr.length);
+      setSizes(sorted[0].sizeArr);
+    }
+  }, [inventory]);
   return (
     <div className='mt-[15px] text-default-text border border-gray-border'>
       <div className='hidden md:flex flex-wrap gap-y-5 bg-primary text-white'>
@@ -27,22 +36,41 @@ const Inventory: React.FC<{
           <div className='font-semibold'>Color</div>
         </div>
         <div
-          className={`lex flex-wrap md:grid md:grid-cols-${
-            inventory?.sizes[0]?.sizeArr.length
-          } justify-evenly  gap-y-5 w-full md:w-10/12 ${
-            inventory?.sizes[0]?.sizeArr.length ? 'text-left' : 'text-center'
-          }`}
+          className={`flex flex-wrap md:grid md:grid-cols-${
+            sizes.length
+          } justify-evenly  gap-y-5 w-full text-center  ${
+            sizes[0] == 'MISC' || sizes[0] == 'Misc'
+              ? ' md:w-2/12'
+              : 'md:w-10/12'
+          } `}
         >
-          {inventory?.sizes.map((product) => {
+          {sizes.map((size, index) => (
+            <div
+              key={index}
+              className={` p-2 w-1/2  ${
+                size == 'MISC' ? ' md:w-2/12' : 'md:w-auto'
+              }`}
+            >
+              <div className='font-semibold'>{size}</div>
+            </div>
+          ))}
+          {/* {inventory?.sizes.map((product) => {
             if (product.colorAttributeOptionId === color.attributeOptionId) {
               return product.sizeArr.map((size, index) => (
-                <div key={index} className={` p-2 w-1/2 md:w-auto`}>
-                  <div className='font-semibold'>{size} </div>
+                <div
+                  key={index}
+                  className={` p-2 w-1/2  ${
+                    inventory?.sizes[0]?.sizeArr[0] == 'MISC'
+                      ? ' md:w-2/12'
+                      : 'md:w-auto'
+                  }`}
+                >
+                  <div className='font-semibold'>{size}</div>
                 </div>
               ));
             }
             return <></>;
-          })}
+          })} */}
         </div>
       </div>
 
@@ -63,13 +91,19 @@ const Inventory: React.FC<{
             <div className=''>{color.name}</div>
           </div>
           <div
-            className={`flex flex-wrap md:grid md:grid-cols-${inventory?.sizes[0]?.sizeArr.length} justify-evenly text-center gap-y-5 w-full md:w-10/12`}
+            className={`flex flex-wrap md:grid md:grid-cols-${
+              sizes.length
+            } justify-evenly text-center gap-y-5 w-full ${
+              sizes[0] == 'MISC' || sizes[0] == 'Misc'
+                ? ' md:w-2/12'
+                : 'md:w-10/12'
+            } `}
           >
             {' '}
             {/*flex flex-wrap justify-evenly text-center gap-y-5 w-full md:w-10/12*/}
             {inventory?.sizes.map((product) => {
               if (product.colorAttributeOptionId === color.attributeOptionId) {
-                return product.sizeArr.map((size, index) => {
+                return sizes.map((size, index) => {
                   const inv =
                     inventory.inventory.find(
                       (int) =>
@@ -81,14 +115,11 @@ const Inventory: React.FC<{
                       item.colorAttributeOptionId === color.attributeOptionId &&
                       item.name === size,
                   );
+
                   return inv > 0 ? (
                     <div
                       key={index}
-                      className={`p-2 w-1/2 md:w-auto ${
-                        inventory?.sizes[0]?.sizeArr.length
-                          ? 'text-left'
-                          : 'text-center'
-                      }`}
+                      className={`p-2 gap-2 ${'w-1/2'}  md:w-auto ${'text-center'}`}
                     >
                       <InventoryAvailability
                         size={size}
@@ -103,9 +134,20 @@ const Inventory: React.FC<{
                       />
                     </div>
                   ) : (
-                    <div className='p-2 w-1/2 md:w-auto'>
+                    <div
+                      className={`${
+                        view == 'MOBILE'
+                          ? ''
+                          : 'justify-center flex items-center'
+                      } p-2  'w-1/2 md:w-auto'`}
+                    >
+                      {view == 'MOBILE' && (
+                        <div className='mb-1 font-semibold md:hidden'>
+                          {size}
+                        </div>
+                      )}
                       <div className='border-bottom p-b-10'>
-                        <strong className='text-center center'> - </strong>{' '}
+                        <strong className=''> - </strong>{' '}
                       </div>
                     </div>
                   );

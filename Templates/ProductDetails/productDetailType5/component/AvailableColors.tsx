@@ -1,9 +1,9 @@
 import { _ModalProps } from '@appComponents/modals/modal';
+import NxtImage from '@appComponents/reUsable/Image';
 import { __pagesConstant } from '@constants/pages.constant';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
-import ColorImage from './ColorImage';
 const AvailableColors: React.FC<_ModalProps> = ({ modalHandler }) => {
   const router = useRouter();
   const { setColor } = useActions_v2();
@@ -43,9 +43,6 @@ const AvailableColors: React.FC<_ModalProps> = ({ modalHandler }) => {
           </div>
           <div className='flex flex-wrap text-center available-colors text-default-text ml-[8px] gap-[3px]'>
             {colors.map((product, index) => {
-              // const show =
-              //   showAllColors ||
-              //   index < __pagesConstant._productDetails.imagesInRow;
               const highlight =
                 product.attributeOptionId === selectedColor?.attributeOptionId
                   ? 'border-primary'
@@ -59,13 +56,12 @@ const AvailableColors: React.FC<_ModalProps> = ({ modalHandler }) => {
                   <div
                     className={`w-[32px] h-[32px] p-[1px] border-2 hover:border-tertiary cursor-pointer ${highlight}`}
                   >
-                    {/* <NxtImage
+                    <NxtImage
                       title={`${product.name}`}
                       src={product.imageUrl}
                       alt={product.altTag}
-                      className='w-full object-center object-cover cursor-pointer'
-                    /> */}
-                    <ColorImage product={product} />
+                      className='max-h-full m-auto'
+                    />
                   </div>
                 </div>
               );

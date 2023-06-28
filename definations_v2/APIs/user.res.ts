@@ -7,6 +7,44 @@ export type UserCreateResponse = {
   status: boolean;
 };
 
+export interface _OrderListFilters {
+  pageIndex: number;
+  pageSize: number;
+  pagingStrategy: number;
+  sortingOptions: [
+    {
+      field: string;
+      direction: number;
+      priority: number;
+    },
+  ];
+  filteringOptions: [
+    {
+      field: string;
+      operator: number;
+      value: string;
+    },
+  ];
+}
+
+export interface _OrderDetailInList {
+  orderNumber: number;
+  orderStatus: string;
+  orderDate: string;
+  paymentStatus: string;
+  fulfillmentStatus: string;
+}
+
+export interface _OrderList {
+  pageIndex: number;
+  pageSize: number;
+  totalCount: number;
+  totalPages: number;
+  hasPreviousPage: boolean;
+  hasNextPage: boolean;
+  items: _OrderDetailInList[] | [];
+}
+
 export interface _Valid {
   credentials: 'VALID';
   id: string;

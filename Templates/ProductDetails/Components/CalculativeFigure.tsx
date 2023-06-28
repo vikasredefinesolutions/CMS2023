@@ -15,6 +15,14 @@ const CalculativeFigure: React.FC = () => {
     additionalSewOutCharges,
   } = useTypedSelector_v2((state) => state.product.toCheckout);
   const storeCode = useTypedSelector_v2((state) => state.store.code);
+
+  const getPriceByStore = () => {
+    if (storeCode === _Store.type4) {
+      return totalPrice / totalQty;
+    }
+
+    return price;
+  };
   return (
     <div className='bg-gray-100 p-[15px] flex flex-wrap items-end justify-between gap-2 mb-[10px] text-default-text'>
       <div className=''>
@@ -37,7 +45,7 @@ const CalculativeFigure: React.FC = () => {
           </span>
           <span className='font-[600] text-sub-text'>
             {' '}
-            <Price value={price} />
+            <Price value={getPriceByStore()} />
           </span>
         </div>
         {storeCode != _Store.type4 ? (
@@ -96,7 +104,7 @@ const CalculativeFigure: React.FC = () => {
         </span>
         <span className='font-[600] text-2xl-text'>
           {' '}
-          <Price value={totalPrice} />
+          <Price value={totalQty * price} />
         </span>
       </div>
     </div>

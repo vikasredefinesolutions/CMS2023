@@ -61,6 +61,8 @@ export const __console_v2: __Console = {
       FetchLogoLocationByProductId: false,
       SumbitRequestConsultationDetails: false,
       SendCompareLinkByEmail: false,
+      FetchCustomerQuantityByProductId: false,
+      FetchCustomSearch: false,
     },
   },
   general: {
@@ -104,6 +106,8 @@ export const __console_v2: __Console = {
       SumbitRequestConsultationDetails: false,
       FetchFeaturedProducts: false,
       SendCompareLinkByEmail: false,
+      FetchCustomerQuantityByProductId: false,
+      FetchCustomSearch: false,
     },
   },
   home: {
@@ -150,6 +154,17 @@ export const __console_v2: __Console = {
       GetStoriesByCategoryURL: false,
       GetNextStoryByStoryID: false,
       GetStoryList: false,
+    },
+  },
+  storeBuilder: {
+    service: {
+      FetchSbStoreConfiguration: false,
+      FetchSbStoreMessages: false,
+      FetchSbStoreFixedFees: false,
+      FetchSbStoreFees: false,
+      FetchSbCouponRebates: false,
+      FetchSbCustomFields: false,
+      FetchSbStoreOrderTax: false,
     },
   },
 };

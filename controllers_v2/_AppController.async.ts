@@ -214,6 +214,9 @@ export const fetchStoreDetails = async (
     isLinepersonalization: false,
     firstLogoCharge: 0,
     secondLogoCharge: 0,
+    storeXPaymetnOptionListViewModels: [
+      { paymentOptionId: 0, paymentOptionName: '' },
+    ],
   };
   const adminConfigs: {
     blobUrlRootDirectory: string;
@@ -228,6 +231,19 @@ export const fetchStoreDetails = async (
       (response) => {
         if (response[0].status === 'fulfilled' && response[0].value) {
           const res = response[0].value;
+          let paymentMethod: {
+            paymentOptionId: number;
+            paymentOptionName: any;
+          }[] = [];
+          res.storeXPaymetnOptionListViewModels.map((el: any) =>
+            paymentMethod.push({
+              paymentOptionId: el.paymentOptionId,
+              paymentOptionName: el.paymentOptionName,
+            }),
+          );
+         // console.log('payment ', paymentMethod);
+
+          store.storeXPaymetnOptionListViewModels = paymentMethod;
           store.storeId = res.id;
           store.firstLogoCharge = res.firstLogoCharge;
           store.secondLogoCharge = res.secondLogoCharge;
@@ -262,6 +278,8 @@ export const fetchStoreDetails = async (
         }
       },
     );
+
+   // console.log('store', store);
 
     return {
       store: store,

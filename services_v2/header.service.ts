@@ -8,7 +8,7 @@ import {
   _t_MenuCategory,
 } from '@definations/header.type';
 import { CallAPI_v2 } from '@helpers/api.helper';
-import { _BannerRes } from '@templates/banner/Banner';
+import { _Banner } from '@templates/banner';
 
 export type _HeaderAPIs =
   | 'FetchBrands'
@@ -77,10 +77,10 @@ export const FetchBannerDetails = async (payload: {
   storeId: number;
   isBrand: boolean;
   sename: string;
-}): Promise<_BannerRes[] | null> => {
+}): Promise<_Banner[] | null> => {
   const url = `Brand/getbannerdeatilsbystoreid.json?isbrand=${payload.isBrand}&storeid=${payload.storeId}&sename=${payload.sename}`;
 
-  const response = await CallAPI_v2<_BannerRes[]>({
+  const response = await CallAPI_v2<_Banner[]>({
     name: {
       api: 'FetchBannerDetails',
       service: 'header',

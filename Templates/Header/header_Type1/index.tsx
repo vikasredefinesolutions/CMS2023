@@ -39,7 +39,7 @@ const Header_Type1: NextPage<_HeaderProps> = ({
   // const storeName = useTypedSelector_v2((state) => state.store.storeName);
   const showSideMenu = useTypedSelector_v2((state) => state.modals.sideMenu);
   const storeTypeId = useTypedSelector_v2((state) => state.store.storeTypeId);
-  const islogo = useTypedSelector_v2((state) => state.sbStore.isLogo);
+  const islogo = useTypedSelector_v2((state) => state.sbStore.store.isLogo);
 
   // ------------------------------------------------------------------------
   const [isMobileView, setIsMobileView] = useState<boolean>(
@@ -55,7 +55,7 @@ const Header_Type1: NextPage<_HeaderProps> = ({
 
   return (
     <div
-      className={`bg-[${headerBgColor}] sticky md:top-7 z-40 shadow-[0_0px_5px_rgba(0,0,0,0.12)] `}
+      className={`bg-[${headerBgColor}] md:top-7 shadow-[0_0px_5px_rgba(0,0,0,0.12)] `}
       id={'header_with_navBar'}
     >
       {/* <NotificationBar /> */}
@@ -72,7 +72,7 @@ const Header_Type1: NextPage<_HeaderProps> = ({
           />
         )}
 
-        <div className='fixed z-40 lg:hidden'></div>
+        <div className='fixed lg:hidden'></div>
         <header className='relative trancking-[1px]'>
           <nav aria-label='Top'>
             <div className={`bg-[${headerBgColor}]`}>
@@ -110,7 +110,8 @@ const Header_Type1: NextPage<_HeaderProps> = ({
                           />
                         )}
 
-                    {islogo &&
+                    {storeTypeId == storeBuilderTypeId ? (
+                      islogo &&
                       (isMobileView ? (
                         <Logo
                           // screen='MOBILE'
@@ -119,7 +120,16 @@ const Header_Type1: NextPage<_HeaderProps> = ({
                             mobile: logoUrl.desktop,
                           }}
                         />
-                      ) : null)}
+                      ) : null)
+                    ) : isMobileView ? (
+                      <Logo
+                        // screen='MOBILE'
+                        logo={{
+                          desktop: logoUrl.desktop,
+                          mobile: logoUrl.desktop,
+                        }}
+                      />
+                    ) : null}
                     <div className='flex items-center justify-end'>
                       <div className='flex items-center '>
                         <div className='flex items-center '>

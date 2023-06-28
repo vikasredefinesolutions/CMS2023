@@ -4,6 +4,7 @@ import React from 'react';
 import { _globalStore } from 'store.global';
 import { _Imageprops } from './reUsable.d';
 let mediaBaseUrl = _globalStore.blobUrl; // for server side
+
 const NxtImage: React.FC<_Imageprops> = ({
   src,
   alt,
@@ -15,6 +16,8 @@ const NxtImage: React.FC<_Imageprops> = ({
   isStatic = false,
   useNextImage = true,
   layout = 'responsive',
+  extraUrl,
+  extraUrlPath,
 }) => {
   const clientSideMediaBaseUrl = useTypedSelector_v2(
     (state) => state.store.mediaBaseUrl,
@@ -22,29 +25,25 @@ const NxtImage: React.FC<_Imageprops> = ({
   mediaBaseUrl = mediaBaseUrl || clientSideMediaBaseUrl;
   const imageUrl = generateImageUrl(src, isStatic, mediaBaseUrl);
 
-  // if (useNextImage) {
-  //   return (
-  //     <div style={{ width: '100%' }} className={className}>
-  //       <NextImage
-  //         title={title}
-  //         src={imageUrl}
-  //         layout={layout}
-  //         alt={alt || ''}
-  //         key={cKey || 0}
-  //         loading={'eager'}
-  //         width={width || 1}
-  //         height={height || 1}
-  //         objectFit={'contain'}
-  //       />
-  //     </div>
-  //   );
-  // }
-
+  if (extraUrlPath) {
+    return (
+      <img
+        itemProp='image'
+        src={(extraUrlPath + imageUrl) as string}
+        alt={alt || ''}
+        title={title || ''}
+        className={className}
+      />
+    );
+  }
   return (
-    <div className={className}>
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={imageUrl as string} alt={alt || ''} title={title || ''} />
-    </div>
+    <img
+      itemProp='image'
+      src={imageUrl as string}
+      alt={alt || ''}
+      title={title || ''}
+      className={className}
+    />
   );
 };
 

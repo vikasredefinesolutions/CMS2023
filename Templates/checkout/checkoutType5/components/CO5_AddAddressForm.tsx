@@ -124,6 +124,7 @@ const CO5_AddAddressForm = ({
                       setShippingAddress(e.target.checked);
                     userId &&
                       !e.target.checked &&
+                      !isBillingForm &&
                       setAddressType &&
                       setAddressType(UserAddressType.BILLINGADDRESS);
                   }}

@@ -28,7 +28,6 @@ export const FetchDIBrands = async (storeId: string, sequence: number) => {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const FetchDataByBrand = async (body: any) => {
   const url = '/StoreProduct/getfeaturedproductitemsbytagnameandsename.json';
-  console.log('=>>>>>>>>>>>>>>>>>>>>', body);
   const res: newFetauredItemResponse[] = await SendAsync({
     url: url,
     method: 'POST',
@@ -38,7 +37,9 @@ export const FetchDataByBrand = async (body: any) => {
 };
 
 // for sitemap categories
-export const FetchSiteMapCategories = async (id: number) => {
+export const FetchSiteMapCategories = async (
+  id: number,
+): Promise<_CategorySiteMap[]> => {
   const url = `/Category/getcategorytreeviewlist/${id}.json`;
   const res: _CategorySiteMap[] = await SendAsync({
     url: url,

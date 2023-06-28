@@ -6,14 +6,19 @@ import {
   GoogleAnalyticsTrackerForCG,
   KlaviyoScriptHelper,
 } from '@helpers/common.helper';
-import { useTypedSelector_v2 } from '@hooks_v2/index';
+import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import { _globalStore } from 'store.global';
 import ProductDetails_Type2 from './productDetailType2';
 import ProductDetails_Type3 from './productDetailType3';
 import ProductDetails_Type4 from './productDetailType4';
 import ProductDetails_Type5 from './productDetailType5';
+import ProductDetails_Type6 from './productDetailType6';
+import ProductDetails_Type7 from './productDetailsType7';
+
 import { _ProductDetailsTemplates, _Props } from './productDetails';
+import ProductDetails_Type8 from './productDetailsType8';
 let mediaBaseUrl = _globalStore.blobUrl;
+let ignoreFirstCleanUp = true;
 
 const ProductDetailTemplates: _ProductDetailsTemplates = {
   type1: ProductDetails_Type1,
@@ -21,13 +26,18 @@ const ProductDetailTemplates: _ProductDetailsTemplates = {
   type3: ProductDetails_Type3,
   type4: ProductDetails_Type4,
   type5: ProductDetails_Type5,
+  type6: ProductDetails_Type6,
+  type7: ProductDetails_Type7,
+  type8: ProductDetails_Type8,
 };
 
 const ProductDetails: React.FC<_Props> = (props) => {
+  const { update_productDetails } = useActions_v2();
   const { id: customerId } = useTypedSelector_v2((state) => state.user);
   const { id: storeId } = useTypedSelector_v2((state) => state.store);
   const { categoryArr } = useTypedSelector_v2((state) => state.product);
   const { sizes } = useTypedSelector_v2((state) => state.product.product);
+  const state = useTypedSelector_v2((state) => state);
 
   const isCaptured = useRef(false);
   const clientSideMediaUrl = useTypedSelector_v2(
@@ -43,6 +53,10 @@ const ProductDetails: React.FC<_Props> = (props) => {
         | 'type2'
         | 'type3'
         | 'type4'
+        | 'type5'
+        | 'type6'
+        | 'type7'
+        | 'type8'
     ];
 
   useEffect(() => {
@@ -64,7 +78,6 @@ const ProductDetails: React.FC<_Props> = (props) => {
         brandName: details?.brandName,
         quantity: details?.quantity,
       };
-
       GoogleAnalyticsTrackerForCG(
         'GoogleProductDetailScript',
         storeId,
@@ -107,6 +120,15 @@ const ProductDetails: React.FC<_Props> = (props) => {
     }
   }, [details?.id, storeId, customerId, categoryArr]);
 
+  useEffect(() => {
+    return () => {
+      if (ignoreFirstCleanUp) {
+        ignoreFirstCleanUp = false;
+        return;
+      }
+      update_productDetails('CLEAN_UP');
+    };
+  }, []);
   return <ProductDetails {...props} />;
 };
 

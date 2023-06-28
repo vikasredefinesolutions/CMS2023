@@ -1,16 +1,18 @@
+import { _PASS_FIELD } from '@constants/common.constant';
 import { UserAddressType } from '@constants/enum';
 import {
   __Cookie,
   __Cookie_Expiry,
-  __UserMessages
+  __UserMessages,
 } from '@constants/global.constant';
 import { paths } from '@constants/paths.constant';
+import { __ValidationText } from '@constants/validation.text';
 import { _Industry } from '@definations/app.type';
 import {
   KlaviyoScriptTag,
   deleteCookie,
   extractCookies,
-  setCookie
+  setCookie,
 } from '@helpers/common.helper';
 import getLocation from '@helpers/getLocation';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
@@ -18,24 +20,22 @@ import { updateCartByNewUserId } from '@services/cart.service';
 import {
   FetchCountriesList,
   FetchIndustriesList,
-  FetchStatesList
+  FetchStatesList,
 } from '@services/general.service';
 import { _CreateNewAccount_Payload } from '@services/payloads/createNewAccount.payload';
 import {
   CreateNewAccount,
   GetStoreCustomer,
   getLocationWithZipCode,
-  signInUser
+  signInUser,
 } from '@services/user.service';
 import { getWishlist } from '@services/wishlist.service';
 import { Form, Formik } from 'formik';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
-import {
-  _SU2_InitialValues,
-  _Signup2Schema,
-  su2_initialValues
-} from './SU2.extras';
+import ReCAPTCHA from 'react-google-recaptcha';
+import * as Yup from 'yup';
+import { _SU2_InitialValues, su2_initialValues } from './SU2.extras';
 
 const SignUp_type2: React.FC = () => {
   const router = useRouter();
@@ -47,6 +47,8 @@ const SignUp_type2: React.FC = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const storeId = useTypedSelector_v2((state) => state.store.id);
   const customerId = useTypedSelector_v2((state) => state.user.id);
+  const [verifiedRecaptch, setverifiedRecaptch] = useState(false);
+  const storeCode = useTypedSelector_v2((state) => state.store.code);
 
   const {
     showModal,
@@ -55,6 +57,73 @@ const SignUp_type2: React.FC = () => {
     updateCustomer,
     logInUser,
   } = useActions_v2();
+
+  const _Signup2Schema = Yup.object().shape({
+    industryType: Yup.string()
+      .trim()
+      .required(__ValidationText.signUp.industryType.required),
+    organizationName: Yup.string()
+      .trim()
+      .required(__ValidationText.signUp.companyName.required),
+    departmentName: Yup.string()
+      .trim()
+      .min(__ValidationText.signUp.companyName.minLength)
+      .max(__ValidationText.signUp.companyName.maxLength),
+    firstname: Yup.string()
+      .trim()
+      .required(__ValidationText.signUp.firstName.required)
+      .min(__ValidationText.signUp.firstName.minLength)
+      .max(__ValidationText.signUp.firstName.maxLength),
+    lastName: Yup.string()
+      .trim()
+      .required(__ValidationText.signUp.lastName.required)
+      .min(__ValidationText.signUp.lastName.minLength)
+      .max(__ValidationText.signUp.lastName.maxLength),
+    email: Yup.string()
+      .trim()
+      .email(__ValidationText.signUp.email.valid)
+      .required(__ValidationText.signUp.email.required),
+    companyAddress: Yup.string()
+      .trim()
+      .required(__ValidationText.signUp.storeCustomerAddress.address1.required),
+    zipCode: Yup.string()
+      .trim()
+      .required(
+        __ValidationText.signUp.storeCustomerAddress.postalCode.required,
+      )
+      .max(__ValidationText.signUp.storeCustomerAddress.postalCode.maxLength),
+    cityName: Yup.string()
+      .trim()
+      .required(__ValidationText.signUp.storeCustomerAddress.city.required),
+    state: Yup.string()
+      .trim()
+      .required(__ValidationText.signUp.storeCustomerAddress.state.required),
+    country: Yup.string()
+      .trim()
+      .required(
+        __ValidationText.signUp.storeCustomerAddress.countryName.required,
+      ),
+    phoneNumber: Yup.string()
+      .trim()
+      .required(__ValidationText.signUp.storeCustomerAddress.phone.required)
+      .min(__ValidationText.signUp.storeCustomerAddress.phone.length)
+      .max(__ValidationText.signUp.storeCustomerAddress.phone.length),
+    usersMessage: Yup.string()
+      .trim()
+      .min(__ValidationText.signUp.companyName.minLength)
+      .max(__ValidationText.signUp.companyName.maxLength),
+    password: Yup.string()
+      .trim()
+      .test('password-test-case', 'Password is required', (value) => {
+        const domain = (_PASS_FIELD as any)[storeCode];
+        if (domain) return true;
+        if (!value || value.length < 6) return false;
+        return true;
+      })
+      // .required(__ValidationText.signUp.password.required)
+      .min(__ValidationText.signUp.password.minLength)
+      .max(__ValidationText.signUp.password.maxLength),
+  });
 
   const handleFormikSubmit = async (values: _SU2_InitialValues) => {
     const location = await getLocation();
@@ -200,7 +269,7 @@ const SignUp_type2: React.FC = () => {
     FetchCountriesList().then((countriesExist) => {
       if (countriesExist) {
         setCountries(countriesExist);
-        FetchStatesList(countriesExist[1].id).then(
+        FetchStatesList(countriesExist[0].id).then(
           (res) => res && setStates(res),
         );
       }
@@ -231,6 +300,10 @@ const SignUp_type2: React.FC = () => {
       }
     });
   };
+
+  function onChange(value: any) {
+    setverifiedRecaptch(true);
+  }
 
   useEffect(() => {
     if (customerId) {
@@ -263,7 +336,6 @@ const SignUp_type2: React.FC = () => {
               touched,
               errors,
             }) => {
-              console.log(errors)
               return (
                 <Form>
                   <div className='flex flex-wrap -mx-3 gap-y-6'>
@@ -281,6 +353,7 @@ const SignUp_type2: React.FC = () => {
                           name='industryType'
                           value={values.industryType}
                         >
+                          <option>Select Industry Type</option>
                           {industries.map((res) => (
                             <option key={res.id}>{res.name}</option>
                           ))}
@@ -293,7 +366,8 @@ const SignUp_type2: React.FC = () => {
 
                     <div className='w-full lg:w-1/2 px-3'>
                       <label className='mb-[4px] text-normal-text'>
-                        Organization Name <span className='text-rose-500'>*</span>
+                        Organization Name{' '}
+                        <span className='text-rose-500'>*</span>
                       </label>
                       <div className=''>
                         <input
@@ -323,40 +397,45 @@ const SignUp_type2: React.FC = () => {
                           onChange={handleChange}
                           onBlur={handleBlur}
                         />
-                     </div>
+                      </div>
                       <div className='text-red-500 text-s'>
                         {touched.departmentName && errors.departmentName}
                       </div>
                     </div>
 
-                    <div className='w-full lg:w-1/2 px-3'>
-                      <label className='mb-[4px] text-normal-text'>
-                        Password <span className='text-rose-500'>*</span>
-                      </label>
-                      <div className=''>
-                        <input
-                          placeholder=''
-                          type={showPassword ? 'text' : 'password'}
-                          value={values.password}
-                          name='password'
-                          className='form-input !w-[calc(100%-40px)]'
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                        />
+                    {!(storeCode === 'PKHG') && (
+                      <div className='w-full lg:w-1/2 px-3'>
+                        <label className='mb-[4px] text-normal-text'>
+                          Password{' '}
+                          {!(storeCode === 'PKHG') && (
+                            <span className='text-rose-500'>*</span>
+                          )}
+                        </label>
+                        <div className=''>
+                          <input
+                            placeholder=''
+                            type={showPassword ? 'text' : 'password'}
+                            value={values.password}
+                            name='password'
+                            className='form-input !w-[calc(100%-40px)]'
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                          />
+                        </div>
+                        <button
+                          type='button'
+                          onClick={() => setShowPassword(!showPassword)}
+                          className='block w-7 h-7 text-center absolute top-2 right-2'
+                        >
+                          <span className='material-symbols-outlined text-gray-400 focus:outline-none hover:text-primary transition-colors'>
+                            visibility
+                          </span>
+                        </button>
+                        <div className='text-red-500 text-s'>
+                          {touched.password && errors.password}
+                        </div>
                       </div>
-                      <button
-                        type='button'
-                        onClick={() => setShowPassword(!showPassword)}
-                        className='block w-7 h-7 text-center absolute top-2 right-2'
-                      >
-                        <span className='material-symbols-outlined text-gray-400 focus:outline-none hover:text-primary transition-colors'>
-                          visibility
-                        </span>
-                      </button>
-                      <div className='text-red-500 text-s'>
-                        {touched.password && errors.password}
-                      </div>
-                    </div>
+                    )}
 
                     <div className='w-full lg:w-1/2 px-3'>
                       <label className='mb-[4px] text-normal-text'>
@@ -398,7 +477,7 @@ const SignUp_type2: React.FC = () => {
 
                     <div className='w-full lg:w-1/2 px-3'>
                       <label className='mb-[4px] text-normal-text'>
-                        Email <span className='text-rose-500'>*</span>
+                        Email Address <span className='text-rose-500'>*</span>
                       </label>
                       <div className=''>
                         <input
@@ -459,7 +538,9 @@ const SignUp_type2: React.FC = () => {
                     </div>
 
                     <div className='w-full lg:w-1/2 px-3'>
-                      <label className='mb-[4px] text-normal-text'>City  <span className='text-rose-500'>*</span></label>
+                      <label className='mb-[4px] text-normal-text'>
+                        City <span className='text-rose-500'>*</span>
+                      </label>
                       <div className=''>
                         <input
                           id=''
@@ -477,7 +558,9 @@ const SignUp_type2: React.FC = () => {
                     </div>
 
                     <div className='w-full lg:w-1/2 px-3'>
-                      <label className='mb-[4px] text-normal-text'>State  <span className='text-rose-500'>*</span></label>
+                      <label className='mb-[4px] text-normal-text'>
+                        State/Provience <span className='text-rose-500'>*</span>
+                      </label>
                       <div className=''>
                         <select
                           className='form-input !w-[calc(100%-40px)]'
@@ -545,7 +628,7 @@ const SignUp_type2: React.FC = () => {
 
                     <div className='w-full lg:w-1/2 px-3'>
                       <label className='mb-[4px] text-normal-text'>
-                        Phone Number <span className='text-rose-500'>*</span>
+                        Phone <span className='text-rose-500'>*</span>
                       </label>
                       <div className=''>
                         <input
@@ -563,22 +646,24 @@ const SignUp_type2: React.FC = () => {
                       </div>
                     </div>
 
-                    <div className='w-full lg:w-1/2 px-3'>
-                      <label className='mb-[4px] text-normal-text'>
-                        Job Title
-                      </label>
-                      <div className=''>
-                        <input
-                          id=''
-                          name='jobTitle'
-                          placeholder=''
-                          value={values.jobTitle}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          className='form-input !w-[calc(100%-40px)]'
-                        />
+                    {!(storeCode === 'PKHG') && (
+                      <div className='w-full lg:w-1/2 px-3'>
+                        <label className='mb-[4px] text-normal-text'>
+                          Job Title
+                        </label>
+                        <div className=''>
+                          <input
+                            id=''
+                            name='jobTitle'
+                            placeholder=''
+                            value={values.jobTitle}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            className='form-input !w-[calc(100%-40px)]'
+                          />
+                        </div>
                       </div>
-                    </div>
+                    )}
                     <div className='w-full lg:w-full px-3'>
                       <label className='mb-[4px] text-normal-text'>
                         Please tell us about your company, and how you would
@@ -597,8 +682,18 @@ const SignUp_type2: React.FC = () => {
                       </div>
                     </div>
 
+                    <ReCAPTCHA
+                      className='w-full px-3'
+                      sitekey={process.env.NEXT_PUBLIC_RECAPTCHASITEKEY || ''}
+                      onChange={onChange}
+                    />
+
                     <div className='w-full lg:w-full px-3'>
-                      <button type='submit' className='btn btn-primary'>
+                      <button
+                        type='submit'
+                        className='btn btn-primary'
+                        disabled={!verifiedRecaptch}
+                      >
                         Submit
                       </button>
                     </div>

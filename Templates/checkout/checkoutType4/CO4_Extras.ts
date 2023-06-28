@@ -43,6 +43,10 @@ export const maxLengthCalculator = (
 export const detectCardIssuer = (cardNumber: string) => {
   let re = new RegExp('^4');
 
+  if (!cardNumber) {
+    return '';
+  }
+
   if (cardNumber.match(re) != null) {
     return 'VISA';
   }

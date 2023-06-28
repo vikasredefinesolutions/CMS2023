@@ -106,13 +106,15 @@ const TemplateFiveListing = ({
                 className='relative cursor-pointer'
               >
                 <div>
+                <a href={`/${product.sename}.html`} title={product.name} style={{display: "block"}}>
+               
                   <NxtImage
                     src={mainImageUrl}
-                    alt=''
+                    alt={product.name}
                     className='max-h-full'
                     key={currentProduct?.id}
-                    title={product.name}
                   />
+                  </a>
                 </div>
               </Link>
               <div className='absolute top-2 right-2 text-gray-800 p-1 z-5'>
@@ -290,7 +292,7 @@ const TemplateFiveListing = ({
                         <NxtImage
                           src={`${mediaBaseUrl}${currentProduct.imageName}`}
                           alt=''
-                          className=''
+                          className='max-h-full m-auto'
                           title={currentProduct.colorName}
                         />
                       </li>
@@ -314,7 +316,7 @@ const TemplateFiveListing = ({
                             <NxtImage
                               src={`${mediaBaseUrl}${subRow.imageurl}`}
                               alt=''
-                              className=''
+                              className='max-h-full m-auto'
                               title={subRow.colorName}
                             />
                           </li>
@@ -357,7 +359,7 @@ const TemplateFiveListing = ({
                         <NxtImage
                           src={`${mediaBaseUrl}${subRow.imageName}`}
                           alt=''
-                          className=''
+                          className='max-h-full m-auto'
                           title={subRow.colorName}
                         />
                       </li>

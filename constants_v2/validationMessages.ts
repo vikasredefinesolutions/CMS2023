@@ -1,9 +1,13 @@
 export const addressMessages = {
   firstName: {
     required: 'First Name is required',
+    minlength: 2,
+    minValidation: 'First Name must be at least 2 characters',
   },
   lastName: {
     required: 'Last Name is required',
+    minlength: 2,
+    minValidation: 'Last Name must be at least 2 characters',
   },
   email: {
     required: 'Email is required',
@@ -35,9 +39,21 @@ export const addressMessages = {
 };
 
 export const addUserMessages = {
-  firstName: { required: 'First Name is required' },
-  lastName: { required: 'Last Name is required' },
-  email: { required: 'Email is required' },
+  firstName: {
+    required: 'First Name is required',
+    minLength: 2,
+    minValidation: 'First Name must be at least 2 characters',
+  },
+  lastName: {
+    required: 'Last Name is required',
+    minLength: 2,
+    minValidation: 'Last Name must be at least 2 characters',
+  },
+
+  email: {
+    required: 'Email is required',
+    valid: 'Enter a valid email address',
+  },
   role: { required: 'Role is required' },
 };
 
@@ -93,6 +109,27 @@ export const signupPageMessages = {
     phone: { required: 'Enter your phone Number.' },
     countryName: { required: 'Required' },
   },
+  teamGender: {
+    required: 'Enter team gender',
+  },
+  timeOfYearPurchase: {
+    required: 'Time of year purchase is required',
+  },
+  primaryColor: {
+    required: 'Primary color is required',
+  },
+  position: {
+    required: 'Position is required',
+  },
+  organizationType: {
+    required: 'Organization type is required',
+  },
+  mascot: {
+    required: 'Mascot is required',
+  },
+  primarySport: {
+    required: 'Primary sport is required',
+  },
 };
 
 export const __QuoteRequestMessages = {
@@ -139,9 +176,13 @@ export const contactPageMessage = {
 export const CustomRequestMessage = {
   firstName: {
     required: 'First name is required',
+    minlength: 2,
+    minValidation: 'First Name must be at least 2 characters',
   },
   lastName: {
     required: 'Last name is required',
+    minlength: 2,
+    minValidation: 'Last name must be at least 2 characters',
   },
   organizationName: {
     required: 'Organization name is required',
@@ -179,6 +220,9 @@ export const CustomRequestMessage = {
   itemName: {
     required: 'Item name is required',
   },
+  budget: {
+    required: 'Budget is required',
+  },
   itemColor: {
     required: 'Item color is required',
   },
@@ -193,9 +237,13 @@ export const CustomRequestMessage = {
 export const consultationProofMessages = {
   firstName: {
     required: 'First name is required',
+    minLength: 2,
+    minValidation: 'First Name must be at least 2 characters',
   },
   lastName: {
     required: 'Last name is required',
+    minLength: 2,
+    minValidation: 'Last Name must be at least 2 characters',
   },
   organization: {
     required: 'Organization name is required',
@@ -216,5 +264,15 @@ export const consultationProofMessages = {
   },
   teamSport: {
     required: 'TeamSport is required',
+  },
+};
+
+export const giftCardValidation = {
+  email: {
+    invalid: 'Invalid email address format',
+    required: 'Email is required',
+  },
+  name: {
+    required: `Recipient's Name is required`,
   },
 };

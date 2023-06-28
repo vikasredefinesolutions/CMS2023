@@ -28,7 +28,7 @@ const Topic: React.FC<_props> = ({ title, url }) => {
               title={title}
               onClick={() => {
                 toggleSideMenu('CLOSE');
-                router.push(`/${url}`);
+                router.push(`/${url}.html`);
               }}
               className=''
             >

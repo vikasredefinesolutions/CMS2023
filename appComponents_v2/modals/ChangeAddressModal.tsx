@@ -54,7 +54,7 @@ const ChangeAddressModal: FC<props> = ({
       <div className='w-full h-full bg-black bg-opacity-50 flex items-center justify-center'>
         <div className='relative w-full max-w-xl'>
           <div className='relative bg-white rounded-lg shadow max-h-screen overflow-y-auto'>
-            <div className='flex justify-between items-start p-4 rounded-t border-b'>
+            <div className='flex justify-between items-start p-4 rounded-t border-b sticky top-0 left-0 bg-white z-40'>
               <h3 className='text-xl font-semibold text-gray-900 '>
                 Change{' '}
                 {addressType === UserAddressType.SHIPPINGADDRESS

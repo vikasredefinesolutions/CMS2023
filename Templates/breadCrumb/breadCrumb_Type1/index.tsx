@@ -1,4 +1,5 @@
 import NxtImage from '@appComponents/reUsable/Image';
+import { storeBuilderTypeId } from '@configs/page.config';
 import { __pagesText } from '@constants/pages.text';
 import { paths } from '@constants/paths.constant';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
@@ -7,7 +8,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { _BreadCrumbProps } from '../breadcrumb';
-
 const BreadCrumb_Type1: NextPage<_BreadCrumbProps> = ({
   pageType,
   breadCrumbs,
@@ -28,8 +28,16 @@ const BreadCrumb_Type1: NextPage<_BreadCrumbProps> = ({
   const { view } = useTypedSelector_v2((state) => state.store);
 
   const product = useTypedSelector_v2((state) => state.product.product);
+  const {
+    id: storeId,
+    storeTypeId,
+  } = useTypedSelector_v2((state) => state.store);
+  const store = useTypedSelector_v2((state) => state.store);
+
   return (
     <>
+    {breadCrumbs.length > 0 && 
+    <div className={`${store.storeTypeId === storeBuilderTypeId ? 'bg-tertiary' : ''}`}>
       <div className='container mx-auto'>
         <div
           className={`${
@@ -41,7 +49,7 @@ const BreadCrumb_Type1: NextPage<_BreadCrumbProps> = ({
               className='flex flex-wrap items-center text-small-text'
               aria-label='Breadcrumb'
             >
-              {showBorderAndLogo && (
+              {(showBorderAndLogo && store.storeTypeId !== storeBuilderTypeId) && (
                 <div
                   className='hidden text-anchor hover:text-anchor-hover cursor-pointer lg:inline-block mr-4 !no-underline'
                   onClick={() => {
@@ -97,6 +105,8 @@ const BreadCrumb_Type1: NextPage<_BreadCrumbProps> = ({
           </div>
         </div>
       </div>
+      </div>
+      }
     </>
   );
 };

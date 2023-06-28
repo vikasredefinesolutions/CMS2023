@@ -1,17 +1,16 @@
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
-import { useEffect } from 'react';
 
 const SuccessErrorModal = () => {
   const modal = useTypedSelector_v2((state) => state.success);
   const { hideModal } = useActions_v2();
-  useEffect(() => {
-    if (modal.showModal) {
-      setTimeout(() => {
-        hideModal();
-      }, 3000);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [modal.showModal]);
+  // useEffect(() => {
+  //   if (modal.showModal) {
+  //     setTimeout(() => {
+  //       hideModal();
+  //     }, 3000);
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [modal.showModal]);
 
   return (
     <div

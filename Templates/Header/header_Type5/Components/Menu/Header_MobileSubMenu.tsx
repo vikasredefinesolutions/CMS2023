@@ -44,7 +44,7 @@ const MobileSubMenu: React.FC<_props> = ({ content, type, view, url }) => {
               className='text-[12px] mr-[5px] underline'
               onClick={() => toggleSideMenu('CLOSE')}
             >
-              <Link href={`${url}.html`}>
+              <Link href={`/${url}.html`}>
                 {__pagesText.Headers.mobileViewAll}
               </Link>
             </div>

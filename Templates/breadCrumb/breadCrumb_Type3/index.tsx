@@ -1,18 +1,13 @@
 import { paths } from '@constants/paths.constant';
-import { useTypedSelector_v2 } from '@hooks_v2/index';
 import { NextPage } from 'next';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import { _BreadCrumbProps } from '../breadcrumb';
 
 const BreadCrumb_Type3: NextPage<_BreadCrumbProps> = ({
   pageType,
   breadCrumbs,
 }) => {
-  const router = useRouter();
-  const product = useTypedSelector_v2((state) => state.product.product);
-
-  return (
+  return breadCrumbs && breadCrumbs.length ? (
     <>
       <div className='container mx-auto'>
         <div className='bg-white px-[10px] py-[5px]'>
@@ -20,7 +15,7 @@ const BreadCrumb_Type3: NextPage<_BreadCrumbProps> = ({
             className='flex bg-light-gray px-[10px] py-[5px]'
             aria-label='Breadcrumb'
           >
-            <ol className='inline-flex items-center space-x-1 md:space-x-3 text-sm'>
+            <ol className='inline-flex items-center space-x-1 md:space-x-3 text-sm flex-wrap gap-y-1'>
               <>
                 {breadCrumbs.map((item, index) => (
                   <li
@@ -81,7 +76,7 @@ const BreadCrumb_Type3: NextPage<_BreadCrumbProps> = ({
         </div>
       </div>
     </>
-  );
+  ) : null;
 };
 
 export default BreadCrumb_Type3;

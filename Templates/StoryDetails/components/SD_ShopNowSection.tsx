@@ -78,14 +78,16 @@ const SD_ShopNowSection: React.FC<_Props> = ({ productSku }) => {
                   </div>
                   <div className='text-center w-full'>
                     <div className='text-medium-text p-[8px] text-anchor tetx-center'>
-                      {ele.name}
+                      <Link className='' href={ele.link}>
+                        <a>{ele.name}</a>
+                      </Link>
                     </div>
                     <div className='mb-[8px] text-medium-text'>
                       <strong></strong>
                     </div>
-                    <Link href={ele.link} className='btn btn-tertiary btn-md'>
-                      <a>
-                        <span className='sr-only'>{ele.name}</span>{' '}
+                    <Link href={ele.link} className='custbtn custbtn-primary btn-md'>
+                      <a className='custbtn custbtn-primary'>
+                        
                         {ele.buttonText}
                       </a>
                     </Link>

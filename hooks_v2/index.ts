@@ -66,6 +66,9 @@ export const GetCustomerId = () => {
 };
 
 export const GetCartTotals = () => {
+  const isEmployeeLoggedIN = useTypedSelector_v2(
+    (state) => !!state.employee.empId,
+  );
   const cart = useTypedSelector_v2((state) => state.cart.cart);
   const { useBalance, allowedBalance } = useTypedSelector_v2(
     (state) => state.cart.userCreditBalance,
@@ -104,8 +107,11 @@ export const GetCartTotals = () => {
       priceObject.totalQty += res.totalQty;
       priceObject.totalLineCharges += res.lineTotalPrice;
       priceObject.totalLogoCharges += res.logoTotalPrice;
-      priceObject.merchandisePrice +=
-        res.msrp !== 0 ? res?.msrp * res.totalQty : res.productTotal;
+      priceObject.merchandisePrice += isEmployeeLoggedIN
+        ? res.productTotal
+        : res.msrp !== 0
+        ? res?.msrp * res.totalQty
+        : res.productTotal;
       res?.shoppingCartLogoPersonViewModels.forEach((item, index) => {
         if (index === 0) {
           priceObject.firstLogoPrice += item.logoPrice;

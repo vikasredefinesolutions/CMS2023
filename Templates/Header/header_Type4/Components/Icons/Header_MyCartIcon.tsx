@@ -92,7 +92,7 @@ const MyCartIcon: React.FC = () => {
                         <div className=''>
                           <Link
                             className='inline-block'
-                            href={`/${cartItem.seName}`}
+                            href={`/${cartItem.seName}.html`}
                           >
                             <a className='inline-block text-[13px] text-[#000000] hover:text-anchor-hover'>
                               {cartItem.productName}

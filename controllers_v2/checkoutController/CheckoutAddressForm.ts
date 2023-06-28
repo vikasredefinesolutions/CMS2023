@@ -20,6 +20,8 @@ const inititalValues = {
 };
 
 export type AddressType = {
+  id?: number;
+  rowVersion?: string;
   firstname: string;
   lastName: string;
   email: string;

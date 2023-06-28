@@ -67,8 +67,6 @@ const ChekoutType1: React.FC<_Props> = ({ templateId }) => {
     fetchShipping,
     shippingMethod,
     setSelectedShipping,
-    setSalesTax,
-    salesTax,
   } = CheckoutController();
   const userId = useTypedSelector_v2((state) => state.user.id);
   const isEmployeeLoggedIn = useTypedSelector_v2(
@@ -113,7 +111,7 @@ const ChekoutType1: React.FC<_Props> = ({ templateId }) => {
             {currentPage === checkoutPages.reviewOrder ? (
               <div id='OrderReview'>
                 <section className='w-full'>
-                  <div className='bg-light-gray p-4 text-2xl font-bold'>
+                  <div className='bg-light-gray p-4 text-title-text font-bold'>
                     {__pagesText.CheckoutPage.OrderReview}
                   </div>
                   <div className='flex flex-wrap checkout-box ml-[-15px] mr-[-15px]'>
@@ -198,12 +196,24 @@ const ChekoutType1: React.FC<_Props> = ({ templateId }) => {
                               <>
                                 <div className='flex flex-wrap'>
                                   <div>
-                                    <NxtImage
-                                      isStatic={true}
-                                      className=''
-                                      src={cardType[1].url}
-                                      alt=''
-                                    />
+                                    {cardType.map((res) => (
+                                      <div
+                                        key={res.name}
+                                        className={`opacity-${
+                                          detectCardType &&
+                                          detectCardType() === res.name
+                                            ? '1 block'
+                                            : '40 hidden'
+                                        } ml-[4px] w-[32px]`}
+                                      >
+                                        <NxtImage
+                                          isStatic={true}
+                                          className=''
+                                          src={res.url}
+                                          alt=''
+                                        />
+                                      </div>
+                                    ))}
                                   </div>
                                   <div>
                                     <p>{cardDetails.cardNumber}</p>
@@ -459,14 +469,7 @@ const ChekoutType1: React.FC<_Props> = ({ templateId }) => {
             )}
           </div>
           <div className='w-full md:w-4/12 lg:w-[27%] pl-[15px] pr-[15px]'>
-            <OrderSummaryType1
-              selectedShippingModel={selectedShipping}
-              salesTax={salesTax}
-              setSalesTax={setSalesTax}
-              billingAddressCode={
-                billingAdress?.postalCode ? billingAdress.postalCode : '0'
-              }
-            />
+            <OrderSummaryType1 selectedShippingModel={selectedShipping} />
             {isEmployeeLoggedIn && <CT1_EL_Dropdowns />}
             <div id='OrderNoteDiv mt-[20px]'>
               <div className='text-sub-text font-bold &nbsp;trsacking-normal mb-[5px]'>

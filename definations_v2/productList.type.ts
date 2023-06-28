@@ -300,3 +300,16 @@ export interface CategoryFilter {
     | GetlAllProductList
   >;
 }
+export interface giftCard {
+  description: string;
+  giftCardEnddate: string;
+  imageName: string;
+  name: string;
+  ourCost: string;
+  productId: number;
+  salePrice: string;
+  seName: string;
+  shortDescription: string;
+  sku: string;
+  storeId: number;
+};

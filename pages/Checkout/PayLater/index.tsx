@@ -27,6 +27,7 @@ import { _globalStore } from 'store.global';
 
 const Checkout: NextPage<{ templateId: number }> = ({ templateId }) => {
   const router = useRouter();
+  const { showModal } = useActions_v2();
   const { logInUser, updateCustomer, updateWishListData } = useActions_v2();
   const encryptedOrderId = router.query.OrderNumber as string;
 
@@ -77,14 +78,30 @@ const Checkout: NextPage<{ templateId: number }> = ({ templateId }) => {
       | 'PAYMENT_ALREADY_DONE'
       | 'NO_ORDER_ID_FOUND'
       | 'UNEXPECTED_ERROR'
-      | 'PAYMENT_COMPLETE',
+      | 'PAYMENT_COMPLETE'
+      | 'ORDER_CANCELLED',
   ) => {
     if (reason === 'PAYMENT_ALREADY_DONE') {
-      router.push(paths.HOME);
+      localStorage.setItem(
+        'OrderNumber',
+        JSON.stringify(router?.query?.OrderNumber),
+      );
+      router.push({
+        pathname: paths.HOME,
+        query: { OrderNumber: JSON.stringify(router?.query?.OrderNumber) },
+      });
       return;
     }
 
     if (reason === 'NO_ORDER_ID_FOUND') {
+      router.push(paths.HOME);
+      return;
+    }
+    if (reason === 'ORDER_CANCELLED') {
+      showModal({
+        message: 'Your Order Has Been Cancelled',
+        title: 'Order Cancelled',
+      });
       router.push(paths.HOME);
       return;
     }
@@ -123,6 +140,10 @@ const Checkout: NextPage<{ templateId: number }> = ({ templateId }) => {
         .then((res) => {
           if (!res) {
             handleRedirect('UNEXPECTED_ERROR');
+            return;
+          }
+          if (res.billing.orderStatus === 'Cancelled') {
+            handleRedirect('ORDER_CANCELLED');
             return;
           }
           logginUserWithId(res.billing.customerID);

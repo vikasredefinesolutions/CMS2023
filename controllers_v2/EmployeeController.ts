@@ -54,6 +54,16 @@ const EmployeeController = () => {
       __LocalStorage.empData,
     );
 
+    const guestLoginByJustEmail = extractFromLocalStorage<{
+      onlyEmail: boolean;
+      email: string;
+    }>(__LocalStorage.guestEmailID);
+
+    if (guestLoginByJustEmail?.onlyEmail) {
+      employee_Login({ isGuest: true });
+      employee_Login({ guestLoginJustByEmail: guestLoginByJustEmail.email });
+    }
+
     const empGuestData =
       extractFromLocalStorage<CheckCustomerAlreadyExistResponse>(
         __LocalStorage.empGuest,

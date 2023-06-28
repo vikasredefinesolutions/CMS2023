@@ -115,7 +115,7 @@ const OrderDetails_type2: React.FC = () => {
                 <div className='mb-[20px]'>
                   <Link href={paths.myAccount.orders} title=''>
                     <a className='!text-anchor !text-anchor-hover'>
-                    &lt; Go Back to all orders
+                      &lt; Go Back to all orders
                     </a>
                   </Link>
                 </div>

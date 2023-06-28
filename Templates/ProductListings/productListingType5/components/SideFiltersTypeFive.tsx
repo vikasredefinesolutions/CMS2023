@@ -84,9 +84,6 @@ const SideFiltersTypeFive = ({
                                       ? 'relative border-primary'
                                       : 'border-secondary'
                                   }`}
-                                  // style={{
-                                  //   background: option.colorCode,
-                                  // }}
                                   onClick={() => {
                                     handleChange(
                                       filter.label,
@@ -184,7 +181,7 @@ const SideFiltersTypeFive = ({
                                       htmlFor={`${option.name}-${ind}`}
                                       className='text-black'
                                     >
-                                      {capitalizeFirstLetter(option.name)} (
+                                      {capitalizeFirstLetter(option.name)}(
                                       {option?.productCount})
                                     </label>
                                   )}

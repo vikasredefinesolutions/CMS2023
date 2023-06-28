@@ -18,6 +18,7 @@ const SelectOrInput: React.FC<_SelectOrInputProps> = ({
   defaultQty,
   sizeAttributeOptionId,
   isSpecialBrand,
+  brandName,
 }) => {
   const isEmployeeLoggedIn = useTypedSelector_v2(
     (state) => state.employee.loggedIn,
@@ -67,7 +68,8 @@ const SelectOrInput: React.FC<_SelectOrInputProps> = ({
       !isEmployeeLoggedIn &&
       multipleQuantity !== 0 &&
       multipleQuantity < qty &&
-      +event.target.value % multipleQuantity !== 0
+      +event.target.value % multipleQuantity !== 0 &&
+      !(+event.target.value > qty)
     ) {
       updateQuantities({
         attributeOptionId: sizeAttributeOptionId,
@@ -330,6 +332,7 @@ const SelectOrInput: React.FC<_SelectOrInputProps> = ({
                       }));
                     }}
                     onBlur={(e) => {
+                      if (+e.target.value > qty) return;
                       enterQtyHandler({
                         itemCount: +(values.itemCount
                           ? isEmployeeLoggedIn

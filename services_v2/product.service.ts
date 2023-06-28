@@ -13,8 +13,8 @@ import {
   _ProductBySku,
   _ProductDetails,
   _ProductDoNotExist,
-  _ProductsAlike,
   _ProductSEO,
+  _ProductsAlike,
   _ProductsRecentlyViewed,
   _ProductsRecentlyViewedPayload,
   _ProductsRecentlyViewedResponse,
@@ -53,7 +53,9 @@ export type _ProducDetailAPIs_V2 =
   | 'SumbitRequestConsultationDetails'
   | 'FetchFeaturedProducts'
   | 'FetchProductsBySKUs'
-  | 'SendCompareLinkByEmail';
+  | 'SendCompareLinkByEmail'
+  | 'FetchCustomerQuantityByProductId'
+  | 'FetchCustomSearch';
 
 export type _ProductDetailService_V2 = {
   service: 'productDetails';
@@ -504,6 +506,26 @@ export const FetchProductsBySKUs = async (payload: {
   return response;
 };
 
+export const FetchCustomerQuantityByProductId = async (payload: {
+  ShoppingCartItemsId: number;
+  ProductId: number;
+  CustomerId: number;
+}): Promise<number | null> => {
+  const url = `Store/GetCustomerQuantityByProductId/${payload.ProductId}/${payload.CustomerId}/${payload.ShoppingCartItemsId}.json`;
+
+  const response = await CallAPI_v2<number>({
+    name: {
+      service: 'productDetails',
+      api: 'FetchCustomerQuantityByProductId',
+    },
+    request: {
+      url: url,
+      method: 'GET',
+    },
+  });
+
+  return response;
+};
 export const SendCompareLinkByEmail = async (payload: {
   storeId: number;
   Email: string;
@@ -548,4 +570,23 @@ export const CustomerProductOrder = async (payload: _CustomerOrderPayload) => {
   });
 
   return res;
+};
+
+export const FetchCustomSearch = async (payload: {
+  contant: string;
+  storeId: number;
+}) => {
+  const url = `StoreProduct/getproductbysearch/${payload.storeId}/${payload.contant}.json`;
+
+  const response = await CallAPI_v2({
+    name: {
+      service: 'productDetails',
+      api: 'FetchCustomSearch',
+    },
+    request: {
+      url: url,
+      method: 'GET',
+    },
+  });
+  return response;
 };

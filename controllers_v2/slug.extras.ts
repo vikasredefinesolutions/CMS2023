@@ -1,5 +1,6 @@
 import { FetchPageThemeConfigs } from '@services/product.service';
 import { GetlAllProductList } from '@templates/ProductListings/ProductListingType';
+import { _Banner } from '@templates/banner';
 
 // FUNCTIONS
 const parseJson = <T>(
@@ -43,6 +44,7 @@ export interface _ProductList_PropsData {
   brandId: number;
   googleTagManagerResponseCommonData: any | null;
   categoryComponents: string | null;
+  banner: _Banner[] | null;
 }
 
 export interface _BrandSEO {
@@ -113,7 +115,7 @@ export interface _FetchPageThemeConfigs_ProductDetails {
 }
 
 export interface _FetchPageThemeConfigs_ProductListing {
-  templateID: number;
-  breadCrumbTemplateId: number;
+  templateID: string;
+  breadCrumbTemplateId: string;
   bannertype: string;
 }

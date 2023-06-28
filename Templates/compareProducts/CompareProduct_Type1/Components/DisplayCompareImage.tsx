@@ -23,7 +23,7 @@ const DisplayCompareImage: React.FC<_props> = ({ onRemove }) => {
               onClick={() => onRemove(index)}
               className='absolute right-[20px] top-[20px]'
             >
-              <span className='material-icons-outlined text-sub-text font-[900] text-anchor hover:text-anchor-hover'>
+              <span className='material-icons-outlined text-anchor hover:text-anchor-hover'>
                 close
               </span>
             </div>

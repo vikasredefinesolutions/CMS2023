@@ -1,7 +1,6 @@
 import { SpinnerComponent } from '@appComponents/ui/spinner';
 import { paths } from '@constants/paths.constant';
 import CheckoutController from '@controllers/checkoutController';
-import { set_EnduserName } from '@helpers/common.helper';
 import { GetCartTotals, useTypedSelector_v2 } from '@hooks_v2/index';
 import {
   BrandPolicyViewModel,
@@ -10,9 +9,9 @@ import {
   PersonalizationLocation,
 } from '@services/cart';
 import CartSummarryType5 from '@templates/cartSummarry/cartSummaryType5';
-import CartItem from 'Templates/cartItem';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
+import CartItem from 'Templates/cartItem';
 import { _CartProps } from '../Cart';
 import EmptyCart from '../components/emptyCart';
 
@@ -72,15 +71,18 @@ const CartType5: React.FC<_CartProps> = ({
   useEffect(() => {
     getPolicyDetails(cartData || []);
   }, [cartData]);
+
   useEffect(() => {
     const data = getEnduser(productPolicy || []);
     setEndUserDisplay(data);
   }, [productPolicy]);
+
   useEffect(() => {
     if (totalPrice) {
       fetchShipping(totalPrice, null);
     }
   }, [totalPrice, shippingAdress]);
+
   let uniquePolicybrand: string[] = [];
 
   productPolicy &&
@@ -125,6 +127,7 @@ const CartType5: React.FC<_CartProps> = ({
           : false
         : true
       : false;
+
   return (
     <>
       <div className='flex-grow-0'>
@@ -180,11 +183,10 @@ const CartType5: React.FC<_CartProps> = ({
                           </div>
                         ) : (
                           policy.policyMessage != '' &&
-                            policy.policyMessage != ' ' && (
+                            policy.policyMessage != null && (
                               <div className='mt-[20px] ' key={policy.name}>
                                 <strong className=' text-medium-text font-[600]'>
                                   {policy.policyMessage}
-                                  <span className='text-red-600 p-1'>*</span>
                                 </strong>
                               </div>
                             )
@@ -201,9 +203,15 @@ const CartType5: React.FC<_CartProps> = ({
                           id='enduserstio'
                           className='form-input'
                           onChange={(event) => {
-                            setEndUserName(event.target.value);
+                            if (event.target.value.trim() !== '')
+                              return setEndUserName(event.target.value.trim());
+                            setEndUserName('');
                           }}
-                          onBlur={(e) => set_EnduserName(e.target.value)}
+                          onBlur={(event) => {
+                            if (event.target.value.trim() !== '')
+                              return setEndUserName(event.target.value.trim());
+                            setEndUserName('');
+                          }}
                         />
                       </div>
                     )}
@@ -213,7 +221,10 @@ const CartType5: React.FC<_CartProps> = ({
                         key={'/checkout'}
                         className={`my-4 w-full `}
                         disabled={!buttonDisabed}
-                        onClick={() => router.push(`${paths.CHECKOUT}`)}
+                        onClick={() => {
+                          localStorage.setItem('endusername', endUserNameS);
+                          router.push(`${paths.CHECKOUT}`);
+                        }}
                       >
                         <a
                           className={`btn btn-lg btn-primary !flex items-center justify-center w-full ${

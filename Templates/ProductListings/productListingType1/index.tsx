@@ -1,9 +1,11 @@
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable no-unused-vars */
 import { __pagesText } from '@constants/pages.text';
-import React, { Fragment, useEffect, useRef } from 'react';
+import React, { Fragment, useRef } from 'react';
 // import { GetlAllProductList, _ListingProps } from '../productListing';
 
+import { storeBuilderTypeId } from '@configs/page.config';
+import { useTypedSelector_v2 } from '@hooks_v2/index';
 import Home from '@templates/Home';
 import { GetlAllProductList, _ListingProps } from '../ProductListingType';
 import FilterChips from './components/FilterChips';
@@ -38,40 +40,41 @@ const ProductListingType1: React.FC<_ListingProps> = ({
   clearFilterSection,
 }) => {
   const buttonRef = useRef<HTMLButtonElement>(null);
+  const { storeTypeId } = useTypedSelector_v2((state) => state.store);
   // useEffect(() => {
   //   buttonRef.current.addEventListener('click', clickHandler);
   // }, []);
-   const handleScroll = () => {
+  const handleScroll = () => {
     if (typeof window !== 'undefined') {
       // if(document.body.classList.contains('index-page') || storeCode === 'DI')
       // {
       let x = document.querySelector('#loadmore');
-      if (x instanceof HTMLElement) 
-      {
+      if (x instanceof HTMLElement) {
         // alert(x)
-       
-          if ((window.pageYOffset + document.documentElement.clientHeight) >= x?.offsetTop) {
-            if(buttonRef.current)
-             {
-              buttonRef?.current.click();
-             } 
+
+        if (
+          window.pageYOffset + document.documentElement.clientHeight >=
+          x?.offsetTop
+        ) {
+          if (buttonRef.current) {
+            buttonRef?.current.click();
           }
-  
+        }
       }
-      
+
       //}
     }
   };
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      window.addEventListener('scroll', handleScroll);
-    }
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-  
+  // useEffect(() => {
+  //   if (typeof window !== 'undefined') {
+  //     window.addEventListener('scroll', handleScroll);
+  //   }
+  //   return () => window.removeEventListener('scroll', handleScroll);
+  // }, []);
+
   return (
     <>
-      <FreeBanner />
+      {storeTypeId !== storeBuilderTypeId && <FreeBanner />}
       <section id=''>
         <div className='bg-white'>
           <div className='container mx-auto '>
@@ -149,16 +152,18 @@ const ProductListingType1: React.FC<_ListingProps> = ({
                         </div>
                       </div>
                       {products.length < totalCount && (
-                        <button id="loadmore" ref={buttonRef}
+                        <button
+                          id='loadmore'
+                          ref={buttonRef}
                           onClick={loadMore}
                           type='submit'
                           className='mt-[16px] btn btn-md btn-secondary tracking-[1.4px] font-normal w-full max-w-[550px] mx-auto focus:outline-none focus:ring-2 mb-[30px] '
-                          style={{ opacity: 0}}
-                       >
+                          style={{ opacity: 0 }}
+                        >
                           <span className='inline-block w-[20px] h-[20px]'>
                             <img
                               className='max-h-full'
-                              src='assets/images/load-more-arrow.webp'
+                              src='/assets/images/load-more-arrow.webp'
                               alt=''
                             />
                           </span>
@@ -168,7 +173,7 @@ const ProductListingType1: React.FC<_ListingProps> = ({
                           <span className='inline-block w-[20px] h-[20px]'>
                             <img
                               className='max-h-full'
-                              src='assets/images/load-more-arrow.webp'
+                              src='/assets/images/load-more-arrow.webp'
                               alt=''
                             />
                           </span>
@@ -178,7 +183,7 @@ const ProductListingType1: React.FC<_ListingProps> = ({
                   </div>
                 </div>
               </div>
-              
+
               {CMS.component && (
                 <div className='flex flex-wrap ml-[-16px] mr-[-16px]'>
                   <Home

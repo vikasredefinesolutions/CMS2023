@@ -15,7 +15,7 @@ import { __ValidationText } from '@constants/validation.text';
 import { Klaviyo_BackInStock } from '@services/klaviyo.service';
 import { ErrorMessage, Form, Formik } from 'formik';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import * as Yup from 'yup';
 import AvailableColors from './AvailableColors';
 import DiscountPricing from './DiscountPricing';
@@ -68,11 +68,7 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
   const showExtraButton =
     product.description.length >=
     __pagesConstant._productDetails.descriptionLength;
-  const initialValue = 0;
-  const totalInventoryCount = inventory?.inventory.reduce(
-    (accumulator, currentValue) => accumulator + currentValue.inventory,
-    initialValue,
-  );
+
   const { inventory: inv } = useTypedSelector_v2(
     (state) => state.product.product,
   );
@@ -98,7 +94,12 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
   });
 
   const HTML_START_ORDER_BUTTON = () => {
+    const totalInventoryCount = inventory?.inventory.reduce(
+      (accumulator, currentValue) => accumulator + currentValue.inventory,
+      0,
+    );
     if (
+      totalInventoryCount === undefined ||
       isEmployeeLoggedIn ||
       (totalInventoryCount && totalInventoryCount > 0) ||
       product.isDropShipProduct
@@ -188,15 +189,26 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
   };
 
   return (
-    <div className='col-span-1 mt-[15px] pl-[8px] pr-[8px] md:pl-[15px] md:pr-[15px] sm:pl-[0px] sm:pr-[0px] lg:mt-[0px]'>
+    <div
+      className='col-span-1 mt-[15px] pl-[8px] pr-[8px] md:pl-[15px] md:pr-[15px] sm:pl-[0px] sm:pr-[0px] lg:mt-[0px]'
+     
+    >
+      <meta itemProp='lowPrice' content={`${product.salePrice}`} />
+      <meta itemProp='highPrice' content={`${product.msrp}`} />
+      <meta itemProp='priceCurrency' content='USD' />
+
       <div className='hidden md:flex flex-wrap'>
         <div className='w-full md:w-2/3'>
-          <h1 className='font-[600] text-large-text'>{product.name}</h1>
+          <h1 className='font-[600] text-large-text' itemProp='name'>
+            {product.name}
+          </h1>
           <div className='pt-[3px] text-default-text'>
             <span className='font-[600] inline-block w-[43px]'>
               {__pagesText.productInfo.sku}
             </span>
-            <span className='ml-[4px]'>: {product.sku}</span>
+            <span itemProp='sku' className='ml-[4px]'>
+              : {product.sku}
+            </span>
           </div>
 
           <div className='pt-[6px] text-default-text'>
@@ -350,6 +362,7 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
           }`}
         >
           <div
+            itemProp='description'
             className='pb-10'
             dangerouslySetInnerHTML={{
               __html: product.description,

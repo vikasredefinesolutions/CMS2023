@@ -1,8 +1,10 @@
+import { _Store } from '@configs/page.config';
+import { BACARDI, CYXTERA_CODE, UNITI_CODE } from '@constants/global.constant';
 import { KlaviyoScriptTag } from '@helpers/common.helper';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import { FetchInventoryById } from '@services/product.service';
-import ProductRecentlyViewed from '@templates/recentlyViewedProducts';
 import Reviews from '@templates/Review';
+import ProductRecentlyViewed from '@templates/recentlyViewedProducts';
 import YouMayAlsoLike from '@templates/youMayAlsoLike';
 import Head from 'next/head';
 import { useEffect } from 'react';
@@ -17,7 +19,11 @@ const ProductDetails_Type3: React.FC<_Props> = (product) => {
     product_storeData,
     product_UpdateSelectedValues,
   } = useActions_v2();
-  const { id: storeId, pageType } = useTypedSelector_v2((state) => state.store);
+  const {
+    id: storeId,
+    pageType,
+    code: storeCode,
+  } = useTypedSelector_v2((state) => state.store);
 
   // const getCategoriesArr = (): string[] => {
   //   let categories: CategoriesByPid = [];
@@ -158,7 +164,17 @@ const ProductDetails_Type3: React.FC<_Props> = (product) => {
         if (val === 'youmayalsolike') {
           return (
             <div key={val + index}>
-              <YouMayAlsoLike product={product.alike} id='type1' />;
+              <YouMayAlsoLike
+                product={product.alike}
+                id={
+                  storeCode == _Store.type6 ||
+                  storeCode == CYXTERA_CODE ||
+                  storeCode == UNITI_CODE ||
+                  storeCode === BACARDI
+                    ? '3'
+                    : '1'
+                }
+              />
             </div>
           );
         } else if (val === 'writereview') {
@@ -170,7 +186,7 @@ const ProductDetails_Type3: React.FC<_Props> = (product) => {
               />
             </div>
           );
-        } else {
+        } else if (val === 'recentlyviewed') {
           return (
             <div key={val + index}>
               <ProductRecentlyViewed product={product} />

@@ -38,6 +38,6 @@
     "**/*.ts",
     "**/*.tsx",
     "controllers_v2/checkoutController"
-  ],
+, "pages/measuringguide.html/index.jsx"  ],
   "exclude": ["node_modules", "public"]
 }

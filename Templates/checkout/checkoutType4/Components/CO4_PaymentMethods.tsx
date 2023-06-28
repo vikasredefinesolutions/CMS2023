@@ -24,7 +24,7 @@ const purchasingOrderValidationSchema = Yup.object().shape({
 const CO4_PaymentMethods: React.FC<_Props> = ({ methods }) => {
   const showToggleOption = methods === 'both';
 
-  const { update_paymentDetails } = useActions_v2();
+  const { update_PaymentDetails } = useActions_v2();
   const [methodToShow, setMethodToShow] = useState<
     'individual_cards' | 'bulk_payment'
   >(initialMethod(methods));
@@ -102,6 +102,7 @@ const CO4_PaymentMethods: React.FC<_Props> = ({ methods }) => {
                   max={16}
                   setFieldValue={setFieldValue}
                   onChange={handleChange}
+                  isCreditCard
                   error={true}
                 />
                 <div className='flex flex-wrap -mx-3 md:gap-y-6'>

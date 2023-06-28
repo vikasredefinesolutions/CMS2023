@@ -17,7 +17,7 @@ let mediaBaseUrl = _globalStore.blobUrl;
 const ThankYouProductTable: React.FC<_props> = ({ product }) => {
   const store = useTypedSelector_v2((state) => state.store);
   mediaBaseUrl = store.mediaBaseUrl || mediaBaseUrl;
-  console.log('---here ---', mediaBaseUrl);
+  // console.log('---here ---', mediaBaseUrl);
   return (
     <>
       <div className='flex justify-between py-[10px]'>
@@ -46,7 +46,7 @@ const ThankYouProductTable: React.FC<_props> = ({ product }) => {
         </div>
       </div>
 
-      {store.storeName !== 'Driving Impressions' &&
+      {(store.storeName !== 'Driving Impressions' && store?.code !== 'PORSCHE') &&
         product.shoppingCartLogoPersonViewModels.map(
           (item: any, index: number) => {
             return item.logoName === 'Customize Later' ? (
@@ -80,7 +80,7 @@ const ThankYouProductTable: React.FC<_props> = ({ product }) => {
                     ) : (
                       <NxtImage
                         className='w-14 h-12'
-                        src={`${mediaBaseUrl}${item.logoImagePath}`}
+                        src={`${item.logoImagePath}`}
                         title=''
                         alt={item.logoImagePath}
                       />

@@ -37,6 +37,7 @@ interface _CreditCardInputProps extends _InputProps {
     value: any,
     shouldValidate?: boolean | undefined,
   ) => void;
+  isCreditCard?: boolean;
 }
 
 export const CO4_CreditCardInput: React.FC<_CreditCardInputProps> = ({
@@ -50,6 +51,7 @@ export const CO4_CreditCardInput: React.FC<_CreditCardInputProps> = ({
   onChange,
   error,
   max,
+  isCreditCard = false,
 }) => {
   const [showPopup, setShowPopup] = useState<'ccvInfo' | null>(null);
 
@@ -108,15 +110,29 @@ export const CO4_CreditCardInput: React.FC<_CreditCardInputProps> = ({
 
   return (
     <div className='relative z-0 w-full mb-[20px] border border-gray-border rounded'>
-      <input
-        name={name}
-        type={type}
-        // value={value}
-        onBlur={onBlur}
-        onChange={(event) => isNumberKey(event)}
-        maxLength={max}
-        className='pt-[15px] pb-[0px] block w-full px-[8px] h-[48px] mt-[0px] text-sub-text text-[18px] text-[#000000] bg-transparent border-0 appearance-none focus:outline-none focus:ring-0'
-      />
+      {isCreditCard ? (
+        <input
+          name={name}
+          type={type}
+          // value={value}
+          onBlur={onBlur}
+          onChange={(event) => isNumberKey(event)}
+          maxLength={max}
+          autoComplete='off'
+          onContextMenu={(e) => e.preventDefault()}
+          className='pt-[15px] pb-[0px] block w-full px-[8px] h-[48px] mt-[0px] text-sub-text text-[18px] text-[#000000] bg-transparent border-0 appearance-none focus:outline-none focus:ring-0'
+        />
+      ) : (
+        <input
+          name={name}
+          type={type}
+          // value={value}
+          onBlur={onBlur}
+          onChange={(event) => isNumberKey(event)}
+          maxLength={max}
+          className='pt-[15px] pb-[0px] block w-full px-[8px] h-[48px] mt-[0px] text-sub-text text-[18px] text-[#000000] bg-transparent border-0 appearance-none focus:outline-none focus:ring-0'
+        />
+      )}
       <label
         htmlFor={name}
         className='left-[8px] absolute duration-300 top-[11px] -z-1 origin-0 text-[#000000] text-[18px]'

@@ -37,7 +37,7 @@ const CheckoutAddress = ({
           <div>
             <button
               onClick={changeClickHandler}
-              className='ml-4 text-anchor underline'
+              className='ml-4 hover:text-secondary text-tertiary underline'
               data-modal-toggle='shippingaddressModal'
             >
               Change
@@ -85,7 +85,7 @@ const CheckoutAddress = ({
           </div>
         </div>
       )}
-      {!useShippingAddress && (
+      {!useShippingAddress && address && (
         <div className='text-base mb-3'>
           {address?.firstname} {address?.lastName}
           <br />

@@ -29,7 +29,7 @@ const Topic: React.FC<_props> = ({ title, url }) => {
       case 'sale': {
         const payload = {
           storeId: storeId,
-          customerId: customerId,
+          customerId: customerId || 0,
           contentGroup: 'SALE',
           view: 'SALE',
           pageTitle: 'SALE',
@@ -52,7 +52,7 @@ const Topic: React.FC<_props> = ({ title, url }) => {
       case 'faq': {
         const payload = {
           storeId: storeId,
-          customerId: customerId,
+          customerId: customerId || 0,
           contentGroup: 'FAQ',
           view: 'FAQ',
           pageTitle: 'FAQ',
@@ -75,7 +75,7 @@ const Topic: React.FC<_props> = ({ title, url }) => {
       case 'consultation': {
         const payload = {
           storeId: storeId,
-          customerId: customerId,
+          customerId: customerId || 0,
           contentGroup: 'Consultation',
           view: 'Consultation',
           pageTitle: 'Consultation',

@@ -9,7 +9,7 @@ import C04_ChangeAddressModal from './CO4_ChangeAddressModal';
 interface _Props {}
 
 const CO4_ShippingAddress: React.FC<_Props> = () => {
-  const user = useTypedSelector_v2((state) => state.checkout.shippingAddress);
+  const user = useTypedSelector_v2((state) => state.checkout.address.shipping);
   const userStoredAddress = useTypedSelector_v2(
     (state) => state.user.customer?.customerAddress,
   );

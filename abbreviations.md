@@ -6,6 +6,10 @@ RP => ResetPassword
 SD => StoryDetails
 SL => StoryList
 SC => StoryCategory
+EL => EmployeeLogin
+CO => Checkout
+CI => CartItem
+CL => CartLayout
 
 ------------------------------------------APIs-----------------------------------------
 CNA => CreateNewAccount

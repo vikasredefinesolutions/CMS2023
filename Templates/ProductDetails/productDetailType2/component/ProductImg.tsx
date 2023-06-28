@@ -62,7 +62,7 @@ const ProductImg: React.FC<_ProductImgProps> = ({ product }) => {
   }, [customerId, wishlist]);
 
   return (
-    <div className='col-span-1 grid grid-cols-12 gap-[24px] pr-[15px] pt-[8px]'>
+    <div className='col-span-1 grid grid-cols-12 gap-[24px] lg:pr-[15px] pr-[0px] pt-[8px]'>
       <div className='col-span-12 border border-gray-border relative'>
         <div className='main-image max-w-lg mx-auto'>
           <InnerImageZoom
@@ -89,14 +89,13 @@ const ProductImg: React.FC<_ProductImgProps> = ({ product }) => {
                   <NxtImage
                     src={img.imageUrl}
                     alt={img.altTag}
-                    className='w-full object-center object-cover'
+                    className='max-h-full m-auto'
                     title={img.altTag}
                   />
                 </div>
               );
             })}
         </div>
-
       </div>
       <div className='col-span-12 flex flex-wrap justify-center'>
         {colors &&

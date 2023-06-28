@@ -64,7 +64,7 @@ const ProductImg_Type3: React.FC<_ProductImgProps> = ({ product }) => {
   }, [customerId, wishlist]);
 
   return (
-    <div className='lg:col-span-6 grid grid-cols-12 pr-[15px] pt-[8px] lg:my-[30px]'>
+    <div className='lg:col-span-6 grid grid-cols-12 lg:pr-[15px] pr-[0px] pt-[8px] lg:my-[30px]'>
       <div className='lg:hidden col-span-12'>
         <div className='text-title-text !font-bold pb-[10px]'>
           {' '}

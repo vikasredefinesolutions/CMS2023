@@ -1,8 +1,8 @@
-import NxtImage from '@appComponents/reUsable/Image';
 import { _Brand } from '@definations/brand';
+import { useTypedSelector_v2 } from '@hooks_v2/index';
 import Link from 'next/link';
 import React, { useState } from 'react';
-
+import { _globalStore } from 'store.global';
 interface _Props {
   brands: _Brand[];
 }
@@ -13,18 +13,18 @@ const categories: { label: _Category; classes: string }[] = [
   {
     label: 'Featured',
     classes:
-      'bg-primary hover:text-[#000000]  block pt-[16px] pb-[16px] pl-[40px] pr-[40px] text-center font-[600]',
+      'bg-primary hover:bg-primary-hover hover:text-[#000000]  block pt-[16px] pb-[16px] pl-[40px] pr-[40px] text-center font-[600]',
   },
 
   {
     label: 'Apparel',
     classes:
-      'bg-tertiary hover:bg-primary-hover block pt-[16px] pb-[16px] pl-[40px] pr-[40px] text-center text-white font-[600] hover:text-[#ffffff]',
+      'bg-tertiary hover:bg-tertiary-hover block pt-[16px] pb-[16px] pl-[40px] pr-[40px] text-center font-[600]',
   },
   {
     label: 'Accessories',
     classes:
-      'bg-secondary hover:bg-default-hover block pt-[16px] pb-[16px] pl-[40px] pr-[40px] text-center text-white font-[600] hover:text-[#ffffff]',
+      'bg-secondary hover:bg-secondary-hover block pt-[16px] pb-[16px] pl-[40px] pr-[40px] text-center font-[600]',
   },
 ];
 
@@ -43,28 +43,32 @@ const categoriesWithBrands: {
     category: 'Featured',
     brandsIDs: [
       {
-        staticImagePath: 'https://headlesscdn-c2fyfua9dca0dthr.z01.azurefd.net/storagemedia/1/brand/logo_515.png',
+        staticImagePath:
+          'https://headlesscdn-c2fyfua9dca0dthr.z01.azurefd.net/storagemedia/1/brand/logo_515.png',
         id: 49,
         brandName: 'Patagonia',
-        seName: 'patagonia',
+        seName: 'Patagonia',
       },
       {
-        staticImagePath: 'https://headlesscdn-c2fyfua9dca0dthr.z01.azurefd.net/storagemedia/1/brand/black_brand_20.png',
+        staticImagePath:
+          'https://headlesscdn-c2fyfua9dca0dthr.z01.azurefd.net/storagemedia/1/brand/black_brand_20.png',
         id: 10,
         brandName: 'YETI',
-        seName: 'yeti',
+        seName: 'YETI',
       },
       {
-        staticImagePath: 'https://headlesscdn-c2fyfua9dca0dthr.z01.azurefd.net/storagemedia/1/brand/black_brand_11.png',
+        staticImagePath:
+          'https://headlesscdn-c2fyfua9dca0dthr.z01.azurefd.net/storagemedia/1/brand/black_brand_11.png',
         id: 9,
         brandName: 'Nike',
-        seName: 'nike',
+        seName: 'Nike',
       },
       {
-        staticImagePath: 'https://headlesscdn-c2fyfua9dca0dthr.z01.azurefd.net/storagemedia/1/brand/black_brand_2.png',
+        staticImagePath:
+          'https://headlesscdn-c2fyfua9dca0dthr.z01.azurefd.net/storagemedia/1/brand/black_brand_2.png',
         id: 28,
         brandName: 'Peter Millar',
-        seName: 'peter-millar',
+        seName: 'Peter-Millar',
       },
     ],
   },
@@ -72,26 +76,30 @@ const categoriesWithBrands: {
     category: 'Apparel',
     brandsIDs: [
       {
-        staticImagePath: 'https://headlesscdn-c2fyfua9dca0dthr.z01.azurefd.net/storagemedia/1/brand/logo_181.png',
-        id: 21,
+        staticImagePath:
+          'https://headlesscdn-c2fyfua9dca0dthr.z01.azurefd.net/storagemedia/1/brand/logo_181.png',
+        id: 84,
         brandName: 'STIO',
-        seName: 'stio',
+        seName: 'STIO',
       },
       {
-        staticImagePath: 'https://headlesscdn-c2fyfua9dca0dthr.z01.azurefd.net/storagemedia/1/brand/black_brand_180.png',
-        id: 45,
+        staticImagePath:
+          'https://headlesscdn-c2fyfua9dca0dthr.z01.azurefd.net/storagemedia/1/brand/black_brand_180.png',
+        id: 82,
         brandName: 'Marine Layer',
-        seName: 'marine-layer',
+        seName: 'Marine-Layer',
       },
       {
-        staticImagePath: 'https://headlesscdn-c2fyfua9dca0dthr.z01.azurefd.net/storagemedia/1/brand/black_brand_29.png',
-        id: 15,
+        staticImagePath:
+          'https://headlesscdn-c2fyfua9dca0dthr.z01.azurefd.net/storagemedia/1/brand/black_brand_29.png',
+        id: 75,
         brandName: 'Eddie Bauer',
-        seName: 'eddie-bauer',
+        seName: 'Eddie-Bauer',
       },
       {
-        staticImagePath: '/assets/images/PKhealth/adidas.png',
-        id: 4,
+        staticImagePath:
+          'https://headlesscdn-c2fyfua9dca0dthr.z01.azurefd.net/storagemedia/1/brand/color_8_5.png',
+        id: 78,
         brandName: 'adidas',
         seName: 'adidas',
       },
@@ -101,33 +109,36 @@ const categoriesWithBrands: {
     category: 'Accessories',
     brandsIDs: [
       {
-        staticImagePath: 'https://headlesscdn-c2fyfua9dca0dthr.z01.azurefd.net/storagemedia/1/brand/black_brand_24.png',
+        staticImagePath:
+          'https://headlesscdn-c2fyfua9dca0dthr.z01.azurefd.net/storagemedia/1/brand/black_brand_24.png',
         id: 533,
         brandName: 'Ogio',
-        seName: 'ogio',
+        seName: 'Ogio',
       },
       {
-        staticImagePath: 'https://headlesscdn-c2fyfua9dca0dthr.z01.azurefd.net/storagemedia/1/brand/logo_37.png',
+        staticImagePath:
+          'https://headlesscdn-c2fyfua9dca0dthr.z01.azurefd.net/storagemedia/1/brand/logo_37.png',
         id: 63,
         brandName: 'Swell',
-        seName: 'swell',
+        seName: 'Swell',
       },
       {
-        staticImagePath: 'https://headlesscdn-c2fyfua9dca0dthr.z01.azurefd.net/storagemedia/1/brand/logo_38.png',
+        staticImagePath:
+          'https://headlesscdn-c2fyfua9dca0dthr.z01.azurefd.net/storagemedia/1/brand/logo_38.png',
         id: 537,
         brandName: 'Camelbak',
-        seName: 'camelbak',
+        seName: 'Camelbak',
       },
       {
-        staticImagePath: 'https://headlesscdn-c2fyfua9dca0dthr.z01.azurefd.net/storagemedia/1/brand/logo_65.png',
+        staticImagePath:
+          'https://headlesscdn-c2fyfua9dca0dthr.z01.azurefd.net/storagemedia/1/brand/logo_65.png',
         id: 26,
         brandName: 'Tile',
-        seName: 'tile',
+        seName: 'Tile',
       },
     ],
   },
 ];
-
 const BrandsByCategoriesType2: React.FC<_Props> = ({ brands }) => {
   const [activeTab, setActiveTab] = useState<_Category>('Featured');
   const activeTabColor = () => {
@@ -140,20 +151,32 @@ const BrandsByCategoriesType2: React.FC<_Props> = ({ brands }) => {
         return 'bg-secondary';
     }
   };
-
+  const clientSideMediaBaseUrl = useTypedSelector_v2(
+    (state) => state.store.mediaBaseUrl,
+  );
+  let mediaBaseUrl = _globalStore.blobUrl; // for server side
+  mediaBaseUrl = mediaBaseUrl || clientSideMediaBaseUrl;
+  
   return (
     <section className='relative pt-[40px] pb-[40px]'>
       <div className='overflow-x-hidden'>
         <div className='w-full'>
-          <div className="mt-3 mb-3  text-center">
-            <span className="material-icons text-[40px] text-[#003a70]">local_offer</span>
-        </div>
-        <div className="mb-3 text-center">
-          <a title="" target="" href="javascript:void(0);"
-            className="btn btn-primary bg-gray-100 uppercase py-2 px-10 text-sm text-[#006CD1]" data-nofollow="N">
-            Shop HEALTHCARE BRANDS BY CATEGORY
-          </a>
-        </div>
+          <div className='mt-3 mb-3  text-center'>
+            <span className='material-icons text-[40px] text-[#003a70]'>
+              local_offer
+            </span>
+          </div>
+          <div className='mb-3 text-center'>
+            <a
+              title=''
+              target=''
+              href='javascript:void(0);'
+              className='btn btn-gray bg-gray-100 hover:bg-primary-hover uppercase py-2 px-10 text-sm text-anchor hover:text-[#000000]'
+              data-nofollow='N'
+            >
+              SHOP HEALTHCARE BRANDS BY CATEGORY
+            </a>
+          </div>
           <div className='mb-[12px] text-large-text font-[600] mt-[12px] text-center'>
             <h2>Level-Up with Custom Healthcare Apparel and Accessories</h2>
           </div>
@@ -178,7 +201,7 @@ const BrandsByCategoriesType2: React.FC<_Props> = ({ brands }) => {
                       <button
                         onClick={() => setActiveTab(category)}
                         className={
-                          `tab pt-[8px] pb-[8px] pl-[8px] pr-[8px] mr-[4px] block hover:text-anchor-hover focus:outline-none font-[600] border-anchor` +
+                          `tab pt-[8px] pb-[8px] pl-[8px] pr-[8px] mr-[4px] block hover:text-anchor-hover focus:outline-none font-[600] border-anchor ` +
                           activeClass
                         }
                       >
@@ -200,7 +223,7 @@ const BrandsByCategoriesType2: React.FC<_Props> = ({ brands }) => {
 
                           return element.brandsIDs.map((item) => {
                             const brand = {
-                              seName: '/',
+                              seName: item.seName,
                               imagePath: item.staticImagePath,
                               name: item.brandName,
                               id: item.id,
@@ -214,13 +237,13 @@ const BrandsByCategoriesType2: React.FC<_Props> = ({ brands }) => {
                               brand.name = brandWithSeName.brandName;
                               brand.seName = brandWithSeName.seName;
                               brand.imagePath =
-                                brandWithSeName.brandColorImageUrl;
+                                brandWithSeName.brandBlackColorImageUrl;
                             }
 
                             return (
                               <div
                                 key={index}
-                                className='w-full lg:w-1/4 pl-[12px] pr-[12px] mt-[12px] mb-[12px] flex'
+                                className='w-full lg:w-1/4 md:w-1/2 sm:w-1/2  pl-[12px] pr-[12px] mt-[12px] mb-[12px] flex'
                               >
                                 <div
                                   className={`border border-gray-border ${activeTabColor()} hover:${activeTabColor()}-hover relative font-light w-full h-full flex items-center justify-center`}
@@ -228,13 +251,14 @@ const BrandsByCategoriesType2: React.FC<_Props> = ({ brands }) => {
                                   <div className='flex justify-center items-center brand-listing-logo'>
                                     <Link
                                       title={brand.name}
-                                      href={brand.seName}
+                                      href={`${brand.seName}.html`}
                                     >
-                                      <NxtImage
-                                        className='w-full mx-auto'
-                                        src={brand.imagePath}
-                                        alt={brand.name}
-                                      />
+                                      <a href={`${brand.seName}.html`}>
+                                        <img src={`${mediaBaseUrl}${brand.imagePath}`} 
+                                          className='w-full mx-auto'
+                                          alt={brand.name}
+                                        />
+                                      </a>
                                     </Link>
                                   </div>
                                 </div>
@@ -246,7 +270,7 @@ const BrandsByCategoriesType2: React.FC<_Props> = ({ brands }) => {
                     </div>
                   </div>
                 </div>
-                <div className='mb-[12px] text-medium-text text-center mx-auto max-w-3xl pb-[40px]'>
+                <div className='mb-[12px] text-[16px] text-center mx-auto max-w-3xl pb-[40px]'>
                   We`ve built close relationships with some of the best-known
                   brands in the world and we`ve introduced them to our customers
                   in the healthcare industry..

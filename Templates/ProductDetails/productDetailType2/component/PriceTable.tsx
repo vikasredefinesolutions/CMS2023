@@ -42,7 +42,7 @@ const QtyPriceTable: React.FC<{ storeCode: string }> = ({ storeCode }) => {
 
   return (
     <>
-      {customerId !== null && (
+      {customerId !== null && discounts && discounts?.subRows.length > 0 && (
         <div className='pt-[15px] text-default-text font-medium'>
           <div className='bg-light-gray py-[5px] text-center font-[500]'>
             {__pagesText.productInfo.quantityDisc}
@@ -51,11 +51,15 @@ const QtyPriceTable: React.FC<{ storeCode: string }> = ({ storeCode }) => {
             {discounts?.subRows?.map((column, index) => {
               return (
                 <div
-                  className='w-1/2 md:w-auto px-[10px] even:border-l even:border-l-gray-border'
+                  className={`w-1/2 md:w-auto border-r ${
+                    discounts?.subRows.length == index
+                      ? ''
+                      : ' border-r-gray-border'
+                  }`}
                   key={column.discountPrice}
                 >
                   <div
-                    className={`px-[10px] ${
+                    className={`px-[15px] ${
                       totalQty >=
                         Number(column?.displayQuantity?.slice(0, -1)) &&
                       discounts.subRows.length - 1 === index

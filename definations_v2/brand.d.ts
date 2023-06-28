@@ -15,6 +15,8 @@ export interface _BrandProps {
   brands: _Brand[] | null;
   alphabets: string[];
   accordian: any;
+  metaData: any;
+  featuredItems: any;
 }
 
 export interface _BrandsTemplates {

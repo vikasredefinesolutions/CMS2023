@@ -15,6 +15,9 @@ export enum __Cookie {
   companyId = 'companyId',
   customScripts = 'customScripts',
   googleTags = 'googleTags',
+  visitorId = 'visitorId',
+  BacardiSelectedStore = 'BacardiSelectedStore',
+  storeBuilderInfo = 'storeBuilderInfo',
 }
 
 // cookie_expiry in days
@@ -37,7 +40,12 @@ export const __LocalStorage = {
   tempCustomerId: 'tempCustomerId',
   empData: 'empData',
   empGuest: 'empGuest',
+  guestEmailID: 'guestEmailID',
 };
+
+export enum __SessionStorage {
+  sessionId = 'sessionId',
+}
 
 export const __Params = {
   giftId: 'giftId',
@@ -47,6 +55,8 @@ export const __UserMessages = {
   signUpPage: {
     SomethingWentWrong: commonMessage.somethingWentWrong,
     SuccessFullyAccountCreated: 'Account Created Successfully!!!',
+    SuccessFullyAccountCreated_PKHG:
+      'Thank you for registering to shop exclusive, co-branded patagonia gear for your group. Our sales team is reviewing your request, and will send a welcome email within 1-2 business days approving your account. In the meantime, please contact ParsonsKellogg with any questions you might have about co-branding with Patagonia gear.',
   },
 };
 export const perPageCount = 18;
@@ -88,10 +98,25 @@ export const phonePattern4 = /^[0-9]{10}$/; //Matches xxxxxxxxxx
 
 export const EMAIL_REGEX = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
-export const CG_STORE_CODE = 21;
-export const GG_STORE_CODE = 2;
+export const CG_STORE_CODE = 5;
+export const GG_STORE_CODE = 6;
+export const PKHG_STORE_CODE = 7;
+export const DI_STORE_CODE = 8;
+export const PORSCHE = 'PORSCHE';
+
+export const THD_STORE_CODE = 'THD';
+export const CYXTERA_CODE = 'CYX';
+export const BACARDI = 'BCGG';
+export const UNITI_CODE = 'Uniti';
+export const SIMPLI_SAFE_CODE = 'SMH';
+export const UCA = 'UCA';
+export const HEALTHYPOINTS = 'UHP';
 
 export const PKHG_MINIMUM_QTY = 10;
+
+export enum _Store_CODES {
+  PKHG = 'PKHG',
+}
 
 export const states: Option[] = [
   { text: 'State/Provice *', value: '' },

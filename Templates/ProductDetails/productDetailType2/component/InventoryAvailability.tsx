@@ -1,3 +1,4 @@
+import { pkhealthmax } from '@constants/enum';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import { useEffect, useState } from 'react';
 interface _props {
@@ -95,6 +96,9 @@ const InventoryAvailability: React.FC<_props> = ({
     }
 
     if (userId) {
+      if (inventoryInStock > pkhealthmax) {
+        return '250+';
+      }
       return inventoryInStock;
     }
 

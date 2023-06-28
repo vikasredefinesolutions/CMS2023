@@ -53,7 +53,7 @@ const CO4_AddEditAddressModal: React.FC<_Props> = ({
   const { getStoreCustomer } = useActions_v2();
 
   const editAddress = useTypedSelector_v2(
-    (state) => state.checkout.editAddress,
+    (state) => state.checkout.address.editing,
   );
   const customerId = useTypedSelector_v2((state) => state.user.customer?.id);
 

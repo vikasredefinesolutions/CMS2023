@@ -36,7 +36,7 @@ const SideFilter = ({
       >
         <div className='text-lg font-semibold text-[#ffffff]'>Filters</div>
         <a href='javascript:void(0);' className='inline-flex'>
-          <span className='material-symbols-outlined mt-[5px]'>
+          <span className='material-symbols-outlined'>
             {openFilters ? 'remove' : 'add'}
           </span>
         </a>
@@ -57,7 +57,7 @@ const SideFilter = ({
                       ) && (
                         <a
                           href='javascript:void(0);'
-                          className='absolute z-10 p-[7px] top-4 right-10 text-[12px] text-anchor hover:text-anchor-hover'
+                          className='absolute z-10 p-[7px] -top-1.5 right-10 text-[12px] text-anchor hover:text-anchor-hover'
                           onClick={() => clearFilterSection(filter.label)}
                         >
                           {' '}
@@ -266,7 +266,7 @@ const SideFilter = ({
                     ) && (
                       <a
                         href='javascript:void(0);'
-                        className='absolute z-10 p-[7px] top-4 right-10 text-[12px] text-anchor hover:text-anchor-hover'
+                        className='absolute z-10 p-[7px] -top-1.5 right-10 text-[12px] text-anchor hover:text-anchor-hover'
                         onClick={() => clearFilterSection(filter.label)}
                       >
                         {' '}

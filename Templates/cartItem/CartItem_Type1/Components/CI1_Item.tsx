@@ -1,3 +1,5 @@
+import ForgotModal from '@appComponents/modals/forgotModal';
+import LoginModal from '@appComponents/modals/loginModal';
 import StartOrderModal from '@appComponents/modals/startOrderModal/StartOrderModal';
 import {
   default as Image,
@@ -20,6 +22,7 @@ import {
   _ProductDetails,
   _ProductDoNotExist,
 } from '@definations/APIs/productDetail.res';
+import { _modals } from '@definations/product.type';
 import {
   GetCustomerId,
   useActions_v2,
@@ -87,6 +90,9 @@ const CI1_Item: React.FC<_CartItem & _Props> = (props) => {
   const [productForSOM, setProductForSOM] = useState<_ProductDetails | null>(
     null,
   );
+
+  const [openModal, setOpenModal] = useState<null | _modals>(null);
+
   const [keepPersonalizing, setKeepPersonalizing] = useState<boolean>(false);
   const [personalizationArray, setPersonalizationArray] = useState<
     ShoppingCartItemDetailsViewModel[] | []
@@ -271,7 +277,7 @@ const CI1_Item: React.FC<_CartItem & _Props> = (props) => {
     <>
       <li className='flex flex-wrap pl-[20px] pr-[20px] ml-[-15px] mr-[-15px] mb-[40px]'>
         <div className='w-full lg:w-2/6 pl-[15px] pr-[15px]'>
-          <div className='w-full'>
+          <div className='w-full text-center'>
             <Image
               src={
                 props.colorImage
@@ -279,7 +285,7 @@ const CI1_Item: React.FC<_CartItem & _Props> = (props) => {
                   : '/assets/images/image_not_available.jpg'
               }
               alt={props.productName}
-              className=''
+              className='max-h-[348px] m-auto'
               isStatic={!Boolean(props.colorImage)}
             />
           </div>
@@ -630,9 +636,28 @@ const CI1_Item: React.FC<_CartItem & _Props> = (props) => {
 
       {productForSOM && (
         <StartOrderModal
-          modalHandler={() => setProductForSOM(null)}
+          modalHandler={(value) => {
+            setProductForSOM(null);
+            setOpenModal(value);
+          }}
           product={productForSOM}
           edit={props}
+        />
+      )}
+
+      {openModal === 'login' && (
+        <LoginModal
+          modalHandler={(value) => {
+            setOpenModal(value);
+          }}
+        />
+      )}
+
+      {openModal === 'forgot' && (
+        <ForgotModal
+          modalHandler={(value) => {
+            setOpenModal(value);
+          }}
         />
       )}
     </>

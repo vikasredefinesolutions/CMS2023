@@ -41,6 +41,11 @@ export interface _RedesignStore {
   currentPage: 'CHECKOUT' | 'BRANDS' | 'STORIES' | null;
   firstLogoCharge: number;
   secondLogoCharge: number;
+  gclid: string;
+  storeXPaymetnOptionListViewModels: {
+    paymentOptionId: number;
+    paymentOptionName: any;
+  }[];
 }
 
 // Define the initial state using that type
@@ -74,6 +79,8 @@ const initialState: _RedesignStore = {
   currentPage: null,
   firstLogoCharge: 0,
   secondLogoCharge: 0,
+  gclid: '',
+  storeXPaymetnOptionListViewModels: [],
 };
 
 export const storeSlice = createSlice({
@@ -114,6 +121,8 @@ export const storeSlice = createSlice({
       state.isLinepersonalization = store.isLinepersonalization;
       state.firstLogoCharge = store.firstLogoCharge;
       state.secondLogoCharge = store.secondLogoCharge;
+      state.storeXPaymetnOptionListViewModels =
+        store.storeXPaymetnOptionListViewModels;
     },
 
     store_setAppView: (
@@ -134,6 +143,9 @@ export const storeSlice = createSlice({
       { payload }: { payload: null | 'CHECKOUT' | 'BRANDS' | 'STORIES' },
     ) => {
       state.currentPage = payload;
+    },
+    updateGclId: (state, action: { payload: string }) => {
+      state.gclid = action.payload;
     },
   },
   extraReducers: (builder) => {

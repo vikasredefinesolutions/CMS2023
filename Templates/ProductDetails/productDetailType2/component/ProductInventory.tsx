@@ -1,3 +1,4 @@
+import { MAX_INVENTORY_FOR_EMPLOYEE } from '@constants/common.constant';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import { useEffect } from 'react';
 import InventoryAvailability from './InventoryAvailability';
@@ -40,7 +41,9 @@ const Inventory: React.FC<{
           return isInventoryAvailable ? (
             <InventoryAvailability
               size={elem.name}
-              inventoryInStock={elem.inventory}
+              inventoryInStock={
+                isEmployeeLoggedIn ? MAX_INVENTORY_FOR_EMPLOYEE : elem.inventory
+              }
               price={price?.msrp || 0}
               attributeOptionId={elem.attributeOptionId}
             />

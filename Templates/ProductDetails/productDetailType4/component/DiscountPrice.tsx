@@ -16,6 +16,7 @@ const DiscountPrice: React.FC<_props & { storeCode: string }> = ({
   storeCode,
 }) => {
   const loggedIn = useTypedSelector_v2((state) => state.user.id);
+  const { price } = useTypedSelector_v2((state) => state.product.toCheckout);
 
   if (!loggedIn) {
     return (
@@ -35,7 +36,7 @@ const DiscountPrice: React.FC<_props & { storeCode: string }> = ({
       </span>{' '}
       <span className='font-semibold'>
         {' '}
-        <Price value={salePrice != 0 ? salePrice : msrp} />
+        <Price value={price ? price : msrp} />
       </span>
     </>
   );

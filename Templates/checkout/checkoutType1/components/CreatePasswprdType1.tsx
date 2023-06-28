@@ -1,5 +1,5 @@
 import { checkoutNewAccountPasswordValidationSchema } from '@constants/schemas/checkout.schema';
-import { Formik } from 'formik';
+import { Form, Formik } from 'formik';
 import { FC } from 'react';
 
 /* eslint-disable no-unused-vars */
@@ -40,8 +40,8 @@ const CreatePassword: FC<Props> = ({
               confirmPassword: '',
             }}
           >
-            {({ handleSubmit, handleBlur, handleChange, errors, touched }) => (
-              <form onSubmit={handleSubmit}>
+            {({ handleBlur, handleChange, errors, touched }) => (
+              <Form>
                 <div className='relative z-0 w-full mb-[20px] border border-gray-border rounded'>
                   <input
                     type='password'
@@ -91,7 +91,7 @@ const CreatePassword: FC<Props> = ({
                     </button>
                   </div>
                 </div>
-              </form>
+              </Form>
             )}
           </Formik>
         </div>

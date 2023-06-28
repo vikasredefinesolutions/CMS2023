@@ -286,7 +286,7 @@ const ElementCarouselDisplay = ({ bannerArr }) => {
                     {image.button_display == 'Yes' && (
                       <>
                         <div
-                          className={`pt-0 lg:pt-5 ${image?.button_text_alignment}`}
+                          className={`pt-3 lg:pt-5 ${image?.button_text_alignment}`}
                           title={image.button_text}
                         >
                           <a

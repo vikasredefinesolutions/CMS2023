@@ -1,3 +1,4 @@
+import { _CustomerRoleResponse } from '@definations/APIs/customer.res';
 import { UserType } from '@definations/APIs/user.res';
 import { getStoreCustomer } from '@redux/asyncActions/user.async';
 import { createSlice } from '@reduxjs/toolkit';
@@ -7,6 +8,10 @@ export interface _UserState {
   id: number | null;
   customer: UserType | null;
   loggedIn: boolean;
+  roles: {
+    customerId: string;
+    adminId: string;
+  };
 }
 
 // Define the initial state using that type
@@ -14,6 +19,10 @@ const initialState: _UserState = {
   id: null,
   customer: null,
   loggedIn: false,
+  roles: {
+    customerId: '',
+    adminId: '',
+  },
 };
 
 export const userSlice = createSlice({
@@ -60,6 +69,18 @@ export const userSlice = createSlice({
     ) => {
       state.customer = action.payload.customer;
       state.id = action.payload.id;
+      state.loggedIn = true;
+    },
+    setCustomerRoles: (
+      state,
+      action: {
+        payload: { roles: _CustomerRoleResponse[] };
+      },
+    ) => {
+      action.payload.roles.forEach((item) => {
+        if (item.label === 'Administrator') state.roles.adminId = item.value;
+        if (item.label === 'User') state.roles.customerId = item.value;
+      });
     },
   },
   extraReducers: (builder) => {

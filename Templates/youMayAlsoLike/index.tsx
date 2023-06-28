@@ -7,11 +7,12 @@ import {
   _YouMayAlsoLikeProps,
   _YouMayAlsoLikeTemplates,
 } from './youMayAlsoLike';
+import YouMayAlsoLikeType3 from './YouMayAlsoLikeType3';
 
 const YouMayAlsoLikeTemplates: _YouMayAlsoLikeTemplates = {
   type1: YouMayAlsoLikeType1,
   type2: YouMayAlsoLikeType2,
-  type3: YouMayAlsoLikeType1,
+  type3: YouMayAlsoLikeType3,
   type4: YouMayAlsoLikeType1,
   type5: YouMayAlsoLikeType5,
 };

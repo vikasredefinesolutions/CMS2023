@@ -23,8 +23,13 @@ import getLocation from 'helpers_v2/getLocation';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
 
 import { _Store } from '@configs/page.config';
+import { _STORE_EMAIL } from '@constants/common.constant';
 import { UserAddressType } from '@constants/enum';
 import {
+  CYXTERA_CODE,
+  HEALTHYPOINTS,
+  SIMPLI_SAFE_CODE,
+  UNITI_CODE,
   __Cookie,
   __Cookie_Expiry,
   __UserMessages,
@@ -47,69 +52,6 @@ import SU_EmailInput from './Components/SU1_EmailInput';
 import SU1_Input from './Components/SU1_Input';
 import SU_PasswordInput from './Components/SU1_PasswordInput';
 
-const _SignupSchema = Yup.object().shape({
-  firstname: Yup.string()
-    .trim()
-    .required(__ValidationText.signUp.firstName.required)
-    .min(__ValidationText.signUp.firstName.minLength)
-    .max(__ValidationText.signUp.firstName.maxLength),
-
-  lastName: Yup.string()
-    .trim()
-    .required(__ValidationText.signUp.lastName.required)
-    .min(__ValidationText.signUp.lastName.minLength)
-    .max(__ValidationText.signUp.lastName.maxLength),
-  companyName: Yup.string()
-    .trim()
-    .required(__ValidationText.signUp.companyName.required)
-    .min(__ValidationText.signUp.companyName.minLength)
-    .max(__ValidationText.signUp.companyName.maxLength),
-  email: Yup.string()
-    .trim()
-    .email(__ValidationText.signUp.email.valid)
-    .required(__ValidationText.signUp.email.required),
-  password: Yup.string()
-    .trim()
-    .required(__ValidationText.signUp.password.required)
-    .min(__ValidationText.signUp.password.minLength)
-    .max(__ValidationText.signUp.password.maxLength),
-  confirmPassword: Yup.string()
-    .trim()
-    .required(__ValidationText.signUp.confirmPassword.required)
-    .test(
-      'passwords-match',
-      __ValidationText.signUp.confirmPassword.mustMatch,
-      function (value) {
-        return this.parent.password === value;
-      },
-    ),
-  storeCustomerAddress: Yup.array().of(
-    Yup.object().shape({
-      phone: Yup.string()
-        .required(__ValidationText.signUp.storeCustomerAddress.phone.required)
-        .test(
-          'phone-test',
-          __ValidationText.signUp.storeCustomerAddress.phone.valid,
-          (value) => {
-            if (
-              phonePattern1.test(value || '') ||
-              phonePattern2.test(value || '') ||
-              phonePattern3.test(value || '') ||
-              phonePattern4.test(value || '')
-            )
-              return true;
-            return false;
-          },
-        ),
-
-      postalCode: Yup.string().max(
-        __ValidationText.signUp.storeCustomerAddress.postalCode.maxLength,
-        'Postal code must be less than 9',
-      ),
-    }),
-  ),
-});
-
 const SignUp_type1: React.FC = () => {
   const router = useRouter();
   const {
@@ -119,16 +61,124 @@ const SignUp_type1: React.FC = () => {
     updateCustomer,
     logInUser,
   } = useActions_v2();
-  const storeId = useTypedSelector_v2((state) => state.store.id);
-  const userId = useTypedSelector_v2((state) => state.user.id);
+  const { id: storeId, code: storeCode } = useTypedSelector_v2(
+    (state) => state.store,
+  );
   const [country, setCountry] = useState<_Country[]>([]);
   const [state, setState] = useState<_State[]>([]);
-  const storeCode = useTypedSelector_v2((state) => state.store.code);
   const user = useTypedSelector_v2((state) => state.user);
+
+  const _SignupSchema = Yup.object().shape({
+    firstname: Yup.string()
+      .trim()
+      .required(__ValidationText.signUp.firstName.required)
+      .min(__ValidationText.signUp.firstName.minLength)
+      .max(__ValidationText.signUp.firstName.maxLength),
+
+    lastName: Yup.string()
+      .trim()
+      .required(__ValidationText.signUp.lastName.required)
+      .min(__ValidationText.signUp.lastName.minLength)
+      .max(__ValidationText.signUp.lastName.maxLength),
+    companyName: Yup.string()
+      .trim()
+      .required(__ValidationText.signUp.companyName.required)
+      .min(__ValidationText.signUp.companyName.minLength)
+      .max(__ValidationText.signUp.companyName.maxLength),
+    email: Yup.string()
+      .trim()
+      .email(__ValidationText.signUp.email.valid)
+      .required(__ValidationText.signUp.email.required)
+      .test(
+        'custom-email-test',
+        `Please enter ${
+          (_STORE_EMAIL as any)[storeCode] || ''
+        }  email address.`,
+        (value) => {
+          const domain = (_STORE_EMAIL as any)[storeCode];
+          if (!domain) return true;
+          const emailTest = new RegExp(
+            "^\\w+([-+.']w+)*@" + domain + '.com$',
+          ).test(value?.trim() || '');
+          return emailTest;
+        },
+      ),
+    password: Yup.string()
+      .trim()
+      .required(__ValidationText.signUp.password.required)
+      .min(__ValidationText.signUp.password.minLength)
+      .max(__ValidationText.signUp.password.maxLength),
+    confirmPassword: Yup.string()
+      .trim()
+      .required(__ValidationText.signUp.confirmPassword.required)
+      .test(
+        'passwords-match',
+        __ValidationText.signUp.confirmPassword.mustMatch,
+        function (value) {
+          return this.parent.password === value;
+        },
+      ),
+    storeCustomerAddress: Yup.array().of(
+      Yup.object().shape({
+        phone: Yup.string()
+          .required(__ValidationText.signUp.storeCustomerAddress.phone.required)
+          .test(
+            'phone-test',
+            __ValidationText.signUp.storeCustomerAddress.phone.valid,
+            (value) => {
+              if (
+                phonePattern1.test(value || '') ||
+                phonePattern2.test(value || '') ||
+                phonePattern3.test(value || '') ||
+                phonePattern4.test(value || '')
+              )
+                return true;
+              return false;
+            },
+          ),
+
+        postalCode: Yup.string().max(
+          __ValidationText.signUp.storeCustomerAddress.postalCode.maxLength,
+          'Postal code must be less than 9',
+        ),
+      }),
+    ),
+  });
+
+  const { code: stroeCode } = useTypedSelector_v2((state) => state.store);
 
   const loginSubmitHandler = async (enteredInputs: _CNA_StoreCustomerModel) => {
     const location = await getLocation();
     setShowLoader(true);
+
+    let addressObj = [
+      {
+        ...enteredInputs.storeCustomerAddress[0],
+        addressType: UserAddressType.BILLINGADDRESS,
+        companyName: enteredInputs.companyName,
+        firstname: enteredInputs.firstname,
+        lastName: enteredInputs.lastName,
+        email: enteredInputs.email,
+        recStatus: 'A',
+      },
+    ];
+
+    if (
+      storeCode === HEALTHYPOINTS ||
+      storeCode === SIMPLI_SAFE_CODE ||
+      storeCode === UNITI_CODE ||
+      storeCode === CYXTERA_CODE
+    ) {
+      addressObj.push({
+        ...enteredInputs.storeCustomerAddress[0],
+        addressType: UserAddressType.SHIPPINGADDRESS,
+        companyName: enteredInputs.companyName,
+        firstname: enteredInputs.firstname,
+        lastName: enteredInputs.lastName,
+        email: enteredInputs.email,
+        recStatus: 'A',
+      });
+    }
 
     const payload: _CreateNewAccount_Payload = {
       storeCustomerModel: {
@@ -150,20 +200,11 @@ const SignUp_type1: React.FC = () => {
         navCustomerId: enteredInputs.navCustomerId
           ? enteredInputs.navCustomerId
           : '',
-        storeCustomerAddress: [
-          {
-            ...enteredInputs.storeCustomerAddress[0],
-            addressType: UserAddressType.BILLINGADDRESS,
-            companyName: enteredInputs.companyName,
-            firstname: enteredInputs.firstname,
-            lastName: enteredInputs.lastName,
-            email: enteredInputs.email,
-            recStatus: 'A',
-          },
-        ],
+        storeCustomerAddress: addressObj,
         recStatus: 'A',
       },
     };
+
     CreateNewAccount(payload).then((res: any) => {
       const keyRes = Object.keys(res).find((obj) =>
         obj.includes('storeCustomerModel.'),

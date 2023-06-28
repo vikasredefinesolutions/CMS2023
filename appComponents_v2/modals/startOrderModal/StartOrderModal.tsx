@@ -1,6 +1,9 @@
 import { _Store } from '@configs/page.config';
 import { __pagesText } from '@constants/pages.text';
-import { FetchInventoryById } from '@services/product.service';
+import {
+  FetchCustomerQuantityByProductId,
+  FetchInventoryById,
+} from '@services/product.service';
 import CalculativeFigure from '@templates/ProductDetails/Components/CalculativeFigure';
 import DiscountPricing from '@templates/ProductDetails/Components/DiscountPricing';
 import SizePriceQtyTable from '@templates/ProductDetails/Components/SizePriceQtyTable';
@@ -9,7 +12,7 @@ import SomCustomizeLogoOptions from '@templates/ProductDetails/Components/SomCus
 import StartOrderAvailableColors from '@templates/ProductDetails/Components/StartOrderAvailableColors';
 import SizePriceQtyTable4 from '@templates/ProductDetails/productDetailType4/component/SizePriceQtyTableType4';
 import Price from 'appComponents_v2/reUsable/Price';
-import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
+import { GetCustomerId, useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
 import React, { useEffect, useState } from 'react';
 import { _startOrderModalProps } from './startOrderModalType';
 
@@ -21,8 +24,10 @@ const StartOrderModal: React.FC<_startOrderModalProps> = (props) => {
     product_storeData,
     setColor,
     product_editLogoPrice,
+    updateDiscountPrice,
   } = useActions_v2();
   const [ignoreFirstCleanUp, setIgnoreFirstCleanUp] = useState<boolean>(true);
+  const { product_PresentQty } = useActions_v2();
   const [allColors, showAllColors] = useState<boolean>(false);
   const { code: storeCode } = useTypedSelector_v2((state) => state.store);
 
@@ -70,6 +75,34 @@ const StartOrderModal: React.FC<_startOrderModalProps> = (props) => {
     // };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedProduct.productId]);
+  const customerId = GetCustomerId();
+  const [currentPresentQty, setCurrentPresentQty] = useState<number>(0);
+  const [editDetails, setEditDetails] = useState<
+    {
+      price: number;
+      qty: number;
+      optionValue: string;
+    }[]
+  >([]);
+
+  useEffect(() => {
+    if ((product && customerId) || 0) {
+      const payload = {
+        ProductId: product.id,
+        ShoppingCartItemsId: edit?.shoppingCartItemsId
+          ? edit?.shoppingCartItemsId
+          : 0,
+        CustomerId: +customerId,
+      };
+      FetchCustomerQuantityByProductId(payload).then((res) => {
+        const payload = {
+          presentQty: res ? res : 0,
+        };
+        setCurrentPresentQty(res ? res : 0);
+        product_PresentQty(payload);
+      });
+    }
+  }, [product, customerId, edit?.shoppingCartItemsId]);
 
   useEffect(() => {
     if (edit && colors) {
@@ -89,6 +122,7 @@ const StartOrderModal: React.FC<_startOrderModalProps> = (props) => {
         setIgnoreFirstCleanUp(false);
         return;
       }
+      clearToCheckout();
       product_storeData({ type: 'DISOCUNT_TABLE_PRICES_CLEANUP' });
       product_storeData({ type: 'INVENTORY_LIST_CLEANUP' });
     };
@@ -96,14 +130,20 @@ const StartOrderModal: React.FC<_startOrderModalProps> = (props) => {
 
   const getEditDetails = () => {
     if (edit) {
-      return edit.shoppingCartItemDetailsViewModels.map((res) => ({
-        qty: res.qty,
-        price: res.price,
-        optionValue: res.attributeOptionValue,
-      }));
+      updateDiscountPrice({
+        presentQty: Qtypresent + edit?.totalQty,
+        price: discountedPrice,
+      });
+      return setEditDetails([
+        ...edit.shoppingCartItemDetailsViewModels.map((res) => ({
+          qty: res.qty,
+          price: res.price,
+          optionValue: res.attributeOptionValue,
+        })),
+      ]);
     }
-    return [];
   };
+
   const { totalQty } = useTypedSelector_v2((state) => state.product.toCheckout);
   useEffect(() => {
     if (edit) {
@@ -111,14 +151,27 @@ const StartOrderModal: React.FC<_startOrderModalProps> = (props) => {
         (el) => el.logoPrice / el.qty,
       );
       product_editLogoPrice({ prices: logoprizes });
+      getEditDetails();
     }
   }, [edit?.shoppingCartLogoPersonViewModels, totalQty]);
 
-  // console.log(
-  //   'edit?.shoppingCartItemsId',
-  //   edit?.shoppingCartLogoPersonViewModels,
-  // );
+  const { price: discountedPrice } = useTypedSelector_v2(
+    (state) => state.product.toCheckout,
+  );
 
+  const Qtypresent = useTypedSelector_v2(
+    (state) => state.product.selected.presentQty,
+  );
+
+  useEffect(() => {
+    if (Qtypresent !== 0) {
+      const payload = {
+        presentQty: Qtypresent + (edit?.totalQty || 0),
+        price: discountedPrice,
+      };
+      updateDiscountPrice(payload);
+    }
+  }, [currentPresentQty]);
   return (
     <div
       id='startorderModal'
@@ -249,13 +302,14 @@ const StartOrderModal: React.FC<_startOrderModalProps> = (props) => {
                 </div>
                 {storeCode !== _Store.type4 ? (
                   <SizePriceQtyTable
-                    editDetails={getEditDetails()}
+                    editDetails={editDetails}
                     isSpecialBrand={props.product.isSpecialBrand}
                   />
                 ) : (
                   <SizePriceQtyTable4
-                    editDetails={getEditDetails()}
+                    editDetails={editDetails}
                     isSpecialBrand={props.product.isSpecialBrand}
+                    brandName={props.edit?.brandPolicyViewModels.name}
                   />
                 )}
 
@@ -275,7 +329,11 @@ const StartOrderModal: React.FC<_startOrderModalProps> = (props) => {
                   <textarea
                     name=''
                     id=''
-                    className='block w-full border border-gray-600 shadow-sm text-base py-2 px-4'
+                    className={`${
+                      storeCode == _Store.type4
+                        ? 'form-input'
+                        : 'block w-full border border-gray-600 shadow-sm text-base py-2 px-4'
+                    }`}
                     rows={3}
                     onChange={(e) => setNotevalue(e.target.value)}
                     value={notevalue}

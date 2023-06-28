@@ -3,60 +3,33 @@ import Price from '@appComponents/reUsable/Price';
 import { __pagesText } from '@constants/pages.text';
 
 import { _shippingMethod } from '@controllers/checkoutController';
-
 import SummarryController from '@controllers/summarryController';
-
 import { FetchSalesTax } from '@services/checkout.service';
-
 import { Form, Formik } from 'formik';
-
 import { GetCartTotals, useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
-
 import { FC, useEffect, useState } from 'react';
-
 interface _props {
-  placeOrder: (args: _shippingMethod) => void;
-
-  currentpage: number;
-
   selectedShipModel: _shippingMethod;
-
   billingAddressCode: string;
-
-  salesTax: number;
-
-  setSalesTax: (args: number) => void;
 }
 
 const OrderSummaryType5: FC<_props> = ({
-  placeOrder,
-
-  currentpage,
-
   selectedShipModel,
-
-  setSalesTax,
-
-  salesTax,
-
   billingAddressCode,
 }) => {
-  const { update_checkoutEmployeeLogin } = useActions_v2();
-
+  const { update_CheckoutEmployeeLogin } = useActions_v2();
   const couponDetails = useTypedSelector_v2((state) => state.cart.discount);
-
   const isEmployeeLoggedIn = useTypedSelector_v2(
     (state) => !!state.employee.empId,
   );
-
   const currentPage = useTypedSelector_v2((state) => state.store.currentPage);
-
-  const { el: employeeLogin } = useTypedSelector_v2((state) => state.checkout);
-
+  const { el: employeeLogin, charges } = useTypedSelector_v2(
+    (state) => state.checkout,
+  );
+  const { id: customerID } = useTypedSelector_v2((state) => state.user);
   const [textOrNumber, setTextOrNumber] = useState<'number' | 'text'>('text');
 
   // Functions
-
   const {
     coupon,
 
@@ -71,37 +44,24 @@ const OrderSummaryType5: FC<_props> = ({
 
   const {
     totalPrice,
-
     subTotal,
-
     logoSetupCharges,
-
     smallRunFee,
-
     totalLogoCharges,
-
     totalLineCharges,
   } = GetCartTotals();
-
-  const { id: customerID } = useTypedSelector_v2((state) => state.user);
 
   useEffect(() => {
     FetchSalesTax({
       customerId: customerID,
-
       zipCode: billingAddressCode,
-
       logoTotal: totalLogoCharges.toFixed(2),
-
       lineTotal: totalLineCharges.toFixed(2),
-
       logoSetupCharge: logoSetupCharges?.toFixed(2),
-
       shippingCharges: selectedShipModel.price?.toFixed(2),
-
       smallRunFee: smallRunFee.toFixed(2),
-    }).then((res) => setSalesTax(res));
-  }, [billingAddressCode]);
+    }).then((res) => res);
+  }, [billingAddressCode, customerID, selectedShipModel.price]);
 
   const ShippingHTML = (userShippingPrice: number) => {
     if (isEmployeeLoggedIn && currentPage === 'CHECKOUT') {
@@ -128,7 +88,7 @@ const OrderSummaryType5: FC<_props> = ({
                   const price =
                     values.shipping === 'FREE' ? 0 : values.shipping;
 
-                  update_checkoutEmployeeLogin({
+                  update_CheckoutEmployeeLogin({
                     type: 'SHIPPING_PRICE',
 
                     value: +(+price).toFixed(2),
@@ -191,8 +151,6 @@ const OrderSummaryType5: FC<_props> = ({
     );
   };
 
-  const addBottomPadding = couponDetails?.amount ? '' : 'pb-[20px]';
-
   const decideValue = (args: {
     message: string | null;
 
@@ -232,12 +190,12 @@ const OrderSummaryType5: FC<_props> = ({
   return (
     <div className='border border-slate-400 bg-[#ffffff] mb-[20px]'>
       <div className='bg-light-gray w-full text-sub-text font-semibold pl-[16px] pr-[16px] pt-[8px] pb-[8px]'>
-        {__pagesText.CheckoutPage.orderSummary.cartSummary}
+        {__pagesText.CheckoutPage.orderSummary.OrderSummary}
       </div>
 
       <div className='px-[15px] py-[15px]'>
         <dl className=''>
-          <div className='font-[600] text-medium-text'>Products Price</div>
+          <div className='font-[600] font-semibold'>Products Price</div>
 
           <div className='flex items-center justify-between pt-[15px] pb-[20px]'>
             <dt className='text-normal-text'>Subtotal:</dt>
@@ -374,14 +332,14 @@ const OrderSummaryType5: FC<_props> = ({
 
           {ShippingHTML(selectedShipModel?.price)}
 
-          {currentPage === 'CHECKOUT' && salesTax != 0 && (
+          {currentPage === 'CHECKOUT' && charges.salesTax !== 0 && (
             <div className='border-t border-gray-200 flex items-center justify-between pt-[10px]'>
               <dt className='text-normal-text flex items-center'>
                 <span>{__pagesText.CheckoutPage.orderSummary.tax}</span>
               </dt>
 
               <dd className='text-normal-text'>
-                <Price value={salesTax} />
+                <Price value={charges.salesTax} />
               </dd>
             </div>
           )}
@@ -392,7 +350,9 @@ const OrderSummaryType5: FC<_props> = ({
         <div>Total:</div>
 
         <div>
-          <Price value={totalPrice + selectedShipModel.price + salesTax} />
+          <Price
+            value={totalPrice + selectedShipModel.price + charges.salesTax}
+          />
         </div>
       </div>
     </div>

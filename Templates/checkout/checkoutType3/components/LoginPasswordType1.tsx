@@ -1,5 +1,5 @@
 import { checkoutPasswordValidationSchema } from '@constants/schemas/checkout.schema';
-import { Formik } from 'formik';
+import { Form, Formik } from 'formik';
 import { FC } from 'react';
 
 const LoginPassword: FC<{
@@ -23,8 +23,8 @@ const LoginPassword: FC<{
             initialValues={{ password: '' }}
             onSubmit={loginCustomer}
           >
-            {({ errors, handleSubmit, handleBlur, handleChange }) => (
-              <form onSubmit={handleSubmit}>
+            {({ errors, handleBlur, handleChange }) => (
+              <Form>
                 <div className='relative z-0 w-full mb-[20px] border border-gray-border rounded'>
                   <input
                     type='password'
@@ -64,7 +64,7 @@ const LoginPassword: FC<{
                     </a>
                   </div>
                 </div>
-              </form>
+              </Form>
             )}
           </Formik>
         </div>

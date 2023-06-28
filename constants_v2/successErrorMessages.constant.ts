@@ -36,9 +36,13 @@ export const checkoutNewAccountPasswordMessages = {
 export const addressMessages = {
   firstName: {
     required: 'First Name is required',
+    firstNameminLength: 2,
+    minValidation: 'First Name must be at least 2 characters',
   },
   lastName: {
     required: 'Last Name is required',
+    lastNameminLength: 2,
+    minValidation: 'Last Name must be at least 2 characters',
   },
   email: {
     required: 'Email is required',

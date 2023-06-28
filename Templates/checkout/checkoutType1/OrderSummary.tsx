@@ -4,31 +4,19 @@ import { _shippingMethod } from '@controllers/checkoutController';
 import SummarryController from '@controllers/summarryController';
 import { FetchSalesTax } from '@services/checkout.service';
 import { Form, Formik } from 'formik';
-import { GetCartTotals, useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
+import {
+  GetCartTotals,
+  GetCustomerId,
+  useActions_v2,
+  useTypedSelector_v2,
+} from 'hooks_v2';
 import { FC, useEffect, useState } from 'react';
 
 interface _props {
   selectedShippingModel: _shippingMethod;
-  billingAddressCode: string;
-  salesTax: number;
-  setSalesTax: (args: number) => void;
 }
 
-const OrderSummaryType1: FC<_props> = ({
-  selectedShippingModel,
-  billingAddressCode,
-  salesTax,
-  setSalesTax,
-}) => {
-  const { update_checkoutEmployeeLogin } = useActions_v2();
-  const couponDetails = useTypedSelector_v2((state) => state.cart.discount);
-  const isEmployeeLoggedIn = useTypedSelector_v2(
-    (state) => !!state.employee.empId,
-  );
-  const currentPage = useTypedSelector_v2((state) => state.store.currentPage);
-  const { el: employeeLogin } = useTypedSelector_v2((state) => state.checkout);
-  const [textOrNumber, setTextOrNumber] = useState<'number' | 'text'>('text');
-  // Functions
+const OrderSummaryType1: FC<_props> = ({ selectedShippingModel }) => {
   const {
     coupon,
     successMessage,
@@ -36,6 +24,21 @@ const OrderSummaryType1: FC<_props> = ({
     applyCouponHandler,
     removeCouponCodeHandler,
   } = SummarryController();
+  const { update_CheckoutEmployeeLogin, update_CheckoutCharges } =
+    useActions_v2();
+  const couponDetails = useTypedSelector_v2((state) => state.cart.discount);
+  const isEmployeeLoggedIn = useTypedSelector_v2(
+    (state) => !!state.employee.empId,
+  );
+  const currentPage = useTypedSelector_v2((state) => state.store.currentPage);
+  const {
+    el: employeeLogin,
+    charges,
+    address,
+  } = useTypedSelector_v2((state) => state.checkout);
+  const [textOrNumber, setTextOrNumber] = useState<'number' | 'text'>('text');
+  // Functions
+
   const {
     totalPrice,
     subTotal,
@@ -45,8 +48,7 @@ const OrderSummaryType1: FC<_props> = ({
     totalLineCharges,
     sewOutTotal,
   } = GetCartTotals();
-  const customerID = useTypedSelector_v2((state) => state.user.id);
-  const [shippingChargesCost, setShippingChargesCost] = useState<number>(0);
+  const customerID = GetCustomerId();
   // const { cartQty } = useTypedSelector_v2((state) => state.cart);
   // const { fetchShipping } = CheckoutController();
   // useEffect(() => {
@@ -55,17 +57,6 @@ const OrderSummaryType1: FC<_props> = ({
   //   }
   // }, [subTotal]);
 
-  useEffect(() => {
-    FetchSalesTax({
-      customerId: customerID,
-      zipCode: billingAddressCode,
-      logoTotal: totalLogoCharges.toFixed(2),
-      lineTotal: totalLineCharges.toFixed(2),
-      logoSetupCharge: logoSetupCharges?.toFixed(2),
-      shippingCharges: shippingChargesCost?.toFixed(2),
-      smallRunFee: smallRunFee.toFixed(2),
-    }).then((res) => setSalesTax(res));
-  }, [billingAddressCode, shippingChargesCost]);
   const getNewShippingCost = (shippingCost: number): number => {
     if (isEmployeeLoggedIn) {
       return employeeLogin.shippingPrice;
@@ -73,6 +64,26 @@ const OrderSummaryType1: FC<_props> = ({
 
     return shippingCost;
   };
+
+  useEffect(() => {
+    FetchSalesTax({
+      customerId: customerID || 0,
+      zipCode: address.zipCode || 0,
+      logoTotal: totalLogoCharges.toFixed(2),
+      lineTotal: totalLineCharges.toFixed(2),
+      logoSetupCharge: logoSetupCharges?.toFixed(2),
+      // Here shippingPrice will be get updated, even if the store do not use employee login.
+      // So, pass it as a dependency
+      shippingCharges: getNewShippingCost(selectedShippingModel?.price || 0),
+      smallRunFee: smallRunFee.toFixed(2),
+    })
+      .then((res) => {
+        update_CheckoutCharges({ type: 'SALES_TAX', cost: res });
+      })
+      .catch((error) => {
+        console.log('ERROR: Sales Tax ===>', error);
+      });
+  }, [address.zipCode, employeeLogin.shippingPrice, customerID]);
 
   const ShippingHTML = (userShippingPrice: number) => {
     if (isEmployeeLoggedIn && currentPage === 'CHECKOUT') {
@@ -96,8 +107,7 @@ const OrderSummaryType1: FC<_props> = ({
                 onSubmit={(values) => {
                   const price =
                     values.shipping === 'FREE' ? 0 : values.shipping;
-                  setShippingChargesCost(+values.shipping);
-                  update_checkoutEmployeeLogin({
+                  update_CheckoutEmployeeLogin({
                     type: 'SHIPPING_PRICE',
                     value: +(+price).toFixed(2),
                   });
@@ -287,14 +297,14 @@ const OrderSummaryType1: FC<_props> = ({
               )}
             </dt>
           </div>
-          {ShippingHTML(getNewShippingCost(selectedShippingModel?.price))}
+          {ShippingHTML(getNewShippingCost(selectedShippingModel?.price || 0))}
           {currentPage === 'CHECKOUT' && (
             <div className='border-t border-gray-200 flex items-center justify-between pt-[10px]'>
               <dt className='text-normal-text flex items-center'>
                 <span>{__pagesText.CheckoutPage.orderSummary.tax}</span>
               </dt>
               <dd className='text-normal-text'>
-                <Price value={salesTax} />
+                <Price value={charges.salesTax} />
               </dd>
             </div>
           )}
@@ -306,8 +316,8 @@ const OrderSummaryType1: FC<_props> = ({
           <Price
             value={
               totalPrice +
-              getNewShippingCost(selectedShippingModel?.price) +
-              salesTax
+              getNewShippingCost(selectedShippingModel?.price || 0) +
+              charges.salesTax
             }
           />
         </div>

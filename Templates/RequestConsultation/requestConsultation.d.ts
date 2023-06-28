@@ -54,5 +54,6 @@ export interface _SubmitConsultationPayload {
     recStatus: 'A';
     status: string;
     customerId: number;
+    visitorId: string;
   };
 }

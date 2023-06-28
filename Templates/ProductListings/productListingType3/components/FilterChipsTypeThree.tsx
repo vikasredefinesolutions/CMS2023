@@ -22,7 +22,7 @@ const FilterChipsTypeThree = ({
           {checkedFilters.map((filter, index) => (
             <li key={index} className=''>
               <a
-                className='bg-secondary inline-flex items-center py-[4px] px-[20px] text-sm text-[#ffffff] hover:bg-secondary-hover hover:text-white rounded cursor-pointer'
+                className='bg-secondary inline-flex items-center py-[4px] px-[20px] text-sm text-[#ffffff] hover:bg-secondary-hover hover:text-white rounded'
                 href='javascript:void(0);'
               >
                 <span className='mr-[10px]'>
@@ -32,7 +32,7 @@ const FilterChipsTypeThree = ({
                   onClick={() => {
                     handleChange(filter.name, filter.value, false);
                   }}
-                  className='material-icons-outlined text-sm'
+                  className='material-icons-outlined'
                 >
                   {__pagesText.productListing.closeIcon}
                 </span>

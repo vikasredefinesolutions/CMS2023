@@ -30,7 +30,19 @@ const UploadLogoPopup: React.FC<_props> = ({
     (state) => state.store,
   );
   const fileReader = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target?.files === null) return;
+    if (
+      event.target.files &&
+      !['image/png', 'image/jpeg', 'image/jpg'].includes(
+        event.target.files[0].type,
+      )
+    ) {
+      setOpenModal(false);
+      return showModal({
+        title: 'Error',
+        message: 'Please select an image file.',
+      });
+    }
+    if (event.target?.files === null || !event.target.files?.length) return;
 
     try {
       const logoFileURL = await UploadImage({
@@ -136,15 +148,8 @@ const UploadLogoPopup: React.FC<_props> = ({
                         </div>
                       )}
                     </label>
-                    <div className='mt-[15px]'>
-                      <button
-                        onClick={() => continueHandler()}
-                        className='btn btn-primary w-full text-center'
-                      >
-                        CONTINUE
-                      </button>
-                    </div>
                   </div>
+
                   <div className='w-full sm:w-2/3'>
                     <div className='bg-light-gray sm:ml-[16px] px-[15px] py-[20px]'>
                       <div className='arrow'></div>
@@ -155,6 +160,14 @@ const UploadLogoPopup: React.FC<_props> = ({
                       </p>
                     </div>
                   </div>
+                </div>
+                <div className='mt-[15px]'>
+                  <button
+                    onClick={() => continueHandler()}
+                    className='btn btn-primary w-full text-center'
+                  >
+                    CONTINUE
+                  </button>
                 </div>
               </div>
             </div>

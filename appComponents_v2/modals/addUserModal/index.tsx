@@ -52,9 +52,22 @@ const AddUserModal = ({
   }, [store]);
 
   const validationSchema = Yup.object().shape({
-    firstName: Yup.string().required(addUserMessages.firstName.required),
-    lastName: Yup.string().required(addUserMessages.lastName.required),
-    email: Yup.string().required(addUserMessages.email.required),
+    firstName: Yup.string()
+      .required(addUserMessages.firstName.required)
+      .min(
+        addUserMessages.firstName.minLength,
+        addUserMessages.firstName.minValidation,
+      ),
+    lastName: Yup.string()
+      .required(addUserMessages.lastName.required)
+      .min(
+        addUserMessages.lastName.minLength,
+        addUserMessages.lastName.minValidation,
+      ),
+    email: Yup.string()
+      .trim()
+      .email(addUserMessages.email.valid)
+      .required(addUserMessages.email.required),
     role: Yup.number().min(1, addUserMessages.role.required),
   });
 

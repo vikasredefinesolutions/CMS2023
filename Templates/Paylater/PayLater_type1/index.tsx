@@ -48,22 +48,63 @@ const PaylaterType1: React.FC<_Props> = ({ orderDetails }) => {
 
   const { payment } = useTypedSelector_v2((state) => state.checkout);
 
-  const disablePlaceOrder = (): boolean => {
-    if (!payment.valid) {
-      return true;
+  const validatePaymentMethod = () => {
+    if (payment.method === 'PURCHASE_ORDER') {
+      if (payment.poNumber.length < 3) {
+        showModal({
+          title: 'Invalid PO Number',
+          message: 'Please enter correct PO Number',
+        });
+        return true;
+      }
     }
 
     if (payment.method === 'CREDIT_CARD') {
-      if (
-        !(
-          payment.creditCard.ccNumber.length > 14 &&
-          payment.creditCard.ccNumber.length < 17
-        )
-      ) {
-        return true;
+      const cardType = payment.creditCard.cardName;
+      const cardLength = payment.creditCard.ccNumber.length;
+      const cvvLength = payment.creditCard.securityCode.length;
+
+      if (cardType === 'AMEX') {
+        if (cardLength !== 15 || cvvLength !== 4) {
+          showModal({
+            title: 'Invalid Card',
+            message: 'Please enter correct card details',
+          });
+          return true;
+        }
+        return false;
       }
 
-      if (payment.creditCard.securityCode.length !== 3) {
+      if (cardLength !== 16 || cvvLength !== 3) {
+        showModal({
+          title: 'Invalid Card',
+          message: 'Please enter correct card details',
+        });
+        return true;
+      }
+    }
+    return false;
+  };
+
+  const disablePlaceOrder = (): boolean => {
+    if (payment.method === 'PURCHASE_ORDER') {
+      if (payment.poNumber.length < 3) {
+        return true;
+      }
+    }
+
+    if (payment.method === 'CREDIT_CARD') {
+      const cardType = payment.creditCard.cardName;
+      const cardLength = payment.creditCard.ccNumber.length;
+      const cvvLength = payment.creditCard.securityCode.length;
+
+      if (cardType === 'AMEX') {
+        if (cardLength !== 15 || cvvLength !== 4) {
+          return true;
+        }
+      }
+
+      if (cardLength !== 16 || cvvLength !== 3) {
         return true;
       }
     }
@@ -113,6 +154,7 @@ const PaylaterType1: React.FC<_Props> = ({ orderDetails }) => {
   };
 
   const makePaymentHandler = async () => {
+    if (validatePaymentMethod()) return;
     setShowLoader(true);
 
     const payload: OrderModelPayment = {
@@ -127,8 +169,8 @@ const PaylaterType1: React.FC<_Props> = ({ orderDetails }) => {
 
       // PAYMENT
       paymentMethod: getPaymentGateway(payment.method),
-      cardName: payment.creditCard.name,
-      cardType: payment.creditCard.type,
+      cardName: payment.creditCard.cardName,
+      cardType: payment.creditCard.cardName,
       cardNumber: payment.creditCard.ccNumber,
       cardVarificationCode: payment.creditCard.securityCode,
       cardExpirationMonth: payment.creditCard.month,
@@ -162,11 +204,11 @@ const PaylaterType1: React.FC<_Props> = ({ orderDetails }) => {
             <div id='OrderReview'>
               <section className='w-full'>
                 <div className='flex flex-wrap checkout-box ml-[-15px] mr-[-15px]'>
-                  <div className='flex-1 w-full md:w-6/12 mt-[15px] ml-[15px] mr-[15px] mb-[30px]'>
+                  <div className='flex w-full md:w-4/12 mt-[15px] pl-[15px] pr-[15px] mb-[30px]'>
                     {ShippingAddressHTML(orderDetails.billing!)}
                   </div>
-                  <div className='flex-1 w-full md:w-6/12 mt-[15px] ml-[15px] mr-[15px] mb-[30px] checkoutpage'>
-                    <div className='pl-[15px] pr-[15px] pt-[15px] pb-[15px]'>
+                  <div className='flex w-full md:w-4/12 mt-[15px] pl-[15px] pr-[15px] mb-[30px] checkoutpage'>
+                    <div className=''>
                       <div className='flex flex-wrap items-center justify-between pt-[10px] border-b border-[#ececec]'>
                         <div className='pb-[10px] text-title-text'>
                           Billing Address
@@ -178,7 +220,7 @@ const PaylaterType1: React.FC<_Props> = ({ orderDetails }) => {
                       />
                     </div>
                   </div>
-                  <div className=' flex-1 w-full md:w-6/12 mt-[15px] ml-[15px] mr-[15px] mb-[30px]'>
+                  <div className=' flex w-full md:w-4/12 mt-[15px] pl-[15px] pr-[15px] mb-[30px]'>
                     <AvailablePaymentMethods
                       allowPO={orderDetails.billing?.isAllowPo || false}
                     />
@@ -229,7 +271,6 @@ const PaylaterType1: React.FC<_Props> = ({ orderDetails }) => {
                   disablePlaceOrder() ? 'opacity-50' : ''
                 }`}
                 id='btn-review-order'
-                disabled={disablePlaceOrder()}
                 onClick={() => makePaymentHandler()}
               >
                 MAKE PAYMENT

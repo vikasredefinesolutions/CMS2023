@@ -1,4 +1,5 @@
 import { paymentMethodCustom } from '@constants/enum';
+import { AddressType } from '@controllers/checkoutController/CheckoutAddressForm';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import { ChangeEvent } from 'react';
 import CO2_EL_PaymentOption from '../CO2_EL_PaymentOption';
@@ -22,20 +23,20 @@ interface _PaymentProps {
   paymentMethod?: paymentMethodCustom;
   setUseShippingAddress: (args: boolean) => void;
   useShippingAddress: boolean;
+  billingAddress: AddressType | null;
+  setShippingAddress: (args: any) => void;
 }
 
 const PaymentChange: React.FC<_PaymentProps> = ({
   updatePaymentMethod,
-  changeHandler,
-  detectCardType,
   changeBillingAddress,
   BillingFormik,
   setChangeBillingAddress,
-  cardDetails,
-  purchaseOrder,
   setUseShippingAddress,
   paymentMethod,
   useShippingAddress,
+  billingAddress,
+  setShippingAddress,
 }) => {
   const employeeLogin = useTypedSelector_v2((state) => state.employee.loggedIn);
   const { el } = useTypedSelector_v2((state) => state.checkout);
@@ -52,13 +53,51 @@ const PaymentChange: React.FC<_PaymentProps> = ({
               <img src='/norton.png' />
             </div>
           </div>
-          {!employeeLogin && changeBillingAddress && (
+          {changeBillingAddress && (
             <div className='mb-[20px]' id='BillingShippingAddress'>
               <input
                 type='checkbox'
                 id='BillingShippingAddressChk'
                 name=''
+                checked={useShippingAddress}
+                onChange={(e) => {
+                  if (e.target.checked) {
+                    setShippingAddress(BillingFormik.values);
+                    setUseShippingAddress(e.target.checked);
+                  } else {
+                    setChangeBillingAddress(true);
+                    setUseShippingAddress(e.target.checked);
+                  }
+                }}
+              />
+              <label className=''>Billing & Shipping Address is the same</label>
+            </div>
+          )}
+          {!useShippingAddress && changeBillingAddress && (
+            <div>
+              {' '}
+              <div className='pt-[10px] border-b border-[#ececec]'>
+                <div className='pb-[10px] text-title-text'>Billing Address</div>
+              </div>
+              <AddressFormPk
+                addressformik={BillingFormik}
+                values={BillingFormik.values}
+                touched={BillingFormik.touched}
+                errors={BillingFormik.errors}
+              />
+            </div>
+          )}
+          {/* {!employeeLogin && (
+            <div className='mb-[20px]' id='BillingShippingAddress'>
+              <input
+                type='checkbox'
+                id='BillingShippingAddressChk'
+                name=''
+                checked={!changeBillingAddress}
                 onClick={() => {
+                  if (!useShippingAddress) {
+                    setShippingAddress(billingAddress);
+                  }
                   setChangeBillingAddress(!changeBillingAddress);
                   setUseShippingAddress(!useShippingAddress);
                 }}
@@ -88,7 +127,12 @@ const PaymentChange: React.FC<_PaymentProps> = ({
               <div className='pt-[10px] border-b border-[#ececec]'>
                 <div className='pb-[10px] text-title-text'>Billing Address</div>
               </div>
-              <AddressFormPk addressformik={BillingFormik} />
+              <AddressFormPk
+                addressformik={BillingFormik}
+                values={BillingFormik.values}
+                touched={BillingFormik.touched}
+                errors={BillingFormik.errors}
+              />
             </>
           )}
           {employeeLogin && !changeBillingAddress && (
@@ -96,9 +140,14 @@ const PaymentChange: React.FC<_PaymentProps> = ({
               <div className='pt-[10px] border-b border-[#ececec]'>
                 <div className='pb-[10px] text-title-text'>Billing Address</div>
               </div>
-              <AddressFormPk addressformik={BillingFormik} />
+              <AddressFormPk
+                addressformik={BillingFormik}
+                values={BillingFormik.values}
+                touched={BillingFormik.touched}
+                errors={BillingFormik.errors}
+              />
             </>
-          )}
+          )} */}
         </>
       }
 
@@ -121,23 +170,25 @@ const PaymentChange: React.FC<_PaymentProps> = ({
             <span>SELECT CREDIT CARD</span>
           </button>
         </div>
-        <div className='mb-[15px]'>
-          <button
-            className={`bg-[#ffffff] flex flex-wrap items-center font-semibold text-normal-text pl-[10px] pr-[10px] pb-[10px] pt-[10px] border border-[#000000] ${
-              el.isPaymentPending
-                ? 'opacity-50'
-                : paymentMethod == paymentMethodCustom.purchaseOrder
-                ? 'bg-gray-200 text-[#fff]'
-                : ''
-            }`}
-            disabled={el.isPaymentPending}
-            onClick={() =>
-              updatePaymentMethod(paymentMethodCustom.purchaseOrder)
-            }
-          >
-            <span>SELECT PURCHASE ORDER</span>
-          </button>
-        </div>
+        {
+          <div className='mb-[15px]'>
+            <button
+              className={`bg-[#ffffff] flex flex-wrap items-center font-semibold text-normal-text pl-[10px] pr-[10px] pb-[10px] pt-[10px] border border-[#000000] ${
+                el.isPaymentPending
+                  ? 'opacity-50'
+                  : paymentMethod == paymentMethodCustom.purchaseOrder
+                  ? 'bg-gray-200 text-[#fff]'
+                  : ''
+              }`}
+              disabled={el.isPaymentPending}
+              onClick={() =>
+                updatePaymentMethod(paymentMethodCustom.purchaseOrder)
+              }
+            >
+              <span>SELECT PURCHASE ORDER</span>
+            </button>
+          </div>
+        }
       </div>
       {employeeLogin && <CO2_EL_PaymentOption />}
     </>

@@ -3,7 +3,7 @@ import { __StaticImg } from '@constants/assets';
 import { paths } from '@constants/paths.constant';
 import { _Story } from '@definations/story';
 import Link from 'next/link';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 
 interface _Props {
   stories: _Story[];
@@ -103,37 +103,37 @@ const StoriesList: React.FC<_Props> = ({
     }
   };
 
-  const buttonRef = useRef<HTMLButtonElement>(null);
-  // useEffect(() => {
-  //   buttonRef.current.addEventListener('click', clickHandler);
-  // }, []);
-   const handleScroll = () => {
-    if (typeof window !== 'undefined') {
-      // if(document.body.classList.contains('index-page') || storeCode === 'DI')
-      // {
-      let x = document.querySelector('#load_btn');
-      if (x instanceof HTMLElement) 
-      {
-        // alert(x)
-       console.log((window.pageYOffset + document.documentElement.clientHeight),  x?.offsetTop);
-          if (window.pageYOffset >= x?.offsetTop) {
-            if(buttonRef.current)
-             {
-              buttonRef?.current.click();
-             } 
-          }
+  // const buttonRef = useRef<HTMLButtonElement>(null);
+  // // useEffect(() => {
+  // //   buttonRef.current.addEventListener('click', clickHandler);
+  // // }, []);
+  //  const handleScroll = () => {
+  //   if (typeof window !== 'undefined') {
+  //     // if(document.body.classList.contains('index-page') || storeCode === 'DI')
+  //     // {
+  //     let x = document.querySelector('#load_btn');
+  //     if (x instanceof HTMLElement) 
+  //     {
+  //       // alert(x)
+  //      //console.log((window.pageYOffset + document.documentElement.clientHeight),  x?.offsetTop);
+  //         if (window.pageYOffset >= x?.offsetTop) {
+  //           if(buttonRef.current)
+  //            {
+  //             buttonRef?.current.click();
+  //            } 
+  //         }
   
-      }
+  //     }
       
-      //}
-    }
-  };
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      window.addEventListener('scroll', handleScroll);
-    }
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  //     //}
+  //   }
+  // };
+  // useEffect(() => {
+  //   if (typeof window !== 'undefined') {
+  //     window.addEventListener('scroll', handleScroll);
+  //   }
+  //   return () => window.removeEventListener('scroll', handleScroll);
+  // }, []);
 
   return (
     <section className='relative pt-[40px] bg-gray-100'>
@@ -195,7 +195,8 @@ const StoriesList: React.FC<_Props> = ({
               <div className='w-full'>
                 <div className='p-2 text-center text-large-text'>
                   <button
-                    id='load_btn'  ref={buttonRef}
+                    id='load_btn'  
+                    // ref={buttonRef}
                     className='text-primary font-[600] inline-flex items-center load_more no-underline'
                     onClick={() => handleLoadStories('loadMore', showByDefault)}
                   >

@@ -305,7 +305,7 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
               // disabled={product?.isDiscontinue}
               // buyNowHandler(e, !!userId);
             }}
-            className='btn btn-secondary w-full text-center'
+            className='btn btn-secondary w-full text-center cursor-pointer'
           >
             {/* {product?.isDiscontinue
                 ? 'Discontinued'

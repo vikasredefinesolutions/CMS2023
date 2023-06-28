@@ -1,5 +1,7 @@
-import { __Cookie } from '@constants/global.constant';
+import { _Store } from '@configs/page.config';
+import { SIMPLI_SAFE_CODE, __Cookie } from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
+import { paths } from '@constants/paths.constant';
 import {
   GoogleAnalyticsTrackerForAllStore,
   getAddToCartObject,
@@ -7,14 +9,13 @@ import {
 } from '@helpers/common.helper';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import { addToCart } from '@services/cart.service';
+import { useRouter } from 'next/router';
 
 interface _Props {
   size: string;
 }
 const BuyNowHandler: React.FC<_Props> = (size) => {
-  const { selected, toCheckout, product } = useTypedSelector_v2(
-    (state) => state.product,
-  );
+  const { toCheckout, product } = useTypedSelector_v2((state) => state.product);
   const { showModal, setShowLoader } = useActions_v2();
   const { id: storeId } = useTypedSelector_v2((state) => state.store);
   const loggedIN_userId = useTypedSelector_v2((state) => state.user.id);
@@ -28,10 +29,47 @@ const BuyNowHandler: React.FC<_Props> = (size) => {
     (state) => state.product.selected,
   );
 
+  const router = useRouter();
+
+  const { code: storeCode } = useTypedSelector_v2((state) => state.store);
+
   const buyNowAction = async () => {
     setShowLoader(true);
 
     const { sizeQtys, totalPrice, totalQty, logos } = toCheckout;
+    if (sizeQtys === null || sizeQtys[0]?.qty === 0) {
+      setShowLoader(false);
+
+      showModal({
+        message:
+          storeCode === SIMPLI_SAFE_CODE
+            ? 'Please select any one size.'
+            : `Please Select One Size and Its Quantity.`,
+        title:
+          storeCode === SIMPLI_SAFE_CODE
+            ? 'Required Size'
+            : 'Required Quantity',
+      });
+      return;
+    }
+    if (totalQty > 1 && storeCode === SIMPLI_SAFE_CODE) {
+      setShowLoader(false);
+      showModal({
+        message: `Employees may redeem only 1 piece of apparel.`,
+        title: 'Information',
+      });
+
+      return;
+    }
+    if (totalQty < toCheckout.minQty) {
+      setShowLoader(false);
+      showModal({
+        message: `The minimum order for this color is ${toCheckout.minQty} pieces. Please increase your quantity and try again.`,
+        title: 'Required',
+      });
+
+      return;
+    }
 
     const cartObject = await getAddToCartObject({
       userId: loggedIN_userId || 0,
@@ -51,15 +89,6 @@ const BuyNowHandler: React.FC<_Props> = (size) => {
       },
       shoppingCartItemId: 0,
     });
-
-    if (totalQty < toCheckout.minQty) {
-      showModal({
-        message: `The minimum order for this color is ${toCheckout.minQty} pieces. Please increase your quantity and try again.`,
-        title: 'Required',
-      });
-
-      return;
-    }
 
     if (cartObject) {
       //GTM event for add-to-cart
@@ -96,6 +125,7 @@ const BuyNowHandler: React.FC<_Props> = (size) => {
               message: __pagesText.cart.successMessage,
               title: 'Success',
             });
+            router.push(paths.CART);
           }
         })
         .catch((err) => {
@@ -106,12 +136,14 @@ const BuyNowHandler: React.FC<_Props> = (size) => {
 
   return (
     <>
-      <div className='w-full text-left flex justify-end mt-[20px]'>
+      <div className='w-full text-left flex justify-end mt-[20px] cursor-pointer '>
         <button
           onClick={buyNowAction}
           className='btn btn-secondary w-full text-center'
         >
-          BUY NOW
+          {storeCode === _Store.type5
+            ? __pagesText.productInfo.addTocart
+            : __pagesText.productInfo.buyNow}
         </button>
       </div>
     </>

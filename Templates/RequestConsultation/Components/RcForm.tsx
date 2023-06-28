@@ -3,12 +3,14 @@ import { __ValidationText } from '@constants/validation.text';
 import getLocation from '@helpers/getLocation';
 
 import {
+  __Cookie,
   phonePattern1,
   phonePattern2,
   phonePattern3,
   phonePattern4,
 } from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
+import { extractCookies } from '@helpers/common.helper';
 import { UploadImage } from '@services/file.service';
 import { SumbitRequestConsultationDetails } from '@services/product.service';
 import { Form, Formik } from 'formik';
@@ -154,6 +156,10 @@ const RcForm: React.FC<{
     }
 
     const location = await getLocation();
+    const visitorInCookie = extractCookies(
+      __Cookie.visitorId,
+      'browserCookie',
+    ).visitorId;
     const payload: _SubmitConsultationPayload = {
       consultationModel: {
         id: 0,
@@ -173,11 +179,12 @@ const RcForm: React.FC<{
         inHandsDate: value.inHandDate,
         logoUrl: fileToUpload?.logoPathURL ? fileToUpload.logoPathURL : '',
         message: value.message,
-        gclid: '',
+        gclid: store.gclid,
         productattributeoptionid: attriubteOptionId,
         recStatus: 'A',
         status: '',
         customerId: +customerId,
+        visitorId: visitorInCookie || '',
       },
     };
 
@@ -430,6 +437,7 @@ const RcForm: React.FC<{
                   <button
                     onClick={() => router.back()}
                     className='text-center !text-anchor hover:!text-anchor-hover text-xl font-semibold'
+                    type='button'
                   >
                     Cancel
                   </button>

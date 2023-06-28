@@ -45,14 +45,15 @@ export interface _ValueLabelPair {
   label: string;
 }
 
-export const FetchEmpSourceList = async (): Promise<_ValueLabelPair[]> => {
-  const url = `/Source/getlist.json`;
+export const FetchEmpSourceList = async (
+  storeId: number,
+): Promise<_ValueLabelPair[]> => {
+  const url = `/Source/getlist/${storeId}.json`;
 
   const response = await SendAsync<_ValueLabelPair[]>({
     url: url,
     method: 'GET',
   });
-
   return response;
 };
 
@@ -93,6 +94,7 @@ export const FetchSalesTax = async ({
 
   const response = await SendAsync<number>({
     url: url,
+
     method: 'GET',
   });
 

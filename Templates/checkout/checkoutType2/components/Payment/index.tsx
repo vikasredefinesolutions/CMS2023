@@ -1,4 +1,5 @@
 import { paymentMethodCustom } from '@constants/enum';
+import { AddressType } from '@controllers/checkoutController/CheckoutAddressForm';
 import { ChangeEvent, FC } from 'react';
 import PaymentChange from './PaymentChange';
 import CardPaymentType from './components/CardPaymentType';
@@ -17,7 +18,8 @@ export type paymentProps = FC<{
     creditCardHolder: string;
   };
   paymentMethod?: paymentMethodCustom;
-
+  billingAddress?: AddressType | null;
+  setShippingAddress?: (args: any) => void;
   purchaseOrder?: string;
   /* eslint-enable no-unused-vars */
 }>;
@@ -43,6 +45,8 @@ const PaymentType: FC<{
   purchaseOrder?: string;
   setUseShippingAddress: (args: boolean) => void;
   useShippingAddress: boolean;
+  billingAddress: AddressType | null;
+  setShippingAddress: (args: any) => void;
   /* eslint-enable no-unused-vars */
 }> = ({
   changeHandler,
@@ -56,6 +60,8 @@ const PaymentType: FC<{
   useShippingAddress,
   cardDetails,
   purchaseOrder,
+  billingAddress,
+  setShippingAddress,
 }) => {
   switch (paymentMethod) {
     case paymentMethodCustom.creditCard:
@@ -72,6 +78,8 @@ const PaymentType: FC<{
               paymentMethod,
               setUseShippingAddress,
               useShippingAddress,
+              setShippingAddress,
+              billingAddress,
             }}
           />
           <CardPaymentType
@@ -107,6 +115,8 @@ const PaymentType: FC<{
               paymentMethod,
               setUseShippingAddress,
               useShippingAddress,
+              setShippingAddress,
+              billingAddress,
             }}
           />
           <PurchaseOrderType

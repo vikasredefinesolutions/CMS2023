@@ -4,14 +4,14 @@ import NxtImage from '@appComponents/reUsable/Image';
 import { cardType } from '@constants/common.constant';
 import {
   checkoutPages,
-  paymentMethodCustom as paymentEnum,
   PaymentMethod,
+  paymentMethodCustom as paymentEnum,
   UserAddressType,
 } from '@constants/enum';
 import {
+  CG_STORE_CODE,
   __Cookie,
   __LocalStorage,
-  CG_STORE_CODE,
 } from '@constants/global.constant';
 import { __pagesConstant } from '@constants/pages.constant';
 import { __pagesText } from '@constants/pages.text';
@@ -30,6 +30,7 @@ import {
   deleteCookie,
   GoogleAnalyticsTrackerForAllStore,
   GoogleAnalyticsTrackerForCG,
+  remove_Coupon,
   remove_EnduserName,
   setCookie,
 } from '@helpers/common.helper';
@@ -49,7 +50,8 @@ import { placeOrder as placeOrderService } from '@services/checkout.service';
 import { Klaviyo_PlaceOrder } from '@services/klaviyo.service';
 import { GetStoreCustomer } from '@services/user.service';
 import CartItem from '@templates/cartItem';
-import _ from 'lodash';
+import { maxLengthCalculator } from '@templates/checkout/checkoutType6/CO6_Extras';
+import _, { isEmpty } from 'lodash';
 import { useRouter } from 'next/router';
 import { ChangeEvent, useEffect, useState } from 'react';
 import CheckoutAddress from './components/AddressType1';
@@ -65,7 +67,9 @@ interface _Props {
 const ChekoutType5: React.FC<_Props> = ({ templateId }) => {
   const router = useRouter();
 
-  const [salesTax, setSalesTax] = useState<number>(0);
+  const checkoutCharges = useTypedSelector_v2(
+    (state) => state.checkout.charges,
+  );
   const { currentPage, setCurrentPage } = CheckoutController();
   const [showAddAddressModal, setShowAddAddressModal] = useState(false);
   const [addressEditData, setAddressEditData] =
@@ -118,12 +122,12 @@ const ChekoutType5: React.FC<_Props> = ({ templateId }) => {
     null,
   );
   const [billingAdress, setBillingAdress] = useState<AddressType | null>(null);
-  const [billAddress, setBillAddress] = useState<AddressType | null>(null);
   const userId = useTypedSelector_v2((state) => state.user.id);
+  const user = useTypedSelector_v2((state) => state.user);
   const isLoggedIn = Boolean(userId);
   const [poAkaRefNumber, setPoAkaRefNumber] = useState<string>('');
 
-  const storeId = useTypedSelector_v2((state) => state.store.id);
+  const { id: storeId, gclid } = useTypedSelector_v2((state) => state.store);
   const isEmployeeLoggedIn = useTypedSelector_v2(
     (state) => !!state.employee.empId,
   );
@@ -153,7 +157,7 @@ const ChekoutType5: React.FC<_Props> = ({ templateId }) => {
     logInUser,
     updateCustomer,
     getStoreCustomer,
-    update_checkoutEmployeeLogin,
+    update_CheckoutEmployeeLogin,
     updateEmployeeV2,
     product_employeeLogin,
   } = useActions_v2();
@@ -287,25 +291,61 @@ const ChekoutType5: React.FC<_Props> = ({ templateId }) => {
                 setBillingAdress(
                   customer.customerAddress[index] as AddressType,
                 );
-                // billAddress && setBillingAdress(billAddress);
+
                 break;
+                // } else if (
+                //   customer.customerAddress[index].addressType ==
+                //   UserAddressType.BILLINGADDRESS
+                // ) {
+                //   setBillingAdress(
+                //     customer.customerAddress[index] as AddressType,
+                //   );
               } else {
-                setBillingAdress(
-                  customer.customerAddress[index] as AddressType,
-                );
-                // billAddress && setBillingAdress(billAddress);
+                setBillingAdress(null);
               }
             }
           }
         }
       }
     }
-  }, [userId]);
+  }, [userId, user.customer?.customerAddress]);
+
+  useEffect(() => {
+    if (useShippingAddress && customer) {
+      setBillingAdress(shippingAdress);
+    } else {
+      if (customer?.customerAddress) {
+        for (
+          let index = 0;
+          index < customer?.customerAddress?.length;
+          index++
+        ) {
+          if (
+            customer?.customerAddress[index].isDefault == true &&
+            customer?.customerAddress[index].addressType ==
+              UserAddressType.BILLINGADDRESS
+          ) {
+            setBillingAdress(customer?.customerAddress[index]);
+            break;
+            // } else if (
+            //   customer?.customerAddress[index].addressType ==
+            //   UserAddressType.BILLINGADDRESS
+            // ) {
+            //   setBillingAdress(customer?.customerAddress[index]);
+          } else {
+            setBillingAdress(null);
+            // setShowAddAddress(true);
+          }
+        }
+      }
+    }
+  }, [shippingAdress, useShippingAddress]);
+
   // GTM event for "add_shipping_info" and "add_payment_info’"
   const addShippingPaymentInfoEventHandle = (eventName: string) => {
     const eventPayload = {
       storeId: storeId,
-      customerId: customerId,
+      customerId: customerId || 0,
       ...(eventName === 'GoogleAddShippingInfoScript'
         ? { shippingTier: 'Free Shipping' }
         : { paymentType: paymentMethod }),
@@ -333,12 +373,13 @@ const ChekoutType5: React.FC<_Props> = ({ templateId }) => {
     let { totalPrice } = { totalPrice: 200 };
     if (totalPrice > 0) {
       if (paymentEnum.creditCard === paymentMethod) {
+        let cardNumber = detectCardType && detectCardType() == 'AMEX' ? 15 : 16;
         if (
           (cardDetails &&
             Object.values(cardDetails).some((x) => x === null || x === '')) ||
-          cardDetails.cardNumber.length !== 16
+          cardDetails.cardNumber.length !== cardNumber
         ) {
-          if (cardDetails.cardNumber.length < 16) {
+          if (cardDetails.cardNumber.length !== cardNumber) {
             showModal({
               message: 'Please enter valid card number',
               title: 'Error',
@@ -389,7 +430,7 @@ const ChekoutType5: React.FC<_Props> = ({ templateId }) => {
           setSelectedShipping(data[0]);
 
           if (data && data.length > 0 && data[0]?.price) {
-            update_checkoutEmployeeLogin({
+            update_CheckoutEmployeeLogin({
               type: 'SHIPPING_PRICE',
               value: data[0].price,
             });
@@ -421,7 +462,8 @@ const ChekoutType5: React.FC<_Props> = ({ templateId }) => {
           });
           return;
         }
-        if (cardDetails.cardVarificationCode.length !== 3) {
+        const cartLength = maxLengthCalculator('cvc', cardDetails.cardNumber);
+        if (cardDetails.cardVarificationCode.length !== cartLength) {
           showModal({
             message:
               'Error in Credit Card information. Please verify and try again.',
@@ -488,7 +530,44 @@ const ChekoutType5: React.FC<_Props> = ({ templateId }) => {
                 });
               })
               .catch((error) => console.log(error)));
-
+          if (!useShippingAddress && !billingAdress && billingForm) {
+            const billObj = {
+              storeCustomerAddressModel: {
+                id: 0,
+                rowVersion: '',
+                location: `${data.city}, ${data.region}, ${data.country}, ${data.postal_code}`,
+                ipAddress: data.ip_address,
+                macAddress: '00-00-00-00-00-00',
+                customerId: +customerId,
+                firstname: billingForm.values.firstname,
+                lastName: billingForm.values.lastName,
+                email: customer?.email || '',
+                address1: billingForm.values.address1,
+                address2: billingForm.values.address2 || ' ',
+                suite: ' ',
+                city: billingForm.values.city,
+                state: billingForm.values.state,
+                postalCode: billingForm.values.postalCode,
+                phone: billingForm.values.phone,
+                fax: billingForm.values.fax ? billingForm.values.fax : '',
+                countryName: billingForm.values.countryName,
+                countryCode: billingForm.values.countryCode || '',
+                addressType: UserAddressType.BILLINGADDRESS,
+                isDefault: true,
+                recStatus: 'A',
+                companyName: billingForm.values.companyName || ' ',
+              },
+            };
+            billObj.storeCustomerAddressModel.email &&
+              (await CreateUserAddress(billObj)
+                .then(() => {
+                  GetStoreCustomer(+customerId).then((res) => {
+                    if (res === null) return;
+                    updateCustomer({ customer: res });
+                  });
+                })
+                .catch((error) => console.log(error)));
+          }
           setShippingAdress(shippingForm.values);
           await fetchShipping(totalPrice);
           if (!useShippingAddress) {
@@ -503,8 +582,6 @@ const ChekoutType5: React.FC<_Props> = ({ templateId }) => {
 
           setCurrentPage(checkoutPages.reviewOrder);
         }
-      } else {
-        setCurrentPage(checkoutPages.reviewOrder);
       }
     } else {
       if (shippingAdress && billingAdress && checkPayment()) {
@@ -576,90 +653,91 @@ const ChekoutType5: React.FC<_Props> = ({ templateId }) => {
     // console.log('selected shipping', selectedShippingMOodel);
 
     let userNewId = 0;
-    setShowLoader(true);
-
     if (billingAdress && shippingAdress) {
-      const orderModel = {
-        ...AddOrderDefault,
-        ...addPaymentDetails(),
-        cardName: billingAdress.firstname + ' ' + billingAdress?.lastName,
-        ...(useBalance
-          ? {
-              isCreditLimit: true,
-              storeCredit: creditBalance,
-            }
-          : {}),
-        ...(useBalance && totalPrice === creditBalance
-          ? {
-              paymentMethod: PaymentMethod.PREPAYMENT,
-              paymentGateway: PaymentMethod.PREPAYMENT,
-            }
-          : {}),
-        storeID: storeId,
-        customerID: userNewId != 0 ? +userNewId : +customerId,
-        firstName: customer?.firstname || billingAdress.firstname,
-        lastName: customer?.lastName || billingAdress.lastName,
-        email: customer?.email || '',
-        billingEqualsShipping: useShippingAddress,
-        billingEmail: billingAdress.email || customer?.email || '',
-        billingFirstName: billingAdress.firstname,
-        billingLastName: billingAdress.lastName,
-        billingCompany: billingAdress.companyName,
-        billingAddress1: billingAdress.address1,
-        billingAddress2: billingAdress.address2,
-        billingSuite: billingAdress.suite,
-        billingCity: billingAdress.city,
-        billingState: billingAdress.state,
-        billingZip: billingAdress.postalCode,
-        billingCountry: billingAdress.countryName,
-        billingPhone: billingAdress.phone,
-        shippingEmail: customer?.email || '',
-        shippingFirstName: shippingAdress.firstname,
-        shippingLastName: shippingAdress.lastName,
-        shippingCompany: shippingAdress.companyName,
-        shippingAddress1: shippingAdress.address1,
-        shippingAddress2: shippingAdress.address2,
-        shippingSuite: shippingAdress.suite,
-        shippingCity: shippingAdress.city,
-        shippingState: shippingAdress.state,
-        shippingZip: shippingAdress.postalCode,
-        shippingCountry: shippingAdress.countryName,
-        shippingPhone: shippingAdress.phone,
-        orderSubtotal: subTotal,
-        orderTax: salesTax,
-        orderTotal:
-          totalPrice + getNewShippingCost(selectedShippingMOodel?.price),
-        orderNotes: orderNote,
-        couponCode: couponCode || '',
-        couponDiscountAmount: discount,
-        orderStatus: __pagesConstant.checkoutPage.orderStatus,
-        transactionStatus: __pagesConstant.checkoutPage.transactionStatus,
-        shippingMethod: selectedShippingMOodel
-          ? selectedShippingMOodel.name
-          : '',
-        endUserName: endUserNameS,
-        logoFinalTotal: totalLogoCharges,
-        lineFinalTotal: totalLineCharges,
-        orderShippingCosts: getNewShippingCost(selectedShippingMOodel?.price),
-        orderSmallRunFee: cartCharges?.smallRunFeesCharges
-          ? cartCharges.smallRunFeesCharges
-          : 0,
-        orderLogoSetupFee: cartCharges?.logoSetupCharges
-          ? cartCharges.logoSetupCharges
-          : 0,
-
-        // EMPLOYEE LOGIN SPECIFIC
-        empSourceName: employeeLogin.source.label,
-        empSourceMedium: employeeLogin.sourceMedium.label,
-        empSalesRap: employeeLogin.salesRep.label,
-        salesRepName: employeeLogin.salesRep.label,
-        salesAgentId: +employeeLogin.salesRep.value,
-        isAllowPo: employeeLogin.allowPo,
-      };
-
-      // console.log('payload', orderModel);
-
+      setShowLoader(true);
       try {
+        const orderModel = {
+          ...AddOrderDefault,
+          ...addPaymentDetails(),
+          cardName: billingAdress.firstname + ' ' + billingAdress?.lastName,
+          ...(useBalance
+            ? {
+                isCreditLimit: true,
+                storeCredit: creditBalance,
+              }
+            : {}),
+          ...(useBalance && totalPrice === creditBalance
+            ? {
+                paymentMethod: PaymentMethod.PREPAYMENT,
+                paymentGateway: PaymentMethod.PREPAYMENT,
+              }
+            : {}),
+          storeID: storeId,
+          customerID: userNewId != 0 ? +userNewId : +customerId,
+          firstName: customer?.firstname || billingAdress.firstname,
+          lastName: customer?.lastName || billingAdress.lastName,
+          email: customer?.email || '',
+          billingEqualsShipping: useShippingAddress,
+          billingEmail: billingAdress.email || customer?.email || '',
+          billingFirstName: billingAdress.firstname,
+          billingLastName: billingAdress.lastName,
+          billingCompany: billingAdress.companyName,
+          billingAddress1: billingAdress.address1,
+          billingAddress2: billingAdress.address2,
+          billingSuite: billingAdress.suite,
+          billingCity: billingAdress.city,
+          billingState: billingAdress.state,
+          billingZip: billingAdress.postalCode,
+          billingCountry: billingAdress.countryName,
+          billingPhone: billingAdress.phone,
+          shippingEmail: customer?.email || '',
+          shippingFirstName: shippingAdress.firstname,
+          shippingLastName: shippingAdress.lastName,
+          shippingCompany: shippingAdress.companyName,
+          shippingAddress1: shippingAdress.address1,
+          shippingAddress2: shippingAdress.address2,
+          shippingSuite: shippingAdress.suite,
+          shippingCity: shippingAdress.city,
+          shippingState: shippingAdress.state,
+          shippingZip: shippingAdress.postalCode,
+          shippingCountry: shippingAdress.countryName,
+          shippingPhone: shippingAdress.phone,
+          orderSubtotal: subTotal,
+          orderTax: checkoutCharges.salesTax,
+          orderTotal:
+            totalPrice +
+            getNewShippingCost(selectedShippingMOodel?.price) +
+            checkoutCharges.salesTax,
+          orderNotes: orderNote,
+          couponCode: couponCode || '',
+          couponDiscountAmount: discount,
+          orderStatus: __pagesConstant.checkoutPage.orderStatus,
+          transactionStatus: __pagesConstant.checkoutPage.transactionStatus,
+          shippingMethod: selectedShippingMOodel
+            ? selectedShippingMOodel.name
+            : '',
+          endUserName: endUserNameS,
+          logoFinalTotal: totalLogoCharges,
+          lineFinalTotal: totalLineCharges,
+          authorizationPNREF: poAkaRefNumber ? poAkaRefNumber : '',
+          orderShippingCosts: getNewShippingCost(selectedShippingMOodel?.price),
+          orderSmallRunFee: cartCharges?.smallRunFeesCharges
+            ? cartCharges.smallRunFeesCharges
+            : 0,
+          orderLogoSetupFee: cartCharges?.logoSetupCharges
+            ? cartCharges.logoSetupCharges
+            : 0,
+
+          // EMPLOYEE LOGIN SPECIFIC
+          empSourceName: employeeLogin.source.label,
+          empSourceMedium: employeeLogin.sourceMedium.label,
+          empSalesRap: employeeLogin.salesRep.label,
+          salesRepName: employeeLogin.salesRep.label,
+          salesAgentId: +employeeLogin.salesRep.value,
+          isAllowPo: employeeLogin.allowPo,
+          gclid: gclid,
+        };
+
         await placeOrderService({
           orderModel,
         })
@@ -672,6 +750,8 @@ const ChekoutType5: React.FC<_Props> = ({ templateId }) => {
                 logout_EmployeeLogin(res.id);
               }
               setShowLoader(false);
+              remove_EnduserName('endusername');
+              remove_Coupon('discountCoupon');
               router.push(`/${paths.THANK_YOU}?orderNumber=${res.id}`);
               logoutClearCart();
               deleteCookie(__Cookie.tempCustomerId);
@@ -721,6 +801,9 @@ const ChekoutType5: React.FC<_Props> = ({ templateId }) => {
     if (isEmployeeLoggedIn) {
       disable = !!!employeeLogin.salesRep.value;
     }
+    if (!shippingAdress || !billingAdress) disable = true;
+    if (!isEmpty(billingForm.errors) || !isEmpty(shippingForm.errors))
+      disable = true;
 
     return disable;
   };
@@ -729,9 +812,17 @@ const ChekoutType5: React.FC<_Props> = ({ templateId }) => {
     const valuesEnduser = localStorage.getItem('endusername');
     if (valuesEnduser) {
       setEndUserName(valuesEnduser);
-      remove_EnduserName('endusername');
     }
   }, []);
+
+  const disableReviewOrder = () => {
+    if (!shippingAdress && isEmpty(shippingForm.touched)) {
+      return true;
+    }
+    if (!isEmpty(billingForm.errors) || !isEmpty(shippingForm.errors))
+      return true;
+    return false;
+  };
 
   // console.log('purchase porder', purchaseOrder);
 
@@ -744,7 +835,7 @@ const ChekoutType5: React.FC<_Props> = ({ templateId }) => {
             {currentPage === checkoutPages.reviewOrder ? (
               <div id='OrderReview'>
                 <section className='w-full'>
-                  <div className='bg-light-gray p-4 text-2xl font-bold font-semibold'>
+                  <div className='bg-light-gray p-4 text-title-text font-bold font-semibold'>
                     {__pagesText.CheckoutPage.OrderReview}
                   </div>
                   <div className='flex flex-wrap checkout-box ml-[-15px] mr-[-15px]'>
@@ -813,7 +904,7 @@ const ChekoutType5: React.FC<_Props> = ({ templateId }) => {
                         />
                         <div className='flex flex-wrap items-center justify-between pt-[10px] border-b border-[#ececec]'>
                           <div className='pb-[10px] text-title-text'>
-                            {__pagesText.CheckoutPage.PaymentMethod}
+                            {__pagesText.CheckoutPage.payment}
                           </div>
                           <div className='text-default-text'>
                             <div
@@ -832,17 +923,32 @@ const ChekoutType5: React.FC<_Props> = ({ templateId }) => {
                             {paymentMethod === paymentEnum.creditCard &&
                               cardDetails.cardNumber && (
                                 <div className='flex flex-wrap'>
-                                  <div>
-                                    <NxtImage
-                                      isStatic={true}
-                                      className=''
-                                      src={cardType[1].url}
-                                      alt=''
-                                    />
-                                  </div>
-                                  <div>
+                                  <span className=''>
+                                    {cardType.map((res) => (
+                                      <div
+                                        key={res.name}
+                                        className={`opacity-${
+                                          detectCardType &&
+                                          detectCardType() === res.name
+                                            ? '1 block'
+                                            : '40 hidden'
+                                        } ml-[4px] w-[32px]`}
+                                      >
+                                        <NxtImage
+                                          isStatic={true}
+                                          className=''
+                                          src={res.url}
+                                          alt=''
+                                        />
+                                      </div>
+                                    ))}
+                                  </span>
+                                  <div className='ml-[10px]'>
                                     <p>{cardDetails.cardNumber}</p>
-                                    <p>{`${cardDetails.cardExpirationMonth}/${cardDetails.cardExpirationYear}`}</p>
+                                    <p>
+                                      Exp:{' '}
+                                      {`${cardDetails.cardExpirationMonth}/${cardDetails.cardExpirationYear}`}
+                                    </p>
                                   </div>
                                 </div>
                               )}
@@ -886,7 +992,7 @@ const ChekoutType5: React.FC<_Props> = ({ templateId }) => {
                         </div>
                         <div className='flex flex-wrap items-center justify-between pt-[10px] border-b border-[#ececec]'>
                           <div className='pb-[10px] text-title-text'>
-                            {__pagesText.CheckoutPage.BillingInformation}
+                            {__pagesText.CheckoutPage.BillingAddress}
                           </div>
                           {!useShippingAddress && (
                             <div className='text-default-text'>
@@ -999,8 +1105,10 @@ const ChekoutType5: React.FC<_Props> = ({ templateId }) => {
                   <div className='text-title-text mr-[15px] font-semibold'>
                     Checkout
                   </div>
-                  <div className='text-[#8b0520] text-medium-text tracking-normal'>
-                    All fields marked * are required.
+                  <div className='text-medium-text tracking-normal'>
+                    <span className='text-rose-500'>
+                      All fields marked * are required.
+                    </span>
                   </div>
                 </div>
 
@@ -1008,7 +1116,7 @@ const ChekoutType5: React.FC<_Props> = ({ templateId }) => {
                   <div id='ShippingPaymentMain'>
                     <div className='flex flex-wrap -mx-[15px] -mt-[21px]'>
                       <div className='w-full lg:w-1/2 pl-[15px] pr-[15px] pt-[15px] pb-[15px]'>
-                        {showAddAddress ? (
+                        {showAddAddress && !shippingAdress ? (
                           <CO5_AddAddressForm
                             refrence={shippingForm}
                             title={'Shipping Address'}
@@ -1062,7 +1170,7 @@ const ChekoutType5: React.FC<_Props> = ({ templateId }) => {
                               setAddressType(UserAddressType.BILLINGADDRESS)
                             }
                             editShipping={() => {
-                              setAddressType(UserAddressType.SHIPPINGADDRESS);
+                              setAddressType(UserAddressType.BILLINGADDRESS);
                             }}
                           />
                         )}
@@ -1075,25 +1183,26 @@ const ChekoutType5: React.FC<_Props> = ({ templateId }) => {
           </div>
           <div className='w-full md:w-4/12 lg:w-[27%] pl-[15px] pr-[15px]'>
             <OrderSummaryType5
-              currentpage={currentPage}
               selectedShipModel={selectedShipping}
-              placeOrder={placeOrder}
-              salesTax={salesTax}
-              setSalesTax={setSalesTax}
               billingAddressCode={
                 billingAdress?.postalCode ? billingAdress.postalCode : '0'
               }
             />
 
             <div className='text-medium-text font-semibold mb-[20px]'>
-              <div className='text-rose-500'>{__pagesText.dicheckoutNote}</div>
+              <div className='text-rose-500 font-semibold'>
+                {__pagesText.dicheckoutNote}
+              </div>
             </div>
 
             {currentPage === checkoutPages.address && (
               <div className=''>
                 <button
-                  className='btn btn-lg !w-full text-center btn-secondary mb-[8px]'
+                  className={`btn btn-lg !w-full text-center btn-secondary mb-[8px] font-semibold ${
+                    disableReviewOrder() ? 'opacity-50' : ''
+                  }`}
                   id='btn-review-order'
+                  disabled={disableReviewOrder()}
                   onClick={() => {
                     reviewOrder();
                   }}
@@ -1126,7 +1235,12 @@ const ChekoutType5: React.FC<_Props> = ({ templateId }) => {
               addressType,
               addressArray,
               changeAddresHandler,
-              closeModalHandler: () => setAddressType(null),
+              closeModalHandler: () => {
+                setAddressType(null);
+                if (!billingAdress) {
+                  setShippingAddress(true);
+                }
+              },
               addAddressButtonHandler: () => setShowAddAddressModal(true),
               setAddressEditData,
             }}

@@ -61,18 +61,22 @@ const TemplateFourListing = ({
 
   return (
     <li className='text-center'>
-      <div className='flex justify-center w-full border border-gray-border'>
+      <div className='flex justify-center w-full border border-gray-border h-full'>
         <div className='relative w-full mb-[20px]'>
           <div className='w-full px-[20px] pt-[10px]'>
             <Link
               href={`${origin}/${product.sename}.html`}
               className='relative'
             >
-              <a style={{ display: 'block' }}>
+              <a
+                href={`/${product.sename}.html`}
+                title={product.name}
+                className='block'
+              >
                 <NxtImage
                   src={mainImageUrl}
-                  alt=''
-                  className='w-auto h-auto m-auto max-h-full'
+                  alt={product.name}
+                  className='max-h-[348px] !inline-black m-auto'
                   key={currentProduct?.id}
                 />
               </a>
@@ -91,6 +95,7 @@ const TemplateFourListing = ({
               return (
                 <div
                   className={`${tagsdetails.tagPosition} h-8 flex gap-1 absolute`}
+                  data-imageUrl={`${tagsdetails.imagename}`}
                 >
                   <div className='h-8'>
                     <img
@@ -102,13 +107,15 @@ const TemplateFourListing = ({
               );
             })}
           </div>
-          <div className='mt-[20px] relative md:px-[30px] px-[15px]'>
+          <div className='mt-[20px] relative px-[15px]'>
             {product?.isonlinebrand ? (
               <div className='mb-[10px] text-sm'>
                 <span className='w-[10px] h-[10px] bg-lime-500 inline-block rounded-full mr-1'></span>{' '}
                 Available Online
               </div>
-            ) : null}
+            ) : (
+              <div className='mb-[10px] text-sm'>&nbsp;</div>
+            )}
 
             <div className='mb-[10px] text-center'>
               <Link href={product.brandUrl}>
@@ -141,28 +148,22 @@ const TemplateFourListing = ({
               </span>
             </div>
             <div className='form-group mb-[12px] text-small-text'>
-              <label className='checkbox-inline flex items-center gap-x-1 justify-center'>
+              <label className='checkbox-inline align-top'>
                 <input
                   checked={skuList.includes(product?.sku ? product.sku : '')}
                   onChange={() =>
                     compareCheckBoxHandler(product?.sku ? product.sku : '')
                   }
                   type='checkbox'
+                  className='w-4 h-4 mr-1 align-bottom'
                 />{' '}
                 {
                   <>
                     {skuList.length &&
                     skuList.includes(product?.sku ? product.sku : '') ? (
-                      skuList.length === 1 ? (
-                        <>
-                          Please select two or more products to Add to Compare
-                          to use this feature.
-                        </>
-                      ) : (
-                        <Link href={getCompareLink()}>
-                          <span>Compare ({skuList.length})</span>
-                        </Link>
-                      )
+                      <Link href={getCompareLink()}>
+                        <span>Compare ({skuList.length})</span>
+                      </Link>
                     ) : (
                       <>Add to Compare</>
                     )}
@@ -211,7 +212,7 @@ const TemplateFourListing = ({
                           <NxtImage
                             src={`${mediaBaseUrl}${subRow.imageurl}`}
                             alt=''
-                            className=''
+                            className='max-h-full m-auto'
                             title={subRow.colorName}
                           />
                         </li>
@@ -226,7 +227,7 @@ const TemplateFourListing = ({
                 product.getProductImageOptionList.map((subRow, index) =>
                   index < listing_max_showcolors ? (
                     <li
-                      className={`w-7 h-7 border-2 hover:border-secondary cursor-pointer ${
+                      className={`w-7 h-7 border-2 hover:border-primary cursor-pointer  ${
                         subRow.id === currentProduct.id
                           ? ' border-secondary'
                           : 'border-light-gray'
@@ -251,10 +252,10 @@ const TemplateFourListing = ({
                       }}
                       key={subRow.id}
                     >
-                      <NxtImage
+                      <img
                         src={`${mediaBaseUrl}${subRow.imageName}`}
                         alt=''
-                        className=''
+                        className='max-h-full m-auto'
                         title={subRow.colorName}
                       />
                     </li>

@@ -1,5 +1,4 @@
 import NxtImage from '@appComponents/reUsable/Image';
-import WishlistButton from '@appComponents/ui/Wishlist';
 import { _OtherImage, _ProductColor } from '@definations/APIs/colors.res';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import { useRouter } from 'next/router';
@@ -32,8 +31,6 @@ const ProductImg_Type3: React.FC<_ProductImgProps> = ({ product }) => {
   const selectedImage = useTypedSelector_v2(
     (state) => state.product?.selected.image,
   );
-  const wishlist = useTypedSelector_v2((state) => state.wishlist.wishListData);
-  const customerId = useTypedSelector_v2((state) => state.user.id);
   const clientSideMediaUrl = useTypedSelector_v2(
     (state) => state.store.mediaBaseUrl,
   );
@@ -49,15 +46,6 @@ const ProductImg_Type3: React.FC<_ProductImgProps> = ({ product }) => {
       altTag: selectedColor.moreImages[0].altTag,
     });
   }, [selectedColor?.attributeOptionId, product?.id]);
-
-  useEffect(() => {
-    wishlist.forEach((item) => {
-      if (item.productId === product?.id) {
-        setWishlistPresent(true);
-        setWishlistId(item.id);
-      }
-    });
-  }, [customerId, wishlist]);
 
   return (
     <div className='lg:col-start-2 lg:col-end-7 grid grid-cols-12 gap-6'>
@@ -94,22 +82,6 @@ const ProductImg_Type3: React.FC<_ProductImgProps> = ({ product }) => {
                 </div>
               );
             })}
-        </div>
-
-        <div className='absolute right-[10px] top-[25px] w-6 h-6'>
-          <button className=''>
-            <WishlistButton
-              {...{
-                productId: product?.id,
-                name: product?.name,
-                color: selectedColor.name,
-                price: product?.salePrice,
-                wishlistId: wishlistId,
-              }}
-              iswishlist={wishlistPresent}
-              brandId={brandId ? brandId : 0}
-            />
-          </button>
         </div>
       </div>
       {/* <div className='col-span-12 flex flex-wrap justify-center'>

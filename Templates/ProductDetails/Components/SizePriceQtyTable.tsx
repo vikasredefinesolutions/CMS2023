@@ -7,7 +7,16 @@ import { _SizePriceQtyTableProps } from './productDetailsComponents';
 const SizePriceQtyTable: React.FC<_SizePriceQtyTableProps> = ({
   editDetails,
   isSpecialBrand,
+  brandName,
 }) => {
+  const customerId = useTypedSelector_v2((state) => state.user.id);
+  // console.log(
+  //   editDetails,
+  //   customerId,
+  //   isSpecialBrand,
+  //   editDetails.length,
+  //   'editDetails',
+  // );
   const { price, inventory } = useTypedSelector_v2(
     (state) => state.product.product,
   );
@@ -49,7 +58,7 @@ const SizePriceQtyTable: React.FC<_SizePriceQtyTableProps> = ({
             </tr>
           </thead>
 
-          <tbody className='divide-y divide-slate-200'>
+          <tbody className='divide-y divide-slate-200' key={editDetails.length}>
             {inventory?.inventory
 
               .filter(
@@ -73,7 +82,15 @@ const SizePriceQtyTable: React.FC<_SizePriceQtyTableProps> = ({
 
                     <td className='px-2 py-4'>
                       <div className=''>
-                        <Price value={discountedPrice} />
+                        <Price
+                          value={
+                            isSpecialBrand &&
+                            !customerId &&
+                            editDetails.length > 0
+                              ? editDetails[0]?.price / editDetails[0]?.qty
+                              : discountedPrice
+                          }
+                        />
                       </div>
                     </td>
 
@@ -86,6 +103,7 @@ const SizePriceQtyTable: React.FC<_SizePriceQtyTableProps> = ({
                       }
                       defaultQty={defaultQty}
                       isSpecialBrand={isSpecialBrand}
+                      brandName={brandName}
                     />
                   </tr>
                 );

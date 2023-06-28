@@ -24,6 +24,7 @@ const ManageAddress = () => {
   const [editData, setEditData] = useState<CustomerAddress | null>(null);
   const [address, setAddress] = useState<CustomerAddress[] | null>(null);
   const [id, setId] = useState<number | null>(null);
+  const roles = useTypedSelector_v2((state) => state.user.roles);
 
   const customer = useTypedSelector_v2((state) => {
     return state.user.customer;
@@ -197,8 +198,10 @@ const ManageAddress = () => {
                             <div className='ml-[10px]'>
                               {address_obj.address1} {address_obj.address2}
                               <br />
+                              {address_obj.city},
+                              <br />
                               {[
-                                address_obj.city,
+                                address_obj.state,
                                 address_obj.countryName,
                                 address_obj.postalCode,
                               ].join(', ')}
@@ -207,7 +210,7 @@ const ManageAddress = () => {
                           {showTab === UserAddressType.OTHERUSERADDRESS ? (
                             <></>
                           ) : (
-                            <div className='border-b last:border-b-0 border-[#d2d2d2] flex flex-wrap px-[20px] py-[10px]'>
+                            <div className='border-b last:border-b-0 border-[#d2d2d2] flex flex-wrap px-[20px] py-[10px] items-center'>
                               <div className='w-2/5 text-right'>
                                 Make Primary:
                               </div>

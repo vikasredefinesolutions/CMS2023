@@ -48,12 +48,17 @@ interface _ExtractCookies {
   loggedIN: boolean;
   storeInfo: null | _StoreInfoCookies['value'];
   tempCustomerId: string | null;
-
+  visitorId: string | null;
   adminConfigs: null | {
     imageFolderPath: string;
     blobUrl: string;
     blobUrlDirectory: string;
     companyId: number;
+  };
+  BacardiSelectedStore: string | null;
+  storeBuilderInfo: null | {
+    showHomePage: boolean;
+    filters: boolean;
   };
 }
 
@@ -71,6 +76,10 @@ interface _StoreInfoCookies {
     blobUrl: string;
     blobUrlRootDirectory: string;
     imageFolderP: string;
+    sb: {
+      displayHomePage: boolean;
+      filters: boolean;
+    };
   };
 }
 
@@ -84,6 +93,11 @@ interface _NextJsSetCookie {
 //////// FUNCTIONS ---------------------------------------
 //////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////
+
+export function scrollToTop() {
+  document.body.scrollTop = 0; // For Safari
+  document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+}
 
 export const extractFromLocalStorage = <T>(key: string): T | null => {
   let dataToReturn: null | T = null;
@@ -239,6 +253,9 @@ export const extractCookies = (
     storeInfo: null,
     tempCustomerId: null,
     adminConfigs: null,
+    visitorId: null,
+    BacardiSelectedStore: null,
+    storeBuilderInfo: null,
   };
 
   const server = isItServer();
@@ -266,6 +283,13 @@ export const extractCookies = (
       .find((cookie) => cookie.split('=')[0] === __Cookie.empData)
       ?.split('=')[1];
 
+    const visitorId = _cookiesArr
+      .find((cookie) => cookie.split('=')[0] === __Cookie.visitorId)
+      ?.split('=')[1];
+    const BacardiSelectedStore = _cookiesArr
+      .find((cookie) => cookie.split('=')[0] === __Cookie.BacardiSelectedStore)
+      ?.split('=')[1];
+
     if (encodedStoreInfo) {
       const decodedStoreInfo = decodeURIComponent(encodedStoreInfo);
       const parsedStoreInfo: null | _StoreInfoCookies['value'] =
@@ -274,16 +298,22 @@ export const extractCookies = (
     }
 
     return {
+      storeBuilderInfo: {
+        showHomePage: expectedCookies.storeInfo?.sb?.displayHomePage || false,
+        filters: expectedCookies.storeInfo?.sb?.filters || false,
+      },
       userId: userId ? +userId : null,
       loggedIN: Boolean(userId),
       storeInfo: expectedCookies.storeInfo,
       tempCustomerId: tempCustomerId || null,
+      visitorId: visitorId || null,
       adminConfigs: {
         companyId: expectedCookies.storeInfo?.companyId || 0,
         blobUrl: expectedCookies.storeInfo?.blobUrl || '',
         blobUrlDirectory: expectedCookies.storeInfo?.blobUrlRootDirectory || '',
         imageFolderPath: expectedCookies.storeInfo?.imageFolderP || '',
       },
+      BacardiSelectedStore: BacardiSelectedStore || null,
     };
   }
   return expectedCookies;
@@ -355,6 +385,7 @@ export const nextJsSetCookie = ({ res, cookie }: _NextJsSetCookie) => {
   if (cookie.name === __Cookie.storeInfo) {
     cValue = JSON.stringify(cookie.value);
   }
+
   const encodedCValue = encodeURIComponent(cValue as string);
   res.setHeader('set-cookie', `${cookie.name}=${encodedCValue}; Path=/;`);
 };
@@ -578,7 +609,7 @@ export const getAddToCartObject = async (product: _Props): Promise<CartReq> => {
   }
 
   sizeQtys?.map((res) => {
-    if (res !== null)
+    if (res !== null && res.qty !== 0)
       cartLogoPersonModel.push({
         id: res.id || 0,
         attributeOptionId: res.attributeOptionId,
@@ -639,6 +670,7 @@ export const generateImageUrl = (
   src: null | string | StaticImageData,
   isStatic: boolean,
   mediaBaseUrl: string,
+  extraUrlpath?: string,
 ): string | StaticImageData => {
   if (src === null) return __StaticImg.product;
 
@@ -648,7 +680,9 @@ export const generateImageUrl = (
 
   if (typeof src === 'string') {
     const with_or_without_HTTP = src.includes('http');
+
     if (with_or_without_HTTP) return src;
+
     if (with_or_without_HTTP === false) return `${mediaBaseUrl}${src}`;
   }
 
@@ -848,14 +882,22 @@ export const GTMHomeScriptForAllStores = async (
 const pushToDataLayerUtil = (payload: Record<string, any>) => {
   const dataLayer = window?.dataLayer || null;
   if (dataLayer) {
-    if (payload?.pageDataLayer)
+    if (payload?.pageDataLayer) {
+      dataLayer.push({ ecommerce: null }); //For clearing ecommerce data layer
       dataLayer.push({ ...JSON.parse(payload?.pageDataLayer) });
-    if (payload?.pageDataLayer2)
+    }
+    if (payload?.pageDataLayer2) {
+      dataLayer.push({ ecommerce: null }); //For clearing ecommerce data layer
       dataLayer.push({ ...JSON.parse(payload?.pageDataLayer2) });
-    if (payload?.pageDataLayer3)
+    }
+    if (payload?.pageDataLayer3) {
+      dataLayer.push({ ecommerce: null }); //For clearing ecommerce data layer
       dataLayer.push({ ...JSON.parse(payload?.pageDataLayer3) });
-    if (payload?.pageItemDetails)
+    }
+    if (payload?.pageItemDetails) {
+      dataLayer.push({ ecommerce: null }); //For clearing ecommerce data layer
       dataLayer.push({ ...JSON.parse(payload?.pageItemDetails) });
+    }
   }
 };
 
@@ -863,5 +905,8 @@ export const set_EnduserName = (endUserNameS: string) => {
   localStorage.setItem('endusername', endUserNameS);
 };
 export const remove_EnduserName = (key: string) => {
+  localStorage.removeItem(key);
+};
+export const remove_Coupon = (key: string) => {
   localStorage.removeItem(key);
 };

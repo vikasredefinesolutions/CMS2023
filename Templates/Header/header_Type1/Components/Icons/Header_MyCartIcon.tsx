@@ -66,7 +66,7 @@ const MyCartIcon: React.FC = () => {
         </Link>
       </div>
       {Focus && totalCartQty > 0 && (
-        <div className='absolute top-full right-0 w-80 text-sm shadow-[0_0px_5px_rgb(0,0,0,0.5)] border border-[#f4ede6] tracking-[1px] '>
+        <div className='absolute top-full right-0 sm:w-80 w-60 text-sm shadow-[0_0px_5px_rgb(0,0,0,0.5)] border border-[#f4ede6] tracking-[1px] '>
           <div
             className='absolute inset-0 top-1/2 bg-white shadow'
             aria-hidden='true'
@@ -91,7 +91,7 @@ const MyCartIcon: React.FC = () => {
                         <div className=''>
                           <Link
                             className='inline-block'
-                            href={`/${cartItem.seName}`}
+                            href={`/${cartItem.seName}.html`}
                           >
                             <a className='inline-block text-[13px] text-[#000000] hover:text-anchor-hover'>
                               {cartItem.productName}

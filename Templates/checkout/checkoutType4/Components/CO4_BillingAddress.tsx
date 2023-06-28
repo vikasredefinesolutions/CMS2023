@@ -9,19 +9,19 @@ import CO4_ChangeAddressModal from './CO4_ChangeAddressModal';
 const BILL = 'BILL';
 
 const CO4_BillingAddress: React.FC = () => {
-  const user = useTypedSelector_v2((state) => state.checkout.billingAddress);
+  const user = useTypedSelector_v2((state) => state.checkout.address.billing);
   const userStoredAddress = useTypedSelector_v2(
     (state) => state.user.customer?.customerAddress,
   );
 
-  const { update_CheckoutProps } = useActions_v2();
+  const { update_CheckoutAddress } = useActions_v2();
 
   const [showAddressModal, setShowAddressModal] = useState<
     'ADD' | 'EDIT' | null | 'CHANGE'
   >(null);
 
   const useShippingAddress = useTypedSelector_v2(
-    (state) => state.checkout.useShippingAddressForBilling,
+    (state) => state.checkout.address.useShippingAddressForBilling,
   );
 
   const showAddEditModal =
@@ -59,7 +59,10 @@ const CO4_BillingAddress: React.FC = () => {
       setShowAddressModal('CHANGE');
       return;
     }
-    update_CheckoutProps({ useShippingAddressForBilling: true });
+    update_CheckoutAddress({
+      type: 'USE_SHIPPING_ADDRESS_FOR_BILLING',
+      value: true,
+    });
   };
 
   return (

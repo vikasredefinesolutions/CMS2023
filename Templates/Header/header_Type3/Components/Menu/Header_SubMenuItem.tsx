@@ -1,8 +1,12 @@
+import LoginModal from '@appComponents/modals/loginModal';
+import { UCA } from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
 import { _MenuCategory } from '@definations/header.type';
+import { _modals } from '@definations/product.type';
 import { FetchMenuCategories } from '@services/header.service';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import SubCategoryItem from './Header_SubCategoryItem';
 
@@ -25,6 +29,18 @@ const SubMenuItem: React.FC<_props> = ({
   const { toggleSideMenu } = useActions_v2();
   const [subCategories, setSubCategories] = useState<_MenuCategory[] | null>();
   const storeId = useTypedSelector_v2((state) => state.store.id);
+  const { id: customerId } = useTypedSelector_v2((state) => state.user);
+  const [openModal, setOpenModal] = useState<null | _modals>(null);
+  const { code } = useTypedSelector_v2((state) => state.store);
+
+  const router = useRouter();
+  const modalHandler = (param: null | _modals) => {
+    if (param) {
+      setOpenModal(param);
+      return;
+    }
+    setOpenModal(null);
+  };
   useEffect(() => {
     if (itemId) {
       FetchMenuCategories({
@@ -59,7 +75,19 @@ const SubMenuItem: React.FC<_props> = ({
     }
     if (view === 'DESKTOP') {
       return (
-        <Link href={`/${itemUrl}`}>
+        <div
+          onClick={() => {
+            if (code === 'CYX' || code === UCA) {
+              if (customerId) {
+                router.push(`/${itemUrl}`);
+              } else {
+                setOpenModal('login');
+              }
+            } else {
+              router.push(`/${itemUrl}`);
+            }
+          }}
+        >
           <li className=''>
             {/* <span className='material-icons-outlined text-[18px] leading-none font-[100] mr-[10px]'>
             {__pagesText.Headers.rightArrowIcon}
@@ -71,7 +99,8 @@ const SubMenuItem: React.FC<_props> = ({
               {itemLabel}
             </span>
           </li>
-        </Link>
+          {openModal === 'login' && <LoginModal modalHandler={modalHandler} />}
+        </div>
       );
     }
   }
@@ -157,19 +186,34 @@ const SubMenuItem: React.FC<_props> = ({
 
     if (view === 'DESKTOP') {
       return (
-        <li className=''>
-          {/* <span className='material-icons-outlined text-[18px] leading-none font-[100] mr-[10px]'>
+        <>
+          <li className=''>
+            {/* <span className='material-icons-outlined text-[18px] leading-none font-[100] mr-[10px]'>
             {__pagesText.Headers.rightArrowIcon}
           </span> */}
-          <Link href={`/${itemUrl}`}>
-            <span
-              className='block text-[14px] text-primary font-[400] tracking-[1px] leading-[18px] uppercase  hover:bg-secondary px-[10px] py-[7px] hover:pl-[20px] transition-all duration-700'
-              title={itemLabel}
+            <div
+              onClick={() => {
+                if (code === 'CYX' || code === UCA) {
+                  if (customerId) {
+                    router.push(`/${itemUrl}`);
+                  } else {
+                    setOpenModal('login');
+                  }
+                } else {
+                  router.push(`/${itemUrl}`);
+                }
+              }}
             >
-              {itemLabel}
-            </span>
-          </Link>
-        </li>
+              <span
+                className='block text-[14px] text-primary hover:text-primary font-[400] tracking-[1px] leading-[18px] uppercase  hover:bg-secondary px-[10px] py-[7px] hover:pl-[20px] transition-all duration-700'
+                title={itemLabel}
+              >
+                {itemLabel}
+              </span>
+            </div>
+          </li>
+          {openModal === 'login' && <LoginModal modalHandler={modalHandler} />}
+        </>
       );
     }
   }

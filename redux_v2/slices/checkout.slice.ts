@@ -3,16 +3,14 @@ import { createSlice } from '@reduxjs/toolkit';
 
 interface _POPaymentMethod {
   method: 'bulk_payment';
-  valid: boolean;
   poNumber: string;
 }
 
 interface _CCPaymentMethod {
   method: 'individual_cards';
-  valid: boolean;
   data: {
-    name: string;
-    type: string;
+    nameOnCard: string;
+    cardName: '' | 'VISA' | 'MASTERCARD' | 'AMEX' | 'DISCOVER';
     year: string;
     ccNumber: string;
     month: string;
@@ -21,17 +19,46 @@ interface _CCPaymentMethod {
 }
 
 export interface _Checkout_Initials {
-  billingAddress: CustomerAddress | null;
-  shippingAddress: CustomerAddress | null;
-  editAddress: CustomerAddress | null;
-  useShippingAddressForBilling: boolean;
+  user: {
+    email: string;
+    creditBalance: number;
+  };
+  playerInformation: {
+    needToValidate: boolean;
+    firstName: string;
+    lastName: string;
+    playerNo: number;
+    poNumberToMatch: string;
+  };
+  additionalInformation: {
+    name: string;
+    type: string;
+    isRequired: boolean;
+    value: string;
+  }[];
+  address: {
+    zipCode: string;
+    billing: CustomerAddress | null;
+    shipping: CustomerAddress | null;
+    editing: CustomerAddress | null;
+    useShippingAddressForBilling: boolean;
+    shipToSchool: boolean;
+  };
   payment: {
-    valid: boolean;
+    useCreditBalance: boolean;
     creditCard: _CCPaymentMethod['data'];
     poNumber: string;
     method: 'CREDIT_CARD' | 'PURCHASE_ORDER';
   };
-  orderNotes: '';
+  charges: {
+    salesTax: number;
+  };
+  shippingMethod: {
+    destination: 'residential' | 'commercial';
+    name: string;
+    price: number;
+  };
+  orderNotes: string;
   el: {
     shippingPrice: number;
     allowPo: boolean;
@@ -53,15 +80,40 @@ export interface _Checkout_Initials {
 }
 
 const initialState: _Checkout_Initials = {
-  shippingAddress: null,
-  billingAddress: null,
-  editAddress: null,
-  useShippingAddressForBilling: false,
+  user: {
+    email: '',
+    creditBalance: 0,
+  },
+  playerInformation: {
+    needToValidate: false,
+    firstName: '',
+    lastName: '',
+    playerNo: 0,
+    poNumberToMatch: '',
+  },
+  additionalInformation: [],
+  shippingMethod: {
+    destination: 'residential',
+    name: '',
+    price: 0,
+  },
+  orderNotes: '',
+  address: {
+    zipCode: '',
+    billing: null,
+    shipping: null,
+    editing: null,
+    useShippingAddressForBilling: false,
+    shipToSchool: false,
+  },
+  charges: {
+    salesTax: 0,
+  },
   payment: {
-    valid: true,
+    useCreditBalance: false,
     creditCard: {
-      name: '',
-      type: '',
+      nameOnCard: '',
+      cardName: '',
       year: '',
       ccNumber: '',
       month: '',
@@ -70,7 +122,6 @@ const initialState: _Checkout_Initials = {
     poNumber: '',
     method: 'CREDIT_CARD',
   },
-  orderNotes: '',
   el: {
     shippingPrice: 0,
     smallRunFee: 0,
@@ -91,67 +142,122 @@ const initialState: _Checkout_Initials = {
   },
 };
 
+/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+///////////////////////                       SLICE
+/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+
 export const checkoutSlice = createSlice({
   name: 'checkout',
   initialState,
   reducers: {
-    update_CheckoutProps: (
+    update_CheckoutUser: (
+      state,
+      { payload }: { payload: { email: string } | { creditBalance: number } },
+    ) => {
+      if ('email' in payload) {
+        state.user.email = payload.email;
+        return;
+      }
+
+      if ('creditBalance' in payload) {
+        state.user.creditBalance = payload.creditBalance;
+        return;
+      }
+    },
+
+    update_CheckoutCharges: (
+      state,
+      {
+        payload,
+      }: { payload: { type: 'SALES_TAX'; cost: number } | 'CLEAN_UP' },
+    ) => {
+      if (payload === 'CLEAN_UP') {
+        state.charges.salesTax = 0;
+        return;
+      }
+
+      if (payload.type === 'SALES_TAX') {
+        state.charges.salesTax = payload.cost;
+        return;
+      }
+    },
+
+    update_CheckoutAddress: (
       state,
       {
         payload,
       }: {
-        payload: _Update_CheckoutProps_Actions;
+        payload: _update_CheckoutAddress_Actions;
       },
     ) => {
       if (payload === 'CLEAN_ALL') {
-        state.editAddress = null;
-        state.shippingAddress = null;
-        state.billingAddress = null;
-        state.useShippingAddressForBilling = false;
+        state.address.editing = null;
+        state.address.shipping = null;
+        state.address.billing = null;
+        state.address.useShippingAddressForBilling = false;
         return;
       }
 
-      if ('editAddress' in payload) {
-        if (payload.editAddress === 'CLEANUP') {
-          state.editAddress = null;
+      if (payload.type === 'ZIP_CODE') {
+        if (payload.value === 'CLEANUP') {
+          state.address.zipCode = '';
           return;
         }
 
-        state.editAddress = payload.editAddress;
+        state.address.zipCode = payload.value || '';
         return;
       }
-      if ('shippingAddress' in payload) {
-        if (payload.shippingAddress === 'CLEANUP') {
-          state.shippingAddress = null;
+
+      if (payload.type === 'EDITING...') {
+        if (payload.address === 'CLEANUP') {
+          state.address.editing = null;
           return;
         }
 
-        state.shippingAddress = payload.shippingAddress;
+        state.address.editing = payload.address;
         return;
       }
-      if ('billingAddress' in payload) {
-        if (payload.billingAddress === 'CLEANUP') {
-          state.billingAddress = null;
+      if (payload.type === 'SHIPPING_ADDRESS') {
+        if (payload.address === 'CLEANUP') {
+          state.address.shipping = null;
           return;
         }
 
-        state.billingAddress = payload.billingAddress;
-        state.useShippingAddressForBilling = false;
+        state.address.shipping = payload.address;
         return;
       }
-      if ('useShippingAddressForBilling' in payload) {
-        if (payload.useShippingAddressForBilling === 'CLEANUP') {
-          state.useShippingAddressForBilling = false;
+      if (payload.type === 'BILLING_ADDRESS') {
+        if (payload.address === 'CLEANUP') {
+          state.address.billing = null;
           return;
         }
 
-        state.billingAddress = null;
-        state.useShippingAddressForBilling =
-          payload.useShippingAddressForBilling;
+        state.address.billing = payload.address;
+        return;
+      }
+      if (payload.type === 'USE_SHIPPING_ADDRESS_FOR_BILLING') {
+        if (payload.value === 'CLEANUP') {
+          state.address.useShippingAddressForBilling = false;
+          return;
+        }
+
+        state.address.billing = null;
+        state.address.useShippingAddressForBilling = payload.value;
+        return;
+      }
+      if (payload.type === 'SHIP_TO_SCHOOL') {
+        if (payload.value === 'CLEANUP') {
+          state.address.shipToSchool = false;
+          return;
+        }
+
+        state.address.shipToSchool = payload.value;
         return;
       }
     },
-    update_paymentDetails: (
+    update_PaymentDetails: (
       state,
       action: {
         payload:
@@ -168,12 +274,10 @@ export const checkoutSlice = createSlice({
 
       if (action.payload.method === 'CHANGED') {
         state.payment.method = action.payload.type;
-        state.payment.valid = false;
         return;
       }
 
       if (action.payload.method === 'bulk_payment') {
-        state.payment.valid = action.payload.valid;
         state.payment.poNumber = action.payload.poNumber;
         state.payment.method = 'PURCHASE_ORDER';
         state.payment.creditCard = JSON.parse(
@@ -183,14 +287,13 @@ export const checkoutSlice = createSlice({
       }
 
       if (action.payload.method === 'individual_cards') {
-        state.payment.valid = action.payload.valid;
         state.payment.creditCard = { ...action.payload.data };
         state.payment.method = 'CREDIT_CARD';
         state.payment.poNumber = '';
         return;
       }
     },
-    update_checkoutEmployeeLogin: (
+    update_CheckoutEmployeeLogin: (
       state,
       { payload }: { payload: _Update_CO_EL_Actions },
     ) => {
@@ -226,12 +329,105 @@ export const checkoutSlice = createSlice({
         return;
       }
     },
+    update_CheckoutShippingMethod: (
+      state,
+      { payload }: { payload: _Update_CO_ShippinMethod },
+    ) => {
+      if (payload === 'CLEAN_ALL') {
+        state.shippingMethod = JSON.parse(
+          JSON.stringify(initialState.shippingMethod),
+        );
+        return;
+      }
+      if (payload.type === 'destination') {
+        state.shippingMethod.destination = payload.value;
+        return;
+      }
+      if (payload.type === 'method') {
+        if (payload.value === 'CLEAN_UP') {
+          state.shippingMethod.name = '';
+          state.shippingMethod.price = 0;
+          return;
+        }
+
+        state.shippingMethod.name = payload.value.name;
+        state.shippingMethod.price = payload.value.price;
+        return;
+      }
+    },
+    update_CheckoutCustomInformation: (
+      state,
+      action: {
+        payload: _Update_CO_CustomInformation;
+      },
+    ) => {
+      if (action.payload.type === 'VALIDATE_PLAYER') {
+        state.playerInformation.needToValidate = action.payload.value;
+        return;
+      }
+
+      if (action.payload.type === 'PO_NUMBER_TO_MATCH') {
+        state.playerInformation.poNumberToMatch = action.payload.value;
+        return;
+      }
+
+      if (action.payload.type === 'PLAYER') {
+        state.playerInformation.firstName = action.payload.data.firstName;
+        state.playerInformation.lastName = action.payload.data.lastName;
+        state.playerInformation.playerNo = action.payload.data.playerNo;
+        return;
+      }
+
+      if (action.payload.type === 'ADDITIONAL') {
+        state.additionalInformation = action.payload.data;
+        return;
+      }
+    },
   },
 });
 
 export const checkoutActions = checkoutSlice.actions;
 
 export default checkoutSlice.reducer;
+
+/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+///////////////////////                       TYPES
+/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+
+type _Update_CO_ShippinMethod =
+  | 'CLEAN_ALL'
+  | {
+      type: 'destination';
+      value: 'residential' | 'commercial';
+    }
+  | {
+      type: 'method';
+      value:
+        | {
+            name: string;
+            price: number;
+          }
+        | 'CLEAN_UP';
+    };
+
+type _Update_CO_CustomInformation =
+  | { type: 'VALIDATE_PLAYER'; value: boolean }
+  | { type: 'PO_NUMBER_TO_MATCH'; value: string }
+  | {
+      type: 'PLAYER';
+      data: { firstName: string; lastName: string; playerNo: number };
+    }
+  | {
+      type: 'ADDITIONAL';
+      data: {
+        name: string;
+        type: string;
+        isRequired: boolean;
+        value: string;
+      }[];
+    };
 
 type _Update_CO_EL_Actions =
   | 'CLEAN_ALL'
@@ -272,18 +468,30 @@ type _Update_CO_EL_Actions =
         label: string;
       };
     };
-type _Update_CheckoutProps_Actions =
+type _update_CheckoutAddress_Actions =
   | 'CLEAN_ALL'
   | { type: 'UPDATE_NOTE'; value: string }
   | {
-      editAddress: CustomerAddress | 'CLEANUP';
+      type: 'EDITING...';
+      address: CustomerAddress | 'CLEANUP';
     }
   | {
-      shippingAddress: CustomerAddress | 'CLEANUP';
+      type: 'BILLING_ADDRESS';
+      address: CustomerAddress | 'CLEANUP';
     }
   | {
-      useShippingAddressForBilling: true | 'CLEANUP';
+      type: 'USE_SHIPPING_ADDRESS_FOR_BILLING';
+      value: boolean | 'CLEANUP';
     }
   | {
-      billingAddress: CustomerAddress | 'CLEANUP';
+      type: 'SHIP_TO_SCHOOL';
+      value: boolean | 'CLEANUP';
+    }
+  | {
+      type: 'SHIPPING_ADDRESS';
+      address: CustomerAddress | 'CLEANUP';
+    }
+  | {
+      type: 'ZIP_CODE';
+      value: string | 'CLEANUP';
     };

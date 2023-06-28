@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import NxtImage from '@appComponents/reUsable/Image';
+import { SIMPLI_SAFE_CODE } from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import { _ThankYouProps } from '@templates/ThankYou/ThankYou';
@@ -9,7 +10,9 @@ import React from 'react';
 import ThankYouCreatePassword from './ThankYouCreatePassword';
 
 const ThankYouHeader: React.FC<_ThankYouProps> = ({ order }) => {
-  const storeEmail = useTypedSelector_v2((state) => state.store.email_address);
+  const { email_address: storeEmail, code: storeCode } = useTypedSelector_v2(
+    (state) => state.store,
+  );
   const storePhoneNumber = useTypedSelector_v2(
     (state) => state.store.phone_number,
   );
@@ -71,19 +74,24 @@ const ThankYouHeader: React.FC<_ThankYouProps> = ({ order }) => {
                       </button>
                     </span>
                   </div>
-                  <div className='pt-[8px]'>
-                    <span className='text-title-text pb-[8px] block text-[#ffffff]'>
-                      {__pagesText.ThankYouPage.Questions}
-                    </span>
-                    <span className='pb-[8px] text-default-text text-[#ffffff] block'>
-                      {__pagesText.ThankYouPage.CallUs} {storePhoneNumber}
-                    </span>
-                    <Link href={''}>
-                      <a className='text-[#ffffff] underline hover:no-underline'>
-                        {__pagesText.ThankYouPage.Email} {storeEmail}
-                      </a>
-                    </Link>
-                  </div>
+                  {storeCode !== SIMPLI_SAFE_CODE && (
+                    <div className='pt-[8px]'>
+                      <span className='text-title-text pb-[8px] block text-[#ffffff]'>
+                        {__pagesText.ThankYouPage.Questions}
+                      </span>
+                      <span className='pb-[8px] text-default-text text-[#ffffff] block'>
+                        {__pagesText.ThankYouPage.CallUs} {storePhoneNumber}
+                      </span>
+                      <span className='pb-[8px] text-default-text text-[#ffffff] block'>
+                      {__pagesText.ThankYouPage.Email}:{' '}
+                      <Link href={''}>
+                        <a className='text-[#ffffff] underline hover:no-underline' href={`mailto:${storeEmail}`}>
+                           {storeEmail}
+                        </a>
+                      </Link>
+                      </span>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

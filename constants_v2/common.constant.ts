@@ -250,3 +250,17 @@ export const companyInfo = {
   email: 'customerservice@parsonskellogg.com',
   phoneNumber: '(866) 602-8398',
 };
+
+export const MAX_INVENTORY_FOR_EMPLOYEE = 99999;
+
+export enum _STORE_EMAIL {
+  SMH = 'simplisafe',
+  CYX = 'cyxtera',
+  UHP = 'usaa',
+  UCA = 'usaa',
+}
+
+export enum _PASS_FIELD {
+  UCA = 'usaa',
+  PKHG = 'pkhg',
+}

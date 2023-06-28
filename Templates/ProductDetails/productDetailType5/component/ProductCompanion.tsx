@@ -36,7 +36,7 @@ const ProductCompanion: React.FC<_ProductCompanion> = ({
               <NxtImage
                 src={selectedCompanionimg || ''}
                 alt={product?.companionProductSEName || ''}
-                className={'"max-h-full"'}
+                className={'max-h-full'}
                 title={product.companionProductName || ''}
               />
             )}
@@ -90,7 +90,7 @@ const ProductCompanion: React.FC<_ProductCompanion> = ({
                             <NxtImage
                               src={`${mediaBaseUrl}${subRow.imageurl}`}
                               alt=''
-                              className=''
+                              className='max-h-full m-auto'
                               title={subRow.colorName}
                             />
                           </li>
@@ -118,7 +118,7 @@ const ProductCompanion: React.FC<_ProductCompanion> = ({
                       <NxtImage
                         src={`${mediaBaseUrl}${subRow.imageUrl}`}
                         alt=''
-                        className=''
+                        className='max-h-full m-auto'
                         title={subRow.altTag}
                       />
                     </li>

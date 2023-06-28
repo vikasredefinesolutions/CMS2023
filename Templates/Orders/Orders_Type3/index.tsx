@@ -33,7 +33,10 @@ const Orders_type3: React.FC = () => {
   const [showTab, setShowTab] = useState<'MyOwnOrders' | 'OtherUsersOrders'>(
     'MyOwnOrders',
   );
-  const isAdmin = customerRoleId == 0 || customerRoleId == 2 ? true : false;
+  const roles = useTypedSelector_v2((state) => state.user.roles);
+
+  const isAdmin =
+    customerRoleId == 0 || customerRoleId == +roles.adminId ? true : false;
   const fetchMultipleOrderDetails = async (ids: number[] | null) => {
     if (ids === null) {
       setOrderDetails([]);
@@ -131,8 +134,11 @@ const Orders_type3: React.FC = () => {
                   {__pagesText.OrderPage.emptyOrderMessage2}
                 </div>
                 <div className='mt-3'>
-                  <Link href={paths.HOME} className='btn btn-secondary btn-lg'>
-                    {__pagesText.OrderPage.emptyOrderMessage1}
+                  <Link title='' href={paths.HOME}>
+                    <a className='btn btn-md btn-primary'>
+                      {' '}
+                      {__pagesText.cart.startShopping}
+                    </a>
                   </Link>
                 </div>
               </div>

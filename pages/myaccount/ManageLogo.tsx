@@ -65,7 +65,14 @@ const Index = () => {
   return (
     <>
       {!loading ? (
-        seType && <ManageLogo id={seType} logoList={logoList} />
+        seType && (
+          <ManageLogo
+            id={seType}
+            logoList={logoList}
+            fetchLogoDetails={fetchLogoDetails}
+            key={logoList?.items.length}
+          />
+        )
       ) : (
         <Spinner>{''}</Spinner>
       )}

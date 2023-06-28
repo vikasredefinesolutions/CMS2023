@@ -1,33 +1,77 @@
 import Price from '@appComponents/Price';
 import NxtImage from '@appComponents/reUsable/Image';
 import {
-  commonMessage,
+  cartRemoveConfirmMessage,
+  SIMPLI_SAFE_CODE,
+} from '@constants/global.constant';
+import { __pagesText } from '@constants/pages.text';
+import { paths } from '@constants/paths.constant';
+import {
   __SuccessErrorText,
+  commonMessage,
 } from '@constants/successError.text';
-import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
+import { captureRemoveItemEvent } from '@controllers/cartController';
+import {
+  GetCustomerId,
+  useActions_v2,
+  useTypedSelector_v2,
+} from '@hooks_v2/index';
 import { _CartItem } from '@services/cart';
-import { updateCartQuantity } from '@services/cart.service';
+import { deleteItemCart, updateCartQuantity } from '@services/cart.service';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { FC, useRef, useState } from 'react';
 import { _globalStore } from 'store.global';
 // import { CI_Props } from './cartItem';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const CIlayout4: FC<any> = ({ removeCartItem }) => {
+const CIlayout4: FC<any> = ({ removeCartItem, isEditable = true }) => {
   const cartData = useTypedSelector_v2((state) => state.cart.cart);
 
   let mediaBaseUrl = _globalStore.blobUrl; // for server side
   const clientSideMediaBaseUrl = useTypedSelector_v2(
     (state) => state.store.mediaBaseUrl,
   );
+  const router = useRouter();
   const { setShowLoader } = useActions_v2();
   const { showModal, fetchCartDetails } = useActions_v2();
+  const { id: storeId, code: storeCode } = useTypedSelector_v2(
+    (state) => state.store,
+  );
   const valueRef = useRef<Record<string, undefined | number>>({});
 
   const [sizeId, setSizeId] = useState<number[]>([]);
-  const { id } = useTypedSelector_v2((state) => state.user);
   const isEmployeeLoggedIn = useTypedSelector_v2(
     (state) => state.employee.loggedIn,
   );
+
+  const customerId = GetCustomerId();
+
+  const refreshCartItems = async () => {
+    await fetchCartDetails({
+      customerId,
+      isEmployeeLoggedIn,
+    });
+    setShowLoader(false);
+  };
+  const handleRemoveItem = async (itemId: number) => {
+    const userConfirmsToDelete = confirm(cartRemoveConfirmMessage);
+    if (userConfirmsToDelete) {
+      setShowLoader(true);
+      captureRemoveItemEvent(cartData, itemId, customerId, storeId);
+      deleteItemCart(itemId)
+        .then(() => {
+          refreshCartItems();
+        })
+        .catch(() => {
+          setShowLoader(false);
+          showModal({
+            message: commonMessage.somethingWentWrong,
+            title: commonMessage.failed,
+          });
+        });
+    }
+  };
+
   const handleUpdateQuantity = (
     e: any,
     attributeOptionId: string | number,
@@ -35,6 +79,13 @@ const CIlayout4: FC<any> = ({ removeCartItem }) => {
     cQuantity: number | undefined,
   ) => {
     e.preventDefault();
+    if (storeCode === SIMPLI_SAFE_CODE && !cQuantity) return;
+    if (storeCode === SIMPLI_SAFE_CODE && cQuantity && cQuantity > 1) {
+      return showModal({
+        message: __pagesText.cart.simpliSafeQtyLimit,
+        title: '',
+      });
+    }
     const payload = {
       updateCartLinePersonModel: {
         cartLogoPersonId: cartLogoPersonId,
@@ -48,7 +99,7 @@ const CIlayout4: FC<any> = ({ removeCartItem }) => {
       .then((res) => {
         if (res) {
           let size = sizeId;
-          fetchCartDetails({ customerId: id ? id : 0, isEmployeeLoggedIn });
+          fetchCartDetails({ customerId, isEmployeeLoggedIn });
           setSizeId(
             size.filter(
               (id) =>
@@ -72,108 +123,128 @@ const CIlayout4: FC<any> = ({ removeCartItem }) => {
   };
 
   mediaBaseUrl = mediaBaseUrl || clientSideMediaBaseUrl;
+
   return (
     <>
-      <ul className='overflow-hidden border border-gray-border p-[15px] md:p-[30px]'>
+      <ul className='overflow-hidden '>
         {cartData &&
           cartData.map((item: _CartItem, cartItemIndex: number) => {
             return (
               <li
-                className=' pt-0'
+                className='bg-white pt-0 mb-[20px]'
                 key={`${item.shoppingCartItemsId}_${cartItemIndex}`}
               >
-                <div className='flex flex-wrap -mx-3'>
-                  <div className='w-full lg:w-1/12 pl-[12px] pr-[12px] mb-[10px] max-w-[300px] mx-auto'>
-                    <NxtImage
-                      src={`${mediaBaseUrl}${item.colorImage}`}
-                      alt="Patagonia Men's Better Sweater Jacket"
-                      className='w-full'
-                    />
-                  </div>
-                  <div className='w-full lg:w-11/12 pl-[12px] pr-[12px]'>
-                    <div className='flex justify-between'>
-                      <div className='text-sub-text font-semibold mb-[10px]'>
-                        <Link
-                          href={`/${item.seName}`}
-                          className='!text-anchor hover:!text-anchor-hover'
-                        >
-                          {item.productName}
-                        </Link>
-                      </div>
-                      <div className='text-default-text'>
-                        <span>
-                          ${(item.totalPrice / item.totalQty).toFixed(2)} / QTY{' '}
-                          {item.totalQty}
-                        </span>
-                      </div>
-                      <div className='text-default-text mb-[10px]'>
-                        <span className='font-semibold'>
-                          Total <Price value={item.totalPrice} />
-                        </span>
-                      </div>
-                    </div>
-                    <div className='text-default-text mb-[10px]'>
-                      Color:{' '}
-                      <span className='font-semibold'>
-                        {item.attributeOptionValue}
-                      </span>
-                    </div>
-                    <div className=''>
-                      {item.shoppingCartItemDetailsViewModels.map(
-                        (view, viewIndex) => {
-                          return (
-                            <>
-                              <div
-                                className='flex justify-between items-center pt-[5px] pb-[5px]'
-                                key={`${view.attributeOptionId}_${viewIndex}`}
-                              >
-                                <div className='w-full md:w-1/3 flex flex-wrap items-center gap-2 pl-[5px] pr-[5px] mb-[10px]'>
-                                  <div className='text-default-text'>
-                                    Size :{' '}
-                                  </div>
-                                  <div className='text-default-text flex items-center font-bold'>
-                                    {view.attributeOptionValue} -
-                                    <form className=''>
-                                      <input
-                                        className='text-default-text pl-[5px] pr-[5px] pt-[5px] pb-[5px] w-[30px] mx-2 rounded  border border-gray text-center w-12'
-                                        defaultValue={view.qty}
-                                        data-valueofinput={view.qty}
-                                        onChange={(e) => {
-                                          valueRef.current = {
-                                            ...valueRef.current,
-                                            [`${view.id}`]: +e.target.value,
-                                          };
-                                        }}
-                                        onBlur={(e) => {
-                                          handleUpdateQuantity(
-                                            e,
-                                            +item.attributeOptionId,
-                                            view.id,
-                                            valueRef.current[
-                                              view.id.toString()
-                                            ],
-                                          );
-                                        }}
-                                      />
-                                    </form>
-                                    {'QTY'}
-                                  </div>
-                                  <div className='"mt-[15px] lg:ml-[40px] w-full cursor-pointer'>
-                                    <div
-                                      onClick={() =>
-                                        removeCartItem(item.shoppingCartItemsId)
-                                      }
-                                      className='!w-full !py-[5px] '
-                                    >
-                                      Remove Item
+                <div className='border border-gray-border p-[15px] w-full '>
+                  <div className='flex flex-wrap -mx-[10px]'>
+                    <div
+                      className={` ${
+                        // // storeCode == _Store.type6
+                        //   ? 'w-full md:w-7/12 px-[10px]'
+                        //   : 'w-full lg:w-1/12 pl-[12px] pr-[12px] mb-[10px] max-w-[300px] mx-auto'
+                        'w-full md:w-7/12 px-[10px]'
+                      }`}
+                    >
+                      <div className='flex flex-wrap mb-[10px] md:mb-[0px] -mx-[10px]'>
+                        <div className='w-2/6 md:w-1/4 px-[10px]'>
+                          <Link href={`/${item.seName}.html`}>
+                            <NxtImage
+                              src={`${mediaBaseUrl}${item.colorImage}`}
+                              alt={item.productName}
+                              className='max-h-[348px] !inline-black m-auto'
+                            />
+                          </Link>
+                        </div>
+
+                        <div className='w-4/6 md:w-3/4 px-[10px]'>
+                          <div className='text-medium-text  mb-[10px]'>
+                            <Link href={`/${item.seName}.html`}>
+                              <a className='text-black hover:text-secondary font-semibold'>
+                                {item.productName}
+                              </a>
+                            </Link>
+                          </div>
+                          <div className='text-default-text mb-[5px]'>
+                            Color:{' '}
+                            <span className='font-semibold'>
+                              {item.attributeOptionValue}
+                            </span>
+                          </div>
+                          <div className=''>
+                            {item.shoppingCartItemDetailsViewModels.map(
+                              (view, viewIndex) => {
+                                return (
+                                  <>
+                                    <div className='text-default-text mb-[5px] flex items-center flex-wrap gap-y-[5px]'>
+                                      Size :{' '}
+                                      <strong className='mx-[2px]'>
+                                        {' '}
+                                        {view.attributeOptionValue} -
+                                      </strong>
+                                      {isEditable ? (
+                                        <form className=''>
+                                          <input
+                                            className='form-input max-w-[100px] mx-[2px]'
+                                            defaultValue={view.qty}
+                                            data-valueofinput={view.qty}
+                                            onChange={(e) => {
+                                              valueRef.current = {
+                                                ...valueRef.current,
+                                                [`${view.id}`]: +e.target.value,
+                                              };
+                                            }}
+                                            onBlur={(e) => {
+                                              handleUpdateQuantity(
+                                                e,
+                                                +item.attributeOptionId,
+                                                view.id,
+                                                valueRef.current[
+                                                  view.id.toString()
+                                                ],
+                                              );
+                                            }}
+                                          />
+                                        </form>
+                                      ) : (
+                                        <strong className='mx-[2px]'>
+                                          {view.qty}
+                                        </strong>
+                                      )}
+                                      <strong className='mx-[2px]'>Qty</strong>
                                     </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </>
-                          );
-                        },
-                      )}
+                                    <div className='text-default-text'>
+                                      <div
+                                        onClick={() =>
+                                          handleRemoveItem(
+                                            item.shoppingCartItemsId,
+                                          )
+                                        }
+                                        className='primary-link hover:hover-primary-link'
+                                      >
+                                        <strong>Remove Item</strong>
+                                      </div>
+                                    </div>
+                                  </>
+                                );
+                              },
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className='w-full flax-wrap md:w-5/12 px-[10px]'>
+                      <div className='flex justify-between'>
+                        <div className='text-default-text'>
+                          <span>
+                            ${(item.totalPrice / item.totalQty).toFixed(2)} /
+                            QTY {item.totalQty}
+                          </span>
+                        </div>
+                        <div className='text-default-text mb-[10px]'>
+                          <span className='font-semibold'>
+                            Total <Price value={item.totalPrice} />
+                          </span>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -181,11 +252,13 @@ const CIlayout4: FC<any> = ({ removeCartItem }) => {
             );
           })}
       </ul>
-      <div className='mt-[20px]'>
-        <Link href={'/'}>
-          <a className='btn btn-primary text-center'>Continue Shopping</a>
-        </Link>
-      </div>
+      {router.pathname !== paths.CHECKOUT && (
+        <div className='mt-[20px]'>
+          <Link href={'/'}>
+            <a className='btn btn-primary '>Continue Shopping</a>
+          </Link>
+        </div>
+      )}
     </>
   );
 };

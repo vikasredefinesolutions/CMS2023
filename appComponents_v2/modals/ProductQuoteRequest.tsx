@@ -200,7 +200,7 @@ const ProductQuoteRequest: React.FC<_props> = ({
                           containerClass={'w-full px-3 '}
                         />
                         <ReCAPTCHA
-                          className='pt-4 first:pt-0'
+                          className='w-full px-3'
                           sitekey={
                             process.env.NEXT_PUBLIC_RECAPTCHASITEKEY || ''
                           }

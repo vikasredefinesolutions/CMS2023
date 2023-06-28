@@ -22,7 +22,7 @@ const FilterChipsTypeFive = ({
           {checkedFilters.map((filter, index) => (
             <li key={index} className=''>
               <a
-                className='inline-flex items-center py-[10px] px-[20px] text-sm rounded bg-tertiary'
+                className='inline-flex items-center py-[5px] lg:py-[10px] px-[10px] lg:px-[20px] text-sm rounded bg-tertiary'
                 href='javascript:void(0);'
               >
                 <span className='mr-[10px] text-[#ffffff]'>

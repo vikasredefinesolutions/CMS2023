@@ -1,4 +1,5 @@
 import { __console_v2 } from '@configs/console.config';
+import { storeBuilderTypeId } from '@configs/page.config';
 import { _defaultTemplates } from '@configs/template.config';
 import { _ProductColor } from '@definations/APIs/colors.res';
 import {
@@ -16,6 +17,7 @@ import {
   FetchSimilartProducts,
   FetchSizeChartById,
 } from '@services/product.service';
+import { _globalStore } from 'store.global';
 import {
   _FetchPageThemeConfigs_ProductDetails,
   getConfigs,
@@ -126,6 +128,14 @@ export const FetchProductDetails = async (payload: {
     });
   }
 
+  let templateId = productConfigs?.productDetailTemplateId || '1';
+
+  if (!productConfigs?.productDetailTemplateId) {
+    if (_globalStore.storeTypeId === storeBuilderTypeId) {
+      templateId = '7';
+    }
+  }
+
   return {
     details: productDetails,
     colors: productColors,
@@ -133,6 +143,6 @@ export const FetchProductDetails = async (payload: {
     SEO: productSEOtags,
     alike: productsAlike,
     views: views,
-    templateId: productConfigs.productDetailTemplateId,
+    templateId: templateId,
   };
 };

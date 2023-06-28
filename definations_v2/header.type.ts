@@ -26,7 +26,7 @@ export interface _MenuCategory {
   id: number;
   categoryName: string;
   seName: string;
-  customSEName: null;
+  customSEName: null | string;
 }
 export interface _BrandWithCategories {
   id: number;
@@ -142,6 +142,8 @@ export interface _HeaderPropsWithBrand {
   menuItems: _MenuItems | _MenuItemsWithBrand | null;
   headerBgColor: string;
   headerTextColor: string;
+  headerTransparent: boolean;
+  headerContainer: boolean;
 }
 export interface _HeaderProps {
   // id: number;
@@ -152,6 +154,8 @@ export interface _HeaderProps {
   menuItems: _MenuItems | null | _MenuItemsWithBrand;
   headerBgColor: string;
   headerTextColor: string;
+  headerTransparent: boolean;
+  headerContainer: boolean;
 }
 export interface _HeaderPropsWithTemplateid {
   storeCode: string;
@@ -162,6 +166,8 @@ export interface _HeaderPropsWithTemplateid {
   headerTemplateId: string;
   headerBgColor: string;
   headerTextColor: string;
+  headerTransparent: boolean;
+  headerContainer: boolean;
   announcementRow?: _AnnouncementRow[];
 }
 
@@ -180,4 +186,8 @@ export interface _HeaderTemplates {
   type3: NextPage<_HeaderProps, _HeaderProps>;
   type4: NextPage<_HeaderProps, _HeaderProps>;
   type5: NextPage<_HeaderProps, _HeaderProps>;
+  type6: NextPage<_HeaderProps, _HeaderProps>;
+  type7: NextPage<_HeaderProps, _HeaderProps>;
+  type8: NextPage<_HeaderProps, _HeaderProps>;
+  type9: NextPage<_HeaderProps, _HeaderProps>;
 }

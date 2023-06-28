@@ -3,19 +3,17 @@ import LoginModal from '@appComponents/modals/loginModal';
 import { _modals } from '@appComponents/modals/modal';
 import RequiredInventoryModal from '@appComponents/modals/RequiredInventoryModal';
 import Price from '@appComponents/Price';
-import { storeBuilderTypeId } from '@configs/page.config';
-import { __Cookie } from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
+import { paths } from '@constants/paths.constant';
 import { _Selectedproduct_v2 } from '@definations/product.type';
-import {
-  getAddToCartObject,
-  GoogleAnalyticsTrackerForAllStore,
-  setCookie,
-} from '@helpers/common.helper';
+import { GoogleAnalyticsTrackerForAllStore } from '@helpers/common.helper';
 import { highLightError } from '@helpers/console.helper';
 import getLocation from '@helpers/getLocation';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
-import { addSubStore, addToCart } from '@services/cart.service';
+import { _Product_SizeQtys } from '@redux/slices/product.slice.types';
+import { addToCart } from '@services/cart.service';
+import { FetchCustomerQuantityByProductId } from '@services/product.service';
+import { FetchSbStoreCartDetails } from '@services/sb.service';
 import { _ProductInfoProps } from '@templates/ProductDetails/Components/productDetailsComponents';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
@@ -38,17 +36,71 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
   const { id: userId } = useTypedSelector_v2((state) => state.user);
   const storeTypeId = useTypedSelector_v2((state) => state.store.storeTypeId);
   const { sbState } = useTypedSelector_v2((state) => state.product.selected);
+  const [currentPresentQty, setCurrentPresentQty] = useState<number>(0);
+  const QtyPresent = useTypedSelector_v2(
+    (state) => state.product.selected.presentQty,
+  );
+  const discountedPrice = useTypedSelector_v2(
+    (state) => state.product.toCheckout.price,
+  );
+
+  const discount = useTypedSelector_v2(
+    (state) => state.product.product.discounts,
+  );
+
+  const {
+    product_PresentQty,
+    updateDiscountPrice,
+    cart_UpdateItems,
+    updatePrice,
+  } = useActions_v2();
+
+  useEffect(() => {
+    if (product && userId) {
+      const payload = {
+        ProductId: product.id,
+        ShoppingCartItemsId: 0,
+        CustomerId: userId,
+      };
+      FetchCustomerQuantityByProductId(payload).then((res) => {
+        const payload = {
+          presentQty: res ? res : 0,
+        };
+        setCurrentPresentQty(res ? res : 0);
+        product_PresentQty(payload);
+      });
+    }
+  }, [product, userId]);
+
+  useEffect(() => {
+    const discountpayload = {
+      presentQty: QtyPresent,
+      price: discountedPrice,
+    };
+    updateDiscountPrice(discountpayload);
+  }, [QtyPresent, currentPresentQty]);
+
+  useEffect(() => {
+    if (discount?.subRows[0].discountPrice) {
+      updatePrice({
+        price: product.isSpecialBrand
+          ? customerId
+            ? +discount?.subRows[0]?.discountPrice
+            : product.msrp
+          : +discount?.subRows[0]?.discountPrice,
+      });
+    } else {
+      updatePrice({
+        price: product.msrp,
+      });
+    }
+  }, [userId, discount]);
 
   const totalCheckout = useTypedSelector_v2(
     (state) => state?.product?.toCheckout,
   );
-  const {
-    clearToCheckout,
-    showModal,
-    setShowLoader,
-    product_storeData,
-    fetchCartDetails,
-  } = useActions_v2();
+  const { clearToCheckout, showModal, setShowLoader, fetchCartDetails } =
+    useActions_v2();
   const { toCheckout, product: storeProduct } = useTypedSelector_v2(
     (state) => state.product,
   );
@@ -86,18 +138,53 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
     { name: string; min: number }[]
   >([]);
 
-  const buyNowHandler = (e: any, isLoggedIn: boolean) => {
+  const decideProductPrice = (
+    sizeQtys: _Product_SizeQtys[] | null,
+    totalPrice: number,
+    totalQty: number,
+  ) => {
+    if (sizeQtys) {
+      if (sizeQtys[0]?.aditionalCharges && sizeQtys[0]?.aditionalCharges > 0) {
+        return sizeQtys[0].price + sizeQtys[0].aditionalCharges;
+      }
+
+      return sizeQtys[0].price;
+    }
+
+    return totalPrice / totalQty;
+  };
+
+  const decideSizePrice = (sizeQty: _Product_SizeQtys): number => {
+    if (sizeQty?.aditionalCharges && sizeQty.aditionalCharges > 0) {
+      return sizeQty.price + sizeQty.aditionalCharges;
+    }
+
+    return sizeQty.price;
+  };
+
+  const updateCart = async () => {
+    return await FetchSbStoreCartDetails(customerId!).then((response) => {
+      if (!response) throw new Error('Invalid response received from Cart API');
+
+      cart_UpdateItems({ items: response });
+    });
+  };
+
+  const buyNowHandler = async (e: any, isLoggedIn: boolean) => {
     e.preventDefault();
     if (isLoggedIn === false) {
       modalHandler('login');
       return;
     }
     if (totalinvetory === 0) {
-      router.push(`contact-request.html?name=${product.name}`);
+      router.push(
+        `contact-request.html?name=${product.name}&sku=${product.sku}`,
+      );
       return;
     }
     let GAAddToCartPaylod: any = { shoppingCartItemsModel: [] };
     const selectedProducts: _Selectedproduct_v2[] = [];
+    const { totalPrice, totalQty } = toCheckout;
 
     colors &&
       colors?.forEach((color) => {
@@ -116,166 +203,189 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
             productName: color.productName,
             productQty: sizeQtys
               ?.filter((size) => size.color == color.name)
-              .reduce((acc: any, curr) => acc.qty + curr.qty),
+              .reduce((acc: any, curr) => acc + curr.qty, 0),
           });
         }
       });
 
-    let dataArray: { name: string; min: number }[] = [];
+    // let dataArray: { name: string; min: number }[] = [];
 
-    selectedProducts.forEach((el) => {
-      if (el.sizeQtys[0].qty < el.color.minQuantity) {
-        dataArray.push({
-          name: el.color.name,
-          min: el.color.minQuantity,
-        });
-      }
-    });
-    if (dataArray.length > 0) {
-      setRequiredData(dataArray);
-      setOpenModal('availableInventory');
-      return;
-    }
+    // selectedProducts.forEach((el) => {
+    //   if (el.productQty < el.color.minQuantity) {
+    //     dataArray.push({
+    //       name: el.color.name,
+    //       min: el.color.minQuantity,
+    //     });
+    //   }
+    // });
+    // if (dataArray.length > 0) {
+    //   setRequiredData(dataArray);
+    //   setOpenModal('availableInventory');
+    //   return;
+    // }
+    const getTotalQuantityForProduct = (product: any) => {
+      let qty = 0;
+      product?.sizeQtys?.forEach((sizeQty: _Product_SizeQtys) => {
+        qty = qty + sizeQty.qty;
+      });
+      return qty;
+    };
 
     if (isLoggedIn === true) {
+      const location = await getLocation();
       const addToCartHandler = async () => {
-        setShowLoader(true);
-        const { sizeQtys, totalPrice, totalQty } = toCheckout;
-        const location = await getLocation();
-
-        for (let [index, Product] of Object(selectedProducts).entries()) {
-          // let totalPrice = price;
-          const cartObject = await getAddToCartObject({
-            userId: customerId || 0,
-            storeId: storeId || 0,
-            isEmployeeLoggedIn,
-            isForm: false,
-            ipAddress: '192.168.1.1',
-            note: '',
-            sizeQtys: Product.sizeQtys || [],
-            productDetails: Product,
-            total: {
-              totalPrice,
-              totalQty,
-            },
-            shoppingCartItemId: 0,
-            logos: null,
-            isSewOutEnable: false,
-            sewOutCharges: 0,
-          });
-
-          if (cartObject) {
-            //GTM event for add-to-cart
-            GAAddToCartPaylod = {
+        const productToUpdate = selectedProducts.map(async (Product) => {
+          const payload = {
+            addToCartModel: {
+              customerId: customerId!,
+              productId: Product.productId,
               storeId: storeId,
-              customerId: customerId,
-              value: totalPrice,
-              coupon: '',
-              shoppingCartItemsModel: [
-                ...GAAddToCartPaylod?.shoppingCartItemsModel,
+              isempLogin: false,
+              ipAddress: location.ip_address,
+              isForm: false,
+              shoppingCartItemModel: {
+                id: 0,
+                price: decideProductPrice(
+                  Product.sizeQtys,
+                  totalPrice,
+                  totalQty,
+                ),
+                quantity: getTotalQuantityForProduct(Product),
+                weight: 0,
+                productType: 0,
+                discountPrice: 0,
+                logoTitle: Product.color.altTag,
+                logogImagePath: Product.color.imageUrl,
+                perQuantity: 0,
+                appQuantity: 0,
+                status: 2,
+                discountPercentage: 0,
+                productCustomizationId: 0,
+                itemNotes: '',
+                isEmployeeLoginPrice: false,
+              },
+              shoppingCartItemsDetailModels: [
                 {
-                  productId: Product.productId,
-                  productName: Product.productName,
-                  colorVariants: Product.attributeOptionId,
-                  price: Product?.productQty * pricePerItem || 0,
-                  quantity: Product?.productQty || 0,
+                  attributeOptionName: 'Color',
+                  attributeOptionValue: Product.color.name,
+                  attributeOptionId: Product.color.attributeOptionId,
                 },
               ],
-            };
-            try {
-              let c_id = customerId;
-              let res;
-              await addToCart(cartObject)
-                .then((res) => {
-                  if (res) {
-                    res = res;
-                  }
-                  return res;
-                })
-                .then((res) => {
-                  if (storeTypeId === storeBuilderTypeId) {
-                    const Sbs_constant = {
-                      id: 0,
-                      rowVersion: '',
-                      location: `${location.city}, ${location.region}, ${location.country}, ${location.postal_code}`,
-                      ipAddress: location.ip_address,
-                      macAddress: '00-00-00-00-00-00',
-                      shoppingCartItemsId: res,
-                      isRequired: true,
-                      isExclusive: true,
-                      isChargePerCharacter: true,
-                    };
-                    const payload_sbs = sbState.map((el: any) => {
-                      return { ...el, ...Sbs_constant };
-                    });
+              cartLogoPersonModel: Product.sizeQtys!.map(
+                (sizeQty: _Product_SizeQtys) => {
+                  return {
+                    id: 0,
+                    attributeOptionId: sizeQty.attributeOptionId,
+                    attributeOptionValue: sizeQty.size,
+                    code: '',
+                    price: decideSizePrice(sizeQty),
+                    quantity: sizeQty.qty,
+                    estimateDate: new Date(),
+                    isEmployeeLoginPrice: 0,
+                  };
+                },
+              ),
+              cartLogoPersonDetailModels: [
+                {
+                  id: 0,
+                  logoPrice: 0,
+                  logoQty: 0,
+                  logoFile: '',
+                  logoLocation: '',
+                  logoTotal: 0,
+                  colorImagePath: '',
+                  logoUniqueId: '',
+                  price: 0,
+                  logoColors: '',
+                  logoNotes: '',
+                  logoDate: new Date(),
+                  logoNames: '',
+                  digitalPrice: 0,
+                  logoPositionImage: '',
+                  oldFilePath: '',
+                  originalLogoFilePath: '',
+                  isSewOut: false,
+                  sewOutAmount: 0,
+                  reUsableCustomerLogo: 0,
+                },
+              ],
+            },
+          };
+          GAAddToCartPaylod = {
+            storeId: storeId,
+            customerId: customerId,
+            value: totalPrice,
+            coupon: '',
+            shoppingCartItemsModel: [
+              ...GAAddToCartPaylod?.shoppingCartItemsModel,
+              {
+                productId: Product.productId,
+                productName: Product.productName,
+                colorVariants: Product.attributeOptionId,
+                price: Product?.productQty * pricePerItem || 0,
+                quantity: Product?.productQty || 0,
+              },
+            ],
+          };
+          GoogleAnalyticsTrackerForAllStore(
+            'GoogleAddToCartScript',
+            storeId,
+            GAAddToCartPaylod,
+          );
 
-                    addSubStore({
-                      shoppingCartItemsCustomFieldModel: payload_sbs,
-                    });
-                  }
-                  setShowLoader(false);
-                  showModal({
-                    message: __pagesText.cart.successMessage,
-                    title: 'Success',
-                  });
-                  if (index == selectedProducts.length - 1) {
-                    clearToCheckout();
-                  }
-                })
-                .catch((err) => {
-                  setShowLoader(false);
-                });
-              if (!customerId && res) {
-                c_id = res;
-                setCookie(__Cookie.tempCustomerId, '' + res, 'Session');
-              }
-              if (c_id)
-                fetchCartDetails({
-                  customerId: c_id,
-                  isEmployeeLoggedIn,
-                });
-            } catch (error) {
-              highLightError({ error, component: 'StartOrderModal' });
-            }
-            router.push('/cart/IndexNew.html');
-          }
-        }
+          return await addToCart(payload);
+        });
 
-        GoogleAnalyticsTrackerForAllStore(
-          'GoogleAddToCartScript',
-          storeId,
-          GAAddToCartPaylod,
-        );
+        return await Promise.allSettled(productToUpdate);
       };
-      if (sizeQtys === null || sizeQtys[0]?.qty === 0) {
+
+      if (sizeQtys === null || sizeQtys[0]?.qty === 0 || totalQty == 0) {
         showModal({
           message: `Please Select At Least Any One Color's Quantity.`,
           title: 'Required ',
         });
 
         return;
-      } else if (totalQty < minQty) {
-        showModal({
-          message: `Please enter quantity greater than or equal to ${minQty}.`,
-          title: 'Required Quantity',
-        });
-        return;
-      } else {
-        for (let Product of selectedProducts) {
-          let totalColorqty = 0;
-          for (let colorqty of Product.sizeQtys) {
-            totalColorqty = totalColorqty + colorqty.qty;
-          }
-          if (totalColorqty < minQty && totalColorqty != 0) {
-            showModal({
-              message: `Please enter quantity greater than or equal to ${minQty}.`,
-              title: 'Required Quantity',
-            });
+      }
+      // else if (totalQty < minQty) {
+      //   showModal({
+      //     message: `Please enter quantity greater than or equal to ${minQty}.`,
+      //     title: 'Required Quantity',
+      //   });
+      //   return;
+      // }
+      else {
+        let dataArray: { name: string; min: number }[] = [];
 
-            return;
+        selectedProducts.forEach((el) => {
+          if (el.productQty < el.color.minQuantity) {
+            dataArray.push({
+              name: el.color.name,
+              min: el.color.minQuantity,
+            });
           }
+        });
+        if (dataArray.length > 0) {
+          setRequiredData(dataArray);
+          setOpenModal('availableInventory');
+          return;
         }
-        addToCartHandler();
+        setShowLoader(true);
+        await addToCartHandler()
+          .then(() => updateCart())
+          .then(() => {
+            showModal({
+              message: __pagesText.cart.successMessage,
+              title: 'Success',
+            });
+            router.push(paths.CART);
+          })
+          .catch((error) => {
+            highLightError({ error, component: 'StartOrderModal' });
+          })
+          .finally(() => {
+            setShowLoader(false);
+          });
       }
 
       // router.push(`${paths.CUSTOMIZE_LOGO}/${product?.id}`);
@@ -291,7 +401,7 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
       return __pagesText.productInfo.Discontinued;
     } else if (userId) {
       if (totalinvetory == 0) {
-        return __pagesText.productInfo.callUs;
+        return __pagesText.productInfo.capContactUs;
       } else {
         return __pagesText.productInfo.addTocart;
       }

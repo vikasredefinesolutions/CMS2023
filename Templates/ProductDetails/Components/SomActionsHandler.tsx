@@ -188,7 +188,7 @@ const SomActionsHandler: React.FC<_SOMActionHandlerProps> = ({
     //GTM event for add-to-cart
     const payload = {
       storeId: storeId,
-      customerId: loggedIN_userId,
+      customerId: loggedIN_userId || 0,
       productId: product?.id,
       productName: product?.name,
       colorName: product?.colors?.length
@@ -203,7 +203,7 @@ const SomActionsHandler: React.FC<_SOMActionHandlerProps> = ({
 
     const payload2 = {
       storeId: storeId,
-      customerId: loggedIN_userId,
+      customerId: loggedIN_userId || 0,
       value: toCheckout?.totalPrice,
       coupon: '',
       shoppingCartItemsModel: [

@@ -190,7 +190,11 @@ const ChekoutType3: FC<_Props> = ({ templateId }) => {
                       type='text'
                       id='enduserstio'
                       className='form-input'
-                      onChange={(event) => setEndUserName(event.target.value)}
+                      onChange={(event) => {
+                        if (event.target.value.trim() !== '')
+                          return setEndUserName(event.target.value.trim());
+                        setEndUserName('');
+                      }}
                     />
                   </div>
                 </div>

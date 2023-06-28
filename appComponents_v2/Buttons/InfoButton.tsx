@@ -12,6 +12,7 @@ const InfoButton: React.FC<_props> = () => {
     >
       <button
         className=''
+        type='button'
         onFocus={() => setShowInfo(true)}
         onBlur={() => setShowInfo(false)}
       >

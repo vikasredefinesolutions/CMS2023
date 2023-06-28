@@ -2,8 +2,8 @@ import { _StoreCache } from '@definations/slug.type';
 import { KlaviyoScriptTag } from '@helpers/common.helper';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import { FetchInventoryById } from '@services/product.service';
-import ProductRecentlyViewed from '@templates/recentlyViewedProducts';
 import Reviews from '@templates/Review';
+import ProductRecentlyViewed from '@templates/recentlyViewedProducts';
 import YouMayAlsoLike from '@templates/youMayAlsoLike';
 import Head from 'next/head';
 import { useEffect } from 'react';
@@ -41,6 +41,14 @@ const ProductDetails_Type4: React.FC<_ProductDetailsProps & _StoreCache> = (
         type: 'BASIC_PRODUCT_DETAILS',
         prop: {
           sku: product.details.sku,
+        },
+      });
+      product_UpdateSelectedValues({
+        type: 'PRICES',
+        price: {
+          msrp: product.details.msrp,
+          ourCost: product.details.ourCost,
+          salePrice: product.details.salePrice,
         },
       });
 

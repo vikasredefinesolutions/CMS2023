@@ -38,6 +38,7 @@ export const paths = {
     additionalTab: '/myaccount/[edit]',
   },
   SIGN_UP: '/CreateAccount/SignUp',
+  SIGNUP_TEAM: '/CreateAccount/SignupTeams',
   THANK_YOU: '/Orders/Thankyou',
   thankYou: {
     notAuthorized: defaultRoute,
@@ -56,11 +57,13 @@ export const paths = {
   Contact: '/Contact',
   ThankYou: '/Thankyou',
   STORIES: '/stories',
-  PRIVACY_POLICY: 'javascript:void(0)',///privacy-policy.html',
+  PRIVACY_POLICY: '/privacy-policy.html', ///privacy-policy.html',
   TERMS_OF_USE: '/terms-and-conditions.html',
   PKHGTERMS_OF_USE: '/termsandcondition.html',
   PATAGONIA_CUSTOM_REQUEST_FORM: '/Custom-Requests',
   REQUEST_THANKYOU: '/request-thankyou.html',
+  SB_PRODUCT_LISTING: '/ItemList/Index',
+  CONTACT_US: '/contact-us.html',
 };
 
 export const __SpecialBreadCrumbsPaths = [
@@ -99,6 +102,26 @@ export const __SpecialBreadCrumbsPaths = [
   {
     path: [paths.REQUEST_THANKYOU],
     name: 'Request Thankyou',
+    directTo: null,
+  },
+  {
+    path: ['/myaccount/edit-billing-address'],
+    name: 'Billing Address',
+    directTo: null,
+  },
+  {
+    path: ['/myaccount/edit-shipping-address'],
+    name: 'Shipping Address',
+    directTo: null,
+  },
+  {
+    path: ['/gift-cards/listing'],
+    name: 'Gift Card',
+    directTo: null,
+  },
+  {
+    path: ['/gift-cards/[giftId]'],
+    name: 'Gift Card {}',
     directTo: null,
   },
 ];

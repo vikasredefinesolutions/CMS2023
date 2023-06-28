@@ -70,6 +70,7 @@ const InventoryAvailability: React.FC<_props> = ({
 
   return (
     <>
+      <div className='mb-1 font-semibold md:hidden'>{size}</div>
       {brandName == brandname ? (
         <div className='mb-2'>{qty < maxPeter ? qty : `${maxPeter}+`}</div>
       ) : (
@@ -79,7 +80,7 @@ const InventoryAvailability: React.FC<_props> = ({
         <input
           type='number'
           onKeyDown={blockInvalidChar}
-          className='form-input !px-[10px] !inline-block !w-[65px]'
+          className='form-input !px-[10px] !inline-block max-w-[100px] mx-auto w-full'
           placeholder='0'
           min={0}
           value={value > 0 ? value : ''}

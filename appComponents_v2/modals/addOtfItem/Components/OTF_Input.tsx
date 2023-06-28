@@ -122,7 +122,6 @@ export const OTF_Input: React.FC<_props> = ({
         onChange(event);
         return;
       }
-
       if (isNumberKey(event)) {
         // For all numbers
         onChange(event);
@@ -133,7 +132,6 @@ export const OTF_Input: React.FC<_props> = ({
     // For all strings
     onChange(event);
   };
-
   return (
     <div className='flex flex-wrap mb-4'>
       <div className='w-full '>
@@ -148,9 +146,10 @@ export const OTF_Input: React.FC<_props> = ({
         <div className='mt-1'>
           <input
             id={name}
-            onKeyDown={(event) =>
-              ['.'].includes(event.key) && event.preventDefault()
-            }
+            onKeyDown={(event) => {
+              if (name !== 'price')
+                ['.'].includes(event.key) && event.preventDefault();
+            }}
             name={name}
             type={'text'}
             value={value}

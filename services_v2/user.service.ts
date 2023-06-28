@@ -10,6 +10,8 @@ import {
   _Invalid,
   _MyAcc_OrderBillingDetails,
   _MyAcc_OrderProductDetails,
+  _OrderList,
+  _OrderListFilters,
   _UpdatePasswordForGuestEmail,
   _Valid,
 } from '@definations/APIs/user.res';
@@ -254,6 +256,22 @@ export const FetchOrdersIdByCustomerUserId = async (payload: {
   });
 
   return response;
+};
+
+export const FetchOrdersList = async (payload: {
+  storeID: number;
+  customerId: number;
+  args: _OrderListFilters;
+}): Promise<_OrderList> => {
+  const url = `Order/list.json`;
+
+  const res = await SendAsync<_OrderList>({
+    url: url,
+    method: 'POST',
+    data: payload,
+  });
+
+  return res;
 };
 
 export const GetEmailByResetToken = async (payload: {

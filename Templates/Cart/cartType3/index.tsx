@@ -8,7 +8,7 @@ import {
   useTypedSelector_v2,
 } from '@hooks_v2/index';
 import { fetchThirdpartyservice } from '@services/thirdparty.service';
-import CartSummarry from '@templates/cartSummarry';
+import CartSummarryType1 from '@templates/cartSummarry/cartSummaryType1';
 import CartItem from 'Templates/cartItem';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -71,9 +71,9 @@ const CartType3: React.FC<_CartProps> = ({
   }
   return (
     <section id='' className=''>
-      <div className='"container mx-auto'>
-        <div className='bg-white p-[10px]'>
-          <form className='flex flex-wrap -mx-[10px] -mt-[10px] cart-box'>
+      <div className='container mx-auto'>
+        <div className='bg-white p-[10px] min-h-screen'>
+          <div className='flex flex-wrap -mx-[10px] -mt-[10px] cart-box'>
             <section
               aria-labelledby='cart-heading'
               className='w-full lg:w-9/12 px-[10px] mt-[15px]'
@@ -108,8 +108,7 @@ const CartType3: React.FC<_CartProps> = ({
               aria-labelledby='summary-heading'
               className='w-full lg:w-3/12 px-[10px] mt-[15px]'
             >
-              <CartSummarry selectedShippingModel={selectedShipping} />
-
+              <CartSummarryType1 selectedShippingModel={selectedShipping} />
               {!loggedIn && thirdPartyLogin ? (
                 <div className='mt-[15px]'>
                   <button
@@ -132,7 +131,7 @@ const CartType3: React.FC<_CartProps> = ({
                 </Link>
               )}
             </section>
-          </form>
+          </div>
         </div>
       </div>
     </section>

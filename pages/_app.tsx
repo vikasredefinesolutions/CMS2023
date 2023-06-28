@@ -1,33 +1,46 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { __domain, storeBuilderTypeId } from '@configs/page.config';
+import { __domain, _Store, storeBuilderTypeId } from '@configs/page.config';
 import * as _AppController from '@controllers/_AppController.async';
 import { TrackFile } from '@services/tracking.service';
+import 'material-icons/iconfont/material-icons.css';
 import App, { AppContext, AppInitialProps, AppProps } from 'next/app';
 import { useRouter } from 'next/router';
 import 'public/assets/css/custom.css';
 // import 'public/assets/css/main.css';
-import 'public/assets/css/accordian_pkhg.css';
-import 'public/assets/css/spinner.css';
-import { useEffect } from 'react';
-
 import { reduxWrapper } from '@redux/store.redux';
 import { getWishlist } from '@services/wishlist.service';
-import { domainToShow, extractCookies, Logout } from 'helpers_v2/common.helper';
+import {
+  domainToShow,
+  extractCookies,
+  Logout,
+  setCookie,
+} from 'helpers_v2/common.helper';
 import { useActions_v2 } from 'hooks_v2';
+import 'material-icons/iconfont/material-icons.css';
+import 'public/assets/css/accordian_pkhg.css';
+import 'public/assets/css/spinner.css';
+import { useEffect, useRef } from 'react';
 
+import Metatags from '@appComponents/MetaTags';
+import QuickHelp from '@appComponents/QuickHelp';
+import Spinner from '@appComponents/ui/spinner';
 import { __console_v2 } from '@configs/console.config';
-import { __Cookie } from '@constants/global.constant';
+import {
+  __Cookie,
+  __SessionStorage,
+  BACARDI,
+  CG_STORE_CODE,
+} from '@constants/global.constant';
+import { paths } from '@constants/paths.constant';
 import EmployeeController from '@controllers/EmployeeController';
+import { PageResponseType } from '@definations/app.type';
+import { _MenuItems } from '@definations/header.type';
 import {
   _FetchStoreConfigurations,
   _SbStoreConfiguration,
   _StoreReturnType,
 } from '@definations/store.type';
-import { conditionalLog_V2 } from '@helpers/console.helper';
-
-import Spinner from '@appComponents/ui/spinner';
-import { PageResponseType } from '@definations/app.type';
-import { _MenuItems } from '@definations/header.type';
+import '@fortawesome/fontawesome-free/js/all.js';
 import {
   _PropsToStoreAndGetFromCookies,
   _templateIds,
@@ -38,11 +51,15 @@ import {
   passPropsToDocumentFile,
   storeCookiesToDecreaseNoOfAPIRecalls,
 } from '@helpers/app.extras';
-import { FetchSbStoreConfiguration } from '@services/app.service';
+import { conditionalLog_V2 } from '@helpers/console.helper';
+import getLocation from '@helpers/getLocation';
+import { CustomerRoles } from '@services/customerUser.service';
+import { FetchSbStoreConfiguration } from '@services/sb.service';
 import { fetchThirdpartyservice } from '@services/thirdparty.service';
 import { GetStoreCustomer } from '@services/user.service';
 import Redefine_Layout from '@templates//TemplateComponents/Redefine_Layout';
 import AuthGuard from 'Guard/AuthGuard';
+import uuid from 'react-uuid';
 import DcTags from 'tags/DcTags';
 import TwitterTags from 'tags/TwitterTags';
 import { _Slug_Props } from './[...slug-id]';
@@ -76,35 +93,62 @@ const RedefineCustomApp = ({
     store_storeDetails,
     sbStore_sbStoreDetails,
     setKlaviyoKey,
+    setCustomerRoles,
+    updateGclId,
   } = useActions_v2();
 
+  const isVisitorCreated = useRef(false);
+
   const { updatePageType, setShowLoader } = useActions_v2();
-  const trackingFile = async () => {
+  const trackingFile = async (storeId: number) => {
+    if (isVisitorCreated.current && storeId !== CG_STORE_CODE) return;
+    isVisitorCreated.current = true;
+    const oldSessionId = sessionStorage.getItem(__SessionStorage.sessionId);
+    const visitorInCookie = extractCookies(
+      __Cookie.visitorId,
+      'browserCookie',
+    ).visitorId;
+    const freshVisitorId = uuid();
+    const freshSessionId = uuid();
+    if (!oldSessionId) {
+      sessionStorage.setItem(
+        __SessionStorage.sessionId,
+        freshSessionId.toString(),
+      );
+    }
+    if (!visitorInCookie) {
+      setCookie(__Cookie.visitorId, freshVisitorId.toString(), 365);
+    }
+    const location = await getLocation();
+
     let data = {
       trackingModel: {
         id: 0,
         storeId: extractCookies(__Cookie.storeInfo, 'browserCookie').storeInfo
           ?.storeId,
-        sessionID: 'string',
-        visitorId: '',
-        gclId: router?.query?.gclid ?? '',
-        msclkId: router?.query?.msclkId ?? '',
-        initialReferrer: '',
-        initialLandingPage: '',
+        sessionID: sessionStorage.getItem(__SessionStorage.sessionId),
+        visitorId: visitorInCookie || freshVisitorId.toString(),
+        gclId: router?.query?.gclid || '',
+        msclkId: router?.query?.msclkid || '',
+        initialReferrer: document.referrer || '', //previous url
+        initialLandingPage: window.location.href,
         marketingTimeStamp: '',
-        marketingLandingPage: '',
-        marketingInitialReferrer: '',
-        utmSource: router?.query?.utmSource ?? '',
-        utmMedium: router?.query?.utmMedium ?? '',
-        utmTerm: router?.query?.utmTerm ?? '',
-        utmContent: router?.query?.utmContent ?? '',
-        utmCampaign: router?.query?.utm_campaign ?? '',
-        utmExpid: router?.query?.utm_expid ?? '',
-        utmReferrer: router?.query?.utm_referrer ?? '',
+        marketingLandingPage: window.location.href, //current url
+        marketingInitialReferrer: document.referrer || '', //previous url
+        utmSource: router?.query?.utm_source || '',
+        utmMedium: router?.query?.utm_medium || '',
+        utmTerm: router?.query?.utm_term || '',
+        utmContent: router?.query?.utm_content || '',
+        utmCampaign: router?.query?.utm_campaign || '',
+        utmExpid: router?.query?.utm_expid || '',
+        utmReferrer: router?.query?.utm_referrer || '',
         isNewVisitor: true,
-        ipAddress: '192.168.1.1',
+        ipAddress: location.ip_address,
+        strInitialLandingPage: window.location.href, //current url
+        strMarketingTimeStamp: '',
       },
     };
+
     await TrackFile(data);
   };
 
@@ -144,6 +188,11 @@ const RedefineCustomApp = ({
     router.events.on('routeChangeStart', handleStart);
     router.events.on('routeChangeComplete', handleComplete);
     router.events.on('routeChangeError', handleComplete);
+    if (router.asPath === paths.HOME) {
+      document.body.classList.add('index-page');
+    } else {
+      document.body.classList.remove('index-page');
+    }
   }, [router]);
 
   const getKlaviyoKey = async (storeId: number) => {
@@ -158,6 +207,38 @@ const RedefineCustomApp = ({
     }
   };
 
+  const getRoles = async (storeId: number) => {
+    try {
+      const response = await CustomerRoles({ storeId: storeId });
+
+      if (response) {
+        setCustomerRoles({
+          roles: response,
+        });
+      }
+    } catch (error) {
+      console.log('Error in setting roles');
+    }
+  };
+
+  useEffect(() => {
+    if (store?.code === BACARDI && window.location.pathname === '/') {
+      const selectedStore = extractCookies(
+        'BacardiSelectedStore',
+        'browserCookie',
+      ).BacardiSelectedStore;
+      if (selectedStore) {
+        if (selectedStore === 'GreyGoose') {
+          router.push('/home/GreyGoose');
+        } else {
+          router.push('/index.html');
+        }
+      } else {
+        setCookie('BacardiSelectedStore', 'Bacardi', 365);
+        router.push('/index.html');
+      }
+    }
+  }, [store?.code]);
   useEffect(() => {
     const cookies = extractCookies('', 'browserCookie');
     const tempCustomerId = extractCookies(
@@ -182,7 +263,10 @@ const RedefineCustomApp = ({
       });
     }
 
-    if (store && store?.storeId) getKlaviyoKey(store.storeId);
+    if (store && store?.storeId) {
+      getKlaviyoKey(store.storeId);
+      getRoles(store.storeId);
+    }
 
     if (sbStore && store?.storeTypeId == storeBuilderTypeId) {
       sbStore_sbStoreDetails({
@@ -193,8 +277,18 @@ const RedefineCustomApp = ({
     if (cookies && cookies.userId) {
       getUserDetails(cookies.userId, tempCustomerId);
     }
-
-    // const res = trackingFile();
+    if (router?.query?.gclid || router?.query?.msclkid)
+      updateGclId(
+        (router?.query?.gclid as string) ||
+          (router?.query?.msclkId as string) ||
+          '',
+      );
+    if (
+      (router?.query?.gclid || router?.query?.msclkid) &&
+      !cookies?.visitorId
+    ) {
+      trackingFile(store?.storeId || 0);
+    }
     setShowLoader(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -222,22 +316,22 @@ const RedefineCustomApp = ({
       //}
     }
   };
-  
+
   useEffect(() => {
     if (typeof window !== 'undefined') {
       window.addEventListener('scroll', handleScroll);
     }
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-  
+
   return (
     <>
       <Spinner>
-        {/* <Metatags
+        <Metatags
           storeName={store.storeName}
           pageMetaData={pageProps?.metaData}
           routepath={router.asPath}
-        /> */}
+        />
         <DcTags />
         <TwitterTags
           pageMetaData={pageProps?.metaData}
@@ -255,6 +349,7 @@ const RedefineCustomApp = ({
           templateIDs={templateIDs}
           pageMetaData={pageProps.metaData}
         >
+          {store?.code === _Store.type3 && <QuickHelp />}
           <Component {...pageProps} />
         </Redefine_Layout>
       </Spinner>
@@ -283,6 +378,10 @@ RedefineCustomApp.getInitialProps = async (
       },
       isAttributeSaparateProduct: false,
     },
+    storeBuilder: {
+      showHomePage: false,
+      filters: false,
+    },
     adminConfig: {
       imageFolderPath: '',
       blobUrl: '',
@@ -294,6 +393,7 @@ RedefineCustomApp.getInitialProps = async (
 
   //------------------------------------
   const ctx = await App.getInitialProps(context);
+  const isUpperCase = (string: any) => /[A-Z]/.test(string);
 
   if (req && req.headers) {
     if ('x-nextjs-data' in req.headers) {
@@ -331,6 +431,17 @@ RedefineCustomApp.getInitialProps = async (
       }
     }
   }
+  // if (res) {
+  //   if (
+  //     !req?.headers.host?.includes('www') &&
+  //     req?.headers.host !== 'localhost:3000'  && req?.headers.host !== 'corporategear.online'
+  //   ) {
+  //   res.writeHead(301, {
+  //       Location: 'https://www.' + req?.headers.host + req?.url,
+  //     });
+  //     res.end();
+  //   }
+  // }
 
   if (res && currentPath) {
     const currentPage = AuthGuard({
@@ -339,7 +450,7 @@ RedefineCustomApp.getInitialProps = async (
     });
 
     if (currentPage.access === false) {
-      res.writeHead(302, {
+      res.writeHead(301, {
         Location: currentPage.redirectTo,
       });
       res.end();
@@ -370,6 +481,11 @@ RedefineCustomApp.getInitialProps = async (
         // If cookies are empty then store 'Store and other required details' to decrease the number of APIs calls on page transition
         if (res) {
           propsToStoreAndGetFromCookies = {
+            storeBuilder: {
+              // will be updated later in the code
+              showHomePage: false,
+              filters: false,
+            },
             store: {
               id: response.store.storeId!,
               storeTypeId: response.store.storeTypeId!,
@@ -400,12 +516,32 @@ RedefineCustomApp.getInitialProps = async (
     }
 
     if (
+      res &&
+      domain &&
+      APIsCalledOnce === false &&
       propsToStoreAndGetFromCookies.store.storeTypeId === storeBuilderTypeId &&
       propsToStoreAndGetFromCookies.store.id
     ) {
-      expectedProps.sbStore = await FetchSbStoreConfiguration({
+      const response = await FetchSbStoreConfiguration({
         storeId: propsToStoreAndGetFromCookies.store.id,
       });
+
+      if (response) {
+        expectedProps.sbStore = {
+          ...response,
+        };
+
+        propsToStoreAndGetFromCookies.storeBuilder.showHomePage =
+          response?.isDisplayHome || false;
+        propsToStoreAndGetFromCookies.storeBuilder.filters =
+          response?.isLeftNavigation || false;
+
+        storeCookiesToDecreaseNoOfAPIRecalls(
+          res,
+          propsToStoreAndGetFromCookies,
+          domain,
+        );
+      }
     }
 
     conditionalLog_V2({
@@ -428,6 +564,10 @@ RedefineCustomApp.getInitialProps = async (
     const serverConfigs = await configsToCallEveryTime(
       propsToStoreAndGetFromCookies.store.id,
     );
+    const bacardiSelectedStoreValue = req?.headers.cookie
+      ?.split(';')
+      .find((item) => item.includes('BacardiSelectedStore'))
+      ?.split('=')[1];
 
     passPropsToDocumentFile({
       store: propsToStoreAndGetFromCookies.store,
@@ -435,6 +575,15 @@ RedefineCustomApp.getInitialProps = async (
       customScripts: serverConfigs.customScripts,
       gTags: serverConfigs.gTags,
       klaviyoKey: serverConfigs.klaviyoKey,
+      domain: req?.headers?.host ? req.headers.host : '',
+      bacardiSelectedStore: bacardiSelectedStoreValue || 'Bacardi',
+      storeBuilder: {
+        status:
+          propsToStoreAndGetFromCookies.store.storeTypeId ===
+          storeBuilderTypeId,
+        showHomePage: propsToStoreAndGetFromCookies.storeBuilder.showHomePage,
+        filters: propsToStoreAndGetFromCookies.storeBuilder.filters,
+      },
     });
   }
 

@@ -2,7 +2,6 @@ import { combineReducers } from '@reduxjs/toolkit';
 import cacheSlice from './slices/cache.slice';
 import cartReducer from './slices/cart.slice';
 import checkoutReducer from './slices/checkout.slice';
-import commonSlice from './slices/common.slice';
 import compareReducer from './slices/compare.slice';
 import employeeReducer from './slices/employee.slice';
 import homeReducer from './slices/home.slice';
@@ -21,7 +20,6 @@ const rootReducer = combineReducers({
   user: userReducer,
   cart: cartReducer,
   employee: employeeReducer,
-  common: commonSlice,
   cache: cacheSlice,
   success: successReducer,
   loader: loaderReducer,

@@ -1,5 +1,6 @@
 import ForgotModal from '@appComponents/modals/forgotModal';
 import LoginModal from '@appComponents/modals/loginModal';
+import { THD_STORE_CODE } from '@constants/global.constant';
 import { _modals } from '@definations/product.type';
 import { fetchThirdpartyservice } from '@services/thirdparty.service';
 import { useTypedSelector_v2 } from 'hooks_v2';
@@ -18,10 +19,14 @@ const LoginIcon: React.FC = () => {
     setShowModal('login');
   };
   const router = useRouter();
-  const storeId = useTypedSelector_v2((state) => state.store.id);
+  const { id: storeId, code: storeCode } = useTypedSelector_v2(
+    (state) => state.store,
+  );
   const { thirdPartyLogin, bothLogin } = useTypedSelector_v2(
     (state) => state.store,
   );
+
+  if (storeCode === THD_STORE_CODE) return null;
   if (loggedIn) return <></>;
   const SamlloginHandler = () => {
     fetchThirdpartyservice({ storeId }).then((ThirdpartyServices) => {
@@ -58,7 +63,7 @@ const LoginIcon: React.FC = () => {
               {/* <span className='text-[12px] hidden xl:inline-block whitespace-nowrap tracking-[1px]'>
             {__pagesText.Headers.login}
           </span> */}
-              <span className='material-icons'>perm_identity</span>
+              <span className='material-icons-outlined'>perm_identity</span>
             </button>
             {showModal === 'login' && (
               <LoginModal modalHandler={setShowModal} />

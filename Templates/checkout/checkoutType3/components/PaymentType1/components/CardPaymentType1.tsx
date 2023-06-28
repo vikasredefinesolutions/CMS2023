@@ -33,6 +33,8 @@ const CardPaymentType1: paymentProps = ({
       <div className='relative z-0 w-full mb-[20px] border border-gray-border rounded'>
         <input
           onChange={changeHandler}
+          autoComplete='off'
+          onContextMenu={(e) => e.preventDefault()}
           name='cardNumber'
           placeholder=' '
           required={true}

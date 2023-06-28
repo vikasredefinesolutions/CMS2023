@@ -20,7 +20,7 @@ const BreadCrumb_Type4: NextPage<_BreadCrumbProps> = ({
               className='flex flex-wrap items-center text-extra-small-text'
               aria-label='Breadcrumb'
             >
-              <ol className='inline-flex items-center'>
+              <ol className='inline-flex items-center flex-wrap gap-y-1'>
                 <>
                   {breadCrumbs.map((item, index) => (
                     <li

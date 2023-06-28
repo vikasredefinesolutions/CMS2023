@@ -1,13 +1,21 @@
 import { default as Image } from '@appComponents/reUsable/Image';
 import Price from '@appComponents/reUsable/Price';
-import { cartQuantityUpdateConfirmMessage } from '@constants/global.constant';
+import {
+  cartQuantityUpdateConfirmMessage,
+  cartRemoveConfirmMessage,
+} from '@constants/global.constant';
 import {
   __SuccessErrorText,
   commonMessage,
 } from '@constants/successError.text';
-import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
+import { captureRemoveItemEvent } from '@controllers/cartController';
+import {
+  GetCustomerId,
+  useActions_v2,
+  useTypedSelector_v2,
+} from '@hooks_v2/index';
 import { _CartItem } from '@services/cart';
-import { updateCartQuantity } from '@services/cart.service';
+import { deleteItemCart, updateCartQuantity } from '@services/cart.service';
 import Link from 'next/link';
 import { FC, useRef, useState } from 'react';
 import { _globalStore } from 'store.global';
@@ -23,11 +31,40 @@ const CIlayout3: FC<any> = ({ isEditable, removeCartItem, loadProduct }) => {
   const isEmployeeLoggedIn = useTypedSelector_v2(
     (state) => state.employee.loggedIn,
   );
-  const { id } = useTypedSelector_v2((state) => state.user);
+  const customerId = GetCustomerId();
 
-  const { code: storeCode } = useTypedSelector_v2((state) => state.store);
+  const { id: storeId, code: storeCode } = useTypedSelector_v2(
+    (state) => state.store,
+  );
 
   const [sizeId, setSizeId] = useState<number[]>([]);
+
+  const refreshCartItems = async () => {
+    await fetchCartDetails({
+      customerId,
+      isEmployeeLoggedIn,
+    });
+    setShowLoader(false);
+  };
+
+  const handleRemoveItem = async (itemId: number) => {
+    const userConfirmsToDelete = confirm(cartRemoveConfirmMessage);
+    if (userConfirmsToDelete) {
+      setShowLoader(true);
+      captureRemoveItemEvent(cartData, itemId, customerId, storeId);
+      deleteItemCart(itemId)
+        .then(() => {
+          refreshCartItems();
+        })
+        .catch(() => {
+          setShowLoader(false);
+          showModal({
+            message: commonMessage.somethingWentWrong,
+            title: commonMessage.failed,
+          });
+        });
+    }
+  };
   const handleUpdate = (e: string, qty: any, itemId: any) => {
     if (+e !== qty) {
       setSizeId((prev) => [...prev, itemId]);
@@ -58,7 +95,7 @@ const CIlayout3: FC<any> = ({ isEditable, removeCartItem, loadProduct }) => {
         .then((res) => {
           if (res) {
             let size = sizeId;
-            fetchCartDetails({ customerId: id ? id : 0, isEmployeeLoggedIn });
+            fetchCartDetails({ customerId: customerId, isEmployeeLoggedIn });
             setSizeId(
               size.filter(
                 (id) =>
@@ -70,6 +107,7 @@ const CIlayout3: FC<any> = ({ isEditable, removeCartItem, loadProduct }) => {
               message: commonMessage.updated,
               title: __SuccessErrorText.Success,
             });
+            document.location.reload();
           }
         })
         .catch((el) => {
@@ -104,19 +142,30 @@ const CIlayout3: FC<any> = ({ isEditable, removeCartItem, loadProduct }) => {
                       : '/assets/images/image_not_available.jpg'
                   }
                   alt={item.productName}
-                  className=''
+                  className='max-h-64 m-auto'
                   isStatic={!Boolean(item.colorImage)}
                 />
               </Link>
               {/* </div> */}
             </div>
             <div className='w-full lg:w-3/4 px-[10px] flex flex-wrap lg:justify-between'>
-              <div className='text-sub-text font-semibold'>
-                <Link href={`/${item.seName}`}>
-                  <a className='text-black hover:text-secondary'>
-                    {item.productName}
-                  </a>
-                </Link>
+              <div className='text-sub-text font-semibold flex justify-between w-full'>
+                <div>
+                  <Link href={`/${item.seName}`}>
+                    <a className='text-black hover:text-secondary'>
+                      {item.productName}
+                    </a>
+                  </Link>
+                </div>
+
+                <div className='text-default-text'>
+                  <div
+                    onClick={() => handleRemoveItem(item.shoppingCartItemsId)}
+                    className='primary-link hover:hover-primary-link cursor-pointer'
+                  >
+                    <strong>Remove Item</strong>
+                  </div>
+                </div>
               </div>
               <div className='w-full flex flex-wrap'>
                 <div className='lg:w-2/3 w-full mt-[10px]'>
@@ -140,15 +189,15 @@ const CIlayout3: FC<any> = ({ isEditable, removeCartItem, loadProduct }) => {
                       <div className='text-default-text font-semibold w-28'>
                         Size
                       </div>
-                      <div className='text-default-text font-semibold w-16 text-center'>
+                      <div className='text-default-text font-semibold w-28 text-center'>
                         Qty
                       </div>
                       {empLoggedIn && (
-                        <div className='text-base font-semibold w-18 text-center'>
+                        <div className='text-base font-semibold w-28 text-center'>
                           Unit Price
                         </div>
                       )}
-                      <div className='text-default-text font-semibold w-20 text-right'>
+                      <div className='text-default-text font-semibold w-28 text-right'>
                         Price
                       </div>
                     </div>
@@ -162,7 +211,7 @@ const CIlayout3: FC<any> = ({ isEditable, removeCartItem, loadProduct }) => {
                             <div className='text-default-text w-28'>
                               {view.attributeOptionValue}
                             </div>
-                            <div className='text-default-text w-16 text-center'>
+                            <div className='text-default-text w-28 text-center'>
                               {isEditable ? (
                                 <form>
                                   <div className='flex'>
@@ -207,7 +256,7 @@ const CIlayout3: FC<any> = ({ isEditable, removeCartItem, loadProduct }) => {
                                 view.qty
                               )}
                             </div>
-                            <div className='text-default-text w-16 text-center'>
+                            <div className='text-default-text w-28 text-right'>
                               <Price value={view.price} />
                             </div>
                           </div>

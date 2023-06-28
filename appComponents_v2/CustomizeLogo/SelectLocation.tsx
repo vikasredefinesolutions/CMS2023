@@ -100,7 +100,9 @@ const SelectLocation: React.FC<_props> = ({
               SELECT YOUR LOGO
             </button>
           </div>
-          <div className='px-[10px] py-[10px]'>OR</div>
+          <div className='px-[10px] py-[10px] md:w-auto w-full text-center'>
+            OR
+          </div>
           <div className='mx-[15px]'>
             <button
               onClick={() => actionHandler('later')}

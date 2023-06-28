@@ -1,6 +1,6 @@
 import SuccessErrorModal from '@appComponents/modals/successErrorModal';
 import CloseStore from '@appComponents/reUsable/CloseStore';
-import { storeBuilderTypeId } from '@configs/page.config';
+import { _Store, storeBuilderTypeId } from '@configs/page.config';
 import { paths } from '@constants/paths.constant';
 import { _AnnouncementRow, _MenuItems } from '@definations/header.type';
 import { _GetPageType, _StoreCache } from '@definations/slug.type';
@@ -57,9 +57,12 @@ const Layout: React.FC<_props & _StoreCache> = ({
   );
   const [headerBgColor, setHeaderBgColor] = useState<string>('');
   const [headerTextColor, setHeaderTextColor] = useState<string>('');
+  const [headerContainer, setHeaderContainer] = useState<boolean>(false);
+  const [headerTransparent, setHeaderTransparent] = useState<boolean>(false);
   const [announcementRow, setAnnouncementRow] = useState<_AnnouncementRow[]>(
     [],
   );
+  const YearofDate = new Date().getFullYear();
   const [footerData, SetFooterData] =
     useState<_FetchStoreConfigurations | null>(null);
   const router = useRouter();
@@ -68,13 +71,19 @@ const Layout: React.FC<_props & _StoreCache> = ({
   const storeId = useTypedSelector_v2((state) => state.store?.id);
   // const islogo = useTypedSelector_v2((state) => state.sbStore.isLogo);
   const [isStoreOpend, setIsStoreOpen] = useState<boolean>(true);
+  const [selectedBacardiStore, setSelectedBacardiStore] = useState<
+    string | null
+  >('');
+
+  const { code } = useTypedSelector_v2((state) => state.store);
 
   const StoreOpen = (openStoreOn: string, closedStoreOn: string) => {
     const openFrom = Date.parse(openStoreOn);
     const closeOn = Date.parse(closedStoreOn);
     const newDate = new Date();
-
     const todayDate = Date.parse(`${newDate}`);
+    // return setIsStoreOpen(true);
+    // console.log(openFrom, closeOn, todayDate);
     if (todayDate <= closeOn && todayDate >= openFrom) {
       return setIsStoreOpen(true);
     } else {
@@ -103,6 +112,8 @@ const Layout: React.FC<_props & _StoreCache> = ({
       const headerInfo = JSON.parse(headerConfig.config_value);
       setHeaderBgColor(headerInfo?.header_bg_color);
       setHeaderTextColor(headerInfo?.header_text_color);
+      setHeaderContainer(headerInfo?.header_container);
+      setHeaderTransparent(headerInfo?.header_transparent);
 
       headerInfo?.announcementRow &&
         setAnnouncementRow(headerInfo?.announcementRow);
@@ -121,14 +132,49 @@ const Layout: React.FC<_props & _StoreCache> = ({
   }, [router.asPath]);
 
   const isbreadcrumbShow = pageMetaData?.isbreadcrumbShow;
-
   const showBreadcrumb =
     router.pathname !== paths.CHECKOUT &&
     router.asPath != paths.BRAND &&
     router.pathname !== paths.PRODUCT_COMPARE &&
-    router.pathname !== paths.CATALOGS;
+    router.pathname !== paths.CATALOGS &&
+    router.pathname !== paths.CART;
+
   return (
     <>
+      {/* {code === 'BCGG' && (
+        <div className='w-full flex justify-center'>
+          <div
+            className={`p-10 m-10 border border-black cursor-pointer ${
+              selectedBacardiStore === 'Bacardi' ? 'bg-primary' : ''
+            }`}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              localStorage.setItem('BacardiSelectedStore', 'Bacardi');
+              setCookie(__Cookie.BacardiSelectedStore, 'Bacardi', 365);
+              setSelectedBacardiStore('Bacardi');
+              window.location.replace('/index.html');
+            }}
+          >
+            <img src='/logo.png' className='cursor-pointer' />
+          </div>
+          <div
+            className={`p-10 m-10  cursor-pointer ${
+              selectedBacardiStore === 'GreyGoose' ? 'bg-secondary' : ''
+            }`}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              localStorage.setItem('BacardiSelectedStore', 'GreyGoose');
+              setCookie(__Cookie.BacardiSelectedStore, 'GreyGoose', 365);
+              setSelectedBacardiStore('GreyGoose');
+              window.location.replace('/home/GreyGoose');
+            }}
+          >
+            <img src='/greygoose-logo.png' className='cursor-pointer' />
+          </div>
+        </div>
+      )} */}
       <Header
         storeCode={header.storeCode}
         logoUrl={{
@@ -137,7 +183,9 @@ const Layout: React.FC<_props & _StoreCache> = ({
         menuItems={useMemo(() => header.menuItems, [header.menuItems])}
         headerTemplateId={headerTemplateId}
         headerBgColor={headerBgColor}
-        headerTextColor={headerTextColor}
+        headerContainer={headerContainer}
+         headerTextColor={headerTextColor}
+        headerTransparent={headerTransparent}
         announcementRow={announcementRow}
       />
 
@@ -166,6 +214,26 @@ const Layout: React.FC<_props & _StoreCache> = ({
 
       {showFooter && (
         <Footer data={configs.footer ? configs.footer : footerData} />
+      )}
+      {storeCode == _Store.type4 && router.asPath == paths.CHECKOUT && (
+        <div className='bg-white'>
+          <div className='continer'>
+            <div className='text-center'>
+              <div className='w-full pl-[15px] pr-[15px] pt-[10px]'>
+                <div className='text-[11px] text-primary text-center pb-[10px]'>
+                  © {YearofDate}{' '}
+                  <a
+                    className='text-[11px] text-primary hover:text-primary-hover'
+                    href='javascript:void(0);'
+                  >
+                    Driving Impressions®
+                  </a>
+                  , All Rights Reserved. Terms of Use Privacy
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
     </>
   );

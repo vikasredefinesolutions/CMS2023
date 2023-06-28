@@ -22,11 +22,16 @@ const BrandsListingTemplate: React.FC<
     id = 'type4';
   } else if (storeCode == 'PKHG') {
     id = 'type2';
+  }
+  else if (storeCode == 'GG') {
+    id = 'type3';
   } else {
     id = 'type1';
   }
   const Template = brandsTemplates[id];
-  return <Template {...rest} />;
+  return<>
+   
+  <Template {...rest} /> </>
 };
 
 export default BrandsListingTemplate;

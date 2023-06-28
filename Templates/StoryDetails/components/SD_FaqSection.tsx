@@ -25,8 +25,8 @@ const SD_FaqSection: React.FC<_Props> = ({ page }) => {
     <section className='relative pt-[40px] pb-[40px] bg-light-gray'>
       <div className='container mx-auto px-[16px]'>
         <div className='flex flex-wrap -mx-[12px] -mt-[24px] justify-center'>
-          <div className='w-full lg:w-2/3 md:w-3/6 order-1 mt-[24px] flex px-[12px]'>
-            <div className='w-full flex h-full bg-[#ffffff] p-[40px]'>
+          <div className='w-full lg:w-3/5 xl:w-2/3 order-1 mt-[24px] flex px-[12px]'>
+            <div className='w-full flex h-full bg-[#ffffff] p-[20px] sm:p-[30px] lg:p-[40px]'>
               <Home
                 props={{
                   pageData: { components: page.accordionContent },
@@ -36,11 +36,11 @@ const SD_FaqSection: React.FC<_Props> = ({ page }) => {
               />
             </div>
           </div>
-          <div className='w-full mt-[24px] px-[12px] lg:w-1/3 md:w-3/6 order-2'>
-            <div className='w-full bg-white p-10'>
+          <div className='w-full mt-[24px] px-[12px] lg:w-2/5 xl:w-1/3 order-2'>
+            <div className='w-full bg-white p-[20px] sm:p-[30px] lg:p-[40px]'>
               <div className='w-full'>
                 <div
-                  className='bg-blue-900 text-white p-10 text-large-text font-semibold'
+                  className='bg-blue-900 text-white p-[20px] sm:p-[30px] lg:p-[40px] text-large-text font-semibold'
                   role='heading'
                 >
                   <div>

@@ -98,6 +98,7 @@ const SD_HeroSection: React.FC<_Props> = ({
         </section>
         <SD_FaqSection page={page} />
         <SD_ShopNowSection productSku={productSku} />
+        
         {/* <SD_ProductsSlider /> */}
       </div>
     </section>

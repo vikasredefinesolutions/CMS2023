@@ -1,14 +1,27 @@
 import WishlistButton from '@appComponents/ui/Wishlist';
+import { __domain } from '@configs/page.config';
 import { _OtherImage } from '@definations/APIs/colors.res';
 import { _ProductImgProps } from '@templates/ProductDetails/Components/productDetailsComponents';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
+import {
+  FacebookIcon,
+  FacebookShareButton,
+  PinterestIcon,
+  PinterestShareButton,
+  TwitterIcon,
+  TwitterShareButton
+} from 'next-share';
+import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import InnerImageZoom from 'react-inner-image-zoom';
 import 'react-inner-image-zoom/lib/InnerImageZoom/styles.min.css';
 import { _globalStore } from 'store.global';
 
 let mediaBaseUrl = _globalStore.blobUrl; // for server side rendering
-
+const mediaExtraUrlDeatilMain =
+  process.env.NEXT_PUBLIC_EXTRA_MEDIA_URL_DETAIL_MAIN;
+const mediaExtraUrlDeatilThumbnail =
+  process.env.NEXT_PUBLIC_EXTRA_MEDIA_URL_DETAIL_THUMBNAIL;
 const ProductImg: React.FC<_ProductImgProps> = ({ product }) => {
   const { setImage, setImage_2 } = useActions_v2();
   const [wishlistId, setWishlistId] = useState<number>(0);
@@ -47,9 +60,10 @@ const ProductImg: React.FC<_ProductImgProps> = ({ product }) => {
       }
     });
   }, [customerId, wishlist]);
-
+  const router = useRouter();
+  const URL = `https://${__domain.localDomain}${router.asPath}`;
   return (
-    <div className='col-span-1 grid grid-cols-12 gap-[24px] pr-[15px] pt-[8px]'>
+    <div className='col-span-1 grid grid-cols-12 gap-[24px] lg:pr-[15px] pr-[0px] pt-[8px]'>
       <div className='col-span-12 border border-gray-border relative'>
         <div className='main-image max-w-lg mx-auto'>
           {/* TODO :  ADJUST SALE ICON ALIGNMENT IN PRODUCT DETAIL  */}
@@ -59,12 +73,14 @@ const ProductImg: React.FC<_ProductImgProps> = ({ product }) => {
             (product.productTagViewModel[0].productTagName ? (
               <div className='absolute top-1 left-2 text-gray-800 p-1 z-5"'>
                 <img
+                  itemProp='image'
                   src={`${mediaBaseUrl}${product?.productTagViewModel[0].imagename}`}
                 />
               </div>
             ) : (
               <div className='absolute -top-2 -left-2 text-gray-800 p-1 z-5"'>
                 <img
+                  itemProp='image'
                   src={`${mediaBaseUrl}${product?.productTagViewModel[0].imagename}`}
                   width={'60px'}
                   height={'60px'}
@@ -73,7 +89,7 @@ const ProductImg: React.FC<_ProductImgProps> = ({ product }) => {
             ))}
           <InnerImageZoom
             key={selectedImage.imageUrl}
-            src={selectedImage?.imageUrl}
+            src={`${mediaExtraUrlDeatilMain}${selectedImage?.imageUrl}`}
             zoomType='hover'
             hideHint={true}
             className='w-full object-center object-cover sm:rounded-lg main_image max-h'
@@ -90,6 +106,7 @@ const ProductImg: React.FC<_ProductImgProps> = ({ product }) => {
             selectedColor?.moreImages
               ?.map((img, index) => ({ ...img, id: index }))
               .map((img) => {
+               
                 const highlight =
                   img.id === selectedImage.id
                     ? 'border-secondary'
@@ -101,10 +118,11 @@ const ProductImg: React.FC<_ProductImgProps> = ({ product }) => {
                     onClick={() => selectImgHandler(img)}
                   >
                     <img
-                      src={`${mediaBaseUrl}${img.imageUrl}`}
-                      alt={img.altTag}
+                      itemProp='image'
+                      src={`${mediaExtraUrlDeatilThumbnail}${mediaBaseUrl}${img.imageUrl}`}
+                      alt={product?.name}
                       className='w-full object-center object-cover'
-                      title={img.altTag}
+                      title={product?.name}
                     />
                   </div>
                 );
@@ -128,7 +146,31 @@ const ProductImg: React.FC<_ProductImgProps> = ({ product }) => {
         </div>
       </div>
       {/* Social Media third Party */}
-      {/* <SocialShare /> */}
+      {product &&
+      <div style={{"display":"flex"}} className='text-center'>
+        
+        <FacebookShareButton
+          url={URL}
+          hashtag={'#coporateGear'}
+        >
+          {/* NEED TO ADD APPID AND APPSECRET */}
+
+          <FacebookIcon size={50} borderRadius={10}  />
+        </FacebookShareButton>
+
+        <TwitterShareButton url={URL} title={'Checkout this amazing product'}>
+          <TwitterIcon size={50} round />
+        </TwitterShareButton>
+
+        <PinterestShareButton
+          url={URL}
+          media={`${mediaBaseUrl}${product?.productBrandLogo}`} // update the image param to the product image url
+        >
+          <PinterestIcon size={50} round />
+        </PinterestShareButton>
+        
+      </div>
+}
     </div>
   );
 };

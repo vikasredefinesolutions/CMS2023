@@ -14,7 +14,6 @@ export interface PersonalizationArray {
 }
 const CIlayout2: FC<_CartProps> = (props) => {
   const cartData = useTypedSelector_v2((state) => state.cart.cart);
-
   return (
     <>
       <div className='w-full mb-[30px]'>

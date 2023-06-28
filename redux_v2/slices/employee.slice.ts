@@ -7,6 +7,7 @@ export interface _EmployeeState {
   loggedIn: boolean;
   isLoadingComplete: boolean;
   isEmpGuest: boolean;
+  guestLoginJustByEmail: string;
 }
 
 const initialState: _EmployeeState = {
@@ -15,6 +16,7 @@ const initialState: _EmployeeState = {
   loggedIn: false,
   isLoadingComplete: false,
   isEmpGuest: false, // FOR PK
+  guestLoginJustByEmail: '',
 };
 
 export const employeeSlice = createSlice({
@@ -38,6 +40,7 @@ export const employeeSlice = createSlice({
         state.loggedIn = false;
         state.isLoadingComplete = true;
         state.isEmpGuest = false;
+        state.guestLoginJustByEmail = '';
         return;
       }
 
@@ -46,8 +49,20 @@ export const employeeSlice = createSlice({
       state.loggedIn = true;
       state.isLoadingComplete = true;
     },
-    employee_Login: (state, action: { payload: { isGuest: boolean } }) => {
-      state.isEmpGuest = action.payload.isGuest;
+    employee_Login: (
+      state,
+      action: {
+        payload: { isGuest: boolean } | { guestLoginJustByEmail: string };
+      },
+    ) => {
+      if ('isGuest' in action.payload) {
+        state.isEmpGuest = action.payload.isGuest;
+        return;
+      }
+      if ('guestLoginJustByEmail' in action.payload) {
+        state.guestLoginJustByEmail = action.payload.guestLoginJustByEmail;
+        return;
+      }
     },
   },
 });

@@ -21,9 +21,9 @@
 .slider-container {
   width: 100%;
   height: 100%;
-  position:fixed; /* add this code for position fixed */
-  top:0px; /* set top and left 0 */
-  left:0px;
+  position: fixed; /* add this code for position fixed */
+  top: 0px; /* set top and left 0 */
+  left: 0px;
 }
 .slider-item-div {
   padding: 20px;
@@ -36,6 +36,11 @@
   height: 100% !important;
 }
 
+.you-may-also-like-slider-2 .slick-track {
+  width: auto !important;
+  display: flex;
+  justify-content: center;
+}
 
 #globalLoader {
   position: fixed;
@@ -49,5 +54,37 @@
   justify-content: center;
   align-items: center;
   display: flex;
+}
+@font-face {
+  font-family: 'porsche_nextbold';
+
+  src: url(/fonts/porsche/1d92c588b0533d8ac18b.woff2) format('woff2'),
+    url(/fonts/porsche/620b29c94f1ccb2d76b6.woff) format('woff');
+
+  font-weight: normal;
+
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'porsche_nextregular';
+
+  src: url(/fonts/porsche/cc323df23d55b5f72bb8.woff2) format('woff2'),
+    url(/fonts/porsche/41174deb5ac9bf5ed2b8.woff) format('woff');
+
+  font-weight: normal;
+
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'porsche_nextthin';
+
+  src: url(/fonts/porsche/802a0dfb650a332a6e26.woff2) format('woff2'),
+    url(/fonts/porsche/40283c1ecd3abf88e86d.woff) format('woff');
+
+  font-weight: normal;
+
+  font-style: normal;
 }
 /* @import url('https://www.ystore.us/HTML/RedefineCommerce/Ecom-front/corporategear/main.css'); */

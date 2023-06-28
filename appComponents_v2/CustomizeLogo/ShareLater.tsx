@@ -1,19 +1,27 @@
 import { _LogoSteps } from '@definations/product.type';
-import { useActions_v2 } from '@hooks_v2/index';
+import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import { _AvailableLocationDetailsOtherStores } from '@redux/slices/product.slice.types';
-import { useRouter } from 'next/router';
 import React from 'react';
 interface _props {
   setNextStep: React.Dispatch<React.SetStateAction<_LogoSteps[]>>;
   selectedLocation: _AvailableLocationDetailsOtherStores | null;
+  setShowLogoComponent: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const ShareLater: React.FC<_props> = ({ setNextStep, selectedLocation }) => {
-  const router = useRouter();
+const ShareLater: React.FC<_props> = ({
+  setNextStep,
+  selectedLocation,
+  setShowLogoComponent,
+}) => {
+  const { clearToCheckout } = useActions_v2();
   const { updateOptions, updateLogoDetails } = useActions_v2();
+  const { price: pricePerItem } = useTypedSelector_v2(
+    (state) => state.product.toCheckout,
+  );
   const actionHandler = (action: 'CONTINUE' | 'CANCEL') => {
     if (action === 'CANCEL') {
-      router.back();
+      setShowLogoComponent(false);
+      clearToCheckout(pricePerItem);
       return;
     }
 

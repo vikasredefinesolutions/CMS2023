@@ -17,12 +17,18 @@ export interface _SU3_InitialValues {
   jobTitle: string;
 }
 
-export type FieldType = 'email' | 'password' | 'number' | 'text' | 'dropdown';
+export type FieldType =
+  | 'email'
+  | 'password'
+  | 'number'
+  | 'text'
+  | 'dropdown'
+  | 'color';
 
 export interface Option {
   name: string;
-  id: string | number;
-  value: string;
+  id?: string | number;
+  value: string | number;
 }
 
 export interface _SU3_Field {

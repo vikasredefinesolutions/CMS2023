@@ -62,7 +62,7 @@ export const deleteCustomerAddress = async (
 export const GetShippingmethod = async (payload: _GetShippingmethod) => {
   const url = 'Store/GetShippingmethod';
 
-  const res = await SendAsync<any>({
+  const res = await SendAsync<{ name: string; price: number }[]>({
     url: url,
     method: 'POST',
     data: payload,

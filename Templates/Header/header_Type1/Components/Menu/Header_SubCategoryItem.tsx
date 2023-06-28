@@ -23,7 +23,7 @@ const SubCategoryItem: React.FC<_props> = ({
       return (
         <>
           <li className='py-[12px] border-b border-b-gray-border' key={key}>
-            <Link href={`${sename}.html?v=product-list`} passHref>
+            <Link href={`${sename}`} passHref>
               <a
                 className='inline-block pl-[70px] leading-[18px]'
                 title=''

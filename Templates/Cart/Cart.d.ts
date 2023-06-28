@@ -12,4 +12,5 @@ export interface _CartTemplates {
   type3: NextPage<_CartProps, _CartProps>;
   type4: NextPage<_CartProps, _CartProps>;
   type5: NextPage<_CartProps, _CartProps>;
+  type6: NextPage<_CartProps, _CartProps>;
 }

@@ -3,7 +3,7 @@ import { useState } from 'react';
 
 const PL1_PurchaseOrder: React.FC = () => {
   const [value, setValue] = useState<string>('');
-  const { update_paymentDetails } = useActions_v2();
+  const { update_PaymentDetails } = useActions_v2();
 
   return (
     <div id='PurchaseOrder'>
@@ -17,7 +17,7 @@ const PL1_PurchaseOrder: React.FC = () => {
               className='!text-anchor hover:!text-anchor-hover underline'
               id='btn-use-credit-card'
               onClick={() =>
-                update_paymentDetails({
+                update_PaymentDetails({
                   method: 'CHANGED',
                   type: 'CREDIT_CARD',
                 })
@@ -39,9 +39,8 @@ const PL1_PurchaseOrder: React.FC = () => {
           name='EnterPONumber'
           placeholder=' '
           onBlur={() => {
-            update_paymentDetails({
+            update_PaymentDetails({
               method: 'bulk_payment',
-              valid: value.length > 3,
               poNumber: value,
             });
           }}

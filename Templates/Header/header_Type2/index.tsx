@@ -43,7 +43,7 @@ const Header_Type2: NextPage<_HeaderProps> = ({
   // const storeName = useTypedSelector_v2((state) => state.store.storeName);
   const showSideMenu = useTypedSelector_v2((state) => state.modals.sideMenu);
   const storeTypeId = useTypedSelector_v2((state) => state.store.storeTypeId);
-  const islogo = useTypedSelector_v2((state) => state.sbStore.isLogo);
+  const islogo = useTypedSelector_v2((state) => state.sbStore.store.isLogo);
 
   // ------------------------------------------------------------------------
   const [isMobileView, setIsMobileView] = useState<boolean>(
@@ -108,7 +108,7 @@ const Header_Type2: NextPage<_HeaderProps> = ({
           storeCode !== 'PKHG' && router.asPath === paths.HOME
             ? 'bg-[' + headerBgColor + ']'
             : ''
-        } sticky top-7 z-40  border-b border-y-gray-border`}
+        } border-b border-y-gray-border`}
         id='mobile_menu_box'
       >
         {/* <NotificationBar /> */}
@@ -178,7 +178,8 @@ const Header_Type2: NextPage<_HeaderProps> = ({
                           />
                         )}
 
-                        {islogo &&
+                        {storeTypeId == storeBuilderTypeId ? (
+                          islogo &&
                           (isMobileView ? (
                             <Logo
                               // screen='MOBILE'
@@ -187,7 +188,16 @@ const Header_Type2: NextPage<_HeaderProps> = ({
                                 mobile: logoUrl.desktop,
                               }}
                             />
-                          ) : null)}
+                          ) : null)
+                        ) : isMobileView ? (
+                          <Logo
+                            // screen='MOBILE'
+                            logo={{
+                              desktop: logoUrl.desktop,
+                              mobile: logoUrl.desktop,
+                            }}
+                          />
+                        ) : null}
                       </div>
                       {isMobileView ? (
                         <SearchBar screen={'DESKTOP'} />

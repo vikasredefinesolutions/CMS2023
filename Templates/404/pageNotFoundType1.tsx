@@ -1,10 +1,28 @@
+import { storeBuilderTypeId } from '@configs/page.config';
 import { paths } from '@constants/paths.constant';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
-import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React from 'react';
 
 const PageNotFoundType1: React.FC = () => {
-  const storeCode = useTypedSelector_v2((state) => state.store.code);
+  const { code: storeCode, storeTypeId } = useTypedSelector_v2(
+    (state) => state.store,
+  );
+
+  const { isLeftNavigation } = useTypedSelector_v2(
+    (state) => state.sbStore.store,
+  );
+  const router = useRouter();
+
+  const handleRedirect = () => {
+    if (storeTypeId === storeBuilderTypeId && !isLeftNavigation) {
+      router.push(paths.SB_PRODUCT_LISTING);
+      return;
+    }
+
+    router.push(paths.HOME);
+  };
+
   return (
     <div className=''>
       <section className='container mx-auto text-center'>
@@ -43,9 +61,9 @@ const PageNotFoundType1: React.FC = () => {
               PAGE NOT FOUND
             </div> */}
             <div className='mt-[30px]'>
-              <Link href={paths.HOME}>
+              <button onClick={() => handleRedirect()}>
                 <a className='btn btn-md btn-primary'>BACK TO HOME PAGE</a>
-              </Link>
+              </button>
             </div>
           </div>
         </div>

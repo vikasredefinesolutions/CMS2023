@@ -49,7 +49,7 @@ const AccountSetting = () => {
     return response;
   };
 
-  const updatePassword = async () => {
+  const updatePassword = async (handleReset: () => void) => {
     try {
       const res = await UpdateUserPassword({
         email: customer?.email || '',
@@ -62,12 +62,12 @@ const AccountSetting = () => {
           setCurrentPass(response ? response : '');
         });
         setShowPasswordUpdate(false);
-
+        setActiveEditBox(false);
+        handleReset();
         showModal({
           message: 'Password Updated Successfully',
           title: 'Updated',
         });
-        setActiveEditBox(false);
       } else {
         showModal({
           message: 'Password Update Failed, Try Again!',
@@ -80,11 +80,26 @@ const AccountSetting = () => {
   };
 
   const validationSchema = Yup.object().shape({
-    firstName: Yup.string().required(editAccountMessage.firstName),
-    lastName: Yup.string().required(editAccountMessage.lastName),
-    companyName: Yup.string().required(editAccountMessage.companyName),
+    firstName: Yup.string()
+      .trim()
+      .required(editAccountMessage.firstName.required)
+      .min(
+        editAccountMessage.firstName.firstNameminLength,
+        editAccountMessage.firstName.minValidation,
+      ),
+    lastName: Yup.string()
+      .trim()
+      .required(editAccountMessage.lastName.required)
+      .min(
+        editAccountMessage.lastName.lastNameminLength,
+        editAccountMessage.lastName.minValidation,
+      ),
+    companyName: Yup.string()
+      .trim()
+      .required(editAccountMessage.companyName.required),
     password: Yup.string()
-      .required(editAccountMessage.password)
+      .trim()
+      .required(editAccountMessage.password.required)
       .min(__ValidationText.signUp.password.minLength)
       .max(__ValidationText.signUp.password.maxLength),
     gender: Yup.string(),
@@ -143,10 +158,10 @@ const AccountSetting = () => {
                 values,
                 handleChange,
                 handleBlur,
-                errors,
                 setErrors,
-                setFieldValue,
                 handleReset,
+                errors,
+                setTouched,
               }) => (
                 <Form>
                   <div className='mb-[24px] mt-[24px]'>
@@ -331,8 +346,12 @@ const AccountSetting = () => {
                           <div className='m:col-span-1'>
                             <button
                               type='button'
-                              onClick={updatePassword}
-                              className='m-r-10 btn btn-primary '
+                              onClick={() => {
+                                setTouched({ password: true }, true);
+                                if (!errors.password)
+                                  updatePassword(handleReset);
+                              }}
+                              className='m-r-10 btn btn-primary'
                             >
                               {__pagesText.accountPage.passwordChange}
                             </button>
@@ -378,7 +397,7 @@ const AccountSetting = () => {
                             }}
                             className='btn btn-primary btn-md'
                           >
-                            {__pagesText.accountPage.profileEdit}--
+                            {__pagesText.accountPage.profileEdit}
                           </button>
                         ) : (
                           <>

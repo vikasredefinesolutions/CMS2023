@@ -126,7 +126,7 @@ const LoggedInMenu: React.FC = () => {
               <li className='border-t border-t-gray-300'>
                 <div
                   onClick={() => logoutHandler()}
-                  className='flex items-center p-2 gap-2.5 text-primary hover:text-primary-hover'
+                  className='flex items-center p-2 gap-2.5 text-primary hover:text-primary-hover cursor-pointer'
                 >
                   <span className=''>
                     <NxtImage

@@ -194,10 +194,12 @@ const ElementAccordionDisplay = ({ selected_Values, acValues }) => {
                         }}
                       >
                             {/* <div className='text-defaule-text'> */}
-                            <div className=' secondary-link pointer-events-none font-normal'>
-                              {acValue.title}
-                            </div>
-                            {/* </div> */}
+                            {acValue?.titleheadtag ?
+                             <div dangerouslySetInnerHTML={{ __html: `<${acValue.titleheadtag}>${acValue.title}</${acValue.titleheadtag}>`}} className='text-defaule-text pointer-events-none'></div>
+                            : 
+                            <div className='text-defaule-text pointer-events-none'>{acValue?.title}</div>
+                          }
+\                            {/* </div> */}
                            
                       </button>
                   </>
@@ -211,9 +213,12 @@ const ElementAccordionDisplay = ({ selected_Values, acValues }) => {
                       }}
                     >
                           {/* <div className='text-defaule-text'> */}
-                          <div className='text-defaule-text pointer-events-none'>
-                            {acValue.title}
-                          </div>
+                          
+                          {acValue?.titleheadtag ?
+                             <div dangerouslySetInnerHTML={{ __html: `<${acValue.titleheadtag}>${acValue.title}</${acValue.titleheadtag}>`}} className='text-defaule-text pointer-events-none'></div>
+                            : 
+                            <div className='text-defaule-text pointer-events-none'>{acValue?.title}</div>
+                          }
                           {/* </div> */}
                           <span className='material-icons-outlined ml-3 pointer-class pointer-events-none'>
                             {helper.getSymbol(acValue.icon, acValue.openstatus)}

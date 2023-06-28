@@ -1,6 +1,7 @@
 import Price from '@appComponents/Price';
 import NxtImage from '@appComponents/reUsable/Image';
 import { _MyAcc_OrderProductDetails } from '@definations/APIs/user.res';
+import { DisplayLineAttributeOption } from '@services/cart';
 import Link from 'next/link';
 import React from 'react';
 
@@ -34,9 +35,8 @@ const OrD_ItemDetails: React.FC<_Props> = ({ item }) => {
               <Link
                 href={'/'}
                 className='!text-anchor hover:!text-anchor-hover font-bold'
-              ><a className='font-bold'>
-                {item.productName}
-                </a>
+              >
+                <a className='font-bold'>{item.productName}</a>
               </Link>
             </div>
             <div className='text-default-text mb-[10px]'>
@@ -111,11 +111,20 @@ const OrD_ItemDetails: React.FC<_Props> = ({ item }) => {
                               {`Logo ${index + 1} :`}
                             </div>
                             <div className='h-[50px] w-auto'>
-                              <NxtImage
-                                src={logo.logoImagePath}
-                                alt={logo.logoLocation}
-                                className='w-auto h-[50px]'
-                              />
+                              {logo.logoImagePath === '' ? (
+                                <img
+                                  className='w-14 h-12'
+                                  src={`/assets/images/logo-to-be-submitted.webp`}
+                                  title=''
+                                  alt={logo.logoPositionImage}
+                                />
+                              ) : (
+                                <NxtImage
+                                  src={logo.logoImagePath}
+                                  alt={logo.logoLocation}
+                                  className='w-auto h-[50px]'
+                                />
+                              )}
                             </div>
                           </div>
                         </div>
@@ -132,6 +141,83 @@ const OrD_ItemDetails: React.FC<_Props> = ({ item }) => {
                     </div>
                   );
                 })}
+                {item.displayLineAttributeOptions.length > 0 && (
+                  <div className='mt-10'>
+                    <div className='text-normal-text border-t pt-[10px] mt-[10px] first:mt-0'>
+                      <div className='font-semibold'>Personalise Text:</div>
+                      <div className='flex justify-between py-1 first:pt-0 last:pb-0'>
+                        <div className='font-semibold'>Font</div>
+                        <div className='text-right'>
+                          {
+                            item.displayLineAttributeOptions[0]
+                              ?.linePersonalizeDetails[0].font
+                          }
+                        </div>
+                      </div>
+                      <div className='flex justify-between py-1 first:pt-0 last:pb-0'>
+                        <div className='font-semibold'>Color</div>
+                        <div className='text-right'>
+                          {
+                            item.displayLineAttributeOptions[0]
+                              ?.linePersonalizeDetails[0].color
+                          }
+                        </div>
+                      </div>
+                      <div className='flex justify-between py-1 first:pt-0 last:pb-0'>
+                        <div className='font-semibold'>
+                          Personalization Location
+                        </div>
+                        <div className='text-right'>
+                          {
+                            item.displayLineAttributeOptions[0]
+                              ?.linePersonalizeDetails[0].location
+                          }
+                        </div>
+                      </div>
+                    </div>
+                    {item.displayLineAttributeOptions.map(
+                      (Lineitem: DisplayLineAttributeOption, index: number) => {
+                        return (
+                          <>
+                            <div className='text-normal-text border-t pt-[10px] mt-[10px] first:mt-0'>
+                              <div className='flex justify-between py-1 first:pt-0 last:pb-0'>
+                                <div className='font-semibold'>Size</div>
+                                <div className='text-right font-bold'>
+                                  {Lineitem.attributeOptionName}
+                                </div>
+                              </div>
+                              {Lineitem.linePersonalizeDetails.map(
+                                (line: any, ind: number) => (
+                                  <>
+                                    <div className='flex justify-between py-1 first:pt-0 last:pb-0'>
+                                      <div className='font-semibold'>
+                                        Line 1
+                                      </div>
+                                      <div className='text-right'>
+                                        {line.line1Text}
+                                      </div>
+                                    </div>
+                                    {line.line2Text &&
+                                      line.line2Text !== '' && (
+                                        <div className='flex justify-between py-1 first:pt-0 last:pb-0'>
+                                          <div className='font-semibold'>
+                                            Line 2
+                                          </div>
+                                          <div className='text-right'>
+                                            {line.line2Text}
+                                          </div>
+                                        </div>
+                                      )}
+                                  </>
+                                ),
+                              )}
+                            </div>
+                          </>
+                        );
+                      },
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           </div>

@@ -61,7 +61,7 @@ const Header_Category: React.FC<_props> = ({
             className='text-[12px] mr-[5px] underline'
             onClick={() => toggleSideMenu('CLOSE')}
           >
-            <Link href={`${url}.html?v=product-list`} passHref>
+            <Link href={`/${url}.html`} passHref>
               <a>{__pagesText.Headers.mobileViewAll}</a>
             </Link>
           </div>
@@ -82,7 +82,7 @@ const Header_Category: React.FC<_props> = ({
                         <SubMenuItem
                           view={view}
                           itemLabel={capitalizeFirstLetter(item.categoryName)}
-                          itemUrl={`${item.seName}.html?v=product-list`}
+                          itemUrl={`${item.seName}.html`}
                           type={'CATEGORY'}
                           itemId={item.id}
                           setSubTab={setSubTab}
@@ -102,7 +102,7 @@ const Header_Category: React.FC<_props> = ({
   if (view === 'DESKTOP') {
     return (
       <>
-        <Link href={`${url}.html?v=product-list`} passHref className='flex'>
+        <Link href={`/${url}.html`} passHref className='flex'>
           <a>
             <div className='relative flex'>
               <button
@@ -151,7 +151,7 @@ const Header_Category: React.FC<_props> = ({
                             key={index}
                             view={view}
                             itemLabel={capitalizeFirstLetter(item.categoryName)}
-                            itemUrl={`${item.seName}.html?v=product-list`}
+                            itemUrl={`${item.seName}.html`}
                             type={'CATEGORY'}
                             setSubTab={setSubTab}
                             Subtab={Subtab}
@@ -172,7 +172,7 @@ const Header_Category: React.FC<_props> = ({
                                 itemLabel={capitalizeFirstLetter(
                                   item.categoryName,
                                 )}
-                                itemUrl={`${item.seName}.html?v=product-list`}
+                                itemUrl={`${item.seName}.html`}
                                 type={'CATEGORY'}
                                 setSubTab={setSubTab}
                                 Subtab={Subtab}

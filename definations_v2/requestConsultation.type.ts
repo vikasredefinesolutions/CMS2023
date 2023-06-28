@@ -19,5 +19,7 @@ export interface _SubmitConsultationPayload {
     message: string;
     recStatus: 'A';
     status: string;
+    gclid: string;
+    visitorId: string;
   };
 }

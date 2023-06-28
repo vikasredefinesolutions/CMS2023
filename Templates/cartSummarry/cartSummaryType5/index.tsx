@@ -11,7 +11,7 @@ interface _props {
 }
 
 const CartSummarryType5: FC<_props> = ({ selectedShippingModel }) => {
-  const { update_checkoutEmployeeLogin } = useActions_v2();
+  const { update_CheckoutEmployeeLogin } = useActions_v2();
   const couponDetails = useTypedSelector_v2((state) => state.cart.discount);
   const isEmployeeLoggedIn = useTypedSelector_v2(
     (state) => !!state.employee.empId,
@@ -74,7 +74,7 @@ const CartSummarryType5: FC<_props> = ({ selectedShippingModel }) => {
                 onSubmit={(values) => {
                   const price =
                     values.shipping === 'FREE' ? 0 : values.shipping;
-                  update_checkoutEmployeeLogin({
+                  update_CheckoutEmployeeLogin({
                     type: 'SHIPPING_PRICE',
                     value: +(+price).toFixed(2),
                   });
@@ -169,7 +169,7 @@ const CartSummarryType5: FC<_props> = ({ selectedShippingModel }) => {
       </div>
       <div className='px-[15px] py-[15px]'>
         <dl className=''>
-          <div className='font-[600] text-medium-text'>Products Price</div>
+          <div className='font-[600] font-semibold'>Products Price</div>
           <div className='flex items-center justify-between pt-[15px] pb-[20px]'>
             <dt className='text-normal-text'>Subtotal:</dt>
             <dd className='text-normal-text'>

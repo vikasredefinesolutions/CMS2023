@@ -9,7 +9,12 @@ import {
 } from '@helpers/common.helper';
 import { highLightError } from '@helpers/console.helper';
 import getLocation from '@helpers/getLocation';
-import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
+import {
+  GetCustomerId,
+  useActions_v2,
+  useTypedSelector_v2,
+} from '@hooks_v2/index';
+import { _LogoDetail } from '@redux/slices/product.slice.types';
 import { addSubStore, addToCart } from '@services/cart.service';
 
 import { useRouter } from 'next/router';
@@ -31,7 +36,7 @@ const LogosToPrint: React.FC<_props> = ({
   const { isSewOutEnable, sewOutCharges } = useTypedSelector_v2(
     (state) => state.store,
   );
-  const { availableOptions } = useTypedSelector_v2(
+  const { availableOptions, price: pricePerItem } = useTypedSelector_v2(
     (state) => state.product.toCheckout,
   );
   const { toCheckout, product } = useTypedSelector_v2((state) => state.product);
@@ -40,18 +45,38 @@ const LogosToPrint: React.FC<_props> = ({
   );
   const storeId = useTypedSelector_v2((state) => state.store.id);
   const storeTypeId = useTypedSelector_v2((state) => state.store.storeTypeId);
-  const customerId = useTypedSelector_v2((state) => state.user.id);
+  const customerId = GetCustomerId();
   const isEmployeeLoggedIn = useTypedSelector_v2(
     (state) => state.employee.loggedIn,
   );
   const { sbState } = useTypedSelector_v2((state) => state.product.selected);
   const store = useTypedSelector_v2((state) => state.store);
 
-  const loggedIN_userId = useTypedSelector_v2((state) => state.user.id);
-
   mediaBaseURL = store.mediaBaseUrl || mediaBaseURL;
   const { showModal, setShowLoader, fetchCartDetails, clearToCheckout } =
     useActions_v2();
+
+  const resolvePriceIssue = (logos: _LogoDetail[] | null, totalQty: number) => {
+    if (!logos) return null;
+
+    const getPrice = (index: number) => {
+      if (index === 0) {
+        return store.firstLogoCharge;
+      }
+
+      return store.secondLogoCharge;
+    };
+
+    return logos.map((logo, index) => ({
+      ...logo,
+      location: {
+        ...logo.location,
+        // cost: getPrice(index) * totalQty,
+        cost: getPrice(index),
+        price: getPrice(index),
+      },
+    }));
+  };
 
   const addToCartHandler = async () => {
     setShowLoader(true);
@@ -59,7 +84,7 @@ const LogosToPrint: React.FC<_props> = ({
     const location = await getLocation();
 
     const cartObject = await getAddToCartObject({
-      userId: customerId || 0,
+      userId: +customerId || 0,
       storeId: storeId || 0,
       isEmployeeLoggedIn,
       note: '',
@@ -77,7 +102,7 @@ const LogosToPrint: React.FC<_props> = ({
         inventory: selectedProduct.inventory,
       },
       shoppingCartItemId: 0,
-      logos: logos,
+      logos: resolvePriceIssue(logos, totalQty),
       isSewOutEnable: isSewOutEnable,
       sewOutCharges: sewOutCharges,
       total: {
@@ -104,7 +129,7 @@ const LogosToPrint: React.FC<_props> = ({
       //GTM event for add-to-cart
       const payload = {
         storeId: storeId,
-        customerId: loggedIN_userId,
+        customerId: +customerId,
         value: toCheckout?.totalPrice,
         coupon: '',
         shoppingCartItemsModel: [
@@ -128,12 +153,10 @@ const LogosToPrint: React.FC<_props> = ({
 
       try {
         let c_id = customerId;
-        let res;
         await addToCart(cartObject)
           .then((res) => {
-            if (res) {
-              res = res;
-            }
+            setCookie(__Cookie.tempCustomerId, '' + res, 'Session');
+            res = c_id;
             return res;
           })
           .then((res) => {
@@ -175,10 +198,6 @@ const LogosToPrint: React.FC<_props> = ({
             });
           });
 
-        if (!customerId && res) {
-          c_id = res;
-          setCookie(__Cookie.tempCustomerId, '' + res, 'Session');
-        }
         if (c_id)
           fetchCartDetails({
             customerId: c_id,
@@ -190,13 +209,6 @@ const LogosToPrint: React.FC<_props> = ({
     }
 
     // modalHandler(null);
-  };
-
-  const actionHandler = (action: 'CONTINUE' | 'CANCEL') => {
-    if (action === 'CANCEL') {
-      router.back();
-      return;
-    }
   };
 
   return (
@@ -213,7 +225,7 @@ const LogosToPrint: React.FC<_props> = ({
               />
             </div>
             <div className='mt-2'>
-              Logo : {!logo.no ? 'Will Be Applied Later' : `#${logo.no}`}
+              Logo : {logo.no ? 'Add Later' : `Submitted`}
             </div>
             <div className='mt-2 flex gap-2 items-center'>
               <div className='font-semibold'>Logo {index + 1}:</div>
@@ -254,7 +266,10 @@ const LogosToPrint: React.FC<_props> = ({
           ADD TO CART
         </button>
         <button
-          onClick={() => actionHandler('CANCEL')}
+          onClick={() => {
+            clearToCheckout(pricePerItem);
+            setShowLogoComponent(false);
+          }}
           className='btn btn-primary w-64'
         >
           CANCEL

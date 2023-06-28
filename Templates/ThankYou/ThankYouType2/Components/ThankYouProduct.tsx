@@ -1,7 +1,7 @@
+import Price from '@appComponents/Price';
 import NxtImage from '@appComponents/reUsable/Image';
 import { __pagesText } from '@constants/pages.text';
 import { _MyAcc_OrderProductDetails } from '@definations/APIs/user.res';
-import ThankYouProductTable from '@templates/ThankYou/CommonComponents/ThankYouProductTable';
 import Link from 'next/link';
 import React from 'react';
 
@@ -22,56 +22,85 @@ const ThankYouProduct: React.FC<_props> = ({ product }) => {
 
   return (
     <>
-      <li className='flex pt-[20px] pb-[20px] flex-wrap md:pl-[15px] md:pr-[15px]'>
-        <div className='w-full lg:w-4/12 px-[15px] mt-[15px]'>
+      <li className='flex flex-wrap py-[20px] -mx-[10px] items-start'>
+        <div className='w-full md:w-1/4 px-[10px] md:mb-0 mb-[10px] text-center'>
           <Link href={`/${product.seName}.html`}>
-            <div>
-              <NxtImage
-                src={product.colorImage}
-                alt={product.productName}
-                className='rounded-md object-center object-cover'
-              />
-            </div>
+            <NxtImage
+              src={product.colorImage}
+              alt={product.productName}
+              className='max-h-[348px] inline-block'
+            />
           </Link>
         </div>
-        <div className='w-full lg:w-8/12 md:pl-[15px] md:pr-[15px] mt-[15px]'>
-          <div className='text-sub-text font-[600]'>
+        <div className='w-full md:w-3/4 px-[10px] flex flex-wrap lg:justify-between'>
+          <div className='text-sub-text font-semibold'>
             <Link href={`/${product.seName}.html`}>
-              <a className='text-black hover:text-anchor-hover'>
+              <a className='text-black hover:text-secondary'>
                 {product.productName}
               </a>
             </Link>
           </div>
-          <div className='w-full flex flex-wrap text-default-text'>
-            <div className='sm:w-2/3 mt-[8px]'>
+          <div className='w-full flex flex-wrap'>
+            <div className='lg:w-2/3 w-full mt-[10px]'>
               <div className='flex justify-between'>
-                <div>
-                  <span className='font-[600]'>
+                <div className='text-default-text'>
+                  <span className='font-semibold'>
+                    {' '}
                     {__pagesText.ThankYouPage.TotalSummary.Sku}
-                  </span>
+                  </span>{' '}
                   {product.sku}
                 </div>
               </div>
-              <div className='mt-[4px] flex'>
-                <div>
-                  <span className='font-[600]'>
+              <div className='mt-[5px] flex'>
+                <div className='text-default-text'>
+                  <span className='font-semibold'>
                     {__pagesText.ThankYouPage.TotalSummary.Color}
                   </span>
                   {product.attributeOptionValue}
                 </div>
               </div>
-            </div>
-            <div className='mt-[8px] sm:w-1/3'>
-              <div className='bold text-sub-text text-right'>
-                {__pagesText.ThankYouPage.TotalSummary.ItemTotal}
-              </div>
-            </div>
-            <div className='mt-[40px] mb-[40] w-full'>
-              <div className='font-[600] border-b pb-[8px]'>
-                {__pagesText.ThankYouPage.TotalSummary.ItemDetails}
-              </div>
+              <div className='mt-[40px]'>
+                <div className='text-default-text font-semibold border-b border-b-gray-border pb-[10px]'>
+                  {__pagesText.ThankYouPage.TotalSummary.ItemDetails}
+                </div>
+                <div className='flex justify-between py-[10px]'>
+                  <div className='text-default-text font-semibold w-28'>
+                    Size
+                  </div>
+                  <div className='text-default-text font-semibold w-16 text-center'>
+                    Qty
+                  </div>
+                  <div className='text-default-text font-semibold w-20 text-right'>
+                    Price
+                  </div>
+                </div>
 
-              <ThankYouProductTable product={product} />
+                {product.shoppingCartItemDetailsViewModels.map(
+                  (prod, index) => (
+                    <div key={index} className='flex justify-between py-[10px]'>
+                      <div className='text-base w-28'>
+                        {prod.attributeOptionValue}{' '}
+                      </div>
+                      <div className='text-base w-16 text-center'>
+                        {prod.qty}
+                      </div>
+                      <div className='text-base w-20 text-right'>
+                        <Price value={prod.price} />
+                      </div>
+                    </div>
+                  ),
+                )}
+              </div>
+            </div>
+
+            <div className='mt-[10px] lg:w-1/3 w-full'>
+              <div className='font-bold text-medium-text text-right'>
+                <span className=''>
+                  {__pagesText.ThankYouPage.TotalSummary.ItemTotal}
+                  <br />
+                  <Price value={product.productTotal} />
+                </span>
+              </div>
             </div>
           </div>
         </div>

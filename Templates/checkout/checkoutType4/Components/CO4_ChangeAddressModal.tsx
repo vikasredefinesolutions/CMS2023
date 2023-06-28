@@ -11,21 +11,23 @@ const C04_ChangeAddressModal: React.FC<_Props> = ({
   closeModal,
   addressType,
 }) => {
-  const { update_CheckoutProps } = useActions_v2();
+  const { update_CheckoutAddress } = useActions_v2();
   const userAddresses = useTypedSelector_v2(
     (state) => state.user.customer?.customerAddress,
   );
 
   const handleShipToThisAddress = (user: CustomerAddress) => {
     if (addressType === 'SHIP') {
-      update_CheckoutProps({
-        shippingAddress: user,
+      update_CheckoutAddress({
+        type: 'SHIPPING_ADDRESS',
+        address: user,
       });
     }
 
     if (addressType === 'BILL') {
-      update_CheckoutProps({
-        billingAddress: user,
+      update_CheckoutAddress({
+        type: 'BILLING_ADDRESS',
+        address: user,
       });
     }
 
@@ -33,8 +35,9 @@ const C04_ChangeAddressModal: React.FC<_Props> = ({
   };
 
   const handleEditAddress = (user: CustomerAddress) => {
-    update_CheckoutProps({
-      editAddress: user,
+    update_CheckoutAddress({
+      type: 'EDITING...',
+      address: user,
     });
     closeModal('EDIT');
   };
@@ -62,8 +65,9 @@ const C04_ChangeAddressModal: React.FC<_Props> = ({
   };
 
   useEffect(() => {
-    update_CheckoutProps({
-      editAddress: 'CLEANUP',
+    update_CheckoutAddress({
+      type: 'EDITING...',
+      address: 'CLEANUP',
     });
   }, []);
 

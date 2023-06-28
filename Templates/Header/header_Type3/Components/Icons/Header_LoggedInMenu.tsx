@@ -1,4 +1,5 @@
 import NxtImage from '@appComponents/reUsable/Image';
+import { THD_STORE_CODE } from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
 import { paths } from '@constants/paths.constant';
 import { Logout } from '@helpers/common.helper';
@@ -10,6 +11,7 @@ import { __StaticImg } from '../../../../../public/assets/images.asset';
 const LoggedInMenu: React.FC = () => {
   const { logInUser, logoutClearCart, setWishListEmpty } = useActions_v2();
   const { id: loggedIn, customer } = useTypedSelector_v2((state) => state.user);
+  const { code: storeCode } = useTypedSelector_v2((state) => state.store);
   const [focus, setFocus] = useState(false);
 
   const logoutHandler = () => {
@@ -18,6 +20,7 @@ const LoggedInMenu: React.FC = () => {
     setWishListEmpty([]);
     Logout(logInUser);
   };
+  if (storeCode === THD_STORE_CODE) return null;
 
   if (!loggedIn) return <></>;
 
@@ -33,12 +36,10 @@ const LoggedInMenu: React.FC = () => {
             className='text-primary hover:text-secondary flex items-center gap-1'
             title={__pagesText.Headers.myAccountTittle}
           >
-            <span className='text-[12px] hidden xl:inline-block whitespace-nowrap tracking-[1px]'>
+            {/* <span className='text-[12px] hidden xl:inline-block whitespace-nowrap tracking-[1px]'>
               {customer?.firstname}
-            </span>
-            <span className='xl:hidden material-icons text-[30px]'>
-              perm_identity
-            </span>
+            </span> */}
+            <span className='material-icons-outlined'>perm_identity</span>
           </a>
         </Link>
 
@@ -81,7 +82,7 @@ const LoggedInMenu: React.FC = () => {
                   </a>
                 </Link>
               </li>
-              <li className='border-t border-t-gray-300'>
+              {/* <li className='border-t border-t-gray-300'>
                 <Link href={paths.loggedInMenu.help}>
                   <a className='flex items-center p-[10px] gap-2.5 text-[#000000] hover:text-[#000000]'>
                     <span className=''>
@@ -97,11 +98,11 @@ const LoggedInMenu: React.FC = () => {
                     <span className=''> {__pagesText.Headers.help}</span>
                   </a>
                 </Link>
-              </li>
-              <li className='border-t border-t-gray-300'>
+              </li> */}
+              <li className='border-t-2 border-t-gray-300'>
                 <div
                   onClick={() => logoutHandler()}
-                  className='flex items-center p-[10px] gap-2.5 text-[#000000] hover:text-[#000000]'
+                  className='flex items-center p-[10px] gap-2.5 text-[#000000] hover:text-[#000000] cursor-pointer'
                 >
                   <span className=''>
                     <NxtImage

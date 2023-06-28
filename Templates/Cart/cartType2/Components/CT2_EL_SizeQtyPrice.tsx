@@ -11,7 +11,6 @@ import {
   useActions_v2,
   useTypedSelector_v2,
 } from '@hooks_v2/index';
-import { fetchCartDetails } from '@redux/asyncActions/cart.async';
 import { _CartItem } from '@services/cart';
 import {
   deleteItemCart,
@@ -44,7 +43,7 @@ const CT2_EL_SizeQtyPrice: React.FC<_Props> = ({
   setDetails,
   item,
 }) => {
-  const { showModal, setShowLoader } = useActions_v2();
+  const { showModal, setShowLoader, fetchCartDetails } = useActions_v2();
 
   const customerId = GetCustomerId();
 
@@ -59,10 +58,10 @@ const CT2_EL_SizeQtyPrice: React.FC<_Props> = ({
     const userConfirmsToDelete = confirm(cartRemoveConfirmMessage);
     if (userConfirmsToDelete) {
       setShowLoader(true);
-      captureRemoveItemEvent(cartData, itemId, customerId, storeId);
       deleteItemCart(itemId)
         .then(() => {
           refreshCartItems();
+          captureRemoveItemEvent(cartData, itemId, customerId, storeId);
         })
         .catch(() => {
           setShowLoader(false);
@@ -118,7 +117,6 @@ const CT2_EL_SizeQtyPrice: React.FC<_Props> = ({
   const handleQtyPriceUpdate = (inputs: _Props['details']) => {
     const newOrOldQty = +inputs.qty;
     const newUnitPrice = inputs.unitPrice;
-
     if (details.qty !== newOrOldQty || details.unitPrice !== newUnitPrice) {
       setDetails((prev) => {
         let updateTotalPrice = 0;
@@ -141,8 +139,8 @@ const CT2_EL_SizeQtyPrice: React.FC<_Props> = ({
         if (newOrOldQty > 0) {
           updateSizeWithPriceNQty = prev.sizesWithPriceNQty.map((item) => {
             const idOfUpdatedQtyOrPrice = +inputs.id;
+            const totalPriceForSingleSize = newOrOldQty * +newUnitPrice;
             if (item.id === idOfUpdatedQtyOrPrice) {
-              const totalPriceForSingleSize = newOrOldQty * +newUnitPrice;
               updateTotalPrice += totalPriceForSingleSize;
               udpateTotalQty += newOrOldQty;
               return {
@@ -155,7 +153,7 @@ const CT2_EL_SizeQtyPrice: React.FC<_Props> = ({
               };
             }
 
-            updateTotalPrice += item.totalPrice;
+            updateTotalPrice += totalPriceForSingleSize;
             udpateTotalQty += item.qty;
             return { ...item, unitPrice: (+newUnitPrice).toFixed(2) };
           });
@@ -231,13 +229,15 @@ const CT2_EL_SizeQtyPrice: React.FC<_Props> = ({
                       event.preventDefault()
                     }
                     onChange={(event) => {
-                      if (+event.target.value === 0) {
-                        setFieldValue('unitPrice', 1);
-                        return;
-                      }
                       handleChange(event);
                     }}
-                    onBlur={() => {
+                    onBlur={(event) => {
+                      if (
+                        +event.target.value === 0 ||
+                        !event.target.value.trim()
+                      ) {
+                        setFieldValue('unitPrice', 1);
+                      }
                       submitForm();
                     }}
                   />

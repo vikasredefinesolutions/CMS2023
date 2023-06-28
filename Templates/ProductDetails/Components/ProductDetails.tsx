@@ -16,7 +16,11 @@ const ProductDetails: React.FC<_ProductDetailsProps> = ({
   const consultationURL = `${paths.REQUEST_CONSULTATION}?productid=${product.id}&title=Request%20Consultation%20%26%20Proof&Color=${color.name}`;
   const router = useRouter();
   return (
-    <div className='container pl-[15px] pr-[15px] mx-auto mt-[15px]'>
+    <div
+      className='container pl-[15px] pr-[15px] mx-auto mt-[15px]'
+      itemType='https://schema.org/Product'
+      itemScope
+    >
       <div className='lg:grid lg:grid-cols-2 lg:items-start'>
         <div className='flex md:hidden flex-wrap'>
           <div className='w-full md:w-2/3'>

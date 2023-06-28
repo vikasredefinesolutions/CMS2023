@@ -18,7 +18,7 @@ const SL_TemplateType1: React.FC<_Props> = ({ list, brands }) => {
       {list.length > 2 ? (
         <SL_Story
           stories={list.slice(2)}
-          showByDefault={6}
+          showByDefault={8}
           buttonType='LoadMore'
         />
       ) : null}

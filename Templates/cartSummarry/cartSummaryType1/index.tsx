@@ -11,7 +11,7 @@ interface _props {
 }
 
 const CartSummarryType1: FC<_props> = ({ selectedShippingModel }) => {
-  const { update_checkoutEmployeeLogin } = useActions_v2();
+  const { update_CheckoutEmployeeLogin } = useActions_v2();
   const couponDetails = useTypedSelector_v2((state) => state.cart.discount);
   const isEmployeeLoggedIn = useTypedSelector_v2(
     (state) => !!state.employee.empId,
@@ -74,7 +74,7 @@ const CartSummarryType1: FC<_props> = ({ selectedShippingModel }) => {
                 onSubmit={(values) => {
                   const price =
                     values.shipping === 'FREE' ? 0 : values.shipping;
-                  update_checkoutEmployeeLogin({
+                  update_CheckoutEmployeeLogin({
                     type: 'SHIPPING_PRICE',
                     value: +(+price).toFixed(2),
                   });

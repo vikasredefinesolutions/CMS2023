@@ -3,13 +3,13 @@ import { __pagesText } from '@constants/pages.text';
 import { paths } from '@constants/paths.constant';
 import {
   _MyAcc_OrderBillingDetails,
-  _MyAcc_OrderProductDetails
+  _MyAcc_OrderProductDetails,
 } from '@definations/APIs/user.res';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import {
   FetchOrderDetails,
   FetchOrdersIdByCustomerId,
-  FetchOrdersIdByCustomerUserId
+  FetchOrdersIdByCustomerUserId,
 } from '@services/user.service';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
@@ -30,10 +30,13 @@ const Orders_type1: React.FC = () => {
   const customerRoleId = useTypedSelector_v2(
     (state) => state.user.customer?.customerRoleId,
   );
+  const roles = useTypedSelector_v2((state) => state.user.roles);
+
   const [showTab, setShowTab] = useState<'MyOwnOrders' | 'OtherUsersOrders'>(
     'MyOwnOrders',
   );
-  const isAdmin = customerRoleId == 0 || customerRoleId == 2 ? true : false;
+  const isAdmin =
+    customerRoleId == 0 || customerRoleId == +roles.adminId ? true : false;
   const fetchMultipleOrderDetails = async (ids: number[] | null) => {
     if (ids === null) {
       setOrderDetails([]);
@@ -131,8 +134,8 @@ const Orders_type1: React.FC = () => {
                   {__pagesText.OrderPage.emptyOrderMessage2}
                 </div>
                 <div className='mt-3'>
-                  <Link href={paths.HOME} className='btn btn-secondary btn-lg'>
-                    {__pagesText.OrderPage.emptyOrderMessage1}
+                  <Link href={paths.HOME} className='btn btn-primary btn-lg'>
+                    <a>{__pagesText.OrderPage.startShopping}</a>
                   </Link>
                 </div>
               </div>

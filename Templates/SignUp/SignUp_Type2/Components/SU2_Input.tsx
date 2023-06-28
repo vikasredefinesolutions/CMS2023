@@ -35,6 +35,7 @@ const SU2_Input: React.FC<_props> = ({
           type={type}
           onChange={handleChange}
           onBlur={handleBlur}
+          autoComplete={'false'}
           className='form-input !w-[calc(100%-40px)]'
         />
       </div>

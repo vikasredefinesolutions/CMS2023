@@ -16,6 +16,8 @@ import ProductListingType2 from './productListingType2';
 import ProductListingType3 from './productListingType3';
 import ProductListingType4 from './productListingType4';
 import ProductListingType5 from './productListingType5';
+import ProductListingType6 from './productListingType6';
+import ProductListingType8 from './productListingType8';
 
 const productListingTemplates: _ProductListingTemplates = {
   type1: ProductListingType1,
@@ -23,6 +25,9 @@ const productListingTemplates: _ProductListingTemplates = {
   type3: ProductListingType3,
   type4: ProductListingType4,
   type5: ProductListingType5,
+  type6: ProductListingType6,
+  type7: ProductListingType1, // Store Builders (if showFilters is true)
+  type8: ProductListingType8,
 };
 
 const ProductListing: React.FC<_ProductListingProps & { id: string }> = ({
@@ -60,6 +65,7 @@ const ProductListing: React.FC<_ProductListingProps & { id: string }> = ({
     clearFilterSection,
   } = ProductListController(pageData, slug, checkedFilters, pageData?.brandId);
   const { id: storeId } = useTypedSelector_v2((state) => state.store);
+
   useEffect(() => {
     if (pageData?.googleTagManagerResponseCommonData && !isCaptured.current) {
       isCaptured.current = true;
@@ -75,10 +81,12 @@ const ProductListing: React.FC<_ProductListingProps & { id: string }> = ({
       );
     }
   }, [pageData?.googleTagManagerResponseCommonData]);
+
   const Component =
     productListingTemplates[
-      (`type${id}` as 'type1') || 'type2' || 'type3' || 'type4'
+      (`type${id}` as 'type1') || 'type2' || 'type3' || 'type4' || 'type6'
     ];
+
   if (product.length === 0 && !pageData.product.length) {
     return (
       <section id=''>

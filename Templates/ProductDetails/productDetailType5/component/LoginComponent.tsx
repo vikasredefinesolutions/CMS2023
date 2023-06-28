@@ -9,7 +9,7 @@ import { __ValidationText } from '@constants/validation.text';
 import { updateCartByNewUserId } from '@services/cart.service';
 import { GetStoreCustomer, signInUser } from '@services/user.service';
 import { getWishlist } from '@services/wishlist.service';
-import { ErrorMessage, Formik } from 'formik';
+import { ErrorMessage, Form, Formik } from 'formik';
 import {
   KlaviyoScriptTag,
   deleteCookie,
@@ -127,9 +127,9 @@ const LoginComp: React.FC<_ModalProps> = ({ modalHandler }) => {
           onSubmit={signInHandler}
           validationSchema={validationSchema}
         >
-          {({ values, handleChange, handleSubmit }) => {
+          {({ values, handleChange }) => {
             return (
-              <>
+              <Form>
                 <div className='Login-Main'>
                   <div className='mb-[10px]'>
                     <input
@@ -210,15 +210,12 @@ const LoginComp: React.FC<_ModalProps> = ({ modalHandler }) => {
                       disabled={!!showErroMsg}
                       className='btn btn-tertiary'
                       type='submit'
-                      onClick={() => {
-                        handleSubmit();
-                      }}
                     >
                       SIGN IN
                     </button>
                   </div>
                 </div>
-              </>
+              </Form>
             );
           }}
         </Formik>

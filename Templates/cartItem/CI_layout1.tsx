@@ -21,7 +21,12 @@ const CIlayout1: FC<_CartProps> = (props) => {
     <ul role='list' className='overflow-hidden'>
       {cartData &&
         cartData.map((item: _CartItem, cartItemIndex: number) => (
-          <CI1_Item {...item} {...props} cartItemIndex={cartItemIndex} />
+          <CI1_Item
+            key={cartItemIndex}
+            {...item}
+            {...props}
+            cartItemIndex={cartItemIndex}
+          />
         ))}
     </ul>
   );

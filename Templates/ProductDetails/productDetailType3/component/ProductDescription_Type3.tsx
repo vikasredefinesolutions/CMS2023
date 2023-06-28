@@ -8,8 +8,8 @@ interface _props {
 const ProductDescription_Type3: React.FC<_props> = ({ product }) => {
   return (
     <div className='bg-white pt-[40px] px-[10px]'>
-      <div className='bg-secondary py-[10px] px-[15px] text-white inline-block rounded-t-md'>
-        INFORMATION
+      <div className='bg-secondary py-[10px] px-[15px] text-white inline-block rounded-t-md text-xl font-semibold'>
+        DESCRIPTION
       </div>
       <div
         className='text-sm tracking-widest p-[20px] border border-gray-border'

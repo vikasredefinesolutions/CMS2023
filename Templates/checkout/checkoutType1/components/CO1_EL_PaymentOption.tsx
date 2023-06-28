@@ -2,7 +2,7 @@ import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import React from 'react';
 
 const CT1_EL_PaymentOption: React.FC = () => {
-  const { update_checkoutEmployeeLogin } = useActions_v2();
+  const { update_CheckoutEmployeeLogin } = useActions_v2();
   const { el } = useTypedSelector_v2((state) => state.checkout);
 
   return (
@@ -15,7 +15,7 @@ const CT1_EL_PaymentOption: React.FC = () => {
           id='PAYMENT_PENDING'
           className='mr-2'
           onChange={() =>
-            update_checkoutEmployeeLogin({
+            update_CheckoutEmployeeLogin({
               type: 'PAYMENT_PENDING',
               value: !el.isPaymentPending,
             })
@@ -31,7 +31,7 @@ const CT1_EL_PaymentOption: React.FC = () => {
           className='mr-2'
           checked={el.allowPo}
           onChange={() =>
-            update_checkoutEmployeeLogin({
+            update_CheckoutEmployeeLogin({
               type: 'ALLOW_PO',
               value: !el.allowPo,
             })

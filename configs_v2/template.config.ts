@@ -38,6 +38,7 @@ export const _defaultTemplates: _DefaultTemplatesType = {
   youMayAlsoLike: 'type1',
   catalogs: 'type4',
   contactRequest: 'type4',
+  StoreBuilder: 'type1',
 };
 
 interface _DefaultTemplatesType {
@@ -80,4 +81,5 @@ interface _DefaultTemplatesType {
   youMayAlsoLike: 'type1';
   catalogs: 'type4';
   contactRequest: 'type4';
+  StoreBuilder: 'type1';
 }

@@ -28,11 +28,11 @@ const CompanyLogo: React.FC<_props> = ({ logo }) => {
         <Link href={paths.HOME}>
           <a
             title={storeName || ''}
-            className='max-w-[150px] w-full inline-block'
+            className='max-w-[150px] w-full inline-flex justify-center md:justify-start brand-logo'
           >
             <NxtImage
+              className=''
               title={storeName || ''}
-              className='brand-logo w-full'
               src={logo?.mobile}
               useNextImage={false}
               alt={storeName ? storeName : ''}

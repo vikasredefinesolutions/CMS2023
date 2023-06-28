@@ -1,8 +1,8 @@
 import { formFields } from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
 import {
-  __SuccessErrorText,
   storeRequestMessages,
+  __SuccessErrorText,
 } from '@constants/successError.text';
 import { consultationProofMessages } from '@constants/validationMessages';
 import { useActions_v2 } from '@hooks_v2/index';
@@ -40,12 +40,18 @@ const Consultation_Type1 = () => {
   };
 
   const validationSchema = Yup.object().shape({
-    firstName: Yup.string().required(
-      consultationProofMessages.firstName.required,
-    ),
-    lastName: Yup.string().required(
-      consultationProofMessages.lastName.required,
-    ),
+    firstName: Yup.string()
+      .required(consultationProofMessages.firstName.required)
+      .min(
+        consultationProofMessages.firstName.minLength,
+        consultationProofMessages.firstName.minValidation,
+      ),
+    lastName: Yup.string()
+      .required(consultationProofMessages.lastName.required)
+      .min(
+        consultationProofMessages.lastName.minLength,
+        consultationProofMessages.lastName.minValidation,
+      ),
     organization: Yup.string().required(
       consultationProofMessages.organization.required,
     ),

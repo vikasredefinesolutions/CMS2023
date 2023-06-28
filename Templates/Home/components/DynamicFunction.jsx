@@ -236,8 +236,8 @@ export const boximage = (dataArr, selectedObj) => {
   if (dataArr.length > 0) {
     dataArr.forEach(function (item) {
       let classNameName;
-      if (item.colcount == 2) classNameName = 'lg:w-1/2';
-      else if (item.colcount == 3) classNameName = 'lg:w-1/3';
+      if (item.colcount == 2) classNameName = 'md:w-1/2';
+      else if (item.colcount == 3) classNameName = 'md:w-1/3';
       else classNameName = 'md:w-1/2 lg:w-1/4';
       strHTML +=
         '<div class="w-full ' + classNameName + ' px-[15px] mt-[30px]">';

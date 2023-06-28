@@ -32,7 +32,7 @@ const CompanyLogo: React.FC<_props> = ({ logo }) => {
         >
           <NxtImage
             title={storeName || ''}
-            className='brand-logo w-full'
+            className='brand-logo'
             src={logo?.mobile}
             useNextImage={false}
             alt={storeName ? storeName : ''}

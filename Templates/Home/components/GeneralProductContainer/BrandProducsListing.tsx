@@ -2,6 +2,7 @@ import FeaturedSkeleton from '@appComponents/Loading/Skeleton';
 import { newFetauredItemResponse } from '@definations/productList.type';
 import { useTypedSelector_v2, useWindowDimensions_v2 } from '@hooks_v2/index';
 import { _SelectedTab } from '@templates/ProductDetails/productDetailsTypes/storeDetails.res';
+import { useRouter } from 'next/router';
 import React, { Fragment, useEffect, useRef, useState } from 'react';
 import 'react-loading-skeleton/dist/skeleton.css';
 import Slider from 'react-slick';
@@ -16,7 +17,6 @@ interface _props {
   showButton: string;
   showPrice: string;
   showBrandLogo: string;
-  footerTabing: string;
   productToDisplay: string;
   featuredItems: { [x: string]: newFetauredItemResponse[] };
 }
@@ -42,10 +42,10 @@ const BrandProductListing: React.FC<_props> = (props) => {
     showButton,
     showPrice,
     showBrandLogo,
-    footerTabing,
-    productToDisplay,
     featuredItems,
   } = props;
+
+  const router = useRouter();
 
   const { width } = useWindowDimensions_v2();
   const Settings = {
@@ -75,9 +75,10 @@ const BrandProductListing: React.FC<_props> = (props) => {
 
   // Fetching products by brand
   useEffect(() => {
-    if(featuredItems)
+    if (featuredItems && Object.keys(featuredItems).length > 0) {
       setBrandsData(featuredItems[productsData?.tabName]);
-  }, [productsData?.tabName, storeId]);
+    }
+  }, [productsData?.tabName, storeId, router?.query['slug-id']]);
 
   useEffect(() => {
     if (width <= 480) {
@@ -187,10 +188,8 @@ const BrandProductListing: React.FC<_props> = (props) => {
                                 showButton={showButton}
                                 showPrice={showPrice}
                                 showBrandLogo={showBrandLogo}
-                                footerTabing={footerTabing}
                               />
                             </div>
-                            {/* )} */}
                           </Fragment>
                         );
                       })

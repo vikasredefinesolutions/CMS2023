@@ -8,6 +8,7 @@ export interface _HomeState {
     uImgIndex: string[];
   };
   isCMS_page: boolean;
+  redirectPath: string;
 }
 
 // Define the initial state using that type
@@ -17,6 +18,7 @@ const initialState: _HomeState = {
     uImgIndex: ['0-0-0'],
   },
   isCMS_page: false,
+  redirectPath: '',
 };
 
 export const homeSlice = createSlice({
@@ -45,6 +47,10 @@ export const homeSlice = createSlice({
 
     topic_set_isCMS: (state, action: { payload: boolean }) => {
       state.isCMS_page = action.payload;
+    },
+
+    setRedirectPagePath: (state, action: { payload: string }) => {
+      state.redirectPath = action.payload;
     },
   },
 });

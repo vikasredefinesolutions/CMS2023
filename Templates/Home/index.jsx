@@ -20,22 +20,20 @@ const Home = (props) => {
   const { topic_set_isCMS } = useActions_v2();
   const router = useRouter();
   const storeCode = useTypedSelector_v2((state) => state.store.code);
-
-
+  const [count, setCount] = useState(0);
+  let cont = 0;
 
   useEffect(() => {
-    if (router.asPath === paths.HOME) 
-    {
+    if (router.asPath === paths.HOME) {
       document.body.classList.add('index-page');
       topic_set_isCMS(true);
-
     }
+
     return () => {
       topic_set_isCMS(false);
     };
   }, []);
 
-  
   // useEffect(() => {
   //   AOS.init();
   //   AOS.refresh();
@@ -45,7 +43,7 @@ const Home = (props) => {
     // let pageId = pageData.id;
     // document.title = pageData?.seTitle;
     if (pageData.components !== undefined) {
-      setComponentHtml(pageData?.components);
+      setComponentHtml(pageData?.components.filter(component => component.visibility !== "Off"));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageData]);
@@ -228,15 +226,31 @@ const Home = (props) => {
   };
 
   useEffect(() => {
+    if (document.readyState === 'complete') {
+      // let x = document.querySelectorAll('#allContents')[0];
+      // x.classList.remove('hidden');
+    }
+  }, []);
+
+  useEffect(() => {
     componentHtml?.map((element, index) => {
       //let x = ReactDOM.findDOMNode(refArray.current[element.uid]);
       //  x.querySelectorAll('#div'+element.no)[0].innerHTML = element.uid;
       helper.updateSetProperties(element, index);
     });
+    let x = document.querySelectorAll('#allContents')[0];
+    if (x) {
+      x.classList.remove('hidden');
+    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [componentHtml]);
 
   const storeTypeId = useTypedSelector_v2((state) => state.store.storeTypeId);
+
+  // const isUpperCase = (string) => /[A-Z]/.test(string)
+  // console.log(isUpperCase('bcc'));
+  console.log(pageData.components.filter(component => component.visibility !== "Off"), pageData.components);
   return (
     <>
       {storeCode === 'DI' &&
@@ -246,17 +260,20 @@ const Home = (props) => {
         </>
       ) : (
         <>
-          <div className=''>
+          <div className='hidden' id='allContents'>
             {/* {featuredItems?.products && (
           <FeaturedItems
             brands={__constant._Home.featuredItems.brands}
             products={featuredItems.products}
           />          
         )}*/}
-            <main>
-             
-              {pageData?.components && pageData?.components.length > 0 ? (
-                pageData.components.map((componentValue, index) => {
+            <main key={props.props?.slug}>
+              {pageData?.components && pageData?.components.filter(component => component.visibility !== "off").length > 0 ? (
+                pageData.components.filter(component => component.visibility !== "off").map((componentValue, index) => {
+
+                  
+
+                  /* Code for hidden component */
                   if (typeof componentValue.selectedVal == 'string') {
                     componentValue.selectedVal = JSON.parse(
                       componentValue.selectedVal,
@@ -461,17 +478,15 @@ const Home = (props) => {
                                 <>
                                   {Object.keys(
                                     componentValue.selectedVal,
-                                  ).includes(
-                                    'featuredproducts_section_title',
-                                  ) ||
-                                  Object.keys(
-                                    componentValue.selectedVal,
-                                  ).includes(
-                                    'featuredproducts_product_count',
-                                  ) ? (
+                                  ).includes('featuredproducts') ? (
                                     <>
                                       <FeaturedProducts
                                         dataArr={componentValue.selectedVal}
+                                        featuredItems={
+                                          props?.featuredItems?.products[cont++]
+                                        }
+                                        count={count}
+                                        setCount={setCount}
                                       />
                                     </>
                                   ) : (
@@ -536,7 +551,19 @@ const Home = (props) => {
                                                     }
                                                     dangerouslySetInnerHTML={{
                                                       __html:
-                                                        componentValue.html,
+                                                        componentValue.html
+                                                          .replace(
+                                                            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque massa nibh, pulvinar vitae aliquet nec, accumsan aliquet orci.',
+                                                            '',
+                                                          )
+                                                          .replace(
+                                                            'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry',
+                                                            '',
+                                                          )
+                                                          .replace(
+                                                            's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
+                                                            '',
+                                                          ),
                                                     }}
                                                   ></div>
                                                 </>

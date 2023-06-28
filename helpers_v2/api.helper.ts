@@ -7,6 +7,7 @@ import { _HomeServices } from '@services/home.service';
 import { _KlaviyoServices } from '@services/klaviyo.service';
 import { _LogoApiService } from '@services/logo.service';
 import { _ProductDetailService_V2 } from '@services/product.service';
+import { _StoreBuilderServices } from '@services/sb.service';
 import { _SlugService_V2 } from '@services/slug.service';
 import { _StoreRequestService_V2 } from '@services/storerequest.service';
 import { _StoryService_V2 } from '@services/story.service';
@@ -38,6 +39,7 @@ export const CallAPI_v2 = async <T>({
     | _HomeServices
     | _LogoApiService
     | _StoreRequestService_V2
+    | _StoreBuilderServices
     | _StoryService_V2;
   request: _GET | _POST;
 }) => {

@@ -324,7 +324,9 @@ export const BillingAddress = (
   type: '1' | '2' = '1',
 ) => {
   let address = '';
+  let billingName = '';
   if (billing?.billingAddress1) {
+    billingName += `${billing?.billingFirstName + billing?.billingLastName}`;
     address += `${billing.billingAddress1}`;
   }
   if (billing?.billingAddress2 && billing.billingAddress2.trim() !== '') {
@@ -352,6 +354,7 @@ export const BillingAddress = (
     return (
       <div>
         <div className='font-[600]'>Bill to:</div>
+        <div className=''>{billingName}</div>
         <div className=''>{address}</div>
       </div>
     );
@@ -372,7 +375,9 @@ export const ShippingAddress = (
   type: '1' | '2' | '3' = '1',
 ) => {
   let address = '';
+  let shippingName = '';
   if (billing?.shippingAddress1) {
+    shippingName += `${billing.shippingFirstName + billing?.shippingLastName}`;
     address += `${billing.shippingAddress1}`;
   }
   if (billing?.shippingAddress2 && billing.shippingAddress2.trim() !== '') {
@@ -399,6 +404,7 @@ export const ShippingAddress = (
     return (
       <div>
         <div className='font-[600]'>Ship to:</div>
+        <div>{shippingName}</div>
         <div className=''>{address}</div>
       </div>
     );

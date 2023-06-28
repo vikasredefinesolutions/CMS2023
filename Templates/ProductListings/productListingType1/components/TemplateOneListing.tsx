@@ -11,6 +11,10 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { _globalStore } from 'store.global';
 import ProductBoxController from './productBoxController';
+const mediaExtraUrlListingMain =
+  process.env.NEXT_PUBLIC_EXTRA_MEDIA_URL_LISTING_MAIN;
+const mediaExtraUrlListingThumbNail =
+  process.env.NEXT_PUBLIC_EXTRA_MEDIA_URL_LISTING_THUMBNAIL;
 
 let mediaBaseUrl = _globalStore.blobUrl;
 
@@ -90,13 +94,21 @@ const TemplateOneListing = ({
             <div className='w-full rounded-md overflow-hidden aspect-w-1 aspect-h-1'>
               <Link key={product.id} href={`/${product.sename}.html`}>
                 <div>
-                  <NxtImage
-                    src={mainImageUrl}
-                    alt=''
-                    className='w-auto h-auto max-h-max cursor-pointer'
-                    cKey={currentProduct.id}
+                  <a
+                    href={`/${product.sename}.html`}
                     title={product.name}
-                  />
+                    className=''
+                    style={{ display: 'block' }}
+                  >
+                    <NxtImage
+                      src={`${mainImageUrl}`}
+                      alt={product.name}
+                      className='max-h-[348px] !inline-black m-auto'
+                      cKey={currentProduct.id}
+                      extraUrl={true}
+                      extraUrlPath={mediaExtraUrlListingMain}
+                    />
+                  </a>
                 </div>
               </Link>
 
@@ -124,11 +136,9 @@ const TemplateOneListing = ({
                     />
                   </div>
                 ) : (
-                  <div className='absolute -top-2 -left-2 text-gray-800 p-1 z-5"'>
+                  <div className='absolute top-1 left-2 text-gray-800 p-1 z-5"'>
                     <img
                       src={`${mediaBaseUrl}${product?.productTagViewModel[0].imagename}`}
-                      width={'60px'}
-                      height={'60px'}
                     />
                   </div>
                 ))}
@@ -188,8 +198,10 @@ const TemplateOneListing = ({
                         <NxtImage
                           src={`${mediaBaseUrl}${currentProduct.imageName}`}
                           alt=''
-                          className=''
+                          className='max-h-full m-auto'
                           title={currentProduct.colorName}
+                          extraUrlPath={mediaExtraUrlListingThumbNail}
+                          extraUrl={true}
                         />
                       </li>
                     </Link>
@@ -212,8 +224,10 @@ const TemplateOneListing = ({
                             <NxtImage
                               src={`${mediaBaseUrl}${subRow.imageurl}`}
                               alt=''
-                              className=''
+                              className='max-h-full m-auto'
                               title={subRow.colorName}
+                              extraUrl={true}
+                              extraUrlPath={mediaExtraUrlListingThumbNail}
                             />
                           </li>
                         </Link>
@@ -255,8 +269,10 @@ const TemplateOneListing = ({
                         <NxtImage
                           src={`${mediaBaseUrl}${subRow.imageName}`}
                           alt=''
-                          className=''
+                          className='max-h-full m-auto'
                           title={subRow.colorName}
+                          extraUrl={true}
+                          extraUrlPath={mediaExtraUrlListingThumbNail}
                         />
                       </li>
                     ) : (

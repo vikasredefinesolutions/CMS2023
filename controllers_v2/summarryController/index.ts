@@ -25,6 +25,10 @@ const SummarryController = () => {
   const removeCouponCodeHandler = () => {
     cart_promoCode('REMOVE_PROMO_CODE');
   };
+  const discountCoupon = localStorage.getItem('discountCoupon');
+  const set_Coupon = (couponCode: string) => {
+    localStorage.setItem('discountCoupon', couponCode);
+  };
 
   const handleIfCouponIsValid = (details: {
     couponCode: string;
@@ -42,25 +46,31 @@ const SummarryController = () => {
     });
     setCoupon('');
   };
-
-  const handleIfCouponIsNotValid = (errors: { [key: string]: string }) => {
-    const objToArr = Object.values(errors);
-
-    if (objToArr.length === 0) return;
-    cart_promoCode('REMOVE_PROMO_CODE');
-
-    if ('promotionsModel.CustomerId' in errors) {
-      setCoupon(objToArr[0]);
-      setTimeout(() => {
-        setCoupon('');
-      }, 1500);
-      return;
+  useEffect(() => {
+    if (discountCoupon && customerId) {
+      applyCouponHandler(discountCoupon);
     }
+  }, [discountCoupon, customerId]);
+  const handleIfCouponIsNotValid = (errors: { [key: string]: string }) => {
+    if (errors) {
+      const objToArr = Object?.values(errors);
 
-    // if No errors matched
-    setTimeout(() => {
-      setCoupon(objToArr[0]);
-    }, 1500);
+      if (objToArr.length === 0) return;
+      cart_promoCode('REMOVE_PROMO_CODE');
+
+      if ('promotionsModel.CustomerId' in errors) {
+        setCoupon(objToArr[0]);
+        setTimeout(() => {
+          setCoupon('');
+        }, 1500);
+        return;
+      }
+
+      // if No errors matched
+      setTimeout(() => {
+        setCoupon(objToArr[0]);
+      }, 1500);
+    }
   };
 
   const applyCouponHandler = async (couponCode: string) => {
@@ -78,6 +88,7 @@ const SummarryController = () => {
     await addPromoCode(couponObject)
       .then((res) => {
         if ('discountAmount' in res) {
+          set_Coupon(couponCode);
           handleIfCouponIsValid(res);
           return;
         }

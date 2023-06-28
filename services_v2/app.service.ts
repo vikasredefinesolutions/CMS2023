@@ -1,8 +1,6 @@
 import {
   StoreConfigurationConfigs,
-  _FetchSbStoreConfiguration,
   _FetchStoreConfigurations,
-  _SbStoreConfiguration,
 } from '@definations/store.type';
 import { CallAPI_v2 } from '@helpers/api.helper';
 import { _StoreDetails } from '@templates/ProductDetails/productDetailsTypes/storeDetails.res';
@@ -19,7 +17,6 @@ export const GetStoreID = async (
   domain: string,
 ): Promise<_StoreDetails | null> => {
   const url = `Store/getstorebydomain.json`;
-console.log(url);
   try {
     const response = await SendAsync<_StoreDetails>({
       url: url,
@@ -188,57 +185,4 @@ export const getAllConfigurations = async (payload: {
     });
 
   return configurations;
-};
-
-export const FetchSbStoreConfiguration = async (payload: {
-  storeId: number;
-}): Promise<null | _SbStoreConfiguration> => {
-  const url = `SbStoreConfiguration/GetSbStoreConfiguration`;
-
-  const response = await CallAPI_v2<_FetchSbStoreConfiguration>({
-    name: {
-      service: 'app',
-      api: 'FetchSbStoreConfiguration',
-    },
-    request: {
-      url: url,
-      method: 'POST',
-      data: payload,
-    },
-  });
-
-  if (response) {
-    return {
-      id: response.id,
-      storeId: response.storeId,
-      organizationId: response.organizationId,
-      sportId: response.sportId,
-      salesPersonId: response.salesPersonId,
-      salesCode: response.salesCode,
-      directAccessURL: response.directAccessURL,
-      estimateShipDate: response.estimateShipDate,
-      workOrder: response.workOrder,
-      message: response.message,
-      isLogo: response.isLogo,
-      messageTypeId: response.messageTypeId,
-      openStoreOn: response.openStoreOn,
-      closeStoreOn: response.closeStoreOn,
-      serviceEmailId: response.serviceEmailId,
-      serviceEmailSalesPersonId: response.serviceEmailSalesPersonId,
-      servicePhoneId: response.servicePhoneId,
-      servicePhoneSalesPersonId: response.servicePhoneSalesPersonId,
-      logoUrl: response.logoUrl,
-      recStatus: response.recStatus,
-      createdDate: response.createdDate,
-      createdBy: response.createdBy,
-      modifiedDate: response.modifiedDate,
-      modifiedBy: response.modifiedBy,
-      rowVersion: response.rowVersion,
-      location: response.location,
-      ipAddress: response.ipAddress,
-      macAddress: response.macAddress,
-    };
-  }
-
-  return null;
 };

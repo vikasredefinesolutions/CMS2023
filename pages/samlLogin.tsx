@@ -33,7 +33,6 @@ const SSOLoginPage: NextPage = () => {
             setErrorMsg(user.message);
           }
           if (user.credentials === 'VALID' && user.id) {
-            // modalHandler(null);
             logInUser({
               id: +user.id,
             });

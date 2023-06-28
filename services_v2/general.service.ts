@@ -50,6 +50,30 @@ export const UploadImage = async ({
   return response;
 };
 
+export const DeleteLogo = async (logoid: number, customerid: number) => {
+  const url = `/StoreCustomerLogo/removecustomerlogo/${logoid}/${customerid}.json`;
+  const response = await SendAsync<any>({
+    url: url,
+    method: 'POST',
+  });
+
+  return response;
+};
+
+export const SetLogoDefault = async (
+  logoId: number,
+  isdefault: boolean,
+  customerId: number,
+) => {
+  const url = `/StoreCustomerLogo/updatedefaultlogo/${logoId}/${isdefault}/${customerId}.json`;
+  const response = await SendAsync<any>({
+    url: url,
+    method: 'POST',
+  });
+
+  return response;
+};
+
 export const FetchStatesList = async (id: number): Promise<_State[] | null> => {
   const url = `StoreCustomer/getcustomerstatebycountryid/${id}.json`;
 
@@ -63,6 +87,10 @@ export const FetchStatesList = async (id: number): Promise<_State[] | null> => {
       method: 'GET',
     },
   });
+
+  if (response?.length === 0) {
+    return null;
+  }
 
   return response;
 };
@@ -80,6 +108,10 @@ export const FetchCountriesList = async (): Promise<_Country[] | null> => {
       method: 'POST',
     },
   });
+
+  if (response?.length === 0) {
+    return null;
+  }
 
   return response;
 };

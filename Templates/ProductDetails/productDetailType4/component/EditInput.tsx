@@ -21,9 +21,6 @@ const EditInput: React.FC<_SelectOrInputProps> = ({
     (state) => state.employee.loggedIn,
   );
   const { updateQuantities, updatePrice } = useActions_v2();
-  const { attributeOptionId } = useTypedSelector_v2(
-    (state) => state.product.selected.color,
-  );
 
   const newprice = useTypedSelector_v2(
     (state) => state.product.toCheckout.price,
@@ -38,8 +35,7 @@ const EditInput: React.FC<_SelectOrInputProps> = ({
   );
 
   const customerId = useTypedSelector_v2((state) => state.user.id);
-  const [email, setEmail] = useState<string>('');
-  const [EditInput, setEditInput] = useState<{
+  const [editInput, setEditInput] = useState<{
     type: 'input';
     choosedValue: number;
     focus: boolean;
@@ -66,23 +62,8 @@ const EditInput: React.FC<_SelectOrInputProps> = ({
   };
 
   useEffect(() => {
-    if (discount?.subRows[0].discountPrice) {
-      updatePrice({
-        price: isSpecialBrand
-          ? customerId
-            ? +discount?.subRows[0]?.discountPrice
-            : price.msrp
-          : +discount?.subRows[0]?.discountPrice,
-      });
-    } else {
-      updatePrice({
-        price: price.msrp,
-      });
-    }
-  }, [customerId, discount]);
-
-  useEffect(() => {
     if (defaultQty > 0) {
+      setEditInput({ type: 'input', choosedValue: +defaultQty, focus: false });
       updateQuantities({
         attributeOptionId: sizeAttributeOptionId,
         size: size,
@@ -94,11 +75,12 @@ const EditInput: React.FC<_SelectOrInputProps> = ({
   }, [defaultQty]);
 
   return (
-    <div className='px-2 py-4'>
-      {EditInput.type === 'input' && (
+    <div className='px-2 py-2'>
+      {editInput.type === 'input' && (
         <Formik
-          initialValues={{ itemCount: Math.ceil(EditInput.choosedValue) }}
+          initialValues={{ itemCount: Math.ceil(editInput.choosedValue) }}
           onSubmit={enterQtyHandler}
+          enableReinitialize
         >
           {({ values, handleChange, setFieldValue }) => {
             return (
@@ -147,10 +129,10 @@ const EditInput: React.FC<_SelectOrInputProps> = ({
                       }));
                     }}
                     onChange={handleChange}
-                    className='block w-full border border-gray-600 shadow-sm py-1 px-2 text-default-text max-w-[100px]'
+                    className='form-input !px-[10px] !inline-block max-w-[100px] mx-auto w-full'
                   />
 
-                  {values.itemCount > qty && EditInput.focus && (
+                  {values.itemCount > qty && editInput.focus && (
                     <span className='text-rose-500 text-sm'>
                       Only {qty} Available!
                     </span>
