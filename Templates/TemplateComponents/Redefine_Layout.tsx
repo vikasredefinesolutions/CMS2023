@@ -1,5 +1,3 @@
-import SuccessErrorModal from '@appComponents/modals/successErrorModal';
-import CloseStore from '@appComponents/reUsable/CloseStore';
 import { _Store, storeBuilderTypeId } from '@configs/page.config';
 import { paths } from '@constants/paths.constant';
 import { _AnnouncementRow, _MenuItems } from '@definations/header.type';
@@ -7,13 +5,12 @@ import { _GetPageType, _StoreCache } from '@definations/slug.type';
 import { _FetchStoreConfigurations } from '@definations/store.type';
 import { _templateIds } from '@helpers/app.extras';
 import { addCustomEvents } from '@helpers/common.helper';
-import BreadCrumb from '@templates/breadCrumb';
-import Footer from '@templates/Footer';
 import * as _AppController from 'controllers_v2/_AppController.async';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import React, { useEffect, useMemo, useState } from 'react';
-import Header from 'Templates/Header';
+
 
 interface _props {
   children: React.ReactNode;
@@ -38,6 +35,13 @@ const Layout: React.FC<_props & _StoreCache> = ({
   headerConfig,
   pageMetaData,
 }) => {
+
+  const Header = dynamic(() => import ('Templates/Header'));
+const BreadCrumb = dynamic(() => import ('Templates/breadCrumb'));
+const Footer = dynamic(() => import ('Templates/Footer'));
+const CloseStore = dynamic(() => import ('@appComponents/reUsable/CloseStore'));
+const SuccessErrorModal = dynamic(() => import ('@appComponents/modals/successErrorModal'));
+
   useEffect(() => {
     if (localStorage) {
       addCustomEvents('localStorage');
