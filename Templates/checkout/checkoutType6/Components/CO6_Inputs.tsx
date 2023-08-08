@@ -1,5 +1,5 @@
 import NxtImage from '@appComponents/reUsable/Image';
-import { isNumberKey } from '@helpers/common.helper';
+import { KeyboardEvent } from 'react';
 interface _InputProps {
   additionalClass: string;
   label: string;
@@ -15,6 +15,7 @@ interface _InputProps {
   readonly?: boolean;
   creditCard?: boolean;
   children?: React.ReactNode;
+  autoComplete: string;
 }
 export const CO6_Input: React.FC<_InputProps> = ({
   children,
@@ -29,11 +30,35 @@ export const CO6_Input: React.FC<_InputProps> = ({
   required,
   touched,
   error,
+  autoComplete,
   readonly = false,
   creditCard = false,
 }) => {
   const right = required && touched && error === null;
   const wrong = required && touched && error;
+
+  const phoneNumberCheck = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (name === 'phone' || name === 'ccNumber' || '') {
+      if (
+        ![
+          'Tab',
+          'Backspace',
+          '0',
+          '1',
+          '2',
+          '3',
+          '4',
+          '5',
+          '6',
+          '7',
+          '8',
+          '9',
+        ].includes(event.key)
+      )
+        return event.preventDefault();
+    }
+    return ['.'].includes(event.key) && event.preventDefault();
+  };
 
   return (
     <div className={`mb-[15px] w-full pl-[15px] pr-[15px] ${additionalClass}`}>
@@ -51,13 +76,11 @@ export const CO6_Input: React.FC<_InputProps> = ({
           value={value}
           readOnly={readonly}
           onBlur={onBlur}
-          onKeyDown={(event) =>
-            ['.'].includes(event.key) && event.preventDefault()
-          }
+          onKeyDown={phoneNumberCheck}
           maxLength={length}
           onChange={onChange}
           className='form-input !w-[calc(100%-40px)]'
-          autoComplete={creditCard ? 'off' : ''}
+          autoComplete={autoComplete}
           onContextMenu={(e) => {
             if (creditCard) {
               e.preventDefault();
@@ -80,6 +103,7 @@ export const CO6_Input: React.FC<_InputProps> = ({
 interface _SelectProps {
   additionalClass: string;
   label: string;
+  autoComplete: string;
   name: string;
   required: boolean;
   value: string | number;
@@ -110,6 +134,7 @@ export const CO6_Select: React.FC<_SelectProps> = ({
   onChange,
   valid,
   inValid,
+  autoComplete,
   disabled,
   initialOption,
   additionalClass,
@@ -126,6 +151,7 @@ export const CO6_Select: React.FC<_SelectProps> = ({
           disabled={disabled}
           onChange={onChange}
           onBlur={onBlur}
+          autoComplete={autoComplete}
           className='form-input !w-[calc(100%-40px)]'
         >
           <option value={''}>{initialOption}</option>
@@ -162,7 +188,29 @@ export const CO6_CreditCardInput: React.FC<{
   inValid: boolean;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur: (event: React.FocusEvent<HTMLInputElement, Element>) => void;
-}> = ({ name, value, onBlur, onChange, valid, inValid }) => {
+  autoComplete: string;
+}> = ({ name, value, onBlur, onChange, valid, inValid, autoComplete }) => {
+  const numberCheck = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (
+      ![
+        'Tab',
+        'Backspace',
+        '0',
+        '1',
+        '2',
+        '3',
+        '4',
+        '5',
+        '6',
+        '7',
+        '8',
+        '9',
+      ].includes(event.key)
+    ) {
+      return event.preventDefault();
+    }
+  };
+
   return (
     <>
       <div className='flex flex-wrap justify-between items-center'>
@@ -171,11 +219,9 @@ export const CO6_CreditCardInput: React.FC<{
           value={value}
           onBlur={onBlur}
           maxLength={2}
-          onChange={(event) => {
-            if (isNumberKey(event)) {
-              onChange(event);
-            }
-          }}
+          onKeyDown={numberCheck}
+          onChange={onChange}
+          autoComplete={autoComplete}
           className='form-input !w-[calc(100%-40px)]'
         />
         {valid && (

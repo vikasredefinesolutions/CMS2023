@@ -9,17 +9,22 @@ import ColorImage_Type3 from './ColorImage_Type3';
 
 // import ColorImage from './ColorImage';
 const AvailableColors_Type3: React.FC = () => {
-  const store_Code=useTypedSelector_v2(state=>state.store.code)
+  const store_Code = useTypedSelector_v2((state) => state.store.code);
   const router = useRouter();
-  const { setColor } = useActions_v2();
+  const { setColor, clearToCheckout } = useActions_v2();
   const selectedColor = useTypedSelector_v2(
     (state) => state.product.selected.color,
   );
   const [showAllColors, setShowAllColors] = useState(false);
   const colors = useTypedSelector_v2((state) => state.product.product.colors);
   const handleChooseColor = (product: _ProductColor) => {
-    if (!product.productSEName || product.productSEName === '') {
+    if (
+      !product.productSEName ||
+      product.productSEName === '' ||
+      selectedColor.productSEName == product.productSEName
+    ) {
       setColor(product);
+      clearToCheckout();
       return;
     }
     router.push(product.productSEName);
@@ -32,24 +37,36 @@ const AvailableColors_Type3: React.FC = () => {
   return (
     <>
       <div className='flex align-top mb-[15px]'>
-        <div className={`w-[128px] ${store_Code==_Store.type6?"text-sm":" text-default-text"}`}>
-          <span className={`${store_Code==_Store.type6?"text-sm":''}  font-semibold`}>
+        <div
+          className={`w-[128px] ${
+            store_Code == _Store.type6 ? 'text-sm' : ' text-default-text'
+          }`}
+        >
+          <span
+            className={`${
+              store_Code == _Store.type6 ? 'text-sm' : ''
+            }  font-semibold`}
+          >
             {' '}
             {__pagesText.productInfo.availableColors.colors}
           </span>
         </div>
-        <div className={`flex flex-wrap gap-1 ${store_Code==_Store.type6?"text-sm":'text-default-text'} text-center`}>
+        <div
+          className={`flex flex-wrap gap-1 ${
+            store_Code == _Store.type6 ? 'text-sm' : 'text-default-text'
+          } text-center`}
+        >
           {colors.map((product, index) => {
             const show =
               showAllColors ||
               index < __pagesConstant._productDetails.imagesInRow;
             const highlight =
               product.attributeOptionId === selectedColor?.attributeOptionId
-                ? 'border-secondary'
-                : 'border-slate-200';
+                ? 'border-quaternary'
+                : 'border-slate-200 border-gray-border';
             return (
               <div
-                className={`border border-gray-border hover:border-secondary p-[1px] w-[32px] h-[32px] cursor-pointer 111 ${highlight}`}
+                className={`border hover:border-quaternary p-[1px] w-[32px] h-[32px] cursor-pointer 111 ${highlight}`}
                 key={product.attributeOptionId}
                 onClick={() => handleChooseColor(product)}
               >

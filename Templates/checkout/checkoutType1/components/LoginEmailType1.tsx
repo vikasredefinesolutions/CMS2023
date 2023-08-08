@@ -1,5 +1,6 @@
 import { checkoutEmailvalidationSchema } from '@constants/schemas/checkout.schema';
 import { Form, Formik } from 'formik';
+import Link from 'next/link';
 import { FC } from 'react';
 
 const LoginEmail: FC<{
@@ -55,8 +56,8 @@ const LoginEmail: FC<{
           )}
         </Formik>
         <div className='text-small-text tracking-normal'>
-          By continuing, you agree to our Terms of Use and consent to our
-          Privacy Policy.
+        By continuing, you agree and consent to our 
+           {' '}<Link href='/privacy-policy.html'><a>Privacy Policy</a></Link>.
         </div>
       </div>
     </div>

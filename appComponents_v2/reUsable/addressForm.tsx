@@ -68,7 +68,8 @@ const AddressForm: React.FC<AddressFormRefType> = ({
 
       udpateStates(stateId ? stateId : 0, false);
       setCountry(res);
-      // setFieldValue('countryName', res[0].name);
+
+      setFieldValue('countryName', res[0].name);
       // setFieldValue('countryCode', res[0].id);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -99,7 +100,7 @@ const AddressForm: React.FC<AddressFormRefType> = ({
                 htmlFor='FirstName'
                 className='left-[8px] absolute duration-300 top-[15px] -z-1 origin-0 text-[#000000] text-[18px]'
               >
-                First Name *
+                First Name*
               </label>
             </div>
             <div className='text-red-500 text-s'>
@@ -121,7 +122,7 @@ const AddressForm: React.FC<AddressFormRefType> = ({
               htmlFor='LastName'
               className='left-[8px] absolute duration-300 top-[15px] -z-1 origin-0 text-[#000000] text-[18px]'
             >
-              Last Name *
+              Last Name*
             </label>
           </div>
           <div className='text-red-500 text-s'>
@@ -142,7 +143,7 @@ const AddressForm: React.FC<AddressFormRefType> = ({
               htmlFor='CompanyName'
               className='left-[8px] absolute duration-300 top-[15px] -z-1 origin-0 text-[#000000] text-[18px]'
             >
-              Company Name *
+              Company Name*
             </label>
           </div>
           <div className='text-red-500 text-s'>
@@ -163,7 +164,7 @@ const AddressForm: React.FC<AddressFormRefType> = ({
               htmlFor='address1'
               className='left-[8px] absolute duration-300 top-[15px] -z-1 origin-0 text-[#000000] text-[18px]'
             >
-              Street Address *
+              Street Address*
             </label>
           </div>
           <div className='text-red-500 text-s'>
@@ -205,7 +206,7 @@ const AddressForm: React.FC<AddressFormRefType> = ({
               htmlFor='city'
               className='left-[8px] absolute duration-300 top-[15px] -z-1 origin-0 text-[#000000] text-[18px]'
             >
-              City *
+              City*
             </label>
           </div>
           <div className='text-red-500 text-s'>
@@ -230,11 +231,11 @@ const AddressForm: React.FC<AddressFormRefType> = ({
               htmlFor='postalCode'
               className='left-[8px] absolute duration-300 top-[11px] -z-1 origin-0 text-[#000000] text-[18px]'
             >
-              Zip Code *
+              Zip Code*
             </label>
           </div>
           <div className='text-red-500 text-s'>
-            {touched.postalCode && errors.postalCode}
+            {touched?.postalCode && errors?.postalCode}
           </div>
         </div>
         <div className='w-full lg:w-1/2 pl-[12px] pr-[12px] mb-[20px]'>
@@ -254,7 +255,7 @@ const AddressForm: React.FC<AddressFormRefType> = ({
               htmlFor='StateProvince'
               className='left-[8px] absolute duration-300 top-[15px] -z-1 origin-0 text-[#000000] text-[18px]'
             >
-              State / Province *
+              State / Province*
             </label>
           </div>
           <div className='text-red-500 text-s'>
@@ -288,7 +289,7 @@ const AddressForm: React.FC<AddressFormRefType> = ({
               htmlFor='countryName'
               className='left-[8px] absolute duration-300 top-[11px] -z-1 origin-0 text-[#000000] text-[18px]'
             >
-              Select Country *
+              Select Country*
             </label>
           </div>
           <div className='text-red-500 text-s'>
@@ -318,7 +319,7 @@ const AddressForm: React.FC<AddressFormRefType> = ({
           </div>
         </div>
       </div>
-      <div className='w-full pr-[12px] mb-[20px]'>
+      <div className='w-full pr-[12px] mb-[20px] hidden'>
         <span className='font-semibold'>Used For Delivery Questions Only</span>
       </div>
     </form>

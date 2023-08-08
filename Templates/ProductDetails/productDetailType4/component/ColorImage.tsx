@@ -12,7 +12,7 @@ const ColorImage: React.FC<_props> = ({ product }) => {
       src={product.imageUrl}
       alt={product.altTag}
       // className='w-full object-center object-cover cursor-pointer'
-      className='max-w-[70px] max-h-[70px]  cursor-pointer'
+      className='max-h-full m-auto cursor-pointer'
     />
   );
 };

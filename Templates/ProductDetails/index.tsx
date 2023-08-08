@@ -17,6 +17,7 @@ import ProductDetails_Type7 from './productDetailsType7';
 
 import { _ProductDetailsTemplates, _Props } from './productDetails';
 import ProductDetails_Type8 from './productDetailsType8';
+import ProductDetails_Type9 from './productDetailsType9';
 let mediaBaseUrl = _globalStore.blobUrl;
 let ignoreFirstCleanUp = true;
 
@@ -29,6 +30,7 @@ const ProductDetailTemplates: _ProductDetailsTemplates = {
   type6: ProductDetails_Type6,
   type7: ProductDetails_Type7,
   type8: ProductDetails_Type8,
+  type9: ProductDetails_Type9,
 };
 
 const ProductDetails: React.FC<_Props> = (props) => {
@@ -37,13 +39,15 @@ const ProductDetails: React.FC<_Props> = (props) => {
   const { id: storeId } = useTypedSelector_v2((state) => state.store);
   const { categoryArr } = useTypedSelector_v2((state) => state.product);
   const { sizes } = useTypedSelector_v2((state) => state.product.product);
-  const state = useTypedSelector_v2((state) => state);
 
   const isCaptured = useRef(false);
   const clientSideMediaUrl = useTypedSelector_v2(
     (state) => state.store.mediaBaseUrl,
   );
   mediaBaseUrl = mediaBaseUrl || clientSideMediaUrl;
+  useEffect(()=> {
+    document.body.classList.add('product_details');
+  }, []);
 
   const { details, colors } = props;
   const ProductDetails =
@@ -57,8 +61,9 @@ const ProductDetails: React.FC<_Props> = (props) => {
         | 'type6'
         | 'type7'
         | 'type8'
+        | 'type9'
     ];
-
+console.log(props.productDetailsTemplateId);
   useEffect(() => {
     if (details && storeId && categoryArr.length && !isCaptured.current) {
       isCaptured.current = true;

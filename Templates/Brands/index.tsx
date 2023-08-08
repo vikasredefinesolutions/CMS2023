@@ -20,9 +20,10 @@ const BrandsListingTemplate: React.FC<
   const storeCode = useTypedSelector_v2((state) => state.store.code);
   if (storeCode == _Store.type4) {
     id = 'type4';
-  } else if (storeCode == 'PKHG') {
-    id = 'type2';
-  }
+  } 
+  // else if (storeCode == 'PKHG') {
+  //   id = 'type2';
+  // }
   else if (storeCode == 'GG') {
     id = 'type3';
   } else {

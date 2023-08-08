@@ -1,4 +1,5 @@
 import LoginModal from '@appComponents/modals/loginModal';
+import { _Store } from '@configs/page.config';
 import { UCA } from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
 import { _Brand } from '@definations/brand';
@@ -148,9 +149,15 @@ const Brand: React.FC<_props> = ({
               onMouseLeave={() => setFocus(false)}
               className={`relative text-[12px] xl:text-[14px] xl:ml-[12px] xl:mr-[12px] ml-[5px] mr-[5px] tracking-[2px] z-10 flex items-center font-[400] pt-[10px] pb-[10px] border-b-[4px] ${
                 focus
-                  ? 'border-secondary text-secondary'
-                  : 'border-transparent text-primary'
-              }`}
+                  ? `border-secondary ${
+                      code == _Store.type6
+                        ? 'primary-link hover:primary-link'
+                        : 'text-secondary'
+                    } `
+                  : `border-transparent  ${
+                      code == _Store.type6 ? '' : 'text-primary'
+                    } `
+              } border-primary-link`}
             >
               <span
                 className='uppercase '

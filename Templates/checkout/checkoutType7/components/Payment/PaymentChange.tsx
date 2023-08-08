@@ -1,3 +1,4 @@
+import NxtImage from '@appComponents/reUsable/Image';
 import { paymentMethodCustom } from '@constants/enum';
 import { CYXTERA_CODE, UNITI_CODE } from '@constants/global.constant';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
@@ -45,7 +46,6 @@ const PaymentChange: React.FC<_PaymentProps> = ({
   const { allowedBalance } = useTypedSelector_v2(
     (state) => state.cart.userCreditBalance,
   );
-  console.log(storeXPaymetnOptionListViewModels, 'payment list oprion');
 
   const [showPO, setShowPO] = useState<boolean>(false);
   const [showCredit, setShowCredit] = useState<boolean>(false);
@@ -93,7 +93,12 @@ const PaymentChange: React.FC<_PaymentProps> = ({
               }
             >
               <span className='mr-[10px]'>
-                <img className='' src='/cards.jpg' alt='/credit card' />
+                <NxtImage
+                  isStatic={true}
+                  className=''
+                  src='/cards.jpg'
+                  alt='/credit card'
+                />
               </span>
               <span>SELECT CREDIT CARD</span>
             </button>

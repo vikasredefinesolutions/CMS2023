@@ -62,9 +62,6 @@ const OrderSummary: React.FC<_props> = ({
   const [textOrNumberSmallRun, setTextOrNumberSmallRun] = useState<
     'number' | 'text'
   >('text');
-  const [textOrNumberShippingCost, setTextOrNumberShippingCost] = useState<
-    'number' | 'text'
-  >('text');
   const { update_CheckoutEmployeeLogin, update_CheckoutCharges } =
     useActions_v2();
 
@@ -109,10 +106,7 @@ const OrderSummary: React.FC<_props> = ({
 
   const ShippingHTML = (userShippingPrice: number) => {
     if (isEmployeeLoggedIn && currentPage === 'CHECKOUT') {
-      const price =
-        textOrNumberShippingCost === 'text' && employeeLogin.shippingPrice === 0
-          ? 'FREE'
-          : employeeLogin.shippingPrice.toFixed(2);
+      const price = employeeLogin.shippingPrice.toFixed(2);
 
       return (
         <div
@@ -133,19 +127,11 @@ const OrderSummary: React.FC<_props> = ({
               <Formik
                 key='shipping'
                 initialValues={{ shipping: price }}
-                onSubmit={(values, { setFieldValue }) => {
-                  const price =
-                    values.shipping === 'FREE' ? 0 : values.shipping;
+                onSubmit={(values) => {
                   update_CheckoutEmployeeLogin({
                     type: 'SHIPPING_PRICE',
-                    value: +(+price).toFixed(2),
+                    value: +(+values.shipping).toFixed(2),
                   });
-                  if (+values.shipping <= 0) {
-                    setTextOrNumberShippingCost('text');
-                    setFieldValue('shipping', 'FREE');
-                  } else {
-                    setTextOrNumberShippingCost('number');
-                  }
                 }}
                 enableReinitialize
               >
@@ -157,13 +143,11 @@ const OrderSummary: React.FC<_props> = ({
                         value={values.shipping}
                         min={0}
                         name={'shipping'}
-                        type={textOrNumberShippingCost}
-                        onFocus={() => {
-                          if (textOrNumberShippingCost === 'text') {
-                            setFieldValue('shipping', 0);
-                            setTextOrNumberShippingCost('number');
-                          }
-                        }}
+                        type={'number'}
+                        onKeyDown={(e) =>
+                          ['e', 'E', '+', '-', '.'].includes(e.key) &&
+                          e.preventDefault()
+                        }
                         onChange={(event) => {
                           if (Number(event.target.value) < 0)
                             return setFieldValue('shipping', 0);
@@ -191,10 +175,12 @@ const OrderSummary: React.FC<_props> = ({
     return (
       <div
         className={`${
-          storeCode !== CYXTERA_CODE && storeCode !== UNITI_CODE
-            ? 'border-t border-gray-200'
+          storeCode !== CYXTERA_CODE &&
+          storeCode !== UNITI_CODE &&
+          storeCode !== _Store_CODES.PKHG
+            ? 'border-t border-gray-200 pt-[15px]'
             : ''
-        }  flex items-center justify-between pt-[15px]`}
+        }  flex items-center justify-between`}
       >
         <dt className='text-normal-text flex items-center'>
           <span>
@@ -255,6 +241,10 @@ const OrderSummary: React.FC<_props> = ({
                         name={'smallRun'}
                         min={0}
                         type={textOrNumberSmallRun}
+                        onKeyDown={(e) =>
+                          ['e', 'E', '+', '-', '.'].includes(e.key) &&
+                          e.preventDefault()
+                        }
                         onFocus={() => {
                           if (textOrNumberSmallRun === 'text') {
                             setFieldValue('smallRun', 0);
@@ -392,9 +382,16 @@ const OrderSummary: React.FC<_props> = ({
 
           {storeCode !== CYXTERA_CODE && storeCode !== UNITI_CODE && (
             <div className='mt-[16px]'>
-              <div className=' text-rose-600 mb-[10px]'>
-                {__pagesText.CheckoutPage.orderSummary.CartSummarryInstruction}
-              </div>
+              {__pagesText.CheckoutPage.orderSummary.CartSummarryInstruction.map(
+                (text, index) => (
+                  <div
+                    key={`summary_${index}`}
+                    className=' text-rose-600 mb-[10px]'
+                  >
+                    {text}
+                  </div>
+                ),
+              )}
             </div>
           )}
           <div className='mt-[16px] mb-[16px]'>

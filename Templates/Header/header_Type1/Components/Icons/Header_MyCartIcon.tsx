@@ -11,6 +11,7 @@ import NxtImage from '@appComponents/reUsable/Image';
 import Price from '@appComponents/reUsable/Price';
 import { __pagesText } from '@constants/pages.text';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 
 const MyCartIcon: React.FC = () => {
@@ -23,6 +24,7 @@ const MyCartIcon: React.FC = () => {
   const isEmployeeLoggedIn = useTypedSelector_v2(
     (state) => state.employee.loggedIn,
   );
+  const router = useRouter();
 
   const { totalPrice, totalQty } = GetCartTotals();
   const [Focus, setFocus] = useState(false);
@@ -53,9 +55,12 @@ const MyCartIcon: React.FC = () => {
       <div className='flow-root relative pl-[15px]' x-data='{ open: false }'>
         <Link href={paths.CART}>
           <a className='text-primary group flex items-center relative pt-[8px] pb-[8px]'>
-            <span className='mr-[8px] text-[14px] hidden xl:inline-block whitespace-nowrap tracking-[1px]'>
-              {__pagesText.Headers.mycart}
-            </span>{' '}
+            {router.asPath == paths.CHECKOUT && (
+              <span className='mr-[8px] text-[14px] xl:inline-block whitespace-nowrap tracking-[1px]'>
+                {__pagesText.Headers.mycart}
+              </span>
+            )}
+
             <span className='material-icons'>
               {__pagesText.Headers.shoppingCartIcon}
             </span>

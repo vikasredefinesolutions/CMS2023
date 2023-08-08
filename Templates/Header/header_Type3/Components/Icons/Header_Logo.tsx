@@ -21,13 +21,10 @@ const CompanyLogo: React.FC<_props> = ({ logo }) => {
   return (
     <>
       <Link href={paths.HOME}>
-        <a
-          title={storeName || ''}
-          className='logo inline-block'
-        >
+        <a title={storeName || ''} className='logo inline-block'>
           <NxtImage
             title={storeName || ''}
-            className='max-w-[260px]'
+            className='md:max-w-[260px]'
             src={logo?.mobile}
             useNextImage={false}
             alt={storeName ? storeName : ''}

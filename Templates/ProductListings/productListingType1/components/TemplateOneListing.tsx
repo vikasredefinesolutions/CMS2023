@@ -101,7 +101,7 @@ const TemplateOneListing = ({
                     style={{ display: 'block' }}
                   >
                     <NxtImage
-                      src={`${mainImageUrl}`}
+                      src={mainImageUrl || null}
                       alt={product.name}
                       className='max-h-[348px] !inline-black m-auto'
                       cKey={currentProduct.id}
@@ -131,14 +131,20 @@ const TemplateOneListing = ({
                 product.productTagViewModel.length > 0 &&
                 (product.productTagViewModel[0].productTagName === 'sale' ? (
                   <div className='absolute top-1 left-2 text-gray-800 p-1 z-5"'>
-                    <img
-                      src={`${mediaBaseUrl}${product?.productTagViewModel[0].imagename}`}
+                    <NxtImage
+                      className=''
+                      alt=''
+                      useNextImage={false}
+                      src={product?.productTagViewModel[0].imagename}
                     />
                   </div>
                 ) : (
                   <div className='absolute top-1 left-2 text-gray-800 p-1 z-5"'>
-                    <img
-                      src={`${mediaBaseUrl}${product?.productTagViewModel[0].imagename}`}
+                    <NxtImage
+                      className=''
+                      useNextImage={false}
+                      alt=''
+                      src={product?.productTagViewModel[0].imagename}
                     />
                   </div>
                 ))}
@@ -151,10 +157,11 @@ const TemplateOneListing = ({
                     !isbrand ? `${product.brandUrl}.html` : 'javascript:void(0)'
                   }
                 >
-                  <img
+                  <NxtImage
                     className='inline-block max-h-full'
-                    src={`${mediaBaseUrl}${product.productBrandlogo}`}
-                    alt={product.brandlogo}
+                    src={product.productBrandlogo}
+                    useNextImage={false}
+                    alt={product?.brandlogo || ''}
                     title={product.brandName || ''}
                   />
                 </Link>
@@ -196,7 +203,7 @@ const TemplateOneListing = ({
                         className={`w-[28px] h-[28px] border-2 border-secondary hover:border-secondary cursor-pointer`}
                       >
                         <NxtImage
-                          src={`${mediaBaseUrl}${currentProduct.imageName}`}
+                          src={currentProduct?.imageName || null}
                           alt=''
                           className='max-h-full m-auto'
                           title={currentProduct.colorName}
@@ -210,6 +217,7 @@ const TemplateOneListing = ({
                       index < listing_max_showcolors - 1 ? (
                         <Link href={`/${subRow.seName}.html`}>
                           <li
+                            id={subRow.colorName}
                             className={`w-[28px] h-[28px]  border-2 hover:border-secondary cursor-pointer`}
                             key={`${index}_${subRow.prodcutId}`}
                             onMouseOver={() => setMainImageUrl(subRow.imageurl)}
@@ -222,7 +230,7 @@ const TemplateOneListing = ({
                             }
                           >
                             <NxtImage
-                              src={`${mediaBaseUrl}${subRow.imageurl}`}
+                              src={subRow?.imageurl}
                               alt=''
                               className='max-h-full m-auto'
                               title={subRow.colorName}
@@ -267,7 +275,7 @@ const TemplateOneListing = ({
                         key={`${index}_${subRow.id}`}
                       >
                         <NxtImage
-                          src={`${mediaBaseUrl}${subRow.imageName}`}
+                          src={subRow?.imageName}
                           alt=''
                           className='max-h-full m-auto'
                           title={subRow.colorName}

@@ -15,15 +15,23 @@ interface _props {
 const CompanyLogo: React.FC<_props> = ({ logo }) => {
   // const storeLayout = useTypedSelector_v2((state) => state.store.layout);
   const storeName = useTypedSelector_v2((state) => state.store?.storeName);
+  const logoUrl = useTypedSelector_v2((state) => state.store.logoUrl);
   const router = useRouter();
+
+  const checkoutStyle = () => {
+    if (router.asPath === paths.CHECKOUT) {
+      return {
+        flex: ' 1 1 75%',
+        justifyContent: 'center',
+      };
+    }
+    return {};
+  };
 
   return (
     <div
       className='sm:flex sm:items-center sm:w-[50%] md:w-[25%] relative '
-      style={{
-        flex: router.asPath === paths.CHECKOUT ? ' 1 1 75%' : '',
-        justifyContent: router.asPath === paths.CHECKOUT ? 'center' : '',
-      }}
+      style={checkoutStyle()}
     >
       <Link href={paths.HOME}>
         <a
@@ -34,7 +42,7 @@ const CompanyLogo: React.FC<_props> = ({ logo }) => {
             <NxtImage
               title={storeName || ''}
               className='brand-logo w-full'
-              src={logo?.mobile}
+              src={logoUrl}
               useNextImage={false}
               alt={storeName ? storeName : ''}
             />

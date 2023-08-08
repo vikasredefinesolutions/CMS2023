@@ -23,7 +23,7 @@ const GiftCard: React.FC<_Props> = ({ giftCard }) => {
       <div className='flex justify-center w-full border border-transparent hover:border-gray-border hover:shadow-md'>
         <div className='relative w-full mb-[20px]'>
           <div className='w-full px-[30px] pt-[10px]'>
-            <Link href={`/gift-cards/${giftCard.seName}`}>
+            <Link href={`/gift-card/${giftCard.seName}`}>
               <a className='relative'>
                 <NxtImage
                   src={giftCard.imageName}
@@ -36,14 +36,16 @@ const GiftCard: React.FC<_Props> = ({ giftCard }) => {
           </div>
           <div className='mt-[20px] relative md:px-[30px] px-[15px]'>
             <div className='mb-[10px] mt-[10px] h-[46px] text-medium-text'>
-              <Link href={`/gift-cards/${giftCard.seName}`}>
-                <a className='relative text-tertiary hover:tertiary-hover'>
+              <Link href={`/gift-card/${giftCard.seName}`}>
+                <a className='relative text-anchor hover:text-anchor'>
                   {giftCard.name}
                 </a>
               </Link>
             </div>
             <div className='mb-[12px] text-sub-text'>
-              <span className='text-primary'>${giftCard.ourCost}</span>
+              <span className='text-tertiary !font-normal'>
+                ${giftCard.ourCost}
+              </span>
             </div>
           </div>
         </div>

@@ -6,7 +6,11 @@ import {
   getAddToCartObject,
   setCookie,
 } from '@helpers/common.helper';
-import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
+import {
+  GetCustomerId,
+  useActions_v2,
+  useTypedSelector_v2,
+} from '@hooks_v2/index';
 import { addToCart } from '@services/cart.service';
 
 interface _Props {
@@ -16,7 +20,8 @@ const BuyNowHandler: React.FC<_Props> = (size) => {
   const { selected, toCheckout, product } = useTypedSelector_v2(
     (state) => state.product,
   );
-  const { showModal, setShowLoader } = useActions_v2();
+  const customerId = GetCustomerId();
+  const { showModal, setShowLoader, fetchCartDetails } = useActions_v2();
   const { id: storeId } = useTypedSelector_v2((state) => state.store);
   const loggedIN_userId = useTypedSelector_v2((state) => state.user.id);
   const { isSewOutEnable, sewOutCharges } = useTypedSelector_v2(
@@ -33,7 +38,7 @@ const BuyNowHandler: React.FC<_Props> = (size) => {
   const cart = useTypedSelector_v2((state) => state.cart.cart);
 
   const buyNowAction = async () => {
-    if (cart && cart?.length > 0) {
+    if ((cart && cart?.length > 0) || toCheckout.totalQty > 1) {
       showModal({
         message: `Employees may redeem only 1 piece of apparel.`,
         title: 'INFORMATION',
@@ -63,7 +68,7 @@ const BuyNowHandler: React.FC<_Props> = (size) => {
     }
 
     const cartObject = await getAddToCartObject({
-      userId: loggedIN_userId || 0,
+      userId: customerId ? +customerId : 0,
       storeId: storeId || 0,
       isEmployeeLoggedIn,
       isForm: false,
@@ -85,7 +90,7 @@ const BuyNowHandler: React.FC<_Props> = (size) => {
       //GTM event for add-to-cart
       const payload = {
         storeId: storeId,
-        customerId: loggedIN_userId,
+        customerId: customerId ? customerId : 0,
         value: toCheckout?.totalPrice,
         coupon: '',
         shoppingCartItemsModel: [
@@ -115,6 +120,11 @@ const BuyNowHandler: React.FC<_Props> = (size) => {
             showModal({
               message: __pagesText.cart.successMessage,
               title: 'Success',
+            });
+
+            fetchCartDetails({
+              customerId: customerId || res,
+              isEmployeeLoggedIn,
             });
           }
         })

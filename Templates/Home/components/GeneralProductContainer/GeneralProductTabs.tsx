@@ -75,13 +75,14 @@ const ProductsInfoTabs: React.FC<_props> = (props) => {
 
   return (
     <TabContext value={value}>
-      <ul className='w-full flex justify-center max-w-4xl mx-auto flex-wrap'>
+      {footerTabing == __pagesConstant?.show?.Yes && <ul className='w-full flex justify-center max-w-4xl mx-auto flex-wrap'>
         <li className=''>
           <div
             className={`inline-block bg-[${footerTabColorName}] h-[8px] w-[96px] mt-[8px] mb-[8px]`}
           />
         </li>
       </ul>
+      }
       <div>
         <TabList
           variant='scrollable'

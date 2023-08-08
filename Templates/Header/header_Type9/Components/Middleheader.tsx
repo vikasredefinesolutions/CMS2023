@@ -1,3 +1,4 @@
+import NxtImage from '@appComponents/reUsable/Image';
 import { extractCookies } from '@helpers/common.helper';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import React, { useEffect, useState } from 'react';
@@ -9,17 +10,23 @@ import SearchBar from './Menu/Header_SearchBar';
 // }
 const MiddleHeader: React.FC = () => {
   const { toggleSideMenu } = useActions_v2();
+  const selectedBacardi = extractCookies(
+    'BacardiSelectedStore',
+    'browserCookie',
+  ).BacardiSelectedStore;
   const [selectedBacardiStore, setSelectedBacardiStore] = useState<
     string | null
-  >(
-    extractCookies('BacardiSelectedStore', 'browserCookie')
-      .BacardiSelectedStore,
-  );
+  >(null);
   const { storeTypeId, code: storeCode } = useTypedSelector_v2(
     (state) => state.store,
   );
 
   const { view } = useTypedSelector_v2((state) => state.store);
+
+  useEffect(() => {
+    setSelectedBacardiStore(selectedBacardi);
+  }, [selectedBacardi]);
+
   useEffect(() => {
     if (storeCode === 'BCGG') {
       setSelectedBacardiStore(
@@ -48,7 +55,7 @@ const MiddleHeader: React.FC = () => {
                           <a
                             className={` ${
                               selectedBacardiStore === 'Bacardi'
-                                ? 'bg-primary after:absolute after:w-full after:h-1 after:left-0 after:bottom-[-20px] after:bg-secondary'
+                                ? 'after:absolute after:w-full after:h-1 after:left-0 after:bottom-[-20px] after:bg-secondary'
                                 : ''
                             }`}
                             onClick={(e) => {
@@ -69,8 +76,11 @@ const MiddleHeader: React.FC = () => {
                               window.location.replace('/index.html');
                             }}
                           >
-                            <img
-                              src='/logo.png'
+                            <NxtImage
+                              src='/bacardi/logo.png'
+                              useNextImage={false}
+                              alt='Bacardi'
+                              isStatic={true}
                               className={`max-h-[80px] w-auto  ${
                                 selectedBacardiStore === 'GreyGoose'
                                   ? 'opacity-30'
@@ -83,7 +93,7 @@ const MiddleHeader: React.FC = () => {
                           <div
                             className={`${
                               selectedBacardiStore === 'GreyGoose'
-                                ? 'after:absolute after:w-full after:h-1 after:left-0 after:bottom-[-20px] after:bg-secondary bg-primary'
+                                ? 'after:absolute after:w-full after:h-1 after:left-0 after:bottom-[-20px] after:bg-secondary-hover'
                                 : ''
                             }`}
                             onClick={(e) => {
@@ -104,8 +114,11 @@ const MiddleHeader: React.FC = () => {
                               window.location.replace('/home/GreyGoose');
                             }}
                           >
-                            <img
-                              src='/greygoose-logo.png'
+                            <NxtImage
+                              useNextImage={false}
+                              alt='Grey-Goose'
+                              isStatic={true}
+                              src='/grey-goose/greygoose-logo.png'
                               className={`max-h-[80px] w-auto  ${
                                 selectedBacardiStore !== 'GreyGoose'
                                   ? 'opacity-30'
@@ -144,8 +157,11 @@ const MiddleHeader: React.FC = () => {
                             window.location.replace('/index.html');
                           }}
                         >
-                          <img
-                            src='/logo.png'
+                          <NxtImage
+                            useNextImage={false}
+                            alt=''
+                            isStatic={true}
+                            src='bacardi/logo.png'
                             className={`h-auto w-auto  ${
                               selectedBacardiStore === 'GreyGoose'
                                 ? 'opacity-30'
@@ -158,7 +174,7 @@ const MiddleHeader: React.FC = () => {
                         <div
                           className={`${
                             selectedBacardiStore === 'GreyGoose'
-                              ? 'after:absolute after:w-full after:h-1 after:left-0 after:bottom-[-20px] after:bg-secondary bg-secondary'
+                              ? 'after:absolute after:w-full after:h-1 after:left-0 after:bottom-[-20px] after:bg-secondary'
                               : ''
                           }`}
                           onClick={(e) => {
@@ -179,8 +195,11 @@ const MiddleHeader: React.FC = () => {
                             window.location.replace('/home/GreyGoose');
                           }}
                         >
-                          <img
-                            src='/greygoose-logo.png'
+                          <NxtImage
+                            useNextImage={false}
+                            alt=''
+                            isStatic={true}
+                            src='grey-goose/greygoose-logo.png'
                             className={`h-auto w-auto  ${
                               selectedBacardiStore !== 'GreyGoose'
                                 ? 'opacity-30'

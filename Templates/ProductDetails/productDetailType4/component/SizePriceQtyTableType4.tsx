@@ -15,6 +15,7 @@ const SizePriceQtyTable4: React.FC<_SizePriceQtyTableProps> = ({
     (state) => state.product.product,
   );
   const { color } = useTypedSelector_v2((state) => state.product.selected);
+  const view = useTypedSelector_v2((state) => state.store.view);
 
   return (
     <div className='mt-[15px] text-default-text border border-gray-border'>
@@ -100,9 +101,18 @@ const SizePriceQtyTable4: React.FC<_SizePriceQtyTableProps> = ({
                   />
                 </div>
               ) : (
-                <div className={`${'p-2 w-1/2 md:w-auto'}`}>
+                <div
+                  className={`${
+                    view == 'MOBILE' ? '' : 'justify-center flex items-center'
+                  } p-2  w-1/2 md:w-auto`}
+                >
+                  {view == 'MOBILE' && (
+                    <div className='mb-1 font-semibold md:hidden'>
+                      {inventory.name}
+                    </div>
+                  )}
                   <div className='border-bottom p-b-10'>
-                    <strong className='text-center center'> - </strong>{' '}
+                    <strong className=''> - </strong>{' '}
                   </div>
                 </div>
               );

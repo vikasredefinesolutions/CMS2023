@@ -8,6 +8,7 @@ const Price: React.FC<_PriceProps> = ({ value, prices, addColon = false }) => {
   const currency = useTypedSelector_v2((state) => state.store.currency);
   const loggedIn = useTypedSelector_v2((state) => state.user.id);
 
+  const { storeTypeName } = useTypedSelector_v2((state) => state.store);
   if (value) {
     priceToDisplay = +value;
   }
@@ -15,6 +16,12 @@ const Price: React.FC<_PriceProps> = ({ value, prices, addColon = false }) => {
   if (prices) {
     priceToDisplay = +prices.msrp;
     if (loggedIn && prices?.salePrice < prices?.msrp) {
+      priceToDisplay = +prices.salePrice;
+    }
+    if (
+      storeTypeName === 'Store Builder Store' ||
+      storeTypeName === 'Corporate Store'
+    ) {
       priceToDisplay = +prices.salePrice;
     }
   }

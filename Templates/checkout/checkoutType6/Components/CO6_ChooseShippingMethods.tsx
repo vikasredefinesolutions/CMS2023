@@ -18,6 +18,8 @@ interface _Props {
   setScreenToShow: React.Dispatch<React.SetStateAction<_CO6_Screens>>;
 }
 
+let firstRender = true;
+
 const CO6_ChooseShippingMethods: React.FC<_Props> = ({
   city,
   state,
@@ -52,6 +54,9 @@ const CO6_ChooseShippingMethods: React.FC<_Props> = ({
 
   const { name: selectedShipping } = useTypedSelector_v2(
     (state) => state.checkout.shippingMethod,
+  );
+  const { shipToSchool } = useTypedSelector_v2(
+    (state) => state.checkout.address,
   );
   const [availableShippingMethods, setAvailableShippingMethods] = useState<
     {
@@ -149,15 +154,22 @@ const CO6_ChooseShippingMethods: React.FC<_Props> = ({
   };
 
   useEffect(() => {
-    calculateTax({
-      shippingCharges: 0,
-      smallRunFee: cartCharges?.smallRunFeesCharges || 0,
-      zipCode: postalCode,
-    });
-  }, []);
+    if (!firstRender || !shipToSchool) return;
+
+    firstRender = false;
+    const getData = setTimeout(() => {
+      calculateTax({
+        shippingCharges: 0,
+        smallRunFee: cartCharges?.smallRunFeesCharges || 0,
+        zipCode: postalCode,
+      });
+    }, 1500);
+
+    return () => clearTimeout(getData);
+  }, [postalCode]);
 
   useEffect(() => {
-    if (!countryName || !state || !postalCode || !city) return;
+    if (shipToSchool || !countryName || !state || !postalCode || !city) return;
 
     const getData = setTimeout(() => {
       calculateShippingCharges();
@@ -166,6 +178,7 @@ const CO6_ChooseShippingMethods: React.FC<_Props> = ({
     return () => clearTimeout(getData);
   }, [city, state, postalCode, countryName, cartItems]);
 
+  if (shipToSchool) return null;
   if (availableShippingMethods.length === 0) return null;
   return (
     <div className='bg-light-gray w-full mb-[30px]' id='ShippingMethods'>

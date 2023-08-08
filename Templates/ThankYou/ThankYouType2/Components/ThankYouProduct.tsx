@@ -26,7 +26,7 @@ const ThankYouProduct: React.FC<_props> = ({ product }) => {
         <div className='w-full md:w-1/4 px-[10px] md:mb-0 mb-[10px] text-center'>
           <Link href={`/${product.seName}.html`}>
             <NxtImage
-              src={product.colorImage}
+              src={product?.colorImage || null}
               alt={product.productName}
               className='max-h-[348px] inline-block'
             />

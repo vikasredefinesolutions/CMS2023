@@ -1,5 +1,5 @@
 import { _templateIds } from '@helpers/app.extras';
-import { _MenuItems } from './header.type';
+import { _StoreMenu } from './header.type';
 import {
   _FetchStoreConfigurations,
   _SbStoreConfiguration,
@@ -9,13 +9,14 @@ import {
 export type _Expected_AppProps = {
   sbStore: _SbStoreConfiguration | null;
   store: _StoreReturnType;
-  menuItems: _MenuItems | null;
+  menuItems: _StoreMenu[] | null;
   footerHTML: _FetchStoreConfigurations | null;
   headerConfig: _FetchStoreConfigurations | null;
   templateIDs: _templateIds;
 };
 
 export type PageResponseType = {
+  description: string;
   id: string | number;
   slug: string;
   store_id: number | string;

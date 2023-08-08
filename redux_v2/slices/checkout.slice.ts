@@ -46,6 +46,7 @@ export interface _Checkout_Initials {
   };
   payment: {
     useCreditBalance: boolean;
+    paymentRequired: boolean;
     creditCard: _CCPaymentMethod['data'];
     poNumber: string;
     method: 'CREDIT_CARD' | 'PURCHASE_ORDER';
@@ -69,6 +70,10 @@ export interface _Checkout_Initials {
       label: string;
     };
     source: {
+      value: string;
+      label: string;
+    };
+    orderSubType: {
       value: string;
       label: string;
     };
@@ -111,6 +116,7 @@ const initialState: _Checkout_Initials = {
   },
   payment: {
     useCreditBalance: false,
+    paymentRequired: true,
     creditCard: {
       nameOnCard: '',
       cardName: '',
@@ -128,6 +134,10 @@ const initialState: _Checkout_Initials = {
     allowPo: false,
     isPaymentPending: false,
     salesRep: {
+      value: '',
+      label: '',
+    },
+    orderSubType: {
       value: '',
       label: '',
     },
@@ -250,10 +260,13 @@ export const checkoutSlice = createSlice({
       if (payload.type === 'SHIP_TO_SCHOOL') {
         if (payload.value === 'CLEANUP') {
           state.address.shipToSchool = false;
+
           return;
         }
 
         state.address.shipToSchool = payload.value;
+        state.shippingMethod.name = '';
+        state.shippingMethod.price = 0;
         return;
       }
     },
@@ -263,12 +276,35 @@ export const checkoutSlice = createSlice({
         payload:
           | 'CLEANUP'
           | { type: 'PURCHASE_ORDER' | 'CREDIT_CARD'; method: 'CHANGED' }
+          | {
+              value: boolean;
+              method: 'USE_CREDIT_BALANCE';
+            }
+          | {
+              value: boolean;
+              method: 'PAYMENT_REQUIRED';
+            }
           | _POPaymentMethod
           | _CCPaymentMethod;
       },
     ) => {
       if (action.payload === 'CLEANUP') {
         state.payment = JSON.parse(JSON.stringify(initialState.payment));
+        return;
+      }
+      if (action.payload.method === 'USE_CREDIT_BALANCE') {
+        state.payment.useCreditBalance = action.payload.value;
+        return;
+      }
+
+      if (action.payload.method === 'PAYMENT_REQUIRED') {
+        state.payment.paymentRequired = action.payload.value;
+        if (!action.payload.value) {
+          state.payment.creditCard = JSON.parse(
+            JSON.stringify(initialState.payment.creditCard),
+          );
+          state.payment.poNumber = '';
+        }
         return;
       }
 
@@ -318,6 +354,11 @@ export const checkoutSlice = createSlice({
       }
       if (payload.type === 'SOURCE_MEDIUM') {
         state.el.sourceMedium = payload.value;
+        return;
+      }
+
+      if (payload.type === 'ORDER_SUB_TYPE') {
+        state.el.orderSubType = payload.value;
         return;
       }
       if (payload.type === 'SALES_REP') {
@@ -382,6 +423,24 @@ export const checkoutSlice = createSlice({
         state.additionalInformation = action.payload.data;
         return;
       }
+    },
+    clear_Checkout: (state) => {
+      state.user = JSON.parse(JSON.stringify(initialState.user));
+      state.playerInformation = JSON.parse(
+        JSON.stringify(initialState.playerInformation),
+      );
+
+      state.additionalInformation = JSON.parse(
+        JSON.stringify(initialState.additionalInformation),
+      );
+      state.payment = JSON.parse(JSON.stringify(initialState.payment));
+      state.address = JSON.parse(JSON.stringify(initialState.address));
+      state.charges = JSON.parse(JSON.stringify(initialState.charges));
+      state.shippingMethod = JSON.parse(
+        JSON.stringify(initialState.shippingMethod),
+      );
+      state.orderNotes = JSON.parse(JSON.stringify(initialState.orderNotes));
+      state.el = JSON.parse(JSON.stringify(initialState.el));
     },
   },
 });
@@ -456,6 +515,13 @@ type _Update_CO_EL_Actions =
     }
   | {
       type: 'SOURCE';
+      value: {
+        value: string;
+        label: string;
+      };
+    }
+  | {
+      type: 'ORDER_SUB_TYPE';
       value: {
         value: string;
         label: string;

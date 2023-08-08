@@ -12,6 +12,7 @@
 import React from 'react';
 // import { GetlAllProductList, _ListingProps } from '../productListing';
 
+import NxtImage from '@appComponents/reUsable/Image';
 import { __pagesText } from '@constants/pages.text';
 import { _ListingProps } from '../ProductListingType';
 import SideFilter from '../productListingType1/components/SideFilter';
@@ -141,7 +142,8 @@ const ProductListingType4: React.FC<_ListingProps> = ({
                           className='mt-[16px] btn-primary block tracking-[1.4px] text-[20px] font-normal w-full max-w-[550px] mx-auto pt-[20px] pb-[20px] md:pl-[70px] md:pr-[70px] pl-[16px] pr-[16px]'
                         >
                           <span className='inline-block w-[20px] h-[20px]'>
-                            <img
+                            <NxtImage
+                              isStatic={true}
                               className='max-h-full'
                               src='assets/images/di/load-more-arrow.gif'
                               alt=''
@@ -151,7 +153,8 @@ const ProductListingType4: React.FC<_ListingProps> = ({
                             {__pagesText.productListing.loadMoreButton}
                           </span>
                           <span className='inline-block w-[20px] h-[20px]'>
-                            <img
+                            <NxtImage
+                              isStatic={true}
                               className='max-h-full'
                               src='assets/images/di/load-more-arrow.gif'
                               alt=''

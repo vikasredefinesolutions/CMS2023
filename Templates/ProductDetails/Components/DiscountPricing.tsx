@@ -20,7 +20,7 @@ const DiscountPricing: React.FC<
   isSpecialBrand,
 }) => {
   const [showMsg, setShowMsg] = useState(false);
-
+  const code  = useTypedSelector_v2((state) => state.store.code);
   const customerId = useTypedSelector_v2((state) => state.user.id);
   const { minQty } = useTypedSelector_v2((state) => state.product.toCheckout);
   const minimumUnitsTotalPrice = useTypedSelector_v2(
@@ -150,7 +150,7 @@ const DiscountPricing: React.FC<
                 </span>
                 {__pagesText.productInfo.discountPricing.perItem}
               </div>
-              {showMinQuantity() ? (
+              {(code !== 'PMCG' && showMinQuantity())  ? (
                 <a
                   href='javascript:void(0);'
                   className={

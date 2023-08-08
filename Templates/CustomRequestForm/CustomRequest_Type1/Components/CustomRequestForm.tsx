@@ -7,13 +7,13 @@ import {
 } from '@constants/global.constant';
 import { __ValidationText } from '@constants/validation.text';
 import { CustomRequestMessage } from '@constants/validationMessages';
-import getLocation from '@helpers/getLocation';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
-import { UploadImage } from '@services/file.service';
 import { _CustomerOrderPayload } from '@services/product';
 import { CustomerProductOrder } from '@services/product.service';
 import router from 'next/router';
 // import { UploadImage } from '@services/general.service';
+import { paths } from '@constants/paths.constant';
+import { UploadImage } from '@services/general.service';
 import { Form, Formik } from 'formik';
 import React, { useState } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
@@ -21,21 +21,24 @@ import * as Yup from 'yup';
 
 const validationSchema = Yup.object().shape({
   firstName: Yup.string()
+    .trim()
     .required(CustomRequestMessage.firstName.required)
     .min(
       CustomRequestMessage.firstName.minlength,
       CustomRequestMessage.firstName.minValidation,
     ),
   lastName: Yup.string()
+    .trim()
     .required(CustomRequestMessage.lastName.required)
     .min(
       CustomRequestMessage.lastName.minlength,
       CustomRequestMessage.lastName.minValidation,
     ),
-  organizationName: Yup.string().required(
-    CustomRequestMessage.organizationName.required,
-  ),
+  organizationName: Yup.string()
+    .trim()
+    .required(CustomRequestMessage.organizationName.required),
   phone: Yup.string()
+    .trim()
     .required(__ValidationText.signUp.storeCustomerAddress.phone.required)
     .test(
       'phone-test',
@@ -52,16 +55,19 @@ const validationSchema = Yup.object().shape({
       },
     ),
   email: Yup.string()
+    .trim()
     .email(__messages.email.validRequest)
     .max(__length.email.max)
     .min(__length.email.min)
     .required(__messages.email.required)
     .nullable(),
-  itemName: Yup.string().required(CustomRequestMessage.itemName.required),
+  itemName: Yup.string()
+    .trim()
+    .required(CustomRequestMessage.itemName.required),
   brandPreferences: Yup.string(),
-  budgetPerItem: Yup.number().required(CustomRequestMessage.budget.required),
+  // budgetPerItem: Yup.number().required(CustomRequestMessage.budget.required),
   additionalComments: Yup.string(),
-  sizeQty: Yup.string().required(CustomRequestMessage.sizeQty.required),
+  sizeQty: Yup.string().trim().required(CustomRequestMessage.sizeQty.required),
 });
 
 const _initialValues = {
@@ -70,14 +76,6 @@ const _initialValues = {
   organizationName: '',
   phone: '',
   email: '',
-  // firstNameAddress: '',
-  // lastNameAddress: '',
-  // address1: '',
-  // address2: '',
-  // city: '',
-  // zipCode: '',
-  // countryName: '',
-  // stateName: '',
   itemName: '',
   brandPreferences: '',
   budgetPerItem: '',
@@ -89,15 +87,9 @@ const _initialValues = {
 };
 
 const CustomRequestForm: React.FC = () => {
-  const [fileToUpload, setFileToUpload] = useState<{
-    name: string;
-    type: string;
-    previewURL: string;
-  } | null>(null);
-  const [fileName, setFileName] = useState<string>('');
   const [verifiedRecaptch, setverifiedRecaptch] = useState(false);
   const [initialValues, setInitialValues] = useState(_initialValues);
-
+  const [fileName, setFileName] = useState('');
   const { id: storeId, imageFolderPath } = useTypedSelector_v2(
     (state) => state.store,
   );
@@ -107,9 +99,11 @@ const CustomRequestForm: React.FC = () => {
     setverifiedRecaptch(true);
   }
 
+  const blockInvalidChar = (e: any) =>
+    ['e', 'E', '+', '-', '.'].includes(e.key) && e.preventDefault();
+
   const submitHandler = async (values: any) => {
     setShowLoader(true);
-    const location = await getLocation();
 
     const payload2: _CustomerOrderPayload = {
       customerProductRequestModel: {
@@ -139,50 +133,71 @@ const CustomRequestForm: React.FC = () => {
         item3: '',
         item4: '',
         item5: '',
-        specialRequest: '',
-        companyLogo: '',
+        specialRequest: values.additionalComments,
+        itemName: values.itemName,
+        organizationName: values.organizationName,
+        logo: fileName,
+        shipAddress2: '',
         beforeInHandDate: new Date(),
+        reasonForGiveAwayPurpose: '',
+        additionalCommentsOrRequest: '',
+        ideasParticularItemsOfInterest: '',
+        isDesiredBrandingUnitiLogo: false,
+        isDesiredBrandingOtherExistingLogo: false,
+        isDesiredBrandingNewLogoOrGraphic: false,
+        isBeforeInHand: false,
+        message: '',
+        sport: '',
+        brandPreference: values.brandPreferences,
       },
     };
     CustomerProductOrder(payload2)
-      .then((res) => {
-        showModal({
-          title: 'Success',
-          message: 'Form submited successfully',
-        });
+      .then(() => {
         setInitialValues(_initialValues);
-      })
-      .finally(() => {
         setShowLoader(false);
-        router.push('/');
+        router.push(paths.REQUEST_THANKYOU);
+      })
+      .catch(() => {
+        showModal({
+          title: 'Error',
+          message: 'Something Went Wrong !!!',
+        });
+        setShowLoader(false);
       });
   };
 
   const fileReader = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target?.files === null) return;
+    if (event.target?.files === null) {
+      return;
+    }
 
-    setShowLoader(true);
+    var filePath = event.target.value;
 
-    try {
-      const logoFileURL = await UploadImage({
-        folderPath: imageFolderPath,
-        files: event?.target?.files[0],
-      });
-      const file = {
-        logoPathURL: logoFileURL,
-        name: event.target.files[0].name,
-        type: event.target.files[0].type,
-        previewURL: URL.createObjectURL(event.target.files[0]),
-      };
-
-      setFileName(event.target.files[0].name);
-    } catch (error) {
+    var allowedExtensions =
+      /(\.jpg|\.jpeg|\.png|\.bmp|\.doc|\.docx|\.xlsx|\.xls|\.eps|\.ai|\.pdf)$/i;
+    if (!allowedExtensions.exec(filePath)) {
+      event.target.value = '';
       showModal({
         title: 'Error',
-        message: 'Something Went Wrong. Try again, later!!!',
+        message: 'Please Select A Valid File Type!!!',
       });
+      return;
+    } else {
+      setShowLoader(true);
+      try {
+        const res = await UploadImage({
+          folderPath: imageFolderPath,
+          files: event?.target?.files[0],
+        });
+        setFileName(res || '');
+      } catch (error) {
+        showModal({
+          title: 'Error',
+          message: 'Something Went Wrong. Try again, later!!!',
+        });
+      }
+      setShowLoader(false);
     }
-    setShowLoader(false);
   };
 
   return (
@@ -245,7 +260,7 @@ const CustomRequestForm: React.FC = () => {
                 </div>
 
                 <div className='w-full lg:w-1/2 px-[15px]'>
-                  <label className='block text-default-text font-mediut'>
+                  <label className='block text-default-text font-medium'>
                     Email Address <span className='text-red-600'>*</span> :
                   </label>
                   <div className='mt-2'>
@@ -265,7 +280,7 @@ const CustomRequestForm: React.FC = () => {
                 </div>
 
                 <div className='w-full lg:w-1/2 px-[15px]'>
-                  <label className='block text-default-text font-mediut'>
+                  <label className='block text-default-text font-medium'>
                     Phone Number <span className='text-red-600'>*</span> :
                   </label>
                   <div className='mt-2 relative'>
@@ -310,7 +325,7 @@ const CustomRequestForm: React.FC = () => {
                 </div>
 
                 <div className='w-full lg:w-1/2 px-[15px]'>
-                  <label className='block text-default-text font-mediut'>
+                  <label className='block text-default-text font-medium'>
                     Item Name <span className='text-red-600'>*</span> :
                   </label>
                   <div className='mt-2'>
@@ -331,7 +346,7 @@ const CustomRequestForm: React.FC = () => {
                 </div>
 
                 <div className='w-full lg:w-1/2 px-[15px]'>
-                  <label className='block text-default-text font-mediut'>
+                  <label className='block text-default-text font-medium'>
                     Brand(s) Preferences
                   </label>
                   <div className='mt-2'>
@@ -345,14 +360,17 @@ const CustomRequestForm: React.FC = () => {
                 </div>
 
                 <div className='w-full lg:w-1/2 px-[15px]'>
-                  <label className='block text-default-text font-mediut'>
-                    Budget Per Item <span className='text-red-600'>*</span> :
+                  <label className='block text-default-text font-medium'>
+                    Budget Per Item <span className='text-red-600'></span> :
                   </label>
                   <div className='mt-2'>
                     <input
+                      type='number'
+                      min={1}
                       id=''
                       name={'budgetPerItem'}
                       placeholder=''
+                      onKeyDown={blockInvalidChar}
                       value={values.budgetPerItem}
                       onChange={handleChange}
                       className='form-input'
@@ -366,14 +384,17 @@ const CustomRequestForm: React.FC = () => {
                 </div>
 
                 <div className='w-full lg:w-1/2 px-[15px]'>
-                  <label className='block text-default-text font-mediut'>
+                  <label className='block text-default-text font-medium'>
                     Quantity Needed <span className='text-red-600'>*</span> :
                   </label>
                   <div className='mt-2'>
                     <input
+                      type='number'
+                      min={1}
                       id=''
                       name={'sizeQty'}
                       placeholder=''
+                      onKeyDown={blockInvalidChar}
                       value={values.sizeQty}
                       onChange={handleChange}
                       className='form-input'
@@ -387,7 +408,7 @@ const CustomRequestForm: React.FC = () => {
                 </div>
 
                 <div className='w-full lg:w-1/2 px-[15px]'>
-                  <label className='block text-default-text font-mediut'>
+                  <label className='block text-default-text font-medium'>
                     Color Preferences
                   </label>
                   <div className='mt-2'>
@@ -408,7 +429,7 @@ const CustomRequestForm: React.FC = () => {
                 </div>
 
                 <div className='w-full px-[15px]'>
-                  <label className='block text-default-text font-mediut'>
+                  <label className='block text-default-text font-medium'>
                     Additional Comments
                   </label>
                   <div className='mt-2'>
@@ -422,7 +443,7 @@ const CustomRequestForm: React.FC = () => {
                 </div>
 
                 <div className='w-full px-[15px]'>
-                  <label className='block text-default-text font-mediut'>
+                  <label className='block text-default-text font-medium'>
                     Additional documents or logos needed to complete the
                     request:
                   </label>
@@ -432,7 +453,6 @@ const CustomRequestForm: React.FC = () => {
                       id=''
                       name=''
                       placeholder=''
-                      // value={fileName}
                       onChange={fileReader}
                       className='form-input'
                       accept='.doc,.docx, .xlsx, .xls, .eps, .ai, .pdf, .jpg, .jpeg, .png, .bmp'

@@ -3,4 +3,5 @@ export interface _CustomeRequestTemplates {
   type2: React.FC;
   type3: React.FC;
   type4: React.FC;
+  type5: React.FC;
 }

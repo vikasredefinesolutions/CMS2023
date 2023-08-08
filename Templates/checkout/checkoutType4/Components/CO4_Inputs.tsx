@@ -1,3 +1,4 @@
+import NxtImage from '@appComponents/reUsable/Image';
 import React, { useState } from 'react';
 
 interface _InputProps {
@@ -149,7 +150,13 @@ export const CO4_CreditCardInput: React.FC<_CreditCardInputProps> = ({
           ].map((src) => {
             return (
               <div className='opacity-40 ml-[4px] w-[32px]'>
-                <img src={src} alt='' />
+                <NxtImage
+                  isStatic={true}
+                  useNextImage={false}
+                  src={src}
+                  alt=''
+                  className={''}
+                />
               </div>
             );
           })}

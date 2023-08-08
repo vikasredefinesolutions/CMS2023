@@ -19,7 +19,7 @@ interface _SelectProps {
   required?: boolean;
 }
 
-type _SelectNames = 'source' | 'sourceMedium' | 'salesRep';
+type _SelectNames = 'source' | 'sourceMedium' | 'orderSubType' | 'salesRep';
 
 interface _Select {
   label: string;
@@ -48,6 +48,14 @@ export const _CO1_EL_Fields: Array<_Select> = [
     noOptionFound: 'No Source Medium Found',
   },
   {
+    label: 'Order SubType',
+    name: 'orderSubType',
+    type: 'select',
+    supressedLabel: '',
+    required: false,
+    noOptionFound: 'No Order Sub Type Found',
+  },
+  {
     label: 'Select Sales Rep',
     name: 'salesRep',
     type: 'select',
@@ -60,12 +68,14 @@ export const _CO1_EL_Fields: Array<_Select> = [
 export interface _CO1_EL_InitialValues {
   source: string | undefined;
   sourceMedium: string | undefined;
+  orderSubType: string | undefined;
   salesRep: string | undefined;
 }
 
 export const CO1_EL_InitialValues: _CO1_EL_InitialValues = {
   source: undefined,
   sourceMedium: undefined,
+  orderSubType: undefined,
   salesRep: undefined,
 };
 
@@ -79,7 +89,6 @@ export const CO1_El_Select: React.FC<_SelectProps> = ({
   supressedLabel,
   onBlur,
 }) => {
-  console.log(value);
   return (
     <div className='relative z-0 w-full mb-[20px] border border-gray-border rounded mb-[20px] last:mb-[0px]'>
       <select

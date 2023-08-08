@@ -2,6 +2,7 @@ import { __pagesConstant } from '@constants/pages.constant';
 // import { _MenuItems } from '@src/show.type';
 import StoreTimer from '@appComponents/StoreTimer/StoreTimer';
 import { _HeaderProps, _MenuItems } from '@definations/header.type';
+import { _SbStoreConfiguration } from '@definations/store.type';
 import { FetchSbStoreMessages } from '@services/sb.service';
 import {
   useActions_v2,
@@ -14,6 +15,15 @@ import { useEffect, useState } from 'react';
 import Header_MenuItems from '../header_Type1/Components/Menu/Header_MenuItems';
 import H8_CompanyLogo from './Components/H8_Logo';
 import H8_MyCartIcon from './Components/H8_MyCartIcon';
+
+const initialShowTimer = (sb: _SbStoreConfiguration) => {
+  if (sb?.isDisplayTimer) {
+    const time = Date.parse(sb.closeStoreOn) - Date.now();
+    return time > 0;
+  }
+  return false;
+};
+
 const Header_Type8: NextPage<_HeaderProps> = ({
   logoUrl,
   headerBgColor,
@@ -34,10 +44,12 @@ const Header_Type8: NextPage<_HeaderProps> = ({
   const [isMobileView, setIsMobileView] = useState<boolean>(
     width <= __pagesConstant._header.mobileBreakPoint,
   );
+  const [showHeaderMessage, setShowHeaderMessage] = useState<boolean>(
+    initialShowTimer(sbStore),
+  );
 
   const fetchStoreLevelMessages = async () => {
     await FetchSbStoreMessages({ storeId: storeId }).then((response) => {
-      console.log(response);
       update_SbStoreMessages({
         checkOutMessage: response?.checkOutMessage || '',
         orderSuccessMessage: response?.orderSuccessMessage || '',
@@ -60,6 +72,10 @@ const Header_Type8: NextPage<_HeaderProps> = ({
       fetchStoreLevelMessages();
     }
   }, [storeId]);
+
+  useEffect(() => {
+    setShowHeaderMessage(initialShowTimer(sbStore));
+  }, [sbStore]);
 
   const StoreNameHTML = () => {
     if (!sbStore.isStoreName) {
@@ -86,6 +102,13 @@ const Header_Type8: NextPage<_HeaderProps> = ({
     }
   };
 
+  const hideMessage = () => {
+    if (router.asPath.includes('Checkout')) return false;
+    if (messages?.headerMessage.length === 0) return false;
+    if (!showHeaderMessage) return false;
+    return true;
+  };
+
   return (
     <>
       <div
@@ -108,16 +131,14 @@ const Header_Type8: NextPage<_HeaderProps> = ({
               <div className='container mx-auto'>
                 <div className='flex flex-wrap justify-between items-center pt-[35px] pb-[25px] mx-[-15px]'>
                   <div className='w-full lg:w-2/12 md:w-2/12 sm:w-4/12 pl-[15px]'>
-                  
-                  {!sbStore.isLogo &&
-                    (!isMobileView && <H8_CompanyLogo
-                      logo={{
-                        desktop: logoUrl.desktop,
-                        mobile: logoUrl.desktop,
-                      }}
-                    />
-                    )
-                  }         
+                    {!sbStore.isLogo && !isMobileView && (
+                      <H8_CompanyLogo
+                        logo={{
+                          desktop: logoUrl.desktop,
+                          mobile: logoUrl.desktop,
+                        }}
+                      />
+                    )}
                     {/* <div className='grow flex flex-wrap items-center lg:justify-between'> */}
                     {!sbStore.isLogo &&
                       (isMobileView ? (
@@ -167,12 +188,14 @@ const Header_Type8: NextPage<_HeaderProps> = ({
           </header>
         </div>
       </div>
-      {(messages.headerMessage && messages.headerMessage.length > 0 && !router.asPath.includes('Checkout')) && 
+      {hideMessage() && (
         <div className='container mx-auto'>
-          <div className='bg-tertiary border border-2 border-secondary p-[15px] rounded-md my-[30px] text-normal-text' 
-            dangerouslySetInnerHTML={{ __html: messages.headerMessage}} />
+          <div
+            className='bg-tertiary border border-2 border-secondary p-[15px] rounded-md my-[30px] text-normal-text'
+            dangerouslySetInnerHTML={{ __html: messages.headerMessage }}
+          />
         </div>
-        }
+      )}
     </>
   );
 };

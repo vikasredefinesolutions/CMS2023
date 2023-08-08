@@ -1,8 +1,14 @@
 import Price from '@appComponents/reUsable/Price';
-import { PKHG_MINIMUM_QTY, SIMPLI_SAFE_CODE } from '@constants/global.constant';
+import {
+  BACARDI,
+  PKHG_MINIMUM_QTY,
+  SIMPLI_SAFE_CODE,
+  UCA,
+} from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
 import { paths } from '@constants/paths.constant';
 import { _shippingMethod } from '@controllers/checkoutController';
+import SummarryController from '@controllers/summarryController';
 import { GetCartTotals, useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
@@ -18,6 +24,7 @@ const CartSummarryType2: FC<_props> = ({ selectedShippingModel }) => {
   const isEmployeeLoggedIN = useTypedSelector_v2(
     (state) => !!state.employee.empId,
   );
+  const couponDetails = useTypedSelector_v2((state) => state.cart.discount);
   const { code: storeCode } = useTypedSelector_v2((state) => state.store);
   // Functions
   const {
@@ -35,6 +42,46 @@ const CartSummarryType2: FC<_props> = ({ selectedShippingModel }) => {
     sixthLogoPrice,
     seventhLogoPrice,
   } = GetCartTotals();
+  const {
+    coupon,
+    successMessage,
+    setCoupon,
+    applyCouponHandler,
+    removeCouponCodeHandler,
+  } = SummarryController();
+  const cartItems = useTypedSelector_v2((state) => state.cart.cart);
+  const couponAmt = couponDetails?.amount || 0;
+  const calculateSubTotal = () => {
+    let subTotal = 0;
+    if (!cartItems) return 0;
+
+    cartItems.forEach((item) => {
+      subTotal += item.totalPrice + item.totalCustomFieldsCharges;
+    });
+
+    return subTotal;
+  };
+  const calculateCouponAmount = () => {
+    const subTotal = calculateSubTotal();
+
+    if (couponAmt > subTotal) {
+      return subTotal;
+    }
+
+    return couponAmt;
+  };
+  const cost = {
+    subTotal: calculateSubTotal(),
+    couponDiscount: calculateCouponAmount(),
+
+    totalToShow: function () {
+      const toAdd = this.subTotal;
+      const toSubtract = this.couponDiscount;
+
+      const estimated = toAdd - toSubtract;
+      return estimated > 0 ? estimated : 0;
+    },
+  };
   return (
     <>
       <div className='border border-gray-border p-[15px]'>
@@ -43,27 +90,29 @@ const CartSummarryType2: FC<_props> = ({ selectedShippingModel }) => {
         </div>
         <div className='w-full pl-[15px] pr-[15px] border-b border-gray-border mt-[10px] mb-[10px]'></div>
         <dl className='text-default-text'>
-          {storeCode !== SIMPLI_SAFE_CODE && (
-            <>
-              {' '}
-              <div className='flex items-center justify-between pt-[15px]'>
-                <dt className=''>Merchandise</dt>
-                <dd className=''>
-                  {' '}
-                  <Price value={merchandisePrice} />
-                </dd>
-              </div>
-              {merchandisePrice - subTotal > 0 && !isEmployeeLoggedIN && (
+          {storeCode !== SIMPLI_SAFE_CODE &&
+            storeCode !== UCA &&
+            storeCode !== BACARDI && (
+              <>
+                {' '}
                 <div className='flex items-center justify-between pt-[15px]'>
-                  <dt className=''>Discount</dt>
+                  <dt className=''>Merchandise</dt>
                   <dd className=''>
-                    -<Price value={merchandisePrice - subTotal} />
+                    {' '}
+                    <Price value={merchandisePrice} />
                   </dd>
                 </div>
-              )}
-              <div className='w-full pl-[15px] pr-[15px] border-b border-gray-border mt-[10px]'></div>
-            </>
-          )}
+                {merchandisePrice - subTotal > 0 && !isEmployeeLoggedIN && (
+                  <div className='flex items-center justify-between pt-[15px]'>
+                    <dt className=''>Discount</dt>
+                    <dd className=''>
+                      -<Price value={merchandisePrice - subTotal} />
+                    </dd>
+                  </div>
+                )}
+                <div className='w-full pl-[15px] pr-[15px] border-b border-gray-border mt-[10px]'></div>
+              </>
+            )}
           <div className='flex items-center justify-between pt-[15px]'>
             <dt className=''>
               <span>Subtotal</span>
@@ -72,17 +121,22 @@ const CartSummarryType2: FC<_props> = ({ selectedShippingModel }) => {
               <Price value={subTotal} />
             </dd>
           </div>
-
-          {storeCode !== SIMPLI_SAFE_CODE && (
-            <div className='flex items-center justify-between pt-[15px]'>
-              <dt className=''>
-                <span>First Logo</span>
-              </dt>
-              <dd className=''>
-                {firstLogoPrice > 0 ? <Price value={firstLogoPrice} /> : 'FREE'}
-              </dd>
-            </div>
-          )}
+          {storeCode !== SIMPLI_SAFE_CODE &&
+            storeCode !== UCA &&
+            storeCode !== BACARDI && (
+              <div className='flex items-center justify-between pt-[15px]'>
+                <dt className=''>
+                  <span>First Logo</span>
+                </dt>
+                <dd className=''>
+                  {firstLogoPrice > 0 ? (
+                    <Price value={firstLogoPrice} />
+                  ) : (
+                    'FREE'
+                  )}
+                </dd>
+              </div>
+            )}
           {secondLogoPrice > 0 && (
             <div className='flex items-center justify-between pt-[15px]'>
               <dt className=''>
@@ -93,7 +147,6 @@ const CartSummarryType2: FC<_props> = ({ selectedShippingModel }) => {
               </dd>
             </div>
           )}
-
           {thirdLogoPrice > 0 && (
             <div className='flex items-center justify-between pt-[15px]'>
               <dt className=''>
@@ -166,23 +219,45 @@ const CartSummarryType2: FC<_props> = ({ selectedShippingModel }) => {
               </dd>
             </div>
           )}
+
+          {couponDetails?.amount != 0 &&
+            couponDetails?.amount != undefined &&
+            (storeCode == SIMPLI_SAFE_CODE || storeCode == UCA) && (
+              <div className='flex items-center justify-between pt-[10px] pb-[20px]'>
+                <dt className='text-base'>
+                  Promo{' '}
+                  <span
+                    className='text-anchor cursor-pointer'
+                    onClick={() => removeCouponCodeHandler()}
+                  >
+                    (Remove)
+                  </span>
+                </dt>
+                <dd className='text-base font-medium text-gray-900 '>
+                  - <Price value={couponDetails?.amount} />
+                </dd>
+              </div>
+            )}
           <div className='w-full pl-[15px] pr-[15px] border-b border-gray-border mt-[10px]'></div>
           <div className='flex items-center justify-between pt-[15px] mb-[30px]'>
             <dt className='font-semibold'>
               <span>Estimated Total</span>
             </dt>
             <dd className='font-semibold'>
-              <Price value={totalPrice} />
+              <Price value={cost.totalToShow()} />
             </dd>
           </div>
           <div className=''>
             <div className='mt-[16px]'>
               <button
+                type='button'
                 onClick={() => {
                   if (
                     !isEmployeeLoggedIN &&
                     totalQty < PKHG_MINIMUM_QTY &&
-                    storeCode !== SIMPLI_SAFE_CODE
+                    storeCode !== SIMPLI_SAFE_CODE &&
+                    storeCode !== UCA &&
+                    storeCode !== BACARDI
                   ) {
                     showModal({
                       title: 'Min Quantity Alert',
@@ -193,7 +268,13 @@ const CartSummarryType2: FC<_props> = ({ selectedShippingModel }) => {
                     router.push(paths.CHECKOUT);
                   }
                 }}
-                className={`btn btn-lg btn-primary w-full !flex flex-wrap justify-center items-center `}
+                className={`btn btn-lg btn-${
+                  storeCode === SIMPLI_SAFE_CODE ||
+                  storeCode === UCA ||
+                  storeCode === BACARDI
+                    ? 'secondary'
+                    : 'primary'
+                } w-full !flex flex-wrap justify-center items-center `}
               >
                 CHECKOUT NOW
               </button>

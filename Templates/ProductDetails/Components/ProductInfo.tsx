@@ -15,7 +15,7 @@ import { __ValidationText } from '@constants/validation.text';
 import { Klaviyo_BackInStock } from '@services/klaviyo.service';
 import { ErrorMessage, Form, Formik } from 'formik';
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import * as Yup from 'yup';
 import AvailableColors from './AvailableColors';
 import DiscountPricing from './DiscountPricing';
@@ -57,14 +57,15 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
 
     if (isEmployeeLoggedIn) {
       text = 'START ORDER';
+      return text;
     }
-    if (product.isDiscontinue) {
+    if (product.isDiscontinue && !isEmployeeLoggedIn) {
       text = 'Discontinued';
     }
     return text;
   };
 
-  const consultationURL = `${paths.REQUEST_CONSULTATION}?productid=${product.id}&title=Request%20Consultation%20%26%20Proof&Color=${color.name}`;
+  const consultationURL = `${paths.REQUEST_CONSULTATION}?productid=${product.id}&title=Request%20Consultation%20%26%20Proof&Color=${color?.name}`;
   const showExtraButton =
     product.description.length >=
     __pagesConstant._productDetails.descriptionLength;
@@ -98,6 +99,21 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
       (accumulator, currentValue) => accumulator + currentValue.inventory,
       0,
     );
+    if (product.isDiscontinue && !isEmployeeLoggedIn) {
+      return (
+        <form className='mt-[24px]'>
+          <div className='m-3 mt-6'>
+            <button
+              type='button'
+              disabled={product.isDiscontinue}
+              className='btn btn-xl btn-secondary !flex items-center justify-center lg:!text-3xl w-full uppercase cursor-pointer'
+            >
+              DISCONTINUED
+            </button>
+          </div>
+        </form>
+      );
+    }
     if (
       totalInventoryCount === undefined ||
       isEmployeeLoggedIn ||
@@ -109,7 +125,6 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
           <div className='m-3 mt-6'>
             <button
               type='button'
-              disabled={product.isDiscontinue}
               onClick={() => {
                 setOpenModal('startOrder');
                 setShowLoader(true);
@@ -189,14 +204,7 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
   };
 
   return (
-    <div
-      className='col-span-1 mt-[15px] pl-[8px] pr-[8px] md:pl-[15px] md:pr-[15px] sm:pl-[0px] sm:pr-[0px] lg:mt-[0px]'
-     
-    >
-      <meta itemProp='lowPrice' content={`${product.salePrice}`} />
-      <meta itemProp='highPrice' content={`${product.msrp}`} />
-      <meta itemProp='priceCurrency' content='USD' />
-
+    <div className='col-span-1 mt-[15px] pl-[8px] pr-[8px] md:pl-[15px] md:pr-[15px] sm:pl-[0px] sm:pr-[0px] lg:mt-[0px] link-custom'>
       <div className='hidden md:flex flex-wrap'>
         <div className='w-full md:w-2/3'>
           <h1 className='font-[600] text-large-text' itemProp='name'>
@@ -231,6 +239,7 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
               href='javascript:void(0);'
               onClick={() => router.push(consultationURL)}
               className='!text-anchor hover:!text-anchor-hover text-normal-text pr-[1px]'
+              title={__pagesText.productInfo.requestConsultaionProof}
             >
               {__pagesText.productInfo.requestConsultaionProof}
             </a>{' '}
@@ -240,20 +249,28 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
           </div>
         </div>
       </div>
-
       <AvailableColors />
-      <DiscountPricing
-        title='Exclusivepricing'
-        storeCode={storeCode}
-        showMsrpLine={true}
-        price={{
-          msrp: product.msrp,
-          salePrice: product.salePrice,
-        }}
-        showLogin={!product.isDiscontinue}
-        modalHandler={modalHandler}
-        isSpecialBrand={product.isSpecialBrand}
-      />
+      <div
+        itemProp='offers'
+        itemType='https://schema.org/AggregateOffer'
+        itemScope
+      >
+        <meta itemProp='lowPrice' content={`${product.salePrice}`} />
+        <meta itemProp='highPrice' content={`${product.msrp}`} />
+        <meta itemProp='priceCurrency' content='USD' />
+        <DiscountPricing
+          title='Exclusivepricing'
+          storeCode={storeCode}
+          showMsrpLine={true}
+          price={{
+            msrp: product.msrp,
+            salePrice: product.salePrice,
+          }}
+          showLogin={!product.isDiscontinue}
+          modalHandler={modalHandler}
+          isSpecialBrand={product.isSpecialBrand}
+        />
+      </div>
       {!product?.isDropShipProduct && (
         <div className='ml-[10px] mr-[10px] mt-[13px]'>
           <button
@@ -265,7 +282,6 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
           </button>
         </div>
       )}
-
       {/* <div className='ml-[10px] mr-[10px] mt-[13px]'>
         <button
           type='button'
@@ -275,11 +291,10 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
           {__pagesText.productInfo.checkAvailableInventory}
         </button>
       </div> */}
-
       <div className='ml-[10px] mr-[10px] mt-[6px] flex flex-wrap justify-between gap-[8px] items-center'>
         <div className='pt-[10px] text-sub-text'>
           <span> {__pagesText.productInfo.availableSizes}</span>
-          <span className='ml-[5px]'>{` ${sizes}`}</span>
+          <span className='ml-[5px]'>{` ${sizes.replaceAll(',', ', ')}`}</span>
         </div>
         {sizeChart?.sizeChartView && (
           <div className='pb-[0px]'>
@@ -293,7 +308,6 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
           </div>
         )}
       </div>
-
       {/* <div className='ml-[10px] mr-[10px] mt-[6px] flex flex-wrap justify-between gap-[8px] items-center'>
         <div className='pt-[10px] text-sub-text'>
           <span className='font-[600]'>
@@ -314,7 +328,6 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
           </div>
         )}
       </div> */}
-
       {product.companionProductName && (
         <>
           <div className='text-lg mx-3 mt-3'>
@@ -329,6 +342,7 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
                   goToProduct(`${product.companionProductSEName}.html`)
                 }
                 className='text-anchor hover:text-anchor-hover text-[15px] font-semibold underline leading-[20px]'
+                title={product.companionProductName}
               >
                 {product.companionProductName}
               </a>
@@ -351,8 +365,16 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
           </div> */}
         </>
       )}
-
       <div className='m-[10px] mt-[18px]'>
+        {(product.isShortDescriptionOnTop && product.shortDescription) && (
+          <div
+            itemProp='description'
+            className='pb-5'
+            dangerouslySetInnerHTML={{
+              __html: product.shortDescription,
+            }}
+          />
+        )}
         <div className='mb-[12px] text-title-text'>
           {__pagesText.productInfo.description}
         </div>
@@ -367,7 +389,17 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
             dangerouslySetInnerHTML={{
               __html: product.description,
             }}
+          />
+          {(!product.isShortDescriptionOnTop && product.shortDescription) && (
+           <div
+            itemProp='description'
+            className='pb-10'
+            dangerouslySetInnerHTML={{
+              __html: product.shortDescription,
+            }}
           ></div>
+          )}
+
           {showExtraButton && (
             <div
               className={`bg-gradient-to-b from-[#fffefe00] to-[#ffffff] absolute bottom-0 left-0 right-0 pt-[80px] text-center ${
@@ -416,9 +448,7 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
           )}
         </div>
       </div> */}
-
       {HTML_START_ORDER_BUTTON()}
-
       {/* <div className='m-[12px] mt-[24px]'>
           <button
             type='button'
@@ -432,14 +462,12 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
             {startOrderBtnText()}
           </button>
         </div> */}
-
       {/* {product.isDiscontinue && (
           <TopRatedProducts
             title={'Top Rated Alternatives'}
             suggestedProducts={product.suggestedProducts}
           />
         )} */}
-
       <div className='mt-[20px] text-center'>
         <a
           href='javascript:void(0);'
@@ -449,7 +477,6 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
           {__pagesText.productInfo.requestAFreeConsulation}
         </a>
       </div>
-
       {/* <div className='mt-[20px] text-center'>
           <a
             href='javascript:void(0);'
@@ -459,23 +486,17 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
             {__pagesText.productInfo.requestAFreeConsulation}
           </a>
         </div> */}
-
       <ProductFeatures />
-
       {openModal === 'sizeChart' && (
         <SizeChartModal storeCode={storeCode} modalHandler={modalHandler} />
       )}
-
       {openModal === 'availableInventory' && (
         <AvailableInventoryModal modalHandler={modalHandler} />
       )}
-
       {openModal === 'startOrder' && (
         <StartOrderModal modalHandler={modalHandler} product={product} />
       )}
-
       {openModal === 'login' && <LoginModal modalHandler={modalHandler} />}
-
       {openModal === 'forgot' && <ForgotModal modalHandler={modalHandler} />}
     </div>
   );

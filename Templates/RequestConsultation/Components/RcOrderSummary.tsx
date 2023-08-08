@@ -89,7 +89,8 @@ const RcOrderSummary: React.FC<_props> = ({ item }) => {
                     <div className='w-24 h-24 flex items-center justify-center mx-auto'>
                       {el.logoName === logoLocation.addLater && (
                         <>
-                          <img
+                          <NxtImage
+                            isStatic={true}
                             className='inline-block max-h-full'
                             src={`/assets/images/logo-to-be-submitted.webp`}
                             title={el?.logoLocation}

@@ -42,6 +42,7 @@ const selected_initiaState = {
     minQuantity: 1,
     multipleQuantity: 0,
     splitproductList: null,
+    isDefaultProduct: false,
   },
   sbState: [],
   presentQty: 0,
@@ -49,6 +50,7 @@ const selected_initiaState = {
 
 // Define the initial state using that type
 const initialState: _ProductStore = {
+  pinterestImagePath: '',
   selected: selected_initiaState,
   product: {
     sizeChart: null,
@@ -192,6 +194,10 @@ export const productSlice = createSlice({
       state,
       { payload }: _Product_UpdateSelectedValeus_Action,
     ) => {
+      if (payload.type === 'PINTERESET_IMAGE_PATH') {
+        state.pinterestImagePath = payload.path;
+      }
+
       if (payload.type === 'BASIC_PRODUCT_DETAILS') {
         state.product.sku = payload.prop?.sku || state.product.sku;
         return;
@@ -417,12 +423,12 @@ export const productSlice = createSlice({
       if (state.product.inventory) {
         const inventoryToShowByColor =
           state.product.inventory?.inventory.filter(
-            (int) => int.attributeOptionId === action.payload.attributeOptionId,
+            (int) => int.attributeOptionId === action.payload?.attributeOptionId,
           );
 
         const sizesToShowByColor = state.product.inventory?.sizes.filter(
           (int) =>
-            int.colorAttributeOptionId === action.payload.attributeOptionId,
+            int.colorAttributeOptionId === action.payload?.attributeOptionId,
         );
 
         if (inventoryToShowByColor) {
@@ -435,13 +441,13 @@ export const productSlice = createSlice({
 
       state.selected.color = action.payload;
 
-      state.selected.productId = action.payload.productId;
+      state.selected.productId = action.payload?.productId;
 
       if (state.toCheckout.minQtyShouldNotBeMoreThanOne) {
         state.toCheckout.minQty = 1;
         return;
       }
-      state.toCheckout.minQty = action.payload.minQuantity;
+      state.toCheckout.minQty = action.payload?.minQuantity;
     },
 
     setImage: (
@@ -633,6 +639,7 @@ export const productSlice = createSlice({
       if (addOrRemove === 'ADD') {
         state.toCheckout.availableOptions?.push({
           logoLocationDetailId: action.payload.logoLocationDetailId,
+          reusableLocationId: 0,
           name: action.payload.name,
           image: action.payload.image,
           threeDImage: action.payload.threeDImage,
@@ -701,6 +708,7 @@ export const productSlice = createSlice({
       action: {
         payload: {
           logoLocationDetailId: number;
+          reusableLocationId: number;
           name: string;
           image: string;
           threeDImage: string;
@@ -971,6 +979,11 @@ export const productSlice = createSlice({
       });
 
       let updateSewOutCharge: number = 0;
+
+      state.som_logos.details =
+        state.som_logos.details?.map((item, index) => {
+          return { ...item, quantity: productQty };
+        }) || [];
 
       state.som_logos.details?.forEach((item) => {
         if (item.isSewOut) {
@@ -1330,6 +1343,7 @@ export const productSlice = createSlice({
         payload: {
           location: {
             logoLocationDetailId: number;
+            reusableLocationId: number;
             name: string;
             image: string;
             threeDImage: string;
@@ -1356,6 +1370,7 @@ export const productSlice = createSlice({
           },
           location: upcomingLogo.location || {
             logoLocationDetailId: 0,
+            reusableLocationId: 0,
             name: '',
             image: '',
             threeDImage: '',
@@ -1376,6 +1391,7 @@ export const productSlice = createSlice({
           },
           location: upcomingLogo.location || {
             logoLocationDetailId: 0,
+            reusableLocationId: 0,
             name: '',
             image: '',
             threeDImage: '',

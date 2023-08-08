@@ -25,10 +25,12 @@ export const AddressValidationSchema = Yup.object().shape({
   address2: Yup.string(),
   city: Yup.string().required(addressMessages.city.required),
   state: Yup.string().required(addressMessages.state.required),
-  postalCode: Yup.string().max(
-    __ValidationText.signUp.storeCustomerAddress.postalCode.maxLength,
-    'Postal code must be less than 9',
-  ),
+  postalCode: Yup.string()
+    .required(addressMessages.postalCode.required)
+    .max(
+      __ValidationText.signUp.storeCustomerAddress.postalCode.maxLength,
+      'Postal code must be less than 9',
+    ),
   phone: Yup.string()
     .required(__ValidationText.signUp.storeCustomerAddress.phone.required)
     .test(

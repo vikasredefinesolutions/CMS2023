@@ -46,8 +46,8 @@ const SD_HeroSection: React.FC<_Props> = ({
             className='container pl-[16px] pr-[16px] mx-auto text-center pt-[30px] sm:pt-[40px] lg:pt-[120px] pb-[30px] sm:pb-[40px] lg:pb-[120px]'
             role='main'
           >
-            <div className='mb-[16px]'>
-              <Link href={story.category.url}>
+            <div className='mb-[16px] cursor-pointer'>
+              <Link href={`${story.category.url}.html`}>
                 <span className='btn bg-white hover:bg-tertiary-hover hover:text-anchor-hover text-anchor py-[8px] px-10 text-title-text btn-md'>
                   {story.category.name}
                 </span>
@@ -67,17 +67,22 @@ const SD_HeroSection: React.FC<_Props> = ({
                 <span className='ml-2'>March, 13th, 2022</span>
               </p>
             </div> */}
-            <div className='flex flex-wrap justify-center'>
-              <Link className='' href={story.prev}>
-                <a className='uppercase btn btn-tertiary text-default-text mr-[10px]'>
-                  Previous
-                </a>
-              </Link>{' '}
-              <Link href={story.next}>
-                <a className='uppercase btn btn-tertiary text-default-text mr-[10px]'>
-                  Next
-                </a>
-              </Link>
+
+            <div className='flex flex-wrap justify-center gap-[10px]'>
+              {story.prev !== '' && (
+                <Link className='' href={`${story.prev}.html`}>
+                  <a className='uppercase btn btn-tertiary text-default-text  w-28'>
+                    Previous
+                  </a>
+                </Link>
+              )}
+              {story.next !== '' && (
+                <Link href={`${story.next}.html`}>
+                  <a className='uppercase btn btn-tertiary text-default-text  w-28'>
+                    Next
+                  </a>
+                </Link>
+              )}
             </div>
           </div>
           <div className='w-full p-[16px] bg-default'>
@@ -85,7 +90,7 @@ const SD_HeroSection: React.FC<_Props> = ({
               {banner.map((ban, index) => {
                 return (
                   <span key={index} className='mr-[8px]'>
-                    <Link href={ban.url}>
+                    <Link href={`${ban.url}.html`}>
                       <a className='text-[#ffffff] text-medium-text'>
                         {ban.name}
                       </a>
@@ -98,7 +103,7 @@ const SD_HeroSection: React.FC<_Props> = ({
         </section>
         <SD_FaqSection page={page} />
         <SD_ShopNowSection productSku={productSku} />
-        
+
         {/* <SD_ProductsSlider /> */}
       </div>
     </section>

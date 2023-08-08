@@ -33,6 +33,7 @@ import { conditionalLog_V2 } from '@helpers/console.helper';
 import { _FeaturedProduct } from '@templates/ProductDetails/productDetailsTypes/storeDetails.res';
 import { SendAsync } from '@utils/axios.util';
 import {
+  _CR5_Payload,
   _CustomerOrderPayload,
   _SubmitRequestConsultationPayload,
 } from './product';
@@ -50,6 +51,7 @@ export type _ProducDetailAPIs_V2 =
   | 'FetchSimilartProducts'
   | 'FetchDiscountTablePrices'
   | 'FetchLogoLocationByProductId'
+  | 'FetchLogoLocationByStoreId'
   | 'SumbitRequestConsultationDetails'
   | 'FetchFeaturedProducts'
   | 'FetchProductsBySKUs'
@@ -120,7 +122,6 @@ export const FetchColors = async ({
   } else {
     url = `StoreProduct/getproductattributecolor/${productId}.json`;
   }
-
   const response = await CallAPI_v2<_ProductColor[]>({
     name: {
       service: 'productDetails',
@@ -183,7 +184,7 @@ export const FetchFeaturedProducts = async (payload: {
 /*---------------------------Product List --------------------------*/
 
 export const FetchFiltersJSON = async (
-  filterBy: __pageTypeConstant.brand | __pageTypeConstant.category,
+  filterBy: string,
   filterRequest: FilterApiRequest,
 ): Promise<BrandFilter | CategoryFilter> => {
   if (filterBy === __pageTypeConstant.brand) {
@@ -226,7 +227,6 @@ export const FetchFiltersJsonByCategory = async (
     method: 'POST',
     data: filterRequest,
   });
-
   return res;
 };
 
@@ -431,6 +431,24 @@ export const FetchLogoLocationByProductId = async (payload: {
   return response;
 };
 
+export const FetchLogoLocationByStoreId = async (payload: {
+  storeId: number;
+}): Promise<_LogoLocation | null> => {
+  const url = `StoreProduct/getproductlogolocationdetailsbystoreid/${payload.storeId}.json`;
+
+  const response = await CallAPI_v2<_LogoLocation>({
+    name: {
+      service: 'productDetails',
+      api: 'FetchLogoLocationByStoreId',
+    },
+    request: {
+      url: url,
+      method: 'GET',
+    },
+  });
+  return response;
+};
+
 export const FetchProductList = async (storeId: string) => {
   const url = '/StoreProduct/list.json';
   const res = await SendAsync({
@@ -561,7 +579,9 @@ export const SbStore_fn = async (payload: {
 
 /*---------------------CUSTOM ORDER API--------------------------*/
 
-export const CustomerProductOrder = async (payload: _CustomerOrderPayload) => {
+export const CustomerProductOrder = async (
+  payload: _CustomerOrderPayload | _CR5_Payload,
+) => {
   const url = `Customer/customerproductorder`;
   const res = await SendAsync({
     url: url,

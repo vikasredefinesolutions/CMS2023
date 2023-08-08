@@ -1,21 +1,24 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/rules-of-hooks */
+import LoginModal from '@appComponents/modals/loginModal';
+import ThirdPartyLogin from '@appComponents/modals/loginModal/ThirdPartyLogin';
 import SeoHead from '@appComponents/reUsable/SeoHead';
 import { storeBuilderTypeId } from '@configs/page.config';
-import { __Error, __pageTypeConstant } from '@constants/global.constant';
+import { __Error, _Store_CODES } from '@constants/global.constant';
 import { getServerSideProps } from '@controllers/getServerSideProps';
 import { _FetchProductDetails } from '@controllers/ProductController.async';
 import { _ProductList_PropsData } from '@controllers/slug.extras';
+import { _modals } from '@definations/product.type';
 import { _GetPageType, _StoreCache } from '@definations/slug.type';
-import { useActions_v2 } from '@hooks_v2/index';
+import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import Banner, { _BrandTypes } from '@templates/banner';
 import Home from '@templates/Home';
 import ProductDetails from '@templates/ProductDetails';
-import ProductListing from '@templates/ProductListings';
+import ProductListing from '@templates/ProductListings/indexRefactor';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { _Slug_CMS_Props } from 'pages';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { _globalStore } from 'store.global';
 
 export interface _Slug_ProductDetails_Props {
@@ -46,15 +49,44 @@ export type _Slug_Props =
     };
 
 const SlugSearch: NextPage<_Slug_Props, _Slug_Props> = (props) => {
-  const { updatePageType, topic_set_isCMS } = useActions_v2();
   const router = useRouter();
+  const { updatePageType, topic_set_isCMS } = useActions_v2();
+  const { id: userID, roles } = useTypedSelector_v2((state) => state.user);
+  const { code: storeCode } = useTypedSelector_v2((state) => state.store);
 
-  // useEffect(() => {
-  //   if(!router.asPath.includes(".html") && !router.asPath.includes("not-found"))
-  //   {
-  //     router.push(paths.NOT_FOUND);
-  //   }
-  // }, [router.asPath])
+  const [showModal, setShowModal] = useState(false);
+  const { thirdPartyLogin } = useTypedSelector_v2((state) => state.store);
+
+  useEffect(() => {
+    if (
+      (storeCode === _Store_CODES.UNITi ||
+        storeCode === _Store_CODES.USAACLAIMS) &&
+      !userID &&
+      roles.customerId &&
+      'metaData' in props &&
+      props?.metaData?.type !== 'topic'
+    ) {
+      setShowModal(true);
+    } else {
+      setShowModal(false);
+    }
+  }, [userID, props, storeCode, roles]);
+  const modalHandler = (arg: _modals | null) => {
+    setShowModal(false);
+  };
+  const closeHandler = () => {
+    router.push('/').then(() => setShowModal(false));
+  };
+  const renderLoginModal = () => {
+    return thirdPartyLogin ? (
+      <ThirdPartyLogin
+        modalHandler={modalHandler}
+        closeHandler={closeHandler}
+      />
+    ) : (
+      <LoginModal modalHandler={modalHandler} closeHandler={closeHandler} />
+    );
+  };
 
   useEffect(() => {
     if ('metaData' in props) {
@@ -69,13 +101,16 @@ const SlugSearch: NextPage<_Slug_Props, _Slug_Props> = (props) => {
   if ('error' in props) {
     return <>{props.error}</>;
   }
-
   // PAGES
   const _store: _StoreCache = {
     storeTypeId: _globalStore.storeTypeId,
     storeCode: _globalStore.code,
   };
   const { page, metaData } = props;
+
+  if (showModal) {
+    return renderLoginModal();
+  }
   if (page === 'PRODUCT_DETAILS') {
     const { configs, data } = props;
     return (
@@ -85,6 +120,8 @@ const SlugSearch: NextPage<_Slug_Props, _Slug_Props> = (props) => {
         alike={data.alike}
         colors={data.colors}
         sizes={data.sizes}
+        reviews={data.reviews}
+        ratings={data.ratings}
         details={data.details}
         storeCode={_store.storeCode}
         storeTypeId={_store.storeTypeId}
@@ -151,13 +188,12 @@ const SlugSearch: NextPage<_Slug_Props, _Slug_Props> = (props) => {
         )}
         <ProductListing
           pageData={listingData}
-          slug={metaData.slug}
-          seType={metaData.type}
           id={configs.templateId}
           CMS={{
             component: listingData.categoryComponents,
-            type: __pageTypeConstant.category,
+            type: metaData.type,
             slug: metaData.slug,
+            pageId: metaData.id,
           }}
         />
       </>

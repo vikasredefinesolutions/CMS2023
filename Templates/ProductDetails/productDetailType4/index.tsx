@@ -1,4 +1,3 @@
-import { _StoreCache } from '@definations/slug.type';
 import { KlaviyoScriptTag } from '@helpers/common.helper';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import { FetchInventoryById } from '@services/product.service';
@@ -7,12 +6,10 @@ import ProductRecentlyViewed from '@templates/recentlyViewedProducts';
 import YouMayAlsoLike from '@templates/youMayAlsoLike';
 import Head from 'next/head';
 import { useEffect } from 'react';
-import { _ProductDetailsProps } from '../productDetailsTypes/productDetail.res';
+import { _Props } from '../productDetails';
 import ProductDetail from './component/ProductDetail';
 
-const ProductDetails_Type4: React.FC<_ProductDetailsProps & _StoreCache> = (
-  product,
-) => {
+const ProductDetails_Type4: React.FC<_Props> = (product) => {
   const {
     store_productDetails,
     setColor,
@@ -173,6 +170,8 @@ const ProductDetails_Type4: React.FC<_ProductDetailsProps & _StoreCache> = (
           return (
             <div key={val + index}>
               <Reviews
+                ratings={product.ratings}
+                reviews={product.reviews}
                 storeCode={product.storeCode}
                 productId={product?.details?.id ? product.details.id : 0}
               />

@@ -1,4 +1,5 @@
 import Price from '@appComponents/Price';
+import { HEALTHYPOINTS } from '@constants/global.constant';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import React from 'react';
 import { _CO7R_AddressFields, _CO7R_Screens } from '../CO7R_Extras';
@@ -13,6 +14,7 @@ const CO7R_ReviewShippingInformation: React.FC<_Props> = ({
   address,
 }) => {
   const { shippingMethod } = useTypedSelector_v2((state) => state.checkout);
+  const storeCode = useTypedSelector_v2((state) => state.store.code);
 
   const text = {
     firstLine: `${address.firstname} ${address.lastName}`,
@@ -29,12 +31,17 @@ const CO7R_ReviewShippingInformation: React.FC<_Props> = ({
   };
 
   const showShippingMethodReview = () => {
-    if (shippingMethod.name || shippingMethod.price > 0) return true;
+    if (
+      shippingMethod.name ||
+      shippingMethod.price > 0 ||
+      storeCode == HEALTHYPOINTS
+    )
+      return true;
     return false;
   };
 
   return (
-    <div className='bg-light-gray flex-1 w-full md:w-6/12 mt-[15px] ml-[15px] mr-[15px] mb-[30px]'>
+    <div className='bg-light-gray flex-1 w-full md:w-6/12 mt-[15px] ml-[15px] mr-[15px] mb-[30px] pb-[60px]'>
       <div className='pl-[15px] pr-[15px] pt-[15px] pb-[15px]'>
         <div className='flex flex-wrap items-center justify-between pt-[10px] border-b border-[#ececec]'>
           <div className='pb-[10px] text-title-text'>Shipping Information</div>

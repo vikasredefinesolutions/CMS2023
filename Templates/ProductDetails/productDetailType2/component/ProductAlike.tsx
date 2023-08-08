@@ -1,6 +1,6 @@
 import { __pagesConstant } from '@constants/pages.constant';
 // import { _ProductAlikeProps } from '@templates/ProductDetails/components/productDetailsComponents';
-import Image from 'appComponents_v2/reUsable/Image';
+import NxtImage from 'appComponents_v2/reUsable/Image';
 import Price from 'appComponents_v2/reUsable/Price';
 import Link from 'next/link';
 import React, { useRef, useState } from 'react';
@@ -78,7 +78,7 @@ const ProductAlike: React.FC<_ProductAlikeProps> = ({
                                 className='relative underline min-h-[48px]'
                               >
                                 <div>
-                                  <Image
+                                  <NxtImage
                                     title={product.name}
                                     src={product.image}
                                     alt={product.name}

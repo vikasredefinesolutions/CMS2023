@@ -1,21 +1,24 @@
 import {
   checkoutPages,
-  PaymentMethod,
   paymentMethodCustom as paymentEnum,
+  PaymentMethod,
   UserAddressType,
 } from '@constants/enum';
 import {
-  CG_STORE_CODE,
   __Cookie,
   __Cookie_Expiry,
   __LocalStorage,
   __UserMessages,
+  CG_STORE_CODE,
 } from '@constants/global.constant';
 import { paths } from '@constants/paths.constant';
 
 import { addAddress, AddOrderDefault } from '@constants/payloads/checkout';
 import { signup_payload } from '@constants/payloads/signup';
-import { commonMessage } from '@constants/successError.text';
+import {
+  __SuccessErrorText,
+  commonMessage,
+} from '@constants/successError.text';
 import { CreditCardDetailsType } from '@definations/checkout';
 import {
   deleteCookie,
@@ -57,7 +60,7 @@ import { __pagesConstant } from '@constants/pages.constant';
 import { PaymentOptions } from '@definations/APIs/cart.req';
 import { CustomerAddress, UserType } from '@definations/APIs/user.res';
 import { WishlistType } from '@definations/wishlist.type';
-import { BrandPolicyViewModel, _CartItem } from '@services/cart';
+import { _CartItem, BrandPolicyViewModel } from '@services/cart';
 import { Klaviyo_PlaceOrder } from '@services/klaviyo.service';
 import {
   getCustomerAllowBalance,
@@ -74,6 +77,11 @@ export interface _shippingMethod {
   price: number;
 }
 [];
+
+export interface _Props {
+  name: string;
+  value: string;
+}
 
 const CheckoutController = () => {
   const [endUserNameS, setEndUserName] = useState<string>('');
@@ -107,7 +115,6 @@ const CheckoutController = () => {
   );
   const [orderNote, setorderNotes] = useState<string>('');
   const [billingAdress, setBillingAdress] = useState<AddressType | null>(null);
-  const [billAddress, setBillAddress] = useState<AddressType | null>(null);
   const [addressType, setAddressType] = useState<
     null | UserAddressType.SHIPPINGADDRESS | UserAddressType.BILLINGADDRESS
   >(null);
@@ -230,7 +237,7 @@ const CheckoutController = () => {
 
   useEffect(() => {
     if (isLoggedIn && user.customer) {
-      if (user.customer.customerAddress.length > 0) {
+      if (user.customer.customerAddress?.length > 0) {
         if (customer && customer.customerAddress) {
           if (!shippingAdress) {
             setShowAddAddress(true);
@@ -316,75 +323,83 @@ const CheckoutController = () => {
     cpass: string;
   }) => {
     setShowLoader(true);
-    const addAccount = {
-      storeCustomerGuestModel: {
-        id: 0,
-        email: customerEmail,
-        password: enteredInputs.pass,
-        confirmPassword: enteredInputs.cpass,
-        storeId: storeId,
-        recStatus: 'A',
-      },
-    };
-    const userDetail = await createAccountWithoutCompany(addAccount);
+    try {
+      const addAccount = {
+        storeCustomerGuestModel: {
+          id: 0,
+          email: customerEmail,
+          password: enteredInputs.pass,
+          confirmPassword: enteredInputs.cpass,
+          storeId: storeId,
+          recStatus: 'A',
+        },
+      };
+      const userDetail = await createAccountWithoutCompany(addAccount);
 
-    if (userDetail) {
-      signInUser({
-        userName: userDetail?.item1.email,
-        password: enteredInputs.pass,
-        storeId: storeId!,
-      })
-        .then((user) => {
-          if (user.credentials === 'INVALID') {
-            // setErrorMsg(user.message);
-          }
-          if (user.credentials === 'VALID') {
-            logInUser({
-              id: +user.id,
-            });
-            setCookie(__Cookie.userId, user.id, __Cookie_Expiry.userId);
-
-            GetStoreCustomer(+user.id).then((res) => {
-              if (res === null) return;
-              if (localStorage) {
-                const tempCustomerId = extractCookies(
-                  __Cookie.tempCustomerId,
-                  'browserCookie',
-                ).tempCustomerId;
-
-                if (tempCustomerId) {
-                  updateCartByNewUserId(~~tempCustomerId, res.id).then(() => {
-                    fetchCartDetails({
-                      customerId: res.id,
-                      isEmployeeLoggedIn: isEmployeeLoggedIn,
-                    });
-                  });
-                  deleteCookie(__Cookie.tempCustomerId);
-                }
-              }
-
-              const userInfo = {
-                $email: res.email,
-                $first_name: res.firstname,
-                $last_name: res.lastName,
-                $phone_number: '',
-                $organization: res.companyName,
-                $title: 'title',
-                $timestamp: new Date(),
-              };
-
-              KlaviyoScriptTag(['identify', userInfo]);
-              updateCustomer({ customer: res });
-              getWishlist(res.id).then((wishListResponse) => {
-                updateWishListData(wishListResponse);
-              });
-            });
-          }
+      if (userDetail) {
+        signInUser({
+          userName: userDetail?.item1.email,
+          password: enteredInputs.pass,
+          storeId: storeId!,
         })
-        .finally(() => {
-          setShowLoader(false);
-          setCurrentPage(checkoutPages.address);
-        });
+          .then((user) => {
+            if (user.credentials === 'INVALID') {
+              // setErrorMsg(user.message);
+            }
+            if (user.credentials === 'VALID') {
+              logInUser({
+                id: +user.id,
+              });
+              setCookie(__Cookie.userId, user.id, __Cookie_Expiry.userId);
+
+              GetStoreCustomer(+user.id).then((res) => {
+                if (res === null) return;
+                if (localStorage) {
+                  const tempCustomerId = extractCookies(
+                    __Cookie.tempCustomerId,
+                    'browserCookie',
+                  ).tempCustomerId;
+
+                  if (tempCustomerId) {
+                    updateCartByNewUserId(~~tempCustomerId, res.id).then(() => {
+                      fetchCartDetails({
+                        customerId: res.id,
+                        isEmployeeLoggedIn: isEmployeeLoggedIn,
+                      });
+                    });
+                    deleteCookie(__Cookie.tempCustomerId);
+                  }
+                }
+
+                const userInfo = {
+                  $email: res.email,
+                  $first_name: res.firstname,
+                  $last_name: res.lastName,
+                  $phone_number: '',
+                  $organization: res.companyName,
+                  $title: 'title',
+                  $timestamp: new Date(),
+                };
+
+                KlaviyoScriptTag(['identify', userInfo]);
+                updateCustomer({ customer: res });
+                getWishlist(res.id).then((wishListResponse) => {
+                  updateWishListData(wishListResponse);
+                });
+              });
+            }
+          })
+          .finally(() => {
+            setShowLoader(false);
+            setCurrentPage(checkoutPages.address);
+          });
+      }
+    } catch (error) {
+      showModal({
+        message: __SuccessErrorText.SomethingWentWrong,
+        title: commonMessage.failed,
+      });
+      setShowLoader(false);
     }
   };
 
@@ -458,31 +473,35 @@ const CheckoutController = () => {
 
   const checkEmail = async (values: { email: string }) => {
     setShowLoader(true);
-    const response = await checkCustomerAlreadyExist(values.email, storeId);
-    if (response) {
-      setCustomerEmail(values.email);
+    try {
+      const response = await checkCustomerAlreadyExist(values.email, storeId);
+      if (response) {
+        setCustomerEmail(values.email);
 
-      if (isEmployeeLoggedIn && response.isCustomerExist) {
-        await skipUserPasswordScreen(response.id);
-        return;
-      }
+        if (isEmployeeLoggedIn && response.isCustomerExist) {
+          await skipUserPasswordScreen(response.id);
+          return;
+        }
 
-      if (isEmployeeLoggedIn) {
-        setShowLoader(false);
-        continueAsGuest();
-        return;
-      }
+        if (isEmployeeLoggedIn) {
+          setShowLoader(false);
+          continueAsGuest();
+          return;
+        }
 
-      if (response.isCustomerExist) {
-        setCurrentPage(checkoutPages.password);
-      } else if (!response.isCustomerExist) {
-        setCurrentPage(checkoutPages.createAccount);
+        if (response.isCustomerExist) {
+          setCurrentPage(checkoutPages.password);
+        } else if (!response.isCustomerExist) {
+          setCurrentPage(checkoutPages.createAccount);
+        }
+        if (response.isGuestCustomer) {
+          setAllowGuest(false);
+        }
       }
-      if (response.isGuestCustomer) {
-        setAllowGuest(false);
-      }
+      setShowLoader(false);
+    } catch (error) {
+      setShowLoader(false);
     }
-    setShowLoader(false);
   };
   const sortingArrayObject = (a: string, b: string) => {
     let fa = a.toLowerCase(),
@@ -609,14 +628,15 @@ const CheckoutController = () => {
   const logout_EmployeeLogin = (id: string) => {
     updateEmployeeV2('CLEAN_UP');
     product_employeeLogin('MinQtyToOne_CleanUp');
-    logoutClearCart();
     logInUser('CLEAN_UP');
     setCookie(__Cookie.userId, '', 'EPOCH');
     deleteCookie(__Cookie.tempCustomerId);
     localStorage.removeItem(__LocalStorage.guestEmailID);
     localStorage.removeItem(__LocalStorage.empData);
     localStorage.removeItem(__LocalStorage.empGuest);
-    router.push(`/${paths.THANK_YOU}?orderNumber=${id}`);
+    return router
+      .push(`/${paths.THANK_YOU}?orderNumber=${id}`)
+      .then(() => logoutClearCart());
   };
 
   const checkPayment = () => {
@@ -854,7 +874,7 @@ const CheckoutController = () => {
             shippingType: shippingChargeType,
           },
         });
-        if (data) {
+        if (data.length) {
           setShippingMethod(data);
           setSelectedShipping(data[0]);
 
@@ -1054,9 +1074,9 @@ const CheckoutController = () => {
         salesRepName: employeeLogin.salesRep.label,
         salesAgentId: +employeeLogin.salesRep.value,
         isAllowPo: employeeLogin.allowPo,
-        sewOut: isSewOutEnable,
+        sewout: isSewOutEnable,
         sewoutTotal: sewOutTotal,
-
+        orderSubType: employeeLogin.orderSubType.value,
         gclid: gclid,
       };
 
@@ -1106,11 +1126,8 @@ const CheckoutController = () => {
     }
   };
 
-  const paymentFieldUpdateHandler = (
-    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-  ) => {
-    const { name, value } = e.target;
-
+  const paymentFieldUpdateHandler = (props: _Props) => {
+    const { name, value } = props;
     switch (paymentMethod) {
       case paymentEnum.creditCard:
         setCardDetails((prev) => ({ ...prev, [name]: value }));

@@ -58,6 +58,8 @@ const OrganizationSection = () => {
               stateName={'storeCustomerAddress[1].state'}
               stateValue={values.storeCustomerAddress[1].state}
               setFieldValue={setFieldValue}
+              labelClass='mb-[4px] text-normal-text'
+              order='2'
             />
           ) : (
             <SU4_Input

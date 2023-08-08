@@ -1,5 +1,6 @@
 import LoginModal from '@appComponents/modals/loginModal';
-import { UCA } from '@constants/global.constant';
+import { _Store } from '@configs/page.config';
+import { CYXTERA_CODE, UCA, UNITI_CODE } from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
 import { _MenuCategory } from '@definations/header.type';
 import { _modals } from '@definations/product.type';
@@ -30,6 +31,8 @@ const Header_Category: React.FC<_props> = ({
   const [focus, setFocus] = useState(false);
   const [showAllItems, setShowAllItems] = useState<boolean>(false);
   const [showtab, setShowTab] = useState<boolean>(false);
+  const { redirectPath } = useTypedSelector_v2((state) => state.home);
+
   useEffect(() => {
     if (openTab == title) {
       setShowTab(true);
@@ -122,32 +125,40 @@ const Header_Category: React.FC<_props> = ({
   if (view === 'DESKTOP') {
     return (
       <>
-        <div
-          onClick={() => {
-            if (code === 'CYX' || code === UCA) {
-              if (customerId) {
-                setOpenTab(title);
-                setShowAllItems((show) => !show);
-              } else {
-                setOpenModal('login');
-              }
-            } else {
-              setOpenTab(title);
-              setShowAllItems((show) => !show);
-            }
-          }}
-        >
+        <div>
           <div className='relative '>
             <button
               title={title}
               type='button'
               onMouseOver={() => setFocus(true)}
               onMouseLeave={() => setFocus(false)}
+              onClick={() => {
+                if (
+                  code === CYXTERA_CODE ||
+                  code === UNITI_CODE ||
+                  code === UCA
+                ) {
+                  if (customerId) {
+                    router.push(`/${url}`);
+                  } else {
+                    setRedirectPagePath(redirectPath || `/${url}`);
+                    setOpenModal('login');
+                  }
+                } else {
+                  router.push(`/${url}`);
+                }
+              }}
               className={`relative text-[12px] xl:text-[14px] xl:ml-[12px] xl:mr-[12px] ml-[5px] mr-[5px] tracking-[2px] z-10 flex items-center font-[400] pt-[10px] pb-[10px] border-b-[4px] ${
                 focus
-                  ? 'border-secondary text-secondary'
-                  : 'border-transparent text-primary'
-              }`}
+                  ? `border-secondary ${
+                      code == _Store.type6
+                        ? 'primary-link hover:primary-link'
+                        : 'text-secondary'
+                    } `
+                  : `border-transparent  ${
+                      code == _Store.type6 ? '' : 'text-primary'
+                    } `
+              } border-primary-link`}
             >
               <span
                 className='uppercase '

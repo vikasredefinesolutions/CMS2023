@@ -1,8 +1,10 @@
+import NxtImage from '@appComponents/reUsable/Image';
 import {
   maximumWordsUnderChestLogo,
   maximumWordsUnderSleeveLogo,
 } from '@constants/common.constant';
 import { __pagesText } from '@constants/pages.text';
+import { _modals } from '@definations/product.type';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import {
   PersonalizationColor,
@@ -16,6 +18,7 @@ import { updateCartPersonalization } from '@services/cart.service';
 import { _CartLinePersonDetailModel } from '@services/product.service.type';
 import { FC, useState } from 'react';
 import { _globalStore } from 'store.global';
+import SelectedFontZoom from './SelectedFontZoom';
 
 interface _Props {
   availableColor: PersonalizationColor[];
@@ -72,8 +75,22 @@ const Personalizing: FC<_Props> = ({
       ? true
       : false,
   );
+  const [openModal, setOpenModal] = useState<null | _modals>(null);
+  const modalHandler = (param: null | _modals) => {
+    if (param) {
+      setOpenModal(param);
+      return;
+    }
+    setOpenModal(null);
+  };
   const [selectedFont, setSelectedFont] = useState<string>(
     earlierSelectedFont !== '' ? earlierSelectedFont : availableFont[0]['name'],
+  );
+  const [selectedFontImage, setSelectedFontImage] = useState<string>(
+    earlierSelectedFont !== ''
+      ? availableFont.filter((item) => item.name === earlierSelectedFont)[0]
+          .image
+      : availableFont[0].image,
   );
   const [selectedColor, setSelectedColor] = useState<string>(
     earlierSelectedColor !== ''
@@ -369,7 +386,7 @@ const Personalizing: FC<_Props> = ({
                       ...s,
                       linetext: e.target.value,
                       linefont: selectedFont,
-                      linecolor: selectedColor,
+                      linecolor: selectedColor || availableColor[0]['name'],
                     };
                   }
                   return s;
@@ -402,7 +419,7 @@ const Personalizing: FC<_Props> = ({
                         ...s,
                         linetext: e.target.value,
                         linefont: selectedFont,
-                        linecolor: selectedColor,
+                        linecolor: selectedColor || availableColor[0]['name'],
                       };
                     }
                     return s;
@@ -434,13 +451,33 @@ const Personalizing: FC<_Props> = ({
     // if (lineObject.linetext === '') {
     //   return;
     // }
-
     let newArr: _CartLinePersonDetailModel[] | [] = cartLinePersonModels;
 
     let availableIndex = newArr.findIndex((item) => item.id === id);
 
     if (availableIndex !== -1) {
-      newArr[availableIndex].lineText = lineObject.linetext;
+      newArr[availableIndex].lineText =
+        lineObject.linetext.trim() === '' ? '' : lineObject.linetext;
+      newArr[availableIndex].lineTotal =
+        lineObject.linetext.trim() === ''
+          ? 0
+          : newArr[availableIndex].lineNumber === 1
+          ? firstLineCharges
+          : secondLineCharges;
+      newArr[availableIndex].linePrice =
+        lineObject.linetext.trim() === ''
+          ? 0
+          : newArr[availableIndex].lineNumber === 1
+          ? firstLineCharges
+          : secondLineCharges;
+      newArr[availableIndex].lineFont =
+        lineObject.linetext.trim() === '' ? '' : selectedFont;
+      newArr[availableIndex].lineColor =
+        lineObject.linetext.trim() === ''
+          ? ''
+          : selectedColor || availableColor[0]['name'];
+      newArr[availableIndex].personalizeLocation =
+        lineObject.linetext.trim() === '' ? '' : selectedLocation;
       setCartLinePersonModels(newArr);
     } else {
       setCartLinePersonModels((prev: _CartLinePersonDetailModel[] | []) => [
@@ -450,7 +487,7 @@ const Personalizing: FC<_Props> = ({
           cartLinePersonId: lineObject.cartLinePersonId,
           shoppingCartItemsId: shoppingCartItemsId,
           linePrice:
-            lineObject.linetext !== ''
+            lineObject.linetext.trim() !== ''
               ? name === 'lineone'
                 ? firstLineCharges
                 : secondLineCharges
@@ -459,19 +496,22 @@ const Personalizing: FC<_Props> = ({
           lineAboveLogo: 0,
           lineIndividually: 1,
           lineNumber: name === 'lineone' ? 1 : 2,
-          lineText: lineObject.linetext,
+          lineText: lineObject.linetext.trim(),
           lineTotal:
-            lineObject.linetext !== ''
+            lineObject.linetext.trim() !== ''
               ? name === 'lineone'
                 ? firstLineCharges
                 : secondLineCharges
               : 0,
-          lineFont: lineObject.linetext !== '' ? lineObject.linefont : '',
-          lineColor: lineObject.linetext !== '' ? lineObject.linecolor : '',
+          lineFont: lineObject.linetext.trim() !== '' ? selectedFont : '',
+          lineColor:
+            lineObject.linetext.trim() !== ''
+              ? selectedColor || availableColor[0]['name']
+              : '',
           linePriceDouble: 0,
           logoCartId: 0,
           personalizeLocation:
-            lineObject.linetext !== '' ? selectedLocation : '',
+            lineObject.linetext.trim() !== '' ? selectedLocation : '',
           parentId: lineObject.parentId,
         },
       ]);
@@ -491,6 +531,9 @@ const Personalizing: FC<_Props> = ({
             <span
               data-modal-toggle='NamePersonalizeModal'
               className='material-icons-outlined text-xl leading-none cursor-pointer'
+              onClick={() => {
+                modalHandler('personalizationFonts');
+              }}
             >
               search
             </span>
@@ -504,6 +547,7 @@ const Personalizing: FC<_Props> = ({
                   onClick={() => {
                     setSelectedFont(item.name);
                     changeLocationForAll(item.name, 'Font');
+                    setSelectedFontImage(item.image);
                   }}
                 >
                   <div
@@ -511,7 +555,12 @@ const Personalizing: FC<_Props> = ({
                       selectedFont === item.name ? 'border-secondary' : ''
                     }`}
                   >
-                    <img src={`${mediaBaseUrl}${item.image}`} alt='' />
+                    <NxtImage
+                      className=''
+                      useNextImage={false}
+                      src={item.image}
+                      alt=''
+                    />
                   </div>
                 </div>
               </>
@@ -521,12 +570,14 @@ const Personalizing: FC<_Props> = ({
         <div className='w-full pl-[15px] pr-[15px] border-b border-gray-border mt-[20px] mb-[20px]'></div>
         <div className='pt-5 flex flex-wrap gap-2 gap-x-8 '>
           <div className='w-[80px] h-[80px]'>
-            <img
+            <NxtImage
+              className=''
+              useNextImage={false}
               src={
-                item.shoppingCartLogoPersonViewModels[0].logoImagePath !== ''
-                  ? `${mediaBaseUrl}${item.shoppingCartLogoPersonViewModels[0].logoImagePath}`
-                  : '/assets/images/logolater.png'
+                item.shoppingCartLogoPersonViewModels[0].logoImagePath ||
+                '/assets/images/logolater.png'
               }
+              isStatic={!item.shoppingCartLogoPersonViewModels[0].logoImagePath}
               alt=''
             />
           </div>
@@ -556,31 +607,49 @@ const Personalizing: FC<_Props> = ({
                   );
                 },
               )}
+              {/* <div
+                className={`w-[32px] h-[32px] border-2 pl-[4px] pr-[4px] pb-[4px] pt-[4px] ${
+                  selectedColor.startsWith('#') ? 'border-secondary' : ''
+                }`}
+              >
+                <input
+                  className='w-full h-full'
+                  value={selectedColor}
+                  type='color'
+                  onChange={(e) => {
+                    setSelectedColor(e.target.value);
+                  }}
+                  onBlur={(e) => changeLocationForAll(e.target.value, 'color')}
+                />
+              </div> */}
+
+              <button
+                className='h-[32px] btn btn-sm text-sm border-2 btn-primary cursor-pointer'
+                onClick={() => {
+                  setSelectedColor(
+                    !showColorPelette ? '' : availableColor[0].name,
+                  );
+                  setShowColorPelette(!showColorPelette);
+                }}
+              >
+                {showColorPelette ? 'Close Custom Color' : 'Open Custom Color'}
+              </button>
               {showColorPelette && (
-                <div
-                  className={`w-[32px] h-[32px] border-2 pl-[4px] pr-[4px] pb-[4px] pt-[4px] ${
-                    selectedColor.startsWith('#') ? 'border-secondary' : ''
-                  }`}
-                >
+                <div className='w-[100px] h-[32px]'>
                   <input
-                    className='w-full h-full'
                     value={selectedColor}
-                    type='color'
+                    type='text'
                     onChange={(e) => {
                       setSelectedColor(e.target.value);
                     }}
                     onBlur={(e) =>
                       changeLocationForAll(e.target.value, 'color')
                     }
+                    className='form-input inline-block w-40 h-[32px]'
+                    placeholder=''
                   />
                 </div>
               )}
-              <button
-                className='h-[32px] btn btn-sm text-sm border-2 btn-primary cursor-pointer'
-                onClick={() => setShowColorPelette(!showColorPelette)}
-              >
-                {showColorPelette ? 'Close Custom Color' : 'Open Custom Color'}
-              </button>
             </div>
           </div>
         </div>
@@ -733,6 +802,13 @@ const Personalizing: FC<_Props> = ({
           </button>
         </div>
       </div>
+      {openModal === 'personalizationFonts' && (
+        <SelectedFontZoom
+          modalHandler={modalHandler}
+          selectedFontImage={selectedFontImage}
+          selectedFont={selectedFont}
+        />
+      )}
     </>
   );
 };

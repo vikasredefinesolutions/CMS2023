@@ -2,6 +2,7 @@ import { __pagesConstant } from '@constants/pages.constant';
 import { __ValidationText } from '@constants/validation.text';
 import getLocation from '@helpers/getLocation';
 
+import NxtImage from '@appComponents/reUsable/Image';
 import {
   __Cookie,
   phonePattern1,
@@ -81,12 +82,12 @@ const _RequestConsulationSchema = Yup.object().shape({
   preferedContactMethod: Yup.string().required(
     __ValidationText.requestConsultation.preferedContactMethod,
   ),
-  desiredQty: Yup.string()
+  desiredQty: Yup.number()
+    .required(__ValidationText.requestConsultation.desiredQty.required)
     .min(
       __ValidationText.requestConsultation.desiredQty.minQty,
       __ValidationText.requestConsultation.desiredQty.minText,
-    )
-    .required(__ValidationText.requestConsultation.desiredQty.required),
+    ),
   inHandDate: Yup.string(),
   message: Yup.string(),
 });
@@ -125,6 +126,15 @@ const RcForm: React.FC<{
   };
 
   const fileReader = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (
+      event.target.files &&
+      !['image/png', 'image/jpeg', 'image/jpg'].includes(
+        event.target.files[0].type,
+      )
+    ) {
+      alert('Please select an image file.');
+      return;
+    }
     if (event.target?.files === null) return;
 
     try {
@@ -282,7 +292,7 @@ const RcForm: React.FC<{
                       handleChange(event);
                     }
                   }}
-                  value={values.desiredQty || ''}
+                  value={values.desiredQty}
                   type={'text'}
                   id='Desired Quantity'
                   name={'desiredQty'}
@@ -336,9 +346,10 @@ const RcForm: React.FC<{
                         </label>
                         {fileUploded ? (
                           <div className='flex items-center justify-between border border-[#a5a5a5] text-medium-text pl-[5px] pr-[5px] pt-[5px] pb-[5px] rounded'>
-                            <img
+                            <NxtImage
+                              useNextImage={false}
                               className='w-14 max-h-14'
-                              src={`${mediaBaseUrl}${fileToUpload?.logoPathURL}`}
+                              src={fileToUpload?.logoPathURL || null}
                               alt=''
                             />
                             <button

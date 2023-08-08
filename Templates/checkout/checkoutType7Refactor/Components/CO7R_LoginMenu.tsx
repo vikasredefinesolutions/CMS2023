@@ -2,6 +2,7 @@ import Input from '@appComponents/ui/switch/Input';
 import { _Store } from '@configs/page.config';
 import {
   SIMPLI_SAFE_CODE,
+  _Store_CODES,
   __Cookie,
   __Cookie_Expiry,
 } from '@constants/global.constant';
@@ -9,7 +10,6 @@ import { __pagesText } from '@constants/pages.text';
 import { paths } from '@constants/paths.constant';
 import { setCookie } from '@helpers/common.helper';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
-import { getCustomerAllowBalance } from '@services/payment.service';
 import { GetStoreCustomer, signInUser } from '@services/user.service';
 import { Form, Formik } from 'formik';
 import Link from 'next/link';
@@ -49,12 +49,7 @@ const CO7_LoginMenu: React.FC<_Props> = ({ setScreenToShow }) => {
       // });
       udpateCustomerIdInCookie(+userId);
       updateKlaviyo(response);
-      return getCustomerAllowBalance(+userId).then((res) => {
-        if (res && typeof res === 'number') {
-          update_CheckoutUser({ creditBalance: res });
-        }
-        return 'SUCCESS';
-      });
+      return 'SUCCESS';
     });
   };
 
@@ -98,6 +93,7 @@ const CO7_LoginMenu: React.FC<_Props> = ({ setScreenToShow }) => {
 
   const checkDomainNameInEmail = (
     event: React.ChangeEvent<HTMLInputElement>,
+    domain: 'usaa' | 'simplisafe',
   ) => {
     const enteredEmail = event.target.value.trim();
 
@@ -105,9 +101,12 @@ const CO7_LoginMenu: React.FC<_Props> = ({ setScreenToShow }) => {
       return;
     }
 
-    if (storeCode == _Store.type5 || storeCode == SIMPLI_SAFE_CODE) {
-      const domain = true ? 'simplisafe' : 'usaa';
-      const matched = new RegExp("^\\w+([-+.']w+)*@" + domain + '.com$').test(
+    if (
+      storeCode == _Store.type5 ||
+      storeCode == SIMPLI_SAFE_CODE ||
+      storeCode === _Store_CODES.USAAHEALTHYPOINTS
+    ) {
+      const matched = new RegExp(`[a-zA-Z0-9._%+-]+@` + domain + `\.com$`).test(
         enteredEmail,
       );
 
@@ -120,11 +119,15 @@ const CO7_LoginMenu: React.FC<_Props> = ({ setScreenToShow }) => {
   };
 
   return (
-    <div className='flex flex-wrap ml-[-15px] mr-[-15px] -mt-3 checkout-box'>
+    <div
+      className={`flex flex-wrap ml-[-15px] mr-[-15px] ${
+        storeCode == SIMPLI_SAFE_CODE ? '' : '-mt-3'
+      } checkout-box`}
+    >
       <>
         <div className='w-full lg:w-6/12 md:w-6/12 pl-[15px] pr-[15px]'>
           <div className='p-[15px] bg-light-gray'>
-            <div className='pb-[10px] text-title-text text-center'>
+            <div className='pb-[15px] text-title-text text-center uppercase'>
               {__pagesText.productInfo.loginModal.signIn}
             </div>
             <Formik
@@ -158,7 +161,14 @@ const CO7_LoginMenu: React.FC<_Props> = ({ setScreenToShow }) => {
                         }}
                         type={'email'}
                         required={false}
-                        onBlur={checkDomainNameInEmail}
+                        onBlur={(e) =>
+                          checkDomainNameInEmail(
+                            e,
+                            storeCode == SIMPLI_SAFE_CODE
+                              ? 'simplisafe'
+                              : 'usaa',
+                          )
+                        }
                       />
                       <Input
                         label={''}
@@ -202,7 +212,7 @@ const CO7_LoginMenu: React.FC<_Props> = ({ setScreenToShow }) => {
                           </label>
                         </div>
 
-                        <div className='mb-[10px] hidden'>
+                        <div className='mb-[10px]'>
                           <button onClick={() => {}} className='text-anchor'>
                             {__pagesText.productInfo.loginModal.forgotPassword}
                           </button>
@@ -213,7 +223,7 @@ const CO7_LoginMenu: React.FC<_Props> = ({ setScreenToShow }) => {
                 );
               }}
             </Formik>
-            <div className='mt-[10px] text-extra-small-text text-center hidden'>
+            <div className='mt-[10px] text-extra-small-text text-center  '>
               {__pagesText.productInfo.loginModal.clickMessage}{' '}
               <Link
                 href={`${
@@ -222,12 +232,22 @@ const CO7_LoginMenu: React.FC<_Props> = ({ setScreenToShow }) => {
                     : paths.TERMS_OF_USE
                 }`}
               >
-                <a className='text-anchor'>
+                <a
+                  className={`${
+                    storeCode === _Store_CODES.USAAHEALTHYPOINTS &&
+                    'text-red-600'
+                  }`}
+                >
                   {__pagesText.productInfo.loginModal.termsOfUse}
                 </a>
               </Link>{' '}
               {__pagesText.productInfo.loginModal.and}{' '}
-              <a href={paths?.PRIVACY_POLICY} className='text-anchor'>
+              <a
+                href={paths?.PRIVACY_POLICY}
+                className={`${
+                  storeCode === _Store_CODES.USAAHEALTHYPOINTS && 'text-red-600'
+                }`}
+              >
                 {__pagesText.productInfo.loginModal.privacyPolicy}
               </a>
             </div>
@@ -235,10 +255,10 @@ const CO7_LoginMenu: React.FC<_Props> = ({ setScreenToShow }) => {
         </div>
         <div className='w-full lg:w-6/12 md:w-6/12 pl-[15px] pr-[15px]'>
           <div className='p-[15px] bg-light-gray'>
-            <div className='pb-[10px] text-title-text text-center'>
+            <div className='pb-[15px] text-title-text text-center uppercase'>
               {__pagesText.productInfo.loginModal.signUp}
             </div>
-            <div className='mb-[20px]'>
+            <div className=''>
               <Link href={paths.SIGN_UP}>
                 <a
                   className={`btn ${

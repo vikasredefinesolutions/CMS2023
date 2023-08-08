@@ -1,9 +1,10 @@
 import { __pagesText } from '@constants/pages.text';
 import { _ProductInventory } from '@definations/APIs/inventory.res';
 import { FetchInventoryById } from '@services/product.service';
-import { default as Image } from 'appComponents_v2/reUsable/Image';
+import NxtImage from 'appComponents_v2/reUsable/Image';
 import { useTypedSelector_v2 } from 'hooks_v2';
-import React, { useEffect, useState } from 'react';
+import moment from 'moment';
+import React, { useEffect, useRef, useState } from 'react';
 import { _ModalProps } from '../modal.d';
 
 const AvailableInventoryModal: React.FC<_ModalProps> = ({ modalHandler }) => {
@@ -18,6 +19,7 @@ const AvailableInventoryModal: React.FC<_ModalProps> = ({ modalHandler }) => {
     _ProductInventory[]
   >([]);
   const [size, setSizes] = useState<string[]>([]);
+  const showMessage = useRef(false);
 
   const fetchInventory = async () => {
     colors?.map((item) => {
@@ -37,6 +39,45 @@ const AvailableInventoryModal: React.FC<_ModalProps> = ({ modalHandler }) => {
     fetchInventory();
   }, []);
 
+  const currentInventory = (
+    currentProduct: _ProductInventory,
+    index: number,
+  ) => {
+    if (currentProduct.inventory) {
+      if (currentProduct.inventory > 100) {
+        return (
+          <td key={index} className='px-2 py-3'>
+            <div>100+</div>
+          </td>
+        );
+      } else {
+        return (
+          <td key={index} className='px-2 py-3'>
+            <div>{currentProduct.inventory}</div>
+          </td>
+        );
+      }
+    } else if (
+      currentProduct.futureInventory &&
+      moment(currentProduct.futureInventoryDate).format('DD/YY/YYYY') >=
+        moment().format('DD/MM/YYYY')
+    ) {
+      showMessage.current = true;
+      return (
+        <td key={index} className='px-2 py-3 bg-primary text-white'>
+          <p>In Stock({currentProduct.futureInventory})</p>
+          <p>{currentProduct.futureInventoryDate}</p>
+        </td>
+      );
+    } else {
+      return (
+        <td key={index} className='px-2 py-3'>
+          <div>-</div>
+        </td>
+      );
+    }
+  };
+
   return (
     <div
       onClick={() => modalHandler(null)}
@@ -46,7 +87,7 @@ const AvailableInventoryModal: React.FC<_ModalProps> = ({ modalHandler }) => {
       <div className='w-full h-full bg-black bg-opacity-50 flex items-center justify-center'>
         <div className='relative px-4 w-full max-w-3xl h-full md:h-auto'>
           <div className='relative bg-gray-200 shadow max-h-screen overflow-y-auto'>
-            <div className='px-4 lg:px-10 bg-blue-900 text-white'>
+            <div className='px-4 lg:px-10 bg-primary text-white'>
               <div className='flex flex-wrap items-center justify-between py-6'>
                 <div className='pl-8  w-16 h-6'></div>
                 <div className='uppercase font-semibold flex flex-wrap items-center'>
@@ -100,8 +141,8 @@ const AvailableInventoryModal: React.FC<_ModalProps> = ({ modalHandler }) => {
                       >
                         <>
                           <td className='px-2 py-3'>
-                            <div className='w-10 mx-auto mb-1 border border-slate-200'>
-                              <Image
+                            <div className='w-[40px] h-[40px] flex items-center justify-center mx-auto mb-1 border border-slate-200'>
+                              <NxtImage
                                 src={color.imageUrl}
                                 alt={color.altTag}
                                 className=''
@@ -118,17 +159,7 @@ const AvailableInventoryModal: React.FC<_ModalProps> = ({ modalHandler }) => {
                                   color.attributeOptionId,
                             );
                             if (foundIt) {
-                              return (
-                                <td key={index} className='px-2 py-3'>
-                                  <div>
-                                    {foundIt.inventory === 0
-                                      ? foundIt.futureInventory || '-'
-                                      : foundIt.inventory < 100
-                                      ? foundIt.inventory
-                                      : '100+'}
-                                  </div>
-                                </td>
-                              );
+                              return currentInventory(foundIt, index);
                             } else {
                               return (
                                 <td key={index} className='px-2 py-3'>
@@ -145,12 +176,32 @@ const AvailableInventoryModal: React.FC<_ModalProps> = ({ modalHandler }) => {
                   </tbody>
                 </table>
               </div>
+              {showMessage.current && (
+                <div className='text-center mt-2'>
+                  <div className='text-default-text'>
+                    Any dated noted above are estimated restocking dates.
+                  </div>
+
+                  <div className='text-default-text mb-[10px]'>
+                    <a href='javascript:void(0);' className='text-anchor'>
+                      Call us
+                    </a>{' '}
+                    or email{' '}
+                    <a href='javascript:void(0);' className='text-anchor'>
+                      support@corporategear.com
+                    </a>{' '}
+                    to palce any
+                    <br /> order for incoming stock or review alternate options!
+                  </div>
+                </div>
+              )}
             </div>
 
             <div className='flex items-center justify-end p-4 lg:p-10 pt-0 lg:pt-0'>
               <button
                 onClick={() => {
                   setAvailableInventory([]);
+                  showMessage.current = false;
                   modalHandler(null);
                 }}
                 type='button'

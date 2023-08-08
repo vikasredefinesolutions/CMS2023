@@ -160,7 +160,7 @@ const CheckLogoApproved1 = () => {
                 <div className='border border-gray-border md:grid md:grid-cols-3 md:gap-x-6 mb-[30px] rounded-md'>
                   <div className='left-side-box md:col-span-1 pl-[15px] pr-[15px] pt-[15px] pb-[15px] md:pl-[24px] md:pr-[24px] md:pt-[24px] md:pb-[24px] md:pr-0'>
                     <NxtImage
-                      src={logoDetail?.imageUrl}
+                      src={logoDetail?.imageUrl || null}
                       className='w-full'
                       alt=''
                     />

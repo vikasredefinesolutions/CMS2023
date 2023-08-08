@@ -9,9 +9,9 @@ import {
   PersonalizationLocation,
 } from '@services/cart';
 import CartSummarryType5 from '@templates/cartSummarry/cartSummaryType5';
+import CartItem from 'Templates/cartItem';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
-import CartItem from 'Templates/cartItem';
 import { _CartProps } from '../Cart';
 import EmptyCart from '../components/emptyCart';
 
@@ -184,8 +184,11 @@ const CartType5: React.FC<_CartProps> = ({
                         ) : (
                           policy.policyMessage != '' &&
                             policy.policyMessage != null && (
-                              <div className='mt-[20px] ' key={policy.name}>
-                                <strong className=' text-medium-text font-[600]'>
+                              <div
+                                className='mt-[20px] text-medium-text '
+                                key={policy.name}
+                              >
+                                <strong className='font-[600]'>
                                   {policy.policyMessage}
                                 </strong>
                               </div>
@@ -222,7 +225,8 @@ const CartType5: React.FC<_CartProps> = ({
                         className={`my-4 w-full `}
                         disabled={!buttonDisabed}
                         onClick={() => {
-                          localStorage.setItem('endusername', endUserNameS);
+                          endUserDisplay &&
+                            localStorage.setItem('endusername', endUserNameS);
                           router.push(`${paths.CHECKOUT}`);
                         }}
                       >

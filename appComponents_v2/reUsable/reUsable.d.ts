@@ -2,6 +2,7 @@ import { StaticImageData } from 'next/image';
 
 export interface _Imageprops {
   isStatic?: boolean;
+  sizes?: string;
   src: null | string | StaticImageData;
   alt: string | null;
   className: string;
@@ -13,6 +14,8 @@ export interface _Imageprops {
   title?: string;
   extraUrl?: boolean;
   extraUrlPath?: string;
+  role?: string;
+  decoding?: 'async';
 }
 
 export interface _PriceProps {

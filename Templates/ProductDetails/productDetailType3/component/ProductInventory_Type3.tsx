@@ -37,10 +37,12 @@ const Inventory_Type3: React.FC<{
             store_Code == _Store.type6 ? 'text-sm' : 'text-default-text'
           } flex flex-wrap items-center gap-1`}
         >
-          {storeCode! == BACARDI ? (
+          {store_Code !== BACARDI ? (
             inventory?.inventory
               .filter((el) => el.colorAttributeOptionId == +attributeOptionId)
               .map((elem, index) => {
+                // border  h-[32px] w-[46px] flex items-center justify-center cursor-pointers  border-gray-border bg-light-gray  hover:border-secondary
+                // border  h-[32px] w-[46px] flex items-center justify-center cursor-pointers bg-light-gray border-primary
                 return (
                   <Fragment key={`${elem.inventoryId}${index}`}>
                     <button
@@ -48,14 +50,22 @@ const Inventory_Type3: React.FC<{
                       onClick={() => {
                         setSelectSize(elem.name);
                       }}
-                      className={`border  h-[32px] w-[32px] flex items-center justify-center cursor-pointers  4444444444 ${
+                      className={`border  h-[32px] w-[46px] flex items-center justify-center cursor-pointers 454545 ${
                         selectSize === elem.name
-                          ? 'border-secondary bg-secondary text-white'
-                          : 'border-gray-border bg-light-gray'
+                          ? store_Code == _Store.type6
+                            ? 'bg-light-gray border-primary'
+                            : 'border-secondary'
+                          : `border-gray-border bg-light-gray ${
+                              store_Code == _Store.type6
+                                ? 'hover:border-secondary'
+                                : ''
+                            } `
                       }  ${
                         elem.inventory
-                          ? 'hover:bg-secondary hover:text-white'
-                          : 'opacity-50'
+                          ? store_Code == _Store.type6
+                            ? ''
+                            : 'hover:bg-secondary hover:text-white'
+                          : 'opacity-50 outOfStockProduct'
                       } `}
                       disabled={!elem.inventory ? true : false}
                     >
@@ -71,7 +81,7 @@ const Inventory_Type3: React.FC<{
               className='form-input max-w-sm'
               onChange={(e) => setSelectSize(e.target.value)}
             >
-               <option value="">Select Size</option>
+              <option value=''>Select Size</option>
               {inventory?.inventory
                 .filter((el) => el.colorAttributeOptionId == +attributeOptionId)
                 .map((elem, index) => {

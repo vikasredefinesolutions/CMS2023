@@ -103,7 +103,6 @@ const CT1_EL_SizeQtyPrice: React.FC<_Props> = ({ details, setDetails }) => {
                   min={1}
                   onChange={(event) => {
                     if (event.target.value.toString() === '0') {
-                      // handleChange(event);
                       return setFieldValue('qty', 1);
                     }
                     if (!event.target.value.includes('.')) {
@@ -111,7 +110,13 @@ const CT1_EL_SizeQtyPrice: React.FC<_Props> = ({ details, setDetails }) => {
                     }
                   }}
                   onBlur={(event) => {
-                    if (!event.target.value) setFieldValue('qty', 1);
+                    if (!event.target.value) {
+                      setFieldValue('qty', 1);
+                      handleQtyPriceUpdate({
+                        ...values,
+                        qty: 1,
+                      });
+                    }
                     submitForm();
                   }}
                 />
@@ -122,20 +127,23 @@ const CT1_EL_SizeQtyPrice: React.FC<_Props> = ({ details, setDetails }) => {
                   value={values.unitPrice}
                   type='number'
                   name='unitPrice'
-                  min={0.1}
-                  size={0.1}
                   onKeyDown={(event) =>
                     ['e', 'E', '+', '-'].includes(event.key) &&
                     event.preventDefault()
                   }
+                  min={0.1}
                   onChange={(event) => {
-                    if (+event.target.value === 0) {
-                      setFieldValue('unitPrice', 1);
-                      return;
-                    }
                     handleChange(event);
                   }}
-                  onBlur={() => {
+                  onBlur={(event) => {
+                    if (!event.target.value || +event.target.value == 0) {
+                      setFieldValue('unitPrice', 1);
+
+                      handleQtyPriceUpdate({
+                        ...values,
+                        unitPrice: '1',
+                      });
+                    }
                     submitForm();
                   }}
                 />

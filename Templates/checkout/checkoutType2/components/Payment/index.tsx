@@ -1,6 +1,7 @@
 import { paymentMethodCustom } from '@constants/enum';
 import { AddressType } from '@controllers/checkoutController/CheckoutAddressForm';
-import { ChangeEvent, FC } from 'react';
+import { FC } from 'react';
+import { _HandlerProps } from '../..';
 import PaymentChange from './PaymentChange';
 import CardPaymentType from './components/CardPaymentType';
 import PurchaseOrderType from './components/PurchaseorderType';
@@ -8,7 +9,7 @@ import PurchaseOrderType from './components/PurchaseorderType';
 export type paymentProps = FC<{
   /* eslint-disable no-unused-vars */
   updatePaymentMethod: (arg: paymentMethodCustom) => void;
-  changeHandler: (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
+  changeHandler: (e: _HandlerProps) => void;
   detectCardType?: () => string;
   cardDetails?: {
     cardNumber: string;
@@ -25,15 +26,13 @@ export type paymentProps = FC<{
 }>;
 
 const PaymentType: FC<{
-  changeHandler: (
-    /* eslint-disable no-unused-vars */
-    event: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-  ) => void;
+  changeHandler: (e: _HandlerProps) => void;
   paymentMethod: paymentMethodCustom;
   updatePaymentMethod: (arg: paymentMethodCustom) => void;
   detectCardType: () => string;
   changeBillingAddress: boolean;
   BillingFormik: any;
+  ShippingFormik: any;
   setChangeBillingAddress: (value: boolean) => void;
   cardDetails?: {
     cardNumber: string;
@@ -46,7 +45,7 @@ const PaymentType: FC<{
   setUseShippingAddress: (args: boolean) => void;
   useShippingAddress: boolean;
   billingAddress: AddressType | null;
-  setShippingAddress: (args: any) => void;
+  setBillingAddress: (args: any) => void;
   /* eslint-enable no-unused-vars */
 }> = ({
   changeHandler,
@@ -61,7 +60,8 @@ const PaymentType: FC<{
   cardDetails,
   purchaseOrder,
   billingAddress,
-  setShippingAddress,
+  ShippingFormik,
+  setBillingAddress,
 }) => {
   switch (paymentMethod) {
     case paymentMethodCustom.creditCard:
@@ -78,7 +78,8 @@ const PaymentType: FC<{
               paymentMethod,
               setUseShippingAddress,
               useShippingAddress,
-              setShippingAddress,
+              setBillingAddress,
+              ShippingFormik,
               billingAddress,
             }}
           />
@@ -115,7 +116,8 @@ const PaymentType: FC<{
               paymentMethod,
               setUseShippingAddress,
               useShippingAddress,
-              setShippingAddress,
+              setBillingAddress,
+              ShippingFormik,
               billingAddress,
             }}
           />

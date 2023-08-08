@@ -1,16 +1,93 @@
 import Price from '@appComponents/Price';
 import NxtImage from '@appComponents/reUsable/Image';
-import { __pagesConstant } from '@constants/pages.constant';
 import { __pagesText } from '@constants/pages.text';
-import { useTypedSelector_v2 } from '@hooks_v2/index';
+import { useTypedSelector_v2, useWindowDimensions_v2 } from '@hooks_v2/index';
 import Link from 'next/link';
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Slider from 'react-slick';
 import { _TemplateProps } from './youMayAlsoLike';
+
+interface _carouselProps {
+  sliderSettings: {
+    dots: boolean;
+    infinite: boolean;
+    speed: number;
+    slidesToShow: number;
+    slidesToScroll: number;
+    arrows: boolean;
+  };
+  carouselCounter: number;
+}
 
 const YouMayAlsoLikeType5: React.FC<_TemplateProps> = ({ productsData }) => {
   const sliderRef = useRef<null | Slider>(null);
   const customerId = useTypedSelector_v2((state) => state.user.id);
+
+  const { width } = useWindowDimensions_v2();
+  const Settings = {
+    sliderSettings: {
+      dots: false,
+      infinite: true,
+      speed: 500,
+      slidesToShow: width <= 418 ? 1 : width <= 768 ? 2 : width <= 1024 ? 3 : 5,
+      slidesToScroll: 1,
+      arrows: false,
+    },
+    carouselCounter:
+      width <= 418 ? 1 : width <= 768 ? 2 : width <= 1024 ? 3 : 5,
+  };
+
+  const [featuredProductCarouselSetting, setFeaturedProductCarouselSetting] =
+    useState<_carouselProps>(Settings);
+
+  useEffect(() => {
+    if (width <= 480) {
+      setFeaturedProductCarouselSetting({
+        sliderSettings: {
+          ...featuredProductCarouselSetting?.sliderSettings,
+          slidesToShow: 1,
+          infinite: true,
+        },
+        carouselCounter: 1,
+      });
+    } else if (width <= 768) {
+      setFeaturedProductCarouselSetting({
+        sliderSettings: {
+          ...featuredProductCarouselSetting?.sliderSettings,
+          slidesToShow: 2,
+          infinite: true,
+        },
+        carouselCounter: 2,
+      });
+    } else if (width <= 1024) {
+      setFeaturedProductCarouselSetting({
+        sliderSettings: {
+          ...featuredProductCarouselSetting?.sliderSettings,
+          slidesToShow: 3,
+          infinite: true,
+        },
+        carouselCounter: 3,
+      });
+    } else if (productsData && productsData?.length <= 5 && width >= 1024) {
+      setFeaturedProductCarouselSetting({
+        sliderSettings: {
+          ...featuredProductCarouselSetting?.sliderSettings,
+          slidesToShow: 5,
+          infinite: false,
+        },
+        carouselCounter: 5,
+      });
+    } else {
+      setFeaturedProductCarouselSetting({
+        sliderSettings: {
+          ...featuredProductCarouselSetting?.sliderSettings,
+          slidesToShow: 5,
+          infinite: true,
+        },
+        carouselCounter: 5,
+      });
+    }
+  }, [width, productsData]);
 
   const goToNextProduct = () => {
     sliderRef.current?.slickNext();
@@ -39,7 +116,7 @@ const YouMayAlsoLikeType5: React.FC<_TemplateProps> = ({ productsData }) => {
                 <div
                   className={`${
                     productsData.length >
-                    __pagesConstant._productAlike.carouselCounter
+                    featuredProductCarouselSetting?.carouselCounter
                       ? 'absolute'
                       : 'hidden'
                   } top-1/2 -translate-y-1/2 z-10 flex items-center left-0`}
@@ -55,8 +132,7 @@ const YouMayAlsoLikeType5: React.FC<_TemplateProps> = ({ productsData }) => {
                 </div>
                 <Slider
                   ref={(c) => (sliderRef.current = c)}
-                  {...__pagesConstant._productDetails.similarProducts
-                    .sliderSettings}
+                  {...featuredProductCarouselSetting.sliderSettings}
                 >
                   {productsData.map((product) => {
                     return (
@@ -64,7 +140,7 @@ const YouMayAlsoLikeType5: React.FC<_TemplateProps> = ({ productsData }) => {
                         <div className='px-2'>
                           <div className='flex text-center lg:w-auto mb-6'>
                             <div className='relative pb-4 w-full'>
-                              <div className='w-full rounded-md overflow-hidden aspect-w-1 aspect-h-1'>
+                              <div>
                                 <Link
                                   key={product.id}
                                   href={`${encodeURIComponent(
@@ -73,17 +149,18 @@ const YouMayAlsoLikeType5: React.FC<_TemplateProps> = ({ productsData }) => {
                                   className='relative'
                                 >
                                   {/* Issue: Using functional components as child of <Link/> causes ref-warnings */}
-                                  <a>
+                                  <a className='block'>
                                     <NxtImage
                                       src={product.image}
                                       alt={product.name}
-                                      className='w-auto h-auto max-h-max'
+                                      useNextImage={false}
+                                      className='max-h-[348px] m-auto'
                                     />
                                   </a>
                                 </Link>
                               </div>
-                              <div className='mt-6 mb-[30px]'>
-                                <div className='mt-1 text-center hover:text-anchor-hover h-[50px] overflow-hidden line-clamp-2 block !font-bold text-xl mb-[10px]'>
+                              <div>
+                                <div className='mt-[10px] text-center hover:text-anchor-hover h-[50px] overflow-hidden line-clamp-2 block !font-bold text-sub-text mb-[10px]'>
                                   <Link
                                     key={product.id}
                                     href={`${encodeURIComponent(
@@ -93,8 +170,8 @@ const YouMayAlsoLikeType5: React.FC<_TemplateProps> = ({ productsData }) => {
                                     {product.name}
                                   </Link>
                                 </div>
-                                <div className='mt-3 text-[#415364] p-[5px] text-center text-base tracking-wider'>
-                                  <span className='font-[600]'>
+                                <div className='mt-[10px] text-small-text text-center'>
+                                  <span className='font-semibold'>
                                     {' '}
                                     {customerId
                                       ? __pagesText.productListing.PRICE
@@ -121,7 +198,7 @@ const YouMayAlsoLikeType5: React.FC<_TemplateProps> = ({ productsData }) => {
                 <div
                   className={`${
                     productsData.length >
-                    __pagesConstant._productAlike.carouselCounter
+                    featuredProductCarouselSetting?.carouselCounter
                       ? 'absolute'
                       : 'hidden'
                   }  top-1/2 -translate-y-1/2 right-0 z-10 flex items-center`}

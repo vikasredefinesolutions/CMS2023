@@ -18,7 +18,7 @@ const MenuItems: React.FC<_props> = ({
   showSideMenu,
 }) => {
   const [menuItems, setMenuItems] = useState<null | _MenuItems>(null);
-  const mobileNumber=useTypedSelector_v2(state=>state.store.phone_number)
+  const mobileNumber = useTypedSelector_v2((state) => state.store.phone_number);
   const [openTab, setOpenTab] = useState<string>('');
   const router = useRouter();
   useEffect(() => {
@@ -37,10 +37,10 @@ const MenuItems: React.FC<_props> = ({
   if (screen === 'MOBILE') {
     return (
       <div
-        className='fixed z-[100] lg:hidden inset-0 bg-[#000000] bg-opacity-50 '
+        className='fixed z-[100] inset-0 bg-[#000000] bg-opacity-50 '
         id='mobile_menu_box'
       >
-         <Backdrop setOpenTab={setOpenTab} />
+        <Backdrop setOpenTab={setOpenTab} />
         <div className='w-full max-w-xs bg-[#ffffff] h-screen overflow-x-scroll'>
           <div
             className='header-nav relative tracking-[1px]'

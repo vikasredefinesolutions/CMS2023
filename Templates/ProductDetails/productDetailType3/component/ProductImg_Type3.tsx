@@ -1,4 +1,5 @@
 import NxtImage from '@appComponents/reUsable/Image';
+import { UCA, UNITI_CODE, _Store_CODES } from '@constants/global.constant';
 import { _OtherImage, _ProductColor } from '@definations/APIs/colors.res';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import { useRouter } from 'next/router';
@@ -26,6 +27,7 @@ const ProductImg_Type3: React.FC<_ProductImgProps> = ({ product }) => {
   const selectedColor = useTypedSelector_v2(
     (state) => state.product?.selected.color,
   );
+  const storeCode = useTypedSelector_v2((state) => state.store.code);
 
   const { setColor } = useActions_v2();
   const selectedImage = useTypedSelector_v2(
@@ -48,40 +50,85 @@ const ProductImg_Type3: React.FC<_ProductImgProps> = ({ product }) => {
   }, [selectedColor?.attributeOptionId, product?.id]);
 
   return (
-    <div className='lg:col-start-2 lg:col-end-7 grid grid-cols-12 gap-6'>
+    <div className='lg:col-start-2 lg:col-end-7 grid grid-cols-12 gap-6 '>
+      {storeCode === _Store_CODES.UNITi && (
+        <div className='col-span-12 relative mt-[15px] border-b border-b-gray-border block lg:hidden'>
+          <div className='text-large-text md:text-sub-text lg:text-large-text pb-[20px]'>
+            {product?.name}
+          </div>
+        </div>
+      )}
       <div className='col-span-12 relative'>
         <div className='main-image mb-[5px]'>
           <InnerImageZoom
             src={selectedImage?.imageUrl}
             zoomType='hover'
             hideHint={true}
-            className='w-full object-center object-cover'
+            className={`w-full object-center object-cover ${
+              storeCode == UNITI_CODE ? 'max-h-[700px] m-auto' : ''
+            } `}
           />
         </div>
         {/* https://redefinecommerce.blob.core.windows.net/rdcbeta/1/product/attributeimages/attribute_10887_10887_1.jpg */}
         <div className='sub-image w-full flex justify-center text-center'>
-          {selectedColor?.moreImages
-            ?.map((img, index) => ({ ...img, id: index }))
-            .map((img) => {
-              const highlight =
-                img.id === selectedImage.id
-                  ? 'border-primary'
-                  : 'border-slate-200';
-              return (
-                <div
-                  key={img.id + img.imageUrl}
-                  className={`w-[80px] h-[80px] overflow-hidden mr-[5px] mb-[15px] border gray-border hover:border-secondary p-[5px]`}
-                  onClick={() => selectImgHandler(img)}
-                >
-                  <NxtImage
-                    src={img.imageUrl}
-                    alt={img.altTag}
-                    className='w-full object-center object-cover'
-                    title={img.altTag}
-                  />
-                </div>
-              );
-            })}
+          {storeCode === UCA || storeCode === UNITI_CODE ? (
+            <>
+              {' '}
+              {colors?.map((img, index) => {
+                const highlight =
+                  img.attributeOptionId === selectedColor?.attributeOptionId
+                    ? 'border-quaternary'
+                    : 'border-slate-200';
+                return (
+                  <div
+                    key={img.attributeOptionId + img.imageUrl}
+                    className={`w-[80px] h-[80px] overflow-hidden mr-[5px] mb-[15px] border gray-border hover:border-quaternary p-[5px] ${highlight}`}
+                    onClick={() => {
+                      setColor(img);
+                      setImage_2({
+                        id: img.attributeOptionId,
+                        imageUrl: mediaBaseUrl + img.imageUrl,
+                        altTag: img.altTag,
+                      });
+                    }}
+                  >
+                    <NxtImage
+                      src={img.imageUrl}
+                      alt={img.altTag}
+                      className='max-h-full m-auto cursor-pointer'
+                      title={img.altTag}
+                    />
+                  </div>
+                );
+              })}
+            </>
+          ) : (
+            <>
+              {' '}
+              {selectedColor?.moreImages
+                ?.map((img, index) => ({ ...img, id: index }))
+                .map((img) => {
+                  const highlight =
+                    img.id === selectedImage.id
+                      ? 'border-quaternary'
+                      : 'border-slate-200';
+                  return (
+                    <div
+                      key={img.id + img.imageUrl}
+                      className={`w-[80px] h-[80px] overflow-hidden mr-[5px] mb-[15px] border gray-border hover:border-quaternary p-[5px] ${highlight}`}
+                      onClick={() => selectImgHandler(img)}
+                    >
+                      <NxtImage
+                        src={img.imageUrl}
+                        alt={img.altTag}
+                        className='max-h-full m-auto cursor-pointer'
+                        title={img.altTag}
+                      />
+                    </div>
+                  );
+                })}
+            </>
+          )}
         </div>
       </div>
       {/* <div className='col-span-12 flex flex-wrap justify-center'>

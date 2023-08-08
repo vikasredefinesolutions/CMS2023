@@ -7,7 +7,7 @@ const CT1_EL_PaymentOption: React.FC = () => {
 
   return (
     <div className='w-full flex flex-wrap'>
-      <label className='w-full flex justify-end cursor-pointer'>
+      <label className='w-full flex justify-end cursor-pointer pt-[5px]'>
         <input
           type='checkbox'
           name='PAYMENT_PENDING'
@@ -21,9 +21,9 @@ const CT1_EL_PaymentOption: React.FC = () => {
             })
           }
         />
-        <div className='font-bold'>USE PAYMENT PENDING</div>
+        <div className=''>USE PAYMENT PENDING</div>
       </label>
-      <label className='w-full flex justify-end cursor-pointer'>
+      <label className='w-full flex justify-end cursor-pointer pt-[5px]'>
         <input
           type='checkbox'
           name='ALLOW_PO'
@@ -37,7 +37,7 @@ const CT1_EL_PaymentOption: React.FC = () => {
             })
           }
         />
-        <div className='font-bold'>ALLOW PO</div>
+        <div className=''>ALLOW PO</div>
       </label>
     </div>
   );

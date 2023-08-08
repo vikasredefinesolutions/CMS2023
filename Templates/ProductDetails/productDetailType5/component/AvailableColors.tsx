@@ -10,6 +10,9 @@ const AvailableColors: React.FC<_ModalProps> = ({ modalHandler }) => {
   const selectedColor = useTypedSelector_v2(
     (state) => state.product.selected.color,
   );
+  const sizeChart = useTypedSelector_v2(
+    (state) => state.product.product.sizeChart,
+  );
   const [showAllColors] = useState(false);
   const colors = useTypedSelector_v2((state) => state.product.product.colors);
   const { inventory } = useTypedSelector_v2((state) => state.product.product);
@@ -100,7 +103,13 @@ const AvailableColors: React.FC<_ModalProps> = ({ modalHandler }) => {
               data-modal-toggle='FitandSize'
               onClick={() => modalHandler('sizeChart')}
             >
-              <img src={'/assets/images/size-chart.jpg'} alt={'Fit and Size'} />
+              <NxtImage
+                isStatic={true}
+                useNextImage={false}
+                className=''
+                src={'/assets/images/size-chart.jpg'}
+                alt={'Fit and Size'}
+              />
             </a>
           </div>
         )}

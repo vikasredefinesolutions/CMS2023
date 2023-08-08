@@ -7,11 +7,7 @@ import {
 import { __pagesText } from '@constants/pages.text';
 import { __ValidationText } from '@constants/validation.text';
 import { KlaviyoScriptTag, setCookie } from '@helpers/common.helper';
-import {
-  GetCustomerId,
-  useActions_v2,
-  useTypedSelector_v2,
-} from '@hooks_v2/index';
+import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import { fetchCartDetails } from '@redux/asyncActions/cart.async';
 import { updateCartByNewUserId } from '@services/cart.service';
 import { checkCustomerAlreadyExist } from '@services/checkout.service';
@@ -22,7 +18,7 @@ import {
 } from '@services/user.service';
 import { getWishlist } from '@services/wishlist.service';
 import { _ThankYouProps } from '@templates/ThankYou/ThankYou';
-import { Form, Formik } from 'formik';
+import { ErrorMessage, Form, Formik } from 'formik';
 import { useRouter } from 'next/router';
 import React, { Fragment, useEffect, useState } from 'react';
 import * as Yup from 'yup';
@@ -31,11 +27,8 @@ import ThankYouProduct from './ThankYouProduct';
 
 const ThankYouAccordian: React.FC<_ThankYouProps> = ({ order }) => {
   const [showAccordian, setshowAccordian] = useState<boolean>(true);
-
-  const guest = useTypedSelector_v2((state) => state.cart);
   const [isguest, setIsGuest] = useState<boolean>();
   const storeId = useTypedSelector_v2((state) => state.store.id);
-  const cusID = GetCustomerId();
   const { loggedIn: isEmployeeLoggedIn, isLoadingComplete } =
     useTypedSelector_v2((state) => state.employee);
   const {
@@ -166,10 +159,10 @@ const ThankYouAccordian: React.FC<_ThankYouProps> = ({ order }) => {
     <>
       {!isguest ? (
         <>
-          <div className='text-title-text mb-[10px] mt-[20px]'>
+          <div className='text-title-text mb-[10px] mt-[20px] hidden'>
             Save your information for next time
           </div>
-          <div className='max-w-[600px]'>
+          <div className='max-w-[600px] hidden'>
             <div className='relative z-0 w-full mb-[20px]'>
               <label
                 htmlFor='EmailAddress'
@@ -192,7 +185,6 @@ const ThankYouAccordian: React.FC<_ThankYouProps> = ({ order }) => {
                           type='password'
                           name='password'
                           placeholder=' '
-                          required
                           className='pb-[0px] block w-full px-[8px] h-[48px] mt-[0px] text-sub-text text-[18px] text-[#000000] bg-transparent border-0 appearance-none focus:outline-none focus:ring-0'
                           onChange={handleChange}
                         />
@@ -205,6 +197,11 @@ const ThankYouAccordian: React.FC<_ThankYouProps> = ({ order }) => {
                         Create Account
                       </button>
                     </div>
+                    <ErrorMessage
+                      name={'password'}
+                      className='text-rose-500'
+                      component={'p'}
+                    />
                   </Form>
                 );
               }}

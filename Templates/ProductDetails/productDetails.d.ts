@@ -1,3 +1,5 @@
+import { _ProductRatings } from "@services/review";
+
 interface _Props {
   details: null | _ProductDetails;
   colors: null | _ProductColor[];
@@ -5,8 +7,10 @@ interface _Props {
   SEO: null | _ProductSEO;
   alike: null | _ProductsAlike[];
   sectionView: string[] | [];
+  reviews: _ProductReview[] | null;
   productDetailsTemplateId: string;
   storeTypeId: number;
+  ratings: _ProductRatings | null
   storeCode: string;
 }
 
@@ -19,6 +23,7 @@ export interface _ProductDetailsTemplates {
   type6: React.FC<_Props>;
   type7: React.FC<_Props>;
   type8: React.FC<_Props>;
+  type9: React.FC<_Props>;
 }
 export interface _sbsStore_props {
   id: number;

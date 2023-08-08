@@ -1,49 +1,35 @@
 import { __pagesText } from '@constants/pages.text';
 import { paths } from '@constants/paths.constant';
-import { useTypedSelector_v2 } from '@hooks_v2/index';
-import { _ProductDetailsProps } from '@templates/ProductDetails/productDetailsType8/components/productDetailsComponents';
+import { _ProductColor } from '@definations/APIs/colors.res';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useState } from 'react';
 import ProductImg from './ProductImg';
 import ProductInfo from './ProductInfo';
 
-const ProductDetails: React.FC<_ProductDetailsProps> = ({
-  product,
-  storeCode,
-}) => {
-  const color = useTypedSelector_v2((state) => state.product.selected.color);
-  const consultationURL = `${paths.REQUEST_CONSULTATION}?productid=${product.id}&title=Request%20Consultation%20%26%20Proof&Color=${color.name}`;
+import { _ProductDetails } from '@definations/APIs/productDetail.res';
+interface _Props {
+  details: _ProductDetails;
+  colors: _ProductColor[];
+}
+
+const ProductDetails: React.FC<_Props> = ({ details, colors }) => {
   const router = useRouter();
+  const [activeColor, setActiveColor] = useState<_ProductColor>(colors[0]);
+
+  const consultationURL = `${paths.REQUEST_CONSULTATION}?productid=${details?.id}&title=Request%20Consultation%20%26%20Proof&Color=${activeColor?.name}`;
   return (
     <div className='bg-white pt-[20px] min-h-screen'>
       <div className='container pl-[15px] pr-[15px] mx-auto mt-[15px]'>
         <div className='lg:grid lg:grid-cols-2 lg:items-start'>
           <div className='flex md:hidden flex-wrap'>
             <div className='w-full md:w-2/3'>
-              <h1 className='font-[600] text-large-text'>{product.name}</h1>
-
+              <h1 className='font-[600] text-large-text'>{details?.name}</h1>
               <div className='pt-[3px] text-default-text'>
                 <span className='font-[600] inline-block w-[43px]'>
                   {__pagesText.productInfo.sku}
                 </span>
-                <span className='ml-[4px]'>: {product.sku}</span>
+                <span className='ml-[4px]'>: {details?.sku}</span>
               </div>
-
-              {/* <div className='text-black text-sm'>
-                <span className='font-[600] inline-block w-[43px]'>
-                  {__pagesText.productInfo.msrp}
-                </span>
-                <span className='ml-[4px]'>
-                  <Price
-                    value={undefined}
-                    prices={{
-                      msrp: product.msrp,
-                      salePrice: product.salePrice,
-                    }}
-                    addColon={true}
-                  />
-                </span>
-              </div> */}
             </div>
 
             <div className='w-full md:w-1/3 mt-[10px] md:text-right'>
@@ -61,8 +47,13 @@ const ProductDetails: React.FC<_ProductDetailsProps> = ({
               </div>
             </div>
           </div>
-          <ProductImg product={product} />
-          <ProductInfo product={product} storeCode={storeCode} />
+          <ProductImg details={details} activeColor={activeColor} />
+          <ProductInfo
+            colors={colors}
+            details={details}
+            activeColor={activeColor!}
+            setActiveColor={setActiveColor}
+          />
         </div>
       </div>
     </div>

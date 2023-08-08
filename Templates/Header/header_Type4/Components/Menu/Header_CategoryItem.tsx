@@ -152,7 +152,7 @@ const Header_Category: React.FC<_props> = ({
                   <ul className='w-full lg:w-1/2 text-[13px] pl-[20px] pr-[20px]'>
                     {content?.map((item, index) => {
                       if (
-                        index >= content.length / 2 &&
+                        index > content.length / 2 &&
                         index <= (content.length / 2) * 2 + 1
                       )
                         return (

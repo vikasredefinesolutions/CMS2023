@@ -1,21 +1,15 @@
 import { TwitterTagsData } from '@constants/metatags.mock';
 import { _GetPageType } from '@definations/slug.type';
-import { useEffect, useState } from 'react';
 import { _globalStore } from 'store.global';
 
 interface _Props {
   pageMetaData: _GetPageType | null;
-  routepath: string;
+  pageUrl: string;
   logoUrl: string;
 }
 
 const TwitterTags: React.FC<_Props> = (props) => {
-  const { pageMetaData, routepath, logoUrl } = props;
-
-  const [routeUrl, setRouteUrl] = useState<string>('');
-  useEffect(() => {
-    setRouteUrl(window.location.href);
-  }, [routepath]);
+  const { pageMetaData, pageUrl, logoUrl } = props;
 
   return (
     <>
@@ -28,17 +22,22 @@ const TwitterTags: React.FC<_Props> = (props) => {
                   _globalStore.googleTags?.twitterTags?.twitterTagTextArea,
               }}
             ></code>
-            <meta
-              name={`${TwitterTagsData?.tagName}:url`}
-              content={`${routeUrl}`}
-            />
+            <meta name={`${TwitterTagsData?.tagName}:url`} content={pageUrl} />
             <meta
               name={`${TwitterTagsData?.tagName}:title`}
-              content={pageMetaData?.meta_Title}
+              content={
+                pageMetaData?.twitterOpenGraphTitle ||
+                pageMetaData?.meta_Title ||
+                ''
+              }
             />
             <meta
               name={`${TwitterTagsData?.tagName}:description`}
-              content={pageMetaData?.meta_Description}
+              content={
+                pageMetaData?.twitterOpenGraphDescription ||
+                pageMetaData?.meta_Description ||
+                ''
+              }
             />
             <meta
               name={`${TwitterTagsData?.tagName}:image`}

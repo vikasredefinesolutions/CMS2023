@@ -75,6 +75,7 @@ const CustomizeLogo: React.FC<_Props> = ({
           });
           const constructedSubRows = res?.subRow?.map((item, index) => ({
             ...item,
+            reusableLocationId: 0,
             price: index === 0 ? firstLogoCharge : secondLogoCharge,
             cost: index === 0 ? firstLogoCharge : secondLogoCharge,
           }));

@@ -5,12 +5,11 @@ import React from 'react';
 
 export interface _ProductListingProps {
   pageData: _PageData;
-  slug: string;
-  seType: string;
   CMS: {
     component: string | null;
-    type: __pageTypeConstant.category;
+    type: string;
     slug: string;
+    pageId: number;
   };
 }
 
@@ -46,9 +45,15 @@ export interface _ListingProps {
 
 export interface _PageData {
   filters: _Filter[];
-  product: GetlAllProductList[];
+  list: {
+    visible: _ListingPageProduct[];
+    jumpBy: number;
+    currentPage: number;
+    totalAvailable: number;
+    allProducts: _ListingPageProduct[];
+    filterOptionforfaceteds: _NameValuePairs[];
+  };
   checkedFilters: _CheckedFilter[];
-  brandId: number;
   googleTagManagerResponseCommonData?: any | null;
 }
 export interface _FilterOption {
@@ -72,15 +77,18 @@ export interface _CheckedFilter {
   value: string;
 }
 
+type Types =
+  | 'type1'
+  | 'type2'
+  | 'type3'
+  | 'type4'
+  | 'type5'
+  | 'type6'
+  | 'type7'
+  | 'type8';
+
 export interface _ProductListingTemplates {
-  type1: React.FC<_ListingProps>;
-  type2: React.FC<_ListingProps>;
-  type3: React.FC<_ListingProps>;
-  type4: React.FC<_ListingProps>;
-  type5: React.FC<_ListingProps>;
-  type6: React.FC<_ListingProps>;
-  type7: React.FC<_ListingProps>;
-  type8: React.FC<_ListingProps>;
+  [key: Types]: React.FC<_ListingProps>;
 }
 
 export interface LoginBar {
@@ -237,6 +245,44 @@ export interface GetProductImageOptionList {
   displayOrder?: number;
   altTag?: string;
   productId?: number;
+}
+
+export interface _ListingPageProduct {
+  isonlinebrand: boolean;
+  brandUrl: string;
+  getProductImageOptionList: GetProductImageOptionList[] | [];
+  id?: number;
+  name: string;
+  productTagViewModel: Array<{
+    productId: number;
+    imagename: string;
+    productTagName: string;
+    tagPosition: string;
+  }>;
+  isspecialbrand: boolean;
+  sename?: string;
+  msrp: number;
+  salePrice: number;
+  brandlogo?: string;
+  iswishlist?: boolean;
+  label?: string;
+  wishListId?: number;
+  sku?: string;
+  imageUrl?: string;
+  imap?: string;
+  splitproductList: splitproductList[] | null;
+  productId?: number;
+  productName?: string;
+  productSEName?: string;
+  productDisplayOrder?: number;
+  attributeOptionName?: string;
+  blackBrandlogo: string;
+  ourCost?: number;
+  brandName: string;
+  index: number | string;
+  lowPrice: number;
+  categoryName?: string;
+  productBrandlogo: string | null;
 }
 
 export interface GetlAllProductList {

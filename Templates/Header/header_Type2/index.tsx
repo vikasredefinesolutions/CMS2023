@@ -73,7 +73,7 @@ const Header_Type2: NextPage<_HeaderProps> = ({
   return (
     <>
       {!!empId && (
-        <div className='bg-[#ffffff]'>
+        <div className='bg-[#ffffff] hidden'>
           <div className='relative trancking-[1px]'>
             <div className='bg-[#ffffff]'>
               <div className='container mx-auto'>

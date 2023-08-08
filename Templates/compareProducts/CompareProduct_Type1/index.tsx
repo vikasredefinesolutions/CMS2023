@@ -6,6 +6,7 @@ import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import { SendCompareLinkByEmail } from '@services/product.service';
 import { ErrorMessage, Form, Formik } from 'formik';
 import Head from 'next/head';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useCallback, useState } from 'react';
 import * as Yup from 'yup';
@@ -42,7 +43,8 @@ const CompareProduct_Type1: React.FC<_CompareProductprops> = (props) => {
     //   shallow: true,
     // });
   };
-
+  const skuValue = router.query.SKU as string;
+  const skuArray = skuValue?.split(',');
   const removeSkuFromLocalStorage = (skuToKeep: string[] | 'REMOVE ALL') => {
     if (skuToKeep === 'REMOVE ALL') {
       localStorage.setItem(__LocalStorage.compareProducts, JSON.stringify([]));
@@ -81,10 +83,8 @@ const CompareProduct_Type1: React.FC<_CompareProductprops> = (props) => {
     const skuToRemove = products?.details?.find(
       (detail, index) => index === indexToRemove,
     );
-
     if (skuToRemove) {
       const storedSKUs = localStorage.getItem(__LocalStorage.compareProducts);
-
       updateCompareDisplayImage({
         type: 'REMOVE',
         data: {
@@ -105,10 +105,25 @@ const CompareProduct_Type1: React.FC<_CompareProductprops> = (props) => {
         const skuToKeep = skuStoredIdArr.filter(
           (sku) => sku !== skuToRemove.sku,
         );
-
         if (skuToKeep) {
           removeSkuFromQueryParams(skuToKeep);
           removeSkuFromLocalStorage(skuToKeep);
+          setProducts((prods: any) =>
+            removeProductFromTable(prods, indexToRemove),
+          );
+          return;
+        }
+      } else {
+        if (skuArray.length === 0) {
+          removeSkuFromQueryParams('REMOVE ALL');
+          // removeSkuFromLocalStorage('REMOVE ALL');
+          setProducts(null);
+          return;
+        }
+        const skuToKeep = skuArray.filter((sku) => sku !== skuToRemove.sku);
+        if (skuToKeep) {
+          removeSkuFromQueryParams(skuToKeep);
+          // removeSkuFromLocalStorage(skuToKeep);
           setProducts((prods: any) =>
             removeProductFromTable(prods, indexToRemove),
           );
@@ -175,12 +190,12 @@ const CompareProduct_Type1: React.FC<_CompareProductprops> = (props) => {
         </div>
         {products?.details && products.details.length <= 1 ? (
           <div className='relative overflow-auto border border-gray-border'>
-            <div className='text-center pb-[10px] border-b-[1.4px] border-[#000000] relative '>
+            <div className='text-center py-[10px] border-b-[1.4px] border-[#000000] relative '>
               {getCompareProductsText(products?.details?.length)}
             </div>
           </div>
         ) : null}
-        {products?.details && products.details.length >= 2 ? (
+        {products?.details && products.details.length >= 1 ? (
           <>
             {' '}
             <div className='relative overflow-auto border border-gray-border'>
@@ -199,9 +214,9 @@ const CompareProduct_Type1: React.FC<_CompareProductprops> = (props) => {
                           style={{ verticalAlign: 'top' }}
                         >
                           <div className='p-[8px]'>
-                            <a href={product.seName} title={product.name}>
-                              {product.name}
-                            </a>
+                            <Link href={`/${product.seName}`}>
+                              <a title={product.name}>{product.name}</a>
+                            </Link>
                           </div>
                         </td>
                       ))}

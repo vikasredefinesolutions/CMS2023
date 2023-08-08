@@ -1,36 +1,43 @@
 import { __pagesText } from '@constants/pages.text';
 import getLocation from '@helpers/getLocation';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
-import { ProductReviewDetailsRes } from '@services/review';
-import {
-  createstoreproductreviewcount,
-  FetchProductReviewDetails,
-} from '@services/review.service';
+import { ReviewImages, _ProductReview } from '@services/review';
+import { createstoreproductreviewcount } from '@services/review.service';
 import { _ProductReviewDetailsProps } from '@templates/ProductDetails/Components/productDetailsComponents';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 const RatingReviewDetails1: React.FC<_ProductReviewDetailsProps> = ({
   productId,
+  reviewsDeatils,
 }) => {
-  const [reviewsDeatils, setReviewsdetails] = useState<
-    ProductReviewDetailsRes[]
-  >([]);
+  // const [reviewsDeatils, setReviewsdetails] = useState<_ProductReview[]>(
+  //   reviews || [],
+  // );
+
+  // console.log('reviews: '), reviews;
   const [flag, setFlag] = useState<boolean>(false);
   const [reload, setReload] = useState<boolean>(false);
   const customerId = useTypedSelector_v2((state) => state.user.id);
   const storeId = useTypedSelector_v2((state) => state.store.id);
+  const { mediaBaseUrl } = useTypedSelector_v2((state) => state.store);
   // console.log('product is ', productId);
   const { setShowLoader } = useActions_v2();
-  useEffect(() => {
-    if (productId) {
-      FetchProductReviewDetails(productId).then((details) =>
-        setReviewsdetails(details),
-      );
-    }
-  }, [productId, reload]);
+
+  // useEffect(() => {
+  //   // console.log('reviews: ', reviews);
+  //   setReviewsdetails(reviews || []);
+  // }, [reviews]);
+
+  // useEffect(() => {
+  //   if (productId) {
+  //     FetchProductReviewDetails(productId).then((details) =>
+  //       setReviewsdetails(details),
+  //     );
+  //   }
+  // }, [productId, reload]);
 
   const filterRating = (value: string) => {
-    const result = reviewsDeatils.sort((a, b) => {
+    const result = reviewsDeatils?.sort((a: any, b: any) => {
       if (value == __pagesText.review.reviewSorting.positive) {
         return b.rating - a.rating;
       } else if (value == __pagesText.review.reviewSorting.negative) {
@@ -41,7 +48,7 @@ const RatingReviewDetails1: React.FC<_ProductReviewDetailsProps> = ({
         );
       }
     });
-    setReviewsdetails(result);
+    // setReviewsdetails(result);
     setFlag(!flag);
   };
 
@@ -71,45 +78,54 @@ const RatingReviewDetails1: React.FC<_ProductReviewDetailsProps> = ({
     }
   };
 
+  if (!reviewsDeatils || reviewsDeatils.length === 0) return null;
+
   return (
     <>
       <div>
-        {reviewsDeatils?.length ? (
-          <div className='mb-[20px] text-right'>
-            <div className='inline-block'>
-              <select
-                className='form-input'
-                id=''
-                onChange={(e) => filterRating(e.target.value)}
-              >
-                <option value={__pagesText.review.reviewSorting.latest}>
-                  {__pagesText.review.reviewSorting.mostRecent}
-                </option>
-                <option value={__pagesText.review.reviewSorting.positive}>
-                  {__pagesText.review.reviewSorting.positiveFirst}
-                </option>
-                <option value={__pagesText.review.reviewSorting.negative}>
-                  {__pagesText.review.reviewSorting.negativeFirst}
-                </option>
-              </select>
-            </div>
+        <div className='mb-[20px] text-right'>
+          <div className='inline-block'>
+            <select
+              className='form-input'
+              id=''
+              onChange={(e) => filterRating(e.target.value)}
+            >
+              <option value={__pagesText.review.reviewSorting.latest}>
+                {__pagesText.review.reviewSorting.mostRecent}
+              </option>
+              <option value={__pagesText.review.reviewSorting.positive}>
+                {__pagesText.review.reviewSorting.positiveFirst}
+              </option>
+              <option value={__pagesText.review.reviewSorting.negative}>
+                {__pagesText.review.reviewSorting.negativeFirst}
+              </option>
+            </select>
           </div>
-        ) : (
-          ''
-        )}
+        </div>
 
         <div className='flow-root pb-[20px]'>
           <div className='-my-[10px]'>
-            {reviewsDeatils?.map((reviewsDeatil) => {
+            {reviewsDeatils?.map((reviewsDeatil: _ProductReview) => {
               return (
-                <div className='py-[10px]' key={reviewsDeatil.reviewId}>
-                  <div className='border border-[#4b5963] bg-[#ffffff] p-[30px] flex flex-wrap'>
+                <div
+                  className='py-[10px]'
+                  key={reviewsDeatil.reviewId}
+                  itemProp='reviewRating'
+                  itemType='https://schema.org/Rating'
+                  itemScope
+                >
+                  <meta
+                    itemProp='ratingValue'
+                    content={`${reviewsDeatil.rating}`}
+                  />
+                  <meta itemProp='bestRating' content='5' />
+                  <div className='border border-[#4b5963] bg-[#ffffff] p-[30px] flex flex-wrap items-center'>
                     <div className='w-full lg:w-1/4 lg:border-r lg:border-[#4b5963] flex flex-wrap'>
                       <div className='text-sub-text mb-[5px]'>
                         {reviewsDeatil.name}
                       </div>
                     </div>
-                    <div className='w-full lg:w-3/4 py-[10px] text-default-text'>
+                    <div className='w-full lg:w-2/4 py-[10px] text-default-text'>
                       <div className='flex items-center flex-wrap gap-[10px] lg:pl-[20px]'>
                         <div
                           className='flex items-center gap-[1px]'
@@ -170,6 +186,15 @@ const RatingReviewDetails1: React.FC<_ProductReviewDetailsProps> = ({
                         </div>
                       </div>
                     </div>
+                    {reviewsDeatil.images.map((image: ReviewImages) => (
+                      <div className='w-full lg:w-1/4'>
+                        <img
+                          src={`${mediaBaseUrl}${image.ImageName}` || ''}
+                          className='mr-[15px]'
+                          width={'100px'}
+                        />
+                      </div>
+                    ))}
                   </div>
                 </div>
               );

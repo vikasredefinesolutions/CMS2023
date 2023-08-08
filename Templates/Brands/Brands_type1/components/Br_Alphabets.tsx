@@ -8,7 +8,7 @@ interface _Props {
         brandName: string;
         seName: string;
         brandColorImageUrl: string;
-        brandCollectionUrl: null;
+        brandCollectionUrl: string;
         brandBlackColorImageUrl: string;
         isBrandOnline: boolean;
       }[]
@@ -59,7 +59,7 @@ const Br_Alphabets: React.FC<_Props> = ({
                 #
               </button>
               {allAlphabets.map((al) => {
-                const activeAlphabet = availableAlphabets.includes(al);
+                const activeAlphabet = availableAlphabets?.includes(al);
                 return (
                   <button
                     title={`$${al}`}
@@ -81,6 +81,7 @@ const Br_Alphabets: React.FC<_Props> = ({
           <div className='lg:w-8/12 W-full'>
             <div className='flex flex-wrap lg:ml-[40px] lg:mr-[40px] bg-light-gray pt-[40px] lg:pl-[24px] lg:pr-[24px]'>
               {allAlphabets.map((al) => {
+              
                 const brandsToShow = brands?.filter(
                   (brand) => brand.brandName[0].toLowerCase() === al,
                 );

@@ -104,7 +104,9 @@ const ProductDetails_Type2: React.FC<_Props> = (product) => {
         },
       });
       if (product.colors) {
-        setColor(product.colors[0]);
+        setColor(
+          product.colors.filter((item) => item.isDefaultProduct === true)[0],
+        );
 
         const allColorAttributes = product.colors.map(
           (color) => color.attributeOptionId,
@@ -174,6 +176,8 @@ const ProductDetails_Type2: React.FC<_Props> = (product) => {
               return (
                 <div key={val + index}>
                   <Reviews
+                    ratings={product.ratings}
+                    reviews={product.reviews}
                     storeCode={product.storeCode}
                     productId={product?.details?.id ? product.details.id : 0}
                   />

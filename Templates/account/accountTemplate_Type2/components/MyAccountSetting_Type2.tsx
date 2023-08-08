@@ -94,20 +94,22 @@ const MyAccountSetting_Type2 = () => {
     return response;
   };
 
-  const updatePassword = async (setFieldValue: any) => {
+  const updatePassword = async (setFieldValue: any, values: SettingForm) => {
     try {
+      if (editPassword && editPassword.length < 6) {
+        return alert(__ValidationText.signUp.password.required);
+      }
       const res = await UpdateUserPassword({
-        email: customer?.email || '',
-        password: editPassword,
+        newPassword: editPassword,
+        confirmNewPassword: editPassword,
+        currentPassword: values.password,
         customerId: customer?.id || 0,
       });
       if (res) {
+        setFieldValue('password', editPassword);
         setNewPassword('');
         setEditPassword('');
-        passDecryptFunction(res?.password).then((res) => {
-          setInitialValues({ ...initialValues, password: res ? res : '' });
-          setCurrentPass(res ? res : '');
-        });
+        setCurrentPass(editPassword);
         setShowPasswordUpdate(false);
         showModal({
           message: 'Password Updated Successfully',
@@ -523,7 +525,7 @@ const MyAccountSetting_Type2 = () => {
                         </label>
                         <div className='relative grow'>
                           <input
-                            id=''
+                            id='editPassword'
                             className='form-input'
                             placeholder='Password'
                             type={showPassword ? 'text' : 'password'}
@@ -591,7 +593,7 @@ const MyAccountSetting_Type2 = () => {
                             <button
                               type='button'
                               onClick={(e) => {
-                                updatePassword(setFieldValue);
+                                updatePassword(setFieldValue, values);
                                 handleReset(e);
                               }}
                               className='m-r-10 btn btn-primary '
@@ -629,6 +631,7 @@ const MyAccountSetting_Type2 = () => {
                               onClick={(e) => {
                                 setActiveEditBox(false);
                                 handleReset(e);
+                                setEditPassword('');
                                 setGenderId(
                                   customer?.gender ? customer.gender : '',
                                 );
@@ -643,7 +646,7 @@ const MyAccountSetting_Type2 = () => {
                                 customer?.birthDate &&
                                   setMonth(customer.birthDate.split('-')[1]);
                               }}
-                              className='ml-2 btn btn-primary'
+                              className='ml-2 btn btn-secondary'
                             >
                               {__pagesText.accountPage.cancelBtn}
                             </button>
@@ -668,9 +671,12 @@ const MyAccountSetting_Type2 = () => {
                           {ele.firstname} {ele.lastName}
                         </td>
                         <td className='text-left p-[10px]'>
+                          <>{ele.address1}, </>
+                          {ele.suite && ele.suite.trim() != '' && (
+                            <> {ele.suite}, </>
+                          )}
                           {[
-                            ele.address1,
-                            !(ele.address2 === ' ') && ele.address2,
+                            ele.state,
                             ele.city,
                             ele.countryName,
                             ele.postalCode,
@@ -745,11 +751,16 @@ const MyAccountSetting_Type2 = () => {
                   {billingAddress.map((ele: any) => {
                     return (
                       <tr>
-                        <td className='text-left p-[10px]'>{ele.firstname}</td>
                         <td className='text-left p-[10px]'>
+                          {ele.firstname} {ele.lastName}
+                        </td>
+                        <td className='text-left p-[10px]'>
+                          <>{ele.address1}, </>
+                          {ele.suite && ele.suite.trim() != '' && (
+                            <> {ele.suite}, </>
+                          )}
                           {[
-                            ele.address1,
-                            !(ele.address2 === ' ') && ele.address2,
+                            ele.state,
                             ele.city,
                             ele.countryName,
                             ele.postalCode,

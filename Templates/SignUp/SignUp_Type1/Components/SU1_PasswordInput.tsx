@@ -1,4 +1,6 @@
 import NxtImage from '@appComponents/reUsable/Image';
+import { HEALTHYPOINTS } from '@constants/global.constant';
+import { useTypedSelector_v2 } from '@hooks_v2/index';
 import noImg from '@images/no.png';
 import yesImg from '@images/yes.png';
 import { ErrorMessage } from 'formik';
@@ -27,13 +29,14 @@ const SU1_PasswordInput: React.FC<_props> = ({
 }) => {
   const right = required && touched && error === null;
   const wrong = required && touched && error;
+  const { code: storeCode } = useTypedSelector_v2((state) => state.store);
 
   return (
     <div className='w-full lg:w-1/2 px-[15px]'>
       <label htmlFor={name} className='block text-default-text'>
         {label} {required && <span className='text-rose-500'>*</span>}
       </label>
-      <div className={`relative mb-2`}>
+      <div className={`relative mt-2`}>
         <div className='mr-8'>
           <input
             type={'password'}
@@ -43,7 +46,9 @@ const SU1_PasswordInput: React.FC<_props> = ({
             value={value}
             autoComplete='off'
             onChange={handleChange}
-            className='form-input'
+            className={`form-input ${
+              wrong && storeCode === HEALTHYPOINTS ? 'has-error' : ''
+            }`}
           />
           <div className='absolute w-6 h-6 right-0 top-2'>
             {right && (

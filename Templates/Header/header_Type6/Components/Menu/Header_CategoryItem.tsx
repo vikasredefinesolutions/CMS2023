@@ -1,5 +1,12 @@
 import LoginModal from '@appComponents/modals/loginModal';
-import { CYXTERA_CODE, UNITI_CODE } from '@constants/global.constant';
+import ThirdPartyLogin from '@appComponents/modals/loginModal/ThirdPartyLogin';
+import {
+  CYXTERA_CODE,
+  SIMPLI_SAFE_CODE,
+  UCA,
+  UNITI_CODE,
+  _Store_CODES,
+} from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
 import { _MenuCategory } from '@definations/header.type';
 import { _modals } from '@definations/product.type';
@@ -8,7 +15,7 @@ import { capitalizeFirstLetter } from '@helpers/common.helper';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 interface _props {
   title: string;
   url: string;
@@ -30,6 +37,7 @@ const Header_Category: React.FC<_props> = ({
   const [focus, setFocus] = useState(false);
   const [showAllItems, setShowAllItems] = useState<boolean>(false);
   const [showtab, setShowTab] = useState<boolean>(false);
+  const { thirdPartyLogin } = useTypedSelector_v2((state) => state.store);
   const { redirectPath } = useTypedSelector_v2((state) => state.home);
   useEffect(() => {
     if (openTab == title) {
@@ -51,6 +59,31 @@ const Header_Category: React.FC<_props> = ({
     setOpenModal(null);
   };
 
+  const getHeaderClassName = useCallback(() => {
+    if (focus) {
+      if (
+        code == SIMPLI_SAFE_CODE ||
+        code === _Store_CODES.USAAHEALTHYPOINTS ||
+        code == UCA
+      ) {
+        return 'border-secondary primary-link hover:primary-link';
+      }
+      return 'border-secondary text-secondary';
+    } else {
+      if (code == UNITI_CODE) {
+        return 'border-transparent primary-link font-semibold';
+      } else if (
+        code == SIMPLI_SAFE_CODE ||
+        code === _Store_CODES.USAAHEALTHYPOINTS ||
+        code == UCA
+      ) {
+        return 'border-transparent primary-link';
+      } else {
+        return 'border-transparent text-primary';
+      }
+    }
+  }, [focus, code]);
+
   if (view === 'MOBILE') {
     return (
       <>
@@ -61,7 +94,11 @@ const Header_Category: React.FC<_props> = ({
             type='button'
             className='relative text-[14px] pl-[25px] mr-[5px] flex items-center pt-[15px] pb-[15px] grow'
             onClick={() => {
-              if (code === CYXTERA_CODE || code === UNITI_CODE) {
+              if (
+                code === CYXTERA_CODE ||
+                code === UNITI_CODE ||
+                code === UCA
+              ) {
                 if (customerId) {
                   setOpenTab(title);
                   setShowAllItems((show) => !show);
@@ -116,7 +153,15 @@ const Header_Category: React.FC<_props> = ({
             </div>
           </div>
         )}
-        {openModal === 'login' && <LoginModal modalHandler={modalHandler} />}
+        {openModal === 'login' && (
+          <>
+            {thirdPartyLogin ? (
+              <ThirdPartyLogin modalHandler={modalHandler} />
+            ) : (
+              <LoginModal modalHandler={modalHandler} />
+            )}
+          </>
+        )}
       </>
     );
   }
@@ -125,7 +170,7 @@ const Header_Category: React.FC<_props> = ({
       <>
         <div
           onClick={() => {
-            if (code === CYXTERA_CODE || code === UNITI_CODE) {
+            if (code === CYXTERA_CODE || code === UNITI_CODE || code === UCA) {
               if (customerId) {
                 router.push(`/${url}`);
               } else {
@@ -141,13 +186,11 @@ const Header_Category: React.FC<_props> = ({
             <button
               title={title}
               type='button'
-              onMouseOver={() => setFocus(true)}
+              onMouseOver={() => {
+                if (code !== _Store_CODES.USAAHEALTHYPOINTS) setFocus(true);
+              }}
               onMouseLeave={() => setFocus(false)}
-              className={`relative text-[12px] xl:text-[14px] xl:ml-[12px] xl:mr-[12px] ml-[5px] mr-[5px] tracking-[2px] z-10 flex items-center font-[400] pt-[10px] pb-[10px] border-b-[4px] ${
-                focus
-                  ? 'border-secondary text-secondary'
-                  : 'border-transparent text-primary'
-              }`}
+              className={`relative text-[12px] xl:text-[14px] xl:ml-[12px] xl:mr-[12px] ml-[5px] mr-[5px] tracking-[2px] z-10 flex items-center font-[400] pt-[10px] pb-[10px] border-b-[4px] ${getHeaderClassName()} `}
             >
               <span
                 className='uppercase '
@@ -188,7 +231,15 @@ const Header_Category: React.FC<_props> = ({
             )}
           </div>
         </div>
-        {openModal === 'login' && <LoginModal modalHandler={modalHandler} />}
+        {openModal === 'login' && (
+          <>
+            {thirdPartyLogin ? (
+              <ThirdPartyLogin modalHandler={modalHandler} />
+            ) : (
+              <LoginModal modalHandler={modalHandler} />
+            )}
+          </>
+        )}
       </>
     );
   }

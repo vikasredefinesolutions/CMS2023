@@ -1,4 +1,4 @@
-import { __domain } from '@configs/page.config';
+import { _Store, __domain } from '@configs/page.config';
 import { CG_STORE_CODE, __Cookie, __Params } from '@constants/global.constant';
 import { _ProductInventoryTransfomed } from '@definations/APIs/inventory.res';
 import { ActionCreatorWithPayload } from '@reduxjs/toolkit/dist/createAction';
@@ -8,7 +8,6 @@ import {
   _CartLogoPersonModel,
 } from '@services/product.service.type';
 import { IncomingMessage, ServerResponse } from 'http';
-import { StaticImageData } from 'next/image';
 import router from 'next/router';
 import { __StaticImg } from 'public/assets/images.asset';
 import { ParsedUrlQuery } from 'querystring';
@@ -229,8 +228,25 @@ export const Logout = (
   >,
 ) => {
   setCookie(__Cookie.userId, '', 'EPOCH');
+  deleteCookie(__Cookie.userId);
+  setCookie(__Cookie.tempCustomerId, '', 'EPOCH');
   logInUser('CLEAN_UP');
   router.push('/');
+  return;
+};
+export const BacardiLogout = (
+  logInUser: ActionCreatorWithPayload<
+    | {
+        id: number | null;
+      }
+    | 'CLEAN_UP',
+    'userDetails/logInUser'
+  >,
+) => {
+  setCookie(__Cookie.userId, '', 'EPOCH');
+  deleteCookie(__Cookie.userId);
+  setCookie(__Cookie.tempCustomerId, '', 'EPOCH');
+  logInUser('CLEAN_UP');
   return;
 };
 
@@ -461,38 +477,42 @@ export const c_getSeName = (
 };
 
 export const extractSlugName = (
+  storeCode: string,
   contextParam?: ParsedUrlQuery,
-): { seName: string; otherParams: string[] | null } => {
+): {
+  seName: string;
+  otherParams: string[] | null;
+  seNameForSearch: string;
+} => {
   if (contextParam) {
     let params = contextParam['slug-id'] as string[];
 
     if (params && params.length > 0) {
       const lastElementIndex = params.length - 1;
-      params[lastElementIndex] = params[lastElementIndex].replace('.html', '');
-      const seName = params[lastElementIndex];
+      let seNameForSearch = params[lastElementIndex].replace('.html', '');
+      const seName = params[lastElementIndex].replace('.html', '');
 
-      if (seName.includes('.svg') || seName.includes('.png')) {
-        return {
-          seName: '/',
-          otherParams: null,
-        };
+      if (storeCode !== _Store.type1) {
+        seNameForSearch = seName;
       }
 
       if (params.length === 1) {
         return {
+          seNameForSearch: seNameForSearch,
           seName: seName,
           otherParams: null,
         };
       }
 
-      return { seName: seName, otherParams: params };
+      return {
+        seNameForSearch: seNameForSearch,
+        seName: seName,
+        otherParams: params,
+      };
     }
   }
 
-  return {
-    seName: '/',
-    otherParams: null,
-  };
+  return { seNameForSearch: '/', seName: '/', otherParams: null };
 };
 
 interface _ParamsReturn {
@@ -591,7 +611,7 @@ export const getAddToCartObject = async (product: _Props): Promise<CartReq> => {
         oldFilePath: '',
         isSewOut: isSewOutEnable,
         sewOutAmount: sewOutCharges,
-        reUsableCustomerLogo: 0,
+        reUsableCustomerLogo: logo.location.reusableLocationId,
         logoPrice: logo.location.cost,
         logoQty: totalQty,
         logoFile: logo.logo.url || '',
@@ -667,26 +687,21 @@ export const getAddToCartObject = async (product: _Props): Promise<CartReq> => {
 };
 
 export const generateImageUrl = (
-  src: null | string | StaticImageData,
-  isStatic: boolean,
+  src: null | string,
   mediaBaseUrl: string,
-  extraUrlpath?: string,
-): string | StaticImageData => {
-  if (src === null) return __StaticImg.product;
-
-  if (isStatic) {
-    return src;
-  }
+  isStatic?: boolean,
+): string => {
+  if (isStatic && src) return src;
+  if (src === null) return __StaticImg.product.src;
 
   if (typeof src === 'string') {
     const with_or_without_HTTP = src.includes('http');
 
     if (with_or_without_HTTP) return src;
-
-    if (with_or_without_HTTP === false) return `${mediaBaseUrl}${src}`;
+    if (!with_or_without_HTTP) return `${mediaBaseUrl}${src}`;
   }
 
-  return __StaticImg.noImageFound;
+  return __StaticImg.noImageFound.src;
 };
 
 export const capitalizeFirstLetter = (text: string) => {
@@ -882,20 +897,20 @@ export const GTMHomeScriptForAllStores = async (
 const pushToDataLayerUtil = (payload: Record<string, any>) => {
   const dataLayer = window?.dataLayer || null;
   if (dataLayer) {
+    dataLayer.push({ ecommerce: null }); //For clearing ecommerce data layer
     if (payload?.pageDataLayer) {
-      dataLayer.push({ ecommerce: null }); //For clearing ecommerce data layer
       dataLayer.push({ ...JSON.parse(payload?.pageDataLayer) });
     }
+    if (payload?.userDetails) {
+      dataLayer.push({ ...JSON.parse(payload?.userDetails) });
+    }
     if (payload?.pageDataLayer2) {
-      dataLayer.push({ ecommerce: null }); //For clearing ecommerce data layer
       dataLayer.push({ ...JSON.parse(payload?.pageDataLayer2) });
     }
     if (payload?.pageDataLayer3) {
-      dataLayer.push({ ecommerce: null }); //For clearing ecommerce data layer
       dataLayer.push({ ...JSON.parse(payload?.pageDataLayer3) });
     }
     if (payload?.pageItemDetails) {
-      dataLayer.push({ ecommerce: null }); //For clearing ecommerce data layer
       dataLayer.push({ ...JSON.parse(payload?.pageItemDetails) });
     }
   }
@@ -909,4 +924,27 @@ export const remove_EnduserName = (key: string) => {
 };
 export const remove_Coupon = (key: string) => {
   localStorage.removeItem(key);
+};
+
+// Handle tab key press to trap focus within the modal
+export const handleTabKey = (
+  e: any,
+  modalRef: React.RefObject<HTMLDivElement>,
+) => {
+  const focusableElements: any = modalRef?.current?.querySelectorAll(
+    'a[href], button, textarea, input[type="text"], input[type="radio"], input[type="checkbox"], select',
+  );
+  if (focusableElements) {
+    const firstFocusableElement = focusableElements[0];
+    const lastFocusableElement =
+      focusableElements[focusableElements.length - 1];
+
+    if (!e.shiftKey && document.activeElement === lastFocusableElement) {
+      e.preventDefault();
+      firstFocusableElement?.focus();
+    } else if (e.shiftKey && document.activeElement === firstFocusableElement) {
+      e.preventDefault();
+      lastFocusableElement?.focus();
+    }
+  }
 };

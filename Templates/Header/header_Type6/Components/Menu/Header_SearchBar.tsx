@@ -1,4 +1,11 @@
 import LoginModal from '@appComponents/modals/loginModal';
+import ThirdPartyLogin from '@appComponents/modals/loginModal/ThirdPartyLogin';
+import {
+  HEALTHYPOINTS,
+  SIMPLI_SAFE_CODE,
+  UCA,
+  _Store_CODES,
+} from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
 import { _modals } from '@definations/product.type';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
@@ -22,6 +29,10 @@ const SearchBar: React.FC<_props> = ({
   const [inputText, setInputText] = useState<string>('');
   const { id: customerId } = useTypedSelector_v2((state) => state.user);
   const { setRedirectPagePath } = useActions_v2();
+  const { thirdPartyLogin } = useTypedSelector_v2((state) => state.store);
+  const { id: storeId, code: storeCode } = useTypedSelector_v2(
+    (state) => state.store,
+  );
 
   const modalHandler = (param: null | _modals) => {
     if (param) {
@@ -32,7 +43,7 @@ const SearchBar: React.FC<_props> = ({
   };
 
   const searchHandler = (values: any) => {
-    if (customerId) {
+    if (!customerId && (storeCode === UCA || storeCode === HEALTHYPOINTS)) {
       onSearchInput(values.text as string);
       let x = searchRef.current;
       if (x) {
@@ -41,7 +52,24 @@ const SearchBar: React.FC<_props> = ({
           x?.value == 'Enter Search here' ||
           x?.value.toString().toLowerCase().indexOf('enter search') > -1
         ) {
-          alert('Please enter something to search');
+          return alert('Please enter something to search');
+        }
+      }
+    }
+    if (
+      customerId ||
+      storeCode == SIMPLI_SAFE_CODE ||
+      storeCode == HEALTHYPOINTS
+    ) {
+      onSearchInput(values.text as string);
+      let x = searchRef.current;
+      if (x) {
+        if (
+          x?.value == '' ||
+          x?.value == 'Enter Search here' ||
+          x?.value.toString().toLowerCase().indexOf('enter search') > -1
+        ) {
+          return alert('Please enter something to search');
         }
         var str = x.value.replace(/^\s+|\s+$/g, '');
         while (str.substring(str.length - 1, str.length) == ' ') {
@@ -49,7 +77,7 @@ const SearchBar: React.FC<_props> = ({
         }
         if (str.length < 3) {
           alert('Please enter at least 3 characters to search');
-          x.focus();
+          return x.focus();
         }
 
         window.location.href =
@@ -79,7 +107,7 @@ const SearchBar: React.FC<_props> = ({
           {({ values, handleSubmit, handleChange, handleReset }) => {
             return (
               <Form>
-                <div className='sm:hidden'>
+                <div className='p-[10px]'>
                   <div className=''>
                     <div className='bg-white border border-[#003a70] pt-[5px] pb-[4px] pl-[15px] pr-[24px] text-primary relative'>
                       <input
@@ -101,6 +129,7 @@ const SearchBar: React.FC<_props> = ({
                           handleSubmit();
                           handleReset();
                         }}
+                        type='button'
                       >
                         <span className='material-icons text-primary font-[900]'>
                           {__pagesText.Headers.searchIcon}
@@ -145,8 +174,15 @@ const SearchBar: React.FC<_props> = ({
                         handleSubmit();
                         handleReset();
                       }}
+                      type='button'
                     >
-                      <span className='material-icons text-primary font-[900] hover:text-secondary'>
+                      <span
+                        className={`material-icons text-primary font-[900] ${
+                          storeCode === _Store_CODES.USAAHEALTHYPOINTS
+                            ? 'hover:primary-link '
+                            : 'hover:text-secondary'
+                        } `}
+                      >
                         {__pagesText.Headers.searchIcon}
                       </span>
                     </button>
@@ -156,7 +192,15 @@ const SearchBar: React.FC<_props> = ({
             );
           }}
         </Formik>
-        {openModal === 'login' && <LoginModal modalHandler={modalHandler} />}
+        {openModal === 'login' && (
+          <>
+            {thirdPartyLogin ? (
+              <ThirdPartyLogin modalHandler={modalHandler} />
+            ) : (
+              <LoginModal modalHandler={modalHandler} />
+            )}
+          </>
+        )}
       </>
     );
   }

@@ -1,6 +1,6 @@
 import Price from '@appComponents/Price';
 import NxtImage from '@appComponents/reUsable/Image';
-import { CustomizeLater, CustomizeLaterMain } from '@constants/common.constant';
+import { CustomizeLaterMain } from '@constants/common.constant';
 import { __pagesText } from '@constants/pages.text';
 import { _MyAcc_OrderProductDetails } from '@definations/APIs/user.res';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
@@ -46,21 +46,24 @@ const ThankYouProductTable: React.FC<_props> = ({ product }) => {
         </div>
       </div>
 
-      {(store.storeName !== 'Driving Impressions' && store?.code !== 'PORSCHE') &&
+      {store.storeName !== 'Driving Impressions' &&
+        store?.code !== 'PORSCHE' &&
         product.shoppingCartLogoPersonViewModels.map(
           (item: any, index: number) => {
             return item.logoName === 'Customize Later' ? (
               <div className='flex justify-start items-center mt-3'>
                 <div>
-                  <span className='material-icons text-[60px] mr-3'>
-                    support_agent
-                  </span>
-                </div>
+                            {store?.code === 'PMCG' ? <><img src='/assets/images/petermiller/crown.svg' /></> : 
+                            <span className='material-icons text-[60px] mr-3'>
+                              support_agent
+                            </span>}
+                            
+                          </div>
                 <div>
                   <div className='text-lg font-semibold'>
                     {CustomizeLaterMain}
                   </div>
-                  <div className='text-base'>{CustomizeLater}</div>
+                  <div className='text-base'> {store?.code == 'PMCG' ? __pagesText.CustomizeLaterPM : __pagesText.CustomizeLater}</div>
                 </div>
               </div>
             ) : (
@@ -71,16 +74,18 @@ const ThankYouProductTable: React.FC<_props> = ({ product }) => {
                 <div className='text-base'>
                   <div className='mb-3 flex'>
                     {item.logoImagePath === '' ? (
-                      <img
-                        className='w-14 h-12'
+                      <NxtImage
+                        className='max-h-[full] m-auto'
+                        isStatic={true}
+                        useNextImage={false}
                         src={`/assets/images/logo-to-be-submitted.webp`}
                         title=''
                         alt={item.logoPositionImage}
                       />
                     ) : (
                       <NxtImage
-                        className='w-14 h-12'
-                        src={`${item.logoImagePath}`}
+                        className='max-h-[50px]'
+                        src={item?.logoImagePath || null}
                         title=''
                         alt={item.logoImagePath}
                       />

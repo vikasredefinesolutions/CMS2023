@@ -326,7 +326,9 @@ export const BillingAddress = (
   let address = '';
   let billingName = '';
   if (billing?.billingAddress1) {
-    billingName += `${billing?.billingFirstName + billing?.billingLastName}`;
+    billingName += `${
+      billing?.billingFirstName + ' ' + billing?.billingLastName
+    }`;
     address += `${billing.billingAddress1}`;
   }
   if (billing?.billingAddress2 && billing.billingAddress2.trim() !== '') {
@@ -377,7 +379,7 @@ export const ShippingAddress = (
   let address = '';
   let shippingName = '';
   if (billing?.shippingAddress1) {
-    shippingName += `${billing.shippingFirstName + billing?.shippingLastName}`;
+    shippingName += `${billing.shippingFirstName} ${billing?.shippingLastName}`;
     address += `${billing.shippingAddress1}`;
   }
   if (billing?.shippingAddress2 && billing.shippingAddress2.trim() !== '') {

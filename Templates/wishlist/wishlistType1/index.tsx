@@ -1,5 +1,6 @@
-import Image from '@appComponents/reUsable/Image';
+import NxtImage from '@appComponents/reUsable/Image';
 import Price from '@appComponents/reUsable/Price';
+import { _Store } from '@configs/page.config';
 import { __pagesText } from '@constants/pages.text';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import { WishlistType } from '@services/wishlist';
@@ -29,21 +30,34 @@ const WishlistType1: React.FC<_Wishlist> = ({
               key={`${list.id}`}
               className='w-full sm:w-1/2 lg:w-1/4 px-[15px]'
             >
-              <div className='border border-[#f0f0f0] text-default-text mb-[20px]'>
-                <div className='pt-[10px] pb-[5px] flex items-center justify-center'>
+              <div
+                className={`border ${
+                  store.code == _Store.type2
+                    ? 'border-gray-border'
+                    : 'border-[#f0f0f0'
+                } text-default-text mb-[20px]`}
+              >
+                <div className='pt-[10px] pb-[5px] flex items-center justify-center max-h-[348px]'>
                   <Link
                     key={list.productId}
                     href={`${origin}/${list.seName}.html?v=product-detail&altview=1`}
-                    className='relative underline min-h-[48px]'
                   >
-                    <a className='w-full cursor-pointer'>
-                      <Image
+                    <a
+                      className={`w-full cursor-pointer ${
+                        store.code == _Store.type2 ? 'text-center' : ''
+                      }`}
+                    >
+                      <NxtImage
                         src={
                           mediaBaseUrl + list && list?.colorLogoUrl
                             ? list.colorLogoUrl
                             : ''
                         }
-                        className=''
+                        className={`${
+                          store.code == _Store.type2
+                            ? 'max-h-[348px] m-auto'
+                            : ''
+                        }`}
                         alt='wishlist'
                       />
                     </a>
@@ -55,14 +69,34 @@ const WishlistType1: React.FC<_Wishlist> = ({
                       key={list.productId}
                       href={`${origin}/${list.seName}.html?v=product-detail&altview=1`}
                     >
-                      <a className='text-anchor h-[40px] block overflow-hidden'>
+                      <a
+                        className={`${
+                          store.code == _Store.type2
+                            ? 'relative text-sub-text !font-bold h-[45px] overflow-hidden inline-block'
+                            : 'text-anchor h-[40px] block overflow-hidden'
+                        }`}
+                      >
                         {list.productName}
                       </a>
                     </Link>
                   </div>
-                  <div className='flex flex-wrap justify-center items-center mt-[5px] mb-[10px]'>
-                    <div className=''>{__pagesText.productInfo.price}</div>
-                    <div className='font-[600]'>
+                  <div className='flex flex-wrap justify-center items-center mb-[10px] text-small-text'>
+                    <div
+                      className={`${
+                        store.code == _Store.type2
+                          ? 'font-semibold pr-[3px]'
+                          : ''
+                      }`}
+                    >
+                      {__pagesText.productInfo.price}
+                    </div>
+                    <div
+                      className={`${
+                        store.code == _Store.type2
+                          ? 'font-semibold'
+                          : 'font-[600]'
+                      }`}
+                    >
                       <Price
                         value={undefined}
                         prices={{

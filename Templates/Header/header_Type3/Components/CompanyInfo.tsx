@@ -15,9 +15,9 @@ const CompanyInfo: React.FC<_props> = ({ phoneNumber, email }) => {
   const { view } = useTypedSelector_v2((state) => state.store);
   if (view == 'MOBILE')
     return (
-      <div className='sm:hidden block text-center pb-[10px] break-words border-b border-b-gray-border mb-[10px] text-default-text'>
+      <div className='block text-center pb-[10px] break-words border-b border-b-gray-border mb-[10px] text-default-text'>
         {__pagesText.Headers.companyPhoneQuestion}{' '}
-        <a href={`'tel:${phoneNumber}`} className='break-words'>
+        <a href={`tel:${phoneNumber}`} className='break-words'>
           {phoneNumber}
         </a>{' '}
         {__pagesText.Headers.companyEmailQuestion}{' '}
@@ -34,7 +34,7 @@ const CompanyInfo: React.FC<_props> = ({ phoneNumber, email }) => {
       <div className='break-words w-full text-right hidden sm:block pb-[10px] text-default-text'>
         <div>
           {__pagesText.Headers.companyPhoneQuestion}{' '}
-          <a href={`'tel:${phoneNumber}`} className='break-words'>
+          <a href={`tel:${phoneNumber}`} className='break-words'>
             {phoneNumber}
           </a>{' '}
         </div>

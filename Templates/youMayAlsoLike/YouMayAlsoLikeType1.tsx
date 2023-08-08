@@ -131,7 +131,7 @@ const YouMayAlsoLikeType1: React.FC<_TemplateProps> = ({ productsData }) => {
         <></>
       ) : (
         <section
-          className={`mainsection mt-10 ${
+          className={`mainsection  ${
             productsData?.length <= 5 && width >= 1024
               ? 'you-may-also-like-slider-2'
               : ''
@@ -139,18 +139,18 @@ const YouMayAlsoLikeType1: React.FC<_TemplateProps> = ({ productsData }) => {
         >
           <div
             className={`container mx-auto ${
-              storeCode === 'CYX' ? '' : 'mt-10'
+              storeCode === 'CYX' ? '' : ''
             } `}
           >
             <div className={`${storeCode === 'CYX' ? 'bg-white pt-10' : ''}`}>
               <div
                 className={
-                  'w-full text-center font-[600] text-2xl-text font-title text-color-title mb-[16px] description-title'
+                  'w-full text-center font-[600] text-2xl-text font-title text-color-title pb-[20px] pt-[20px] description-title bg-[#ffffff]'
                 }
               >
                 {__pagesText.YouMayAlsoLike.YouMayAlsoLike}
               </div>
-              <div className='relative'>
+              <div className='relative bg-[#ffffff]'>
                 <div className=''>
                   <div
                     className={`${
@@ -193,6 +193,7 @@ const YouMayAlsoLikeType1: React.FC<_TemplateProps> = ({ productsData }) => {
                                       <NxtImage
                                         src={product.image}
                                         alt={product.name}
+                                        useNextImage={false}
                                         className='max-h-[348px] !inline-black m-auto'
                                       />
                                     </a>

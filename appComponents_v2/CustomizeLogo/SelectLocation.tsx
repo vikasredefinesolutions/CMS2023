@@ -3,14 +3,12 @@ import { _LogoSteps } from '@definations/product.type';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import { _AvailableLocationDetailsOtherStores } from '@redux/slices/product.slice.types';
 import { useState } from 'react';
-import { _globalStore } from 'store.global';
 
 interface _props {
   setNextStep: React.Dispatch<React.SetStateAction<_LogoSteps[]>>;
   selectedLocation: _AvailableLocationDetailsOtherStores | null;
   setSelectedLocation: React.Dispatch<React.SetStateAction<any>>;
 }
-let mediaBaseUrl = _globalStore.blobUrl;
 
 const SelectLocation: React.FC<_props> = ({
   setNextStep,
@@ -23,9 +21,6 @@ const SelectLocation: React.FC<_props> = ({
     (state) => state.product.toCheckout,
   );
 
-  const mediaUrl = useTypedSelector_v2((state) => state.store.mediaBaseUrl);
-
-  let mediaBaseUrl = mediaUrl ? mediaUrl : _globalStore.blobUrl;
   const actionHandler = (action: 'now' | 'later') => {
     if (selectedLocation === null && action !== 'later') {
       setShowError(true);
@@ -80,7 +75,7 @@ const SelectLocation: React.FC<_props> = ({
               <div className='mb-[10px] flex flex-wrap items-center justify-center h-[120px] px-[10px]'>
                 <NxtImage
                   className='max-h-[120px] w-auto mx-auto'
-                  src={`${mediaBaseUrl}${pos.image}`}
+                  src={pos?.image || null}
                   alt={pos.name}
                 />
               </div>

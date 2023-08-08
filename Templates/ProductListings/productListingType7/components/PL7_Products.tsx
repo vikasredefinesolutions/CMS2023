@@ -26,9 +26,13 @@ const PL7_Products = ({ product }: { product: GetlAllProductList }) => {
               href={`/${product.sename}.html`}
               className='relative'
             >
-              <a className="h-[348px] flex items-center justify-center mb-[10px]" href={`/${product.sename}.html`} title={product.name}>
+              <a
+                className='h-[348px] flex items-center justify-center mb-[10px]'
+                href={`/${product.sename}.html`}
+                title={product.name}
+              >
                 <NxtImage
-                  src={`${mediaBaseUrl}${currentImage}`}
+                  src={currentImage || null}
                   alt={product.name}
                   title={product.name}
                   className='max-h-[348px] m-auto cursor-pointer'
@@ -42,13 +46,18 @@ const PL7_Products = ({ product }: { product: GetlAllProductList }) => {
               <Link
                 href={`/${product.sename}.html`}
                 className='relative text-primary hover:text-primary-hover uppercase text-medium-text'
-              ><a>
-                <h3>{product.name.toUpperCase()}</h3></a>
+              >
+                <a>
+                  <h3>{product.name.toUpperCase()}</h3>
+                </a>
               </Link>
             </div>
             <div className='mb-[12px] text-sub-text'>
               <span className='text-primary font-normal'>
-                <Price value={product.msrp} />
+                <Price
+                  value={product?.salePrice || product?.msrp || 0}
+                  // prices={{ }}
+                />
               </span>
             </div>
             <ul
@@ -75,13 +84,20 @@ const PL7_Products = ({ product }: { product: GetlAllProductList }) => {
                           key={subRow.id}
                         >
                           <div className='w-[30px] h-[30px] p-[2px] flex items-center justify-center cursor-pointer'>
-                          <a href="javascript:void(0)" title={`${subRow.alttag}`} onClick={() => {
-                            setCurrentImage(subRow.imageName);
-                          }}><img
-                              src={`${mediaBaseUrl}${subRow.imageName}`}
-                              alt={`${subRow.alttag}`}
-                              className='m-auto max-h-full'
-                            /></a>
+                            <a
+                              href='javascript:void(0)'
+                              title={`${subRow.alttag}`}
+                              onClick={() => {
+                                setCurrentImage(subRow.imageName);
+                              }}
+                            >
+                              <NxtImage
+                                src={subRow.imageName}
+                                useNextImage={false}
+                                alt={`${subRow.alttag}`}
+                                className='m-auto max-h-full'
+                              />
+                            </a>
                           </div>
                         </li>
                       ) : (

@@ -49,13 +49,9 @@ const CT2_EL_CartItem: React.FC<_CartItem & _Props> = (item) => {
   const isEmployeeLoggedIn = useTypedSelector_v2(
     (state) => state.employee.loggedIn,
   );
-  const {
-    isLinepersonalization,
-    code: storeCode,
-    mediaBaseUrl: clientSideMediaBaseUrl,
-    isAttributeSaparateProduct,
-    id: storeId,
-  } = useTypedSelector_v2((state) => state.store);
+  const { isLinepersonalization, id: storeId } = useTypedSelector_v2(
+    (state) => state.store,
+  );
   const { lastUpdate } = useTypedSelector_v2((state) => state.cart);
 
   const [keepPersonalizing, setKeepPersonalizing] = useState<boolean>(false);
@@ -225,8 +221,6 @@ const CT2_EL_CartItem: React.FC<_CartItem & _Props> = (item) => {
     }
   };
 
-  const mediaBaseUrl = useTypedSelector_v2((state) => state.store.mediaBaseUrl);
-
   const ProductNameHTML = (seName: string | null, name: string) => {
     if (!seName) {
       return <a className='text-[#000000]'>{name}</a>;
@@ -246,11 +240,7 @@ const CT2_EL_CartItem: React.FC<_CartItem & _Props> = (item) => {
       <div className='flex flex-wrap pb-[20px] -mx-3'>
         <div className='w-full lg:w-1/4 pl-[12px] pr-[12px] mb-[10px] max-w-[300px] mx-auto'>
           <NxtImage
-            src={
-              item.colorImage
-                ? item.colorImage
-                : '/assets/images/image_not_available.jpg'
-            }
+            src={item.colorImage || '/assets/images/image_not_available.jpg'}
             alt={item.productName}
             className=''
             isStatic={!Boolean(item.colorImage)}
@@ -324,7 +314,7 @@ const CT2_EL_CartItem: React.FC<_CartItem & _Props> = (item) => {
                   </div>
                   <div className='w-[80px] h-[80px]'>
                     <NxtImage
-                      src={`${mediaBaseUrl}${_item.logoPositionImage}`}
+                      src={_item.logoPositionImage}
                       alt=''
                       className='max-h-full'
                     />
@@ -341,12 +331,14 @@ const CT2_EL_CartItem: React.FC<_CartItem & _Props> = (item) => {
                         <div className='w-[80px] h-[80px]'>
                           {_item.logoImagePath !== '' ? (
                             <NxtImage
-                              src={`${mediaBaseUrl}${_item.logoImagePath}`}
+                              src={_item.logoImagePath}
                               className='max-h-full'
                               alt=''
                             />
                           ) : (
-                            <img
+                            <NxtImage
+                              useNextImage={false}
+                              isStatic={true}
                               src={'/assets/images/logolater.png'}
                               className='max-h-full'
                               alt=''

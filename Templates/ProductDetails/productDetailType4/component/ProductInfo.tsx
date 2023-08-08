@@ -1,8 +1,8 @@
+import Price from '@appComponents/Price';
+import RequiredInventoryModal from '@appComponents/modals/RequiredInventoryModal';
 import ForgotModal from '@appComponents/modals/forgotModal';
 import LoginModal from '@appComponents/modals/loginModal';
 import { _modals } from '@appComponents/modals/modal';
-import RequiredInventoryModal from '@appComponents/modals/RequiredInventoryModal';
-import Price from '@appComponents/Price';
 import { __pagesText } from '@constants/pages.text';
 import { paths } from '@constants/paths.constant';
 import { _Selectedproduct_v2 } from '@definations/product.type';
@@ -148,10 +148,36 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
         return sizeQtys[0].price + sizeQtys[0].aditionalCharges;
       }
 
-      return sizeQtys[0].price;
+      return sizeQtys[0]?.price || 0;
     }
 
     return totalPrice / totalQty;
+  };
+
+  const calculateTotalPriceToShowUser = () => {
+    let totalPrice = 0;
+    let totalQty = 0;
+    let showUsualPrice = true;
+
+    sizeQtys?.forEach((sizeQty) => {
+      if (sizeQty.qty <= 0) return null;
+      if (showUsualPrice) {
+        if (sizeQty?.aditionalCharges && sizeQty.aditionalCharges > 0) {
+          showUsualPrice = false;
+        }
+      }
+      totalPrice +=
+        (+product.salePrice + (sizeQty?.aditionalCharges || 0)) * sizeQty.qty;
+      totalQty += sizeQty.qty;
+    });
+
+    if (showUsualPrice) {
+      return discountedPrice;
+    }
+
+    return totalQty > 0 && totalPrice > 0
+      ? totalPrice / totalQty
+      : product.salePrice;
   };
 
   const decideSizePrice = (sizeQty: _Product_SizeQtys): number => {
@@ -393,9 +419,11 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
   };
 
   let totalinvetory = 0;
+
   const data = inventory?.inventory?.map((inv) => {
     totalinvetory = totalinvetory + inv.inventory;
   });
+
   const buttonMessage = () => {
     if (product?.isDiscontinue) {
       return __pagesText.productInfo.Discontinued;
@@ -491,9 +519,7 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
                 )} */}
                 <DiscountPrice
                   storeCode={storeCode}
-                  ourCost={product?.ourCost || 0}
-                  msrp={product?.msrp || 0}
-                  imap={product?.imap || 0}
+                  averagePrice={calculateTotalPriceToShowUser()}
                   salePrice={
                     totalQty
                       ? Math.abs(
@@ -504,7 +530,7 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
                 />
               </div>
             </div>
-            <Subtotal subTotal={totalCheckout.totalPrice} />
+            <Subtotal subTotal={Math.abs(totalCheckout.totalPrice)} />
           </div>
         )}
         <form className='mt-[15px]'>

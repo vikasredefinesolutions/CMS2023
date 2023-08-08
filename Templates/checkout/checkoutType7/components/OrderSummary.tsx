@@ -332,12 +332,17 @@ const OrderSummary: React.FC<_props> = ({
               />
             </dt>
           </div>
-          
-          {messages.checkoutTermsAndCondition &&  <div className='mt-[16px] mb-[16px]'>
-              <div className=" text-rose-600 mb-[10px]" dangerouslySetInnerHTML={{ __html: messages.checkoutTermsAndCondition}}>
-              </div>
-          </div>}
-         
+
+          {messages.checkoutTermsAndCondition && (
+            <div className='mt-[16px] mb-[16px]'>
+              <div
+                className=' text-rose-600 mb-[10px]'
+                dangerouslySetInnerHTML={{
+                  __html: messages.checkoutTermsAndCondition,
+                }}
+              ></div>
+            </div>
+          )}
 
           <div className='mt-[16px] mb-[16px]'>
             <button

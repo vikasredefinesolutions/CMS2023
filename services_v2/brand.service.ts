@@ -1,4 +1,4 @@
-import { _Brand } from '@definations/brand';
+import { _Brand, _BrandWithProductCount } from '@definations/brand';
 import { newFetauredItemResponse } from '@definations/productList.type';
 import {
   _CategorySiteMap,
@@ -64,5 +64,14 @@ export const FetchBrandsBySequence = async (storeId: string) => {
     url: url,
     method: 'GET',
   });
+  return res;
+};
+export const FetchBrandsWithProductCount = async (storeId: string) => {
+  const url = `/Brand/getstorebrandsequencedi/${storeId}.json`;
+  const res: _BrandWithProductCount[] = await SendAsync({
+    url: url,
+    method: 'GET',
+  });
+
   return res;
 };

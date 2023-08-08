@@ -11,9 +11,11 @@ import React from 'react';
 import * as Yup from 'yup';
 
 const GiftDetail: React.FC<_GiftDetailsProps> = ({ giftData }) => {
-  const { setShowLoader, showModal } = useActions_v2();
+  const { setShowLoader, showModal, fetchCartDetails } = useActions_v2();
   const { id: customerId } = useTypedSelector_v2((state) => state.user);
-
+  const isEmployeeLoggedIn = useTypedSelector_v2(
+    (state) => state.employee.loggedIn,
+  );
   const { id: storeId } = useTypedSelector_v2((state) => state.store);
   const initialValues = {
     recipientName: '',
@@ -22,11 +24,14 @@ const GiftDetail: React.FC<_GiftDetailsProps> = ({ giftData }) => {
   };
 
   const validationSchema = Yup.object().shape({
-    recipientName: Yup.string().required(giftCardValidation.name.required),
+    recipientName: Yup.string()
+      .trim()
+      .required(giftCardValidation.name.required),
     recipientEmail: Yup.string()
+      .trim()
       .email(giftCardValidation.email.invalid)
       .required(giftCardValidation.email.required),
-    message: Yup.string().notRequired(),
+    message: Yup.string().trim().required(giftCardValidation.message.required),
   });
 
   const handleSubmit = async (values: FormikValues) => {
@@ -49,13 +54,13 @@ const GiftDetail: React.FC<_GiftDetailsProps> = ({ giftData }) => {
           isForm: false,
           shoppingCartItemModel: {
             id: 0,
-            price: 0,
-            quantity: 0,
+            price: +giftData.salePrice,
+            quantity: 1,
             weight: 0,
             productType: 0,
             discountPrice: 0,
-            logoTitle: '',
-            logogImagePath: '',
+            logoTitle: giftData.name,
+            logogImagePath: giftData.imageName,
             perQuantity: 0,
             appQuantity: 0,
             status: 2,
@@ -64,14 +69,52 @@ const GiftDetail: React.FC<_GiftDetailsProps> = ({ giftData }) => {
             itemNotes: '',
             isEmployeeLoginPrice: false,
           },
-          cartLogoPersonModel: [],
-          cartLogoPersonDetailModels: [],
+          cartLogoPersonModel: [
+            {
+              id: 0,
+              attributeOptionId: 0,
+              attributeOptionValue: `${values.recipientName}^${values.recipientEmail}^${values.message}`,
+              code: '',
+              price: +giftData.salePrice,
+              quantity: 1,
+              estimateDate: new Date(),
+              isEmployeeLoginPrice: 0,
+            },
+          ],
+          cartLogoPersonDetailModels: [
+            {
+              id: 0,
+              logoPrice: 0,
+              logoQty: 0,
+              logoFile: '',
+              logoLocation: '',
+              logoTotal: 0,
+              colorImagePath: '',
+              logoUniqueId: '',
+              price: 0,
+              logoColors: '',
+              logoNotes: '',
+              logoDate: new Date(),
+              logoNames: '',
+              digitalPrice: 0,
+              logoPositionImage: '',
+              oldFilePath: '',
+              originalLogoFilePath: '',
+              isSewOut: false,
+              sewOutAmount: 0,
+              reUsableCustomerLogo: 0,
+            },
+          ],
         },
       };
       await addToCart(cartObject);
       showModal({
         message: __pagesText.cart.successMessage,
         title: 'Success',
+      });
+      await fetchCartDetails({
+        customerId: customerId || 0,
+        isEmployeeLoggedIn,
       });
       setShowLoader(false);
     } catch (error) {
@@ -163,10 +206,16 @@ const GiftDetail: React.FC<_GiftDetailsProps> = ({ giftData }) => {
                             className='form-input'
                             rows={4}
                             id='message'
+                            name='message'
                             value={values.message}
                             onChange={handleChange}
                             onBlur={handleBlur}
                           ></textarea>
+                          <ErrorMessage name='message'>
+                            {(msg) => (
+                              <p className='text-red-500 text-xs mt-1'>{msg}</p>
+                            )}
+                          </ErrorMessage>
                         </div>
                       </div>
                       <div>
@@ -200,21 +249,23 @@ const GiftDetail: React.FC<_GiftDetailsProps> = ({ giftData }) => {
         </div>
       </section>
 
-      <section className=''>
-        <div className='container mx-auto'>
-          <div className='bg-white pt-[40px] px-[10px] pb-[30px]'>
-            <div className=''>
-              <div className='bg-secondary py-[10px] px-[15px] text-white inline-block rounded-t-md'>
-                Description
+      {giftData?.description && (
+        <section className=''>
+          <div className='container mx-auto'>
+            <div className='bg-white pt-[40px] px-[10px] pb-[30px]'>
+              <div className=''>
+                <div className='bg-secondary py-[10px] px-[15px] text-white inline-block rounded-t-md'>
+                  Description
+                </div>
               </div>
+              <div
+                className='text-sm tracking-widest p-[20px] border border-gray-border'
+                dangerouslySetInnerHTML={{ __html: giftData?.description }}
+              ></div>
             </div>
-            <div
-              className='text-sm tracking-widest p-[20px] border border-gray-border'
-              dangerouslySetInnerHTML={{ __html: giftData.description }}
-            ></div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
     </>
   );
 };

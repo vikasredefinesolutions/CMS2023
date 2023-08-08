@@ -93,6 +93,7 @@ interface _Input {
   fullWidth: boolean;
   name: _PL1_AddEditInputFieldsName;
   type: 'text' | 'number';
+  autoFillText: string;
 }
 
 interface _Select {
@@ -102,6 +103,7 @@ interface _Select {
   name: _PL1_AddEditInputFieldsName;
   type: 'select';
   noOptionFound: string;
+  autoFillText: string;
 }
 
 export const maxLengthCalculator = (
@@ -206,6 +208,7 @@ export const PL1_addEditInputFields: Array<_Input | _Select> = [
     fullWidth: true,
     name: 'firstName',
     type: 'text',
+    autoFillText: 'given-name',
   },
   {
     required: false,
@@ -213,6 +216,7 @@ export const PL1_addEditInputFields: Array<_Input | _Select> = [
     fullWidth: true,
     name: 'lastName',
     type: 'text',
+    autoFillText: 'family-name',
   },
   {
     required: false,
@@ -220,6 +224,7 @@ export const PL1_addEditInputFields: Array<_Input | _Select> = [
     fullWidth: true,
     name: 'companyName',
     type: 'text',
+    autoFillText: '',
   },
   {
     required: false,
@@ -227,6 +232,7 @@ export const PL1_addEditInputFields: Array<_Input | _Select> = [
     fullWidth: true,
     name: 'address1',
     type: 'text',
+    autoFillText: 'street-address',
   },
   {
     required: false,
@@ -234,6 +240,7 @@ export const PL1_addEditInputFields: Array<_Input | _Select> = [
     fullWidth: true,
     name: 'address2',
     type: 'text',
+    autoFillText: 'address-line3',
   },
   {
     required: false,
@@ -241,6 +248,7 @@ export const PL1_addEditInputFields: Array<_Input | _Select> = [
     fullWidth: true,
     name: 'city',
     type: 'text',
+    autoFillText: 'address-level2',
   },
   {
     required: false,
@@ -249,6 +257,7 @@ export const PL1_addEditInputFields: Array<_Input | _Select> = [
     name: 'state',
     type: 'select',
     noOptionFound: 'No State Found',
+    autoFillText: 'address-level1',
   },
   {
     required: false,
@@ -256,6 +265,7 @@ export const PL1_addEditInputFields: Array<_Input | _Select> = [
     fullWidth: true,
     name: 'zipcode',
     type: 'text',
+    autoFillText: 'postal-code',
   },
   {
     required: false,
@@ -264,6 +274,7 @@ export const PL1_addEditInputFields: Array<_Input | _Select> = [
     name: 'country',
     type: 'select',
     noOptionFound: 'No Country Found',
+    autoFillText: 'country-name',
   },
   {
     required: false,
@@ -271,5 +282,6 @@ export const PL1_addEditInputFields: Array<_Input | _Select> = [
     fullWidth: true,
     name: 'phoneNumber',
     type: 'text',
+    autoFillText: 'tel',
   },
 ];

@@ -11,6 +11,10 @@ import {
 } from '../CO7R_Extras';
 import { CO7R_CreditCardInput, CO7R_Input } from './CO7R_Inputs';
 
+interface _CustomEvent extends Event {
+  inputType: 'deleteContentBackward';
+}
+
 interface _Props {
   values: _CO7R_CreditCardFields;
   handleChange(e: React.ChangeEvent<any>): void;
@@ -92,7 +96,21 @@ const CO7R_CreditCard: React.FC<_Props> = ({
           name={'nameOnCard'}
           required={true}
           value={values.nameOnCard}
-          onChange={handleChange}
+          onChange={(e) => {
+            if (
+              (e.nativeEvent as _CustomEvent).inputType ===
+              'deleteContentBackward'
+            ) {
+              if (e.currentTarget.value === '') {
+                setFieldValue('ccNumber', '');
+                setFieldValue('expiryMonth', '');
+                setFieldValue('expiryYear', '');
+                setFieldValue('cvc', '');
+              }
+            }
+            handleChange(e);
+          }}
+          autoComplete='cc-name'
           onBlur={handleBlur}
           touched={!!touched.nameOnCard}
           error={errors?.nameOnCard ? errors.nameOnCard : null}
@@ -102,13 +120,22 @@ const CO7R_CreditCard: React.FC<_Props> = ({
           additionalClass={'md:w-6/12'}
           type={'text'}
           name={'ccNumber'}
+          autoComplete='cc-number'
           required={true}
           length={maxLengthCalculator('ccNumber', values.ccNumber)}
           value={values.ccNumber}
-          onChange={(event) => {
-            if (isNumberKey(event)) {
-              handleChange(event);
+          onChange={(e) => {
+            if (
+              (e.nativeEvent as _CustomEvent).inputType ===
+              'deleteContentBackward'
+            ) {
+              if (e.currentTarget.value === '') {
+                setFieldValue('expiryMonth', '');
+                setFieldValue('expiryYear', '');
+                setFieldValue('cvc', '');
+              }
             }
+            handleChange(e);
           }}
           creditCard={true}
           onBlur={handleBlur}
@@ -137,6 +164,7 @@ const CO7R_CreditCard: React.FC<_Props> = ({
               value={values.expiryMonth}
               onChange={handleExpiryMonthOnChange}
               name={'expiryMonth'}
+              autoComplete='cc-exp-month'
               onBlur={handleExpiryMonth}
               valid={
                 !!touched.expiryMonth &&
@@ -154,6 +182,7 @@ const CO7R_CreditCard: React.FC<_Props> = ({
               onChange={handleChange}
               name={'expiryYear'}
               onBlur={handleBlur}
+              autoComplete='cc-exp-year'
               valid={
                 !!touched.expiryYear &&
                 values.expiryYear !== '' &&
@@ -171,6 +200,7 @@ const CO7R_CreditCard: React.FC<_Props> = ({
           label='Security Code(CVV/CVC)'
           additionalClass={'md:w-6/12'}
           type={'text'}
+          autoComplete='cc-csc'
           name={'cvc'}
           required={true}
           value={values.cvc}

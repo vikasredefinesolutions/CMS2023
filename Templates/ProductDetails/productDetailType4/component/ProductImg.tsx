@@ -1,4 +1,5 @@
 import NxtImage from '@appComponents/reUsable/Image';
+import { _Store } from '@configs/page.config';
 import { _OtherImage, _ProductColor } from '@definations/APIs/colors.res';
 import { _ProductImgProps } from '@templates/ProductDetails/Components/productDetailsComponents';
 import ColorImage from '@templates/ProductDetails/productDetailType2/component/ColorImage';
@@ -38,6 +39,7 @@ const ProductImg: React.FC<_ProductImgProps> = ({ product }) => {
   const clientSideMediaUrl = useTypedSelector_v2(
     (state) => state.store.mediaBaseUrl,
   );
+  const storeCode = useTypedSelector_v2((state) => state.store.code);
   mediaBaseUrl = mediaBaseUrl || clientSideMediaUrl;
   const selectImgHandler = (img: _OtherImage) => {
     setImage_2({ ...img, imageUrl: mediaBaseUrl + img.imageUrl });
@@ -63,12 +65,31 @@ const ProductImg: React.FC<_ProductImgProps> = ({ product }) => {
   return (
     <div className='col-span-1 grid grid-cols-12 gap-[10px] lg:pr-[15px] pr-[0px] pt-[8px]'>
       <div className='col-span-12 border border-gray-border relative'>
-        <div className='main-image max-w-lg mx-auto'>
+        {product?.productTagViewModel?.map((tagsdetails) => {
+          return (
+            <div
+              className={`${tagsdetails.tagPosition}`}
+              data-imageUrl={`${tagsdetails.imagename}`}
+            >
+              <NxtImage
+                alt=''
+                useNextImage={false}
+                src={tagsdetails.imagename}
+                className='max-h-full inline-block'
+              />
+            </div>
+          );
+        })}
+        <div
+          className={`main-image max-w-lg mx-auto ${
+            storeCode == _Store.type4 ? 'lg:max-h-[700px] overflow-hidden' : ''
+          } `}
+        >
           <InnerImageZoom
             src={selectedImage?.imageUrl}
             zoomType='hover'
             hideHint={true}
-            className='w-full object-center object-cover sm:rounded-lg main_image max-h'
+            className='w-full object-center object-cover  main_image max-h'
           />
         </div>
         <div className='hidden md:block sub-image absolute left-[10px] top-[15px] w-[70px]'>
@@ -89,7 +110,9 @@ const ProductImg: React.FC<_ProductImgProps> = ({ product }) => {
                     <NxtImage
                       src={img.imageUrl}
                       alt={img.altTag}
-                      className={`${highlight} max-h-full m-auto`}
+                      className={`${highlight} max-h-full m-auto ${
+                        storeCode == _Store.type4 ? 'w-[70px] h-[70px]' : ''
+                      }`}
                       title={img.altTag}
                     />
                   </div>
@@ -116,7 +139,9 @@ const ProductImg: React.FC<_ProductImgProps> = ({ product }) => {
                 >
                   <ColorImage product={product} />
                 </div>
-                <div className='text-center w-[70px]'>{product.name}</div>
+                <div className='text-center w-[80px] text-extra-small-text px-[4px]'>
+                  {product.name}
+                </div>
               </div>
             );
           })}

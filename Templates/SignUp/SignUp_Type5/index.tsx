@@ -1,4 +1,3 @@
-import { _PASS_FIELD } from '@constants/common.constant';
 import { UserAddressType } from '@constants/enum';
 import {
   __Cookie,
@@ -85,6 +84,21 @@ const SignUp_type5: React.FC<_props> = ({
       .required(__ValidationText.signUp.firstName.required)
       .min(__ValidationText.signUp.firstName.minLength)
       .max(__ValidationText.signUp.firstName.maxLength),
+    password: Yup.string()
+      .trim()
+      .required(__ValidationText.signUp.password.required)
+      .min(__ValidationText.signUp.password.minLength)
+      .max(__ValidationText.signUp.password.maxLength),
+    // confirmPassword: Yup.string()
+    //   .trim()
+    //   .required(__ValidationText.signUp.confirmPassword.required)
+    //   .test(
+    //     'passwords-match',
+    //     __ValidationText.signUp.confirmPassword.mustMatch,
+    //     function (value) {
+    //       return this.parent.password === value;
+    //     },
+    //   ),
     lastName: Yup.string()
       .trim()
       .required(__ValidationText.signUp.lastName.required)
@@ -121,23 +135,25 @@ const SignUp_type5: React.FC<_props> = ({
       .max(__ValidationText.signUp.storeCustomerAddress.phone.length),
     usersMessage: Yup.string()
       .trim()
-      .min(__ValidationText.signUp.companyName.minLength)
-      .max(__ValidationText.signUp.companyName.maxLength),
-    password: Yup.string()
-      .trim()
-      .test('password-test-case', 'Password is required', (value) => {
-        const domain = (_PASS_FIELD as any)[storeCode];
-        if (domain) return true;
-        if (!value || value.length < 6) return false;
-        return true;
-      })
-      // .required(__ValidationText.signUp.password.required)
-      .min(__ValidationText.signUp.password.minLength)
-      .max(__ValidationText.signUp.password.maxLength),
+      .max(
+        __ValidationText.signUp.companyName.maxLength,
+        'Description must be less than 50',
+      ),
+    // password: Yup.string()
+    //   .trim()
+    //   .test('password-test-case', 'Password is required', (value) => {
+    //     const domain = (_PASS_FIELD as any)[storeCode];
+    //     if (domain) return true;
+    //     if (!value || value.length < 6) return false;
+    //     return true;
+    //   })
+    //   // .required(__ValidationText.signUp.password.required)
+    //   .min(__ValidationText.signUp.password.minLength)
+    //   .max(__ValidationText.signUp.password.maxLength),
   });
 
   const handleFormikSubmit = async (values: _SU5_InitialValues) => {
-    console.log('working ajkhdkja', values);
+    // console.log('working ajkhdkja', values);
 
     const location = await getLocation();
     const payload: _CreateNewAccount_Payload = {
@@ -205,9 +221,6 @@ const SignUp_type5: React.FC<_props> = ({
 
     if (verifiedRecaptch) {
       CreateNewAccount(payload).then((res: any) => {
-        const keyRes = Object.keys(res).find((obj) =>
-          obj.includes('storeCustomerModel.'),
-        );
         if (res?.data === null) {
           setShowLoader(false);
           showModal({
@@ -428,6 +441,25 @@ const SignUp_type5: React.FC<_props> = ({
 
                         <div className='w-full lg:w-1/2 px-3 pb-[10px]'>
                           <label className='mb-[4px] text-normal-text'>
+                            Job title
+                          </label>
+                          <div className=''>
+                            <input
+                              placeholder=''
+                              value={values.jobTitle}
+                              name='jobTitle'
+                              className='form-input !w-[calc(100%-40px)]'
+                              onChange={handleChange}
+                              onBlur={handleBlur}
+                            />
+                          </div>
+                          <div className='text-red-500 text-s'>
+                            {touched.jobTitle && errors.jobTitle}
+                          </div>
+                        </div>
+
+                        <div className='w-full lg:w-1/2 px-3 pb-[10px]'>
+                          <label className='mb-[4px] text-normal-text'>
                             Department Name
                           </label>
                           <div className=''>
@@ -445,25 +477,20 @@ const SignUp_type5: React.FC<_props> = ({
                           </div>
                         </div>
 
-                        {!(storeCode === 'PKHG') && (
-                          <div className='w-full lg:w-1/2 px-3 pb-[10px]'>
-                            <label className='mb-[4px] text-normal-text'>
-                              Password{' '}
-                              {!(storeCode === 'PKHG') && (
-                                <span className='text-rose-500'>*</span>
-                              )}
-                            </label>
-                            <div className=''>
-                              <input
-                                placeholder=''
-                                type={showPassword ? 'text' : 'password'}
-                                value={values.password}
-                                name='password'
-                                className='form-input !w-[calc(100%-40px)]'
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                              />
-                            </div>
+                        <div className='w-full lg:w-1/2 px-3 pb-[10px]'>
+                          <label className='mb-[4px] text-normal-text'>
+                            Password <span className='text-rose-500'>*</span>
+                          </label>
+                          <div className='relative'>
+                            <input
+                              placeholder=''
+                              type={showPassword ? 'text' : 'password'}
+                              value={values.password}
+                              name='password'
+                              className='form-input !w-[calc(100%-40px)]'
+                              onChange={handleChange}
+                              onBlur={handleBlur}
+                            />
                             <button
                               type='button'
                               onClick={() => setShowPassword(!showPassword)}
@@ -473,11 +500,12 @@ const SignUp_type5: React.FC<_props> = ({
                                 visibility
                               </span>
                             </button>
-                            <div className='text-red-500 text-s'>
-                              {touched.password && errors.password}
-                            </div>
                           </div>
-                        )}
+
+                          <div className='text-red-500 text-s'>
+                            {touched.password && errors.password}
+                          </div>
+                        </div>
 
                         <div className='w-full lg:w-1/2 px-3 pb-[10px]'>
                           <label className='mb-[4px] text-normal-text'>
@@ -723,10 +751,14 @@ const SignUp_type5: React.FC<_props> = ({
                               name='usersMessage'
                               placeholder=''
                               value={values.usersMessage}
+                              maxLength={50}
                               onChange={handleChange}
                               onBlur={handleBlur}
                               className='form-input !w-[calc(100%-40px)]'
                             />
+                          </div>
+                          <div className='text-red-500 text-s'>
+                            {touched.usersMessage && errors.usersMessage}
                           </div>
                         </div>
 
@@ -843,7 +875,7 @@ const SignUp_type5: React.FC<_props> = ({
                               terms
                                 ? 'btn btn-primary'
                                 : 'btn btn-primary opacity-50 '
-                            } 
+                            }
                             disabled={!terms}
                           >
                             {`Submit >`}

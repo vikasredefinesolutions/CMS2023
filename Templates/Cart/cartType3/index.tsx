@@ -1,4 +1,6 @@
 import { SpinnerComponent } from '@appComponents/ui/spinner';
+import { __LocalStorage } from '@constants/global.constant';
+import { thirdPartyLoginService } from '@constants/pages.constant';
 import { __pagesText } from '@constants/pages.text';
 import { paths } from '@constants/paths.constant';
 import CheckoutController from '@controllers/checkoutController';
@@ -9,10 +11,10 @@ import {
 } from '@hooks_v2/index';
 import { fetchThirdpartyservice } from '@services/thirdparty.service';
 import CartSummarryType1 from '@templates/cartSummarry/cartSummaryType1';
-import CartItem from 'Templates/cartItem';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
+import CartItem from 'Templates/cartItem';
 import { _CartProps } from '../Cart';
 import EmptyCart from '../components/emptyCart';
 const CartType3: React.FC<_CartProps> = ({
@@ -31,8 +33,24 @@ const CartType3: React.FC<_CartProps> = ({
     fetchThirdpartyservice({ storeId }).then((ThirdpartyServices) => {
       try {
         ThirdpartyServices.map((service) => {
-          if (service.thirdPartyServiceName == 'Okta')
-            service.url != '' && router.push(service.url);
+          if (
+            service.thirdPartyServiceName.toLocaleLowerCase() ==
+            thirdPartyLoginService.oktaLogin.toLocaleLowerCase()
+          ) {
+            localStorage.setItem(
+              __LocalStorage.thirdPartyServiceName,
+              service.thirdPartyServiceName,
+            );
+            service.url && router.push(service.url);
+          } else if (
+            service.thirdPartyServiceName.toLocaleLowerCase() ==
+            thirdPartyLoginService.samlLogin.toLocaleLowerCase()
+          ) {
+            const jsonDate = new Date().toJSON();
+            const datejson = jsonDate.split('.')[0] + 'Z';
+            // console.log(datejson, 'datejson', jsonDate);
+            return router.push(service.url + encodeURIComponent(datejson));
+          }
         });
       } catch (error) {
         showModal({

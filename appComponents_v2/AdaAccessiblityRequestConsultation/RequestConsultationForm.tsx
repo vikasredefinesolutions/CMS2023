@@ -77,10 +77,7 @@ const _RequestConsulationSchema = Yup.object().shape({
   preferedContactMethod: Yup.string().required(
     __ValidationText.requestConsultation.preferedContactMethod,
   ),
-  inHandDate: Yup.date()
-    .typeError(__ValidationText.requestConsultation.inHandDate.typeError)
-    .required(__ValidationText.requestConsultation.inHandDate.required)
-    .min(new Date(), __ValidationText.requestConsultation.inHandDate.min),
+  inHandDate: Yup.string(),
 
   message: Yup.string(),
 });
@@ -283,7 +280,15 @@ const RequestConsultationForm: React.FC<{
                                 disableHighlightToday={true}
                                 disablePast={true}
                                 renderInput={(params) => (
-                                  <TextField {...params} />
+                                  <TextField
+                                    {...params}
+                                    error={false}
+                                    inputProps={{
+                                      ...params.inputProps,
+                                      readOnly: true,
+                                    }}
+                                    // disabled={true}
+                                  />
                                 )}
                               />
                               <ErrorMessage

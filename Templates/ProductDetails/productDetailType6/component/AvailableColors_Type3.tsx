@@ -1,3 +1,4 @@
+import { _Store_CODES } from '@constants/global.constant';
 import { __pagesConstant } from '@constants/pages.constant';
 import { __pagesText } from '@constants/pages.text';
 import { _ProductColor } from '@definations/APIs/colors.res';
@@ -8,6 +9,7 @@ import ColorImage_Type3 from './ColorImage_Type3';
 
 // import ColorImage from './ColorImage';
 const AvailableColors_Type3: React.FC = () => {
+  const storeCode = useTypedSelector_v2((store) => store.store.code);
   const router = useRouter();
   const { setColor } = useActions_v2();
   const selectedColor = useTypedSelector_v2(
@@ -30,8 +32,12 @@ const AvailableColors_Type3: React.FC = () => {
   return (
     <>
       <div className='flex align-top mb-[15px]'>
-        <div className='w-[128px] text-default-text'>
-          <span className='text-default-text font-semibold'>
+        <div className='w-[128px] text-default-text mt-[5px]'>
+          <span
+            className={`text-default-text font-semibold ${
+              storeCode === _Store_CODES.USAAHEALTHYPOINTS && '!font-semibold'
+            }`}
+          >
             {' '}
             {__pagesText.productInfo.availableColors.colors}
           </span>
@@ -47,12 +53,11 @@ const AvailableColors_Type3: React.FC = () => {
                 : 'border-slate-200';
             return (
               <div
-                className='w-[32px]'
                 key={product.attributeOptionId}
                 onClick={() => handleChooseColor(product)}
               >
                 <div
-                  className={`border border-gray-border hover:border-secondary p-[1px] cursor-pointer ${highlight}`}
+                  className={`border border-gray-border hover:border-secondary p-[1px] cursor-pointer ${highlight} w-[32px] h-[32px]`}
                 >
                   <ColorImage_Type3 product={product} />
                 </div>

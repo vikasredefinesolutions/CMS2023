@@ -104,7 +104,7 @@ const OrD_ItemDetails: React.FC<_Props> = ({ item }) => {
                       <div className='flex flex-wrap justify-between gap-y-2 mt-[10px]'>
                         <div className='w-full lg:w-1/2'>
                           <div className='mb-[4px] text-default-text'>
-                            Logo #{logo.name}
+                            Logo #{logo?.id}
                           </div>
                           <div className='flex flex-wrap items-center gap-2'>
                             <div className='text-default-text font-semibold'>
@@ -112,10 +112,11 @@ const OrD_ItemDetails: React.FC<_Props> = ({ item }) => {
                             </div>
                             <div className='h-[50px] w-auto'>
                               {logo.logoImagePath === '' ? (
-                                <img
+                                <NxtImage
                                   className='w-14 h-12'
                                   src={`/assets/images/logo-to-be-submitted.webp`}
                                   title=''
+                                  isStatic={true}
                                   alt={logo.logoPositionImage}
                                 />
                               ) : (

@@ -16,7 +16,7 @@ import { consultationProofMessages } from '@constants/validationMessages';
 import { getLocationWithZipCode } from '@services/user.service';
 import { Form, Formik } from 'formik';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
 import * as Yup from 'yup';
 import CustomInput from './CustomInput';
@@ -24,21 +24,24 @@ import StateAndCountriesInput from './StateAndCountriesInput';
 
 const validationSchema = Yup.object().shape({
   firstName: Yup.string()
+    .trim()
     .required(__ValidationText.requestConsultation.firstName.required)
     .min(
       consultationProofMessages.firstName.minLength,
       consultationProofMessages.firstName.minValidation,
     ),
   lastName: Yup.string()
+    .trim()
     .required(__ValidationText.requestConsultation.lastName.required)
     .min(
       consultationProofMessages.lastName.minLength,
       consultationProofMessages.lastName.minValidation,
     ),
-  organizationName: Yup.string().required(
-    __ValidationText.requestConsultation.companyName.required,
-  ),
+  organizationName: Yup.string()
+    .trim()
+    .required(__ValidationText.requestConsultation.companyName.required),
   phone: Yup.string()
+    .trim()
     .required(__ValidationText.signUp.storeCustomerAddress.phone.required)
     .test(
       'phone-test',
@@ -55,21 +58,23 @@ const validationSchema = Yup.object().shape({
       },
     ),
   email: Yup.string()
+    .trim()
     .email()
     .required(__ValidationText.requestConsultation.email.required),
-  shipFirstName: Yup.string().required(
-    __ValidationText.requestConsultation.firstName.required,
-  ),
-  shipLastName: Yup.string().required(
-    __ValidationText.requestConsultation.lastName.required,
-  ),
-  address1: Yup.string().required(
-    __ValidationText.requestConsultation.address.required,
-  ),
-  city: Yup.string().required(
-    __ValidationText.requestConsultation.city.required,
-  ),
+  shipFirstName: Yup.string()
+    .trim()
+    .required(__ValidationText.requestConsultation.firstName.required),
+  shipLastName: Yup.string()
+    .trim()
+    .required(__ValidationText.requestConsultation.lastName.required),
+  address1: Yup.string()
+    .trim()
+    .required(__ValidationText.requestConsultation.address.required),
+  city: Yup.string()
+    .trim()
+    .required(__ValidationText.requestConsultation.city.required),
   zipCode: Yup.string()
+    .trim()
     .required(__ValidationText.signUp.storeCustomerAddress.postalCode.required)
     .max(
       __ValidationText.signUp.storeCustomerAddress.postalCode.maxLength,
@@ -81,18 +86,18 @@ const validationSchema = Yup.object().shape({
   stateName: Yup.string().required(
     __ValidationText.requestConsultation.stateName.required,
   ),
-  itemName: Yup.string().required(
-    __ValidationText.requestConsultation.itemName.required,
-  ),
-  itemColor: Yup.string().required(
-    __ValidationText.requestConsultation.itemColor.required,
-  ),
-  sizeQty: Yup.string().required(
-    __ValidationText.requestConsultation.desiredQty.required,
-  ),
-  needByDate: Yup.string().required(
-    __ValidationText.requestConsultation.needByDate.required,
-  ),
+  itemName: Yup.string()
+    .trim()
+    .required(__ValidationText.requestConsultation.itemName.required),
+  itemColor: Yup.string()
+    .trim()
+    .required(__ValidationText.requestConsultation.itemColor.required),
+  sizeQty: Yup.string()
+    .trim()
+    .required(__ValidationText.requestConsultation.desiredQty.required),
+  needByDate: Yup.string()
+    .trim()
+    .required(__ValidationText.requestConsultation.needByDate.required),
 });
 
 const _initialValues = {
@@ -119,6 +124,7 @@ const _initialValues = {
 
 const CustomRequestForm: React.FC = () => {
   const [fileUrl, setFileUrl] = useState('');
+  const fileRef = useRef<HTMLInputElement>(null);
   const [verifiedRecaptch, setverifiedRecaptch] = useState(false);
   const [initialValues, setInitialValues] = useState(_initialValues);
   const router = useRouter();
@@ -163,18 +169,50 @@ const CustomRequestForm: React.FC = () => {
         item4: '',
         item5: '',
         specialRequest: '',
-        companyLogo: fileUrl,
+        itemName: values.itemName,
+        logo: fileUrl,
         beforeInHandDate: new Date(),
+        shipAddress2: values.address2,
+        organizationName: values.organizationName,
+        reasonForGiveAwayPurpose: '',
+        additionalCommentsOrRequest: values.additionalComments,
+        ideasParticularItemsOfInterest: '',
+        isDesiredBrandingUnitiLogo: false,
+        isDesiredBrandingOtherExistingLogo: false,
+        isDesiredBrandingNewLogoOrGraphic: false,
+        isBeforeInHand: false,
+        message: '',
+        sport: '',
+        brandPreference: '',
       },
     };
     CustomerProductOrder(payload2)
       .then(() => {
         router.push(paths.REQUEST_THANKYOU);
       })
+      .catch(() => {
+        showModal({
+          title: 'Error',
+          message: 'Something Went Wrong !!!',
+        });
+      })
       .finally(() => setShowLoader(false));
   };
 
   const fileReader = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    fileRef.current?.style.setProperty('color', 'white');
+
+    if (
+      event.target.files &&
+      !['image/png', 'image/jpeg', 'image/jpg'].includes(
+        event.target.files[0].type,
+      )
+    ) {
+      alert('Please select an image file.');
+
+      return;
+    }
+
     if (event.target?.files === null) return;
     setShowLoader(true);
 
@@ -183,6 +221,7 @@ const CustomRequestForm: React.FC = () => {
         folderPath: imageFolderPath,
         files: event?.target?.files[0],
       });
+      fileRef.current?.style.setProperty('color', 'gray');
 
       setFileUrl(res || '');
     } catch (error) {
@@ -343,7 +382,6 @@ const CustomRequestForm: React.FC = () => {
                     onChange={handleChange}
                     placeHolder=''
                     value={values.address2}
-                    required
                     type='text'
                     showIcon={false}
                   />
@@ -418,6 +456,10 @@ const CustomRequestForm: React.FC = () => {
                     onChange={handleChange}
                     placeHolder=''
                     value={values.sizeQty}
+                    onKeyDown={(event) =>
+                      ['e', 'E', '+', '-', '.'].includes(event.key) &&
+                      event.preventDefault()
+                    }
                     required
                     type='number'
                     error={errors?.sizeQty}
@@ -450,10 +492,12 @@ const CustomRequestForm: React.FC = () => {
                       id='file'
                       name=''
                       placeholder=''
-                      // value={file && file?.name ? file?.name : ''}
+                      ref={fileRef}
+                      // value={file && file?.name ? file?.name : ''}sadfasdf
+
                       onChange={fileReader}
                       className='form-input'
-                      accept='image/png, image/jpg, image/jpeg'
+                      accept='image/*'
                     />
                   </div>
                   <div className='text-[12px]'>

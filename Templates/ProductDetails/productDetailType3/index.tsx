@@ -1,5 +1,11 @@
 import { _Store } from '@configs/page.config';
-import { BACARDI, CYXTERA_CODE, UNITI_CODE } from '@constants/global.constant';
+import {
+  BACARDI,
+  CYXTERA_CODE,
+  SIMPLI_SAFE_CODE,
+  UCA,
+  UNITI_CODE,
+} from '@constants/global.constant';
 import { KlaviyoScriptTag } from '@helpers/common.helper';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import { FetchInventoryById } from '@services/product.service';
@@ -161,7 +167,7 @@ const ProductDetails_Type3: React.FC<_Props> = (product) => {
         storeCode={product.storeCode}
       />
       {product.sectionView.map((val: string, index: number) => {
-        if (val === 'youmayalsolike') {
+        if (val === 'youmayalsolike' && product?.alike?.length) {
           return (
             <div key={val + index}>
               <YouMayAlsoLike
@@ -170,7 +176,8 @@ const ProductDetails_Type3: React.FC<_Props> = (product) => {
                   storeCode == _Store.type6 ||
                   storeCode == CYXTERA_CODE ||
                   storeCode == UNITI_CODE ||
-                  storeCode === BACARDI
+                  storeCode === BACARDI ||
+                  storeCode === UCA
                     ? '3'
                     : '1'
                 }
@@ -179,12 +186,20 @@ const ProductDetails_Type3: React.FC<_Props> = (product) => {
           );
         } else if (val === 'writereview') {
           return (
-            <div key={val + index}>
-              <Reviews
-                storeCode={product.storeCode}
-                productId={product?.details?.id ? product.details.id : 0}
-              />
-            </div>
+            <>
+              {storeCode == SIMPLI_SAFE_CODE ? (
+                <></>
+              ) : (
+                <div key={val + index}>
+                  <Reviews
+                    ratings={product.ratings}
+                    reviews={product.reviews}
+                    storeCode={product.storeCode}
+                    productId={product?.details?.id ? product.details.id : 0}
+                  />
+                </div>
+              )}
+            </>
           );
         } else if (val === 'recentlyviewed') {
           return (

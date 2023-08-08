@@ -1,14 +1,18 @@
-import { default as ImageComponent } from '@appComponents/reUsable/Image';
+import NxtImage, {
+  default as ImageComponent,
+} from '@appComponents/reUsable/Image';
 import Price from '@appComponents/reUsable/Price';
 import { showcolors } from '@constants/global.constant';
 import { __pagesConstant } from '@constants/pages.constant';
 import { __pagesText } from '@constants/pages.text';
 import {
+  moreImages,
   newFetauredItemResponse,
   splitproductList,
 } from '@definations/productList.type';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React, { Fragment, useEffect, useState } from 'react';
 import 'react-loading-skeleton/dist/skeleton.css';
 
@@ -34,18 +38,53 @@ const SlugSingleProductListing: React.FC<_props> = (props) => {
     showBrandLogo,
     showBorder,
   } = props;
-  const customerId = useTypedSelector_v2((state) => state.user.id);
 
+  const colorChangeHandler = (
+    productId: number | undefined,
+    seName: string | undefined,
+    color: string | undefined | null,
+  ) => {
+    const storageString = localStorage.getItem('selectedProducts');
+    const selectedProducts: Array<{
+      productId: number | undefined;
+      seName: string | undefined;
+      color: string | undefined | null;
+    }> = storageString ? JSON.parse(storageString) : [];
+    const index = selectedProducts.findIndex(
+      (product) => product.productId === productId,
+    );
+
+    const productObject = {
+      productId,
+      seName,
+      color,
+    };
+
+    if (index > -1) {
+      selectedProducts[index] = productObject;
+    } else {
+      selectedProducts.push(productObject);
+    }
+    localStorage.setItem('selectedProducts', JSON.stringify(selectedProducts));
+  };
+  const customerId = useTypedSelector_v2((state) => state.user.id);
   const store = useTypedSelector_v2((state) => state.store);
   const [mainImageUrl, setMainImageUrl] = useState<string>('');
-  const [currentProduct, setCurrentProduct] = useState<
-    newFetauredItemResponse | undefined | null
-  >(null);
+  const [currentProduct, setCurrentProduct] = useState<moreImages | null>(null);
   useEffect(() => {
-    setCurrentProduct(product);
+    setCurrentProduct(product.moreImages[0]);
     setMainImageUrl(product?.imageUrl);
   }, []);
+
+  const getProductsColorCount = () => {
+    if (showSplitProducts === 'Yes' && product.splitproductList) {
+      return product?.splitproductList?.length - showcolors + 1;
+    } else {
+      return product?.getProductImageOptionList?.length - showcolors;
+    }
+  };
   let flag: boolean = false;
+  const router = useRouter();
   return (
     <>
       <div key={product?.productId} className='slide-item'>
@@ -73,21 +112,20 @@ const SlugSingleProductListing: React.FC<_props> = (props) => {
                       alt={product?.productName}
                       title={product?.productName}
                       className='max-h-[348px] !inline-black m-auto'
-                      height={350}
-                      width={350}
-                      key={currentProduct?.productId}
+                      key={product?.productId}
                     />
                   </a>
                 </Link>
               </div>
-              <div className=''>
+              <div className='mt-[24px] pl-[8px] pr-[8px]'>
                 {showBrandLogo == __pagesConstant?.show?.No ? (
                   ''
                 ) : (
-                  <div className='text-center h-auto cursor-pointer'>
-                    <img
-                      className='!inline-block'
-                      src={store.mediaBaseUrl + product?.productBrandLogo}
+                  <div className='mt-[4px] text-center h-[35px] cursor-pointer'>
+                    <NxtImage
+                      className='!inline-block max-h-full'
+                      useNextImage={false}
+                      src={product?.productBrandLogo}
                       alt=''
                     />
                   </div>
@@ -95,13 +133,13 @@ const SlugSingleProductListing: React.FC<_props> = (props) => {
                 {showProductName == __pagesConstant?.show.No ? (
                   ''
                 ) : (
-                  <div className='text-base p-2 text-blue-700 tetx-center isinput overflow-hidden'>
+                  <div className='mt-[14px] text-anchor hover:text-anchor-hover h-[44px] text-ellipsis overflow-hidden line-clamp-2 text-small-text tracking-[1.4px]'>
                     <Link
                       key={product.productId}
                       href={`${encodeURIComponent(product.productSEName)}.html`}
                     >
                       <a
-                        className='h-[46px] overflow-hidden'
+                        className='relative underline text-anchor hover:text-anchor-hover leading-[20px]'
                         title={product.productName}
                       >
                         {product.productName}
@@ -115,8 +153,8 @@ const SlugSingleProductListing: React.FC<_props> = (props) => {
                 {showPrice == __pagesConstant?.show?.No ? (
                   ''
                 ) : (
-                  <div className='mt-3 text-[#000000] text-base tracking-wider'>
-                    <span className='font-[600]'>
+                  <div className='mt-[12px] text-medium-text tracking-wider'>
+                    <span className='font-semibold'>
                       {customerId
                         ? __pagesText.productListing.PRICE
                         : __pagesText.productListing.MSRP}
@@ -130,76 +168,118 @@ const SlugSingleProductListing: React.FC<_props> = (props) => {
                     </span>
                   </div>
                 )}
-                {showSplitProducts == __pagesConstant?.show?.No ? (
-                  ''
-                ) : (
+                {showSplitProducts === __pagesConstant?.show?.Yes ? (
                   <ul className='flex items-center justify-center mt-2 list-none'>
-                    <Link
-                      key={product.productId}
-                      href={`/${product.productSEName}.html`}
-                    >
-                      <li
-                        className={`w-7 h-7 border-2 border-secondary
-                     hover:border-secondary cursor-pointer`}
-                      >
-                        <ImageComponent
-                          src={
-                            store.mediaBaseUrl + currentProduct &&
-                            currentProduct?.imageUrl
-                              ? currentProduct.imageUrl
-                              : ''
-                          }
-                          alt='no image'
-                          className='max-h-full m-auto'
-                          title={product?.moreImages[0].attributeOptionName}
-                        />
-                      </li>
-                    </Link>
-                    {product?.splitproductList &&
-                      product?.splitproductList.map(
-                        (option: splitproductList, index: number) =>
-                          index < showcolors - 1 ? (
-                            <Link
-                              key={option.prodcutId}
-                              href={`/${option.seName}.html`}
-                            >
-                              <li
-                                key={option.prodcutId}
-                                className={`border-2 w-7 h-7 text-center overflow-hidden  hover:border-secondary ml-1 cursor-pointer`}
-                                onMouseOver={() =>
-                                  setMainImageUrl(option.imageurl)
-                                }
-                                onMouseLeave={() =>
-                                  setMainImageUrl(
-                                    currentProduct?.imageUrl
-                                      ? currentProduct?.imageUrl
-                                      : '',
-                                  )
-                                }
-                              >
-                                <ImageComponent
-                                  src={store.mediaBaseUrl + option.imageurl}
-                                  alt='no image'
-                                  className='max-h-full m-auto'
-                                  title={option.colorName}
-                                />
-                              </li>
-                            </Link>
-                          ) : (
-                            <Fragment key={index}>{(flag = true)}</Fragment>
-                          ),
-                      )}
+                    {product.splitproductList ? (
+                      <>
+                        <Link
+                          key={product.productId}
+                          href={`/${product.productSEName}.html`}
+                        >
+                          <li
+                            className={`w-7 h-7 border-2 border-secondary mr-1
+                       hover:border-light-gray cursor-pointer`}
+                          >
+                            <ImageComponent
+                              src={
+                                store.mediaBaseUrl + currentProduct &&
+                                currentProduct?.imageUrl
+                                  ? currentProduct.imageUrl
+                                  : ''
+                              }
+                              alt='no image'
+                              className='max-h-full m-auto'
+                              title={product.productName}
+                            />
+                          </li>
+                        </Link>
+                        {product?.splitproductList &&
+                          product?.splitproductList.map(
+                            (option: splitproductList, index: number) =>
+                              index < showcolors - 1 ? (
+                                <Link
+                                  key={option.prodcutId}
+                                  href={`/${option.seName}.html`}
+                                >
+                                  <li
+                                    key={option.prodcutId}
+                                    className={`border-2 w-7 h-7 text-center overflow-hidden  hover:border-secondary ml-1 cursor-pointer`}
+                                    onMouseOver={() =>
+                                      setMainImageUrl(option.imageurl)
+                                    }
+                                    onMouseLeave={() =>
+                                      setMainImageUrl(
+                                        currentProduct?.imageUrl
+                                          ? currentProduct?.imageUrl
+                                          : '',
+                                      )
+                                    }
+                                  >
+                                    <ImageComponent
+                                      src={store.mediaBaseUrl + option.imageurl}
+                                      alt='no image'
+                                      className='max-h-full m-auto'
+                                      title={option.colorName}
+                                    />
+                                  </li>
+                                </Link>
+                              ) : (
+                                <Fragment key={index}>{(flag = true)}</Fragment>
+                              ),
+                          )}
+                      </>
+                    ) : (
+                      product.moreImages.map((option: moreImages, index) =>
+                        index < showcolors ? (
+                          <li
+                            className={`w-7 h-7 border-2 hover:border-secondary cursor-pointer ${
+                              option.attributeOptionID ===
+                              currentProduct?.attributeOptionID
+                                ? ' border-secondary'
+                                : 'border-light-gray'
+                            }`}
+                            onMouseOver={() => setMainImageUrl(option.imageUrl)}
+                            onMouseLeave={() =>
+                              setMainImageUrl(
+                                currentProduct?.imageUrl
+                                  ? currentProduct?.imageUrl
+                                  : '',
+                              )
+                            }
+                            onClick={() => setCurrentProduct(option)}
+                            key={`${index}_${option.id}`}
+                          >
+                            <NxtImage
+                              src={option.imageUrl}
+                              alt=''
+                              className='max-h-full m-auto'
+                              title={option.attributeOptionName}
+                            />
+                          </li>
+                        ) : (
+                          <>{(flag = true)}</>
+                        ),
+                      )
+                    )}
+
                     {flag ? (
-                      <Link href={`/${product.productSEName}.html`}>
-                        <li className='extra w-7 h-7 text-center border-2 hover:border-secondary inset-0 bg-primary text-xs font-semibold flex items-center justify-center text-white cursor-pointer'>
-                          <span>+</span>
-                          {product &&
-                            product?.splitproductList &&
-                            product?.splitproductList.length - showcolors + 1}
+                      <Link
+                        key={product.productId}
+                        href={`/${product.productSEName}.html`}
+                      >
+                        <li className='w-[28px] mr-1 h-[28px] border-2 border-light-gray hover:border-light-gray relative cursor-pointer'>
+                          <span
+                            className='absolute inset-0 bg-primary text-xs bg-[#003a70] font-semibold flex items-center justify-center text-[#ffffff]'
+                            title={` See Additional Colors +${getProductsColorCount()}`}
+                          >
+                            +{getProductsColorCount()}
+                          </span>
                         </li>
                       </Link>
                     ) : null}
                   </ul>
+                ) : (
+                  <></>
                 )}
                 {showButton && showButton == __pagesConstant?.show?.Yes ? (
                   <Link

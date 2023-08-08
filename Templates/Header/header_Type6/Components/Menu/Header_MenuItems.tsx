@@ -1,6 +1,12 @@
-import { companyInfo } from '@constants/common.constant';
+import {
+  SIMPLI_SAFE_CODE,
+  UCA,
+  UNITI_CODE,
+  _Store_CODES,
+} from '@constants/global.constant';
 import { _MenuItems } from '@definations/header.type';
 import MenuItem from '@header/header_Type6/Components/Menu//Header_MenuItem';
+import { useTypedSelector_v2 } from '@hooks_v2/index';
 import Backdrop from '@templates/Header/header_Type6/Components/Backdrop';
 import { useRouter } from 'next/router';
 import React, { Fragment, useEffect, useState } from 'react';
@@ -19,6 +25,7 @@ const MenuItems: React.FC<_props> = ({
 }) => {
   const [menuItems, setMenuItems] = useState<null | _MenuItems>(null);
   const [openTab, setOpenTab] = useState<string>('');
+  const store_Code = useTypedSelector_v2((state) => state.store.code);
   const router = useRouter();
   useEffect(() => {
     setOpenTab('');
@@ -36,7 +43,7 @@ const MenuItems: React.FC<_props> = ({
   if (screen === 'MOBILE') {
     return (
       <div
-        className='fixed z-[100] lg:hidden inset-0 bg-[#000000] bg-opacity-50 '
+        className='fixed z-[100]  inset-0 bg-[#000000] bg-opacity-50 '
         id='mobile_menu_box'
       >
         <Backdrop setOpenTab={setOpenTab} />
@@ -47,9 +54,7 @@ const MenuItems: React.FC<_props> = ({
           >
             <CloseIcon />
 
-            <div className='pt-[15px] pb-[15px] px-[10px] text-right'>
-              {companyInfo.phoneNumber}
-            </div>
+            
             {menuItems.items_content?.map((menu, index) => {
               if (menu === null) {
                 return <></>;
@@ -75,7 +80,16 @@ const MenuItems: React.FC<_props> = ({
   }
   if (screen === 'DESKTOP') {
     return (
-      <div className='hidden lg:block border-y border-y-gray-border ml-[10px] mr-[10px]'>
+      <div
+        className={`hidden lg:block ${
+          store_Code == UNITI_CODE ||
+          store_Code == SIMPLI_SAFE_CODE ||
+          store_Code === _Store_CODES.USAAHEALTHYPOINTS ||
+          store_Code === UCA
+            ? ''
+            : 'border-y border-y-gray-border'
+        } ml-[10px] mr-[10px] `}
+      >
         <div className='h-full flex justify-center header-nav relative'>
           {menuItems.items_content?.map((menu, index) => {
             if (menu === null) {

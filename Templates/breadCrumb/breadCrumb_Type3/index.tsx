@@ -10,7 +10,7 @@ const BreadCrumb_Type3: NextPage<_BreadCrumbProps> = ({
   return breadCrumbs && breadCrumbs.length ? (
     <>
       <div className='container mx-auto'>
-        <div className='bg-white px-[10px] py-[5px]'>
+        <div className='bg-white px-[10px] py-[5px] min-h-[45px]'>
           <nav
             className='flex bg-light-gray px-[10px] py-[5px]'
             aria-label='Breadcrumb'

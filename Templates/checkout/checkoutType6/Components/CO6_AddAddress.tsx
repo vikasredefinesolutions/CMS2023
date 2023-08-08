@@ -1,5 +1,4 @@
 import { _Country, _State } from '@definations/app.type';
-import { isNumberKey } from '@helpers/common.helper';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import { FetchCountriesList, FetchStatesList } from '@services/general.service';
 import { getLocationWithZipCode } from '@services/user.service';
@@ -55,6 +54,7 @@ const CO6_AddAddress: React.FC<_Props> = ({
   const sbStore = useTypedSelector_v2((state) => state.sbStore.store);
   const [shipToSchool, setShipToSchool] = useState<boolean>(false);
   const title = addressType === 'BILL' ? 'Billing' : 'Shipping';
+  const { address } = useTypedSelector_v2((state) => state.checkout);
 
   const callStatesAPI = async (id: number, setDefault: boolean) => {
     await FetchStatesList(id).then((response) => {
@@ -69,6 +69,8 @@ const CO6_AddAddress: React.FC<_Props> = ({
   };
 
   const postalCodeHandler = (e: React.FocusEvent<HTMLInputElement>) => {
+    if (shipToSchool) return;
+
     const zipCode = e.target.value;
     handleBlur(e);
     if (zipCode.trim().length === 0) return;
@@ -152,6 +154,13 @@ const CO6_AddAddress: React.FC<_Props> = ({
   const fetchCountriesNstates = async () => {
     await FetchCountriesList().then((response) => {
       if (!response) return;
+      const alreadyStateNCountryIsSelected = values.state.length > 0;
+
+      if (alreadyStateNCountryIsSelected) {
+        setCountries(response);
+        callStatesAPI(+values.countryCode || response[0].id, false);
+        return;
+      }
 
       // Country
       setCountries(response);
@@ -170,11 +179,16 @@ const CO6_AddAddress: React.FC<_Props> = ({
   useEffect(() => {
     fetchCountriesNstates();
 
-    if (
-      sbStore.payBusinessMethodDeliveryOptions === 'one_address' &&
-      addressType === 'SHIP'
-    ) {
-      setInitialAddress();
+    if (addressType === 'SHIP') {
+      if (sbStore.payBusinessMethodDeliveryOptions === 'one_address') {
+        setInitialAddress();
+        setShipToSchool(true);
+        update_CheckoutAddress({ type: 'SHIP_TO_SCHOOL', value: true });
+      }
+
+      if (address.shipToSchool) {
+        setShipToSchool(true);
+      }
     }
   }, []);
 
@@ -212,6 +226,7 @@ const CO6_AddAddress: React.FC<_Props> = ({
           onBlur={handleBlur}
           readonly={shipToSchool}
           touched={!!touched.firstname}
+          autoComplete='given-name'
           error={errors?.firstname ? errors.firstname : null}
         />
         <CO6_Input
@@ -224,6 +239,7 @@ const CO6_AddAddress: React.FC<_Props> = ({
           onChange={handleChange}
           onBlur={handleBlur}
           readonly={shipToSchool}
+          autoComplete='family-name'
           touched={!!touched.lastName}
           error={errors?.lastName ? errors.lastName : null}
         />
@@ -239,6 +255,7 @@ const CO6_AddAddress: React.FC<_Props> = ({
           onChange={handleChange}
           onBlur={handleBlur}
           readonly={shipToSchool}
+          autoComplete='address-line3'
           touched={!!touched.address1}
           error={errors?.address1 ? errors.address1 : null}
         />
@@ -252,6 +269,7 @@ const CO6_AddAddress: React.FC<_Props> = ({
             onChange={handleChange}
             onBlur={handleBlur}
             readOnly={shipToSchool}
+            autoComplete='address-line4'
             className='form-input !w-[calc(100%-40px)]'
           />
         </div>
@@ -264,6 +282,7 @@ const CO6_AddAddress: React.FC<_Props> = ({
           value={values.postalCode}
           readonly={shipToSchool}
           onChange={handleChange}
+          autoComplete='postal-code'
           onBlur={postalCodeHandler}
           touched={!!touched.postalCode}
           error={errors?.postalCode ? errors.postalCode : null}
@@ -275,6 +294,7 @@ const CO6_AddAddress: React.FC<_Props> = ({
           additionalClass={'md:w-6/12'}
           type={'text'}
           name={'city'}
+          autoComplete='address-level2'
           required={true}
           value={values.city}
           onChange={handleChange}
@@ -293,6 +313,7 @@ const CO6_AddAddress: React.FC<_Props> = ({
           onChange={handleChange}
           onBlur={handleBlur}
           disabled={shipToSchool}
+          autoComplete='address-level1'
           valid={
             !!touched.state &&
             values.state !== '' &&
@@ -307,6 +328,7 @@ const CO6_AddAddress: React.FC<_Props> = ({
           label='COUNTRY'
           additionalClass={'md:w-6/12'}
           name={'countryName'}
+          autoComplete='country-name'
           initialOption={'Select Country'}
           required={true}
           value={values.countryName}
@@ -319,10 +341,12 @@ const CO6_AddAddress: React.FC<_Props> = ({
               setFieldValue('countryCode', country.id);
 
               if (country.name !== values.countryName) {
+                callStatesAPI(country.id, true);
                 setFieldValue('state', '');
                 setFieldTouched('state', true);
               }
             } else {
+              setStates([]);
               setFieldValue('countryName', '');
               setFieldValue('countryCode', '');
               setFieldValue('state', '');
@@ -346,12 +370,9 @@ const CO6_AddAddress: React.FC<_Props> = ({
           name={'phone'}
           required={true}
           value={values.phone}
-          onChange={(event) => {
-            if (isNumberKey(event)) {
-              handleChange(event);
-            }
-          }}
+          onChange={handleChange}
           onBlur={handleBlur}
+          autoComplete='tel'
           readonly={shipToSchool}
           touched={!!touched.phone}
           error={errors?.phone ? errors.phone : null}

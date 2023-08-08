@@ -1,6 +1,5 @@
 import { PaymentMethod } from '@constants/enum';
 import { paths } from '@constants/paths.constant';
-import { __SuccessErrorText } from '@constants/successError.text';
 import {
   _MyAcc_OrderBillingDetails,
   _MyAcc_OrderProductDetails,
@@ -9,7 +8,7 @@ import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import { _CartItem } from '@services/cart';
 import { OrderModelPayment, UpdatePaymentLater } from '@services/user.service';
 import { useRouter } from 'next/router';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { ShippingAddressHTML } from './components/PL1.extras';
 import PL1_BillingAddress from './components/PL1_BillingAddress';
 import PL1_CartItem from './components/PL1_OrderItem';
@@ -26,7 +25,10 @@ interface _Props {
 
 const PaylaterType1: React.FC<_Props> = ({ orderDetails }) => {
   const { setShowLoader, showModal } = useActions_v2();
-  const orderNoteRef = useRef(null);
+  // const orderNoteRef = useRef<string>(orderDetails.billing?.orderNotes || '');
+  const [orderNoteRef, setorderNoteRef] = useState(
+    orderDetails.billing?.orderNotes || '',
+  );
   const router = useRouter();
 
   const { id: storeId } = useTypedSelector_v2((state) => state.store);
@@ -60,12 +62,25 @@ const PaylaterType1: React.FC<_Props> = ({ orderDetails }) => {
     }
 
     if (payment.method === 'CREDIT_CARD') {
-      const cardType = payment.creditCard.cardName;
+      const selectedCardType = payment.creditCard.cardName;
       const cardLength = payment.creditCard.ccNumber.length;
       const cvvLength = payment.creditCard.securityCode.length;
+      const cardMonth = payment.creditCard.month;
+      const cardYear = payment.creditCard.year;
+      const date = new Date();
+      const givenMonth =
+        +cardMonth < 10 && cardMonth.length === 1
+          ? `0${cardMonth}`
+          : `${cardMonth}`;
+      const givendate = cardYear.toString() + `${givenMonth}`;
+      const month =
+        date.getMonth() + 1 < 10
+          ? `0${date.getMonth() + 1}`
+          : `${date.getMonth() + 1}`;
+      const currentdate = date.getFullYear().toString() + month;
 
-      if (cardType === 'AMEX') {
-        if (cardLength !== 15 || cvvLength !== 4) {
+      if (selectedCardType === 'AMEX') {
+        if (cardLength !== 15 || cvvLength !== 4 || +givendate < +currentdate) {
           showModal({
             title: 'Invalid Card',
             message: 'Please enter correct card details',
@@ -75,12 +90,14 @@ const PaylaterType1: React.FC<_Props> = ({ orderDetails }) => {
         return false;
       }
 
-      if (cardLength !== 16 || cvvLength !== 3) {
+      if (cardLength !== 16 || cvvLength !== 3 || +givendate < +currentdate) {
         showModal({
           title: 'Invalid Card',
           message: 'Please enter correct card details',
         });
         return true;
+      } else {
+        return false;
       }
     }
     return false;
@@ -92,20 +109,34 @@ const PaylaterType1: React.FC<_Props> = ({ orderDetails }) => {
         return true;
       }
     }
-
     if (payment.method === 'CREDIT_CARD') {
       const cardType = payment.creditCard.cardName;
       const cardLength = payment.creditCard.ccNumber.length;
       const cvvLength = payment.creditCard.securityCode.length;
-
+      const cardMonth = payment.creditCard.month;
+      const cardYear = payment.creditCard.year;
+      const date = new Date();
+      const givenMonth =
+        +cardMonth < 10 && cardMonth.length === 1
+          ? `0${cardMonth}`
+          : `${cardMonth}`;
+      const givendate = cardYear.toString() + `${givenMonth}`;
+      const month =
+        date.getMonth() + 1 < 10
+          ? `0${date.getMonth() + 1}`
+          : `${date.getMonth() + 1}`;
+      const currentdate = date.getFullYear().toString() + month;
       if (cardType === 'AMEX') {
-        if (cardLength !== 15 || cvvLength !== 4) {
+        if (cardLength !== 15 || cvvLength !== 4 || +givendate < +currentdate) {
           return true;
         }
-      }
-
-      if (cardLength !== 16 || cvvLength !== 3) {
-        return true;
+        return false;
+      } else {
+        if (cardLength !== 16 || cvvLength !== 3 || +givendate < +currentdate) {
+          return true;
+        } else {
+          return false;
+        }
       }
     }
 
@@ -153,6 +184,22 @@ const PaylaterType1: React.FC<_Props> = ({ orderDetails }) => {
     router.push(paths.HOME);
   };
 
+  const handlePlaceOrderFailed = (errorResponse: any) => {
+    let error = {
+      title: 'Something went wrong',
+      message: 'Please, contact sales person!!!',
+    };
+
+    Object.keys(errorResponse).forEach((key, index) => {
+      if (index === 0) {
+        error.title = 'Failed' || 'Something went wrong';
+        error.message = errorResponse[key] || 'Please, contact sales person!!!';
+      }
+    });
+
+    showModal(error);
+  };
+
   const makePaymentHandler = async () => {
     if (validatePaymentMethod()) return;
     setShowLoader(true);
@@ -162,13 +209,13 @@ const PaylaterType1: React.FC<_Props> = ({ orderDetails }) => {
       isCreditLimit: false,
       storeID: storeId,
       email: orderDetails.billing?.email || '',
-      paymentGateway: getPaymentMethod(payment.method),
+      paymentGateway: getPaymentGateway(payment.method),
 
       // BILLING
       ...billingAddress,
 
       // PAYMENT
-      paymentMethod: getPaymentGateway(payment.method),
+      paymentMethod: getPaymentMethod(payment.method),
       cardName: payment.creditCard.cardName,
       cardType: payment.creditCard.cardName,
       cardNumber: payment.creditCard.ccNumber,
@@ -176,20 +223,22 @@ const PaylaterType1: React.FC<_Props> = ({ orderDetails }) => {
       cardExpirationMonth: payment.creditCard.month,
       cardExpirationYear: payment.creditCard.year,
       poNumber: payment.poNumber,
+      notes: orderNoteRef,
     };
 
     await UpdatePaymentLater({
       orderModelPayment: payload,
     })
-      .then(() => {
-        handleRedirect('PAYMENT_COMPLETE', orderDetails.billing?.id);
+      .then((response) => {
+        if (!response) throw new Error('Something went wrong!!!');
+
+        if ('id' in response) {
+          handleRedirect('PAYMENT_COMPLETE', orderDetails.billing?.id);
+          return;
+        }
       })
       .catch((error) => {
-        console.log('ERROR ===>', error);
-        showModal({
-          message: __SuccessErrorText.SomethingWentWrong,
-          title: 'ERROR',
-        });
+        handlePlaceOrderFailed(error);
       })
       .finally(() => {
         setShowLoader(false);
@@ -260,7 +309,8 @@ const PaylaterType1: React.FC<_Props> = ({ orderDetails }) => {
                   className='border border-gray-border rounded pt-[12px] pb-[12px] pl-[12px] pr-[12px] w-full text-sub-text'
                   rows={3}
                   id='txtOrderNotes'
-                  ref={orderNoteRef}
+                  value={orderNoteRef}
+                  onChange={(e) => setorderNoteRef(e.target.value)}
                 />
               </div>
             </div>
@@ -279,7 +329,7 @@ const PaylaterType1: React.FC<_Props> = ({ orderDetails }) => {
             <div className='mt-4 bg-light-gray px-4 py-4'>
               <div className='flex items-center justify-center'>
                 <img
-                  src='/order-risk-free-icon.jpg'
+                  src='/assets/images/order-risk-free-icon.jpg'
                   alt=''
                   className='mr-2 w-5 h-5'
                 />

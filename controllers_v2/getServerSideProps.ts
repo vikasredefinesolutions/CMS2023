@@ -1,5 +1,6 @@
 import {
-  CG_STORE_CODE,
+  BOSTONBEAR,
+  listingProductsCount,
   __Error,
   __pageTypeConstant,
 } from '@constants/global.constant';
@@ -8,44 +9,51 @@ import {
   BrandFilter,
   CategoryFilter,
   newFetauredItemResponse,
+  _GoogleTagManagerResponseCommonData,
 } from '@definations/productList.type';
-import { _GetPageType } from '@definations/slug.type';
 import { extractSlugName } from '@helpers/common.helper';
 import { highLightError } from '@helpers/console.helper';
 import {
-  GetPageComponentsByCategoryId,
   getPageComponents,
+  GetPageComponentsByCategoryId,
 } from '@services/home.service';
 import { FetchFiltersJSON } from '@services/product.service';
-import { FetchPageType } from '@services/slug.service';
 import { GetServerSideProps, GetServerSidePropsResult } from 'next';
 import { _Slug_Props } from 'pages/[...slug-id]';
 import { getProductDetailProps } from './ProductController.async';
 
-import { storeBuilderTypeId } from '@configs/page.config';
+import { storeBuilderTypeId, _Store } from '@configs/page.config';
+import { Sorting } from '@constants/enum';
 import { FetchDataByBrand } from '@services/brand.service';
-import { FetchBannerDetails, getGTMScript } from '@services/header.service';
-import { _SelectedTab } from '@templates/ProductDetails/productDetailsTypes/storeDetails.res';
-import { GetlAllProductList } from '@templates/ProductListings/ProductListingType';
+import { FetchBannerDetails } from '@services/header.service';
+import { FetchPageType } from '@services/slug.service';
 import { _Banner, _BrandTypes } from '@templates/banner';
+import { _SelectedTab } from '@templates/ProductDetails/productDetailsTypes/storeDetails.res';
+import {
+  GetlAllProductList,
+  _ListingPageProduct,
+} from '@templates/ProductListings/ProductListingType';
 import { _globalStore } from 'store.global';
 import {
+  getConfigs,
   _FetchPageThemeConfigs_ProductListing,
   _Filter,
   _FilterOption,
   _NameValuePairs,
-  getConfigs,
 } from './slug.extras';
 
 export const getServerSideProps: GetServerSideProps = async (
   context,
 ): Promise<GetServerSidePropsResult<_Slug_Props>> => {
-  let { seName, otherParams } = extractSlugName(context.params);
+  let { seName, otherParams, seNameForSearch } = extractSlugName(
+    _globalStore.code,
+    context.params,
+  );
   let allFeaturedProductComponentData: any = [];
   let allFeaturedProductComponentBody: any = [];
   let allTabingData: any = [];
   let bodyArr: any = [];
-
+  let customerId = context.req.cookies.userId;
   /*if(!context.req.url?.includes('.html') && !context.req.url?.includes('not-found') && !context.req.url?.includes('.json'))
   {
     // return {
@@ -81,10 +89,27 @@ export const getServerSideProps: GetServerSideProps = async (
   }
 
   // ---------------------------------------------------------------
-  const pageMetaData: _GetPageType | null = await FetchPageType({
+  // let pageMetaData: _GetPageType | null = _globalStore.pageMetaData;
+
+  // if (!pageMetaData) {
+  const pageMetaData = await FetchPageType({
     storeId: store.storeId,
     slug: seName,
   });
+  // }
+
+  //}
+
+  // cLog(
+  //   {
+  //     extracted: {
+  //       seName,
+  //       seNameForSearch,
+  //     },
+  //     pageMetaData,
+  //   },
+  //   'Page Meta Data',
+  // );
 
   // pageMetaData!.type = 'brand'; // DUMMY VALUE FOR TEST
   if (pageMetaData === null) {
@@ -97,60 +122,54 @@ export const getServerSideProps: GetServerSideProps = async (
     };
   }
 
-  if (seName !== pageMetaData.slug) {
+  if (
+    pageMetaData?.type === 'withouthtml' ||
+    pageMetaData?.type === 'upperwithouthtml' ||
+    pageMetaData?.type === 'upperwithhtml' ||
+    pageMetaData?.type === '301'
+  ) {
+    // cLog(
+    //   pageMetaData,
+    //   `REDIRECTING... from ${seNameForSearch} to ${pageMetaData.slug}`,
+    // );
+
     return {
       redirect: {
-        destination: `${pageMetaData.slug}.html`,
-        permanent: false,
+        statusCode: 301,
+        destination: pageMetaData.slug,
       },
     };
   }
-  // ------------------------------------------------------------------
-
-  ////////////////////////////////////////////////
-  /////////// GTM integration using API start for CG only
-  ////////////////////////////////////////////////
-  if (Number(store.storeId) === CG_STORE_CODE) {
-    const topHeaderScriptGTM = await getGTMScript(
-      store.storeId,
-      'GetTopHeadScript',
-    );
-    _globalStore.set({
-      key: 'topHeaderScriptGTM',
-      value: topHeaderScriptGTM
-        ? topHeaderScriptGTM?.replace('<script>', '').replace('</script>', '')
-        : '',
-    });
-
-    const bottomHeaderScriptGTM = await getGTMScript(
-      store.storeId,
-      'GetBottomHeadScript',
-    );
-    _globalStore.set({
-      key: 'bottomHeaderScriptGTM',
-      value: bottomHeaderScriptGTM
-        ? bottomHeaderScriptGTM
-            ?.replace('<script>', '')
-            .replace('</script>', '')
-        : '',
-    });
-
-    const topBodySnippetGTM = await getGTMScript(
-      store.storeId,
-      'GetTopBodySnippet',
-    );
-    _globalStore.set({
-      key: 'topBodySnippetGTM',
-      value: topBodySnippetGTM
-        ? topBodySnippetGTM
-            ?.replace('<!-- Google Tag Manager (noscript) --><noscript>', '')
-            .replace(
-              '</noscript><!-- End Google Tag Manager (noscript) -->',
-              '',
-            )
-        : '',
-    });
-  }
+  // return {
+  //   redirect: {
+  //     destination: `/${pageMetaData.slug}`,
+  //     permanent: false,
+  //   },
+  // };
+  // }
+  //  else if (pageMetaData && pageMetaData?.type == 'upperwithouthtml') {
+  //   context.res.writeHead(301, {
+  //     Location: 'https://www.' + context.req?.headers.host + pageMetaData?.slug,
+  //   });
+  //   context.res.end();
+  //     // return {
+  //     //   redirect: {
+  //     //     destination: `/${pageMetaData.slug}`,
+  //     //     permanent: false,
+  //     //   },
+  //     // };
+  //   } else if (pageMetaData && pageMetaData?.type == 'upperwithhtml') {
+  //     context.res.writeHead(301, {
+  //       Location: 'https://www.' + context.req?.headers.host + pageMetaData?.slug,
+  //     });
+  //     context.res.end();
+  //     // return {
+  //     //   redirect: {
+  //     //     destination: `/${pageMetaData.slug}`,
+  //     //     permanent: false,
+  //     //   },
+  //     // };
+  //   }
 
   ////////////////////////////////////////////////
   /////////// Page Type Checks
@@ -300,10 +319,10 @@ export const getServerSideProps: GetServerSideProps = async (
   if (pageMetaData.type === __pageTypeConstant.productDetails) {
     let productDetails = await getProductDetailProps({
       storeId: store.storeId,
-      seName: seName,
+      seName: seName.replace('.html', ''),
       isAttributeSaparateProduct: store.isAttributeSaparateProduct,
+      productId: pageMetaData.id,
     });
-
     if (productDetails.details === null || productDetails.details.id === null) {
       return {
         redirect: {
@@ -355,8 +374,10 @@ export const getServerSideProps: GetServerSideProps = async (
     pageMetaData.type === __pageTypeConstant.brand ||
     pageMetaData.type === __pageTypeConstant.category
   ) {
-    let FilterOptions: Array<_NameValuePairs> = [];
+    let checkedFilters: Array<_NameValuePairs> = [];
     let filterOptionforfaceteds: Array<_NameValuePairs> = [];
+    const sortBy = (context.query?.sort as string) || 0;
+    const pageNo = +((context.query?.page as string) || 1);
 
     if (otherParams) {
       const keys = otherParams[0].split(',');
@@ -364,7 +385,7 @@ export const getServerSideProps: GetServerSideProps = async (
 
       keys.forEach((res: string, index: number) =>
         values[index].split('~').forEach((val) => {
-          FilterOptions.push({
+          checkedFilters.push({
             name: res,
             value: val,
           });
@@ -377,41 +398,49 @@ export const getServerSideProps: GetServerSideProps = async (
     }
 
     const _filters: _Filter[] = [];
-    let product: GetlAllProductList[] = [];
+    let products: GetlAllProductList[] = [];
     let configs: _FetchPageThemeConfigs_ProductListing = {
       templateID: '1',
       breadCrumbTemplateId: '1',
       bannertype: 'type1',
     };
-    let googleTagManagerResponseCommonData: any | null = null;
+    let googleTagManagerResponseCommonData: _GoogleTagManagerResponseCommonData | null =
+      null;
     let categoryComponents: any | null = null;
     let bannerData: _Banner[] | null = null;
 
     const getBannerContent = async () => {
       return await FetchBannerDetails({
         storeId: store.storeId,
-        isBrand: pageMetaData.type === __pageTypeConstant.brand,
-        sename: pageMetaData.slug,
+        isBrand: pageMetaData!.type === __pageTypeConstant.brand,
+        sename: pageMetaData!.slug,
       });
     };
 
+    const ifCG = _globalStore.code === _Store.type1;
+
+    const filterPayload = {
+      storeID: store.storeId,
+      [pageMetaData.type === 'brand' ? 'brandId' : 'categoryId']:
+        pageMetaData.id,
+      customerId: customerId ? parseInt(customerId) : 0,
+      jumpBy: listingProductsCount,
+      //  pageStartindex: ifCG ? listingProductsCount * (pageNo - 1) + 1 : 0,
+      //pageEndindex: ifCG ? listingProductsCount * pageNo : 0,
+      pageStartindex: 0,
+      pageEndindex: 0,
+      filterOptionforfaceteds: filterOptionforfaceteds,
+    };
+
+    let productFilters: BrandFilter | CategoryFilter | null = null;
+    let totalProductsAvailable = 0;
     try {
-      const filter = {
-        storeID: store.storeId,
-        [pageMetaData.type === 'brand' ? 'brandId' : 'categoryId']:
-          pageMetaData.id,
-        customerId: 0,
-        filterOptionforfaceteds: filterOptionforfaceteds,
-      };
-
-      let ProductFilt: BrandFilter | CategoryFilter | null = {} as BrandFilter;
-
       await Promise.allSettled([
         getConfigs<_FetchPageThemeConfigs_ProductListing>(
           store.storeId,
           'productListing',
         ),
-        FetchFiltersJSON(pageMetaData.type, filter),
+        FetchFiltersJSON(pageMetaData.type, filterPayload),
         GetPageComponentsByCategoryId({ categoryId: pageMetaData.id }),
         getBannerContent(),
       ]).then((values) => {
@@ -434,45 +463,114 @@ export const getServerSideProps: GetServerSideProps = async (
           }
         }
 
-        ProductFilt = values[1].status === 'fulfilled' ? values[1].value : null;
+        productFilters =
+          values[1].status === 'fulfilled' ? values[1].value : null;
         categoryComponents =
           values[2].status === 'fulfilled' ? values[2].value : null;
         bannerData = values[3].status === 'fulfilled' ? values[3].value : null;
-      });
 
-      if (ProductFilt) {
-        for (const key in ProductFilt) {
-          const element = ProductFilt[key];
-          if (element.length > 0 && key !== 'getlAllProductList') {
-            _filters.push({
-              label:
-                key === 'storeCategoryProductCategoryListViewModel'
-                  ? 'Category'
-                  : element[0].label || element[0].name || '',
-              options: element as _FilterOption[],
-            });
-          } else if (key === 'getlAllProductList') {
-            product = element as unknown as GetlAllProductList[];
-          } else if (key === 'googleTagManagerResponseCommonData') {
-            googleTagManagerResponseCommonData = element;
-          }
+        if (productFilters) {
+          const filters = productFilters as CategoryFilter;
+
+          (Object.keys(filters) as Array<_CategoryFilterFields>).forEach(
+            (propertyName) => {
+              if (propertyName === 'googleTagManagerResponseCommonData') {
+                googleTagManagerResponseCommonData = filters[propertyName];
+                return;
+              }
+
+              if (propertyName === 'getlAllProductList') {
+                products = filters[propertyName];
+                return;
+              }
+
+              if (propertyName === 'totalrecords') {
+                totalProductsAvailable = filters[propertyName];
+                return;
+              }
+
+              if (filters[propertyName].length > 0) {
+                if (
+                  propertyName === 'storeCategoryProductCategoryListViewModel'
+                ) {
+                  _filters.push({
+                    label: 'Category',
+                    options: filters[
+                      propertyName
+                    ] as unknown as _FilterOption[],
+                  });
+                  return;
+                }
+                _filters.push({
+                  label:
+                    filters[propertyName][0].label ||
+                    filters[propertyName][0].name ||
+                    '',
+                  options: filters[propertyName] as _FilterOption[],
+                });
+              }
+            },
+          );
         }
-      }
+      });
     } catch (error) {
       console.log('ERRROR ===>', error);
     }
 
+    const sortProducts = (sortBy: number, products: _ListingPageProduct[]) => {
+      return products.sort((pro1, pro2) => {
+        if (sortBy === Sorting.Ascending) {
+          if (customerId) {
+            return pro1.salePrice > pro2.salePrice ? 1 : -1;
+          } else {
+            return pro1.msrp > pro2.msrp ? 1 : -1;
+          }
+        } else if (sortBy === Sorting.Descending) {
+          if (customerId) {
+            return pro1.salePrice < pro2.salePrice ? 1 : -1;
+          } else {
+            return pro1.msrp < pro2.msrp ? 1 : -1;
+          }
+        } else if (sortBy === Sorting.AtoZ) {
+          return pro1.name > pro2.name ? 1 : -1;
+        } else if (sortBy === Sorting.ZtoA) {
+          return pro1.name < pro2.name ? 1 : -1;
+        }
+        return 1;
+      });
+    };
+
+    const sortedProducts = sortProducts(+sortBy, products);
+    const visibleProducts =
+      store.storeCode == BOSTONBEAR
+        ? products
+        : products.slice(0, filterPayload.jumpBy);
+    const constructedFilters = checkedFilters?.filter((item) => {
+      const filterOptions = _filters?.find((fil) => fil.label === item.name);
+      if (
+        item.name === filterOptions?.label &&
+        filterOptions.options.some((opt) => opt.name === item.value)
+      )
+        return true;
+    });
+    checkedFilters = !products.length ? checkedFilters : constructedFilters;
     return {
       props: {
         page: 'PRODUCT_LISTING',
         listingData: {
+          list: {
+            visible: visibleProducts,
+            jumpBy: filterPayload.jumpBy,
+            currentPage: pageNo,
+            totalAvailable: totalProductsAvailable,
+            allProducts: products,
+            filterOptionforfaceteds: filterPayload.filterOptionforfaceteds,
+          },
           filters: _filters,
-          product: product,
-          checkedFilters: FilterOptions,
-          brandId: pageMetaData.id,
+          banner: bannerData,
+          checkedFilters: checkedFilters,
           googleTagManagerResponseCommonData,
           categoryComponents: categoryComponents,
-          banner: bannerData,
         },
         metaData: pageMetaData,
         configs: {
@@ -493,3 +591,15 @@ export const getServerSideProps: GetServerSideProps = async (
     notFound: true,
   };
 };
+
+type _CategoryFilterFields =
+  | 'storeBrandProductBrandViewModel'
+  | 'storeBrandProductSizeViewModels'
+  | 'storeBrandProductColorViewModels'
+  | 'storeBrandProductGenderViewModels'
+  | 'storeBrandProductPriceRangeViewModels'
+  | 'storeBrandProductProductTypeViewModels'
+  | 'storeCategoryProductCategoryListViewModel'
+  | 'googleTagManagerResponseCommonData'
+  | 'getlAllProductList'
+  | 'totalrecords';

@@ -1,4 +1,5 @@
 import { __pagesText } from '@constants/pages.text';
+import { fetchDetailsByZipCode } from '@services/general.service';
 import { ErrorMessage, Field, FormikValues, useFormikContext } from 'formik';
 import { useState } from 'react';
 import { _SU3_Field } from '../../SignUp_Type3/SU3.extras';
@@ -14,7 +15,23 @@ const SU4_Input = ({
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
   const [isPasswordHintVisible, setIsPasswordHintVisible] =
     useState<boolean>(false);
-  const { values }: FormikValues = useFormikContext();
+  const {
+    values,
+    setFieldValue,
+    setFieldTouched,
+    setFieldError,
+  }: FormikValues = useFormikContext();
+
+  const autoFillStateCountry = async (zipCode: string, type: number) => {
+    const res = await fetchDetailsByZipCode(zipCode);
+
+    if (res.stateId && res.countryId && res.cityName) {
+      setFieldValue(`storeCustomerAddress[${type}].city`, res.cityName);
+      setFieldError(`storeCustomerAddress[${type}].city`, '');
+      setFieldValue(`storeCustomerAddress[${type}].state`, res.stateId);
+      setFieldValue(`storeCustomerAddress[${type}].countryName`, res.countryId);
+    }
+  };
 
   return (
     <>
@@ -86,6 +103,7 @@ const SU4_Input = ({
           </label>
           <div className='mt-1'>
             <Field
+              id={name}
               as='select'
               name={name}
               className='form-input !w-[calc(100%-40px)]'
@@ -109,11 +127,12 @@ const SU4_Input = ({
           <div className='mt-1 flex items-center gap-2'>
             <span>{__pagesText.accountPage.primaryColor}</span>
             <div
-              className={`${
-                values.primaryColor
-                  ? `bg-[${values.primaryColor}]`
-                  : 'bg-slate-600'
-              } rounded-full`}
+              className={`rounded-full`}
+              style={{
+                backgroundColor: values.primaryColor
+                  ? values.primaryColor
+                  : 'rgba(71,85,105,1)',
+              }}
             >
               <Field
                 type='color'
@@ -122,6 +141,11 @@ const SU4_Input = ({
                 id={name}
               />
             </div>
+            <ErrorMessage
+              className='text-rose-500'
+              component={'span'}
+              name={name}
+            />
           </div>
         </div>
       ) : (
@@ -136,6 +160,21 @@ const SU4_Input = ({
               autoComplete=''
               placeholder={placeholder}
               className='form-input !w-[calc(100%-40px)]'
+              onBlur={
+                name === 'storeCustomerAddress[1].postalCode'
+                  ? () =>
+                      autoFillStateCountry(
+                        values.storeCustomerAddress[1].postalCode,
+                        1,
+                      )
+                  : name === 'storeCustomerAddress[0].postalCode'
+                  ? () =>
+                      autoFillStateCountry(
+                        values.storeCustomerAddress[0].postalCode,
+                        0,
+                      )
+                  : null
+              }
             />
           </div>
           <ErrorMessage

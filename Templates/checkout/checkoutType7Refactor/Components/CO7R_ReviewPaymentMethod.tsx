@@ -21,15 +21,20 @@ const CO7R_ReviewPaymentMethod: React.FC<_Props> = ({ setScreenToShow }) => {
             <button
               className='!text-anchor hover:!text-anchor-hover'
               onClick={() => setScreenToShow('addPaymentMethodAndBilling')}
-              disabled={!paymentMethodAdded}
+              disabled={!paymentMethodAdded && payment.paymentRequired}
             >
               Change
             </button>
           </div>
         </div>
-        {!paymentMethodAdded && (
+        {!paymentMethodAdded && payment.paymentRequired && (
           <div className='text-default-text mt-[10px] mb-[15px]'>
             Provide payment details below
+          </div>
+        )}
+        {payment.paymentRequired === false && (
+          <div className='text-default-text mt-[10px] mb-[2px]'>
+            Payment Method: No Payment Required
           </div>
         )}
         {paymentMethodAdded && payment.method === 'CREDIT_CARD' && (

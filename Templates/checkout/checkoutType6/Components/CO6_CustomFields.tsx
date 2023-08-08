@@ -46,6 +46,7 @@ const CO6_CustomFields: React.FC<_Props> = ({
                 type={'text'}
                 name={fields.name}
                 readonly={readOnly}
+                autoComplete=''
                 required={fields.isRequired}
                 value={values[`${fields.name}`]}
                 onChange={handleChange}

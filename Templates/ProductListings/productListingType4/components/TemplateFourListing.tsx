@@ -84,7 +84,7 @@ const TemplateFourListing = ({
             {/* {product?.productTagViewModel?.length !== 0 ? (
               <div className='absolute right-[10px] top-[10px] tanish'>
                 <div className='h-8'>
-                  <img
+                  <NxtImage
                     src={`${mediaBaseUrl}${product?.productTagViewModel[0]?.imagename}`}
                     className='max-h-full inline-block'
                   ></img>
@@ -94,15 +94,15 @@ const TemplateFourListing = ({
             {product?.productTagViewModel?.map((tagsdetails) => {
               return (
                 <div
-                  className={`${tagsdetails.tagPosition} h-8 flex gap-1 absolute`}
+                  className={`${tagsdetails.tagPosition}`}
                   data-imageUrl={`${tagsdetails.imagename}`}
                 >
-                  <div className='h-8'>
-                    <img
-                      src={`${mediaBaseUrl}${tagsdetails.imagename}`}
-                      className='max-h-full inline-block'
-                    ></img>
-                  </div>
+                  <NxtImage
+                    alt=''
+                    useNextImage={false}
+                    src={tagsdetails.imagename}
+                    className='max-h-full inline-block'
+                  />
                 </div>
               );
             })}
@@ -119,9 +119,10 @@ const TemplateFourListing = ({
 
             <div className='mb-[10px] text-center'>
               <Link href={product.brandUrl}>
-                <img
+                <NxtImage
                   className='inline-block max-h-full'
-                  src={`${mediaBaseUrl}${product.productBrandlogo}`}
+                  src={product.productBrandlogo}
+                  useNextImage={false}
                   alt={product.brandName}
                   title={product.brandName || ''}
                 />
@@ -186,7 +187,7 @@ const TemplateFourListing = ({
                       key={product.id}
                     >
                       <NxtImage
-                        src={`${mediaBaseUrl}${currentProduct.imageName}`}
+                        src={currentProduct?.imageName || null}
                         alt=''
                         className='w-auto h-auto max-h-max cursor-pointer flex items-center'
                         title={product.name}
@@ -210,7 +211,7 @@ const TemplateFourListing = ({
                           }
                         >
                           <NxtImage
-                            src={`${mediaBaseUrl}${subRow.imageurl}`}
+                            src={subRow?.imageurl || null}
                             alt=''
                             className='max-h-full m-auto'
                             title={subRow.colorName}
@@ -252,10 +253,11 @@ const TemplateFourListing = ({
                       }}
                       key={subRow.id}
                     >
-                      <img
-                        src={`${mediaBaseUrl}${subRow.imageName}`}
+                      <NxtImage
+                        src={subRow?.imageName || null}
                         alt=''
                         className='max-h-full m-auto'
+                        useNextImage={false}
                         title={subRow.colorName}
                       />
                     </li>

@@ -1,10 +1,20 @@
 import { signupPageMessages } from '@constants/validationMessages';
 import * as Yup from 'yup';
 
+import {
+  phonePattern1,
+  phonePattern2,
+  phonePattern3,
+  phonePattern4,
+} from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
+import { __ValidationText } from '@constants/validation.text';
 import getLocation from '@helpers/getLocation';
 import { _CreateNewAccount_Payload } from '@services/payloads/createNewAccount.payload';
 import { CreateNewAccount } from '@services/user.service';
+// import parse from 'date-fns/parse';
+
+import { minAgerequired } from '@constants/common.constant';
 import { _SU3_Field } from '../SignUp_Type3/SU3.extras';
 
 export const signupFourInitialFormValues = {
@@ -57,24 +67,46 @@ export const signupFourInitialFormValues = {
   navCustomerId: '',
 };
 export const SignupFourSchema = Yup.object().shape({
-  firstname: Yup.string().required(signupPageMessages.firstname.required),
-  lastName: Yup.string().required(signupPageMessages.lastName.required),
+  firstname: Yup.string()
+    .trim()
+    .required(__ValidationText.signUp.firstName.required)
+    .min(__ValidationText.signUp.firstName.minLength)
+    .max(__ValidationText.signUp.firstName.maxLength),
+  lastName: Yup.string()
+    .trim()
+    .required(__ValidationText.signUp.lastName.required)
+    .min(__ValidationText.signUp.lastName.minLength)
+    .max(__ValidationText.signUp.lastName.maxLength),
   gender: Yup.string().required(signupPageMessages.Gender.required),
-  email: Yup.string().email().required(signupPageMessages.email.required),
+  email: Yup.string()
+    .trim()
+    .email()
+    .required(signupPageMessages.email.required),
   password: Yup.string().required(signupPageMessages.password.required),
   teamGender: Yup.string().required(signupPageMessages.teamGender.required),
   timeOfYearPurchase: Yup.string().required(
     signupPageMessages.timeOfYearPurchase.required,
   ),
-  primaryColor: Yup.string().required(signupPageMessages.primaryColor.required),
-  companyName: Yup.string().required(signupPageMessages.companyName.required),
+  primaryColor: Yup.string()
+    .trim()
+    .required(signupPageMessages.primaryColor.required),
+  companyName: Yup.string()
+    .trim()
+    .required(signupPageMessages.companyName.required),
   organizationId: Yup.number().test(
     'not zero',
     signupPageMessages.organizationType.required,
     (val) => val !== undefined && val > 0,
   ),
-
-  position: Yup.string().required(signupPageMessages.position.required),
+  birthDate: Yup.date()
+    .typeError('The value must be a date (MM/DD/YYYY)')
+    .max(
+      new Date(
+        new Date().setFullYear(new Date().getFullYear() - minAgerequired),
+      ),
+      signupPageMessages.birthDate.min,
+    ),
+  position: Yup.string().trim().required(signupPageMessages.position.required),
   mascotId: Yup.number().test(
     'not zero',
     signupPageMessages.mascot.required,
@@ -92,30 +124,47 @@ export const SignupFourSchema = Yup.object().shape({
       return this.parent.password === value;
     },
   ),
-  phoneAddress: Yup.string().required(
-    signupPageMessages.storeCustomerAddress.phone.required,
-  ),
+  phoneAddress: Yup.string()
+    .required(__ValidationText.signUp.storeCustomerAddress.phone.required)
+    .test(
+      'phone-test',
+      __ValidationText.signUp.storeCustomerAddress.phone.valid,
+      (value) => {
+        if (
+          phonePattern1.test(value || '') ||
+          phonePattern2.test(value || '') ||
+          phonePattern3.test(value || '') ||
+          phonePattern4.test(value || '')
+        )
+          return true;
+        return false;
+      },
+    ),
   organizationEmail: Yup.string().email().required('Email is required'),
   storeCustomerAddress: Yup.array()
     .of(
       Yup.object().shape({
-        address1: Yup.string().required(
-          signupPageMessages.storeCustomerAddress.address1.required,
-        ),
+        address1: Yup.string()
+          .trim()
+          .required(signupPageMessages.storeCustomerAddress.address1.required),
 
-        city: Yup.string().required(
-          signupPageMessages.storeCustomerAddress.city.required,
-        ),
-        state: Yup.string().required(
-          signupPageMessages.storeCustomerAddress.state.required,
-        ),
-        postalCode: Yup.string().required(
-          signupPageMessages.storeCustomerAddress.postalCode.required,
-        ),
+        city: Yup.string()
+          .trim()
+          .required(signupPageMessages.storeCustomerAddress.city.required),
+        state: Yup.string()
+          .trim()
+          .required(signupPageMessages.storeCustomerAddress.state.required),
+        postalCode: Yup.string()
+          .trim()
+          .required(
+            signupPageMessages.storeCustomerAddress.postalCode.required,
+          ),
 
-        countryName: Yup.string().required(
-          signupPageMessages.storeCustomerAddress.countryName.required,
-        ),
+        countryName: Yup.string()
+          .trim()
+          .required(
+            signupPageMessages.storeCustomerAddress.countryName.required,
+          ),
       }),
     )
     .min(1),
@@ -169,14 +218,13 @@ export const handleSignupFour = async (enteredInputs: any, storeId: any) => {
           rowVersion: '',
         },
       ],
+      organizationName: enteredInputs.companyName,
       recStatus: 'A',
     },
   };
 
-  console.log('payload: ', payload);
-
   try {
-    CreateNewAccount(payload).then((res) => res);
+    return CreateNewAccount(payload).then((res: any) => res);
   } catch (err) {
     console.log('exception: ', err);
   }
@@ -269,7 +317,7 @@ export const signupFourFormFields: SignUpFields = {
       placeholder: '',
       name: 'organizationId',
       type: 'dropdown',
-      label: __pagesText.accountPage.organizationNameText,
+      label: __pagesText.accountPage.organizationType,
       required: true,
       options: [
         { value: 0, name: 'Select Organization Type' },

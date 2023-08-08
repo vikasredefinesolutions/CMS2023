@@ -22,14 +22,17 @@ import {
 import getLocation from 'helpers_v2/getLocation';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
 
+import AccountCreateSuccessModal from '@appComponents/modals/accountCreateSuccessModal';
 import { _Store } from '@configs/page.config';
 import { _STORE_EMAIL } from '@constants/common.constant';
 import { UserAddressType } from '@constants/enum';
 import {
   CYXTERA_CODE,
+  DI_STORE_CODE,
   HEALTHYPOINTS,
   SIMPLI_SAFE_CODE,
   UNITI_CODE,
+  _Store_CODES,
   __Cookie,
   __Cookie_Expiry,
   __UserMessages,
@@ -61,12 +64,25 @@ const SignUp_type1: React.FC = () => {
     updateCustomer,
     logInUser,
   } = useActions_v2();
-  const { id: storeId, code: storeCode } = useTypedSelector_v2(
-    (state) => state.store,
-  );
+  const {
+    id: storeId,
+    code: storeCode,
+    storeName,
+  } = useTypedSelector_v2((state) => state.store);
+
+  let modalShowState: boolean;
+
   const [country, setCountry] = useState<_Country[]>([]);
   const [state, setState] = useState<_State[]>([]);
+  const [modalShow, setModalShow] = useState<boolean>(false);
   const user = useTypedSelector_v2((state) => state.user);
+
+  useEffect(() => {}, [modalShow]);
+
+  const modalHandlerFunction = (boolVal: boolean) => {
+    modalShowState = boolVal;
+    setModalShow(boolVal);
+  };
 
   const _SignupSchema = Yup.object().shape({
     firstname: Yup.string()
@@ -82,9 +98,13 @@ const SignUp_type1: React.FC = () => {
       .max(__ValidationText.signUp.lastName.maxLength),
     companyName: Yup.string()
       .trim()
-      .required(__ValidationText.signUp.companyName.required)
-      .min(__ValidationText.signUp.companyName.minLength)
-      .max(__ValidationText.signUp.companyName.maxLength),
+      .when({
+        is: storeCode !== SIMPLI_SAFE_CODE,
+        then: Yup.string()
+          .required(__ValidationText.signUp.companyName.required)
+          .min(__ValidationText.signUp.companyName.minLength)
+          .max(__ValidationText.signUp.companyName.maxLength),
+      }),
     email: Yup.string()
       .trim()
       .email(__ValidationText.signUp.email.valid)
@@ -98,7 +118,7 @@ const SignUp_type1: React.FC = () => {
           const domain = (_STORE_EMAIL as any)[storeCode];
           if (!domain) return true;
           const emailTest = new RegExp(
-            "^\\w+([-+.']w+)*@" + domain + '.com$',
+            `[a-zA-Z0-9._%+-]+@` + domain + `\.com$`,
           ).test(value?.trim() || '');
           return emailTest;
         },
@@ -145,8 +165,6 @@ const SignUp_type1: React.FC = () => {
     ),
   });
 
-  const { code: stroeCode } = useTypedSelector_v2((state) => state.store);
-
   const loginSubmitHandler = async (enteredInputs: _CNA_StoreCustomerModel) => {
     const location = await getLocation();
     setShowLoader(true);
@@ -172,7 +190,8 @@ const SignUp_type1: React.FC = () => {
       addressObj.push({
         ...enteredInputs.storeCustomerAddress[0],
         addressType: UserAddressType.SHIPPINGADDRESS,
-        companyName: enteredInputs.companyName,
+        companyName:
+          !enteredInputs.companyName && storeName ? storeName : storeCode,
         firstname: enteredInputs.firstname,
         lastName: enteredInputs.lastName,
         email: enteredInputs.email,
@@ -189,6 +208,8 @@ const SignUp_type1: React.FC = () => {
         customerType: 'corporate',
         industryId: 0,
         gender: 'string',
+        companyName:
+          !enteredInputs.companyName && storeName ? storeName : storeCode,
         memberFrom: 0,
         memberTo: 0,
         organizationId: 0,
@@ -219,10 +240,19 @@ const SignUp_type1: React.FC = () => {
 
         return;
       }
-      showModal({
-        message: __UserMessages.signUpPage.SuccessFullyAccountCreated,
-        title: 'Success',
-      });
+      if (storeCode === _Store_CODES.PETERMILLAR) {
+        setShowLoader(false);
+        return showModal({
+          message: __UserMessages.signUpPage.SuccessFullyAccountCreated_PMCG,
+          title: 'Success',
+        });
+      }
+      storeId == DI_STORE_CODE
+        ? modalHandlerFunction(true)
+        : showModal({
+            message: __UserMessages.signUpPage.SuccessFullyAccountCreated,
+            title: 'Success',
+          });
       signInUser({
         userName: payload.storeCustomerModel.email,
         password: payload.storeCustomerModel.password,
@@ -274,7 +304,8 @@ const SignUp_type1: React.FC = () => {
           setShowLoader(false);
           // CartController();
         });
-      router.push(paths.HOME);
+
+      !(storeId === DI_STORE_CODE) && router.push(paths.HOME);
     });
   };
 
@@ -314,9 +345,15 @@ const SignUp_type1: React.FC = () => {
 
   return (
     <>
-      <section className='pt-[40px] pb-[30px]'>
+      <section className=''>
         <div className='container mx-auto'>
-          <div className='text-2xl-text text-center '>
+          <div
+            className={`${
+              storeCode === _Store_CODES.USAAHEALTHYPOINTS
+                ? 'text-sub-text'
+                : 'text-2xl-text'
+            } text-center bg-white pt-[30px] pb-[30px]`}
+          >
             <h1>CREATE NEW CUSTOMER ACCOUNT</h1>
           </div>
         </div>
@@ -372,274 +409,315 @@ const SignUp_type1: React.FC = () => {
 
             return (
               <Form>
-                <div className='container mx-auto mb-6'>
-                  <div className='w-full mx-auto max-w-5xl bg-light-gray p-5'>
-                    <div className='w-full text-sub-text mb-5'>
-                      Personal Information
-                    </div>
-                    <div className='flex flex-wrap mx-[-15px] gap-y-6'>
-                      <SU1_Input
-                        name={'firstname'}
-                        value={values.firstname}
-                        label={'First Name'}
-                        onChange={handleChange}
-                        placeHolder={'Enter Your First Name'}
-                        required
-                        onBlur={handleBlur}
-                        touched={!!touched.firstname}
-                        error={errors?.firstname ? errors.firstname : null}
-                      />
-                      <SU1_Input
-                        name={'lastName'}
-                        value={values.lastName}
-                        label={'Last Name'}
-                        onChange={handleChange}
-                        placeHolder='Enter Your Last Name'
-                        required
-                        onBlur={handleBlur}
-                        touched={!!touched.lastName}
-                        error={errors?.lastName ? errors.lastName : null}
-                      />
-                      <SU1_Input
-                        name={'companyName'}
-                        value={values?.companyName ? values.companyName : ''}
-                        label={'Company Name'}
-                        onChange={handleChange}
-                        placeHolder={'Enter Your Company Name'}
-                        required
-                        onBlur={handleBlur}
-                        touched={!!touched.companyName}
-                        error={errors?.companyName ? errors.companyName : null}
-                      />
-                      <SU1_Input
-                        type={'text'}
-                        name={'storeCustomerAddress[0].phone'}
-                        value={values.storeCustomerAddress[0].phone}
-                        label={'Phone Number'}
-                        onChange={handleChange}
-                        placeHolder={'Enter Your Phone Number'}
-                        required
-                        onBlur={handleBlur}
-                        touched={
-                          touched.storeCustomerAddress
-                            ? !!touched.storeCustomerAddress[0].phone
-                            : false
-                        }
-                        error={
-                          errors.storeCustomerAddress
-                            ? (
-                                errors
-                                  .storeCustomerAddress[0] as FormikErrors<_CNA_StoreCustomerAddress>
-                              ).phone!
-                            : null
-                        }
-                      />
-                      <SU_EmailInput
-                        name={'email'}
-                        value={values.email}
-                        label={'Email Address'}
-                        onChange={handleChange}
-                        placeHolder={'Enter Email Address'}
-                        required
-                        onBlur={handleBlur}
-                        touched={!!touched.email}
-                        error={errors?.email ? errors.email : null}
-                        setError={setFieldError}
-                      />
-                      <SU1_Input
-                        name={'jobTitle'}
-                        value={values.jobTitle}
-                        label={'Job Title'}
-                        onChange={handleChange}
-                        placeHolder={'Enter Your Job Title'}
-                        onBlur={handleBlur}
-                        touched={!!touched.jobTitle}
-                        error={errors?.jobTitle ? errors.jobTitle : null}
-                      />
-                      <SU_PasswordInput
-                        name={'password'}
-                        value={values.password}
-                        label={'Password'}
-                        onChange={handleChange}
-                        placeHolder='Password'
-                        required={true}
-                        touched={!!touched.password}
-                        error={errors?.password ? errors.password : null}
-                      />
-                      <SU_PasswordInput
-                        name={'confirmPassword'}
-                        value={values.confirmPassword}
-                        label={'Confirm Password'}
-                        onChange={handleChange}
-                        placeHolder='Password'
-                        required={true}
-                        touched={!!touched.confirmPassword}
-                        error={
-                          errors?.confirmPassword
-                            ? errors.confirmPassword
-                            : null
-                        }
-                      />
-                      <SU1_Input
-                        name={'storeCustomerAddress[0].address1'}
-                        value={values.storeCustomerAddress[0].address1}
-                        label={'Address 1'}
-                        onChange={handleChange}
-                        placeHolder='Enter Your Address 1'
-                        onBlur={handleBlur}
-                        touched={
-                          touched.storeCustomerAddress
-                            ? !!touched.storeCustomerAddress[0].address1
-                            : false
-                        }
-                        error={
-                          errors.storeCustomerAddress
-                            ? (
-                                errors
-                                  .storeCustomerAddress[0] as FormikErrors<_CNA_StoreCustomerAddress>
-                              ).address1!
-                            : null
-                        }
-                      />
-                      <SU1_Input
-                        name={'storeCustomerAddress[0].address2'}
-                        value={values.storeCustomerAddress[0].address2}
-                        label={'Address 2'}
-                        onChange={handleChange}
-                        placeHolder='Enter Your Address 2'
-                        onBlur={handleBlur}
-                        touched={
-                          touched.storeCustomerAddress
-                            ? !!touched.storeCustomerAddress[0].address2
-                            : false
-                        }
-                        error={
-                          errors.storeCustomerAddress
-                            ? (
-                                errors
-                                  .storeCustomerAddress[0] as FormikErrors<_CNA_StoreCustomerAddress>
-                              ).address2!
-                            : null
-                        }
-                      />
-                      <SU1_Input
-                        name={'storeCustomerAddress[0].postalCode'}
-                        value={values.storeCustomerAddress[0].postalCode}
-                        label={'Zip Code'}
-                        onChange={handleChange}
-                        placeHolder='Enter Your Zip Code'
-                        onBlur={customHandleBlur}
-                        touched={
-                          touched.storeCustomerAddress
-                            ? !!touched.storeCustomerAddress[0].postalCode
-                            : false
-                        }
-                        error={
-                          errors.storeCustomerAddress
-                            ? (
-                                errors
-                                  .storeCustomerAddress[0] as FormikErrors<_CNA_StoreCustomerAddress>
-                              ).postalCode!
-                            : null
-                        }
-                      />
-                      <SU1_Input
-                        name={'storeCustomerAddress[0].city'}
-                        value={values.storeCustomerAddress[0].city}
-                        label={'City'}
-                        onChange={handleChange}
-                        placeHolder='Enter Your City'
-                        onBlur={handleBlur}
-                        touched={
-                          touched.storeCustomerAddress
-                            ? !!touched.storeCustomerAddress[0].city
-                            : false
-                        }
-                        error={
-                          errors.storeCustomerAddress
-                            ? (
-                                errors
-                                  .storeCustomerAddress[0] as FormikErrors<_CNA_StoreCustomerAddress>
-                              ).city!
-                            : null
-                        }
-                      />
-
-                      <div className='w-full lg:w-1/2 px-[15px]'>
-                        <label className='block text-default-text'>
-                          Country
-                        </label>
-                        <div className='mt-2 relative'>
-                          <div className='mr-8'>
-                            <select
-                              className='form-input'
-                              name='storeCustomerAddress[0].countryName'
-                              value={values.storeCustomerAddress[0].countryName}
-                              onChange={(e) => {
-                                customChangeHandler(e, handleChange);
-                              }}
-                              onBlur={handleBlur}
-                            >
-                              <>
-                                {country.length === 0 ? (
-                                  <option>No State found</option>
-                                ) : (
-                                  ''
-                                )}
-                                {country?.map((opt) => (
-                                  <option id={opt.id.toString()} key={opt.id}>
-                                    {opt.name}
-                                  </option>
-                                ))}
-                              </>
-                            </select>
-                          </div>
-                        </div>
+                <div className='container mx-auto'>
+                  <div className='bg-white pb-6'>
+                    <div className='w-full mx-auto max-w-5xl p-5'>
+                      <div className='w-full text-sub-text mb-5'>
+                        Personal Information
                       </div>
-
-                      <div className='w-full lg:w-1/2 px-[15px]'>
-                        <label className='block text-default-text'>State</label>
-                        <div className='mt-2 relative'>
-                          <div className='mr-8'>
-                            <select
-                              className='form-input'
-                              name='storeCustomerAddress[0].state'
-                              value={values.storeCustomerAddress[0].state}
-                              onChange={handleChange}
-                              onBlur={handleBlur}
-                            >
-                              <>
-                                {country.length === 0 ? (
-                                  <option>No State found</option>
-                                ) : (
-                                  ''
-                                )}
-                                {state?.map((opt) => (
-                                  <option id={opt.id.toString()} key={opt.id}>
-                                    {opt.name}
-                                  </option>
-                                ))}
-                              </>
-                            </select>
-                          </div>
-                        </div>
-                      </div>
-
-                      {storeCode == _Store.type4 && (
+                      <div className='flex flex-wrap mx-[-15px] gap-y-6'>
                         <SU1_Input
-                          name={'navCustomerId'}
-                          value={values.navCustomerId}
-                          label={'Customer Number:'}
+                          name={'firstname'}
+                          value={values.firstname}
+                          label={'First Name'}
                           onChange={handleChange}
-                          placeHolder={'Enter Your Customer Number'}
+                          placeHolder={'Enter Your First Name'}
+                          required
                           onBlur={handleBlur}
-                          touched={!!touched.navCustomerId}
+                          touched={!!touched.firstname}
+                          error={errors?.firstname ? errors.firstname : null}
+                        />
+                        <SU1_Input
+                          name={'lastName'}
+                          value={values.lastName}
+                          label={'Last Name'}
+                          onChange={handleChange}
+                          placeHolder='Enter Your Last Name'
+                          required
+                          onBlur={handleBlur}
+                          touched={!!touched.lastName}
+                          error={errors?.lastName ? errors.lastName : null}
+                        />
+                        {storeCode == SIMPLI_SAFE_CODE ? (
+                          ''
+                        ) : (
+                          <SU1_Input
+                            name={'companyName'}
+                            value={
+                              values?.companyName ? values.companyName : ''
+                            }
+                            label={'Company Name'}
+                            onChange={handleChange}
+                            placeHolder={'Enter Your Company Name'}
+                            required={
+                              storeCode == SIMPLI_SAFE_CODE ? false : true
+                            }
+                            onBlur={handleBlur}
+                            touched={!!touched.companyName}
+                            error={
+                              errors?.companyName ? errors.companyName : null
+                            }
+                          />
+                        )}
+                        <SU1_Input
+                          type={'text'}
+                          name={'storeCustomerAddress[0].phone'}
+                          value={values.storeCustomerAddress[0].phone}
+                          label={
+                            storeCode == SIMPLI_SAFE_CODE
+                              ? 'Company Phone Number'
+                              : 'Phone Number'
+                          }
+                          onChange={handleChange}
+                          placeHolder={
+                            storeCode == SIMPLI_SAFE_CODE
+                              ? 'Enter Your Company Phone Number'
+                              : 'Enter Your Phone Number'
+                          }
+                          required
+                          onBlur={handleBlur}
+                          touched={
+                            touched.storeCustomerAddress
+                              ? !!touched.storeCustomerAddress[0].phone
+                              : false
+                          }
                           error={
-                            errors?.navCustomerId ? errors.navCustomerId : null
+                            errors.storeCustomerAddress
+                              ? (
+                                  errors
+                                    .storeCustomerAddress[0] as FormikErrors<_CNA_StoreCustomerAddress>
+                                ).phone!
+                              : null
                           }
                         />
-                      )}
-                      {/* <SU1_StateNcountries
+                        <SU_EmailInput
+                          name={'email'}
+                          value={values.email}
+                          label={'Email Address'}
+                          onChange={handleChange}
+                          placeHolder={'Enter Email Address'}
+                          required
+                          onBlur={handleBlur}
+                          touched={!!touched.email}
+                          error={errors?.email ? errors.email : null}
+                          setError={setFieldError}
+                        />
+                        {storeCode == SIMPLI_SAFE_CODE ? (
+                          ''
+                        ) : (
+                          <SU1_Input
+                            name={'jobTitle'}
+                            value={values.jobTitle}
+                            label={'Job Title'}
+                            onChange={handleChange}
+                            placeHolder={'Enter Your Job Title'}
+                            onBlur={handleBlur}
+                            touched={!!touched.jobTitle}
+                            error={errors?.jobTitle ? errors.jobTitle : null}
+                          />
+                        )}
+                        <SU_PasswordInput
+                          name={'password'}
+                          value={values.password}
+                          label={'Password'}
+                          onChange={handleChange}
+                          placeHolder='Password'
+                          required={true}
+                          touched={!!touched.password}
+                          error={errors?.password ? errors.password : null}
+                        />
+                        <SU_PasswordInput
+                          name={'confirmPassword'}
+                          value={values.confirmPassword}
+                          label={'Confirm Password'}
+                          onChange={handleChange}
+                          placeHolder='Password'
+                          required={true}
+                          touched={!!touched.confirmPassword}
+                          error={
+                            errors?.confirmPassword
+                              ? errors.confirmPassword
+                              : null
+                          }
+                        />
+                        <SU1_Input
+                          name={'storeCustomerAddress[0].address1'}
+                          value={values.storeCustomerAddress[0].address1}
+                          label={
+                            storeCode == SIMPLI_SAFE_CODE
+                              ? 'Ship to Address'
+                              : 'Address 1'
+                          }
+                          onChange={handleChange}
+                          placeHolder={
+                            storeCode == SIMPLI_SAFE_CODE
+                              ? 'Enter Your Address'
+                              : 'Enter Your Address 1'
+                          }
+                          onBlur={handleBlur}
+                          touched={
+                            touched.storeCustomerAddress
+                              ? !!touched.storeCustomerAddress[0].address1
+                              : false
+                          }
+                          error={
+                            errors.storeCustomerAddress
+                              ? (
+                                  errors
+                                    .storeCustomerAddress[0] as FormikErrors<_CNA_StoreCustomerAddress>
+                                ).address1!
+                              : null
+                          }
+                        />
+                        {storeCode == SIMPLI_SAFE_CODE ? (
+                          ''
+                        ) : (
+                          <SU1_Input
+                            name={'storeCustomerAddress[0].address2'}
+                            value={values.storeCustomerAddress[0].address2}
+                            label={'Address 2'}
+                            onChange={handleChange}
+                            placeHolder='Enter Your Address 2'
+                            onBlur={handleBlur}
+                            touched={
+                              touched.storeCustomerAddress
+                                ? !!touched.storeCustomerAddress[0].address2
+                                : false
+                            }
+                            error={
+                              errors.storeCustomerAddress
+                                ? (
+                                    errors
+                                      .storeCustomerAddress[0] as FormikErrors<_CNA_StoreCustomerAddress>
+                                  ).address2!
+                                : null
+                            }
+                          />
+                        )}
+                        <SU1_Input
+                          name={'storeCustomerAddress[0].postalCode'}
+                          value={values.storeCustomerAddress[0].postalCode}
+                          label={'Zip Code'}
+                          onChange={handleChange}
+                          placeHolder='Enter Your Zip Code'
+                          onBlur={customHandleBlur}
+                          touched={
+                            touched.storeCustomerAddress
+                              ? !!touched.storeCustomerAddress[0].postalCode
+                              : false
+                          }
+                          error={
+                            errors.storeCustomerAddress
+                              ? (
+                                  errors
+                                    .storeCustomerAddress[0] as FormikErrors<_CNA_StoreCustomerAddress>
+                                ).postalCode!
+                              : null
+                          }
+                        />
+                        <SU1_Input
+                          name={'storeCustomerAddress[0].city'}
+                          value={values.storeCustomerAddress[0].city}
+                          label={'City'}
+                          onChange={handleChange}
+                          placeHolder='Enter Your City'
+                          onBlur={handleBlur}
+                          touched={
+                            touched.storeCustomerAddress
+                              ? !!touched.storeCustomerAddress[0].city
+                              : false
+                          }
+                          error={
+                            errors.storeCustomerAddress
+                              ? (
+                                  errors
+                                    .storeCustomerAddress[0] as FormikErrors<_CNA_StoreCustomerAddress>
+                                ).city!
+                              : null
+                          }
+                        />
+
+                        <div className='w-full lg:w-1/2 px-[15px]'>
+                          <label className='block text-default-text'>
+                            State / Province
+                          </label>
+                          <div className='mt-2 relative'>
+                            <div className='mr-8'>
+                              <select
+                                className='form-input'
+                                name='storeCustomerAddress[0].state'
+                                value={values.storeCustomerAddress[0].state}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                              >
+                                <>
+                                  {country.length === 0 ? (
+                                    <option>No State found</option>
+                                  ) : (
+                                    ''
+                                  )}
+                                  {state?.map((opt) => (
+                                    <option id={opt.id.toString()} key={opt.id}>
+                                      {opt.name}
+                                    </option>
+                                  ))}
+                                </>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className='w-full lg:w-1/2 px-[15px]'>
+                          <label className='block text-default-text'>
+                            Country
+                          </label>
+                          <div className='mt-2 relative'>
+                            <div className='mr-8'>
+                              <select
+                                className='form-input'
+                                name='storeCustomerAddress[0].countryName'
+                                value={
+                                  values.storeCustomerAddress[0].countryName
+                                }
+                                onChange={(e) => {
+                                  customChangeHandler(e, handleChange);
+                                }}
+                                onBlur={handleBlur}
+                              >
+                                <>
+                                  {country.length === 0 ? (
+                                    <option>No State found</option>
+                                  ) : (
+                                    ''
+                                  )}
+                                  {country?.map((opt) => (
+                                    <option id={opt.id.toString()} key={opt.id}>
+                                      {opt.name}
+                                    </option>
+                                  ))}
+                                </>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+
+                        {storeCode == _Store.type4 && (
+                          <SU1_Input
+                            name={'navCustomerId'}
+                            value={values.navCustomerId}
+                            label={'Customer Number:'}
+                            onChange={handleChange}
+                            placeHolder={'Enter Your Customer Number'}
+                            onBlur={handleBlur}
+                            touched={!!touched.navCustomerId}
+                            error={
+                              errors?.navCustomerId
+                                ? errors.navCustomerId
+                                : null
+                            }
+                          />
+                        )}
+                        {/* <SU1_StateNcountries
                         countryName={'storeCustomerAddress[0].countryName'}
                         countryValue={
                           values.storeCustomerAddress[0].countryName
@@ -649,13 +727,11 @@ const SignUp_type1: React.FC = () => {
                         setFieldValue={setFieldValue}
                       /> */}
 
-                      <div className='w-full lg:w-full px-[15px] text-center'>
-                        <button
-                          type='submit'
-                          className='btn btn-secondary btn-xl'
-                        >
-                          SUBMIT
-                        </button>
+                        <div className='w-full lg:w-full px-[15px] text-center'>
+                          <button type='submit' className='btn btn-secondary'>
+                            SUBMIT
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -665,6 +741,9 @@ const SignUp_type1: React.FC = () => {
           }}
         </Formik>
       </section>
+      {modalShow && (
+        <AccountCreateSuccessModal showModal={modalHandlerFunction} />
+      )}
     </>
   );
 };

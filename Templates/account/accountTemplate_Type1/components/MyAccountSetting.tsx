@@ -1,18 +1,18 @@
 import { _Store } from '@configs/page.config';
 import { __pagesText } from '@constants/pages.text';
 import {
-  editAccountMessage,
   __ValidationText,
+  editAccountMessage,
 } from '@constants/validation.text';
 import { UserType } from '@definations/APIs/user.res';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import {
-  getDecryptPassword,
   UpdateUserData,
   UpdateUserPassword,
+  getDecryptPassword,
 } from '@services/user.service';
 import { ErrorMessage, Form, Formik } from 'formik';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import * as Yup from 'yup';
 
 const initValue = {
@@ -35,9 +35,11 @@ const AccountSetting = () => {
   const [disableFeature, setDisableFeature] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showPasswordUpdate, setShowPasswordUpdate] = useState<boolean>(false);
-  const [newPassword, setNewPassword] = useState<string>('');
   const [currentPass, setCurrentPass] = useState<string>('');
   const [initialValues, setInitialValues] = useState<SettingForm>(initValue);
+
+  const customerInfo = useRef(false);
+  const passwordSet = useRef('');
 
   useEffect(() => {
     if (activeEditBox) {
@@ -54,26 +56,27 @@ const AccountSetting = () => {
     return response;
   };
 
-  const updatePassword = async (setFieldValue: any) => {
-    if (newPassword && newPassword.length < 6) {
+  const updatePassword = async (password: string, setFieldValue: any) => {
+    // setShowLoader(true);
+    if (password && password.length < 6) {
+      // setShowLoader(false);
+
       return alert(__ValidationText.signUp.password.required);
     }
     setDisableFeature(true);
 
     try {
       const res = await UpdateUserPassword({
-        email: customer?.email || '',
-        password: newPassword ? newPassword : currentPass,
         customerId: customer?.id || 0,
+        currentPassword: passwordSet.current,
+        newPassword: password,
+        confirmNewPassword: password,
       });
       if (res) {
-        setNewPassword('');
-        await passDecryptFunction(res?.password).then((response) => {
-          setCurrentPass(response ? response : '');
-          setFieldValue('password', response);
-        });
+        passwordSet.current = password;
+        // setCurrentPass(password);
+        setFieldValue('password', passwordSet.current);
         setShowPasswordUpdate(false);
-
         showModal({
           message: 'Password Updated Successfully',
           title: 'Updated',
@@ -81,6 +84,8 @@ const AccountSetting = () => {
         setDisableFeature(false);
 
         setActiveEditBox(false);
+        setInitialValues({ ...initialValues, password: passwordSet.current });
+        // resetForm();
       } else {
         showModal({
           message: 'Password Update Failed, Try Again!',
@@ -90,23 +95,29 @@ const AccountSetting = () => {
     } catch (error) {
       showModal({ message: 'Error', title: 'Failed' });
     }
+    // setShowLoader(false);
   };
 
   const validationSchema = Yup.object().shape({
     firstName: Yup.string()
+      .trim()
       .required(editAccountMessage.firstName.required)
       .min(
         editAccountMessage.firstName.firstNameminLength,
         editAccountMessage.firstName.minValidation,
       ),
     lastName: Yup.string()
+      .trim()
       .required(editAccountMessage.lastName.required)
       .min(
         editAccountMessage.lastName.lastNameminLength,
         editAccountMessage.lastName.minValidation,
       ),
-    companyName: Yup.string().required(editAccountMessage.companyName.required),
+    companyName: Yup.string()
+      .trim()
+      .required(editAccountMessage.companyName.required),
     password: Yup.string()
+      .trim()
       .required(editAccountMessage.password.required)
       .min(__ValidationText.signUp.password.minLength)
       .max(__ValidationText.signUp.password.maxLength),
@@ -114,9 +125,10 @@ const AccountSetting = () => {
   });
 
   useEffect(() => {
-    if (customer) {
+    if (customer && !customerInfo.current) {
       passDecryptFunction(customer.password).then((res) => {
-        setCurrentPass(res ? res : '');
+        customerInfo.current = true;
+        passwordSet.current = res ? res : '';
         setInitialValues({
           firstName: customer.firstname,
           lastName: customer.lastName,
@@ -136,7 +148,7 @@ const AccountSetting = () => {
     try {
       const res: UserType = await UpdateUserData({
         ...value,
-        password: currentPass,
+        password: passwordSet.current,
         customerId: customer?.id || 0,
         gender: genderId ? genderId : customer?.gender || '',
       });
@@ -185,7 +197,7 @@ const AccountSetting = () => {
                 errors,
                 setErrors,
                 setFieldValue,
-                handleReset,
+                resetForm,
               }) => (
                 <Form>
                   <div className='mb-[24px] mt-[24px]'>
@@ -312,7 +324,6 @@ const AccountSetting = () => {
                             value={values.password}
                             onChange={(e) => {
                               handleChange(e);
-                              setNewPassword(e.target.value);
                             }}
                             disabled={!activeEditBox}
                           />
@@ -371,8 +382,9 @@ const AccountSetting = () => {
                             <button
                               type='button'
                               onClick={(e) => {
-                                handleReset(e);
-                                updatePassword(setFieldValue);
+                                e.stopPropagation();
+                                e.preventDefault();
+                                updatePassword(values.password, setFieldValue);
                               }}
                               className={`m-r-10 btn btn-secondary`}
                               disabled={disableFeature}
@@ -437,7 +449,7 @@ const AccountSetting = () => {
                               type='button'
                               onClick={() => {
                                 setActiveEditBox(false);
-                                handleReset();
+                                resetForm();
                                 setGenderId(
                                   customer?.gender ? customer.gender : '',
                                 );

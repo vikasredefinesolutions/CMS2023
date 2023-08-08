@@ -1,4 +1,4 @@
-import { default as Image } from '@appComponents/reUsable/Image';
+import NxtImage from '@appComponents/reUsable/Image';
 import { _ProductColor } from '@definations/APIs/colors.res';
 import { _ProductDiscountTable } from '@definations/APIs/discountTable.res';
 import { _ProductInventoryTransfomed } from '@definations/APIs/inventory.res';
@@ -255,15 +255,13 @@ const CI5_Item: React.FC<_CartItem & _Props> = (props) => {
         <div className='w-full lg:w-2/6 pl-[15px] pr-[15px]'>
           <Link href={`/${props.seName}.html`}>
             <div className='w-full cursor-pointer'>
-              <Image
+              <NxtImage
                 src={
-                  props.colorImage
-                    ? props.colorImage
-                    : '/assets/images/image_not_available.jpg'
+                  props.colorImage || '/assets/images/image_not_available.jpg'
                 }
                 alt={props.productName}
                 className='max-h-[348px] !inline-black m-auto'
-                isStatic={!Boolean(props.colorImage)}
+                isStatic={!props.colorImage}
               />
             </div>
           </Link>
@@ -346,10 +344,8 @@ const CI5_Item: React.FC<_CartItem & _Props> = (props) => {
                 </div>
 
                 {props.itemNote && (
-                  <div className='flex  py-3 border-t border-b'>
-                    <div className='text-normal-text w-30 font-semibold'>
-                      Item Note:
-                    </div>
+                  <div className='flex  py-3 border-t border-b text-normal-text '>
+                    <div className='w-30 font-semibold'>Item Note:</div>
                     <div className='text-normal-text px-3  text-center'>
                       {props.itemNote}
                     </div>

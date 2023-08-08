@@ -98,3 +98,24 @@ export type _ShoppingCartService = {
   service: 'ShoppingCart';
   api: _ShoppingCartAPIs;
 };
+
+export type _StoreTypeNames =
+  | 'Store Builder Store'
+  | 'Corporate Store'
+  | 'eCommerce Store'
+  | null;
+
+export interface _CreateNameTags {
+  nameTagsModel: {
+    rowVersion: string;
+    location: string;
+    ipAddress: string;
+    macAddress: string;
+    id: number;
+    storeId: number;
+    firstName: string;
+    lastName: string;
+    quantity: number;
+    recStatus: string;
+  };
+}

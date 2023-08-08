@@ -17,7 +17,6 @@ import {
 import { useFormik } from 'formik';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
-import { _globalStore } from 'store.global';
 import PD7_AddToCart from './Components/PD7_AddToCart';
 import PD7_ColorInfo from './Components/PD7_ColorInfo';
 import PD7_CustomizationFields from './Components/PD7_CustomizationCharges';
@@ -29,6 +28,7 @@ import PD7_Slider from './Components/PD7_Slider';
 import {
   convertIntoInitialValues,
   convertIntoValidtionSchema,
+  initialActiveImage,
 } from './PD7_Extras';
 
 interface _Props {
@@ -44,7 +44,6 @@ interface _Props {
   storeCode: string;
 }
 
-let mediaBaseUrl = _globalStore.blobUrl;
 export interface _SelectedSizeQty {
   colorAttributeOptionId: number; // colorId,
   totalQty: number;
@@ -59,23 +58,20 @@ const ProductDetailsType7: React.FC<_Props> = ({
   sizes,
   alike,
 }) => {
-  const { setShowLoader, setImage_2 } = useActions_v2();
+  const { setShowLoader } = useActions_v2();
   const router = useRouter();
   const [customFields, setCustomFields] = useState<
     _SbProductCustomField[] | null
   >(null);
   const storeId = useTypedSelector_v2((state) => state.store.id);
-  const clientSideMediaUrl = useTypedSelector_v2(
-    (state) => state.store.mediaBaseUrl,
+
+  const [activeColor, setActiveColor] = useState<_ProductColor | null>(
+    colors && colors?.length > 0 ? colors[0] : null,
   );
-  mediaBaseUrl = mediaBaseUrl || clientSideMediaUrl;
-  const selectImgHandler = (img: _OtherImage) => {
-    setImage_2({ ...img, imageUrl: mediaBaseUrl + img.imageUrl });
-  };
-  const [activeColor, setActiveColor] = useState<_ProductColor | null>(null);
-  const selectedImage = useTypedSelector_v2(
-    (state) => state.product.selected.image,
+  const [activeImage, setActiveImage] = useState<_OtherImage | null>(
+    initialActiveImage({ colors }),
   );
+
   const [addtionalPrices, setAdditionalPrices] = useState<{
     details: _SbProductAdditionalPrices[];
     total: number;
@@ -99,6 +95,9 @@ const ProductDetailsType7: React.FC<_Props> = ({
   });
 
   const calculateUnitPrice = () => {
+    if (details?.salePrice) {
+      return +details.salePrice + addtionalPrices.total;
+    }
     if (details?.msrp) {
       return +details.msrp + addtionalPrices.total;
     }
@@ -138,17 +137,6 @@ const ProductDetailsType7: React.FC<_Props> = ({
     }
   }, [storeId]);
 
-  useEffect(() => {
-    if (colors && colors?.length > 0) {
-      setActiveColor(colors[0]);
-      setImage_2({
-        id: 0,
-        imageUrl: mediaBaseUrl + colors[0].moreImages[0].imageUrl,
-        altTag: colors[0].moreImages[0].altTag,
-      });
-    }
-  }, [colors]);
-
   return (
     <div className=''>
       <div className='container mx-auto mt-[30px]'>
@@ -163,39 +151,37 @@ const ProductDetailsType7: React.FC<_Props> = ({
           <div className='col-span-1 grid grid-cols-12 gap-[10px] lg:pr-[15px]'>
             <div className='col-span-12 relative'>
               <div className='mx-auto h-[700px] flex justify-center items-center'>
-                
                 <NxtImage
-                  src={selectedImage?.imageUrl || ''}
+                  src={activeImage?.imageUrl || ''}
                   alt=''
-                  className='max-h-700 m-auto'
+                  className='max-h-[700px] m-auto'
                 />
                 <div
                   className={` md:block sub-image absolute left-[10px]  top-[15px] w-[70px] `}
                 >
                   {activeColor &&
                     activeColor.moreImages.length > 1 &&
-                    activeColor?.moreImages
-                      ?.map((img, index) => ({ ...img, id: index }))
-                      .map((img) => {
-                        const highlight =
-                          img.id === selectedImage.id
-                            ? 'border-secondary'
-                            : 'border-slate-200';
-                        return (
-                          <div
-                            key={img.id + img.imageUrl}
-                            className={`md:border hover:border-secondary p-[3px] mt-[5px] mb-[5px] last:mb-0 bg-white cursor-pointer ${highlight}`}
-                            onClick={() => selectImgHandler(img)}
-                          >
-                            <img
-                              src={`${mediaBaseUrl}${img.imageUrl}`}
-                              alt={img.altTag}
-                              className='w-full object-center object-cover'
-                              title={img.altTag}
-                            />
-                          </div>
-                        );
-                      })}
+                    activeColor?.moreImages.map((img, index) => {
+                      const highlight =
+                        img.id === activeImage?.id
+                          ? 'border-secondary'
+                          : 'border-slate-200';
+                      return (
+                        <div
+                          key={img.id + img.imageUrl}
+                          className={`md:border hover:border-secondary p-[3px] mt-[5px] mb-[5px] last:mb-0 bg-white  w-[70px] h-[70px] cursor-pointer ${highlight}`}
+                          onClick={() => setActiveImage({ ...img, id: index })}
+                        >
+                          <NxtImage
+                            src={img.imageUrl}
+                            alt={img.altTag}
+                            useNextImage={false}
+                            className='max-h-full m-auto cursor-pointer'
+                            title={img.altTag}
+                          />
+                        </div>
+                      );
+                    })}
                 </div>
               </div>
             </div>
@@ -207,7 +193,9 @@ const ProductDetailsType7: React.FC<_Props> = ({
                   {details?.name.toUpperCase()}
                 </h1>
                 <div className=''>
-                  <a href="javascript:void(0)" title="Back"
+                  <a
+                    href='javascript:void(0)'
+                    title='Back'
                     onClick={() => router.back()}
                     className='btn btn-sm btn-secondary'
                   >
@@ -253,7 +241,10 @@ const ProductDetailsType7: React.FC<_Props> = ({
                 </div>
                 <PD7_ColorInfo
                   colors={colors}
-                  setActiveColor={setActiveColor}
+                  setActiveColor={(color) => {
+                    setActiveColor(color);
+                    setActiveImage(initialActiveImage({ color }));
+                  }}
                   activeColor={activeColor}
                 />
                 <PD7_SizeChart chart={sizes} />

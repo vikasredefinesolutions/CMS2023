@@ -51,16 +51,20 @@ const AccountSetting = () => {
 
   const updatePassword = async (handleReset: () => void) => {
     try {
+      if (newPassword && newPassword.length < 6) {
+        return alert(__ValidationText.signUp.password.required);
+      }
       const res = await UpdateUserPassword({
-        email: customer?.email || '',
-        password: newPassword ? newPassword : currentPass,
+        newPassword: newPassword,
+        confirmNewPassword: newPassword,
+        currentPassword: currentPass,
         customerId: customer?.id || 0,
       });
       if (res) {
         setNewPassword('');
-        await passDecryptFunction(res?.password).then((response) => {
-          setCurrentPass(response ? response : '');
-        });
+        setCurrentPass(newPassword);
+        setInitialValues({ ...initialValues, password: newPassword });
+
         setShowPasswordUpdate(false);
         setActiveEditBox(false);
         handleReset();

@@ -66,7 +66,9 @@ const ProductListingType3: React.FC<_ListingProps> = ({
                     : 'sr-only'
                 }`}
               >
-                {storeCode == CYXTERA_CODE || storeCode == UNITI_CODE
+                {storeCode == CYXTERA_CODE ||
+                storeCode == UNITI_CODE ||
+                storeCode == SIMPLI_SAFE_CODE
                   ? state.store.pageType.name
                   : __pagesText.productListing.products}
               </h2>

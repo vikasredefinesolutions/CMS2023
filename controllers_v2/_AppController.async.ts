@@ -2,7 +2,6 @@ import { __console_v2 } from '@configs/console.config';
 import {
   _CustomContent,
   _DynamicContent,
-  _MenuItems,
   _NoneContent,
   _StoreMenu,
 } from '@definations/header.type';
@@ -131,41 +130,45 @@ const getNoneContent = async (
 //////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////
 
-export const fetchMenuItems = async (
+export const fetchMenuContents = async (
+  menuItems: null | _StoreMenu[],
   storeId: number,
   storeCode: string,
-): Promise<_MenuItems | null> => {
-  const menu: _menu_ = {
-    items: null,
-    items_content: null,
-  };
+): Promise<
+  (_CustomContent | _DynamicContent | _NoneContent | null)[] | null
+> => {
+  if (menuItems && menuItems.length > 0) {
+    const itemsToFetch = menuItems.map((item) => {
+      if (item.type === 'custom') {
+        return getCustomContent(item);
+      }
+      if (item.type === 'dynamic') {
+        return getDynamicContent(item, storeId, storeCode);
+      }
+      if (item.type === 'none') {
+        return getNoneContent(item);
+      }
 
+      return null;
+    });
+
+    return await Promise.allSettled(itemsToFetch).then((values) => {
+      return values.map((value) =>
+        value.status === 'fulfilled' ? value.value : null,
+      );
+    });
+  }
+
+  return null;
+};
+
+export const fetchMenuItems = async (
+  storeId: number,
+): Promise<null | _StoreMenu[]> => {
   try {
-    menu.items = await HeaderService.FetchStoreMenu({ storeId });
+    const menuItems = await HeaderService.FetchStoreMenu({ storeId });
 
-    if (menu.items && menu.items.length > 0) {
-      const itemsToFetch = menu.items.map((item) => {
-        if (item.type === 'custom') {
-          return getCustomContent(item);
-        }
-        if (item.type === 'dynamic') {
-          return getDynamicContent(item, storeId, storeCode);
-        }
-        if (item.type === 'none') {
-          return getNoneContent(item);
-        }
-
-        return null;
-      });
-
-      await Promise.allSettled(itemsToFetch).then((values) => {
-        menu.items_content = values.map((value) =>
-          value.status === 'fulfilled' ? value.value : null,
-        );
-      });
-    }
-
-    return menu;
+    return menuItems;
   } catch (error) {
     conditionalLog_V2({
       data: error,
@@ -227,6 +230,7 @@ export const fetchStoreDetails = async (
   };
 
   try {
+    // console.log(domain, 'doman is this');
     await Promise.allSettled([GetStoreID(domain), GetAdminAppConfigs()]).then(
       (response) => {
         if (response[0].status === 'fulfilled' && response[0].value) {
@@ -241,7 +245,6 @@ export const fetchStoreDetails = async (
               paymentOptionName: el.paymentOptionName,
             }),
           );
-         // console.log('payment ', paymentMethod);
 
           store.storeXPaymetnOptionListViewModels = paymentMethod;
           store.storeId = res.id;
@@ -278,8 +281,6 @@ export const fetchStoreDetails = async (
         }
       },
     );
-
-   // console.log('store', store);
 
     return {
       store: store,

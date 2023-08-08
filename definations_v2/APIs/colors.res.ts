@@ -17,6 +17,7 @@ export interface _ProductColor {
   moreImages: _OtherImage[];
   minQuantity: number;
   multipleQuantity: number;
+  isDefaultProduct: boolean;
   splitproductList: null | _splitProductList[];
 }
 export interface _splitProductList {

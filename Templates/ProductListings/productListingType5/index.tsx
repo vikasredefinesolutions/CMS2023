@@ -1,3 +1,4 @@
+import NxtImage from '@appComponents/reUsable/Image';
 import { __pagesText } from '@constants/pages.text';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import { Fragment, useEffect } from 'react';
@@ -139,7 +140,9 @@ const ProductListingType5: React.FC<_ListingProps> = ({
                           className='mt-[15px] btn btn-lg btn-secondary tracking-[1.4px] font-normal w-full max-w-[550px]'
                         >
                           <span className='inline-block w-[20px] h-[20px]'>
-                            <img
+                            <NxtImage
+                              alt=''
+                              isStatic={true}
                               className='max-h-full'
                               src='/assets/images/load-more-arrow.gif'
                             />
@@ -148,7 +151,9 @@ const ProductListingType5: React.FC<_ListingProps> = ({
                             {__pagesText.productListing.loadMoreButton}
                           </span>{' '}
                           <span className='inline-block w-[20px] h-[20px]'>
-                            <img
+                            <NxtImage
+                              alt=''
+                              isStatic={true}
                               className='max-h-full'
                               src='/assets/images/load-more-arrow.gif'
                             />

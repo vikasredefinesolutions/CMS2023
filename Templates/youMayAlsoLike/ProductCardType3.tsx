@@ -1,6 +1,12 @@
 import NxtImage from '@appComponents/reUsable/Image';
 import Price from '@appComponents/reUsable/Price';
-import { CYXTERA_CODE, UCA, UNITI_CODE } from '@constants/global.constant';
+import {
+  CYXTERA_CODE,
+  UCA,
+  UNITI_CODE,
+  _Store_CODES,
+} from '@constants/global.constant';
+import { _ProductImageOption } from '@definations/APIs/colors.res';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 
 import { _ProductsRecentlyViewedResponse } from '@templates/ProductDetails/productDetailsTypes/productDetail.res';
@@ -11,11 +17,16 @@ interface props {
 }
 const ProductCardType3: React.FC<props> = ({ product }) => {
   const [productimg, setProductImg] = useState(product.image);
-  const { id: storeId, mediaBaseUrl } = useTypedSelector_v2(
-    (state) => state.store,
+  const {
+    id: storeId,
+    mediaBaseUrl,
+    code: storeCode,
+  } = useTypedSelector_v2((state) => state.store);
+  const [mainImageUrl, setMainImageUrl] = useState<_ProductImageOption>(
+    product.getProductImageOptionList[0],
   );
-  const [currentProductId, setcurrentProductId] = useState(
-    product.getProductImageOptionList[0].id,
+  const [currentProduct, setCurrentProduct] = useState<_ProductImageOption>(
+    product.getProductImageOptionList[0],
   );
   const store = useTypedSelector_v2((state) => state.store);
   return (
@@ -36,9 +47,13 @@ const ProductCardType3: React.FC<props> = ({ product }) => {
               <div className='relative'>
                 <NxtImage
                   title={product.name}
-                  src={productimg ? productimg : product.image}
+                  src={mainImageUrl.imageName}
                   alt={product.name}
-                  className='h-auto w-screen object-cover'
+                  className={`${
+                    storeCode === _Store_CODES.UNITi || storeCode === UCA
+                      ? 'max-h-[348px] m-auto'
+                      : 'h-auto w-screen object-cover'
+                  }`}
                 />
               </div>
             </Link>
@@ -50,16 +65,36 @@ const ProductCardType3: React.FC<props> = ({ product }) => {
                 product.seName,
               )}.html?v=product-detail&altview=1`}
             >
-              <div className='mb-[10px] mt-[10px] text-medium-text  h-[46px]'>
-                <span className='relative text-tertiary hover:tertiary-hover'>
+              <div
+                className={`mb-[10px] mt-[10px] ${
+                  storeCode === _Store_CODES.UNITi || storeCode === UCA
+                    ? 'text-default-text'
+                    : 'text-medium-text'
+                }   h-[46px]`}
+              >
+                <span
+                  className={`relative ${
+                    storeCode === _Store_CODES.UNITi || storeCode === UCA
+                      ? 'text-anchor hover:text-anchor cursor-pointer'
+                      : 'text-tertiary hover:tertiary-hover'
+                  }`}
+                >
                   {product.name}
                 </span>
               </div>
             </Link>
 
             <div className={'mb-[12px] text-sub-text'}>
-              <span className={' text-primary'}>
-                MSRP
+              <span
+                className={
+                  storeCode === _Store_CODES.UNITi || storeCode === UCA
+                    ? 'text-quaternary !font-normal'
+                    : ' text-primary'
+                }
+              >
+                {storeCode !== _Store_CODES.UNITi &&
+                  storeCode !== UCA &&
+                  'MSRP'}
                 <Price value={product.msrp} />
               </span>
             </div>
@@ -68,15 +103,17 @@ const ProductCardType3: React.FC<props> = ({ product }) => {
                 return (
                   <li
                     className={`w-[30px] h-[30px] p-[1px] border-2  hover:border-secondary cursor-pointer ${
-                      currentProductId == res.id ? 'border-secondary' : ''
+                      currentProduct.id === res.id ? 'border-secondary' : ''
                     } `}
+                    onMouseOver={() => setMainImageUrl(res)}
+                    onMouseLeave={() => setMainImageUrl(currentProduct)}
                     onClick={() => {
-                      setcurrentProductId(res.id);
-                      setProductImg(`${mediaBaseUrl}${res.imageName}`);
+                      setCurrentProduct(res);
                     }}
                   >
-                    <img
-                      src={`${mediaBaseUrl}${res.imageName}`}
+                    <NxtImage
+                      useNextImage={false}
+                      src={res.imageName}
                       alt={res.colorName}
                       title={res.colorName}
                       className='w-full object-center object-cover cursor-pointer max-h-full'

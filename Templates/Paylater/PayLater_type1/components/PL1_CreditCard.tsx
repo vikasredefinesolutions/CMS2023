@@ -1,14 +1,13 @@
 import NxtImage from '@appComponents/reUsable/Image';
 import { cardType } from '@constants/common.constant';
 import { __pagesText } from '@constants/pages.text';
-import { isNumberKey } from '@helpers/common.helper';
 import { useActions_v2 } from '@hooks_v2/index';
 import { detectCardIssuer } from '@templates/checkout/checkoutType4/CO4_Extras';
 import { Form, Formik } from 'formik';
-import { useState } from 'react';
+import { KeyboardEvent, useState } from 'react';
 import * as Yup from 'yup';
 
-const creditCardValidationSchema = Yup.object().shape({
+const creditCardValidationSchema = Yup.object({
   ccNumber: Yup.string()
     .trim()
     .min(15)
@@ -22,9 +21,7 @@ const creditCardValidationSchema = Yup.object().shape({
         cardType = detectCardIssuer(enteredCCnumber);
       }
 
-      if (cardType === 'AMEX') {
-        return cardLength === 15;
-      }
+      if (cardType === 'AMEX') return cardLength === 15;
 
       if (
         cardType === 'MASTERCARD' ||
@@ -33,51 +30,42 @@ const creditCardValidationSchema = Yup.object().shape({
       ) {
         return cardLength === 16;
       }
-
-      return true;
+      //
+      return cardLength === 16;
     }),
   year: Yup.string()
     .trim()
     .length(4)
     .required()
     .test('valid-expiry-year', 'Some message', function (enteredYear) {
-      if (!enteredYear) {
-        return false;
-      }
-
+      if (!enteredYear) return false;
+      //
       const currentYear = new Date().getFullYear().toString().slice(-2);
-
-      if (+enteredYear >= +currentYear) {
-        return true;
-      }
-
+      if (+enteredYear >= +currentYear) return true;
+      //
       return false;
     }),
   month: Yup.string()
     .trim()
-    .min(1)
-    .max(2)
+    .length(2)
     .required()
     .test('valid-expiry-year', 'Some message', function (enteredMonth) {
-      if (!enteredMonth) {
-        return false;
-      }
+      if (!enteredMonth) return false;
+      //
       const currentYear = new Date().getFullYear().toString().slice(-2);
       const currentMonth = new Date().getMonth() + 1;
 
-      if (this.parent.expiredYear < currentYear) {
-        return false;
-      }
-
+      if (this.parent.expiredYear < currentYear) return false;
+      //
       if (this.parent.expiryYear === currentYear) {
-        if (+enteredMonth > currentMonth) {
-          return true;
-        }
+        if (+enteredMonth > currentMonth) return true;
+        //
         return false;
       }
-
+      //
       return true;
     }),
+
   securityCode: Yup.string()
     .trim()
     .min(3)
@@ -91,10 +79,10 @@ const creditCardValidationSchema = Yup.object().shape({
         if (cvcLength === 4) {
           return true;
         }
+        return false;
       }
-      if (cvcLength === 3) {
-        return true;
-      }
+      if (cvcLength === 3) return true;
+      //
       return false;
     }),
 });
@@ -102,6 +90,28 @@ const creditCardValidationSchema = Yup.object().shape({
 const PL1_CreditCard: React.FC<{ allowPO: boolean }> = ({ allowPO }) => {
   const { update_PaymentDetails } = useActions_v2();
   const [showCardHelp, setShowCardHelp] = useState(false);
+
+  const validKeyCheck = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (
+      ![
+        'Tab',
+        'Backspace',
+        '0',
+        '1',
+        '2',
+        '3',
+        '4',
+        '5',
+        '6',
+        '7',
+        '8',
+        '9',
+      ].includes(event.key)
+    )
+      return event.preventDefault();
+
+    return ['.'].includes(event.key) && event.preventDefault();
+  };
 
   const handleCCSubmit = (inputs: {
     type: string;
@@ -137,7 +147,7 @@ const PL1_CreditCard: React.FC<{ allowPO: boolean }> = ({ allowPO }) => {
         validationSchema={creditCardValidationSchema}
         validateOnBlur
       >
-        {({ values, handleBlur, handleChange, submitForm }) => {
+        {({ values, handleBlur, handleChange, setFieldValue }) => {
           return (
             <Form>
               <div className='flex flex-wrap items-center justify-between pt-[10px] border-b border-[#ececec]'>
@@ -167,16 +177,29 @@ const PL1_CreditCard: React.FC<{ allowPO: boolean }> = ({ allowPO }) => {
                 >
                   <input
                     required={true}
-                    autoComplete='off'
+                    autoComplete='cc-number'
                     onContextMenu={(e) => e.preventDefault()}
                     onBlur={(event) => {
                       handleBlur(event);
-                      submitForm();
+                      handleCCSubmit(values);
                     }}
+                    onKeyDown={validKeyCheck}
                     onChange={(event) => {
-                      if (isNumberKey(event)) {
-                        handleChange(event);
+                      if (event.target.value.length <= 3) {
+                        setFieldValue('month', '');
+
+                        setFieldValue('year', '');
                       }
+                      handleChange(event);
+                      if (event.target.value.length <= 3) {
+                        setFieldValue('month', '');
+                        setFieldValue('year', '');
+                        setFieldValue('securityCode', '');
+                      }
+                      handleCCSubmit({
+                        ...values,
+                        ccNumber: event.target.value,
+                      });
                     }}
                     name='ccNumber'
                     placeholder=''
@@ -204,9 +227,9 @@ const PL1_CreditCard: React.FC<{ allowPO: boolean }> = ({ allowPO }) => {
                           className={`opacity-70 ml-[4px] w-[32px]`}
                         >
                           <NxtImage
-                            isStatic={true}
+                            isStatic
                             className=''
-                            src={res.url}
+                            src={`${res.url}`}
                             alt=''
                           />
                         </div>
@@ -229,9 +252,9 @@ const PL1_CreditCard: React.FC<{ allowPO: boolean }> = ({ allowPO }) => {
                           } ml-[4px] w-[32px]`}
                         >
                           <NxtImage
-                            isStatic={true}
+                            isStatic
                             className=''
-                            src={res.url}
+                            src={`${res.url}`}
                             alt=''
                           />
                         </div>
@@ -246,9 +269,16 @@ const PL1_CreditCard: React.FC<{ allowPO: boolean }> = ({ allowPO }) => {
                       <select
                         onBlur={(event) => {
                           handleBlur(event);
-                          submitForm();
+                          handleCCSubmit(values);
                         }}
-                        onChange={handleChange}
+                        onChange={(e) => {
+                          handleChange(e);
+                          handleCCSubmit({
+                            ...values,
+                            month: e.target.value,
+                          });
+                        }}
+                        autoComplete='cc-exp-month'
                         name='month'
                         value={values.month}
                         className='selectFiled pt-[15px] pb-[0px] block w-full px-[8px] h-[48px] mt-[0px] text-sub-text text-[18px] text-[#000000] bg-transparent border-0 appearance-none focus:outline-none focus:ring-0'
@@ -287,10 +317,17 @@ const PL1_CreditCard: React.FC<{ allowPO: boolean }> = ({ allowPO }) => {
                       <select
                         onBlur={(event) => {
                           handleBlur(event);
-                          submitForm();
+                          handleCCSubmit(values);
                         }}
-                        onChange={handleChange}
+                        onChange={(e) => {
+                          handleChange(e);
+                          handleCCSubmit({
+                            ...values,
+                            year: e.target.value,
+                          });
+                        }}
                         name='year'
+                        autoComplete='cc-exp-year'
                         value={values.year}
                         data-value={values.year}
                         className='selectFiled pt-[15px] pb-[0px] block w-full px-[8px] h-[48px] mt-[0px] text-sub-text text-[18px] text-[#000000] bg-transparent border-0 appearance-none focus:outline-none focus:ring-0'
@@ -329,17 +366,18 @@ const PL1_CreditCard: React.FC<{ allowPO: boolean }> = ({ allowPO }) => {
                       <input
                         onBlur={(event) => {
                           handleBlur(event);
-                          submitForm();
+                          handleCCSubmit(values);
                         }}
+                        onKeyDown={validKeyCheck}
                         onChange={(event) => {
-                          if (isNumberKey(event)) {
-                            handleChange(event);
-                            setTimeout(() => {
-                              submitForm();
-                            }, 240);
-                          }
+                          handleChange(event);
+                          handleCCSubmit({
+                            ...values,
+                            securityCode: event.target.value,
+                          });
                         }}
                         name='securityCode'
+                        autoComplete='cc-csc'
                         placeholder=''
                         required={true}
                         maxLength={

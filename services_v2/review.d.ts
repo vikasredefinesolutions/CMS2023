@@ -31,7 +31,7 @@ export interface ProductReviewType {
   reviewModel: ReviewModel;
 }
 
-export interface ProductReviewCounts {
+export interface _ProductRatings {
   totalRatingCount: number;
   ratingAverage: number;
   fiveStarRatingCount: number;
@@ -40,7 +40,7 @@ export interface ProductReviewCounts {
   twoStarRatingCount: number;
   oneStarRatingCount: number;
 }
-export interface ProductReviewDetailsRes {
+export interface _ProductReview {
   reviewId: number;
   name: string;
   email: string;

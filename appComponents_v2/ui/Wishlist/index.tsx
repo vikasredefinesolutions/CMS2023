@@ -1,6 +1,8 @@
 import ForgotModal from '@appComponents/modals/forgotModal';
 import LoginModal from '@appComponents/modals/loginModal';
+import LoginModal_Type2 from '@appComponents/modals/loginModal/LoginModal_Type2';
 import { _modals } from '@appComponents/modals/modal';
+import { _Store } from '@configs/page.config';
 import { __Cookie } from '@constants/global.constant';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
@@ -9,7 +11,7 @@ import { _WishListProps } from '@services/wishlist';
 import {
   AddToWishlist,
   getWishlist,
-  removeWishlist
+  removeWishlist,
 } from '@services/wishlist.service';
 import { extractCookies } from 'helpers_v2/common.helper';
 import getLocation from 'helpers_v2/getLocation';
@@ -29,6 +31,7 @@ const WishlistButton = ({
   const [showModal, setShowModal] = useState<null | string>(null);
   const customerId = useTypedSelector_v2((state) => state.user.id);
   const storeId = useTypedSelector_v2((state) => state.store.id);
+  const { code } = useTypedSelector_v2((state) => state.store);
   const wishlistHandler = async () => {
     if (!customerId) {
       setShowModal('login');
@@ -108,7 +111,12 @@ const WishlistButton = ({
   );
   return (
     <>
-      {showModal === 'login' && <LoginModal modalHandler={modalHandler} />}
+      {showModal === 'login' &&
+        (code === _Store.type2 ? (
+          <LoginModal_Type2 modalHandler={modalHandler} />
+        ) : (
+          <LoginModal modalHandler={modalHandler} />
+        ))}
       {showModal === 'forgot' && <ForgotModal modalHandler={modalHandler} />}
       {wishlistHtml}
     </>

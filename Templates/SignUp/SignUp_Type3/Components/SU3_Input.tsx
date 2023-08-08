@@ -1,4 +1,5 @@
-import { ErrorMessage, Field, useFormikContext } from 'formik';
+import { fetchDetailsByZipCode } from '@services/general.service';
+import { ErrorMessage, Field, FormikValues, useFormikContext } from 'formik';
 import { useState } from 'react';
 import { _SU3_Field } from '../SU3.extras';
 
@@ -11,10 +12,20 @@ const SU3_Input = ({
   fetchStates,
   options = [],
 }: _SU3_Field & { fetchStates: (id: number) => void }) => {
-  const { setFieldValue } = useFormikContext();
+  const { setFieldValue, values }: FormikValues = useFormikContext();
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
   const [isPasswordHintVisible, setIsPasswordHintVisible] =
     useState<boolean>(false);
+
+  const autoFillStateCountry = async (zipCode: string) => {
+    const res = await fetchDetailsByZipCode(zipCode);
+    if (res.stateName && res.countryId) {
+      setFieldValue('state', res.stateName);
+      setFieldValue('city', res.cityName);
+      setFieldValue('country', res.countryId);
+    }
+  };
+
   return (
     <>
       {type === 'dropdown' ? (
@@ -123,6 +134,11 @@ const SU3_Input = ({
               placeholder={placeholder}
               type={type}
               className='form-input !w-[calc(100%-40px)]'
+              onBlur={
+                name === 'zipCode'
+                  ? () => autoFillStateCountry(values.zipCode)
+                  : null
+              }
             />
           </div>
           <ErrorMessage

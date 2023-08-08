@@ -77,7 +77,9 @@ const CO6_PlayerInformation: React.FC<_Props> = ({
         <div className='flex flex-wrap ml-[-15px] mr-[-15px]'>
           <CO6_Input
             label={
-              player?.firstName ? `${player.firstName} First Name` : 'First Name'
+              player?.firstName
+                ? `${player.firstName} First Name`
+                : 'First Name'
             }
             additionalClass={'md:w-6/12'}
             type={'text'}
@@ -85,6 +87,7 @@ const CO6_PlayerInformation: React.FC<_Props> = ({
             required={true}
             readonly={readOnly}
             value={values.firstName}
+            autoComplete=''
             onChange={handleChange}
             onBlur={handleBlur}
             touched={!!touched.firstName}
@@ -98,6 +101,7 @@ const CO6_PlayerInformation: React.FC<_Props> = ({
             type={'text'}
             name={'lastName'}
             required={true}
+            autoComplete=''
             readonly={readOnly}
             value={values.lastName}
             onChange={handleChange}
@@ -110,6 +114,7 @@ const CO6_PlayerInformation: React.FC<_Props> = ({
             additionalClass={'md:w-6/12'}
             type={'text'}
             readonly={readOnly}
+            autoComplete=''
             name={'number'}
             required={false}
             value={values.number}

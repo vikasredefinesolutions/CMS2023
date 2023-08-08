@@ -139,7 +139,7 @@ const Inventory: React.FC<{
                         view == 'MOBILE'
                           ? ''
                           : 'justify-center flex items-center'
-                      } p-2  'w-1/2 md:w-auto'`}
+                      } p-2  w-1/2 md:w-auto`}
                     >
                       {view == 'MOBILE' && (
                         <div className='mb-1 font-semibold md:hidden'>

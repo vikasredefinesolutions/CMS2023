@@ -41,6 +41,7 @@ const PurchaseOrderType: paymentProps = ({
               className='form-input !w-[calc(100%-40px)]'
               onFocus={() => setShowPO(true)}
               value={numPO}
+              maxLength={10}
               onChange={(e) => setNumPO(e.target.value)}
             />
             {numPO.length > 0 && (

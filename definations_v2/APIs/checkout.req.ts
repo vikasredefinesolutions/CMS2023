@@ -118,4 +118,5 @@ export interface AddOrderRequest {
   decorationDate: Date;
   orderSmallRunFee: number;
   orderLogoSetupFee: number;
+  orderSubType?: string;
 }

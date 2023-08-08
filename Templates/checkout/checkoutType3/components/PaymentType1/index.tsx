@@ -1,12 +1,13 @@
 import { paymentMethodCustom } from '@constants/enum';
-import { ChangeEvent, FC } from 'react';
+import { _Props } from '@controllers/checkoutController';
+import { FC } from 'react';
 import CardPaymentType1 from './components/CardPaymentType1';
 import PurchaseOrderType1 from './components/PurchaseOrderType1';
 
 export type paymentProps = FC<{
   /* eslint-disable no-unused-vars */
   updatePaymentMethod: (arg: paymentMethodCustom) => void;
-  changeHandler: (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
+  changeHandler: (e: _Props) => void;
   detectCardType?: () => string;
   /* eslint-enable no-unused-vars */
 }>;
@@ -14,7 +15,7 @@ export type paymentProps = FC<{
 const PaymentType1: FC<{
   changeHandler: (
     /* eslint-disable no-unused-vars */
-    event: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    event: _Props,
   ) => void;
   paymentMethod: paymentMethodCustom;
   updatePaymentMethod: (arg: paymentMethodCustom) => void;

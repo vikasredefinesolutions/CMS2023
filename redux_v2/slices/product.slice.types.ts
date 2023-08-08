@@ -156,6 +156,7 @@ export interface _Product_SizeQtys {
 
 export interface _AvailableLocationDetailsOtherStores {
   logoLocationDetailId: number;
+  reusableLocationId: number;
   name: string;
   image: string;
   threeDImage: string;
@@ -215,6 +216,7 @@ export interface _state_SOM_Logos_Container {
   choosedLogoCompletionPending: string | null;
 }
 export interface _ProductStore {
+  pinterestImagePath: string;
   selected: _state_SelectedProduct;
   product: {
     id: number | null;
@@ -315,6 +317,10 @@ export interface _UPDATE_BASIC_PRODUCT_DETAILS {
 export interface _Product_UpdateSelectedValeus_Action {
   payload:
     | _UpdateSelectedValue_Color
+    | {
+        type: 'PINTERESET_IMAGE_PATH';
+        path: string;
+      }
     | _UpdateSelectedValue_Reset_All
     | _UPDATE_BASIC_PRODUCT_DETAILS
     | {

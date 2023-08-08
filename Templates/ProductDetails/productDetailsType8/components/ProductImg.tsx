@@ -1,50 +1,34 @@
-import { _OtherImage } from '@definations/APIs/colors.res';
-import { _ProductImgProps } from '@templates/ProductDetails/Components/productDetailsComponents';
-import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
-import React, { useEffect, useState } from 'react';
+import NxtImage from '@appComponents/reUsable/Image';
+import { _ProductColor } from '@definations/APIs/colors.res';
+import { _ProductDetails } from '@definations/APIs/productDetail.res';
+import { useTypedSelector_v2 } from 'hooks_v2';
+import React, { useState } from 'react';
 import InnerImageZoom from 'react-inner-image-zoom';
 import 'react-inner-image-zoom/lib/InnerImageZoom/styles.min.css';
 import { _globalStore } from 'store.global';
 let mediaBaseUrl = _globalStore.blobUrl; // for server side rendering
 
-const ProductImg: React.FC<_ProductImgProps> = ({ product }) => {
-  const { setImage, setImage_2 } = useActions_v2();
-  const [wishlistId, setWishlistId] = useState<number>(0);
-  const [wishlistPresent, setWishlistPresent] = useState<boolean>(false);
+interface _Props {
+  activeColor: _ProductColor;
+  details: _ProductDetails;
+}
 
-  const brandId = useTypedSelector_v2((state) => state.wishlist.brandId);
-  const selectedColor = useTypedSelector_v2(
-    (state) => state.product.selected.color,
-  );
-  const selectedImage = useTypedSelector_v2(
-    (state) => state.product.selected.image,
-  );
-  const wishlist = useTypedSelector_v2((state) => state.wishlist.wishListData);
-  const customerId = useTypedSelector_v2((state) => state.user.id);
+const ProductImg: React.FC<_Props> = ({ details: product, activeColor }) => {
   const clientSideMediaUrl = useTypedSelector_v2(
     (state) => state.store.mediaBaseUrl,
   );
   mediaBaseUrl = mediaBaseUrl || clientSideMediaUrl;
-  const selectImgHandler = (img: _OtherImage) => {
-    setImage_2({ ...img, imageUrl: mediaBaseUrl + img.imageUrl });
-  };
-
-  useEffect(() => {
-    setImage({
-      id: 0,
-      imageUrl: mediaBaseUrl + selectedColor.moreImages[0].imageUrl,
-      altTag: selectedColor.moreImages[0].altTag,
-    });
-  }, [selectedColor.attributeOptionId, product?.id]);
-
-  useEffect(() => {
-    wishlist.forEach((item) => {
-      if (item.productId === product?.id) {
-        setWishlistPresent(true);
-        setWishlistId(item.id);
-      }
-    });
-  }, [customerId, wishlist]);
+  const [selectedImage, setSelectedImage] = useState<{
+    id: number;
+    imageUrl: string;
+    displayOrder: number;
+    altTag: string;
+  }>({
+    id: 0,
+    imageUrl: activeColor.moreImages[0].imageUrl,
+    displayOrder: activeColor.moreImages[0].displayOrder,
+    altTag: activeColor.moreImages[0].altTag,
+  });
 
   return (
     <div className='col-span-1 grid grid-cols-12 gap-[24px] lg:pr-[15px] pr-[0px] pt-[8px]'>
@@ -56,22 +40,28 @@ const ProductImg: React.FC<_ProductImgProps> = ({ product }) => {
             product.productTagViewModel.length > 0 &&
             (product.productTagViewModel[0].productTagName ? (
               <div className='absolute top-1 left-2 text-gray-800 p-1 z-5"'>
-                <img
-                  src={`${mediaBaseUrl}${product?.productTagViewModel[0].imagename}`}
+                <NxtImage
+                  className=''
+                  alt=''
+                  useNextImage={false}
+                  src={product?.productTagViewModel[0].imagename}
                 />
               </div>
             ) : (
               <div className='absolute -top-2 -left-2 text-gray-800 p-1 z-5"'>
-                <img
-                  src={`${mediaBaseUrl}${product?.productTagViewModel[0].imagename}`}
+                <NxtImage
+                  src={product?.productTagViewModel[0].imagename || null}
                   width={'60px'}
                   height={'60px'}
+                  useNextImage={false}
+                  className=''
+                  alt=''
                 />
               </div>
             ))}
           <InnerImageZoom
-            key={selectedImage.imageUrl}
-            src={selectedImage?.imageUrl}
+            key={selectedImage?.imageUrl}
+            src={`${mediaBaseUrl}${selectedImage.imageUrl}`}
             zoomType='hover'
             hideHint={true}
             className='w-full object-center object-cover sm:rounded-lg main_image max-h'
@@ -84,24 +74,25 @@ const ProductImg: React.FC<_ProductImgProps> = ({ product }) => {
               : ''
           }`}
         >
-          {selectedColor.moreImages.length > 1 &&
-            selectedColor?.moreImages
+          {activeColor.moreImages.length > 1 &&
+            activeColor?.moreImages
               ?.map((img, index) => ({ ...img, id: index }))
               .map((img) => {
                 const highlight =
-                  img.id === selectedImage.id
+                  img.id === selectedImage?.id
                     ? 'border-secondary'
                     : 'border-slate-200';
                 return (
                   <div
                     key={img.id + img.imageUrl}
-                    className={`md:border hover:border-secondary p-[3px] mt-[5px] mb-[5px] last:mb-0 bg-white cursor-pointer ${highlight}`}
-                    onClick={() => selectImgHandler(img)}
+                    className={`md:border hover:border-secondary p-[3px] mt-[5px] mb-[5px] last:mb-0 bg-white  w-[70px] max-h-[70px] cursor-pointer ${highlight}`}
+                    onClick={() => setSelectedImage(img)}
                   >
-                    <img
-                      src={`${mediaBaseUrl}${img.imageUrl}`}
+                    <NxtImage
+                      src={img.imageUrl}
                       alt={img.altTag}
-                      className='w-full object-center object-cover'
+                      useNextImage={false}
+                      className='max-h-full m-auto cursor-pointer'
                       title={img.altTag}
                     />
                   </div>

@@ -1,43 +1,24 @@
 // Husain - Added Static Values for now - 20-3-23
 import { paths } from '@constants/paths.constant';
-import {
-  GetCartTotals,
-  GetCustomerId,
-  useActions_v2,
-  useTypedSelector_v2,
-} from 'hooks_v2';
+import { GetCartTotals, useTypedSelector_v2 } from 'hooks_v2';
 // import { useActions_v2, useTypedSelector_v2 } from '@src/hooks';
 import NxtImage from '@appComponents/reUsable/Image';
 import Price from '@appComponents/reUsable/Price';
+import { BACARDI } from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 
 const MyCartIcon: React.FC = () => {
-  const { fetchCartDetails } = useActions_v2();
   const [totalCartQty, setTotalCartQty] = useState(0);
-
-  const customerId = GetCustomerId();
-
   const cartData = useTypedSelector_v2((state) => state.cart.cart);
-  const isEmployeeLoggedIn = useTypedSelector_v2(
-    (state) => state.employee.loggedIn,
-  );
   const view = useTypedSelector_v2((state) => state.store.view);
-
-  const { totalPrice, totalQty } = GetCartTotals();
   const [Focus, setFocus] = useState(false);
+  const { totalPrice, totalQty } = GetCartTotals();
 
-  useEffect(() => {
-    if (customerId && (totalQty === 0 || totalQty !== totalCartQty)) {
-      fetchCartDetails({
-        customerId: customerId,
-        isEmployeeLoggedIn,
-      });
-    }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [customerId, isEmployeeLoggedIn]);
+  const { id: storeId, code: storeCode } = useTypedSelector_v2(
+    (state) => state.store,
+  );
 
   useEffect(() => {
     setTotalCartQty(totalQty);
@@ -136,7 +117,11 @@ const MyCartIcon: React.FC = () => {
 
               <div className=''>
                 <Link href={paths.CART} className=''>
-                  <a className='btn btn-primary w-full text-center'>
+                  <a
+                    className={`btn btn-${
+                      storeCode === BACARDI ? 'secondary' : 'primary'
+                    } w-full text-center`}
+                  >
                     {__pagesText.Headers.checkoutNow}
                   </a>
                 </Link>

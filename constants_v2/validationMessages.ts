@@ -13,7 +13,7 @@ export const addressMessages = {
     required: 'Email is required',
   },
   address1: {
-    required: 'Address1 is required',
+    required: 'Address is required',
   },
   city: {
     required: 'City is required',
@@ -129,6 +129,9 @@ export const signupPageMessages = {
   },
   primarySport: {
     required: 'Primary sport is required',
+  },
+  birthDate: {
+    min: 'Minimum 16 years of age is required',
   },
 };
 
@@ -274,5 +277,8 @@ export const giftCardValidation = {
   },
   name: {
     required: `Recipient's Name is required`,
+  },
+  message: {
+    required: 'Please enter message',
   },
 };

@@ -102,11 +102,11 @@ const OrderDetails_type2: React.FC = () => {
   return (
     <MyAccountTabsType2>
       {order === null ? (
-        <div id='root'>
-          <div className='loader-wrapper'>
-            <div className='loader'></div>
+        <section className='container mx-auto  mb-[50px]'>
+          <div className='block lg:flex lg:space-x-10'>
+            <div className='w-4/4 lg:w-4/5'>NO ORDERS FOUND</div>
           </div>
-        </div>
+        </section>
       ) : (
         <section className='container mx-auto  mb-[50px]'>
           <div className='block lg:flex lg:space-x-10'>
@@ -122,9 +122,7 @@ const OrderDetails_type2: React.FC = () => {
                 <div className='mb-[20px] text-[16px] border-b border-black pb-[20px]'>
                   {`Order: # ${order.billing.id} placed on ${moment(
                     order?.billing?.orderDate,
-                  ).format(
-                    __pagesConstant._myAccount.orderDetails.dateFormat,
-                  )}`}
+                  ).format(__pagesConstant._myAccount.orderDetails.PkdFormat)}`}
                 </div>
                 <ul
                   role='list'

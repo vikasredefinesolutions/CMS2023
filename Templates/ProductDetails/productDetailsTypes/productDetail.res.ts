@@ -94,6 +94,7 @@ export interface _ProductDetails {
   isSpecialBrand: boolean;
   categoryName?: string;
   brandSEname: string | null;
+  isShortDescriptionOnTop: boolean;
   productTagViewModel: Array<{
     productId: number;
     imagename: string;

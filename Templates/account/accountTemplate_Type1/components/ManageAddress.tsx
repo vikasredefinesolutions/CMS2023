@@ -222,11 +222,15 @@ const ManageAddress = () => {
                           <div className='border-b last:border-b-0 border-[#d2d2d2] flex flex-wrap px-[20px] py-[10px]'>
                             <div className='w-2/5 text-right'>Address:</div>
                             <div className='ml-[10px]'>
-                              {address_obj.address1}
-                              {address_obj.address2}
+                              {address_obj.address1},
+                              {address_obj.address2?.trim() !== ''
+                                ? `${address_obj.address2},`
+                                : ''}
+                              <br />
+                              {address_obj.city},
                               <br />
                               {[
-                                address_obj.city,
+                                address_obj.state,
                                 address_obj.countryName,
                                 address_obj.postalCode,
                               ].join(', ')}

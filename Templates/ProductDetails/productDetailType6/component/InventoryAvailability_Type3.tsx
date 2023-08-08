@@ -41,6 +41,10 @@ const InventoryAvailability_Type3: React.FC<_props> = ({
       <div className='w-1/3 pt-[10px] pb-[10px] text-right'>
         <input
           type='number'
+          onKeyDown={(event) =>
+            ['e', 'E', '+', '-', '.'].includes(event.key) &&
+            event.preventDefault()
+          }
           className='form-input !px-[10px] !inline-block !w-[65px]'
           placeholder='0'
           min={0}

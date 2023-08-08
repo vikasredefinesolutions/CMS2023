@@ -15,15 +15,13 @@ const SearchBar: React.FC<_props> = ({
   const searchHandler = (values: any) => {
     onSearchInput(values.text as string);
     let x = searchRef.current;
-    if(x)
-    {
-      
+    if (x) {
       if (
         x?.value === '' ||
         x?.value === 'Enter Search here' ||
         x?.value.toString().toLowerCase().indexOf('enter search') > -1
       ) {
-        alert('Please enter something to search');
+        return alert('Please enter something to search');
       }
       var str = x.value.replace(/^\s+|\s+$/g, '');
       while (str.substring(str.length - 1, str.length) == ' ') {
@@ -32,14 +30,13 @@ const SearchBar: React.FC<_props> = ({
       if (str.length < 3) {
         alert('Please enter at least 3 characters to search');
         x.focus();
+        return;
       }
-  
+
       window.location.href =
         '/search/result.html?q=' +
         encodeURIComponent(str.replace(/^\s+|\s+$/g, ''));
     }
-    
-  
   };
 
   if (screen === 'MOBILE') {
@@ -104,22 +101,23 @@ const SearchBar: React.FC<_props> = ({
                       placeholder={__pagesText.Headers.searchPlaceholder}
                       onChange={handleChange}
                       className='outline-none w-full border-0 focus:ring-0 text-[14px] tracking-[1px] text-primary h-[26px]'
-                     autoComplete='off'
-                      maxLength={255}
+                      autoComplete='off'
+                      maxLength={128}
                       defaultValue={values.text}
-                     
                     />
-                    { <button
-                      type='submit'
-                      className='w-[24px] h-[24px] absolute right-[6px] top-[6px]'
-                    >
-                      <span
-                        className='material-icons text-primary font-[900]'
-                        onClick={() => searchRef?.current?.focus()}
+                    {
+                      <button
+                        type='submit'
+                        className='w-[24px] h-[24px] absolute right-[6px] top-[6px]'
                       >
-                        {__pagesText.Headers.searchIcon}
-                      </span>
-                    </button> }
+                        <span
+                          className='material-icons text-primary font-[900]'
+                          onClick={() => searchRef?.current?.focus()}
+                        >
+                          {__pagesText.Headers.searchIcon}
+                        </span>
+                      </button>
+                    }
                   </div>
                 </div>
               </div>

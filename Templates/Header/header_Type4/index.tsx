@@ -1,3 +1,4 @@
+import NxtImage from '@appComponents/reUsable/Image';
 import { storeBuilderTypeId } from '@configs/page.config';
 import { __pagesConstant } from '@constants/pages.constant';
 import { paths } from '@constants/paths.constant';
@@ -96,7 +97,7 @@ const Header_Type4: NextPage<_HeaderProps> = ({
                       />
                     )}
 
-                    <div className='h-full hidden lg:flex items-center flex-1'>
+                    <div className='h-full hidden lg:flex sm:flex items-center flex-1'>
                       <div className=''>
                         <div className='h-full flex header-nav relative'>
                           {!isMobileView && showComponent() ? (
@@ -120,7 +121,10 @@ const Header_Type4: NextPage<_HeaderProps> = ({
                         {showComponent() && (
                           <div className='pl-[15px] order-1 sm:order-4 max-w-[100px]'>
                             <a href='/patagonia-sustainability-initiatives.html'>
-                              <img
+                              <NxtImage
+                                isStatic={true}
+                                useNextImage={false}
+                                className=''
                                 src='/assets/images/di/for-the-planet.png'
                                 alt=''
                               />

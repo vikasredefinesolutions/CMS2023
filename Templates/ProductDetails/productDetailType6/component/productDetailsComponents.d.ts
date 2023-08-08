@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-vars */
 import { _modals } from '@appComponents/modals/modal';
 import { _Reviews } from '@definations/product.type';
-import { ProductReviewCounts } from '@services/review';
+import { _ProductRatings } from '@services/review';
 
 import {
   _ProductDetails,
@@ -50,7 +50,7 @@ export interface _ProductImgProps {
 
 export interface _ProductInfoProps {
   product: _ProductDetails | null;
-  storeCode: string;
+  storeCode?: string;
 }
 
 export interface _ProductReviewDetailsProps {
@@ -60,7 +60,7 @@ export interface _ProductReviewDetailsProps {
 
 export interface _ProductReviewRatingProps {
   storeCode: string;
-  reviewsCount?: ProductReviewCounts;
+  ratings?: _ProductRatings;
 }
 
 export interface _ProductReviewsProps {

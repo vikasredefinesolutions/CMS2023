@@ -92,7 +92,13 @@ const Ecommerce_ProductDetails_View: React.FC<_Props> = (product) => {
         },
       });
       if (product.colors) {
-        setColor(product.colors[0]);
+        let filteredProduct = product.colors.find(
+          (item) => item.isDefaultProduct === true,
+        );
+        if (!filteredProduct) {
+          filteredProduct = product.colors[0];
+        }
+        setColor(filteredProduct);
 
         const allColorAttributes = product.colors.map(
           (color) => color.attributeOptionId,
@@ -162,6 +168,8 @@ const Ecommerce_ProductDetails_View: React.FC<_Props> = (product) => {
           return (
             <div key={val + index}>
               <Reviews
+                reviews={product.reviews}
+                ratings={product.ratings}
                 storeCode={product.storeCode}
                 productId={product?.details?.id ? product.details.id : 0}
               />

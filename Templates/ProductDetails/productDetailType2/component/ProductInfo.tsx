@@ -30,6 +30,9 @@ const ProductInfo: React.FC<_Props> = ({
 }) => {
   const [openModal, setOpenModal] = useState<null | _modals>(null);
   const [currentPresentQty, setCurrentPresentQty] = useState<number>(0);
+  const { id: productId } = useTypedSelector_v2(
+    (state) => state.product.product,
+  );
   const QtyPresent = useTypedSelector_v2(
     (state) => state.product.selected.presentQty,
   );
@@ -39,31 +42,37 @@ const ProductInfo: React.FC<_Props> = ({
   const { id: customerId } = useTypedSelector_v2((state) => state.user);
 
   const { product_PresentQty, updateDiscountPrice } = useActions_v2();
+  const { price, inventory } = useTypedSelector_v2(
+    (state) => state.product.product,
+  );
 
-  useEffect(() => {
-    if (product && customerId) {
-      const payload = {
-        ProductId: product.id,
-        ShoppingCartItemsId: 0,
-        CustomerId: customerId,
-      };
-      FetchCustomerQuantityByProductId(payload).then((res) => {
-        const payload = {
-          presentQty: res ? res : 0,
-        };
-        setCurrentPresentQty(res ? res : 0);
-        product_PresentQty(payload);
-      });
-    }
-  }, [product, customerId]);
-
-  useEffect(() => {
+  const fetchCurrentQuantity = async (
+    productId: number,
+    customerId: number,
+  ) => {
+    const payload = {
+      ProductId: productId,
+      ShoppingCartItemsId: 0,
+      CustomerId: customerId,
+    };
+    const res = await FetchCustomerQuantityByProductId(payload);
+    const quantityPayload = {
+      presentQty: res ? res : 0,
+    };
+    setCurrentPresentQty(res ? res : 0);
+    product_PresentQty(quantityPayload);
     const discountpayload = {
-      presentQty: QtyPresent,
-      price: discountedPrice,
+      presentQty: res || 0,
+      price: pricePerItem ? pricePerItem : product?.msrp || 0,
     };
     updateDiscountPrice(discountpayload);
-  }, [currentPresentQty]);
+  };
+  useEffect(() => {
+    if (productId && customerId) {
+      fetchCurrentQuantity(productId, customerId);
+    }
+  }, [customerId, productId]);
+
   const {
     totalQty,
     minQty,
@@ -155,6 +164,10 @@ const ProductInfo: React.FC<_Props> = ({
 
   const BUY_NOW_BTN_HTML = (): React.ReactNode => {
     //if condition order matters here
+    const totalInventoryCount = inventory?.inventory.reduce(
+      (accumulator, currentValue) => accumulator + currentValue.inventory,
+      0,
+    );
 
     let btnText = 'LOGIN TO SHOP NOW WITH LIVE INVENTORY';
 
@@ -169,6 +182,10 @@ const ProductInfo: React.FC<_Props> = ({
     if (isEmpGuest) {
       disableBtn = false;
       btnText = 'CUSTOMIZE NOW AND ADD TO CART';
+    }
+    if (!totalInventoryCount) {
+      disableBtn = true;
+      btnText = 'OUT OF STOCK';
     }
 
     return (
@@ -323,7 +340,7 @@ const ProductInfo: React.FC<_Props> = ({
                 ourCost={product?.ourCost || 0}
                 msrp={product?.msrp || 0}
                 imap={product?.imap || 0}
-                salePrice={pricePerItem || 0}
+                salePrice={pricePerItem}
               />
             </div>
           </>
@@ -359,7 +376,7 @@ const ProductInfo: React.FC<_Props> = ({
       {openModal === 'forgot' && <ForgotModal modalHandler={modalHandler} />}
       {isVisible && (
         <BuyNowHeader
-          msrp={pricePerItem || 0}
+          msrp={totalQty + QtyPresent > 0 ? pricePerItem : price?.msrp || 0}
           productName={product?.name || ''}
           buyNowHandler={buyNowHandler}
           image={image}

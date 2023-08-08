@@ -8,7 +8,6 @@ import {
 import { NextPage } from 'next';
 import { useEffect, useState } from 'react';
 
-import { storeBuilderTypeId } from '@configs/page.config';
 import { paths } from '@constants/paths.constant';
 import { _HeaderProps, _MenuItems } from '@definations/header.type';
 import {
@@ -61,7 +60,7 @@ const Header_Type1: NextPage<_HeaderProps> = ({
       {/* <NotificationBar /> */}
       <div
         className={`bg-[${headerBgColor}]`}
-        style={{ color: `${headerBgColor} !important;` }}
+        style={{ color: `${headerBgColor} !important` }}
       >
         {isMobileView && router.asPath != paths.CHECKOUT && (
           <MenuItems
@@ -79,18 +78,7 @@ const Header_Type1: NextPage<_HeaderProps> = ({
               <div className='container pl-[15px] pr-[15px] mx-auto'>
                 <div className='pt-[10px] pb-[10px]'>
                   <div className='flex items-center justify-between'>
-                    {storeTypeId == storeBuilderTypeId ? (
-                      islogo &&
-                      (isMobileView ? null : (
-                        <Logo
-                          // screen='DESKTOP'
-                          logo={{
-                            desktop: logoUrl.desktop,
-                            mobile: logoUrl.desktop,
-                          }}
-                        />
-                      ))
-                    ) : isMobileView ? null : (
+                    {isMobileView ? null : (
                       <Logo
                         // screen='DESKTOP'
                         logo={{
@@ -110,18 +98,7 @@ const Header_Type1: NextPage<_HeaderProps> = ({
                           />
                         )}
 
-                    {storeTypeId == storeBuilderTypeId ? (
-                      islogo &&
-                      (isMobileView ? (
-                        <Logo
-                          // screen='MOBILE'
-                          logo={{
-                            desktop: logoUrl.desktop,
-                            mobile: logoUrl.desktop,
-                          }}
-                        />
-                      ) : null)
-                    ) : isMobileView ? (
+                    {isMobileView ? (
                       <Logo
                         // screen='MOBILE'
                         logo={{
@@ -143,8 +120,9 @@ const Header_Type1: NextPage<_HeaderProps> = ({
                           {/* {storeCode !== _Store.type1 && <CompareIcon />} */}
                           {/* <!-- <span className="mx-4 h-6 w-px bg-gray-200 lg:mx-6" aria-hidden="true"></span> --> */}
                           <MyCartIcon />
-                          <div className='lg:hidden pl-[15px]'>
-                            {router.asPath !== paths.CHECKOUT && <MenuIcon />}
+                          <div className='pl-[15px]'>
+                            {isMobileView &&
+                              router.asPath !== paths.CHECKOUT && <MenuIcon />}
                           </div>
                         </div>
                       </div>

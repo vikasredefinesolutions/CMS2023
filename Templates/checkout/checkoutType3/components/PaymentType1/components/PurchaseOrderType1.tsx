@@ -23,7 +23,13 @@ const PurchaseOrderType1: paymentProps = ({
       </div>
       <div className='relative z-0 w-full mb-[20px] border border-gray-border rounded'>
         <input
-          onChange={changeHandler}
+          maxLength={10}
+          onInput={(e) => {
+            changeHandler({
+              name: e.currentTarget.name,
+              value: e.currentTarget.value,
+            });
+          }}
           name='EnterPONumber'
           placeholder=' '
           required={true}

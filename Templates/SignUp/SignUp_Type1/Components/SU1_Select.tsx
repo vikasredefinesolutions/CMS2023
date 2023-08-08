@@ -13,6 +13,7 @@ interface _props {
   // eslint-disable-next-line no-unused-vars
   onChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   required?: boolean;
+  labelClass?: string;
 }
 
 const SU1_Select: React.FC<_props> = ({
@@ -22,10 +23,11 @@ const SU1_Select: React.FC<_props> = ({
   onChange,
   required = false,
   value,
+  labelClass,
 }) => {
   return (
     <div className='w-full lg:w-1/2 px-[15px]'>
-      <label htmlFor={name} className='block text-default-text'>
+      <label htmlFor={name} className={labelClass || 'block text-default-text'}>
         {label} {required && <span className='text-rose-500'>*</span>}
       </label>
       <div className='mt-2 relative'>

@@ -43,7 +43,6 @@ const ProductListController = (
     return [];
   };
   const [product, setProduct] = useState<ProductList>([]);
-
   const [showSortMenu, setShowSortMenu] = useState(false);
   const [productView, setProductView] = useState('grid');
   const [showFilter, setShowFilter] = useState(false);

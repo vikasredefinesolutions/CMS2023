@@ -7,6 +7,7 @@ import {
 import { placeOrder } from '@services/checkout.service';
 
 import { UserAddressType } from '@constants/enum';
+import { HEALTHYPOINTS, UCA } from '@constants/global.constant';
 import { AddressAPIRequest } from '@definations/APIs/address.req';
 import getLocation, { _location } from '@helpers/getLocation';
 import { CreateUserAddress } from '@services/address.service';
@@ -29,8 +30,9 @@ interface _Props {
     subTotal: number;
     tax: number;
     couponDiscount: number;
-    creditBalance: number;
-    total: () => number;
+    creditBalance: () => number;
+    giftCardAmount: () => number;
+    totalToSend: () => number;
   };
 }
 
@@ -44,6 +46,7 @@ const CO7_PlaceOrderBtn: React.FC<_Props> = ({ shippingAddress, cost }) => {
   const { address, payment, user } = useTypedSelector_v2(
     (state) => state.checkout,
   );
+  const { code: storeCode } = useTypedSelector_v2((state) => state.store);
   const { shipping: existingShippingAddress, billing: existingBillingAddress } =
     address;
 
@@ -230,14 +233,18 @@ const CO7_PlaceOrderBtn: React.FC<_Props> = ({ shippingAddress, cost }) => {
       orderSubtotal: cost.subTotal,
       orderShippingCosts: cost.shippingNhandling,
       orderTax: cost.tax,
-      orderTotal: cost.total(),
+      orderTotal: cost.totalToSend(),
 
       // credit
-      storeCredit: payment.useCreditBalance ? user.creditBalance : 0,
-      isCreditLimit: user.creditBalance > 0,
+      storeCredit: cost.creditBalance(),
+      isCreditLimit: payment.useCreditBalance,
+
+      // GiftCard
+      giftCertiSerialNumber: discount?.giftCard || '',
+      giftCertificateDiscountAmount: cost.giftCardAmount(),
+
       //
       orderSmallRunFee: 0,
-      giftCertificateDiscountAmount: 0,
       quantityDiscountAmount: 0,
       levelDiscountPercent: 0,
       levelDiscountAmount: 0,
@@ -280,7 +287,6 @@ const CO7_PlaceOrderBtn: React.FC<_Props> = ({ shippingAddress, cost }) => {
       notes: '',
       okToEmail: true,
       lastIPAddress: '',
-      giftCertiSerialNumber: '',
       authorizationCode: '',
       authorizationResult: '',
       transactionCommand: '',
@@ -346,21 +352,21 @@ const CO7_PlaceOrderBtn: React.FC<_Props> = ({ shippingAddress, cost }) => {
   };
 
   return (
-    <div className=''>
-      <div className='mt-[16px] mb-[16px]'>
+    <>
+      <div className='px-[15px] pb-[15px] '>
         <button
-          className='btn btn-lg btn-primary w-full text-center'
+          className={`btn btn-lg ${
+            storeCode === UCA ? 'btn-secondary' : 'btn-primary'
+          } w-full text-center`}
           onClick={handlePlaceOrder}
         >
+          {(storeCode === UCA || storeCode === HEALTHYPOINTS) && (
+            <i className='fa-solid fa-lock mr-[4px]'></i>
+          )}
           PLACE ORDER NOW
         </button>
       </div>
-      <div className='mb-[16px]'>
-        <div className='text-[#ff0000] mb-[10px] text-default-text font-semibold text-center'>
-          Note: Please do not click "Place Order Now" multiple times.
-        </div>
-      </div>
-    </div>
+    </>
   );
 };
 

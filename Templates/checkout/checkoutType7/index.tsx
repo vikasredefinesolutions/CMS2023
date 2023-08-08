@@ -50,6 +50,7 @@ import {
 import { placeOrder as placeOrderService } from '@services/checkout.service';
 import AddressFormPk from './components/Form';
 
+import NxtImage from '@appComponents/reUsable/Image';
 import Input from '@appComponents/ui/switch/Input';
 import { _Store } from '@configs/page.config';
 import { __messages } from '@constants/form.config';
@@ -115,7 +116,7 @@ const ChekoutType7: FC<_Props> = ({ templateId }) => {
     password: yup.string().required(__messages.password.required).nullable(),
   });
   const checkCustomEmail = (email: string, domain: 'usaa' | 'simplisafe') => {
-    const result = new RegExp("^\\w+([-+.']w+)*@" + domain + '.com$').test(
+    const result = new RegExp(`[a-zA-Z0-9._%+-]+@` + domain + `\.com$`).test(
       email.trim(),
     );
     if (
@@ -965,13 +966,6 @@ const ChekoutType7: FC<_Props> = ({ templateId }) => {
 
   const storeCode = useTypedSelector_v2((state) => state.store.code);
 
-  useEffect(() => {
-    console.log(
-      'ShippingFormik.values.postalCode',
-      ShippingFormik.values.postalCode,
-    );
-  }, []);
-
   return (
     <section className='mt-[20px]'>
       <div className='bg-white'>
@@ -981,7 +975,13 @@ const ChekoutType7: FC<_Props> = ({ templateId }) => {
               <>
                 <div className='w-full lg:w-6/12 md:w-6/12 pl-[15px] pr-[15px]'>
                   <div className='p-[15px] bg-light-gray'>
-                    <div className='pb-[10px] text-title-text text-center'>
+                    <div
+                      className={`${
+                        storeCode == SIMPLI_SAFE_CODE
+                          ? 'pb-[15px]'
+                          : 'pb-[10px]'
+                      } text-title-text text-center`}
+                    >
                       {__pagesText.productInfo.loginModal.signIn}
                     </div>
                     <Formik
@@ -1373,7 +1373,8 @@ const ChekoutType7: FC<_Props> = ({ templateId }) => {
                                 </div>
                                 <div className='pt-[10px] pb-[10px]'>
                                   <div className='w-10'>
-                                    <img
+                                    <NxtImage
+                                      isStatic={true}
                                       src='/secure-card-hover.png'
                                       alt='lockimage'
                                       className=''
@@ -1395,7 +1396,8 @@ const ChekoutType7: FC<_Props> = ({ templateId }) => {
                                   </div>
                                   <div className='pt-[10px] pb-[10px]'>
                                     <div className='w-10'>
-                                      <img
+                                      <NxtImage
+                                        isStatic={true}
                                         src='/secure-card.jpg'
                                         alt='lockimage'
                                         className=''
@@ -1456,7 +1458,8 @@ const ChekoutType7: FC<_Props> = ({ templateId }) => {
                             <div className='bg-[#d4d4d4] w-full mb-[30px]'>
                               <div className='pl-[15px] pr-[15px] pt-[15px] pb-[15px] text-center'>
                                 <div className='w-28 mx-auto'>
-                                  <img
+                                  <NxtImage
+                                    isStatic={true}
                                     src={'/secure-btm.jpg'}
                                     alt=''
                                     className='w-full max-h-[100px]'

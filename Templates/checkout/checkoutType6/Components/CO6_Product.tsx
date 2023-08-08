@@ -48,7 +48,10 @@ const CO6_Product: React.FC<_Props> = ({ item }) => {
 
   const deleteProductHandler = async (cartItemId: number) => {
     const userConfirmsToDelete = confirm(cartRemoveConfirmMessage);
-    if (!userConfirmsToDelete) return;
+    if (!userConfirmsToDelete) {
+      setUpdatedInput(null);
+      return;
+    }
 
     //
     setShowLoader(true);
@@ -82,7 +85,7 @@ const CO6_Product: React.FC<_Props> = ({ item }) => {
       .finally(() => setShowLoader(false));
   };
 
-  const deleteSizeHandler = (product: ShoppingCartItemDetailsViewModel) => {
+  const deleteSizeHandler = (productId: number) => {
     if (item.shoppingCartItemDetailsViewModels.length === 1) {
       deleteProductHandler(item.shoppingCartItemsId);
       return;
@@ -90,13 +93,16 @@ const CO6_Product: React.FC<_Props> = ({ item }) => {
 
     //
     const confirmRes = confirm(cartRemoveConfirmMessage);
-    if (!confirmRes) return;
+    if (!confirmRes) {
+      setUpdatedInput(null);
+      return;
+    }
 
     //
     setShowLoader(true);
     removeParticularSizeProduct({
       deletecartlogopersonmodel: {
-        cartLogoPersonId: product.id,
+        cartLogoPersonId: productId,
         attributeOptionId: +item.attributeOptionId,
       },
     })
@@ -125,6 +131,11 @@ const CO6_Product: React.FC<_Props> = ({ item }) => {
       return;
     }
 
+    if (updatedInput.newQty === 0) {
+      deleteSizeHandler(updatedInput.id);
+      return;
+    }
+
     //
     setShowLoader(true);
     updateCartQuantity({
@@ -141,7 +152,6 @@ const CO6_Product: React.FC<_Props> = ({ item }) => {
         return updateCart();
       })
       .catch((error) => {
-        console.log('Error ===>', error);
         showModal({
           message: commonMessage.somethingWentWrong,
           title: commonMessage.failed,
@@ -170,6 +180,7 @@ const CO6_Product: React.FC<_Props> = ({ item }) => {
               src={item.colorImage || '/assets/images/image_not_available.jpg'}
               alt={item.productName}
               className=''
+              useNextImage={false}
               isStatic={!Boolean(item.colorImage)}
             />
           </a>
@@ -248,8 +259,10 @@ const CO6_Product: React.FC<_Props> = ({ item }) => {
                       <Price value={product.price} />
                     </div>
                     <div className='text-default-text w-10 text-right'>
-                      <a href="javascript:void(0)" title="Remove"
-                        onClick={() => deleteSizeHandler(product)}
+                      <a
+                        href='javascript:void(0)'
+                        title='Remove'
+                        onClick={() => deleteSizeHandler(product.id)}
                         className=''
                       >
                         <span className='material-icons-outlined'>delete</span>

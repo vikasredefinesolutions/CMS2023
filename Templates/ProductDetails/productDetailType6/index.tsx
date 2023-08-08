@@ -146,13 +146,15 @@ const ProductDetails_Type6: React.FC<_Props> = (product) => {
         if (val === 'youmayalsolike') {
           return (
             <div key={val + index}>
-              <YouMayAlsoLike product={product.alike} id='3' />;
+              <YouMayAlsoLike product={product.alike} id='3' />
             </div>
           );
         } else if (val === 'writereview') {
           return (
             <div key={val + index}>
               <Reviews
+                ratings={product.ratings}
+                reviews={product.reviews}
                 storeCode={product.storeCode}
                 productId={product?.details?.id ? product.details.id : 0}
               />

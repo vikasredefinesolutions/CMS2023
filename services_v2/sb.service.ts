@@ -497,8 +497,9 @@ export const SaveSbStreCartProductCustomFieldValues = async (
 
 export const FetchSbStoreCartDetails = async (
   customerId: number,
+  isEmployeeLoggedIn: boolean = false,
 ): Promise<_CartItem[] | null> => {
-  const url = `Store/GetShoppingCartItemsDetail/${customerId}/false.json`;
+  const url = `Store/GetShoppingCartItemsDetail/${customerId}/${isEmployeeLoggedIn}.json`;
 
   const response = await CallAPI_v2<_CartItem[] | null>({
     name: {

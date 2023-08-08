@@ -58,7 +58,7 @@ const SubMenuItem: React.FC<_props> = ({
           onClick={() => toggleSideMenu('CLOSE')}
         >
           <Link
-            href={`/${itemUrl}`}
+            href={`/${itemUrl}/`}
             className='text-anchor hover:text-anchor-hover '
           >
             <a
@@ -118,7 +118,7 @@ const SubMenuItem: React.FC<_props> = ({
                 href='javascript:void(0);'
                 onClick={() => toggleSideMenu('CLOSE')}
               >
-                <Link href={`/${itemUrl}`}>
+                <Link href={`/${itemUrl}/`}>
                   {__pagesText.Headers.mobileViewAll}
                 </Link>
               </a>
@@ -159,7 +159,7 @@ const SubMenuItem: React.FC<_props> = ({
         >
           {/* <span className='material-icons-outlined text-lg'>chevron_right</span> */}
           <Link
-            href={`/${itemUrl}`}
+            href={`/${itemUrl}/`}
             className='text-anchor hover:text-anchor-hover'
           >
             <a

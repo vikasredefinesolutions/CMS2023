@@ -41,6 +41,9 @@ export const __LocalStorage = {
   empData: 'empData',
   empGuest: 'empGuest',
   guestEmailID: 'guestEmailID',
+  thirdPartyServiceName: 'thirdPartyServiceName',
+  Productselected: 'productselected',
+  Productlistindex: 'productlistindex',
 };
 
 export enum __SessionStorage {
@@ -57,9 +60,11 @@ export const __UserMessages = {
     SuccessFullyAccountCreated: 'Account Created Successfully!!!',
     SuccessFullyAccountCreated_PKHG:
       'Thank you for registering to shop exclusive, co-branded patagonia gear for your group. Our sales team is reviewing your request, and will send a welcome email within 1-2 business days approving your account. In the meantime, please contact ParsonsKellogg with any questions you might have about co-branding with Patagonia gear.',
+    SuccessFullyAccountCreated_PMCG: `Thanks for signing up, our team has received your new customer account request. Please allow 1-2 business days for review and approval. Our team may reach out to learn more about your request, and your interests in Peter Millar Corporate Gear.`,
   },
 };
 export const perPageCount = 18;
+export const listingProductsCount = 18;
 export const maximumWordsForChestLogoPersonalization: number = 26;
 export const maximumWordsForSleeveLogoPersonalization: number = 20;
 
@@ -102,6 +107,7 @@ export const CG_STORE_CODE = 5;
 export const GG_STORE_CODE = 6;
 export const PKHG_STORE_CODE = 7;
 export const DI_STORE_CODE = 8;
+export const PTML_STORE_CODE = 9;
 export const PORSCHE = 'PORSCHE';
 
 export const THD_STORE_CODE = 'THD';
@@ -111,11 +117,18 @@ export const UNITI_CODE = 'Uniti';
 export const SIMPLI_SAFE_CODE = 'SMH';
 export const UCA = 'UCA';
 export const HEALTHYPOINTS = 'UHP';
+export const BOSTONBEAR = 'BB';
 
 export const PKHG_MINIMUM_QTY = 10;
 
 export enum _Store_CODES {
   PKHG = 'PKHG',
+  UNITi = 'Uniti',
+  PORSCHE = 'PORSCHE',
+  PETERMILLAR = 'PMCG',
+  USAAHEALTHYPOINTS = 'UHP',
+  USAACLAIMS = 'UCA',
+  BCGG = 'BCGG',
 }
 
 export const states: Option[] = [
@@ -268,3 +281,12 @@ export const formFields: any = [
     isRequired: false,
   },
 ];
+
+export const customRequestStoreTypes: Map<string, string> = new Map([
+  ['CG', '1'],
+  ['PKHG', '3'],
+  ['DI', '1'],
+  ['GG', '5'],
+  ['SMH', '4'],
+  ['Uniti', '4'],
+]);

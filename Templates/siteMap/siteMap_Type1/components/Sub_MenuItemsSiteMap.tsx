@@ -15,8 +15,8 @@ const Sub_MenuItemsSiteMap: React.FC<_props> = ({ subRow }) => {
             key={index}
             className='relative ml-[35px] before:bg-[#dfdfdf] before:h-px before:w-[42px] before:absolute before:-left-[55px] before:top-2.5 my-[15px]'
           >
-            <Link href={el.sename}>
-              <a className='text-[#415364] hover:text-[#7bc24e] before:absolute before:bg-[#415364] before:rounded-full before:w-[6px] before:h-[6px] before:mr-3 before:mt-2 before:ml-[-14px] before:inline-block'>
+            <Link href={`${el.sename}.html`}>
+              <a title={el.name} className='text-[#415364] hover:text-[#7bc24e] before:absolute before:bg-[#415364] before:rounded-full before:w-[6px] before:h-[6px] before:mr-3 before:mt-2 before:ml-[-14px] before:inline-block'>
                 {el.name}
               </a>
             </Link>

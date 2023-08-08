@@ -1,5 +1,9 @@
 import AddAddressModal from '@appComponents/modals/addAddressModal';
-import { checkoutPages, UserAddressType } from '@constants/enum';
+import {
+  checkoutPages,
+  paymentMethodCustom,
+  UserAddressType,
+} from '@constants/enum';
 import { __pagesText } from '@constants/pages.text';
 import CartItem from '@templates/cartItem';
 import AddAddress from './components/AddAddressType1';
@@ -16,10 +20,10 @@ import CheckoutController, {
   _shippingMethod,
 } from '@controllers/checkoutController';
 import { GetCartTotals, useTypedSelector_v2 } from '@hooks_v2/index';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { _globalStore } from 'store.global';
 import CT1_EL_Dropdowns from './components/CO1_EL_Dropdowns';
 import OrderSummaryType1 from './OrderSummary';
-
 interface _Props {
   templateId: number;
 }
@@ -73,14 +77,39 @@ const ChekoutType1: React.FC<_Props> = ({ templateId }) => {
     (state) => !!state.employee.empId,
   );
   const { el: employeeLogin } = useTypedSelector_v2((state) => state.checkout);
+  const [disable, setDisable] = useState<boolean>(true);
 
-  const disablePlaceOrder = (): boolean => {
+  const disablePlaceOrder = () => {
     let disable = false;
     if (isEmployeeLoggedIn) {
       disable = !!!employeeLogin.salesRep.value;
     }
-
     return disable;
+  };
+
+  const disableReviewOrder = () => {
+    setDisable(true);
+    if (paymentMethod === paymentMethodCustom.creditCard) {
+      if (
+        cardDetails.cardNumber !== '' &&
+        cardDetails.cardExpirationMonth !== '' &&
+        cardDetails.cardExpirationYear !== '' &&
+        cardDetails.cardVarificationCode !== ''
+      ) {
+        setDisable(false);
+      } else {
+        setDisable(true);
+      }
+    }
+    if (
+      paymentMethod === paymentMethodCustom.purchaseOrder &&
+      purchaseOrder.length > 0
+    ) {
+      setDisable(false);
+    }
+    if (employeeLogin && employeeLogin.isPaymentPending) {
+      setDisable(false);
+    }
   };
 
   useEffect(() => {
@@ -101,7 +130,20 @@ const ChekoutType1: React.FC<_Props> = ({ templateId }) => {
       }
     }
   }, [totalPrice, shippingAdress]);
-
+  useEffect(() => {
+    disableReviewOrder();
+  }, [
+    paymentMethod,
+    purchaseOrder,
+    cardDetails,
+    employeeLogin.isPaymentPending,
+  ]);
+  const clientSideMediaBaseUrl = useTypedSelector_v2(
+    (state) => state.store.mediaBaseUrl,
+  );
+  let mediaBaseUrl = _globalStore.blobUrl; // for server side
+  mediaBaseUrl = mediaBaseUrl || clientSideMediaBaseUrl;
+  const storeId = useTypedSelector_v2((state) => state.store.id);
   return (
     <>
       {' '}
@@ -207,6 +249,7 @@ const ChekoutType1: React.FC<_Props> = ({ templateId }) => {
                                         } ml-[4px] w-[32px]`}
                                       >
                                         <NxtImage
+                                          // TEST: isStatic
                                           isStatic={true}
                                           className=''
                                           src={res.url}
@@ -216,7 +259,12 @@ const ChekoutType1: React.FC<_Props> = ({ templateId }) => {
                                     ))}
                                   </div>
                                   <div>
-                                    <p>{cardDetails.cardNumber}</p>
+                                    <p className='ml-[10px]'>
+                                      {' '}
+                                      {cardDetails.cardNumber.substr(
+                                        cardDetails.cardNumber.length - 4,
+                                      )}
+                                    </p>
                                     <p>{`${cardDetails.cardExpirationMonth}/${cardDetails.cardExpirationYear}`}</p>
                                   </div>
                                 </div>
@@ -244,7 +292,7 @@ const ChekoutType1: React.FC<_Props> = ({ templateId }) => {
                         </div>
                         <div className='flex flex-wrap items-center justify-between pt-[10px]'>
                           <div className='pb-[10px] text-default-text'>
-                            {shippingMethod &&
+                            {shippingMethod.length > 0 &&
                               shippingMethod[0].name !== '' &&
                               shippingMethod.map(
                                 (el: _shippingMethod, index: number) => (
@@ -388,7 +436,10 @@ const ChekoutType1: React.FC<_Props> = ({ templateId }) => {
                   <div className='text-title-text mr-[15px] font-semibold'>
                     Checkout
                   </div>
-                  <div className='text-[#8b0520] text-medium-text tracking-normal'>
+                  <div
+                    className=' text-medium-text tracking-normal '
+                    style={{ color: 'red' }}
+                  >
                     All fields marked * are required.
                   </div>
                 </div>
@@ -497,8 +548,13 @@ const ChekoutType1: React.FC<_Props> = ({ templateId }) => {
             {currentPage === checkoutPages.address && (
               <div className=''>
                 <button
-                  className='btn btn-lg !w-full text-center btn-secondary mb-[8px]'
+                  className={`btn btn-lg !w-full text-center mb-[8px] ${
+                    disable
+                      ? 'bg-light-gray opacity-50 cursor-not-allowed'
+                      : 'cursor-pointer btn-secondary'
+                  }`}
                   id='btn-review-order'
+                  disabled={disable}
                   onClick={() => {
                     reviewOrder();
                   }}
@@ -528,6 +584,7 @@ const ChekoutType1: React.FC<_Props> = ({ templateId }) => {
                   alt=''
                   className='mr-2 w-5 h-5'
                 />
+
                 <span className='text-2xl font-semibold'>Order Risk-Free!</span>
               </div>
               <div className='flex items-center justify-center text-base text-center mt-3 font-semibold'>

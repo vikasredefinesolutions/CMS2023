@@ -6,7 +6,7 @@ const ProductCompanion: React.FC<_ProductCompanion> = ({ product }) => {
   const router = useRouter();
   const goToProduct = (seName: string | null) => {
     if (seName === null) return;
-    router.push(`${seName}`);
+    router.push(`${seName}.html`);
   };
   return (
     <>

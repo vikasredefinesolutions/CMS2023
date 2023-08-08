@@ -79,7 +79,7 @@ const BreadCrumb_Type1: NextPage<_BreadCrumbProps> = ({
                           href={item.url}
                           className='inline-flex items-center'
                         >
-                          <a className='ml-[6px] text-anchor !no-underline'>
+                          <a className='ml-[6px] text-anchor !no-underline' title={item.name}>
                             {item.name}
                           </a>
                         </Link>
@@ -97,7 +97,7 @@ const BreadCrumb_Type1: NextPage<_BreadCrumbProps> = ({
                   className='inline-block'
                   // height={100}
                   // width={100}
-                  alt=''
+                  alt={product.brand?.name || ''}
                   useNextImage={false}
                 />
               </div>

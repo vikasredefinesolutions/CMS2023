@@ -68,7 +68,6 @@ const CustomizeLogo: NextPage = () => {
             smallRunFeesCharges: res.smallRunFeesCharges,
             productId: res.productId,
           });
-          clearLogoUploadHistory(res?.subRow);
         }
       });
     }

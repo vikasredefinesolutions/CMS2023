@@ -35,7 +35,7 @@ export const GetStoryList = async (payload: {
 
 export const GetStoriesByCategoryURL = async (payload: {
   storeId: number;
-  pageType: __pageTypeConstant.stories;
+  pageType: __pageTypeConstant.blog;
   categoryurl: string;
 }) => {
   const url = '/CmsTopicsPublish/getstoriesbycategory.json';

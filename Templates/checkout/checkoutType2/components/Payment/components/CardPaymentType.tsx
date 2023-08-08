@@ -14,11 +14,7 @@ const CardPaymentType: paymentProps = ({
   cardDetails,
   purchaseOrder,
 }) => {
-  const [showCardHelp, setShowCardHelp] = useState(false);
   const [checkCard, setcardCheck] = useState(false);
-  const [input, setInput] = useState<number | string>(
-    cardDetails?.cardNumber ? cardDetails?.cardNumber : '',
-  );
   const [cvv, setcvv] = useState<number | string>(
     cardDetails?.cardVarificationCode ? cardDetails?.cardVarificationCode : '',
   );
@@ -28,48 +24,45 @@ const CardPaymentType: paymentProps = ({
   >('no');
   const { blockInvalidChar } = CheckoutController();
 
-  const isEmployeeLoggedIn = useTypedSelector_v2(
-    (state) => !!state.employee.empId,
-  );
   const { el: employeeLogin } = useTypedSelector_v2((state) => state.checkout);
   const [cardName, setCardName] = useState<boolean>(false);
   const [cardImage, setCardImage] = useState<boolean>(false);
 
   const handleCVV = (e: any) => {
-    const regex = new RegExp('[0-9]').test(e.target.value);
+    const regex = new RegExp('[0-9]').test(e.currentTarget.value);
     if (!regex) {
       setcvv('');
       setcardValidation({
         ...cardValidation,
-        [e.target.name]: '',
+        [e.currentTarget.name]: '',
       });
       return;
     } else {
-      if (e.target.value.length < e.target.maxLength + 1) {
+      if (e.currentTarget.value.length < e.currentTarget.maxLength + 1) {
         setcardValidation({
           ...cardValidation,
-          [e.target.name]: e.target.value,
+          [e.currentTarget.name]: e.currentTarget.value,
         });
-        setcvv(e.target.value);
+        setcvv(e.currentTarget.value);
       }
     }
   };
 
   const handleCard = (e: any) => {
-    if (!Number(e.target.value) || e.target.value.length == 0) {
+    if (!Number(e.currentTarget.value) || e.currentTarget.value.length == 0) {
       setcardCheck(false);
       setcardValidation({
         ...cardValidation,
-        [e.target.name]: '',
+        [e.currentTarget.name]: '',
       });
       return;
     } else {
       const type = detectCardType && detectCardType();
       setcardCheck(true);
-      if (e.target.value.length < e.target.maxLength + 1) {
+      if (e.currentTarget.value.length < e.currentTarget.maxLength + 1) {
         setcardValidation({
           ...cardValidation,
-          [e.target.name]: e.target.value,
+          [e.currentTarget.name]: e.currentTarget.value,
         });
       }
     }
@@ -142,14 +135,24 @@ const CardPaymentType: paymentProps = ({
           <div className='flex flex-wrap justify-between items-center'>
             <input
               type='text'
-              onChange={(e) =>
+              autoComplete='cc-name'
+              onInput={(e) => {
                 setcardValidation({
                   ...cardValidation,
-                  [e.target.name]: e.target.value,
+                  [e.currentTarget.name]: e.currentTarget.value,
+                });
+                changeHandler({
+                  name: e.currentTarget.name,
+                  value: e.currentTarget.value,
+                });
+              }}
+              onFocus={() => setCardName(true)}
+              onBlur={(e) =>
+                changeHandler({
+                  name: e.target.name,
+                  value: e.target.value,
                 })
               }
-              onFocus={() => setCardName(true)}
-              onBlur={changeHandler}
               value={cardValidation.creditCardHolder}
               name='creditCardHolder'
               required={true}
@@ -190,14 +193,23 @@ const CardPaymentType: paymentProps = ({
           </label>
           <div className='flex justify-between items-center'>
             <input
-              onBlur={changeHandler}
+              id='cardNumber'
+              onBlur={(e) => {
+                changeHandler({
+                  name: e.target.name,
+                  value: e.target.value,
+                });
+              }}
+              autoComplete='cc-number'
               onKeyDown={blockInvalidChar}
-              onChange={(e) => {
-                changeHandler(e);
+              onInput={(e) => {
+                changeHandler({
+                  name: e.currentTarget.name,
+                  value: e.currentTarget.value,
+                });
                 handleCard(e);
               }}
               onFocus={() => setCardImage(true)}
-              autoComplete='off'
               onContextMenu={(e) => e.preventDefault()}
               name='cardNumber'
               placeholder=' '
@@ -256,7 +268,7 @@ const CardPaymentType: paymentProps = ({
       <div className='flex flex-wrap ml-[-15px] mr-[-15px]'>
         <div className='mb-[15px] w-full md:w-6/12 pl-[15px] pr-[15px]'>
           <label
-            htmlFor='creditCardHolder'
+            htmlFor='creditCardMonth'
             className='mb-[4px] text-normal-text'
           >
             Expiration Date*
@@ -265,14 +277,25 @@ const CardPaymentType: paymentProps = ({
             <div className='flex items-center justify-start w-full'>
               <div className='flex flex-wrap justify-between items-center w-full'>
                 <input
+                  id='creditCardMonth'
                   type='text'
-                  onBlur={changeHandler}
+                  autoComplete='cc-exp-month'
+                  onBlur={(e) =>
+                    changeHandler({
+                      name: e.target.name,
+                      value: e.target.value,
+                    })
+                  }
                   onKeyDown={blockInvalidChar}
-                  onChange={(e) => {
-                    if (+e.target.value < 13) {
+                  onInput={(e) => {
+                    if (+e.currentTarget.value < 13) {
                       setcardValidation({
                         ...cardValidation,
-                        [e.target.name]: e.target.value,
+                        [e.currentTarget.name]: e.currentTarget.value,
+                      });
+                      changeHandler({
+                        name: e.currentTarget.name,
+                        value: e.currentTarget.value,
                       });
                     }
                   }}
@@ -312,14 +335,24 @@ const CardPaymentType: paymentProps = ({
             <div className='ml-[5px] mr-[5px]'>/</div>
             <div className='flex flex-wrap justify-between items-center w-full'>
               <input
-                onBlur={changeHandler}
-                onChange={(e) => {
+                onBlur={(e) =>
+                  changeHandler({
+                    name: e.target.name,
+                    value: e.target.value,
+                  })
+                }
+                onInput={(e) => {
                   setcardValidation({
                     ...cardValidation,
-                    [e.target.name]: `20${e.target.value}`,
+                    [e.currentTarget.name]: `20${e.currentTarget.value}`,
+                  });
+                  changeHandler({
+                    name: e.currentTarget.name,
+                    value: e.currentTarget.value,
                   });
                 }}
                 name='cardExpirationYear'
+                autoComplete='cc-exp-year'
                 onKeyDown={blockInvalidChar}
                 disabled={employeeLogin.isPaymentPending}
                 value={cardValidation.cardExpirationYear.slice(2)}
@@ -362,10 +395,23 @@ const CardPaymentType: paymentProps = ({
           </label>
           <div className='flex flex-wrap justify-between items-center'>
             <input
+              id='SecurityCode'
               type='number'
               onKeyDown={blockInvalidChar}
-              onBlur={changeHandler}
-              onChange={handleCVV}
+              onBlur={(e) =>
+                changeHandler({
+                  name: e.target.name,
+                  value: e.target.value,
+                })
+              }
+              onInput={(e) => {
+                handleCVV(e);
+                changeHandler({
+                  name: e.currentTarget.name,
+                  value: e.currentTarget.value,
+                });
+              }}
+              autoComplete='cc-csc'
               name='cardVarificationCode'
               maxLength={
                 +`${detectCardType && detectCardType() === 'AMEX' ? 4 : 3}`

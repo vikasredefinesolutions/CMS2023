@@ -29,6 +29,16 @@ yarn-error.log*
 .env.development.local
 .env.test.local
 .env.production.local
+.env.production
+.env.development
+
+
+#robots.txt
+/public/robots.tx
+
+#config files
+/configs_v2/page.config.js
+
 
 # vercel
 .vercel

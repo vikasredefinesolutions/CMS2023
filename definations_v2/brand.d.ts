@@ -6,11 +6,21 @@ export interface _Brand {
   brandName: string;
   seName: string;
   brandColorImageUrl: string;
-  brandCollectionUrl: null;
+  brandCollectionUrl: string;
   brandBlackColorImageUrl: string;
   isBrandOnline: boolean;
 }
-
+export interface _BrandWithProductCount {
+  catalogdetails: any;
+  id: number;
+  brandName: string;
+  seName: string;
+  brandColorImageUrl: string;
+  brandCollectionUrl: string;
+  brandBlackColorImageUrl: string;
+  isBrandOnline: boolean;
+  prodcutcount: number;
+}
 export interface _BrandProps {
   brands: _Brand[] | null;
   alphabets: string[];

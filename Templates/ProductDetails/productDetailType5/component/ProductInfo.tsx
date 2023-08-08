@@ -12,6 +12,7 @@ import {
   _ProductDoNotExist,
 } from '@definations/APIs/productDetail.res';
 // import { _ProductColor } from '@definations/APIs/colors.res';
+import NxtImage from '@appComponents/reUsable/Image';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import {
   FetchColors,
@@ -164,6 +165,19 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
   };
 
   const selected = useTypedSelector_v2((state) => state.product.selected);
+
+  // const checkZero = (pr: string): boolean => {
+  //   let hasZero = false;
+  //   const digits = pr.split('.');
+  //   if (digits.length === 2) {
+  //     if (parseInt(digits[1]) === 0) {
+  //       hasZero = true;
+  //     }
+  //   }
+
+  //   return hasZero;
+  // };
+
   return (
     <>
       {/* need to change call */}
@@ -180,7 +194,8 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
             <div className=''>
               <a className='inline-flex items-center gap-[5px] font-medium tracking-[1px] '>
                 <span>
-                  <img
+                  <NxtImage
+                    isStatic={true}
                     src='assets/images/personalize-icon.png'
                     className='max-h-6'
                     alt=''
@@ -206,7 +221,7 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
               {' '}
               {__pagesText.productInfo.msrp}
             </span>
-
+            <span>:</span>{' '}
             <span className='ml-[8px]'>
               <Price
                 value={undefined}
@@ -214,7 +229,7 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
                   msrp: product ? product.msrp : 0,
                   salePrice: product ? product.salePrice : 0,
                 }}
-                addColon={true}
+                addColon={false}
               />{' '}
             </span>
           </div>
@@ -238,7 +253,7 @@ const ProductInfo: React.FC<_ProductInfoProps> = ({ product, storeCode }) => {
             data-modal-toggle='FitandSize'
             onClick={() => modalHandler('sizeChart')}
           >
-            <img src={'/assets/images/size-chart.jpg'} alt={'Fit and Size'} />
+            <NxtImage isStatic={true}  src={'/assets/images/size-chart.jpg'} alt={'Fit and Size'} />
           </a>{' '}
         </div> */}
 

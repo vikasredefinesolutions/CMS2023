@@ -157,19 +157,6 @@ export interface _HeaderProps {
   headerTransparent: boolean;
   headerContainer: boolean;
 }
-export interface _HeaderPropsWithTemplateid {
-  storeCode: string;
-  logoUrl: {
-    desktop: string;
-  };
-  menuItems: _MenuItems | null | _MenuItemsWithBrand;
-  headerTemplateId: string;
-  headerBgColor: string;
-  headerTextColor: string;
-  headerTransparent: boolean;
-  headerContainer: boolean;
-  announcementRow?: _AnnouncementRow[];
-}
 
 export interface _AnnouncementRow {
   isVisible: boolean;
@@ -190,4 +177,5 @@ export interface _HeaderTemplates {
   type7: NextPage<_HeaderProps, _HeaderProps>;
   type8: NextPage<_HeaderProps, _HeaderProps>;
   type9: NextPage<_HeaderProps, _HeaderProps>;
+  type10: NextPage<_HeaderProps, _HeaderProps>;
 }

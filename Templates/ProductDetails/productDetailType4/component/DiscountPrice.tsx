@@ -4,19 +4,15 @@ import { useTypedSelector_v2 } from '@hooks_v2/index';
 import React from 'react';
 
 interface _props {
-  ourCost: number;
-  msrp: number;
-  imap: number;
   salePrice: number;
+  averagePrice: number;
 }
 
 const DiscountPrice: React.FC<_props & { storeCode: string }> = ({
-  msrp,
   salePrice,
-  storeCode,
+  averagePrice,
 }) => {
   const loggedIn = useTypedSelector_v2((state) => state.user.id);
-  const { price } = useTypedSelector_v2((state) => state.product.toCheckout);
 
   if (!loggedIn) {
     return (
@@ -36,7 +32,7 @@ const DiscountPrice: React.FC<_props & { storeCode: string }> = ({
       </span>{' '}
       <span className='font-semibold'>
         {' '}
-        <Price value={price ? price : msrp} />
+        <Price value={averagePrice} />
       </span>
     </>
   );

@@ -1,5 +1,6 @@
+import { SIMPLI_SAFE_CODE } from '@constants/global.constant';
 import { _Brand } from '@definations/brand';
-import { useActions_v2 } from '@hooks_v2/index';
+import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import {
   FetchBrands,
   FetchSiteMapCategories,
@@ -25,6 +26,8 @@ const SiteMap: NextPage<_siteMapProps> = ({ id, store }) => {
   const [brandItems, setBrandItems] = useState<_Brand[]>([]);
   const [categories, setCategories] = useState<_CategorySiteMap[]>([]);
   const [pageSiteMap, setpageSiteMap] = useState<_pagesSiteMap[]>([]);
+  const storeCode = useTypedSelector_v2((state) => state.store.code);
+
   useEffect(() => {
     setShowLoader(true);
     if (store?.storeId) {
@@ -33,6 +36,10 @@ const SiteMap: NextPage<_siteMapProps> = ({ id, store }) => {
       });
 
       FetchSiteMapCategories(store.storeId).then((res) => {
+        if (storeCode == SIMPLI_SAFE_CODE) {
+          const newHireKit = res.shift();
+          setCategories(res);
+        }
         setCategories(res);
       });
       FetchSiteMapPages(store.storeId).then((res) => {

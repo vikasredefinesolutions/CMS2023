@@ -34,8 +34,14 @@ const PurchaseOrderType: paymentProps = ({
           </label>
           <div className='flex justify-between items-center'>
             <input
+              maxLength={10}
               type='text'
-              onBlur={changeHandler}
+              onBlur={(e) =>
+                changeHandler({
+                  name: e.target.name,
+                  value: e.target.value,
+                })
+              }
               name='EnterPONumber'
               required={true}
               className='form-input !w-[calc(100%-40px)]'

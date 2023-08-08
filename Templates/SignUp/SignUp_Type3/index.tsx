@@ -1,26 +1,47 @@
-import { __UserMessages } from '@constants/global.constant';
+import { __Cookie_Expiry } from '@constants/common.constant';
+import { __Cookie, __UserMessages } from '@constants/global.constant';
+import { paths } from '@constants/paths.constant';
+import {
+  deleteCookie,
+  extractCookies,
+  KlaviyoScriptTag,
+  setCookie,
+} from '@helpers/common.helper';
 import getLocation from '@helpers/getLocation';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
+import { updateCartByNewUserId } from '@services/cart.service';
 import { FetchCountriesList, FetchStatesList } from '@services/general.service';
-import { CreateNewAccount } from '@services/user.service';
+import {
+  CreateNewAccount,
+  GetStoreCustomer,
+  signInUser,
+} from '@services/user.service';
+import { getWishlist } from '@services/wishlist.service';
 import { Form, Formik } from 'formik';
+import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import SU3_Input from './Components/SU3_Input';
 import {
   Option,
+  su3_initialValues,
+  _Signup3Schema,
   _SU3_Field,
   _SU3_Fields,
   _SU3_InitialValues,
-  _Signup3Schema,
-  su3_initialValues,
 } from './SU3.extras';
 
 const SignUp_type3: React.FC = () => {
   const [countries, setCountries] = useState<Option[]>([]);
   const [states, setStates] = useState<Option[]>([]);
+  const {
+    showModal,
+    updateWishListData,
+    setShowLoader,
+    updateCustomer,
+    logInUser,
+  } = useActions_v2();
   const storeId = useTypedSelector_v2((state) => state.store.id);
-  const { setShowLoader, showModal } = useActions_v2();
-
+  const router = useRouter();
   const handleFormikSubmit = async (values: _SU3_InitialValues) => {
     try {
       const location = await getLocation();
@@ -95,7 +116,58 @@ const SignUp_type3: React.FC = () => {
           title: 'Error',
         });
       }
+      signInUser({
+        userName: payload.storeCustomerModel.email,
+        password: payload.storeCustomerModel.password,
+        storeId: storeId!,
+      })
+        .then((user) => {
+          if (user.credentials === 'INVALID') {
+            // setErrorMsg(user.message);
+          }
+          if (user.credentials === 'VALID') {
+            logInUser({
+              id: +user.id,
+            });
+            setCookie(__Cookie.userId, user.id, __Cookie_Expiry.userId);
 
+            GetStoreCustomer(+user.id).then((res) => {
+              if (res === null) return;
+              if (localStorage) {
+                const tempCustomerId = extractCookies(
+                  __Cookie.tempCustomerId,
+                  'browserCookie',
+                ).tempCustomerId;
+
+                if (tempCustomerId) {
+                  updateCartByNewUserId(~~tempCustomerId, res.id);
+                  deleteCookie(__Cookie.tempCustomerId);
+                }
+              }
+
+              const userInfo = {
+                $email: res.email,
+                $first_name: res.firstname,
+                $last_name: res.lastName,
+                $phone_number: '',
+                $organization: res.companyName,
+                $title: 'title',
+                $timestamp: new Date(),
+              };
+
+              KlaviyoScriptTag(['identify', userInfo]);
+              updateCustomer({ customer: res });
+              getWishlist(res.id).then((wishListResponse) => {
+                updateWishListData(wishListResponse);
+              });
+            });
+          }
+        })
+        .finally(() => {
+          setShowLoader(false);
+          // CartController();
+        });
+      router.push(paths.HOME);
       setShowLoader(false);
     } catch (err) {
       setShowLoader(false);

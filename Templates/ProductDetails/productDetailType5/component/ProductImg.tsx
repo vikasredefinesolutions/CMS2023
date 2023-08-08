@@ -27,6 +27,11 @@ const ProductImg_Type3: React.FC<_ProductImgProps> = ({ product }) => {
   const selectedColor = useTypedSelector_v2(
     (state) => state.product?.selected.color,
   );
+  const productName = useTypedSelector_v2(
+    (state) => state.product?.product.name,
+  );
+
+ 
 
   const selectedColor2 = useTypedSelector_v2(
     (state) => state.product?.selected,
@@ -68,7 +73,7 @@ const ProductImg_Type3: React.FC<_ProductImgProps> = ({ product }) => {
       <div className='lg:hidden col-span-12'>
         <div className='text-title-text !font-bold pb-[10px]'>
           {' '}
-          Carhartt Men's Rugged Professional Series Long Sleeve Shirt{' '}
+          {productName}
         </div>
       </div>
       <span className='col-span-12 mb-[10px] text-small-text font-medium'>
@@ -142,7 +147,7 @@ const ProductImg_Type3: React.FC<_ProductImgProps> = ({ product }) => {
                 : 'border-secondary';
             return (
               <div
-                className={`border-2 mx-[5px] mb-[10px] p-[1px] w-[70px] max-h-[70px] ${highlight}`}
+                className={`border-2 mx-[5px] mb-[10px] p-[1px] w-[70px] h-[70px] border-primary text-center ${highlight}`}
                 onClick={() => setColor(product)}
                 key={product.attributeOptionId}
               >

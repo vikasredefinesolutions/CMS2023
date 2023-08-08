@@ -1,3 +1,4 @@
+import NxtImage from '@appComponents/reUsable/Image';
 import React, { useState } from 'react';
 
 interface _InputProps {
@@ -8,6 +9,7 @@ interface _InputProps {
   required: boolean;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur: (event: React.FocusEvent<HTMLInputElement, Element>) => void;
+  autoFillText: string;
 }
 
 interface _SelectProps {
@@ -26,6 +28,7 @@ interface _SelectProps {
     value: any,
     shouldValidate?: boolean | undefined,
   ) => void;
+  autoFillText: string;
 }
 
 interface _CreditCardInputProps extends _InputProps {
@@ -133,7 +136,7 @@ export const PL1_CreditCardInput: React.FC<_CreditCardInputProps> = ({
           ].map((src) => {
             return (
               <div className='opacity-40 ml-[4px] w-[32px]'>
-                <img src={src} alt='' />
+                <NxtImage src={src} className='' alt='' useNextImage={false} />
               </div>
             );
           })}
@@ -178,7 +181,17 @@ export const PL1_AddEditAddressInput: React.FC<
   _InputProps & {
     fullWidth: boolean;
   }
-> = ({ name, fullWidth, type, label, required, onBlur, onChange, value }) => {
+> = ({
+  name,
+  fullWidth,
+  type,
+  label,
+  required,
+  onBlur,
+  onChange,
+  value,
+  autoFillText,
+}) => {
   return (
     <div
       className={`w-full ${fullWidth ? '' : 'lg:w-1/2'} pl-[12px] pr-[12px]`}
@@ -190,6 +203,7 @@ export const PL1_AddEditAddressInput: React.FC<
           value={value}
           onBlur={onBlur}
           onChange={onChange}
+          autoComplete={autoFillText}
           className='pt-[15px] pb-[0px] block w-full px-[8px] h-[48px] mt-[0px] text-sub-text text-[18px] text-[#000000] bg-transparent border-0 appearance-none focus:outline-none focus:ring-0'
         />
         <label
@@ -262,6 +276,7 @@ export const PL1_AddEditAddressSelect: React.FC<
   onBlur,
   onChange,
   setFieldValue,
+  autoFillText,
 }) => {
   return (
     <div
@@ -273,6 +288,7 @@ export const PL1_AddEditAddressSelect: React.FC<
           value={value}
           onChange={onChange}
           onBlur={onBlur}
+          autoComplete={autoFillText}
           className='pt-[15px] pb-[0px] block w-full px-[8px] h-[48px] mt-[0px] text-sub-text text-[18px] text-[#000000] bg-transparent border-0 appearance-none focus:outline-none focus:ring-0'
         >
           {options.length === 0 ? (

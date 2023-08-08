@@ -19,7 +19,7 @@ const ProductCompanion_Type3: React.FC<_ProductCompanion> = ({ product }) => {
       <div className='col-span-12 md:col-start-5 md:col-span-4 text-center'>
         <div className=''>
           <NxtImage
-            src={product && product.companionProductImage}
+            src={product?.companionProductImage || null}
             alt={product && product.companionProductName}
             className=''
           ></NxtImage>

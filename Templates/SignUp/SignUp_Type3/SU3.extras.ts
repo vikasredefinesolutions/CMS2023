@@ -1,3 +1,9 @@
+import {
+  phonePattern1,
+  phonePattern2,
+  phonePattern3,
+  phonePattern4,
+} from '@constants/global.constant';
 import { __ValidationText } from '@constants/validation.text';
 import * as Yup from 'yup';
 export interface _SU3_InitialValues {
@@ -77,10 +83,25 @@ export const _Signup3Schema = Yup.object().shape({
     .trim()
     .email(__ValidationText.signUp.email.valid)
     .required(__ValidationText.signUp.email.required),
-  phone: Yup.string().required(
-    __ValidationText.signUp.storeCustomerAddress.phone.required,
-  ),
-  jobTitle: Yup.string().required(__ValidationText.signUp.jobTitle.required),
+  phone: Yup.string()
+    .required(__ValidationText.signUp.storeCustomerAddress.phone.required)
+    .test(
+      'phone-test',
+      __ValidationText.signUp.storeCustomerAddress.phone.valid,
+      (value) => {
+        if (
+          phonePattern1.test(value || '') ||
+          phonePattern2.test(value || '') ||
+          phonePattern3.test(value || '') ||
+          phonePattern4.test(value || '')
+        )
+          return true;
+        return false;
+      },
+    ),
+  jobTitle: Yup.string()
+    .trim()
+    .required(__ValidationText.signUp.jobTitle.required),
   password: Yup.string()
     .required(__ValidationText.signUp.password.required)
     .min(__ValidationText.signUp.password.minLength)

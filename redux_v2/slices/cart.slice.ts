@@ -20,7 +20,10 @@ export interface _Cart_Initials {
     coupon: string;
     amount: number;
     percentage: number;
+    giftCard: string;
+    giftCardAmt: number;
     showTextFor3Sec: boolean;
+    showTextGiftCardFor3Sec: boolean;
   } | null;
   logos: {
     details: LogoDetails[] | null;
@@ -92,11 +95,68 @@ export const cartSlice = createSlice({
       }
 
       if (payload === 'REMOVE_PROMO_CODE') {
-        state.discount = null;
+        state.discount = {
+          ...state.discount,
+          amount: 0,
+          coupon: '',
+          percentage: 0,
+          showTextFor3Sec: state?.discount?.showTextFor3Sec || false,
+          giftCard: state.discount?.giftCard || '',
+          giftCardAmt: state.discount?.giftCardAmt || 0,
+          showTextGiftCardFor3Sec:
+            state?.discount?.showTextGiftCardFor3Sec || false,
+        };
+
         return;
       }
 
-      state.discount = payload;
+      state.discount = {
+        ...state.discount,
+        ...payload,
+        giftCard: state.discount?.giftCard || '',
+        giftCardAmt: state.discount?.giftCardAmt || 0,
+        showTextGiftCardFor3Sec:
+          state?.discount?.showTextGiftCardFor3Sec || false,
+      };
+    },
+
+    cart_giftcard: (
+      state,
+      {
+        payload,
+      }: {
+        payload:
+          | {
+              giftCard: string;
+              giftCardAmt: number;
+              showTextGiftCardFor3Sec: boolean;
+            }
+          | 'HIDE_GIFT_CARD_TEXT'
+          | 'REMOVE_GIFT_CARD';
+      },
+    ) => {
+      if (payload === 'HIDE_GIFT_CARD_TEXT') {
+        state.discount!.showTextGiftCardFor3Sec = false;
+        return;
+      }
+      if (payload === 'REMOVE_GIFT_CARD') {
+        if (state.discount?.giftCard) state.discount!.giftCard = '';
+        if (state.discount?.amount)
+          state.discount!.amount =
+            state.discount!.amount - state.discount!.giftCardAmt;
+        if (state.discount?.giftCardAmt) state.discount!.giftCardAmt = 0;
+        return;
+      }
+      state.discount = {
+        ...state.discount,
+        amount: state.discount?.amount || 0,
+        giftCard: payload.giftCard,
+        giftCardAmt: payload.giftCardAmt,
+        showTextGiftCardFor3Sec: payload.showTextGiftCardFor3Sec,
+        coupon: state.discount?.coupon || '',
+        percentage: state.discount?.percentage || 0,
+        showTextFor3Sec: state.discount?.showTextFor3Sec || false,
+      };
     },
     updateSomLogo: (
       state,

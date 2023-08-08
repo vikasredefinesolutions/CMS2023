@@ -1,4 +1,5 @@
 import { _Country, _Industry, _State } from '@definations/app.type';
+import { _CreateNameTags } from '@definations/common.type';
 import { SendAsync } from '@utils/axios.util';
 import { CallAPI_v2 } from 'helpers_v2/api.helper';
 
@@ -140,4 +141,36 @@ export const SubsribeToNewsLetter = async (payload: _SubscribeToNewsletter) => {
     data: payload,
   });
   return res;
+};
+
+export const fetchDetailsByZipCode = async (payload: string) => {
+  const res = await SendAsync<any>({
+    url: `/City/getcitystatecountrybyzipCode/${payload}.json`,
+    method: 'GET',
+    data: payload,
+  });
+  return res;
+};
+
+export const customRequestPetermillar = async (payload: {
+  customerRequestModel: Record<string, string | boolean | number | Date>;
+}) => {
+  const url = `/SbStoreCustomerRequest/Create`;
+  const res = await SendAsync<any>({
+    url,
+    method: 'POST',
+    data: payload,
+  });
+  return res;
+};
+
+export const createNameTags = (paylaod: _CreateNameTags) => {
+  const url = `/nametags/createnametag.json`;
+
+  const response = SendAsync<any>({
+    url,
+    method: 'POST',
+    data: paylaod,
+  });
+  return response;
 };

@@ -259,6 +259,8 @@ export const boximage = (dataArr, selectedObj) => {
       let textVPos = '';
       let sectionWidth = '';
       let onBottom = false;
+      let fullWidth = false;
+      let fullWidthClass = '';
       var buttonHTML = '';
       if (
         item.Button_display != undefined &&
@@ -266,13 +268,18 @@ export const boximage = (dataArr, selectedObj) => {
         item.Button_text != '' &&
         item.Button_text != null
       ) {
+        if(item.Button_btn_width)
+        {
+            fullWidth = true;
+            fullWidthClass = item.Button_btn_width;
+        }
         let btnclassName = item.Button_class;
         buttonHTML += '<div class="mt-5 mb-5 ' + item.Button_alignment + '">';
         buttonHTML +=
           '<a target="" href="' +
           item.Button_link +
           '" class="' +
-          btnclassName +
+          btnclassName + ' ' + fullWidthClass + 
           '">';
         buttonHTML += item.Button_text;
         buttonHTML += '</a>';
@@ -349,7 +356,7 @@ export const boximage = (dataArr, selectedObj) => {
         headLine += '</div>';
         headLine += '</div>';
       } else if (buttonHTML) {
-        clName = 'flex relative w-full text-white';
+        clName = 'relative w-full text-white';
         headLine +=
           '<div class="flex absolute ' +
           sectionWidth +
@@ -359,7 +366,7 @@ export const boximage = (dataArr, selectedObj) => {
           textVPos +
           ' inset-0 p-1 lg:p-4 text-white">';
         headLine +=
-          '<div class="" style="background: rgba(' +
+          '<div class="'+(fullWidth ? 'w-full' : '')+'" style="background: rgba(' +
           bgColor +
           ',' +
           bgOpacity +

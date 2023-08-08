@@ -1,21 +1,45 @@
 /* eslint-disable no-unused-vars */
 import { __pagesText } from '@constants/pages.text';
 import { paths } from '@constants/paths.constant';
+import { _modals } from '@definations/product.type';
+import { _ProductRatings, _ProductReview } from '@services/review';
 import { useRouter } from 'next/router';
 import React from 'react';
 import RatingReviewDetails1 from './Components/RatingReviewDetails1';
 import RattingLayout1 from './Components/RattingLayout1';
-import { _ReviewDetailsProps } from './review';
 
-const ReviewDetails_Type1: React.FC<_ReviewDetailsProps> = ({
+interface _Props {
+  ratings: _ProductRatings | null;
+  reviews: _ProductReview[] | null;
+  productId: number;
+  storeCode: string;
+  attributeId: number;
+  userId: number | null;
+  // eslint-disable-next-line no-undef, no-unused-vars
+  modalHandler: (val: null | _modals) => void;
+}
+
+const ReviewDetails_Type1: React.FC<_Props> = ({
   storeCode,
-  reviewsCount,
+  ratings,
   modalHandler,
   userId,
   productId,
   attributeId,
+  reviews,
 }) => {
   const router = useRouter();
+  // const [reviewsDeatils, setReviewsdetails] = useState<
+  //   ProductReviewDetailsRes[]
+  // >([]);
+
+  // useEffect(() => {
+  //   if (productId) {
+  //     FetchProductReviewDetails(productId).then((details) =>
+  //       setReviewsdetails(details),
+  //     );
+  //   }
+  // }, [productId]);
 
   return (
     <>
@@ -26,12 +50,26 @@ const ReviewDetails_Type1: React.FC<_ReviewDetailsProps> = ({
               {__pagesText.review.heading}
             </div>
 
-            {reviewsCount?.totalRatingCount ? (
-              <div className='mt-[20px]'>
+            {ratings?.totalRatingCount ? (
+              <div
+                className='mt-[20px]'
+                itemProp='aggregateRating'
+                itemType='https://schema.org/AggregateRating'
+                itemScope
+              >
+                <meta
+                  itemProp='reviewCount'
+                  content={`${ratings.totalRatingCount}`}
+                />
+                <meta
+                  itemProp='ratingValue'
+                  content={`${ratings.ratingAverage}`}
+                />
                 <div className='mx-auto bg-[#051c2c] p-[20px] text-[#ffffff]'>
                   <RattingLayout1
                     storeCode={storeCode}
-                    reviewsCount={reviewsCount}
+                    ratings={ratings}
+                    reviewsDeatils={reviews}
                   />
                 </div>
               </div>
@@ -73,6 +111,7 @@ const ReviewDetails_Type1: React.FC<_ReviewDetailsProps> = ({
                       <RatingReviewDetails1
                         storeCode={storeCode}
                         productId={productId}
+                        reviewsDeatils={reviews}
                       />
                     </div>
                   </article>

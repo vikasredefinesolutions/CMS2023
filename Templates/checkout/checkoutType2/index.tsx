@@ -1,8 +1,8 @@
 import {
-  PaymentMethod,
-  UserAddressType,
   checkoutPages,
+  PaymentMethod,
   paymentMethodCustom as paymentEnum,
+  UserAddressType,
 } from '@constants/enum';
 import { __pagesText } from '@constants/pages.text';
 import {
@@ -12,19 +12,19 @@ import {
   useTypedSelector_v2,
 } from '@hooks_v2/index';
 import CartItem from '@templates/cartItem';
-import { ChangeEvent, FC, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import * as yup from 'yup';
 import OrderSummary from './components/OrderSummary';
 import PaymentType from './components/Payment';
 
 import {
-  _Store_CODES,
-  __Cookie,
-  __LocalStorage,
   phonePattern1,
   phonePattern2,
   phonePattern3,
   phonePattern4,
+  _Store_CODES,
+  __Cookie,
+  __LocalStorage,
 } from '@constants/global.constant';
 import { __pagesConstant } from '@constants/pages.constant';
 import { paths } from '@constants/paths.constant';
@@ -43,6 +43,7 @@ import {
 import { placeOrder as placeOrderService } from '@services/checkout.service';
 import AddressFormPk from './components/Form';
 
+import NxtImage from '@appComponents/reUsable/Image';
 import { CheckoutMessage, __ValidationText } from '@constants/validation.text';
 import { AddressAPIRequest } from '@definations/APIs/address.req';
 import getLocation, { _location } from '@helpers/getLocation';
@@ -52,9 +53,15 @@ import { maxLengthCalculator } from '@templates/checkout/checkoutType6/CO6_Extra
 import { useFormik } from 'formik';
 import _ from 'lodash';
 import { useRouter } from 'next/router';
+import { ReferralForm } from './components/ReferralForm';
 
 interface _Props {
   templateId: number;
+}
+
+export interface _HandlerProps {
+  name: string;
+  value: string;
 }
 
 const ChekoutType2: FC<_Props> = ({ templateId }) => {
@@ -95,7 +102,7 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
   const [showPayment, setshowPayment] = useState<boolean>(false);
   const [showShippingMethod, setShowShippingMethod] = useState<boolean>(true);
   const customerId = GetCustomerId();
-
+  const [referralRecipient, setReferralRecipient] = useState<string>('');
   const [cardDetails, setCardDetails] = useState<CreditCardDetailsType2>({
     cardNumber: '',
     cardVarificationCode: '',
@@ -111,10 +118,8 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
   ]);
   const [purchaseOrder, setPurchaseOrder] = useState('');
 
-  const paymentFieldUpdateHandler = (
-    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-  ) => {
-    const { name, value } = e.target;
+  const paymentFieldUpdateHandler = (e: _HandlerProps) => {
+    const { name, value } = e;
 
     switch (paymentMethod) {
       case paymentEnum.creditCard:
@@ -122,7 +127,7 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
         if (name == 'cardExpirationYear') {
           setCardDetails((prev) => ({ ...prev, [name]: '20' + value }));
         } else {
-          setCardDetails((prev) => ({ ...prev, [name]: value }));
+          setCardDetails((prev) => ({ ...prev, [name]: value.trim() }));
         }
         break;
       case paymentEnum.purchaseOrder:
@@ -452,7 +457,7 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
         salesRepName: employeeLogin.salesRep.label,
         salesAgentId: +employeeLogin.salesRep.value,
         isAllowPo: employeeLogin.allowPo,
-
+        referrer: referralRecipient,
         gclid: gclid,
         ...(useBalance && {
           isCreditLimit: true,
@@ -770,13 +775,22 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
                         <div className='text-default-text'>
                           <div
                             onClick={() => {
-                              setChangeBillingAddress(true);
-                              if (shippingAddress) {
-                                setShowShippingMethod(false);
-                              }
+                              ShippingFormik.submitForm();
+                              if (ShippingFormik.isValid) {
+                                setChangeBillingAddress(true);
+                                if (shippingAddress) {
+                                  setShowShippingMethod(false);
+                                }
 
-                              setCurrentPage(checkoutPages.address);
-                              setshowPayment(true);
+                                setCurrentPage(checkoutPages.address);
+                                setshowPayment(true);
+                              } else {
+                                showModal({
+                                  message:
+                                    'Some Error Occurred in Shipping Address Form',
+                                  title: 'Error',
+                                });
+                              }
                             }}
                             className='!text-anchor hover:!text-anchor-hover cursor-pointer '
                           >
@@ -792,9 +806,17 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
                             <>
                               <br />
                               {billingAddress?.companyName}
+                              <br />
                             </>
                           ) : null}
-                          {billingAddress?.address1}
+                          {billingAddress?.address1},{' '}
+                          {billingAddress?.suite &&
+                          billingAddress?.suite.trim() != '' ? (
+                            <>
+                              {/* <br /> */}
+                              {billingAddress?.suite}
+                            </>
+                          ) : null}
                           <br />
                           {[
                             billingAddress?.city,
@@ -840,7 +862,11 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
                             {':'}
                             {!_.isEmpty(selectedShipping) && (
                               <span>{`${
-                                selectedShipping.name
+                                selectedShipping.name.toLowerCase() ===
+                                  'free shipping' &&
+                                storeCode === _Store_CODES.PKHG
+                                  ? 'FedEX Ground'
+                                  : selectedShipping.name
                               } ($${selectedShipping.price.toFixed(2)})`}</span>
                             )}
                           </span>
@@ -930,6 +956,17 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
                           </div>
                         </div>
                       </div>
+                      {
+                        <div className='bg-light-gray w-full mb-[30px] opacity-100'>
+                          <div className='bg-light-gray flex-1 w-full md:w-full mt-[15px] mb-[30px] pl-[15px] pr-[15px]'>
+                            <div className='px-[5px] pt-[15px] pb-[15px]'>
+                              <ReferralForm
+                                setReferralRecipient={setReferralRecipient}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      }
                       <div
                         className='bg-light-gray w-full mb-[30px]'
                         id='shippingMethod'
@@ -1011,7 +1048,9 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
                           </div>
                           <div className='pt-[10px] pb-[10px]'>
                             <div className='w-10'>
-                              <img
+                              <NxtImage
+                                isStatic={true}
+                                useNextImage={false}
                                 src='/secure-card-hover.png'
                                 alt='lockimage'
                                 className=''
@@ -1033,7 +1072,9 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
                             </div>
                             <div className='pt-[10px] pb-[10px]'>
                               <div className='w-10'>
-                                <img
+                                <NxtImage
+                                  isStatic={true}
+                                  useNextImage={false}
                                   src='/secure-card.jpg'
                                   alt='lockimage'
                                   className=''
@@ -1052,6 +1093,7 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
                           changeHandler={paymentFieldUpdateHandler}
                           paymentMethod={paymentMethod}
                           updatePaymentMethod={setPaymentMethod}
+                          ShippingFormik={ShippingFormik}
                           detectCardType={detectCardType}
                           BillingFormik={Billingformik}
                           changeBillingAddress={changeBillingAddress}
@@ -1061,7 +1103,7 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
                           cardDetails={cardDetails}
                           purchaseOrder={purchaseOrder}
                           billingAddress={billingAddress}
-                          setShippingAddress={setShippingAddress}
+                          setBillingAddress={setBillingAddress}
                         />
                         <div className='max-w-[278px]'>
                           <button
@@ -1105,7 +1147,9 @@ const ChekoutType2: FC<_Props> = ({ templateId }) => {
                       <div className='bg-[#d4d4d4] w-full mb-[30px]'>
                         <div className='pl-[15px] pr-[15px] pt-[15px] pb-[15px] text-center'>
                           <div className='w-28 mx-auto'>
-                            <img
+                            <NxtImage
+                              isStatic={true}
+                              useNextImage={false}
                               src={'/secure-btm.jpg'}
                               alt=''
                               className='w-full max-h-[100px]'

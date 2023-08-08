@@ -1,5 +1,6 @@
 import NxtImage from '@appComponents/reUsable/Image';
 import WishlistButton from '@appComponents/ui/Wishlist';
+import { UNITI_CODE, _Store_CODES } from '@constants/global.constant';
 import { _OtherImage, _ProductColor } from '@definations/APIs/colors.res';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import { useRouter } from 'next/router';
@@ -24,10 +25,10 @@ const ProductImg_Type3: React.FC<_ProductImgProps> = ({ product }) => {
     router.push(product.productSEName);
   };
   const brandId = useTypedSelector_v2((state) => state.wishlist.brandId);
+  const storeCode = useTypedSelector_v2((state) => state.store.code);
   const selectedColor = useTypedSelector_v2(
     (state) => state.product?.selected.color,
   );
-
   const { setColor } = useActions_v2();
   const selectedImage = useTypedSelector_v2(
     (state) => state.product?.selected.image,
@@ -62,13 +63,23 @@ const ProductImg_Type3: React.FC<_ProductImgProps> = ({ product }) => {
   return (
     <div className='lg:col-start-2 lg:col-end-7 grid grid-cols-12 gap-6'>
       <div className='col-span-12 relative'>
-        <div className='main-image mb-[5px]'>
-          <InnerImageZoom
-            src={selectedImage?.imageUrl}
-            zoomType='hover'
-            hideHint={true}
-            className='w-full object-center object-cover'
-          />
+        <div
+          className={`main-image mb-[5px] ${
+            storeCode == UNITI_CODE
+              ? 'mx-auto lg:max-h-[700px] overflow-hidden'
+              : ''
+          } `}
+        >
+          <figure className='iiz w-full object-center object-cover'>
+            <div className='h-[700px] flex items-center justify-center overflow-hidden '>
+              <InnerImageZoom
+                src={selectedImage?.imageUrl}
+                zoomType='hover'
+                hideHint={true}
+                className='max-h-full m-auto'
+              />
+            </div>
+          </figure>
         </div>
         {/* https://redefinecommerce.blob.core.windows.net/rdcbeta/1/product/attributeimages/attribute_10887_10887_1.jpg */}
         <div className='sub-image w-full flex justify-center text-center'>
@@ -88,7 +99,7 @@ const ProductImg_Type3: React.FC<_ProductImgProps> = ({ product }) => {
                   <NxtImage
                     src={img.imageUrl}
                     alt={img.altTag}
-                    className='w-full object-center object-cover'
+                    className='max-h-full m-auto cursor-pointer'
                     title={img.altTag}
                   />
                 </div>
@@ -96,21 +107,23 @@ const ProductImg_Type3: React.FC<_ProductImgProps> = ({ product }) => {
             })}
         </div>
 
-        <div className='absolute right-[10px] top-[25px] w-6 h-6'>
-          <button className=''>
-            <WishlistButton
-              {...{
-                productId: product?.id,
-                name: product?.name,
-                color: selectedColor.name,
-                price: product?.salePrice,
-                wishlistId: wishlistId,
-              }}
-              iswishlist={wishlistPresent}
-              brandId={brandId ? brandId : 0}
-            />
-          </button>
-        </div>
+        {storeCode !== _Store_CODES.USAAHEALTHYPOINTS && (
+          <div className='absolute right-[10px] top-[25px] w-6 h-6'>
+            <button className=''>
+              <WishlistButton
+                {...{
+                  productId: product?.id,
+                  name: product?.name,
+                  color: selectedColor.name,
+                  price: product?.salePrice,
+                  wishlistId: wishlistId,
+                }}
+                iswishlist={wishlistPresent}
+                brandId={brandId ? brandId : 0}
+              />
+            </button>
+          </div>
+        )}
       </div>
       {/* <div className='col-span-12 flex flex-wrap justify-center'>
         {colors &&

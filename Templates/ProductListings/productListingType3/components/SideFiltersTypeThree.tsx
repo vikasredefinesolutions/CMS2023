@@ -1,4 +1,10 @@
-import { BACARDI, CYXTERA_CODE, UNITI_CODE } from '@constants/global.constant';
+import {
+  BACARDI,
+  BOSTONBEAR,
+  CYXTERA_CODE,
+  UCA,
+  UNITI_CODE,
+} from '@constants/global.constant';
 import { FilterChangeHandler, FilterType } from '@definations/productList.type';
 import { capitalizeFirstLetter } from '@helpers/common.helper';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
@@ -23,7 +29,12 @@ const SideFiltersTypeThree = ({
           ? 'pb-[0] px-[0] border-none'
           : ' pb-[16px] px-[16px]'
       }  ${
-        storeCode == CYXTERA_CODE || storeCode == UNITI_CODE ? '' : 'border'
+        storeCode == CYXTERA_CODE ||
+        storeCode == UNITI_CODE ||
+        storeCode === BOSTONBEAR ||
+        storeCode === UCA
+          ? ''
+          : 'border'
       }`}
     >
       <form className='filter-box filter-type'>
@@ -35,7 +46,9 @@ const SideFiltersTypeThree = ({
                   className={`${
                     storeCode == UNITI_CODE ||
                     storeCode == CYXTERA_CODE ||
-                    storeCode === BACARDI
+                    storeCode === BACARDI ||
+                    storeCode === BOSTONBEAR ||
+                    storeCode === UCA
                       ? 'pb-[16px]'
                       : 'py-[16px]'
                   }`}
@@ -44,7 +57,10 @@ const SideFiltersTypeThree = ({
                     className={`flex items-center justify-between w-full group relative mb-[12px]  ${
                       storeCode === BACARDI
                         ? ''
-                        : storeCode == CYXTERA_CODE || storeCode == UNITI_CODE
+                        : storeCode == CYXTERA_CODE ||
+                          storeCode == UNITI_CODE ||
+                          storeCode === BOSTONBEAR ||
+                          storeCode === UCA
                         ? ' pb-[10px] after:border-b after:border-gray-border after:h-[1px] after:w-[50px] after:absolute after:top-full'
                         : 'bg-[#ebebeb]'
                     }`}

@@ -5,11 +5,14 @@ import {
   phonePattern3,
   phonePattern4,
 } from '@constants/global.constant';
+import { CommanMessage } from '@constants/successErrorMessages.constant';
 import {
   __QuoteRequestMessages,
   __ValidationText,
 } from '@constants/validation.text';
-import { useTypedSelector_v2 } from '@hooks_v2/index';
+import { _ContactRequest } from '@definations/contactRequest.type';
+import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
+import { SendAsync } from '@utils/axios.util';
 import { Form, Formik } from 'formik';
 import React, { useState } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
@@ -75,17 +78,67 @@ const ProductQuoteRequest: React.FC<_props> = ({
 }) => {
   const [verifiedRecaptch, setverifiedRecaptch] = useState(false);
   const { name } = useTypedSelector_v2((state) => state.product.product);
+  const { setShowLoader, showModal } = useActions_v2();
+  const { id: storeId } = useTypedSelector_v2((state) => state.store);
 
   const productName = product ? product : name;
   const quoteRequestHandler = (value: any) => {
-    // console.log(value);
+    const payload: _ContactRequest = {
+      contactUsModel: {
+        id: 0,
+        rowVersion: ' ',
+        location: ' ',
+        ipAddress: '192.168.1.1',
+        macAddress: '00-00-00-00-00-00',
+        name: value?.name,
+        email: value.email,
+        subject: ' ',
+        companyName: value?.companyName,
+        address: ' ',
+        city: ' ',
+        county: ' ',
+        state: ' ',
+        zipCode: ' ',
+        phone: '',
+        comment: value.additionalInformation,
+        storeId: storeId,
+        recStatus: ' ',
+      },
+    };
+    const createContactUs = async (payload: _ContactRequest) => {
+      setShowLoader(true);
+
+      const url = `/ContactUs/CreateContactUs.json`;
+      const res = await SendAsync({
+        url: url,
+        method: 'POST',
+        data: payload,
+      })
+        .then((res) => {
+          if (res) {
+            showModal({
+              message:
+                'A dedicated member of our team will be in touch regarding your request within 2 business days.',
+              title: 'THANK YOU',
+            });
+            window.location.reload();
+          }
+        })
+        .catch((err) => {
+          showModal({ message: CommanMessage.Failed, title: 'Failed' });
+        })
+        .finally(() => {
+          setShowLoader(false);
+        });
+      return res;
+    };
+    createContactUs(payload);
+
     modalHandler(null);
   };
   function onChange(value: any) {
     setverifiedRecaptch(true);
   }
-
-  // const show = useTypedSelector((state) => state.store.display.footer);
 
   return (
     <div
@@ -186,7 +239,7 @@ const ProductQuoteRequest: React.FC<_props> = ({
                           name={'phoneNumber'}
                           onChange={handleChange}
                           type={'number'}
-                          required={false}
+                          required={true}
                           containerClass={'w-full px-3'}
                         />
                         <ProductQuoteRequestInput

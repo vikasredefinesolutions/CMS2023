@@ -1,12 +1,11 @@
 /* eslint-disable no-unused-vars */
-import NxtImage from '@appComponents/reUsable/Image';
-import { SIMPLI_SAFE_CODE } from '@constants/global.constant';
+import { SIMPLI_SAFE_CODE, _Store_CODES } from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import { _ThankYouProps } from '@templates/ThankYou/ThankYou';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useCallback } from 'react';
 import ThankYouCreatePassword from './ThankYouCreatePassword';
 
 const ThankYouHeader: React.FC<_ThankYouProps> = ({ order }) => {
@@ -23,6 +22,13 @@ const ThankYouHeader: React.FC<_ThankYouProps> = ({ order }) => {
   const router = useRouter();
   const orderId = router.query.orderNumber;
 
+  const getIcon = useCallback(() => {
+    if (storeCode === _Store_CODES.PORSCHE)
+      return '/assets/images/porsche-logo-white.png';
+    if (storeCode === _Store_CODES.PETERMILLAR)
+      return '/assets/images/pettermiller/petter-millar-logo.png';
+    return '/assets/images/thank-you-icon.png';
+  }, [storeCode]);
   return (
     <>
       <section id=''>
@@ -31,14 +37,21 @@ const ThankYouHeader: React.FC<_ThankYouProps> = ({ order }) => {
             <div className='bg-primary w-full mt-[20px] mb-[20px]'>
               <div className='pl-[15px] pr-[15px] pb-[15px] pt-[15px] w-full '>
                 <div className='text-center'>
-                  <div className='mx-auto w-[50px]'>
-                    <NxtImage
-                      src='/assets/images/thank-you-icon.png'
-                      isStatic
+                  {storeCode === _Store_CODES.PETERMILLAR ? (
+                    <img
+                      src={getIcon()}
+                      className='mx-auto pl-[15px] pr-[15px] pb-[15px] pt-[15px]'
                       alt=''
-                      className='mx-auto border-2 rounded-full pl-[15px] pr-[15px] pb-[15px] pt-[15px]'
                     />
-                  </div>
+                  ) : (
+                    <div className='mx-auto w-[50px]'>
+                      <img
+                        src={getIcon()}
+                        className='mx-auto border-2 rounded-full pl-[15px] pr-[15px] pb-[15px] pt-[15px]'
+                        alt=''
+                      />
+                    </div>
+                  )}
                   <span className='block text-[#ffffff] text-large-text pt-[8px] pb-[8px]'>
                     {__pagesText.ThankYouPage.ThankYouLabel}{' '}
                     {order.billing?.firstName}
@@ -83,12 +96,15 @@ const ThankYouHeader: React.FC<_ThankYouProps> = ({ order }) => {
                         {__pagesText.ThankYouPage.CallUs} {storePhoneNumber}
                       </span>
                       <span className='pb-[8px] text-default-text text-[#ffffff] block'>
-                      {__pagesText.ThankYouPage.Email}:{' '}
-                      <Link href={''}>
-                        <a className='text-[#ffffff] underline hover:no-underline' href={`mailto:${storeEmail}`}>
-                           {storeEmail}
-                        </a>
-                      </Link>
+                        {__pagesText.ThankYouPage.Email}:{' '}
+                        <Link href={''}>
+                          <a
+                            className='text-[#ffffff] underline hover:no-underline'
+                            href={`mailto:${storeEmail}`}
+                          >
+                            {storeEmail}
+                          </a>
+                        </Link>
                       </span>
                     </div>
                   )}

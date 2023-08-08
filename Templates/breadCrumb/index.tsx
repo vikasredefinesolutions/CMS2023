@@ -1,3 +1,4 @@
+import { SIMPLI_SAFE_CODE, UCA, UNITI_CODE } from '@constants/global.constant';
 import { __SpecialBreadCrumbsPaths, paths } from '@constants/paths.constant';
 import { capitalizeFirstLetter } from '@helpers/common.helper';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
@@ -40,7 +41,7 @@ const BreadCrumb: NextPage<__BreadCrumbTemplatesProps> = ({ breadCrumbid }) => {
 
   const BreadCrumbTemplate = BreadCrumbTemplates[breadCrumbtemplateid];
   const { product_storeCategory } = useActions_v2();
-  //   const storeLayout = useTypedSelector_v2((state) => state.store.layout);
+  const { code: storeCode } = useTypedSelector_v2((state) => state.store);
   const storeId = useTypedSelector_v2((state) => state.store.id);
   const router = useRouter();
   const pageType = useTypedSelector_v2((state) => state.store.pageType);
@@ -86,7 +87,13 @@ const BreadCrumb: NextPage<__BreadCrumbTemplatesProps> = ({ breadCrumbid }) => {
             url: `${catSeNames[index].trim()}.html/`,
           });
         });
-        if (pageType.type == 'product' && brandDetails?.name) {
+        if (
+          pageType.type == 'product' &&
+          brandDetails?.name &&
+          storeCode !== SIMPLI_SAFE_CODE &&
+          storeCode !== UCA &&
+          storeCode !== UNITI_CODE
+        ) {
           breadCrumbs.push({
             name: capitalizeFirstLetter(brandDetails?.name),
             url: `${brandDetails.brandSEname}.html/?v=brand-product-list`,
@@ -133,7 +140,9 @@ const BreadCrumb: NextPage<__BreadCrumbTemplatesProps> = ({ breadCrumbid }) => {
 
   useEffect(() => {
     let callBreadCrumbAPI = true;
-    __SpecialBreadCrumbsPaths.forEach((item) => {
+    for (let i = 0; i < __SpecialBreadCrumbsPaths.length; i++) {
+      const item = __SpecialBreadCrumbsPaths[i];
+
       if (item.path.includes(router.asPath.split('?')[0])) {
         callBreadCrumbAPI = false;
         if (item.name) {
@@ -141,7 +150,7 @@ const BreadCrumb: NextPage<__BreadCrumbTemplatesProps> = ({ breadCrumbid }) => {
             { name: 'Home', url: paths.HOME },
             { name: item.name, url: item.directTo || '' },
           ]);
-          return;
+          break;
         }
       } else if (item.path.includes(router.pathname)) {
         callBreadCrumbAPI = false;
@@ -156,10 +165,12 @@ const BreadCrumb: NextPage<__BreadCrumbTemplatesProps> = ({ breadCrumbid }) => {
             url: item.directTo || '',
           },
         ]);
+        break;
       } else {
         setBreadCrumbs([]); // to hide the breadCrumbs
       }
-    });
+    }
+
     if (callBreadCrumbAPI) {
       setTimeout(() => {
         getBreadCrubs().then((breadCrumbs) => {

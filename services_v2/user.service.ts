@@ -432,14 +432,15 @@ export const UpdateUserData = async (payload: {
 };
 
 export const UpdateUserPassword = async (payload: {
-  email: string;
-  password: string;
   customerId: number;
+  currentPassword: string;
+  newPassword: string;
+  confirmNewPassword: string;
 }): Promise<{
   password: string;
 } | null> => {
   try {
-    const url = '/StoreCustomer/updatestorecustomeremailpassword.json';
+    const url = '/StoreCustomer/changepasswordinfo.json';
     const res = await SendAsync<{
       password: string;
     }>({
@@ -572,6 +573,7 @@ export interface OrderModelPayment {
   poNumber: string;
   storeID: number;
   email: string;
+  notes: string;
 }
 
 export const UpdatePaymentLater = async (payload: {
@@ -579,16 +581,10 @@ export const UpdatePaymentLater = async (payload: {
 }) => {
   const url = `Order/updateorderpayment.json`;
 
-  const response = await CallAPI_v2<any>({
-    name: {
-      service: 'user',
-      api: 'UpdatePaymentLater',
-    },
-    request: {
-      url: url,
-      method: 'POST',
-      data: payload,
-    },
+  const response = await SendAsync<any>({
+    url,
+    method: 'POST',
+    data: payload,
   });
 
   return response;

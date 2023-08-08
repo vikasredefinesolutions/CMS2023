@@ -11,11 +11,12 @@ const BannerType2: React.FC<{
 }> = ({ content }) => {
   const userId = useTypedSelector_v2((state) => state.user.id);
   const [showModal, setShowModal] = useState<string | null>(null);
-
+  const store = useTypedSelector_v2((state) => state.store);
   if (!content || content.length === 0) return null;
 
   return (
     <>
+    {store.code !== 'PMCG' ? ( <>
       {!userId && (
         <div className='container pl-[15px] pr-[15px] mx-auto cursor-pointer'>
           <div className='text-center bg-tertiary pl-[10px] pr-[10px] pt-[4px] pb-[4px]'>
@@ -51,6 +52,26 @@ const BannerType2: React.FC<{
       </div>
       {showModal === 'login' && <LoginModal modalHandler={setShowModal} />}
       {showModal === 'forgot' && <ForgotModal modalHandler={setShowModal} />}
+      </> ) : (
+        <>
+        <div className='container mx-auto'>
+            <div className='items-center'>
+              <div className='flex flex-wrap items-center gap-y-[40px]'>
+                <div className='w-full text-[#000000] md:pl-[0px] md:pr-[0px] pl-[16px] pr-[16px]'>
+                  <div className='text-2xl-text pb-[10px]'>{content[0].h1}</div>
+                  <div className='text-sub-text pb-[5px]'>{content[0].h2}</div>
+                  <div
+                    className='text-default-text font-default-text text-color-default-text max-w-[700px]'
+                    dangerouslySetInnerHTML={{
+                      __html: content[0].description,
+                    }}
+                  ></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
     </>
   );
 };

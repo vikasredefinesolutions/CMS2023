@@ -197,7 +197,7 @@ const Header_Category: React.FC<_props> = ({
               //   x-transition:leave="transition ease-in duration-150"
               //   x-transition:leave-start="opacity-100"
               //   x-transition:leave-end="opacity-0"
-              className='absolute top-full left-0 w-screen max-w-screen-sm text-[#000000] sm:text-sm'
+              className='absolute top-full left-0 w-screen max-w-screen-sm text-[#000000] sm:text-sm cursor-pointer'
             >
               <div
                 className='absolute inset-0 top-1/2 bg-white shadow'

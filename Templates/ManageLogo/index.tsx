@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { LogoList } from '@definations/APIs/logo.res';
 import React from 'react';
-import AccountTabs from './AccountTabs';
 import ManageLogoType1 from './ManageLogoType1';
 import ManageLogoType2 from './ManageLogoType2';
 import { _ManageLogoTemplates } from './managelogo.d';
@@ -22,16 +21,10 @@ const ManageLogo: React.FC<_props> = ({ id, logoList, fetchLogoDetails }) => {
     ];
   return (
     <>
-      {logoList && logoList.items.length > 0 ? (
-        <ManagelogoDeatils
-          logoList={logoList}
-          fetchLogoDetails={fetchLogoDetails}
-        />
-      ) : (
-        <>
-          <AccountTabs setype={id} />
-        </>
-      )}
+      <ManagelogoDeatils
+        logoList={logoList}
+        fetchLogoDetails={fetchLogoDetails}
+      />
     </>
   );
 };

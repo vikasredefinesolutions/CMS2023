@@ -1,4 +1,5 @@
 // import { useTypedSelector_v2 } from 'hooks_v2';
+import { _Store_CODES } from '@constants/global.constant';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import React, { useEffect, useState } from 'react';
 
@@ -10,6 +11,7 @@ interface _props {
 let lastSize_stored: string = '';
 
 const SizeQtyInput: React.FC<_props> = ({ price, size }) => {
+  const storeCode = useTypedSelector_v2((store) => store.store.code);
   const { updateQuantitieSingle } = useActions_v2();
   const [qty, setQty] = useState<number>(0);
   const inventory = useTypedSelector_v2(
@@ -24,17 +26,18 @@ const SizeQtyInput: React.FC<_props> = ({ price, size }) => {
       res.colorAttributeOptionId === color.attributeOptionId,
   );
 
-  const quantityHandler = (enteredQty: number) => {
+  const quantityHandler = (enteredQty: any) => {
+    if (!enteredQty) return setQty(enteredQty);
     let newQuantity = 0;
 
-    if (enteredQty >= current[0].inventory) {
+    if (enteredQty >= current[0]?.inventory) {
       newQuantity = current[0].inventory;
+      setQty(newQuantity);
     } else {
-      newQuantity = enteredQty;
+      newQuantity = +enteredQty;
+      setQty(+enteredQty);
     }
-    // const result = test.filter
 
-    setQty(newQuantity);
     updateQuantitieSingle({
       attributeOptionId: current[0].attributeOptionId,
       size: size,
@@ -61,7 +64,13 @@ const SizeQtyInput: React.FC<_props> = ({ price, size }) => {
     <>
       <div className='flex flex-wrap items-center mb-[15px]'>
         <div className='w-[128px] text-default-text items-center'>
-          <span className='text-default-text font-semibold'>Qty:</span>
+          <span
+            className={`text-default-text font-semibold ${
+              storeCode === _Store_CODES.USAAHEALTHYPOINTS && '!font-semibold'
+            }`}
+          >
+            Qty:
+          </span>
         </div>
         <div className='text-default-text'>
           <div className='w-[112px]'>
@@ -72,15 +81,19 @@ const SizeQtyInput: React.FC<_props> = ({ price, size }) => {
               value={qty}
               max={size ? 1 : 1}
               onKeyDown={(e) => {
-                if (!/[^0-9]/.test(e.key)) {
-                  return;
-                }
+                ['e', 'E', '+', '-', '.'].includes(e.key) && e.preventDefault();
               }}
               onChange={(ev) => {
-                if (size) {
+                if (!size) return alert('select One size');
+                if (ev.target.value.toString() === '0') {
+                  return quantityHandler(1);
+                }
+
+                quantityHandler(ev.target.value);
+              }}
+              onBlur={(event) => {
+                if (!event.target.value) {
                   quantityHandler(1);
-                } else {
-                  alert('select One size');
                 }
               }}
               placeholder=''

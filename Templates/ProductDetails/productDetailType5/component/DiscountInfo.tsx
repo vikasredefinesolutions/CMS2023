@@ -65,9 +65,9 @@ const DiscountInfo: React.FC<{
         Add {qtyRequired - totalQty == 0 ? minQty : qtyRequired - totalQty} more
         of this <h3 className='inline'>{product?.name}</h3> to your cart to save
         an additional $
-        {product?.msrp && parseFloat(`${product?.msrp - nextDiscountPrice}`)}
-        {'.00 '}
-        per Item!
+        {product?.msrp &&
+          parseFloat(`${product?.msrp - nextDiscountPrice}`).toFixed(2)}
+        {' per Item!'}
       </div>
     </>
   );

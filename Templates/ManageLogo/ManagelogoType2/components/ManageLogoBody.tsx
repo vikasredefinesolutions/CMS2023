@@ -7,10 +7,15 @@ import {
   UploadImage,
 } from '@services/general.service';
 import { UploadLogoWithDetails } from '@services/logo.service';
+import { FetchLogoLocationByStoreId } from '@services/product.service';
 import { _ManageLogoProps } from '@templates/ManageLogo/managelogo';
 import { NextPage } from 'next';
 import Link from 'next/link';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import Select from 'react-select';
+import { _globalStore } from 'store.global';
+
+let mediaBaseURL = _globalStore.blobUrl;
 
 const ManageLogoBody: NextPage<_ManageLogoProps> = ({
   logoList,
@@ -20,6 +25,11 @@ const ManageLogoBody: NextPage<_ManageLogoProps> = ({
     (state) => state.user,
   );
   const { imageFolderPath } = useTypedSelector_v2((state) => state.store);
+  const storeId = useTypedSelector_v2((state) => state.store.id);
+  const store = useTypedSelector_v2((state) => state.store);
+
+  mediaBaseURL = store.mediaBaseUrl || mediaBaseURL;
+
   const { showModal, setShowLoader } = useActions_v2();
   const [fileToUpload, setFileToUpload] = useState<{
     logoPathURL: string | null;
@@ -28,6 +38,23 @@ const ManageLogoBody: NextPage<_ManageLogoProps> = ({
     previewURL: string;
     file: File | null;
   } | null>(null);
+  const [logoLocationOption, setLogoLocationOption] = useState<any>([]);
+  const [showImageSection, setShowImageSection] = useState<any>({
+    value: '',
+    image: '',
+    label: '',
+  });
+
+  useEffect(() => {
+    FetchLogoLocationByStoreId({ storeId: storeId }).then((res) => {
+      const options = res?.subRow.map((logoLocation) => ({
+        value: logoLocation.name,
+        label: logoLocation.name,
+        image: logoLocation.image,
+      }));
+      setLogoLocationOption(options?.length ? options : []);
+    });
+  }, []);
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target?.files === null) {
@@ -59,8 +86,9 @@ const ManageLogoBody: NextPage<_ManageLogoProps> = ({
             logo: uploadedpath,
             logoName: fileToUpload.name,
             description: '',
-            logoPositionImage: '',
+            logoPositionImage: showImageSection.image,
             orderedCartLogoDetailId: 0,
+            locationName: showImageSection.value,
           });
         fetchLogoDetails();
         setFileToUpload(null);
@@ -106,7 +134,19 @@ const ManageLogoBody: NextPage<_ManageLogoProps> = ({
     }
   };
 
-  console.log('--reaching logos--', logoList);
+  const Option = ({ innerProps, label, data }: any) => (
+    <div {...innerProps} className='overflow-hidden flex items-center'>
+      <NxtImage
+        src={data.image}
+        alt={label}
+        className='max-h-[100px]'
+        useNextImage={false}
+      />{' '}
+      <p>{label}</p>
+    </div>
+  );
+
+  // console.log('--reaching logos--', logoList);
   return (
     <>
       <div className='w-4/4 lg:w-4/5'>
@@ -119,6 +159,18 @@ const ManageLogoBody: NextPage<_ManageLogoProps> = ({
           </div>
 
           <div className='mb-[10px] text-default-text'>
+            <div className='mb-[5px] font-bold'>Select Logo Position</div>
+          </div>
+          <Select
+            options={logoLocationOption}
+            components={{ Option }}
+            placeholder='Select location'
+            onChange={(e: any) => {
+              setShowImageSection(e);
+            }}
+          />
+
+          <div className='mb-[10px] text-default-text'>
             <div className='mb-[5px] font-bold'>Upload Image</div>
             {!fileToUpload?.file && (
               <span className=''>
@@ -128,6 +180,7 @@ const ManageLogoBody: NextPage<_ManageLogoProps> = ({
                   id='FileUpload1'
                   className='mt-[5px]'
                   onChange={handleFileUpload}
+                  disabled={showImageSection.value ? false : true}
                   accept={'image/*'}
                 />
               </span>
@@ -137,8 +190,12 @@ const ManageLogoBody: NextPage<_ManageLogoProps> = ({
           <div className='my-[10px]'>
             <button
               type='button'
-              disabled={fileToUpload?.file ? false : true}
-              className='btn btn-primary'
+              disabled={
+                fileToUpload?.file && showImageSection.value ? false : true
+              }
+              className={`btn btn-primary ${
+                fileToUpload?.file && showImageSection.value ? '' : 'opacity-50'
+              }`}
               onClick={uploadLogo}
             >
               Upload Image
@@ -147,6 +204,7 @@ const ManageLogoBody: NextPage<_ManageLogoProps> = ({
               <span className='ml-3'>{fileToUpload?.name}</span>
             )}
           </div>
+
           <div className='overflow-auto max-h-screen border border-gray-border'>
             <table className='table table-auto border-gray-border w-full text-default-text'>
               <tbody>
@@ -201,7 +259,7 @@ const ManageLogoBody: NextPage<_ManageLogoProps> = ({
                       </td>
 
                       <td className='border-b border-r border-gray-border p-[16px]'>
-                        <div className='overflow-hidden'>
+                        <div className='w-24 h-24 m-auto'>
                           <NxtImage
                             src={logo.logoLocationImage}
                             alt=''
@@ -230,7 +288,7 @@ const ManageLogoBody: NextPage<_ManageLogoProps> = ({
                         </button>{' '}
                         <button
                           type='button'
-                          className='btn btn-sm btn-secondary text-default-text'
+                          className='btn btn-sm btn-secondary mt-3'
                           onClick={() => handleDeleteLogo(logo.logoId)}
                         >
                           {__pagesText.ManageLogo.delete}

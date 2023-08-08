@@ -7,7 +7,6 @@ const QuickHelpModal: React.FC<{
   modalHandler: (val: null | _modals | 'Display') => void;
 }> = ({ modalHandler }) => {
   const isLoggedIn = useTypedSelector_v2((state) => state.user.customer);
-  const [showModal, setShowModal] = useState<null | string>(null);
 
   const router = useRouter();
   const [tabOpen, setTabOpen] = useState<string>('');

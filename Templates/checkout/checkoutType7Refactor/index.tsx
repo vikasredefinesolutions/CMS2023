@@ -2,8 +2,17 @@ import NxtImage from '@appComponents/reUsable/Image';
 
 import { _Store } from '@configs/page.config';
 import { UserAddressType } from '@constants/enum';
-import { SIMPLI_SAFE_CODE } from '@constants/global.constant';
+import {
+  BOSTONBEAR,
+  HEALTHYPOINTS,
+  SIMPLI_SAFE_CODE,
+  UCA,
+  _Store_CODES,
+} from '@constants/global.constant';
+import { __pagesText } from '@constants/pages.text';
+import { UserType } from '@definations/APIs/user.res';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
+import { getCustomerAllowBalance } from '@services/payment.service';
 import { useFormik } from 'formik';
 import React, { useEffect, useState } from 'react';
 import {
@@ -24,11 +33,48 @@ import CO7R_ReviewProducts from './Components/CO7R_ReviewProducts';
 import CO7_ReviewShippingInformation from './Components/CO7R_ReviewShippingInformation';
 
 const CheckoutType7Refactor: React.FC = () => {
-  const { update_CheckoutAddress } = useActions_v2();
+  const {
+    update_PaymentDetails,
+    update_CheckoutAddress,
+    update_CheckoutUser,
+    clear_Checkout,
+  } = useActions_v2();
   const { customer } = useTypedSelector_v2((state) => state.user);
   const { code: storeCode } = useTypedSelector_v2((state) => state.store);
   const [screenToShow, setScreenToShow] =
     useState<_CO7R_Screens>('enterEmailAddress');
+  const { user, shippingMethod, charges } = useTypedSelector_v2(
+    (state) => state.checkout,
+  );
+  const messages = useTypedSelector_v2((state) => state.sbStore.messages);
+  const { cart: cartItems, discount } = useTypedSelector_v2(
+    (state) => state.cart,
+  );
+
+  const storeBillingAddress = () => {
+    const billingAddress = customer?.customerAddress.find((address) => {
+      if (
+        (address.isDefault &&
+          address.addressType === UserAddressType.BILLINGADDRESS) ||
+        // Condition - 2  ????
+        address.addressType === UserAddressType.BILLINGADDRESS ||
+        // Condition - 3  ????
+        (address.isDefault &&
+          (storeCode === SIMPLI_SAFE_CODE || storeCode === _Store.type5))
+      ) {
+        return true;
+      }
+
+      return false;
+    });
+
+    if (billingAddress) {
+      update_CheckoutAddress({
+        type: 'BILLING_ADDRESS',
+        address: billingAddress,
+      });
+    }
+  };
 
   const convertIntoShippingInitials = () => {
     const shippingAddress = customer?.customerAddress.find((address) => {
@@ -47,33 +93,10 @@ const CheckoutType7Refactor: React.FC = () => {
       return false;
     });
 
-    const billingAddress = customer?.customerAddress.find((address) => {
-      if (
-        (address.isDefault &&
-          address.addressType === UserAddressType.BILLINGADDRESS) ||
-        // Condition - 2  ????
-        address.addressType === UserAddressType.BILLINGADDRESS ||
-        // Condition - 3  ????
-        (address.isDefault &&
-          (storeCode === SIMPLI_SAFE_CODE || storeCode === _Store.type5))
-      ) {
-        return true;
-      }
-
-      return false;
-    });
-
     if (shippingAddress) {
       update_CheckoutAddress({
         type: 'SHIPPING_ADDRESS',
         address: shippingAddress,
-      });
-    }
-
-    if (billingAddress) {
-      update_CheckoutAddress({
-        type: 'BILLING_ADDRESS',
-        address: billingAddress,
       });
     }
 
@@ -115,24 +138,103 @@ const CheckoutType7Refactor: React.FC = () => {
     return 'pt-[20px] pb-[20px] text-title-text ';
   };
 
+  const getCreditBalance = (customer: UserType) => {
+    getCustomerAllowBalance(customer.id).then((res) => {
+      if (res && typeof res === 'number') {
+        update_CheckoutUser({ creditBalance: res });
+      }
+      update_CheckoutUser({ email: customer.email });
+    });
+  };
+
+  const itemsTotal = () => {
+    let subTotal = 0;
+    if (!cartItems) return 0;
+
+    cartItems.forEach((item) => {
+      subTotal += item.totalPrice + item.totalCustomFieldsCharges;
+    });
+
+    return subTotal;
+  };
+
+  const skipPaymentScreen = () => {
+    if (storeCode !== _Store_CODES.UNITi) return false;
+
+    const subTotal = itemsTotal() + shippingMethod.price + charges.salesTax;
+    const credits =
+      user.creditBalance +
+      (discount?.amount || 0) +
+      (discount?.giftCardAmt || 0);
+
+    //
+    return subTotal <= credits;
+  };
+
+  useEffect(() => {
+    storeBillingAddress();
+    return () => {
+      clear_Checkout();
+    };
+  }, []);
+
   useEffect(() => {
     if (customer?.id) {
       setScreenToShow('addShipping');
+
+      getCreditBalance(customer);
     }
   }, [customer]);
-  const messages = useTypedSelector_v2((state) => state.sbStore.messages);
+
+  useEffect(() => {
+    if (skipPaymentScreen() && shippingAddress.isValid) {
+      update_PaymentDetails({
+        method: 'PAYMENT_REQUIRED',
+        value: false,
+      });
+      update_PaymentDetails({
+        method: 'USE_CREDIT_BALANCE',
+        value: true,
+      });
+      setScreenToShow('completeOrderDetails');
+    }
+  }, [skipPaymentScreen(), cartItems?.length]);
 
   return (
-    <section id='' className='sb_checkoutpage'>
+    <section id='' className=''>
       <div className='container mx-auto'>
         <div className='bg-white min-h-[70vh]]'>
-          <div className='pt-[20px] pb-[20px] text-title-text pl-[10px]'>
-            Checkout
+          {storeCode != SIMPLI_SAFE_CODE &&
+            storeCode != _Store_CODES.UNITi &&
+            storeCode != UCA &&
+            storeCode != BOSTONBEAR &&
+            storeCode !== HEALTHYPOINTS &&
+            screenToShow !== 'enterEmailAddress' && (
+              <div className='pt-[20px] pb-[20px] text-title-text pl-[10px]'>
+                Checkout
+              </div>
+            )}
+
+          <div className='pt-[20px] pb-[40px] text-subtitle-text pl-[10px] text-center text-rose-500 !font-bold'>
+            {storeCode !== UCA &&
+            storeCode !== BOSTONBEAR &&
+            storeCode !== _Store_CODES.USAAHEALTHYPOINTS
+              ? __pagesText.checkoutHeaderNote
+              : ''}
           </div>
-          <div className='flex flex-wrap mx-[-10px] checkout-box'>
+
+          <div
+            className={`${
+              screenToShow === 'enterEmailAddress' ? 'pt-[30px] pb-[30px]' : ''
+            } flex flex-wrap mx-[-10px] checkout-box`}
+          >
             <section
               aria-labelledby='cart-heading'
-              className='w-full pl-[10px] pr-[10px]'
+              className={`${
+                screenToShow === 'enterEmailAddress'
+                  ? 'w-full pl-[10px] pr-[10px] lg:w-12/12 md:w-12/12'
+                  : 'w-full pl-[10px] pr-[10px] lg:w-9/12 md:w-8/12'
+              }`}
             >
               {/*  */}
               {messages.checkOutMessage && (
@@ -156,10 +258,14 @@ const CheckoutType7Refactor: React.FC = () => {
                     setScreenToShow={setScreenToShow}
                     address={shippingAddress.values}
                   />
-                  <CO7R_ReviewPaymentMethod
-                    setScreenToShow={setScreenToShow}
-                    isMethodSelected={false}
-                  />
+                  {storeCode == HEALTHYPOINTS ? (
+                    <></>
+                  ) : (
+                    <CO7R_ReviewPaymentMethod
+                      setScreenToShow={setScreenToShow}
+                      isMethodSelected={false}
+                    />
+                  )}
                 </div>
               )}
 
@@ -218,21 +324,23 @@ const CheckoutType7Refactor: React.FC = () => {
                   className='bg-light-gray w-full mb-[30px] opacity-50'
                   id='PaymentMethodTop'
                 >
-                  <div className='pl-[15px] pr-[15px] pt-[15px] pb-[15px]'>
-                    <div className='flex flex-wrap items-center justify-between'>
-                      <div className='pt-[10px] pb-[10px] text-title-text'>
-                        Payment Method
-                      </div>
-                      <div className='pt-[10px] pb-[10px]'>
-                        <NxtImage
-                          isStatic
-                          src='/assets/images/secure-card-hover.png'
-                          className=''
-                          alt={'secured payment symbol'}
-                        />
+                  {!(storeCode == HEALTHYPOINTS) && (
+                    <div className='pl-[15px] pr-[15px] pt-[15px] pb-[15px]'>
+                      <div className='flex flex-wrap items-center justify-between'>
+                        <div className='pt-[10px] pb-[10px] text-title-text'>
+                          Payment Method
+                        </div>
+                        <div className='pt-[10px] pb-[10px]'>
+                          <NxtImage
+                            isStatic
+                            src='/assets/images/secure-card-hover.png'
+                            className=''
+                            alt={'secured payment symbol'}
+                          />
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  )}
                 </div>
               )}
 
@@ -267,6 +375,23 @@ const CheckoutType7Refactor: React.FC = () => {
           </div>
         </div>
       </div>
+      {storeCode === _Store_CODES.USAAHEALTHYPOINTS && (
+        <div className='footer' id='MainFooter'>
+          <div>
+            <div className='container mx-auto white-link'>
+              <div className='bg-primary'>
+                <div className='border-t border-gray-border py-[25px]'>
+                  <div>
+                    <div className='text-center text-xs text-white'>
+                      © 2023 ParsonsKellogg Store. All Rights Reserved
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 };

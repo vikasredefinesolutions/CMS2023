@@ -1,4 +1,5 @@
 import { __LocalStorage } from '@constants/global.constant';
+import { _CheckSizePayload } from '@templates/ProductDetails/productDetailType3/component/BuyNowHandler';
 import { SendAsync } from '@utils/axios.util';
 import {
   AddPromoCodeReq,
@@ -66,6 +67,20 @@ export const addToCart = async (req: CartReq): Promise<number | string> => {
     method: 'POST',
     data: req,
   });
+  return res;
+};
+
+export const checkAvailablityInCart = async (
+  req: _CheckSizePayload,
+): Promise<boolean> => {
+  const url = `Store/CheckAlreadyAddProductInCart.json`;
+
+  const res = await SendAsync<boolean>({
+    url: url,
+    method: 'POST',
+    data: req,
+  });
+  console.log(res);
   return res;
 };
 

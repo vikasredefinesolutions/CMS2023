@@ -1,3 +1,4 @@
+import NxtImage from '@appComponents/reUsable/Image';
 import { __StaticImg } from '@constants/assets';
 import Link from 'next/link';
 import React, { useState } from 'react';
@@ -99,10 +100,11 @@ const SL_ProductsByCategory: React.FC = () => {
                                             <span className='font-bold text-black text-left text-sm lg:p-6 flex flex-wrap'>
                                               {subCategories.name}
                                             </span>{' '}
-                                            <img
+                                            <NxtImage
                                               alt=''
                                               className='w-10 absolute right-3 top-5'
                                               //   inpname="image2"
+                                              isStatic={true}
                                               src={__StaticImg.labelIcon}
                                               title=''
                                             />

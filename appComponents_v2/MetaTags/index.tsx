@@ -1,21 +1,28 @@
 // import { _GetPageType } from '@type/slug.type';
-import { __domain } from '@configs/page.config';
 import { _GetPageType } from '@definations/slug.type';
 import Head from 'next/head';
-import { useRouter } from 'next/router';
 import React from 'react';
+import OgTags from './OgTags';
 interface _Props {
   storeName: string | null;
+  mediaBaseUrl: string;
   pageMetaData: _GetPageType | null;
-  routepath: string;
+  pageUrl: string;
+  imageUrl: string;
 }
 const Metatags: React.FC<_Props> = (props) => {
-  const router = useRouter();
- 
   return (
     <>
       <Head>
-        <link rel='canonical' href={`https://${__domain.localDomain}${router.asPath}`} />
+        <link rel='canonical' href={props.pageUrl} />
+        <OgTags
+          mediaBaseUrl={props.mediaBaseUrl}
+          imageUrl={props.imageUrl}
+          storeName={props.storeName}
+          pageMetaData={props.pageMetaData}
+          pageUrl={props.pageUrl}
+        />
+       
       </Head>
     </>
   );

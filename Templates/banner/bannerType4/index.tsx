@@ -1,24 +1,19 @@
 import ForgotModal from '@appComponents/modals/forgotModal';
 import LoginModal from '@appComponents/modals/loginModal';
+import NxtImage from '@appComponents/reUsable/Image';
 import { _Store } from '@configs/page.config';
 import { __pagesText } from '@constants/pages.text';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import React, { useState } from 'react';
-import { _globalStore } from 'store.global';
 import { _Banner } from '..';
-
-let mediaBaseUrl = _globalStore.blobUrl;
 
 const BannerType4: React.FC<{
   storeId: number;
   content: _Banner[] | null;
 }> = ({ content }) => {
-  const store = useTypedSelector_v2((state) => state.store);
   const userId = useTypedSelector_v2((state) => state.user.id);
   const storeCode = useTypedSelector_v2((state) => state.store.code);
   const [showModal, setShowModal] = useState<string | null>(null);
-
-  mediaBaseUrl = mediaBaseUrl || store.mediaBaseUrl;
 
   if (!content || content.length === 0) return null;
 
@@ -57,8 +52,10 @@ const BannerType4: React.FC<{
             <div className='w-full text-[#000000] md:pl-[0px] md:pr-[0px] pl-[16px] pr-[16px]'>
               {content[0] && (content[0].brandImage || content[0].banner) ? (
                 <div className='text-2xl-text pb-[10px]'>
-                  <img
-                    src={`${mediaBaseUrl}${content[0].brandImage}`}
+                  <NxtImage
+                    useNextImage={false}
+                    alt=''
+                    src={content[0].brandImage}
                     className='max-h-[100px]'
                   />
                 </div>

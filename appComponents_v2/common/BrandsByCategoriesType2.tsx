@@ -1,8 +1,7 @@
+import NxtImage from '@appComponents/reUsable/Image';
 import { _Brand } from '@definations/brand';
-import { useTypedSelector_v2 } from '@hooks_v2/index';
 import Link from 'next/link';
 import React, { useState } from 'react';
-import { _globalStore } from 'store.global';
 interface _Props {
   brands: _Brand[];
 }
@@ -151,12 +150,7 @@ const BrandsByCategoriesType2: React.FC<_Props> = ({ brands }) => {
         return 'bg-secondary';
     }
   };
-  const clientSideMediaBaseUrl = useTypedSelector_v2(
-    (state) => state.store.mediaBaseUrl,
-  );
-  let mediaBaseUrl = _globalStore.blobUrl; // for server side
-  mediaBaseUrl = mediaBaseUrl || clientSideMediaBaseUrl;
-  
+
   return (
     <section className='relative pt-[40px] pb-[40px]'>
       <div className='overflow-x-hidden'>
@@ -253,10 +247,12 @@ const BrandsByCategoriesType2: React.FC<_Props> = ({ brands }) => {
                                       title={brand.name}
                                       href={`${brand.seName}.html`}
                                     >
-                                      <a href={`${brand.seName}.html`}>
-                                        <img src={`${mediaBaseUrl}${brand.imagePath}`} 
+                                      <a>
+                                        <NxtImage
+                                          src={brand.imagePath}
                                           className='w-full mx-auto'
                                           alt={brand.name}
+                                          useNextImage={false}
                                         />
                                       </a>
                                     </Link>

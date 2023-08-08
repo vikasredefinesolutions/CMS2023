@@ -1,3 +1,4 @@
+import NxtImage from '@appComponents/reUsable/Image';
 import { storeBuilderTypeId } from '@configs/page.config';
 import { __Cookie } from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
@@ -19,8 +20,6 @@ import { addSubStore, addToCart } from '@services/cart.service';
 
 import { useRouter } from 'next/router';
 import React from 'react';
-import { _globalStore } from 'store.global';
-let mediaBaseURL = _globalStore.blobUrl;
 interface _props {
   setShowOrSelect: React.Dispatch<React.SetStateAction<'SHOW' | 'SELECT'>>;
   setShowLogoComponent: React.Dispatch<React.SetStateAction<boolean>>;
@@ -52,7 +51,6 @@ const LogosToPrint: React.FC<_props> = ({
   const { sbState } = useTypedSelector_v2((state) => state.product.selected);
   const store = useTypedSelector_v2((state) => state.store);
 
-  mediaBaseURL = store.mediaBaseUrl || mediaBaseURL;
   const { showModal, setShowLoader, fetchCartDetails, clearToCheckout } =
     useActions_v2();
 
@@ -210,7 +208,6 @@ const LogosToPrint: React.FC<_props> = ({
 
     // modalHandler(null);
   };
-
   return (
     <div className='step-2'>
       {selectedLogos?.map((logo, index) => {
@@ -218,26 +215,25 @@ const LogosToPrint: React.FC<_props> = ({
           <div key={logo.no} className='border border-gray-200 p-4 mt-4'>
             <div className=''>Location: {logo.location.name}</div>
             <div className='mt-2 w-32'>
-              <img
+              <NxtImage
                 className='inline-block'
-                src={`${mediaBaseURL}${logo.location.image}`}
+                src={logo.location?.image || null}
                 alt='No Image'
               />
             </div>
             <div className='mt-2'>
-              Logo : {logo.no ? 'Add Later' : `Submitted`}
+              Logo :{' '}
+              {logo.logo.url === '' ? 'Will Be Applied Later' : `Submitted`}
             </div>
             <div className='mt-2 flex gap-2 items-center'>
               <div className='font-semibold'>Logo {index + 1}:</div>
               <div className='w-20 h-20 p-1 inline-flex items-center justify-center border border-gray-200'>
-                <img
+                <NxtImage
                   className='inline-block'
-                  src={
-                    logo?.logo?.url
-                      ? `${mediaBaseURL}${logo?.logo?.url}`
-                      : '/assets/images/logolater.png'
-                  }
+                  useNextImage={false}
+                  src={logo?.logo?.url || '/assets/images/logolater.png'}
                   alt='No Image'
+                  isStatic={!logo?.logo?.url}
                 />
               </div>
             </div>

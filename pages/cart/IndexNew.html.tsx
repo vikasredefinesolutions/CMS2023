@@ -1,6 +1,9 @@
+import LoginModal from '@appComponents/modals/loginModal';
+import ThirdPartyLogin from '@appComponents/modals/loginModal/ThirdPartyLogin';
 import SeoHead from '@appComponents/reUsable/SeoHead';
 import { _defaultTemplates } from '@configs/template.config';
-import { CG_STORE_CODE } from '@constants/global.constant';
+import { CG_STORE_CODE, _Store_CODES } from '@constants/global.constant';
+import { _modals } from '@definations/product.type';
 import {
   GoogleAnalyticsTrackerForAllStore,
   GoogleAnalyticsTrackerForCG,
@@ -14,6 +17,7 @@ import {
 import { FetchPageThemeConfigs } from '@services/product.service';
 import CartTemplate from '@templates/Cart';
 import { GetServerSideProps, GetServerSidePropsResult, NextPage } from 'next';
+import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 import { _globalStore } from 'store.global';
 const Cart: NextPage<{ templateId: number }> = ({ templateId }) => {
@@ -33,9 +37,46 @@ const Cart: NextPage<{ templateId: number }> = ({ templateId }) => {
     show: null | 'loader' | 'emptyCart' | 'dataFound';
     lastUpdatedAt: number;
   }>({ show: null, lastUpdatedAt: 0 });
-
+  const router = useRouter();
   // imported Functions
   const customerId = GetCustomerId();
+
+  const { id: userID, roles } = useTypedSelector_v2((state) => state.user);
+  const [showModal, setShowModal] = useState(false);
+  const { thirdPartyLogin, code: storeCode } = useTypedSelector_v2(
+    (state) => state.store,
+  );
+
+  useEffect(() => {
+    if (
+      (storeCode === _Store_CODES.UNITi ||
+        storeCode === _Store_CODES.USAACLAIMS) &&
+      !userID &&
+      roles.customerId
+    ) {
+      setShowModal(true);
+    } else {
+      setShowModal(false);
+    }
+  }, [userID, roles]);
+
+  const modalHandler = (arg: _modals | null) => {
+    setShowModal(false);
+  };
+  const closeHandler = () => {
+    router.push('/').then(() => setShowModal(false));
+  };
+
+  const renderLoginModal = () => {
+    return thirdPartyLogin ? (
+      <ThirdPartyLogin
+        modalHandler={modalHandler}
+        closeHandler={closeHandler}
+      />
+    ) : (
+      <LoginModal modalHandler={modalHandler} closeHandler={closeHandler} />
+    );
+  };
 
   // All useEffects
   useEffect(() => {
@@ -106,7 +147,9 @@ const Cart: NextPage<{ templateId: number }> = ({ templateId }) => {
     };
   }, []);
 
-  return (
+  return showModal ? (
+    renderLoginModal()
+  ) : (
     <>
       <SeoHead title={'Cart'} keywords={''} description={''} />
       <CartTemplate

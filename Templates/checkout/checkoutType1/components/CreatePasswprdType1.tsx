@@ -1,7 +1,8 @@
 import { checkoutNewAccountPasswordValidationSchema } from '@constants/schemas/checkout.schema';
 import { Form, Formik } from 'formik';
+import { useTypedSelector_v2 } from 'hooks_v2';
+import Link from 'next/link';
 import { FC } from 'react';
-
 /* eslint-disable no-unused-vars */
 type Props = {
   continueAsGuest: () => void;
@@ -19,6 +20,7 @@ const CreatePassword: FC<Props> = ({
   allowGuest,
 }) => {
   const validationSchema = checkoutNewAccountPasswordValidationSchema;
+  const code  = useTypedSelector_v2((state) => state.store.code);
   return (
     <div id='LoginPassword'>
       <div className='text-title-text font-semibold pb-[20px] mb-[20px] border-b border-gray-border'>
@@ -94,8 +96,11 @@ const CreatePassword: FC<Props> = ({
               </Form>
             )}
           </Formik>
+          <div className='text-small-text tracking-normal'>
+        By continuing, you agree and consent to our{' '}<Link href='/privacy-policy.html'><a>Privacy Policy.</a></Link></div>
+      </div>
         </div>
-        {allowGuest && (
+        {(allowGuest && code != 'PMCG') && (
           <div className=''>
             <button
               className='btn btn-secondary btn-lg font-semibold'
@@ -105,11 +110,7 @@ const CreatePassword: FC<Props> = ({
             </button>
           </div>
         )}
-        <div className='text-small-text tracking-normal'>
-          By continuing, you agree to our Terms of Use and consent to our
-          Privacy Policy.
-        </div>
-      </div>
+       
     </div>
   );
 };

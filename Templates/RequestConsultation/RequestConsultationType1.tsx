@@ -30,8 +30,8 @@ const RequestConsultationType1: React.FC<_RequestConsultationProps> = ({
       configname: 'productDetail',
     }).then((data) => {
       if (data) {
-        const obj = JSON?.parse(data?.config_value ? data?.config_value : '{}');
-        setyoumayalsolikeId(obj?.sectionDisplay?.youmayalsolike?.value);
+        const obj = JSON.parse(data?.config_value || '{}');
+        setyoumayalsolikeId(obj.productDetailTemplateId);
       }
     });
   }, []);
@@ -100,7 +100,9 @@ const RequestConsultationType1: React.FC<_RequestConsultationProps> = ({
             </div>
           </div>
           <div>
-            <YouMayAlsoLike product={alike} id={`${youmayalsolikeId}`} />
+            {youmayalsolikeId && (
+              <YouMayAlsoLike product={alike} id={`${youmayalsolikeId}`} />
+            )}
           </div>
         </section>
       )}

@@ -1,8 +1,8 @@
 import { KlaviyoScriptTag } from '@helpers/common.helper';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import { FetchInventoryById } from '@services/product.service';
-import ProductRecentlyViewed from '@templates/recentlyViewedProducts';
 import Reviews from '@templates/Review';
+import ProductRecentlyViewed from '@templates/recentlyViewedProducts';
 import YouMayAlsoLike from '@templates/youMayAlsoLike';
 import Head from 'next/head';
 import { useEffect } from 'react';
@@ -161,6 +161,8 @@ const ProductDetails_Type5: React.FC<_Props> = (product) => {
           return (
             <div key={val + index}>
               <Reviews
+                ratings={product.ratings}
+                reviews={product.reviews}
                 storeCode={product.storeCode}
                 productId={product?.details?.id ? product.details.id : 0}
               />

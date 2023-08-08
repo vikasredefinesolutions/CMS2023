@@ -6,7 +6,7 @@ import ImageComponent from '@appComponents/reUsable/Image';
 import { _Store } from '@configs/page.config';
 import { __pagesText } from '@constants/pages.text';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
-import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { _Banner } from '..';
 
@@ -14,6 +14,7 @@ const BannerType1: React.FC<{
   storeId: number;
   content: _Banner[] | null;
 }> = ({ content }) => {
+  const router = useRouter();
   const userId = useTypedSelector_v2((state) => state.user.id);
   const storeCode = useTypedSelector_v2((state) => state.store.code);
   const [showModal, setShowModal] = useState<string | null>(null);
@@ -46,23 +47,20 @@ const BannerType1: React.FC<{
             <div className='w-full lg:w-1/2 sm:flex gap-[8px] h-full md:pl-[0px] pt-[2px] pb-[2px]'>
               <div className='w-full md:w-5/12 min-h-[100px] bg-[#ffffff] sm:bg-transparent shadow sm:shadow-none flex items-center justify-center  sm:pt-[0px] sm:pb-[0px] text-sub-text md:text-title-text sm:text-[45px] font-bold sm:flex sm:items-center sm:justify-center cursor-pointer'>
                 {content[0] && (content[0].brandImage || content[0].banner) ? (
-                  <Link
-                    href={`${
-                      content[0].customSEName
-                        ? `/${content[0].customSEName}.html`
-                        : `javascript:void(0);`
-                    }`}
+                  <div
+                    onClick={() => {
+                      if (!content[0].customSEName) return;
+                      router.push(`/${content[0].customSEName}.html`);
+                    }}
                   >
-                    <a>
-                      <ImageComponent
-                        title={content[0].name}
-                        className=''
-                        src={content[0]?.brandImage || content[0].banner}
-                        alt={''}
-                        useNextImage={false}
-                      />
-                    </a>
-                  </Link>
+                    <ImageComponent
+                      title={content[0].name}
+                      className=''
+                      src={content[0]?.brandImage || content[0].banner}
+                      alt={''}
+                      useNextImage={false}
+                    />
+                  </div>
                 ) : (
                   <ImageComponent
                     isStatic={true}

@@ -14,6 +14,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { ChangeEvent, useEffect, useState } from 'react';
 import InnerImageZoom from 'react-inner-image-zoom';
+import 'react-inner-image-zoom/lib/InnerImageZoom/styles.min.css';
 import uuid from 'react-uuid';
 import * as Yup from 'yup';
 import { ReviewFormValues } from './WriteReview';
@@ -31,6 +32,8 @@ const WriteReviewTemplate_1 = () => {
   );
   const [star, setStar] = useState(5);
   const [comment, setComment] = useState('');
+  const [showMoreImagesError, setShowMoreImagesError] =
+    useState<boolean>(false);
   const [commentHeading, setCommentHeading] = useState('');
   // const [searchParam] = useSearchParams();
   // const productId = searchParam.get('ProductId');
@@ -71,14 +74,19 @@ const WriteReviewTemplate_1 = () => {
 
   const fileChangeHandler = async (event: ChangeEvent<HTMLInputElement>) => {
     const inputFiles: FileList | null = event.target.files;
-    const files = [];
-    if (inputFiles) {
-      for (let i = 0; i < inputFiles.length; i++) {
-        const file = inputFiles[i];
-        const src = URL.createObjectURL(file);
-        files.push({ file, preview: src });
+    const images: any = [];
+    if (inputFiles?.length && inputFiles?.length + files?.length <= 5) {
+      if (inputFiles) {
+        for (let i = 0; i < inputFiles.length; i++) {
+          const file = inputFiles[i];
+          const src = URL.createObjectURL(file);
+          images.push({ file, preview: src });
+        }
+        setFilesFn((prev) => [...prev, ...images]);
+        setShowMoreImagesError(false);
       }
-      setFilesFn(files);
+    } else {
+      setShowMoreImagesError(true);
     }
   };
 
@@ -189,7 +197,7 @@ const WriteReviewTemplate_1 = () => {
                           >
                             <div className='w-3/4 cursor-pointer'>
                               <NxtImage
-                                src={productdata[0]?.imageUrl || ''}
+                                src={productdata[0]?.imageUrl || null}
                                 alt={''}
                                 className={''}
                                 title={productdata[0].name}
@@ -268,162 +276,221 @@ const WriteReviewTemplate_1 = () => {
                           </div>
                         </div>
                       </div>
-                    </div>
-                    <div className='w-full flex flex-wrap md:mt-[5px] mt-8 pl-[15px] pr-[15px]'>
-                      <Formik
-                        onSubmit={submitHandler}
-                        validationSchema={validationSchema}
-                        initialValues={{ comment, commentHeading }}
-                        enableReinitialize
-                      >
-                        {({
-                          values,
-                          errors,
-                          touched,
-                          handleSubmit,
-                          handleBlur,
-                          // handleChange,
-                        }) => (
-                          <form onSubmit={handleSubmit} className='w-full'>
-                            <div className='w-full flex justify-between mb-8'>
-                              <div className='w-full px-3'>
-                                <label
-                                  htmlFor='First Name'
-                                  className='block text-base font-medium text-gray-700 hidden'
-                                >
-                                  {__pagesText.review.form.description}
-                                </label>
-                                <div className='mt-2'>
-                                  <textarea
-                                    placeholder={
-                                      __pagesText.review.form.description
-                                    }
-                                    className='form-input'
-                                    name='comment'
-                                    onChange={(e) => {
-                                      (values.comment = e.target.value),
-                                        setComment(e.target.value);
-                                    }}
-                                    onBlur={handleBlur}
-                                    value={values.comment}
-                                    rows={4}
-                                  />
-                                  <div className='text-red-500 text-s mt-1'>
-                                    {touched.comment && errors.comment}
+                      <div className='w-full flex flex-wrap md:mt-[15px] mt-8'>
+                        <Formik
+                          onSubmit={submitHandler}
+                          validationSchema={validationSchema}
+                          initialValues={{ comment, commentHeading }}
+                          enableReinitialize
+                        >
+                          {({
+                            values,
+                            errors,
+                            touched,
+                            handleSubmit,
+                            handleBlur,
+                            // handleChange,
+                          }) => (
+                            <form onSubmit={handleSubmit} className='w-full'>
+                              <div className='w-full flex justify-between mb-8'>
+                                <div className='w-full px-3'>
+                                  <label
+                                    htmlFor='First Name'
+                                    className='block text-base font-medium text-gray-700 hidden'
+                                  >
+                                    {__pagesText.review.form.description}
+                                  </label>
+                                  <div className='mt-2'>
+                                    <textarea
+                                      placeholder={
+                                        __pagesText.review.form.description
+                                      }
+                                      className='form-input'
+                                      name='comment'
+                                      onChange={(e) => {
+                                        (values.comment = e.target.value),
+                                          setComment(e.target.value);
+                                      }}
+                                      onBlur={handleBlur}
+                                      value={values.comment}
+                                      rows={4}
+                                    />
+                                    <div className='text-red-500 text-s mt-1'>
+                                      {touched.comment && errors.comment}
+                                    </div>
                                   </div>
                                 </div>
                               </div>
-                            </div>
-                            <div className='w-full flex justify-between mb-8'>
-                              <div className='w-full px-3'>
-                                <label
-                                  htmlFor='First Name'
-                                  className='block text-base font-medium text-gray-700 hidden'
-                                >
-                                  {__pagesText.review.form.description}
-                                </label>
-                                <div className='mt-2'>
-                                  <input
-                                    type='text'
-                                    placeholder={
-                                      __pagesText.review.form.headline
-                                    }
-                                    className='form-input'
-                                    name='commentHeading'
-                                    onChange={(e) => {
-                                      (values.commentHeading = e.target.value),
-                                        setCommentHeading(e.target.value);
-                                    }}
-                                    onBlur={handleBlur}
-                                    value={values.commentHeading}
-                                  />
-                                  <div className='text-red-500 text-s mt-1'>
-                                    {touched.commentHeading &&
-                                      errors.commentHeading}
+                              <div className='w-full flex justify-between mb-8'>
+                                <div className='w-full px-3'>
+                                  <label
+                                    htmlFor='First Name'
+                                    className='block text-base font-medium text-gray-700 hidden'
+                                  >
+                                    {__pagesText.review.form.description}
+                                  </label>
+                                  <div className='mt-2'>
+                                    <input
+                                      type='text'
+                                      placeholder={
+                                        __pagesText.review.form.headline
+                                      }
+                                      className='form-input'
+                                      name='commentHeading'
+                                      onChange={(e) => {
+                                        (values.commentHeading =
+                                          e.target.value),
+                                          setCommentHeading(e.target.value);
+                                      }}
+                                      onBlur={handleBlur}
+                                      value={values.commentHeading}
+                                    />
+                                    <div className='text-red-500 text-s mt-1'>
+                                      {touched.commentHeading &&
+                                        errors.commentHeading}
+                                    </div>
                                   </div>
                                 </div>
                               </div>
-                            </div>
-                            <div className='w-full flex justify-between mb-8'>
-                              <div className='w-full p-3 border border-gray-400 border-dashed'>
-                                {Object.keys(files).length > 0 ? (
-                                  <div className='flex flex-wrap'>
-                                    {files.map((file, index) => (
-                                      <div
-                                        key={index}
-                                        className='h-24 w-24 m-2'
-                                        onMouseEnter={() => sethover(true)}
-                                        onMouseLeave={() => sethover(false)}
-                                      >
-                                        <InnerImageZoom
-                                          key={file.preview}
-                                          src={file.preview}
-                                          zoomType='hover'
-                                          hideHint={true}
-                                          className='w-full object-center object-cover sm:rounded-lg main_image max-h'
-                                        />
-                                        <DeleteIcon
-                                          onClick={() =>
-                                            setFilesFn(
-                                              files.filter(
-                                                (file, ind) => ind !== index,
-                                              ),
-                                            )
-                                          }
-                                          className='svg-inline--fa fa-trash-can text-red-500 h-[16px] w-[16px] inline-block'
-                                        />
-                                        {/* {hover && (
-                                         
-                                        )} */}
-                                        {/* <NxtImage
-                                        src={file.preview}
-                                        alt='preview'
-                                        className=''
-                                      /> */}
-                                      </div>
-                                    ))}
-                                  </div>
-                                ) : (
+                              <div className='w-full flex justify-between mb-8'>
+                                <div className='w-full p-3 border border-gray-400 border-dashed'>
                                   <>
                                     <label
                                       htmlFor='file_upload'
                                       className='block text-base font-medium text-gray-700 form-input  text-sub-text border border-gray-400 border-dashed cursor-pointer'
                                     >
-                                      <span className='block text-base font-medium text-gray-700 mb-2 hidden'>
-                                        {__pagesText.review.form.fileupload}
-                                      </span>
-                                      <div className='w-full flex flex-wrap h-full items-center bg-center bg-no-repeat bg-contain my-3 mx-2'>
-                                        <div className='w-full text-center justify-center inset-0'>
-                                          <div className='text-sm lg:text-lg text-black'>
-                                            <p className='pt-10 lg:pt-20 text-center pb-10 lg:pb-20'>
-                                              <svg
-                                                className='w-6 h-6 text-current-50 mx-auto'
-                                                xmlns='http://www.w3.org/2000/svg'
-                                                fill='none'
-                                                viewBox='0 0 24 24'
-                                                stroke='currentColor'
-                                              >
-                                                <path
-                                                  stroke-linecap='round'
-                                                  stroke-linejoin='round'
-                                                  stroke-width='2'
-                                                  d='M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z'
-                                                ></path>
-                                              </svg>
-                                              <p
-                                                style={{
-                                                  fontSize: '18px',
-                                                }}
-                                              >
-                                                {
-                                                  __pagesText.review.form
-                                                    .dragAndDrop
-                                                }
-                                              </p>
-                                            </p>
+                                      {Object.keys(files).length > 0 ? (
+                                        <>
+                                          <div className='flex flex-wrap'>
+                                            {files.map((file, index) => (
+                                              <>
+                                                <div
+                                                  key={index}
+                                                  className={`m-2 ${
+                                                    hover
+                                                      ? 'w-32 h-32'
+                                                      : 'w-24 h-24'
+                                                  } `}
+                                                  onMouseEnter={() =>
+                                                    sethover(true)
+                                                  }
+                                                  onMouseLeave={() =>
+                                                    sethover(false)
+                                                  }
+                                                >
+                                                  <div
+                                                    onClick={(event) => {
+                                                      event.preventDefault();
+                                                    }}
+                                                  >
+                                                    {/* <NxtImage
+                                                    key={file.preview}
+                                                    src={file.preview}
+                                                    // zoomType='hover'
+                                                    // hideHint={true}
+                                                    alt={''}
+                                                    className='w-full object-center object-cover sm:rounded-lg main_image max-h'
+                                                  /> */}
+                                                    <InnerImageZoom
+                                                      key={file.preview}
+                                                      src={file.preview}
+                                                      zoomType='hover'
+                                                      hideHint={true}
+                                                      className='w-full object-center object-cover sm:rounded-lg main_image max-h'
+                                                    />
+
+                                                    <DeleteIcon
+                                                      onClick={() => {
+                                                        setFilesFn(
+                                                          files.filter(
+                                                            (file, ind) =>
+                                                              ind !== index,
+                                                          ),
+                                                        );
+                                                      }}
+                                                      className='svg-inline--fa fa-trash-can text-red-500 h-[16px] w-[16px] inline-block'
+                                                    />
+                                                  </div>
+
+                                                  {/* {hover && (
+                                                   
+                                                  )} */}
+                                                  {/* <NxtImage
+                                                  src={file.preview}
+                                                  alt='preview'
+                                                  className=''
+                                                /> */}
+                                                </div>
+                                              </>
+                                            ))}
                                           </div>
+                                        </>
+                                      ) : (
+                                        <>
+                                          <span className='block text-base font-medium text-gray-700 mb-2 hidden'>
+                                            {__pagesText.review.form.fileupload}
+                                          </span>
+                                          <div className='w-full flex flex-wrap h-full items-center bg-center bg-no-repeat bg-contain my-3 mx-2'>
+                                            <div className='w-full text-center justify-center inset-0'>
+                                              <div className='text-sm lg:text-lg text-black'>
+                                                <p className='pt-10 lg:pt-20 text-center pb-10 lg:pb-20'>
+                                                  <svg
+                                                    className='w-6 h-6 text-current-50 mx-auto'
+                                                    xmlns='http://www.w3.org/2000/svg'
+                                                    fill='none'
+                                                    viewBox='0 0 24 24'
+                                                    stroke='currentColor'
+                                                  >
+                                                    <path
+                                                      stroke-linecap='round'
+                                                      stroke-linejoin='round'
+                                                      stroke-width='2'
+                                                      d='M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z'
+                                                    ></path>
+                                                  </svg>
+                                                  <p
+                                                    style={{
+                                                      fontSize: '18px',
+                                                    }}
+                                                  >
+                                                    {
+                                                      __pagesText.review.form
+                                                        .dragAndDrop
+                                                    }
+                                                  </p>
+                                                </p>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </>
+                                      )}
+                                      {showMoreImagesError && (
+                                        <div
+                                          className='flex justify-between m-[5px] rounded p-[19px]'
+                                          style={{
+                                            color: '#a94442',
+                                            backgroundColor: '#f2dede',
+                                            border: '1px solid #f2dede',
+                                          }}
+                                        >
+                                          <ul>
+                                            <li>
+                                              Number of files selected for
+                                              upload <b>(1)</b> exceeds maximum
+                                              allowed limit of <b>5</b>.
+                                            </li>
+                                          </ul>
+                                          <span
+                                            className='close kv-error-close'
+                                            onClick={(event) => {
+                                              event.preventDefault();
+                                              setShowMoreImagesError(false);
+                                            }}
+                                          >
+                                            ×
+                                          </span>
                                         </div>
-                                      </div>
+                                      )}
                                     </label>
                                     <div className='mt-2'>
                                       <input
@@ -437,17 +504,17 @@ const WriteReviewTemplate_1 = () => {
                                       />
                                     </div>
                                   </>
-                                )}
+                                </div>
                               </div>
-                            </div>
-                            <div className='w-full flex justify-end'>
-                              <button className='btn btn-secondary btn-md'>
-                                {__pagesText.review.form.submit}
-                              </button>
-                            </div>
-                          </form>
-                        )}
-                      </Formik>
+                              <div className='w-full flex justify-end'>
+                                <button className='btn btn-secondary btn-md'>
+                                  {__pagesText.review.form.submit}
+                                </button>
+                              </div>
+                            </form>
+                          )}
+                        </Formik>
+                      </div>
                     </div>
                   </li>
                 </ul>
