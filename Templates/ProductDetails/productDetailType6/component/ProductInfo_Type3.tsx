@@ -117,7 +117,10 @@ const ProductInfo_Type3: React.FC<_ProductInfoProps> = ({
 
       {openModal === 'login' && <LoginModal modalHandler={modalHandler} />}
       {openModal === 'sizeChart' && (
-        <SizeChartModal storeCode={storeCode} modalHandler={modalHandler} />
+        <SizeChartModal
+          storeCode={storeCode || ''}
+          modalHandler={modalHandler}
+        />
       )}
     </>
   );
