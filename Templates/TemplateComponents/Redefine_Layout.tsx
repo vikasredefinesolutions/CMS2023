@@ -1,27 +1,17 @@
-<<<<<<< HEAD
-import { storeBuilderTypeId } from '@configs/page.config';
-=======
 import SuccessErrorModal from '@appComponents/modals/successErrorModal';
 import CloseStore from '@appComponents/reUsable/CloseStore';
 import { storeBuilderTypeId } from '@configs/page.config';
->>>>>>> ca687e5376e90f4bf91188162d63a7b2a82c8531
 import { paths } from '@constants/paths.constant';
 import { _StoreMenu } from '@definations/header.type';
 import { _GetPageType } from '@definations/slug.type';
 import { _FetchStoreConfigurations } from '@definations/store.type';
 import { _templateIds } from '@helpers/app.extras';
 import { addCustomEvents } from '@helpers/common.helper';
-<<<<<<< HEAD
-import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
-
-=======
 import Footer from '@templates/Footer';
 import BreadCrumb from '@templates/breadCrumb';
 import Header from 'Templates/Header';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
->>>>>>> ca687e5376e90f4bf91188162d63a7b2a82c8531
 
 interface _props {
   children: React.ReactNode;
