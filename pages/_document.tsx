@@ -65,19 +65,19 @@ class MyDocument extends Document {
             ></code>
           )}
           {_globalStore.customHeadScript && (
-            <script
+            <Script
               dangerouslySetInnerHTML={{
                 __html: _globalStore.customHeadScript,
               }}
-            ></script>
+            ></Script>
           )}
           {_globalStore.customGoogleVerification &&
             _globalStore.storeId !== CG_STORE_CODE && (
-              <script
+              <Script
                 dangerouslySetInnerHTML={{
                   __html: _globalStore.customGoogleVerification,
                 }}
-              ></script>
+              ></Script>
             )}
           {/* <link
             rel='stylesheet'
@@ -87,17 +87,17 @@ class MyDocument extends Document {
             }/${_globalStore.companyId}/store/main.css?${Math.random()}`}
           /> */}
           <link
-            rel='stylesheet'
+            rel='preload stylesheet' as="style"
             type='text/css'
             href={`/assets/css/main.css?${Math.random()}`}
           />
           <link
-            rel='stylesheet'
+            rel='preload stylesheet' as="style"
             type='text/css'
             href={`/assets/css/tailwin-css.css?${Math.random()}`}
           />
           <link
-            rel='stylesheet'
+            rel='preload stylesheet' as="style"
             type='text/css'
             href={`${_globalStore.blobUrl}/${
               _globalStore.blobUrlRootDirectory
@@ -117,7 +117,7 @@ class MyDocument extends Document {
             }/${_globalStore.companyId}/store/tailwin-css.css?${Math.random()}`}
           /> */}
           <link
-            rel='stylesheet'
+            rel='preload stylesheet' as="style"
             type='text/css'
             href={`${_globalStore.blobUrl}/${
               _globalStore.blobUrlRootDirectory

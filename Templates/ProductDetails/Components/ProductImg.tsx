@@ -91,7 +91,8 @@ const ProductImg: React.FC<_ProductImgProps> = ({ product }) => {
             key={selectedImage.imageUrl}
             src={`${mediaExtraUrlDeatilMain}${selectedImage?.imageUrl}`}
             zoomType='hover'
-            hideHint={true}
+            hideHint={false}
+            imgAttributes={{alt: "First"}}
             className='w-full object-center object-cover sm:rounded-lg main_image max-h'
           />
         </div>
