@@ -1,13 +1,14 @@
 import { paymentMethodCustom } from '@constants/enum';
-import { ChangeEvent } from 'react';
 import CO5_CreditCardOption from './CO5_CreditCardOption';
 import CO5_NetPaymentOption from './CO5_NetPaymentOption';
 
+export interface _HandlerProps {
+  name: string;
+  value: string;
+}
+
 interface _Props {
-  changeHandler: (
-    /* eslint-disable no-unused-vars */
-    event: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-  ) => void;
+  changeHandler: (e: _HandlerProps) => void;
   paymentMethod: paymentMethodCustom.netNumber | paymentMethodCustom.creditCard;
   updatePaymentMethod: (
     arg: paymentMethodCustom.netNumber | paymentMethodCustom.creditCard,

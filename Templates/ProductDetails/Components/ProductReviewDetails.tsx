@@ -1,23 +1,19 @@
 import { __pagesText } from '@constants/pages.text';
-import { FetchProductReviewDetails } from '@services/review.service';
-import {
-  ProductReviewDetailsRes,
-  ReviewImages,
-} from '../../../services_v2/review';
+import { FetchProductReviews } from '@services/review.service';
+import { _ProductReview, ReviewImages } from '../../../services_v2/review';
 
 import { _ProductReviewDetailsProps } from '@templates/ProductDetails/Components/productDetailsComponents';
-import Image from 'appComponents_v2/reUsable/Image';
-import React, { useEffect, useState } from 'react';
+import NxtImage from 'appComponents_v2/reUsable/Image';
+import React, { Fragment, useEffect, useState } from 'react';
 
 const ProductReviewDetails: React.FC<_ProductReviewDetailsProps> = ({
   productId,
 }) => {
-  const [reviewsDeatils, setReviewsdetails] =
-    useState<ProductReviewDetailsRes[]>();
+  const [reviewsDeatils, setReviewsdetails] = useState<_ProductReview[]>();
 
   useEffect(() => {
     if (productId) {
-      FetchProductReviewDetails(productId).then((details) =>
+      FetchProductReviews(productId).then((details) =>
         setReviewsdetails(details),
       );
     }
@@ -73,19 +69,21 @@ const ProductReviewDetails: React.FC<_ProductReviewDetailsProps> = ({
                       </p>
 
                       <div className='flex flex-wrap gap-5 text-sm text-center px-2 available-colors'>
-                        {reviewsDeatil.images.map((image: ReviewImages) => {
-                          return (
-                            <>
-                              <div className='border-2 border-secondary hover:border-secondary mb-1 last:mb-0'>
-                                <Image
-                                  src={image.ImageName}
-                                  alt=''
-                                  className='w-full object-center object-cover'
-                                />
-                              </div>
-                            </>
-                          );
-                        })}
+                        {reviewsDeatil.images.map(
+                          (image: ReviewImages, index: number) => {
+                            return (
+                              <Fragment key={index}>
+                                <div className='border-2 border-secondary hover:border-secondary mb-1 last:mb-0'>
+                                  <NxtImage
+                                    src={image.ImageName}
+                                    alt=''
+                                    className='w-full object-center object-cover'
+                                  />
+                                </div>
+                              </Fragment>
+                            );
+                          },
+                        )}
                       </div>
                     </div>
                   </div>

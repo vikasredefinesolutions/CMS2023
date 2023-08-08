@@ -70,6 +70,18 @@ export const FetchEmpSourceMediumList = async (
   return response;
 };
 
+export const FetchEmpOrderSubTypeList = async (): Promise<
+  _ValueLabelPair[]
+> => {
+  const url = `Source/getproducttype.json`;
+
+  const response = await SendAsync<_ValueLabelPair[]>({
+    url: url,
+    method: 'GET',
+  });
+  return response;
+};
+
 export const FetchEmployeesList = async (): Promise<_ValueLabelPair[]> => {
   const url = `EmployeeLogin/getallemployee.json`;
 

@@ -1,5 +1,8 @@
 import { UserAddressType } from '@constants/enum';
 import {
+  HEALTHYPOINTS,
+  SIMPLI_SAFE_CODE,
+  UCA,
   phonePattern1,
   phonePattern2,
   phonePattern3,
@@ -9,7 +12,7 @@ import { paths } from '@constants/paths.constant';
 import { __ValidationText } from '@constants/validation.text';
 import { addressMessages } from '@constants/validationMessages';
 import { CustomerAddress } from '@definations/APIs/user.res';
-import { _Country, _State } from '@definations/app.type';
+import { _Country, _Industry, _State } from '@definations/app.type';
 import getLocation from '@helpers/getLocation';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import {
@@ -17,6 +20,7 @@ import {
   UpdateUserAddress,
 } from '@services/address.service';
 import { FetchCountriesList, FetchStatesList } from '@services/general.service';
+import { getLocationWithZipCode } from '@services/user.service';
 import { Formik } from 'formik';
 import { useRouter } from 'next/router';
 import Custom404 from 'pages/404';
@@ -31,8 +35,8 @@ export const _initialValues = {
   aptSuite: '',
   postalCode: '',
   city: '',
-  state: '',
-  countryName: '',
+  state: 'Alabama',
+  countryName: 'United States',
   isDefault: false,
 };
 
@@ -52,6 +56,10 @@ const Index = () => {
   });
   const customerAddressId: any = router.query.Customer;
   const intTrans: number = parseInt(customerAddressId);
+  const [states, setStates] = useState<_Industry[]>([]);
+  const [countries, setCountries] = useState<_Industry[]>([]);
+  const [countryChange, setCoutryChange] = useState<number>(0);
+  const storeCode = useTypedSelector_v2((state) => state.store.code);
 
   useEffect(() => {
     if (customer) {
@@ -98,7 +106,13 @@ const Index = () => {
         addressMessages.firstName.minlength,
         addressMessages.firstName.minValidation,
       ),
-    lastName: Yup.string().trim(),
+    lastName: Yup.string()
+      .trim()
+      .required(addressMessages.lastName.required)
+      .min(
+        addressMessages.lastName.minlength,
+        addressMessages.lastName.minValidation,
+      ),
     address1: Yup.string().trim().required(addressMessages.address1.required),
     city: Yup.string().trim().required(addressMessages.city.required),
     state: Yup.string().required(addressMessages.state.required),
@@ -233,216 +247,337 @@ const Index = () => {
     router.push(paths.myAccount.account_settings);
   };
 
+  const getStateCountry = async (zipCode: string) => {
+    const res = await getLocationWithZipCode(zipCode);
+
+    return res;
+  };
+
+  const customHandleBlur = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    handleBlur: any,
+    setFieldValue: any,
+  ) => {
+    handleBlur(e);
+    getStateCountry(e.target.value).then((res) => {
+      if (res?.countryId) {
+        setFieldValue('city', res.cityName);
+        setFieldValue('countryName', res.countryName);
+        FetchStatesList(res.countryId).then((response) => {
+          setStates(response ? response : []);
+
+          setFieldValue('state', res.stateName);
+        });
+      }
+    });
+  };
+
+  useEffect(() => {
+    FetchStatesList(countryChange).then((res) => res && setStates(res));
+  }, [countryChange]);
+
+  const callOptionAPIs = () => {
+    FetchCountriesList().then((countriesExist) => {
+      if (countriesExist) {
+        setCountries(countriesExist);
+        FetchStatesList(countriesExist[0].id).then(
+          (res) => res && setStates(res),
+        );
+      }
+    });
+  };
+  useEffect(() => {
+    callOptionAPIs();
+  }, []);
+
   return (
     <>
       {edit === paths.myAccount.editShippingAddress ||
       edit === paths.myAccount.editBillingAddress ? (
         <>
           <div className='container mx-auto'>
-            <div className='w-4/4 lg:w-4/5'>
-              <Formik
-                onSubmit={submitHandler}
-                validationSchema={validationSchema}
-                initialValues={initialValues}
-                enableReinitialize
-              >
-                {({
-                  errors,
-                  touched,
-                  values,
-                  handleChange,
-                  handleBlur,
-                  handleSubmit,
-                  submitForm,
-                  isSubmitting,
-                  setFieldValue,
-                }) => (
-                  <>
-                    <form onSubmit={handleSubmit}>
-                      <div className='flex flex-wrap mx-[-15px]'>
-                        <div className='w-full md:w-2/4 px-[15px]'>
-                          <div className='mt-[20px] flex flex-wrap items-center gap-[8px]'>
-                            <label className='text-default-text font-[600] w-full md:w-full md:text-left'>
-                              First Name <span className='text-red-600'>*</span>
-                            </label>
-                            <div className='grow'>
-                              <input
-                                id='firstName'
-                                name='firstName'
-                                placeholder='Enter Your First Name'
-                                className='form-input'
-                                value={values.firstName}
-                                onChange={(e) => {
-                                  handleChange(e);
-                                }}
-                                onBlur={handleBlur}
-                              />
+            <div className='bg-white pt-6 pb-6'>
+              <div className='w-full mx-auto max-w-5xl p-5'>
+                <Formik
+                  onSubmit={submitHandler}
+                  validationSchema={validationSchema}
+                  initialValues={initialValues}
+                  enableReinitialize
+                >
+                  {({
+                    errors,
+                    touched,
+                    values,
+                    handleChange,
+                    handleBlur,
+                    handleSubmit,
+                    submitForm,
+                    isSubmitting,
+                    setFieldValue,
+                  }) => (
+                    <>
+                      <form onSubmit={handleSubmit}>
+                        <div className='flex flex-wrap mx-[-15px]'>
+                          <div className='w-full md:w-2/4 px-[15px]'>
+                            <div className='mt-[20px] flex flex-wrap items-center gap-[8px]'>
+                              <label
+                                className='text-default-text font-[600] w-full md:w-full md:text-left'
+                                htmlFor='firstName'
+                              >
+                                First Name{' '}
+                                <span className='text-red-600'>*</span>
+                              </label>
+                              <div className='grow'>
+                                <input
+                                  id='firstName'
+                                  name='firstName'
+                                  placeholder='Enter Your First Name'
+                                  className={`form-input ${
+                                    touched.firstName &&
+                                    errors.firstName &&
+                                    (storeCode === UCA ||
+                                      storeCode === HEALTHYPOINTS)
+                                      ? 'has-error'
+                                      : ''
+                                  }`}
+                                  value={values.firstName}
+                                  onChange={(e) => {
+                                    handleChange(e);
+                                  }}
+                                  onBlur={handleBlur}
+                                />
+                              </div>
+                            </div>
+                            <div className='text-red-500 text-s mt-1'>
+                              {touched.firstName && errors.firstName}
                             </div>
                           </div>
-                          <div className='text-red-500 text-s mt-1'>
-                            {touched.firstName && errors.firstName}
-                          </div>
-                        </div>
 
-                        <div className='w-full md:w-2/4 px-[15px]'>
-                          <div className='mt-[20px] flex flex-wrap items-center gap-[8px]'>
-                            <label className='text-default-text font-[600] w-full md:w-full md:text-left'>
-                              Last Name
-                            </label>
-                            <div className='grow'>
-                              <input
-                                id='lastName'
-                                name='lastName'
-                                placeholder='Enter Your Last Name'
-                                className='form-input'
-                                value={values.lastName}
-                                onChange={(e) => {
-                                  handleChange(e);
-                                }}
-                                onBlur={handleBlur}
-                              />
+                          <div className='w-full md:w-2/4 px-[15px]'>
+                            <div className='mt-[20px] flex flex-wrap items-center gap-[8px]'>
+                              <label
+                                className='text-default-text font-[600] w-full md:w-full md:text-left'
+                                htmlFor='lastName'
+                              >
+                                Last Name{' '}
+                                <span className='text-red-600'>*</span>
+                              </label>
+                              <div className='grow'>
+                                <input
+                                  id='lastName'
+                                  name='lastName'
+                                  placeholder='Enter Your Last Name'
+                                  className={`form-input ${
+                                    touched.lastName &&
+                                    errors.lastName &&
+                                    (storeCode === UCA ||
+                                      storeCode === HEALTHYPOINTS)
+                                      ? 'has-error'
+                                      : ''
+                                  }`}
+                                  value={values.lastName}
+                                  onChange={(e) => {
+                                    handleChange(e);
+                                  }}
+                                  onBlur={handleBlur}
+                                />
+                              </div>
+                            </div>
+                            <div className='text-red-500 text-s mt-1'>
+                              {touched.lastName && errors.lastName}
                             </div>
                           </div>
-                          <div className='text-red-500 text-s mt-1'>
-                            {touched.lastName && errors.lastName}
-                          </div>
-                        </div>
 
-                        <div className='w-full md:w-4/4 px-[15px]'>
-                          <div className='mt-[20px] flex flex-wrap items-center gap-[8px]'>
-                            <label className='text-default-text font-[600] w-full md:w-full md:text-left'>
-                              Phone Number{' '}
-                              <span className='text-red-600'>*</span>
-                            </label>
-                            <div className='grow'>
-                              <input
-                                id='phone'
-                                name='phone'
-                                placeholder='1234567890'
-                                className='form-input bg-slate-400'
-                                value={values.phone}
-                                onChange={(e) => {
-                                  handleChange(e);
-                                }}
-                                onBlur={handleBlur}
-                              />
+                          <div className='w-full md:w-4/4 px-[15px]'>
+                            <div className='mt-[20px] flex flex-wrap items-center gap-[8px]'>
+                              <label
+                                className='text-default-text font-[600] w-full md:w-full md:text-left'
+                                htmlFor='phone'
+                              >
+                                Phone Number{' '}
+                                <span className='text-red-600'>*</span>
+                              </label>
+                              <div className='grow'>
+                                <input
+                                  id='phone'
+                                  name='phone'
+                                  placeholder='1234567890'
+                                  className={`form-input bg-slate-400 ${
+                                    touched.phone &&
+                                    errors.phone &&
+                                    (storeCode === UCA ||
+                                      storeCode === HEALTHYPOINTS)
+                                      ? 'has-error'
+                                      : ''
+                                  }`}
+                                  value={values.phone}
+                                  onChange={(e) => {
+                                    handleChange(e);
+                                  }}
+                                  onBlur={handleBlur}
+                                />
+                              </div>
+                              <div className='w-full md:w-full md:text-left grow'>
+                                <p>*For delivery questions only</p>
+                              </div>
                             </div>
-                            <div className='w-full md:w-full md:text-left grow'>
-                              <p>*For delivery questions only</p>
+                            <div className='text-red-500 text-s mt-1'>
+                              {touched.phone && errors.phone}
                             </div>
                           </div>
-                          <div className='text-red-500 text-s mt-1'>
-                            {touched.phone && errors.phone}
-                          </div>
-                        </div>
 
-                        <div className='w-full md:w-4/4 px-[15px]'>
-                          <div className='mt-[20px] flex flex-wrap items-center gap-[8px]'>
-                            <label className='text-default-text font-[600] w-full md:w-full md:text-left'>
-                              Street Address{' '}
-                              <span className='text-red-600'>*</span>
-                            </label>
-                            <div className='grow'>
-                              <input
-                                id='address1'
-                                name='address1'
-                                placeholder='132, Street'
-                                className='form-input'
-                                value={values.address1}
-                                onChange={(e) => {
-                                  handleChange(e);
-                                }}
-                                onBlur={handleBlur}
-                              />
+                          <div className='w-full md:w-4/4 px-[15px]'>
+                            <div className='mt-[20px] flex flex-wrap items-center gap-[8px]'>
+                              <label
+                                className='text-default-text font-[600] w-full md:w-full md:text-left'
+                                htmlFor='address1'
+                              >
+                                Street Address{' '}
+                                <span className='text-red-600'>*</span>
+                              </label>
+                              <div className='grow'>
+                                <input
+                                  id='address1'
+                                  name='address1'
+                                  placeholder='132, Street'
+                                  className={`form-input ${
+                                    touched.address1 &&
+                                    errors.address1 &&
+                                    (storeCode === UCA ||
+                                      storeCode === HEALTHYPOINTS)
+                                      ? 'has-error'
+                                      : ''
+                                  }`}
+                                  value={values.address1}
+                                  onChange={(e) => {
+                                    handleChange(e);
+                                  }}
+                                  onBlur={handleBlur}
+                                />
+                              </div>
+                              <div className='w-full md:w-full md:text-left grow'>
+                                <p>*We cannot ship to PO boxes or APO/FPO</p>
+                              </div>
                             </div>
-                            <div className='w-full md:w-full md:text-left grow'>
-                              <p>*We cannot ship to PO boxes or APO/FPO</p>
+                            <div className='text-red-500 text-s mt-1'>
+                              {touched.address1 && errors.address1}
                             </div>
                           </div>
-                          <div className='text-red-500 text-s mt-1'>
-                            {touched.address1 && errors.address1}
-                          </div>
-                        </div>
 
-                        <div className='w-full md:w-2/4 px-[15px]'>
-                          <div className='mt-[20px] flex flex-wrap items-center gap-[8px]'>
-                            <label className='text-default-text font-[600] w-full md:w-full md:text-left'>
-                              Apt, Suite
-                            </label>
-                            <div className='grow'>
-                              <input
-                                id='aptSuite'
-                                name='aptSuite'
-                                placeholder='12'
-                                className='form-input'
-                                value={values.aptSuite}
-                                onChange={(e) => {
-                                  handleChange(e);
-                                }}
-                                onBlur={handleBlur}
-                              />
+                          {storeCode == SIMPLI_SAFE_CODE ||
+                          storeCode == HEALTHYPOINTS ||
+                          storeCode == UCA ? (
+                            <></>
+                          ) : (
+                            <div className='w-full md:w-2/4 px-[15px]'>
+                              <div className='mt-[20px] flex flex-wrap items-center gap-[8px]'>
+                                <label className='text-default-text font-[600] w-full md:w-full md:text-left'>
+                                  Apt, Suite
+                                </label>
+                                <div className='grow'>
+                                  <input
+                                    id='aptSuite'
+                                    name='aptSuite'
+                                    placeholder='12'
+                                    className='form-input'
+                                    value={values.aptSuite}
+                                    onChange={(e) => {
+                                      handleChange(e);
+                                    }}
+                                    onBlur={handleBlur}
+                                  />
+                                </div>
+                              </div>
+                              <div className='text-red-500 text-s mt-1'>
+                                {touched.aptSuite && errors.aptSuite}
+                              </div>
+                            </div>
+                          )}
+
+                          <div className='w-full md:w-2/4 px-[15px]'>
+                            <div className='mt-[20px] flex flex-wrap items-center gap-[8px]'>
+                              <label
+                                className='text-default-text font-[600] w-full md:w-full md:text-left'
+                                htmlFor='postalCode'
+                              >
+                                ZIP Code <span className='text-red-600'>*</span>
+                              </label>
+                              <div className='grow'>
+                                <input
+                                  id='postalCode'
+                                  name='postalCode'
+                                  placeholder='01234'
+                                  className={`form-input bg-slate-400 ${
+                                    touched.postalCode &&
+                                    errors.postalCode &&
+                                    (storeCode === UCA ||
+                                      storeCode === HEALTHYPOINTS)
+                                      ? 'has-error'
+                                      : ''
+                                  }`}
+                                  value={values.postalCode}
+                                  onChange={(e) => {
+                                    handleChange(e);
+                                  }}
+                                  onBlur={(e) => {
+                                    customHandleBlur(
+                                      e,
+                                      handleBlur,
+                                      setFieldValue,
+                                    );
+                                  }}
+                                />
+                              </div>
+                            </div>
+                            <div className='text-red-500 text-s mt-1'>
+                              {touched.postalCode && errors.postalCode}
                             </div>
                           </div>
-                          <div className='text-red-500 text-s mt-1'>
-                            {touched.aptSuite && errors.aptSuite}
-                          </div>
-                        </div>
 
-                        <div className='w-full md:w-2/4 px-[15px]'>
-                          <div className='mt-[20px] flex flex-wrap items-center gap-[8px]'>
-                            <label className='text-default-text font-[600] w-full md:w-full md:text-left'>
-                              ZIP Code <span className='text-red-600'>*</span>
-                            </label>
-                            <div className='grow'>
-                              <input
-                                id='postalCode'
-                                name='postalCode'
-                                placeholder='01234'
-                                className='form-input bg-slate-400'
-                                value={values.postalCode}
-                                onChange={(e) => {
-                                  handleChange(e);
-                                }}
-                                onBlur={handleBlur}
-                              />
+                          <div className='w-full md:w-2/4 px-[15px]'>
+                            <div className='mt-[20px] flex flex-wrap items-center gap-[8px]'>
+                              <label
+                                className='text-default-text font-[600] w-full md:w-full md:text-left'
+                                htmlFor='city'
+                              >
+                                City <span className='text-red-600'>*</span>
+                              </label>
+                              <div className='grow'>
+                                <input
+                                  id='city'
+                                  name='city'
+                                  placeholder='City'
+                                  value={values.city}
+                                  className={`form-input ${
+                                    touched.city &&
+                                    errors.city &&
+                                    (storeCode === UCA ||
+                                      storeCode === HEALTHYPOINTS)
+                                      ? 'has-error'
+                                      : ''
+                                  }`}
+                                  onChange={(e) => {
+                                    handleChange(e);
+                                  }}
+                                  onBlur={handleBlur}
+                                />
+                              </div>
+                            </div>
+                            <div className='text-red-500 text-s mt-1'>
+                              {touched.city && errors.city}
                             </div>
                           </div>
-                          <div className='text-red-500 text-s mt-1'>
-                            {touched.postalCode && errors.postalCode}
-                          </div>
-                        </div>
 
-                        <div className='w-full md:w-1/3 px-[15px]'>
-                          <div className='mt-[20px] flex flex-wrap items-center gap-[8px]'>
-                            <label className='text-default-text font-[600] w-full md:w-full md:text-left'>
-                              City <span className='text-red-600'>*</span>
-                            </label>
-                            <div className='grow'>
-                              <input
-                                id='city'
-                                name='city'
-                                placeholder='City'
-                                value={values.city}
-                                className='form-input'
-                                onChange={(e) => {
-                                  handleChange(e);
-                                }}
-                                onBlur={handleBlur}
-                              />
-                            </div>
-                          </div>
-                          <div className='text-red-500 text-s mt-1'>
-                            {touched.city && errors.city}
-                          </div>
-                        </div>
-
-                        <div className='w-full md:w-1/3 px-[15px]'>
-                          <div className='mt-[20px] flex flex-wrap items-center gap-[8px]'>
-                            <label className='text-default-text font-[600] w-full md:w-full md:text-left'>
-                              State <span className='text-red-600'>*</span>
-                            </label>
-                            <div className='grow'>
-                              <select
+                          <div className='w-full md:w-2/4 px-[15px]'>
+                            <div className='mt-[20px] flex flex-wrap items-center gap-[8px]'>
+                              <label
+                                className='text-default-text font-[600] w-full md:w-full md:text-left'
+                                htmlFor='state'
+                              >
+                                State <span className='text-red-600'>*</span>
+                              </label>
+                              <div className='grow'>
+                                {/* <select
                                 id='state'
                                 name='state'
                                 className='form-input'
@@ -462,21 +597,57 @@ const Index = () => {
                                 {state.map((res, index) => (
                                   <option key={index}>{res?.name}</option>
                                 ))}
-                              </select>
+                              </select> */}
+                                <select
+                                  className={`form-input ${
+                                    touched.state &&
+                                    errors.state &&
+                                    (storeCode === UCA ||
+                                      storeCode === HEALTHYPOINTS)
+                                      ? 'has-error'
+                                      : ''
+                                  }`}
+                                  onBlur={handleBlur}
+                                  onChange={(e) => {
+                                    handleChange(e);
+                                  }}
+                                  name='state'
+                                  id='state'
+                                  value={values.state}
+                                >
+                                  <>
+                                    {countries.length === 0 ? (
+                                      <option>No State found</option>
+                                    ) : (
+                                      ''
+                                    )}
+                                    {states?.map((opt) => (
+                                      <option
+                                        id={opt.id.toString()}
+                                        key={opt.id}
+                                      >
+                                        {opt.name}
+                                      </option>
+                                    ))}
+                                  </>
+                                </select>
+                              </div>
+                            </div>
+                            <div className='text-red-500 text-s mt-1'>
+                              {touched.state && errors.state}
                             </div>
                           </div>
-                          <div className='text-red-500 text-s mt-1'>
-                            {touched.state && errors.state}
-                          </div>
-                        </div>
 
-                        <div className='w-full md:w-1/3 px-[15px]'>
-                          <div className='mt-[20px] flex flex-wrap items-center gap-[8px]'>
-                            <label className='text-default-text font-[600] w-full md:w-full md:text-left'>
-                              Country <span className='text-red-600'>*</span>
-                            </label>
-                            <div className='grow'>
-                              <select
+                          <div className='w-full md:w-2/4 px-[15px]'>
+                            <div className='mt-[20px] flex flex-wrap items-center gap-[8px]'>
+                              <label
+                                className='text-default-text font-[600] w-full md:w-full md:text-left'
+                                htmlFor='countryName'
+                              >
+                                Country <span className='text-red-600'>*</span>
+                              </label>
+                              <div className='grow'>
+                                {/* <select
                                 id='country'
                                 name='countryName'
                                 className='form-input'
@@ -497,41 +668,77 @@ const Index = () => {
                                 {country.map((res, index) => (
                                   <option key={index}>{res?.name}</option>
                                 ))}
-                              </select>
+                              </select> */}
+                                <select
+                                  className={`form-input ${
+                                    touched.countryName &&
+                                    errors.countryName &&
+                                    (storeCode === UCA ||
+                                      storeCode === HEALTHYPOINTS)
+                                      ? 'has-error'
+                                      : ''
+                                  }`}
+                                  onBlur={handleBlur}
+                                  onChange={(e) => {
+                                    handleChange(e);
+                                    setCoutryChange(
+                                      +e.target[e?.target.selectedIndex].id,
+                                    );
+                                  }}
+                                  name='countryName'
+                                  value={values.countryName}
+                                >
+                                  <>
+                                    {countries.length === 0 ? (
+                                      <option>No State found</option>
+                                    ) : (
+                                      ''
+                                    )}
+                                    {countries?.map((opt) => (
+                                      <option
+                                        id={opt.id.toString()}
+                                        key={opt.id}
+                                      >
+                                        {opt.name}
+                                      </option>
+                                    ))}
+                                  </>
+                                </select>
+                              </div>
+                            </div>
+                            <div className='text-red-500 text-s mt-1'>
+                              {touched.countryName && errors.countryName}
                             </div>
                           </div>
-                          <div className='text-red-500 text-s mt-1'>
-                            {touched.countryName && errors.countryName}
+                        </div>
+                      </form>
+
+                      <div className='w-full text-center'>
+                        <div className='flex flex-wrap items-center gap-2 pt-[40px]'>
+                          <div className='grow'>
+                            <button
+                              type='submit'
+                              disabled={isSubmitting}
+                              onClick={submitForm}
+                              className='btn btn-primary mr-1'
+                            >
+                              Save
+                            </button>
+                            <button
+                              className='btn btn-secondary uppercase'
+                              onClick={() =>
+                                router.push(paths.myAccount.account_settings)
+                              }
+                            >
+                              Cancel
+                            </button>
                           </div>
                         </div>
                       </div>
-                    </form>
-
-                    <div className='w-full text-center'>
-                      <div className='flex flex-wrap items-center gap-2 pt-[40px]'>
-                        <div className='grow'>
-                          <button
-                            type='submit'
-                            disabled={isSubmitting}
-                            onClick={submitForm}
-                            className='btn btn-primary'
-                          >
-                            Save
-                          </button>
-                          <button
-                            className='btn btn-secondary uppercase'
-                            onClick={() =>
-                              router.push(paths.myAccount.account_settings)
-                            }
-                          >
-                            Cancel
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </>
-                )}
-              </Formik>
+                    </>
+                  )}
+                </Formik>
+              </div>
             </div>
           </div>
         </>

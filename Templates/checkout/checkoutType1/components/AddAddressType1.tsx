@@ -39,12 +39,7 @@ const AddAddress = ({
     handleSubmit,
     values,
     setFieldValue,
-    isSubmitting,
   } = refrence;
-  const customerId = useTypedSelector_v2((state) => state.user.id);
-  const customer = useTypedSelector_v2((state) => {
-    return state.user.customer;
-  });
   const userId = useTypedSelector_v2((state) => state.user.id);
   const [country, setCountry] = useState<
     {
@@ -73,15 +68,13 @@ const AddAddress = ({
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     handleBlur(e);
-    const locationObj = getStateCountryCityWithZipCode(e.target.value).then(
-      (res) => {
-        if (res?.countryId) {
-          setFieldValue('state', res?.stateName);
-          setFieldValue('countryName', res?.countryName);
-          setFieldValue('city', res?.cityName);
-        }
-      },
-    );
+    getStateCountryCityWithZipCode(e.target.value).then((res) => {
+      if (res?.countryId) {
+        setFieldValue('state', res?.stateName);
+        setFieldValue('countryName', res?.countryName);
+        setFieldValue('city', res?.cityName);
+      }
+    });
   };
 
   useEffect(() => {
@@ -154,7 +147,7 @@ const AddAddress = ({
                   htmlFor='FirstName'
                   className='left-[8px] absolute duration-300 top-[11px] -z-1 origin-0 text-[#000000] text-[18px]'
                 >
-                  First Name *
+                  First Name*
                 </label>
               </div>
               <div className='text-red-500 text-s'>
@@ -175,7 +168,7 @@ const AddAddress = ({
                   htmlFor='LastName'
                   className='left-[8px] absolute duration-300 top-[11px] -z-1 origin-0 text-[#000000] text-[18px]'
                 >
-                  Last Name *
+                  Last Name*
                 </label>
               </div>
               <div className='text-red-500 text-s'>
@@ -196,7 +189,7 @@ const AddAddress = ({
                   htmlFor='CompanyName'
                   className='left-[8px] absolute duration-300 top-[11px] -z-1 origin-0 text-[#000000] text-[18px]'
                 >
-                  Company Name *
+                  Company Name*
                 </label>
               </div>
               <div className='text-red-500 text-s'>
@@ -217,7 +210,7 @@ const AddAddress = ({
                   htmlFor='address1'
                   className='left-[8px] absolute duration-300 top-[11px] -z-1 origin-0 text-[#000000] text-[18px]'
                 >
-                  Street Address *
+                  Street Address*
                 </label>
               </div>
               <div className='text-red-500 text-s'>
@@ -259,7 +252,7 @@ const AddAddress = ({
                   htmlFor='city'
                   className='left-[8px] absolute duration-300 top-[11px] -z-1 origin-0 text-[#000000] text-[18px]'
                 >
-                  City *
+                  City*
                 </label>
               </div>
               <div className='text-red-500 text-s'>
@@ -283,7 +276,7 @@ const AddAddress = ({
                   htmlFor='countryName'
                   className='left-[8px] absolute duration-300 top-[11px] -z-1 origin-0 text-[#000000] text-[18px]'
                 >
-                  Select Country *
+                  Select Country*
                 </label>
               </div>
               <div className='text-red-500 text-s'>
@@ -307,7 +300,7 @@ const AddAddress = ({
                   htmlFor='StateProvince'
                   className='left-[8px] absolute duration-300 top-[11px] -z-1 origin-0 text-[#000000] text-[18px]'
                 >
-                  State / Province *
+                  State / Province*
                 </label>
               </div>
               <div className='text-red-500 text-s'>
@@ -322,14 +315,14 @@ const AddAddress = ({
                   onChange={handleChange}
                   name='postalCode'
                   placeholder=' '
-                  type='number'
+                  type='text'
                   className='pt-[15px] pb-[0px] block w-full px-[8px] h-[48px] mt-[0px] text-sub-text text-[18px] text-[#000000] bg-transparent border-0 appearance-none focus:outline-none focus:ring-0'
                 />
                 <label
                   htmlFor='postalCode'
                   className='left-[8px] absolute duration-300 top-[11px] -z-1 origin-0 text-[#000000] text-[18px]'
                 >
-                  Zip Code *
+                  Zip Code*
                 </label>
               </div>
               <div className='text-red-500 text-s'>
@@ -360,7 +353,7 @@ const AddAddress = ({
               </div>
             </div>
             {!isBillingForm && (
-              <div className='w-full lg:w-1/2 pl-[12px] pr-[12px]'>
+              <div className='w-full lg:w-1/2 pl-[12px] pr-[12px] hidden'>
                 <div className='relative z-0 w-full mb-[20px]'>
                   Used for delivery questions only
                 </div>

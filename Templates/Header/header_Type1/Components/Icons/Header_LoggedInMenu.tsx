@@ -6,8 +6,8 @@ import { Logout } from '@helpers/common.helper';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
 import Link from 'next/link';
 import React, { useState } from 'react';
+import { _globalStore } from 'store.global';
 import { __StaticImg } from '../../../../../public/assets/images.asset';
-
 const LoggedInMenu: React.FC = () => {
   const {
     setWishListEmpty,
@@ -16,12 +16,16 @@ const LoggedInMenu: React.FC = () => {
     logoutClearCart,
     logInUser,
   } = useActions_v2();
+
+  const storeId = useTypedSelector_v2((state) => state.store.id);
+
   const { id: loggedIn, customer } = useTypedSelector_v2((state) => state.user);
   const [focus, setFocus] = useState(false);
   const { view } = useTypedSelector_v2((state) => state.store);
   const isEmployeeLoggedIn = useTypedSelector_v2(
     (state) => state.employee.empId,
   );
+  let mediaBaseUrl = _globalStore.blobUrl; // for server side
 
   const logoutHandler = () => {
     if (isEmployeeLoggedIn) {
@@ -37,8 +41,14 @@ const LoggedInMenu: React.FC = () => {
   };
 
   const handleHelp = () => {
-    window.openWidget();
+    //    window["openWidgett"]();
+    //   window?.openWidgett()
   };
+
+  const clientSideMediaBaseUrl = useTypedSelector_v2(
+    (state) => state.store.mediaBaseUrl,
+  );
+  mediaBaseUrl = mediaBaseUrl || clientSideMediaBaseUrl;
 
   if (!loggedIn) return <></>;
 
@@ -68,7 +78,7 @@ const LoggedInMenu: React.FC = () => {
         </Link>
 
         {focus && (
-          <div className='text-xs uppercase absolute right-0 top-full bg-white z-40 w-[220px] pt-2'>
+          <div className='text-xs uppercase absolute right-0 top-full bg-white z-50 w-[220px] pt-2'>
             <ul className='border-[3px] border-primary'>
               <li className='border-t border-t-gray-300'>
                 <Link href={paths.loggedInMenu.order}>
@@ -106,23 +116,21 @@ const LoggedInMenu: React.FC = () => {
                   </a>
                 </Link>
               </li>
-              <li onClick={handleHelp} className='border-t border-t-gray-300'>
-                {/* <Link href={paths.loggedInMenu.help}> */}
-                <div className='flex items-center p-2 gap-2.5 text-primary hover:text-primary-hover cursor-pointer'>
-                  <span className=''>
-                    <NxtImage
-                      src={__StaticImg.loggedInMenu.help.src}
-                      alt={''}
-                      className={''}
-                      isStatic={true}
-                      useNextImage={false}
-                      title={__pagesText.Headers.help}
-                    />
+              <li
+                className='border-t border-t-gray-300'
+                // IMAGE TAG IN __HTML
+                dangerouslySetInnerHTML={{
+                  __html: `
+                <div class="flex items-center p-2 gap-2.5 text-primary hover:text-primary-hover cursor-pointer">
+                  <span class=""><a href="javascript:void(0)" onClick="if (!window.__cfRLUnblockHandlers) return false; openWidgett()">
+                    <img itemprop="image" src="${mediaBaseUrl}/storagemedia/1/store/${storeId}/images/header-help-icon.png" alt="" title="Help" class="" />
+                    </a>
                   </span>
-                  <span className=''> {__pagesText.Headers.help}</span>
-                </div>
-                {/* </Link> */}
-              </li>
+                  <span class=""><a href="javascript:void(0)" onClick="if (!window.__cfRLUnblockHandlers) return false; openWidgett()"> Help</a></span></div>
+              `,
+                }}
+              ></li>
+
               <li className='border-t border-t-gray-300'>
                 <div
                   onClick={() => logoutHandler()}

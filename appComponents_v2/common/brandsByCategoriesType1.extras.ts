@@ -57,6 +57,12 @@ export const categoriesWithBrands: {
     brandsIDs: [
       {
         staticImagePath: '',
+        id: 1,
+        brandName: 'Peter Millar',
+        seName: 'peter-millar',
+      },
+      {
+        staticImagePath: '',
         id: 9,
         brandName: 'Patagonia',
         seName: 'patagonia',
@@ -66,12 +72,6 @@ export const categoriesWithBrands: {
         id: 6,
         brandName: 'Nike',
         seName: 'nike',
-      },
-      {
-        staticImagePath: '',
-        id: 1,
-        brandName: 'Peter Millar',
-        seName: 'peter-millar',
       },
       {
         staticImagePath: '',

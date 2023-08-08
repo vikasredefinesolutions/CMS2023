@@ -1,4 +1,5 @@
 import Price from '@appComponents/Price';
+import NxtImage from '@appComponents/reUsable/Image';
 import {
   _MyAcc_OrderBillingDetails,
   _MyAcc_OrderProductDetails,
@@ -88,7 +89,12 @@ const OrD_InvoiceModal: React.FC<_Props> = ({
           <div className='relative bg-[#ffffff] shadow max-h-screen overflow-y-auto h-full'>
             <div className='flex justify-between items-start p-[25px] rounded-t border-b sticky top-0 left-0 bg-[#ffffff] z-50'>
               <div className='text-[30px] font-[600] text-large-text'>
-                <img src={`${mediaBaseUrl}${logoUrl}`} />
+                <NxtImage
+                  src={logoUrl}
+                  className=''
+                  useNextImage={false}
+                  alt=''
+                />
               </div>
               <button
                 type='button'

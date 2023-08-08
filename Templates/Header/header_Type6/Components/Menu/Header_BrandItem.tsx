@@ -1,5 +1,12 @@
 import LoginModal from '@appComponents/modals/loginModal';
-import { CYXTERA_CODE, UNITI_CODE } from '@constants/global.constant';
+import ThirdPartyLogin from '@appComponents/modals/loginModal/ThirdPartyLogin';
+import {
+  CYXTERA_CODE,
+  SIMPLI_SAFE_CODE,
+  UCA,
+  UNITI_CODE,
+  _Store_CODES,
+} from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
 import { _Brand } from '@definations/brand';
 import { _modals } from '@definations/product.type';
@@ -8,7 +15,7 @@ import SubMenuItem from '@header/header_Type6/Components/Menu/Header_SubMenuItem
 import { capitalizeFirstLetter } from '@helpers/common.helper';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
 import { useRouter } from 'next/router';
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment, useCallback, useEffect, useState } from 'react';
 
 interface _props {
   url: string;
@@ -32,6 +39,7 @@ const Brand: React.FC<_props> = ({
   const { id: customerId } = useTypedSelector_v2((state) => state.user);
   const [openModal, setOpenModal] = useState<null | _modals>(null);
   const [showtab, setShowTab] = useState<boolean>(false);
+  const { thirdPartyLogin } = useTypedSelector_v2((state) => state.store);
   useEffect(() => {
     if (openTab == title) {
       setShowTab(true);
@@ -50,6 +58,28 @@ const Brand: React.FC<_props> = ({
     }
     setOpenModal(null);
   };
+
+  const getHeaderClassName = useCallback(() => {
+    if (focus) {
+      if (code == SIMPLI_SAFE_CODE || code === _Store_CODES.USAAHEALTHYPOINTS) {
+        return 'border-secondary primary-link hover:primary-link';
+      }
+      return 'border-secondary text-secondary';
+    } else {
+      if (code == UNITI_CODE) {
+        return 'border-transparent primary-link font-semibold';
+      } else if (
+        code == SIMPLI_SAFE_CODE ||
+        code === _Store_CODES.USAAHEALTHYPOINTS ||
+        code === UCA
+      ) {
+        return 'border-transparent primary-link';
+      } else {
+        return 'border-transparent text-primary';
+      }
+    }
+  }, [focus, code]);
+
   if (view === 'MOBILE') {
     return (
       <>
@@ -63,7 +93,11 @@ const Brand: React.FC<_props> = ({
             <span
               className='material-icons-outlined text-[16px] font-[600] mr-[5px] absolute left-[5px] top-1/2 -translate-y-1/2'
               onClick={() => {
-                if (code === CYXTERA_CODE || code === UNITI_CODE) {
+                if (
+                  code === CYXTERA_CODE ||
+                  code === UNITI_CODE ||
+                  code === UCA
+                ) {
                   if (customerId) {
                     setOpenTab(title);
                     setShowAllItems((show) => !show);
@@ -119,7 +153,15 @@ const Brand: React.FC<_props> = ({
             </div>
           </div>
         )}
-        {openModal === 'login' && <LoginModal modalHandler={modalHandler} />}
+        {openModal === 'login' && (
+          <>
+            {thirdPartyLogin ? (
+              <ThirdPartyLogin modalHandler={modalHandler} />
+            ) : (
+              <LoginModal modalHandler={modalHandler} />
+            )}
+          </>
+        )}
       </>
     );
   }
@@ -129,7 +171,7 @@ const Brand: React.FC<_props> = ({
       <>
         <div
           onClick={() => {
-            if (code === CYXTERA_CODE || code === UNITI_CODE) {
+            if (code === CYXTERA_CODE || code === UNITI_CODE || code === UCA) {
               if (customerId) {
                 router.push(`/${url}`);
               } else {
@@ -146,11 +188,7 @@ const Brand: React.FC<_props> = ({
               type='button'
               onMouseOver={() => setFocus(true)}
               onMouseLeave={() => setFocus(false)}
-              className={`relative text-[12px] xl:text-[14px] xl:ml-[12px] xl:mr-[12px] ml-[5px] mr-[5px] tracking-[2px] z-10 flex items-center font-[400] pt-[10px] pb-[10px] border-b-[4px] ${
-                focus
-                  ? 'border-secondary text-secondary'
-                  : 'border-transparent text-primary'
-              }`}
+              className={`relative text-[12px] xl:text-[14px] xl:ml-[12px] xl:mr-[12px] ml-[5px] mr-[5px] tracking-[2px] z-10 flex items-center font-[400] pt-[10px] pb-[10px] border-b-[4px] ${getHeaderClassName()}`}
             >
               <span
                 className='uppercase '

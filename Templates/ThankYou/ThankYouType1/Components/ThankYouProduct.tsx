@@ -27,9 +27,13 @@ const ThankYouProduct: React.FC<_props> = ({ product }) => {
           <Link href={`/${product.seName}.html`}>
             <div>
               <NxtImage
-                src={product.colorImage}
+                src={
+                  product?.colorImage ||
+                  '/assets/images/image_not_available.jpg'
+                }
                 alt={product.productName}
-                className='rounded-md object-center object-cover'
+                className='max-h-[348px]'
+                isStatic={product.colorImage ? false : true}
               />
             </div>
           </Link>

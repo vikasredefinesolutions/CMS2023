@@ -130,7 +130,7 @@ const LoginModal_Type2: React.FC<_ModalProps> = ({ modalHandler }) => {
                 <div
                   className='relative w-full max-w-xl h-auto bg-cover'
                   style={{
-                    backgroundImage: "url('assets/images/login-bg-gdg.jpg')",
+                    backgroundImage: "url('/assets/images/login-bg-gdg.jpg')",
                   }}
                 >
                   <div
@@ -148,7 +148,7 @@ const LoginModal_Type2: React.FC<_ModalProps> = ({ modalHandler }) => {
                       className='p-[25px] bg-cover'
                       style={{
                         backgroundImage:
-                          "url('assets/images/login-bg-1-gdg.jpg')",
+                          "url('/assets/images/login-bg-1-gdg.jpg')",
                       }}
                     >
                       <div className='mb-[10px] medium-text text-center'>
@@ -199,6 +199,11 @@ const LoginModal_Type2: React.FC<_ModalProps> = ({ modalHandler }) => {
                           >
                             Login
                           </button>
+                          {showErroMsg && (
+                            <span className='mb-1 text-rose-500'>
+                              {showErroMsg}
+                            </span>
+                          )}
                         </div>
                         <div className='flex flex-wrap justify-between items-center pb-[10px] gap-[10px]'>
                           <div className='mb-[10px] flex items-center gap-1'>

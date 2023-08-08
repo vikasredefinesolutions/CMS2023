@@ -105,6 +105,7 @@ export interface _ProductDetails {
   productBrandLogo: string | null;
   brandSEname: string | null;
   isDropShipProduct: boolean;
+  isShortDescriptionOnTop: boolean;
   productTagViewModel: Array<{
     productId: number;
     imagename: string;

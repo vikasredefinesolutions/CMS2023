@@ -102,10 +102,11 @@ const OrD_InvoiceItem: React.FC<_props> = ({ item, mediaBaseUrl }) => {
                   ) : (
                     <div className='w-20 h-20 border flex items-center justify-center'>
                       {logo.logoName === logoLocation.addLater ? (
-                        <img
+                        <NxtImage
                           className='w-14 h-12'
                           src={`/assets/images/logo-to-be-submitted.webp`}
                           title=''
+                          isStatic={true}
                           alt={logo.logoLocation}
                         />
                       ) : (

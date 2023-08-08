@@ -75,17 +75,54 @@ export const __ValidationText = {
     },
 
     giveAway: {
-      required: 'Purpose fpor giveaway is required',
+      required: 'Purpose for giveaway is required',
     },
 
     estimateBudget: {
       required: 'Estimated budget is required',
     },
+    requestForGiveAway: {
+      required: 'Please select one option',
+    },
+    requestGiveAway: {
+      required: 'Please select one option',
+    },
+    ideas: {
+      required: 'Please enter ideas/items of interest',
+    },
+    logo: {
+      required: 'Please select logo',
+    },
+    event: {
+      required: 'Please choose event name',
+    },
+    beforeInHandDate: {
+      required: 'Please choose date',
+    },
 
+    somethingWentWrong: 'Something Went Wrong. Try again, later!!!',
     message: '',
     captcha: 'Captcha is not valid !',
+    comment: {
+      required: 'Additional comment is required',
+    },
+
+    jobTitle: {
+      required: 'Job title is required',
+    },
+    purpose: {
+      required: 'Purpose is required',
+    },
   },
   signUp: {
+    newPassword: {
+      required: 'Enter your New Password.',
+      minLength: 6,
+    },
+    confirmNewPassword: {
+      required: 'Please Enter New Password Again',
+      minLength: 6,
+    },
     firstName: {
       required: 'Enter your first name.',
       minLength: 2,
@@ -103,6 +140,9 @@ export const __ValidationText = {
     companyName: {
       required: 'Enter your company name',
       minLength: 3,
+      maxLength: 40,
+    },
+    companyInfo: {
       maxLength: 40,
     },
     industryType: {
@@ -174,8 +214,8 @@ export const __ValidationText = {
 
 export const __QuoteRequestMessages = {
   name: { required: 'Please enter Name.' },
-  organization: { required: 'Enter your last name.' },
-  email: { required: 'Please enter School / Organization.' },
+  organization: { required: 'Please enter School / Organization.' },
+  email: { required: 'Please enter your email' },
   sport: { required: 'Please enter Sport.' },
 };
 

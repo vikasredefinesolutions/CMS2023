@@ -1,3 +1,4 @@
+import NxtImage from '@appComponents/reUsable/Image';
 import React from 'react';
 
 interface _Props {}
@@ -18,9 +19,11 @@ const CO4_OrderReview: React.FC<_Props> = () => {
                 <span
                 // style="box-sizing: border-box; display: block; width: initial; height: initial; background: none; opacity: 1; border: 0px; margin: 0px; padding: 100% 0px 0px;"
                 ></span>
-                <img
+                <NxtImage
+                  className=''
                   alt='products'
                   sizes='100vw'
+                  useNextImage={false}
                   // srcset="https://www.corporategear.com/resources/parsonskellogg/product/logo/110771_3172309_stonewash_7005.jpg?5339"
                   src='https://www.corporategear.com/resources/parsonskellogg/product/logo/110771_3172309_stonewash_7005.jpg?5339'
                   decoding='async'
@@ -115,8 +118,10 @@ const CO4_OrderReview: React.FC<_Props> = () => {
                   <div className='flex justify-between py-3'>
                     <div className='text-normal-text leading-normal'>
                       <div className='mb-3 flex'>
-                        <img
+                        <NxtImage
                           className='w-14 max-h-12'
+                          isStatic={true}
+                          useNextImage={false}
                           src='/images/logo-to-be-submitted.webp'
                           title=''
                           alt=''

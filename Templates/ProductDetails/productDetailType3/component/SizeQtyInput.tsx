@@ -25,16 +25,19 @@ const SizeQtyInput: React.FC<_props> = (props) => {
       res.name === size &&
       res.colorAttributeOptionId === color.attributeOptionId,
   );
-  const quantityHandler = (enteredQty: number) => {
+
+  const quantityHandler = (enteredQty: any) => {
+    if (!enteredQty) return setQty(enteredQty);
     let newQuantity = 0;
 
-    if (enteredQty >= current[0].inventory) {
+    if (enteredQty >= current[0]?.inventory) {
       newQuantity = current[0].inventory;
+      setQty(newQuantity);
     } else {
-      newQuantity = enteredQty;
+      newQuantity = +enteredQty;
+      setQty(+enteredQty);
     }
 
-    setQty(newQuantity);
     updateQuantitieSingle({
       attributeOptionId: current[0].attributeOptionId,
       size: size,
@@ -91,10 +94,16 @@ const SizeQtyInput: React.FC<_props> = (props) => {
                 ['e', 'E', '+', '-', '.'].includes(e.key) && e.preventDefault();
               }}
               onChange={(ev) => {
-                if (size) {
-                  quantityHandler(+ev.target.value);
-                } else {
-                  alert('select One size');
+                if (!size) return alert('select One size');
+                if (ev.target.value.toString() === '0') {
+                  return quantityHandler(1);
+                }
+
+                quantityHandler(ev.target.value);
+              }}
+              onBlur={(event) => {
+                if (!event.target.value) {
+                  quantityHandler(1);
                 }
               }}
               placeholder=''
@@ -104,11 +113,18 @@ const SizeQtyInput: React.FC<_props> = (props) => {
         </div>
         {store_Code == BACARDI && (
           <div
+            className='ml-[10px]'
             onClick={() => {
               setShowSingleInv && setShowSingleInv(false);
             }}
           >
-            <a href='javascript:void(0);' className='' id='ShowMultipleSize'>
+            <a
+              href='javascript:void(0);'
+              className={`${
+                store_Code == BACARDI ? 'text-default hover:text-default' : ''
+              }`}
+              id='ShowMultipleSize'
+            >
               Click here to add multiple sizes
             </a>
           </div>

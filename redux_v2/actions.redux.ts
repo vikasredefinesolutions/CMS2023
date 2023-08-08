@@ -9,6 +9,7 @@ import { successActions } from './slices/success.slice';
 import { wishlistActions } from './slices/wishlist.slice';
 
 import { checkoutActions } from './slices/checkout.slice';
+import { listingActions } from './slices/listing.slice';
 import { modalActions } from './slices/modals.slice';
 import { productActions } from './slices/product.slice';
 import { redefineStoreActions } from './slices/redefineStore.slice';
@@ -31,6 +32,7 @@ const actions = {
   ...modalActions,
   ...sbStoreActions,
   ...checkoutActions,
+  ...listingActions,
 };
 
 export default actions;

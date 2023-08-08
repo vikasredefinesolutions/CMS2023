@@ -1,6 +1,8 @@
 import ForgotModal from '@appComponents/modals/forgotModal';
 import LoginModal from '@appComponents/modals/loginModal';
-import { THD_STORE_CODE } from '@constants/global.constant';
+import { _Store } from '@configs/page.config';
+import { THD_STORE_CODE, __LocalStorage } from '@constants/global.constant';
+import { thirdPartyLoginService } from '@constants/pages.constant';
 import { _modals } from '@definations/product.type';
 import { fetchThirdpartyservice } from '@services/thirdparty.service';
 import { useTypedSelector_v2 } from 'hooks_v2';
@@ -31,8 +33,24 @@ const LoginIcon: React.FC = () => {
   const SamlloginHandler = () => {
     fetchThirdpartyservice({ storeId }).then((ThirdpartyServices) => {
       ThirdpartyServices.map((service) => {
-        if (service.thirdPartyServiceName == 'Okta')
-          router.push(ThirdpartyServices[0].url);
+        if (
+          service.thirdPartyServiceName.toLocaleLowerCase() ==
+          thirdPartyLoginService.oktaLogin.toLocaleLowerCase()
+        ) {
+          localStorage.setItem(
+            __LocalStorage.thirdPartyServiceName,
+            service.thirdPartyServiceName,
+          );
+          service.url && router.push(service.url);
+        } else if (
+          service.thirdPartyServiceName.toLocaleLowerCase() ==
+          thirdPartyLoginService.samlLogin.toLocaleLowerCase()
+        ) {
+          const jsonDate = new Date().toJSON();
+          const datejson = jsonDate.split('.')[0] + 'Z';
+          service.url &&
+            router.push(service.url + encodeURIComponent(datejson));
+        }
       });
     });
   };
@@ -46,9 +64,16 @@ const LoginIcon: React.FC = () => {
               onClick={SamlloginHandler}
               type='button'
             >
-              <span className='material-icons' title='LOGIN VIA SAML'>
-                perm_identity
-              </span>
+              {storeCode == _Store.type6 ? (
+                <i className='fa-solid fa-user-large text-[22px]'></i>
+              ) : (
+                <span
+                  className='material-icons'
+                  title={storeCode == _Store.type6 ? 'LOGIN VIA SAML' : ''}
+                >
+                  perm_identity
+                </span>
+              )}
             </button>
           </div>
         </div>
@@ -63,7 +88,16 @@ const LoginIcon: React.FC = () => {
               {/* <span className='text-[12px] hidden xl:inline-block whitespace-nowrap tracking-[1px]'>
             {__pagesText.Headers.login}
           </span> */}
-              <span className='material-icons-outlined'>perm_identity</span>
+              {storeCode == _Store.type6 ? (
+                <i className='fa-solid fa-user-large text-[22px]'></i>
+              ) : (
+                <span
+                  className='material-icons'
+                  title={storeCode == _Store.type6 ? 'LOGIN VIA SAML' : ''}
+                >
+                  perm_identity
+                </span>
+              )}
             </button>
             {showModal === 'login' && (
               <LoginModal modalHandler={setShowModal} />

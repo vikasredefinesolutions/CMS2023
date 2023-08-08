@@ -1,4 +1,7 @@
+import { _GetPageType } from '@definations/slug.type';
+
 interface _Store {
+  newTab: boolean;
   // Store
   code: string;
   favicon: string;
@@ -46,9 +49,15 @@ interface _Store {
   klaviyoKey: string;
   klaviyoKeyApi: string;
 
+  // Page Details
+  pageMetaData: _GetPageType | null;
+
   set: (
-    pair: // Store
-    | _StoreId
+    pair:
+      | _NewTab
+
+      // Store
+      | _StoreId
       | _StoreCode
       | _StoreTypeId
       | _StoreFavicon
@@ -80,11 +89,15 @@ interface _Store {
       | _KlaviyoKey
       | _KlaviyoKeyApi
       | _domain
-      | _BacardiSelectedStore,
+      | _BacardiSelectedStore
+
+      // Page Details
+      | _PageMetaData,
   ) => void;
 }
 
 export let _globalStore: _Store = {
+  newTab: true,
   // Store
   code: '',
   storeId: 0,
@@ -131,13 +144,20 @@ export let _globalStore: _Store = {
 
   //Klaviyo key
   klaviyoKey: '',
-
   klaviyoKeyApi: '',
+
+  // Page Details
+  pageMetaData: null,
 
   set: (pair) => {
     _globalStore = { ..._globalStore, [pair.key]: pair.value };
   },
 };
+
+interface _NewTab {
+  key: 'newTab';
+  value: boolean;
+}
 
 // -----------------------------------Store
 interface _StoreId {
@@ -278,4 +298,9 @@ interface _domain {
 interface _BacardiSelectedStore {
   key: 'bacardiSelectedStore';
   value: string | null;
+}
+
+interface _PageMetaData {
+  key: 'pageMetaData';
+  value: _GetPageType | null;
 }

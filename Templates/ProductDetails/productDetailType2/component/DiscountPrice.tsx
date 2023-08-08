@@ -17,6 +17,8 @@ const DiscountPrice: React.FC<_props & { storeCode: string }> = ({
 }) => {
   const loggedIn = useTypedSelector_v2((state) => state.user.id);
 
+  const productId = useTypedSelector_v2((state) => state.product.product.id);
+
   if (!loggedIn) {
     return (
       <>
@@ -31,12 +33,14 @@ const DiscountPrice: React.FC<_props & { storeCode: string }> = ({
   return (
     <>
       <div className=''>{__pagesText.productInfo.pricePerItem}</div>
-      <div className='text-title-text'>
+      <div id={`${productId}`} className='text-title-text'>
         <Price value={salePrice} />
       </div>
-      <div className='line-through'>
-        <Price value={msrp} />
-      </div>
+      {salePrice !== msrp && (
+        <div id={`${productId}`} className='line-through'>
+          <Price value={msrp} />
+        </div>
+      )}
     </>
   );
 };

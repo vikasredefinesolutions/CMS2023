@@ -28,6 +28,10 @@ const PD7_Inventory: React.FC<_Props> = ({
   const [inventory, setInventory] =
     useState<null | _ProductInventoryTransfomed>(null);
 
+  const [qtyValues, setQtyValues] = useState<Record<string, string | number>>(
+    {},
+  );
+
   const resetQuantities = (inventory: _ProductInventoryTransfomed | null) => {
     if (!inventory) {
       setSelectedSizeQtys({
@@ -69,7 +73,6 @@ const PD7_Inventory: React.FC<_Props> = ({
         resetQuantities(response);
       })
       .catch(() => {
-        console.log('Inventory not found ===>', productId, attributeOptionId);
         resetQuantities(null);
       })
       .finally(() => {
@@ -77,10 +80,7 @@ const PD7_Inventory: React.FC<_Props> = ({
       });
   };
 
-  const handleChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    item: _ProductInventory,
-  ) => {
+  const handleChange = (value: number, item: _ProductInventory) => {
     if (!formValidateOnce) {
       submitForm();
     }
@@ -92,10 +92,10 @@ const PD7_Inventory: React.FC<_Props> = ({
         colorAttributeOptionId: prev.colorAttributeOptionId,
         sizesNqtys: prev.sizesNqtys.map((old) => {
           if (old.size === item.name) {
-            newTotalQty += +event.target.value;
+            newTotalQty += value;
             return {
               size: old.size,
-              qty: +event.target.value,
+              qty: value,
               sizeAttributeOptionId: old.sizeAttributeOptionId,
             };
           }
@@ -132,9 +132,11 @@ const PD7_Inventory: React.FC<_Props> = ({
         return (
           <div
             key={index}
-            className='flex flex-wrap items-center justify-between border-b border-b-gray-border pl-[10px] w-full' 
+            className='flex flex-wrap items-center justify-between border-b border-b-gray-border pl-[10px] w-full'
           >
-            <div className='px-[10px] w-1/2 pt-[10px] pb-[10px]'>{item.name}</div>
+            <div className='px-[10px] w-1/2 pt-[10px] pb-[10px]'>
+              {item.name}
+            </div>
             <div className='px-[10px] w-1/2 pt-[10px] pb-[10px] text-right'>
               {outOfStock && (
                 <span className='ml-[4px] text-extra-small-text !font-bold !text-[#800000]'>
@@ -148,13 +150,37 @@ const PD7_Inventory: React.FC<_Props> = ({
                   min={0}
                   defaultValue={0}
                   max={item.inventory}
-                  value={selectedSizeQtys.sizesNqtys[index].qty}
-                  onKeyDown={(event) =>
-                    ['e', 'E', '+', '-', '.'].includes(event.key) &&
-                    event.preventDefault()
-                  }
-                  onChange={(event) => handleChange(event, item)}
                   type='number'
+                  value={qtyValues[item.sku]}
+                  onKeyDown={(e) => {
+                    ['e', 'E', '+', '-', '.'].includes(e.key) &&
+                      e.preventDefault();
+                  }}
+                  onChange={(e) => {
+                    if (e.target.value.toString() === '0') {
+                      setQtyValues({
+                        ...qtyValues,
+                        [`${item.sku}`]: 1,
+                      });
+                      return handleChange(1, item);
+                    }
+                    handleChange(+e.target.value || 0, item);
+                    setQtyValues({
+                      ...qtyValues,
+                      [`${item.sku}`]: e.target.value,
+                    });
+                  }}
+                  onBlur={(e) => {
+                    if (!e.target.value) {
+                      setQtyValues({
+                        ...qtyValues,
+                        [`${item.sku}`]: 1,
+                      });
+                      return handleChange(1, item);
+                    } else {
+                      return handleChange(+qtyValues[item.sku], item);
+                    }
+                  }}
                 />
               )}
             </div>

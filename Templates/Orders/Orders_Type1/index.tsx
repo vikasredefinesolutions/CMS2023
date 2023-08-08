@@ -123,8 +123,8 @@ const Orders_type1: React.FC = () => {
               </ul>
             )}
             {orderDetails?.length === 0 && (
-              <div className='text-center text-gray-500 tracking-[1.4px] text-[22px]'>
-                <div className='text-2xl md:text-3xl lg:text-title font-title text-color-title mb-2'>
+              <div className='text-center text-gray-500 tracking-[1.4px] text-[22px] text-default-text'>
+                <div className='text-2xl md:text-3xl lg:text-title font-title text-color-title mb-2 text-title-text'>
                   {__pagesText.OrderPage.emptyOrder}
                 </div>
                 <div className=''>
@@ -134,8 +134,10 @@ const Orders_type1: React.FC = () => {
                   {__pagesText.OrderPage.emptyOrderMessage2}
                 </div>
                 <div className='mt-3'>
-                  <Link href={paths.HOME} className='btn btn-primary btn-lg'>
-                    <a>{__pagesText.OrderPage.startShopping}</a>
+                  <Link href={paths.HOME}>
+                    <a className='btn btn-secondary btn-lg'>
+                      {__pagesText.OrderPage.startShopping}
+                    </a>
                   </Link>
                 </div>
               </div>

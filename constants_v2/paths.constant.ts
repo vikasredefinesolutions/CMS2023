@@ -64,6 +64,20 @@ export const paths = {
   REQUEST_THANKYOU: '/request-thankyou.html',
   SB_PRODUCT_LISTING: '/ItemList/Index',
   CONTACT_US: '/contact-us.html',
+  NAME_TAGS: '/name-tags.html',
+  SEARCH: '/search/result.html',
+  CG_CUSTOM_REQUEST_FORM: '/customrequest/requestform',
+  Boston_CUSTOM_Item_REQUEST_FORM: '/custom-item-request.html',
+  PETERMILLAR: {
+    CUSTOM_FORM: '/peter-millar-corporate-sales.html',
+    THANK_YOU: '/thankyou-peter-millar-coporate-sales.html',
+  },
+  privacyPolicy: '/privacy-policy',
+  termsAndConditions: '/terms-and-conditions',
+  bacardi: {
+    greyGoose: '/home/GreyGoose',
+    bacardi: '/index.html',
+  },
 };
 
 export const __SpecialBreadCrumbsPaths = [
@@ -115,13 +129,43 @@ export const __SpecialBreadCrumbsPaths = [
     directTo: null,
   },
   {
-    path: ['/gift-cards/listing'],
+    path: ['/gift-cards.html'],
     name: 'Gift Card',
     directTo: null,
   },
   {
-    path: ['/gift-cards/[giftId]'],
+    path: ['/gift-card/[giftId]'],
     name: 'Gift Card {}',
+    directTo: null,
+  },
+  {
+    path: [paths.NAME_TAGS],
+    name: 'Name Tags',
+    directTo: null,
+  },
+  {
+    path: [paths.CG_CUSTOM_REQUEST_FORM],
+    name: 'Special Request Form',
+    directTo: null,
+  },
+  {
+    path: [paths.Boston_CUSTOM_Item_REQUEST_FORM],
+    name: 'Custom ITEM REQUEST',
+    directTo: null,
+  },
+  {
+    path: [paths.SEARCH],
+    name: 'Search',
+    directTo: null,
+  },
+  {
+    path: [paths.THANK_YOU],
+    name: 'Thank You',
+    directTo: null,
+  },
+  {
+    path: ['/FAQ', '/FAQ.html'],
+    name: 'FAQ',
     directTo: null,
   },
 ];

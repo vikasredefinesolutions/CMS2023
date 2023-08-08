@@ -1,4 +1,5 @@
 import { CallAPI_v2 } from '@helpers/api.helper';
+import { SendAsync } from '@utils/axios.util';
 import { _GiftCard } from './gift';
 
 export type _GiftCardAPIs =
@@ -43,6 +44,13 @@ interface _UnCookedGiftCard {
   imageName: string;
 }
 
+interface _GiftCardApplyResponse {
+  giftCardSerialNo: string;
+  giftCardId: number;
+  giftCardAmount: number;
+  expiryDate: string;
+}
+
 export const FetchGiftCardDetailsBySename = async (payload: {
   storeId: number;
   giftId: string;
@@ -70,4 +78,23 @@ export const FetchGiftCardDetailsBySename = async (payload: {
   };
 
   return fieldNameChanged;
+};
+
+export const ApplyGiftCard = async (payload: {
+  giftCardModel: {
+    customerID: number;
+    storeId: number;
+    giftCardSerialNo: string;
+    emailId: string;
+  };
+}) => {
+  const url = `/GiftCard/getgiftcarddetails.json`;
+
+  const res = await SendAsync<_GiftCardApplyResponse>({
+    url: url,
+    method: 'POST',
+    data: payload,
+  });
+
+  return res;
 };

@@ -56,7 +56,8 @@ export type StoreConfigurationConfigs =
   | 'googleTags'
   | 'productListing'
   | 'contactInfo'
-  | 'productDetail';
+  | 'productDetail'
+  | 'contactinfo';
 
 export interface _SbStoreConfiguration {
   id: number;

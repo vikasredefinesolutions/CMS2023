@@ -1,7 +1,8 @@
-import { __LocalStorage } from '@constants/global.constant';
+import { _Store_CODES, __LocalStorage } from '@constants/global.constant';
 import { paths } from '@constants/paths.constant';
 import { Logout } from '@helpers/common.helper';
-import { useActions_v2 } from '@hooks_v2/index';
+import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
+import { OktaLogout } from '@services/saml.service';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { ReactNode, useEffect, useState } from 'react';
@@ -26,7 +27,9 @@ const MyAccountTabsType6: React.FC<_Props> = ({ children, addressNum }) => {
   const [pageHeading, setPageHeading] = useState<string>('');
   const [selectedStage, setSelectedStage] = useState('');
   const router = useRouter();
-
+  const { id: storeId, code: storeCode } = useTypedSelector_v2(
+    (state) => state.store,
+  );
   useEffect(() => {
     _TABS.filter((tab) => {
       tab.path === router.asPath && setSelectedStage(tab.label);
@@ -52,10 +55,22 @@ const MyAccountTabsType6: React.FC<_Props> = ({ children, addressNum }) => {
     }
   }, []);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     logoutClearCart();
     setWishListEmpty([]);
     localStorage.removeItem(__LocalStorage.guestEmailID);
+    const thirdParytLogin = localStorage.getItem(
+      __LocalStorage.thirdPartyServiceName,
+    );
+    if (thirdParytLogin?.toLowerCase() == 'okta') {
+      const payload = {
+        oktaLogoutModel: {
+          storeId: +storeId,
+        },
+      };
+      const res = await OktaLogout(payload);
+      res && router.push(res);
+    }
     Logout(logInUser);
   };
 
@@ -73,13 +88,25 @@ const MyAccountTabsType6: React.FC<_Props> = ({ children, addressNum }) => {
 
   return (
     <>
-      <section className='pt-[40px]'>
+      <section>
         <div className='container mx-auto'>
-          <div className='text-2xl-text text-center'>{pageHeading}</div>
+          <div className={`pt-[40px] bg-white`}>
+            <div
+              className={`${
+                storeCode === _Store_CODES.USAAHEALTHYPOINTS
+                  ? 'text-title-text uppercase'
+                  : 'text-2xl-text'
+              } text-center`}
+            >
+              {pageHeading}
+            </div>
+          </div>
         </div>
       </section>
-      <section className='container mx-auto mt-[50px] mb-[50px]'>
-        <div className='block lg:flex lg:space-x-10'>
+      <section className={`container mx-auto`}>
+        <div
+          className={`block lg:flex lg:space-x-10 pt-[50px] pb-[50px] bg-white pl-[15px]  pr-[15px]`}
+        >
           <div className='w-4/4 lg:w-1/5 pb-10'>
             <div className='bg-white flex justify-center'>
               <ul className='w-full max-w-[1350px] mx-auto text-center lg:text-right lg:block hidden'>

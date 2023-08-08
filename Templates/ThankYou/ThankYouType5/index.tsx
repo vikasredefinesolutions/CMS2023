@@ -1,3 +1,4 @@
+import NxtImage from '@appComponents/reUsable/Image';
 import {
   _MyAcc_OrderBillingDetails,
   _MyAcc_OrderProductDetails,
@@ -29,7 +30,8 @@ const ThankYouType5: React.FC<_Props> = ({ order }) => {
               <div className='bg-secondary w-full pt-[20px] pb-[20px]'>
                 <div className='pl-[15px] pr-[15px] pb-[15px] pt-[15px] w-full'>
                   <div className='text-center'>
-                    <img
+                    <NxtImage
+                      isStatic={true}
                       src='images/thank-you-icon.png'
                       alt='Thank you'
                       className='mx-auto border-2 rounded-full pl-[15px] pr-[15px] pb-[15px] pt-[15px]'
@@ -44,17 +46,18 @@ const ThankYouType5: React.FC<_Props> = ({ order }) => {
                   <div className='md:flex md:justify-between md:items-center text-center md:text-left'>
                     <div className='pt-[8px]'>
                       {messages.orderSuccessMessage && (
-                        <span className='text-title-text pb-[8px] block text-[#ffffff]'>
-                          {messages.orderSuccessMessage}
-                        </span>
+                        <span
+                          className='text-title-text pb-[8px] block text-[#ffffff]'
+                          dangerouslySetInnerHTML={{
+                            __html: messages.orderSuccessMessage,
+                          }}
+                        />
                       )}
                       <span className='text-title-text pb-[8px] block text-[#ffffff]'>
                         YOUR ORDER NUMBER IS: {order.billing?.id}
                       </span>
                       <span className='pb-[8px] text-default-text text-[#ffffff] block md:pr-[20px]'>
-                        You will receive a confirmation shortly at
-                        {order.billing?.email}, You can access your account at
-                        your account
+                        {`You will receive a confirmation shortly at ${order.billing?.email}. You can access your account at 'My Account' section.`}
                       </span>
                       {/* <span className='text-[#ffffff] block text-default-text pb-[8px]'>
                         <a

@@ -3,6 +3,7 @@ import MenuItem from '@header/header_Type1/Components/Menu//Header_MenuItem';
 import { useRouter } from 'next/router';
 import React, { Fragment, useEffect, useState } from 'react';
 import Backdrop from '../Backdrop';
+import Header_JustTitle from './Header_JustTitle';
 
 interface _props {
   screen: 'DESKTOP' | 'MOBILE';
@@ -10,19 +11,10 @@ interface _props {
   showSideMenu: 'OPEN' | 'CLOSE';
 }
 
-const MenuItems: React.FC<_props> = ({
-  screen,
-  menuItems: menuItemsFromRoot,
-  showSideMenu,
-}) => {
+const MenuItems: React.FC<_props> = ({ screen, menuItems, showSideMenu }) => {
   const [openTab, setOpenTab] = useState<string>('');
   const router = useRouter();
-  const [menuItems, setMenuItems] = useState<null | _MenuItems>(null);
-  useEffect(() => {
-    if (menuItemsFromRoot) {
-      setMenuItems(menuItemsFromRoot);
-    }
-  }, [menuItemsFromRoot]);
+
   useEffect(() => {
     setOpenTab('');
   }, [router.asPath]);
@@ -33,7 +25,7 @@ const MenuItems: React.FC<_props> = ({
 
   if (screen === 'MOBILE') {
     return (
-      <div className='fixed z-[100] lg:hidden inset-0 bg-[#000000] bg-opacity-50'>
+      <div className='fixed z-[100] inset-0 bg-[#000000] bg-opacity-50'>
         <Backdrop setOpenTab={setOpenTab} />
         <div className='w-full max-w-xs bg-[#ffffff] h-screen overflow-x-scroll'>
           <div
@@ -43,7 +35,7 @@ const MenuItems: React.FC<_props> = ({
             {/* <CloseIcon /> */}
             {menuItems.items_content?.map((menu, index) => {
               if (menu === null) {
-                return <Fragment key={index}>null</Fragment>;
+                return null;
               }
               return (
                 <Fragment key={index}>
@@ -68,9 +60,17 @@ const MenuItems: React.FC<_props> = ({
       <div className='h-full hidden lg:flex items-center flex-1'>
         <div className=''>
           <div className='h-full flex header-nav relative'>
-            {menuItems.items_content?.map((menu, index) => {
-              if (menu === null) {
-                return <></>;
+            {menuItems.items?.map((item, index) => {
+              const menu =
+                menuItems.items_content && menuItems.items_content[index];
+
+              if (!menu) {
+                return (
+                  <Header_JustTitle
+                    key={item?.title}
+                    title={item?.title || ''}
+                  />
+                );
               }
               return (
                 <Fragment key={index}>

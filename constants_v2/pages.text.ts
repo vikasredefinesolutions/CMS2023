@@ -71,8 +71,12 @@ export const __pagesText = {
     closeIcon: 'close',
     rightArrowIcon: 'chevron_right',
     products: 'Products',
+    apparel: 'APPAREL',
     PRICE: 'PRICE ',
     MSRP: 'MSRP ',
+    Uinit_Shipping_In_2_Days_Header_Description: `Need something quick? Product on this page can ship within 2 business days. Your order must consist of only items available on this page. If your order has an in hand date, please email customerservice@parsonskellogg.com with your order number so we can ensure it arrives when needed. All orders ship FedEx Ground.`,
+    Uniti_Minimum_Bulk_Header_Description: `Product on this page requires a minimum amount to order. These items will ship direct from our supplier to the address provided.
+    Lead times vary and are stated in the item description on the product page.`,
   },
   home: {},
   ContactUs: {
@@ -144,6 +148,7 @@ export const __pagesText = {
     checkInventoryPricing: 'Check Inventory And Your Pricing',
     addTocart: 'ADD TO CART',
     buyNow: 'BUY NOW',
+    outOfStock: 'OUT OF STOCK',
     contactUs: 'Contact us for Available Inventory',
     capContactUs: 'CONTACT US FOR AVAILABLE INVENTORY',
     callUs: 'CALL US FOR PRICE',
@@ -161,6 +166,7 @@ export const __pagesText = {
       uploadFromLibrary: 'Upload From Library',
     },
     productReviewRating: {
+      customerPhotos: 'Customer Photos',
       customerReview: 'Customer Reviews',
       shareYourThought: 'Share your thoughts',
       ifYouHaveUsedThisProductShareThought:
@@ -193,6 +199,7 @@ export const __pagesText = {
       selectColor: 'Select Color:',
       showless: 'Show Less',
       seeAll: 'See All',
+      stockCheck: 'Availability:',
       colors: 'Colors:',
       onlycolor: 'Color',
     },
@@ -232,9 +239,9 @@ export const __pagesText = {
         'Health by ParsonsKellogg provides exclusive access to Patagonia apparel and accessories to the healthcare industry. Please log in or create an account to shop now.',
     },
     startOrderModal: {
-      color: 'Color : ',
-      notes: 'Notes :',
-      itemTotal: 'Item Total :',
+      color: 'Color: ',
+      notes: 'Notes:',
+      itemTotal: 'Item Total:',
       orderInMultipleOf: 'ORDER IN MULTIPLES OF ',
       productInformation: 'Product information',
       customizeLogoOption: {
@@ -280,7 +287,7 @@ export const __pagesText = {
       exclusivePricingAvailable: 'EXCLUSIVE PRICING AVAILABLE',
       exclusivePricing: 'EXCLUSIVE PRICING',
       selectSizeAndQuantity: 'Select Size & Quantity:',
-      minimumOrder: 'MINIMUM ORDER : ',
+      minimumOrder: 'MINIMUM ORDER: ',
       minimumOrderQuantity: 'MINIMUM ORDER QUANTITY:',
       price: 'Price:',
       MSRP: 'MSRP: ',
@@ -698,7 +705,7 @@ export const __pagesText = {
     rightArrowIcon: 'chevron_right',
     myAccountTittle: 'My Account',
     companyPhoneQuestion: 'Questions? Call us at',
-    companyEmailQuestion: 'or Email',
+    companyEmailQuestion: 'Email',
     companyEmailQuestionOr: 'Email',
     samllogin: 'LOGIN VIA SAML',
   },
@@ -720,6 +727,12 @@ export const __pagesText = {
   CheckoutPageCardNote1: {
     note: 'Please note that the tax amount on this order is subject to change based on the final invoice, and in accordance with local and state laws',
   },
+  checkoutHeaderNote: `Our product is ordered and decorated on demand. Orders may take up
+  to 10 business days to ship due to availability from our vendors
+  and order size. Please contact Customer Service at
+  customerservice@parsonskellogg.com if you have questions. We
+  accept returns on unused accessories and unworn/unwashed apparel
+  pieces within 30 days of purchase.`,
   CheckoutPageCardNote2: {
     note: 'Your credit card will be authorized at checkout and you will see a pending charge on your bank statement. A sales representative will review the order details once received. Your card will then be charged in 5-7 days after submitted unless confirmed as finalized or otherwise cancelled prior to then.',
   },
@@ -734,12 +747,12 @@ export const __pagesText = {
     ForYourOrder: 'FOR YOUR ORDER',
     OrderNumber: 'YOUR ORDER NUMBER IS: ',
     FirstEmailMessage: 'You will receive a confirmation shortly at ',
-    LastEmailMessage: ', You can access your account at your account ',
+    LastEmailMessage: ', You can access your account at "My Account" section.',
     PrintReciept: 'Print Receipt',
     Questions: 'Questions?',
-    CallUs: 'Call Us : ',
+    CallUs: 'Call Us: ',
     Email: 'Email',
-    AccordianHeader: 'Detailed Order Receipt :',
+    AccordianHeader: 'Detailed Order Receipt: ',
     TotalSummary: {
       SubTotal: 'Sub Total:',
       LinePersonalization: 'Line Personalization:',
@@ -749,8 +762,9 @@ export const __pagesText = {
       SewOut: 'Sew Out:',
       couponDiscountAmount: 'Coupon Discount :',
       GrandTotal: 'Grand Total :',
-      Sku: 'SKU :',
-      Color: 'Color :',
+      GrandTotalPMCG: 'Total: ',
+      Sku: 'SKU: ',
+      Color: 'Color:  ',
       ItemTotal: 'Item Total: ',
       ItemDetails: 'Item Details',
       smallRunningFee: 'Small Run Fee',
@@ -833,8 +847,12 @@ export const __pagesText = {
       InternalCredit: 'Internal Credit',
       Tax: 'Tax',
       EstimatedTotal: 'Estimated Total',
-      LinePersonalization: 'Line Charges',
-      CartSummarryInstruction: `We request that all orders include a minimum of 4 pieces per color of a style, which can be split across men's and women's companion items. We may reject or require modification to any orders not meeting these requirements without prior approval. \n Please note that the tax amount on this order is subject to change based on the final invoice, and in accordance with local and state laws \n Your credit card will be authorized at checkout and you will see a pending charge on your bank statement. A sales representative will review the order details once received. Your card will then be charged in 5-7 days after submitted unless confirmed as finalized or otherwise cancelled prior to then.`,
+      LinePersonalization: 'Line Personalization',
+      CartSummarryInstruction: [
+        `We request that all orders include a minimum of 4 pieces per color of a style, which can be split across men's and women's companion items. We may reject or require modification to any orders not meeting these requirements without prior approval.`,
+        `Please note that the tax amount on this order is subject to change based on the final invoice, and in accordance with local and state laws`,
+        `Your credit card will be authorized at checkout and you will see a pending charge on your bank statement. A sales representative will review the order details once received. Your card will then be charged in 5-7 days after submitted unless confirmed as finalized or otherwise cancelled prior to then.`,
+      ],
     },
   },
   OrderPage: {
@@ -859,6 +877,8 @@ export const __pagesText = {
     estimatedPrice: 'ESTIMATED PRICE',
     writeaReview: ' Write A Review',
   },
+  CustomizeLaterPM:
+    'A dedicated Account Specialist will contact you to discuss the customization for your order.',
   CustomizeLater:
     'A Gear Expert will contact you to discuss the customization of this product.',
   CheckLogoApproved: {
@@ -888,11 +908,14 @@ export const __pagesText = {
     checkOutNow: 'CHECKOUT NOW',
     continueShopping: 'CONTINUE SHOPPING',
     shoppingCart: 'Shopping Cart',
+    sizeAlreadyAddedIncart: 'Size already present in cart',
     chestLineLimit:
       'Limit 26 characters (including spaces) for Chest personalization.',
     sleeveLineLimit:
       'Limit 20 characters (including spaces) for Sleeve personalization.',
     simpliSafeQtyLimit:
+      'customers may redeem 1 shirt only. if you need to make changes to your order please contact customer service at 866-602-8398 x 122 or using the live chat located at the bottom of the right page.',
+    usaaQtyLimit:
       'customers may redeem 1 shirt only. if you need to make changes to your order please contact customer service at 866-602-8398 x 122 or using the live chat located at the bottom of the right page.',
   },
   closedStore: {

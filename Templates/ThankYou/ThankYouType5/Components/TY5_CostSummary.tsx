@@ -212,12 +212,14 @@ const TY5_CostSummary: React.FC<_Props> = ({ billing }) => {
             <Price value={fees.fixedFees || 0} />
           </dd>
         </div>{' '}
-        <div className='flex justify-between pt-[8px]'>
-          <dt className=''>Card Processing Fees:</dt>
-          <dd className=''>
-            <Price value={fees.cardFees || 0} />
-          </dd>
-        </div>
+        {fees.cardFees > 0 && (
+          <div className='flex justify-between pt-[8px]'>
+            <dt className=''>Convenience Fee:</dt>
+            <dd className=''>
+              <Price value={fees.cardFees || 0} />
+            </dd>
+          </div>
+        )}
         <div className='flex justify-between border-t mt-[8px] border-gray-border pt-[8px]'>
           <dt className='font-[600] pt-[8px]'>Grand Total:</dt>
           <dd className='font-[600] pt-[8px]'>

@@ -26,7 +26,7 @@ export const getServerSideProps: GetServerSideProps = async (
 
   pageMetaData = await FetchPageType({
     storeId: _globalStore.storeId!,
-    slug: 'catalogs',
+    slug: 'catalogs.html',
   });
   if (pageMetaData) {
 

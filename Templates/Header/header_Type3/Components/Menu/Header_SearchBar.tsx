@@ -30,7 +30,7 @@ const SearchBar: React.FC<_props> = ({
       }
       if (str.length < 3) {
         alert('Please enter at least 3 characters to search');
-        x.focus();
+        return x.focus();
       }
       window.location.href =
         '/search/result.html?q=' +
@@ -45,7 +45,7 @@ const SearchBar: React.FC<_props> = ({
           {({ values, handleSubmit, handleChange, handleReset }) => {
             return (
               <Form>
-                <div className='sm:hidden'>
+                <div className='p-[10px]'>
                   <div className=''>
                     <div className='border border-[#003a70] pt-[5px] pb-[4px] pl-[15px] pr-[24px] text-primary relative'>
                       <input

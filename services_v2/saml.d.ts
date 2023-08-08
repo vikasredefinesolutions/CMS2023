@@ -1,4 +1,11 @@
 export interface _profileModel {
-  storeId: number;
-  base64SAMLResponse: string;
+  profileModel: {
+    storeId: number;
+    base64SAMLResponse: string;
+  };
+}
+export interface _OktaLogoutModel {
+  oktaLogoutModel: {
+    storeId: number;
+  };
 }

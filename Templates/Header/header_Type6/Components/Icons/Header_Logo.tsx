@@ -3,7 +3,6 @@ import { paths } from '@constants/paths.constant';
 import { useTypedSelector_v2 } from 'hooks_v2';
 import Link from 'next/link';
 import React from 'react';
-
 interface _props {
   logo: {
     mobile: string;
@@ -17,13 +16,10 @@ const CompanyLogo: React.FC<_props> = ({ logo }) => {
   return (
     <>
       <Link href={paths.HOME}>
-        <a
-          title={storeName || ''}
-          className='logo inline-block'
-        >
+        <a title={storeName || ''} className='logo inline-block'>
           <NxtImage
             title={storeName || ''}
-            className='max-w-[260px]'
+            className='max-w-[160px] md:max-w-[260px]'
             src={logo?.mobile}
             useNextImage={false}
             alt={storeName ? storeName : ''}

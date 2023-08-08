@@ -25,7 +25,9 @@ const BreadCrumb_Type4: NextPage<_BreadCrumbProps> = ({
                   {breadCrumbs.map((item, index) => (
                     <li
                       key={index}
-                      className={` ${index > 0 && 'inline-flex items-center'} `}
+                      className={` ${
+                        index > 0 && 'inline-flex items-center'
+                      } cursor-pointer `}
                       aria-current='page'
                     >
                       <Link

@@ -49,6 +49,8 @@ export const getServerSideProps: GetServerSideProps = async (): Promise<
       storeID: _globalStore.storeId,
       categoryId: item.id,
       customerId: 0,
+      pageStartindex: 0,
+      pageEndindex: 0,
       filterOptionforfaceteds: [
         {
           name: '',

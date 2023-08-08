@@ -116,8 +116,6 @@ const CO6_OrderSummary: React.FC<_Props> = ({
     },
   };
 
-  console.log(cost, cost.total());
-
   const decideValue = (args: {
     message: string | null;
     currentValue: string;
@@ -147,7 +145,7 @@ const CO6_OrderSummary: React.FC<_Props> = ({
     return false;
   };
 
-  const handleFees = (rawFees: _SbStoreFees[] | null) => () => {
+  const handleFees = (rawFees: _SbStoreFees[] | null) => {
     if (!rawFees) return;
 
     const multipleFees: {
@@ -383,12 +381,14 @@ const CO6_OrderSummary: React.FC<_Props> = ({
                   </dd>
                 </div>
               )}
-              <div className={`flex items-center justify-between pb-[15px]`}>
-                <dt className='text-default-text'>Card Processing Fees</dt>
-                <dd className='text-default-text font-medium'>
-                  <Price value={cost.cardProcessingFee} />
-                </dd>
-              </div>
+              {cost.cardProcessingFee > 0 && (
+                <div className={`flex items-center justify-between pb-[15px]`}>
+                  <dt className='text-default-text'>Convenience Fee</dt>
+                  <dd className='text-default-text font-medium'>
+                    <Price value={cost.cardProcessingFee} />
+                  </dd>
+                </div>
+              )}
             </dl>
           </div>
 

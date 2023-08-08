@@ -155,7 +155,7 @@ export interface GetProductImageOptionList {
   displayorder?: number;
   alttag?: string;
   attributeOptionID?: number;
-  imageUrl?: string;
+  imageUrl: string;
   attributeOptionName?: string;
   displayOrder?: number;
   altTag?: string;
@@ -183,6 +183,7 @@ export interface newFetauredItemResponse {
   isSpecialBrand: boolean;
   lowPrice: number;
   splitproductList: splitproductList[] | null;
+  getProductImageOptionList: GetProductImageOptionList[] | [];
 }
 export interface moreImages {
   id: number;
@@ -242,6 +243,8 @@ export type FilterApiRequest = {
   brandId?: string | number;
   categoryId?: string | number;
   customerId: number;
+  pageStartindex: number;
+  pageEndindex: number;
   filterOptionforfaceteds: Array<{
     name: string;
     value: string;
@@ -262,7 +265,7 @@ export type FilterChangeHandler = (
   checked: boolean,
 ) => void;
 
-export interface StoreCategoryProductCategoryListViewModel {
+export interface _StoreCategoryProductCategoryListViewModel {
   label?: string;
   subrows: any[];
   id: number;
@@ -281,24 +284,37 @@ export interface StoreBrandProductBrandViewModel {
 }
 
 export interface CategoryFilter {
-  storeBrandProductColorViewModels: StoreBrandProductColorViewModel[];
-  storeBrandProductSizeViewModels: StoreBrandProductSizeViewModel[];
-  storeBrandProductGenderViewModels: StoreBrandProductGenderViewModel[];
-  storeBrandProductProductTypeViewModels: StoreBrandProductProductTypeViewModel[];
+  storeCategoryProductCategoryListViewModel: _StoreCategoryProductCategoryListViewModel[];
+  storeBrandProductBrandViewModel: _StoreBrandProductViewModel[];
+  storeBrandProductColorViewModels: _StoreBrandProductViewModel[];
+  storeBrandProductSizeViewModels: _StoreBrandProductViewModel[];
   storeBrandProductPriceRangeViewModels: StoreBrandProductPriceRangeViewModel[];
-  storeCategoryProductCategoryListViewModel: StoreCategoryProductCategoryListViewModel[];
-  storeBrandProductBrandViewModel: StoreBrandProductBrandViewModel[];
+  storeBrandProductGenderViewModels: any[];
+  storeBrandProductProductTypeViewModels: any[];
   getlAllProductList: GetlAllProductList[];
-  [key: string]: Array<
-    | StoreBrandProductColorViewModel
-    | StoreBrandProductSizeViewModel
-    | StoreBrandProductGenderViewModel
-    | StoreBrandProductProductTypeViewModel
-    | StoreBrandProductPriceRangeViewModel
-    | StoreCategoryProductCategoryListViewModel
-    | StoreBrandProductBrandViewModel
-    | GetlAllProductList
-  >;
+  googleTagManagerResponseCommonData: _GoogleTagManagerResponseCommonData;
+  totalrecords: number;
+}
+
+export interface _StoreBrandProductViewModel {
+  label: _Label;
+  id: number;
+  name: string;
+  productCount: number;
+  displayOrder: number;
+  colorCode?: string;
+}
+
+export enum _Label {
+  Brand = 'Brand',
+  Color = 'Color',
+  Size = 'Size',
+}
+export interface _GoogleTagManagerResponseCommonData {
+  pageDataLayer: string;
+  pageDataLayer2: string;
+  pageDataLayer3: string;
+  pageItemDetails: string;
 }
 export interface giftCard {
   description: string;
@@ -312,4 +328,4 @@ export interface giftCard {
   shortDescription: string;
   sku: string;
   storeId: number;
-};
+}

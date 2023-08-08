@@ -1,3 +1,4 @@
+import NxtImage from '@appComponents/reUsable/Image';
 import { __StaticImg } from '@constants/assets';
 import { paths } from '@constants/paths.constant';
 import { _Story } from '@definations/story';
@@ -41,9 +42,10 @@ const SL_HeroSection: React.FC<_Props> = ({ firstTwo }) => {
               <div className='w-full p-[15px] lg:p-32'>
                 <div className='w-full max-w-lg'>
                   <div className='mt-[10px] mb-[10px]'>
-                    <img
+                    <NxtImage
                       alt=''
                       className='w-auto'
+                      isStatic={true}
                       src={__StaticImg.graphArrow}
                       title=''
                     />
@@ -59,7 +61,7 @@ const SL_HeroSection: React.FC<_Props> = ({ firstTwo }) => {
                     {firstStory.name}
                   </div>
                   <div className='text-base mt-[20px]'>
-                    <Link href={`${paths.STORIES}/${firstStory.slug}`}>
+                    <Link href={`${paths.STORIES}/${firstStory.slug}.html`}>
                       <a className='custbtn-secondary pb-[10px] pr-[20px] pl-[20px] pt-[10px]'>
                         LEARN MORE
                       </a>
@@ -88,8 +90,9 @@ const SL_HeroSection: React.FC<_Props> = ({ firstTwo }) => {
                 <div className='w-full p-[15px] lg:p-32'>
                   <div className='w-full max-w-lg'>
                     <div className='mt-[10px] mb-[10px]'>
-                      <img
+                      <NxtImage
                         alt=''
+                        isStatic={true}
                         className='w-auto'
                         src={__StaticImg.graphArrow}
                         title=''

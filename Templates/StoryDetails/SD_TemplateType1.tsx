@@ -1,4 +1,5 @@
 import Story_Stories from '@appComponents/common/StoriesList';
+import NxtImage from '@appComponents/reUsable/Image';
 import { __StaticImg } from '@constants/assets';
 import { _Story } from '@definations/story';
 import React from 'react';
@@ -39,7 +40,12 @@ const SD_TemplateType1: React.FC<_Props> = ({ list, ...rest }) => {
               <div className='bg-white flex flex-wrap justify-center items-center p-[20px]'>
                 <div className='flex border-r border-primary justify-center items-center pr-[12px] pl-[12px] w-full lg:w-auto'>
                   <div className='w-14'>
-                    <img src={__StaticImg.shippingTruck} alt='Text' />
+                    <NxtImage
+                      isStatic={true}
+                      className=''
+                      src={__StaticImg.shippingTruck}
+                      alt='Text'
+                    />
                   </div>
                   <div className='flex-shrink'>
                     <div className='w-full ml-[12px] text-medium-text text-primary'>
@@ -52,7 +58,9 @@ const SD_TemplateType1: React.FC<_Props> = ({ list, ...rest }) => {
                 </div>
                 <div className='flex border-r border-primary justify-center items-center pr-3 pl-3 w-full lg:w-auto'>
                   <div className='w-14'>
-                    <img
+                    <NxtImage
+                      isStatic={true}
+                      className=''
                       src={__StaticImg.coupons}
                       alt='Blue and black iphone case'
                     />
@@ -68,7 +76,9 @@ const SD_TemplateType1: React.FC<_Props> = ({ list, ...rest }) => {
                 </div>
                 <div className='flex justify-center items-center pr-3 pl-3 w-full lg:w-auto'>
                   <div className='w-14'>
-                    <img
+                    <NxtImage
+                      isStatic={true}
+                      className=''
                       src={__StaticImg.freeProofIcon}
                       alt='Free proof icon'
                       role='presentation'
@@ -89,8 +99,13 @@ const SD_TemplateType1: React.FC<_Props> = ({ list, ...rest }) => {
           <div aria-hidden='true' data-acsb-hidden='true'></div>
         </div>
       </section>
-      <Story_Stories stories={list} showByDefault={6} buttonType='PrevNext' />
-      
+      <Story_Stories
+        stories={list}
+        showByDefault={8}
+        buttonType='PrevNext'
+        next={rest.story.next}
+        prev={rest.story.prev}
+      />
     </>
   );
 };

@@ -1,4 +1,5 @@
 import NxtImage from '@appComponents/reUsable/Image';
+import { _Store } from '@configs/page.config';
 import { THD_STORE_CODE } from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
 import { paths } from '@constants/paths.constant';
@@ -39,7 +40,16 @@ const LoggedInMenu: React.FC = () => {
             {/* <span className='text-[12px] hidden xl:inline-block whitespace-nowrap tracking-[1px]'>
               {customer?.firstname}
             </span> */}
-            <span className='material-icons-outlined'>perm_identity</span>
+            {storeCode == _Store.type6 ? (
+              <i className='fa-solid fa-user-large text-[22px]'></i>
+            ) : (
+              <span
+                className='material-icons'
+                title={storeCode == _Store.type6 ? 'LOGIN VIA SAML' : ''}
+              >
+                perm_identity
+              </span>
+            )}
           </a>
         </Link>
 

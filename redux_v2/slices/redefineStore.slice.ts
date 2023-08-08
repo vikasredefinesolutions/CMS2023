@@ -1,5 +1,6 @@
 import { StoreLayout } from '@constants/enum';
 import { PageResponseType } from '@definations/app.type';
+import { _StoreTypeNames } from '@definations/common.type';
 import { _StoreReturnType } from '@definations/store.type';
 import { createSlice } from '@reduxjs/toolkit';
 import { SetPageType } from '../asyncActions/redefineStore.async';
@@ -46,6 +47,7 @@ export interface _RedesignStore {
     paymentOptionId: number;
     paymentOptionName: any;
   }[];
+  storeTypeName: _StoreTypeNames;
 }
 
 // Define the initial state using that type
@@ -81,6 +83,7 @@ const initialState: _RedesignStore = {
   secondLogoCharge: 0,
   gclid: '',
   storeXPaymetnOptionListViewModels: [],
+  storeTypeName: null,
 };
 
 export const storeSlice = createSlice({
@@ -146,6 +149,9 @@ export const storeSlice = createSlice({
     },
     updateGclId: (state, action: { payload: string }) => {
       state.gclid = action.payload;
+    },
+    updateStoreTypeName: (state, action: { payload: _StoreTypeNames }) => {
+      state.storeTypeName = action.payload;
     },
   },
   extraReducers: (builder) => {

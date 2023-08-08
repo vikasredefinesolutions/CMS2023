@@ -18,6 +18,7 @@ const ProductImg: React.FC<_ProductImgProps> = ({ product }) => {
   const [wishlistId, setWishlistId] = useState<number>(0);
   const [wishlistPresent, setWishlistPresent] = useState<boolean>(false);
   const colors = useTypedSelector_v2((state) => state.product?.product.colors);
+  const colorsV2 = useTypedSelector_v2((state) => state.product);
   const handleChooseColor = (product: _ProductColor) => {
     if (!product.productSEName || product.productSEName === '') {
       setColor(product);
@@ -73,28 +74,29 @@ const ProductImg: React.FC<_ProductImgProps> = ({ product }) => {
           />
         </div>
         <div className='hidden md:block sub-image absolute left-[10px] top-[15px] w-[70px]'>
-          {selectedColor?.moreImages
-            ?.map((img, index) => ({ ...img, id: index }))
-            .map((img) => {
-              const highlight =
-                img.id === selectedImage.id
-                  ? 'border-primary'
-                  : 'border-slate-200';
-              return (
-                <div
-                  key={img.id + img.imageUrl}
-                  className={`bg-white md:border hover:border-primary p-[3px] mt-[5px] mb-[5px] last:mb-0 ${highlight} testingclassnametest cursor-pointer`}
-                  onClick={() => selectImgHandler(img)}
-                >
-                  <NxtImage
-                    src={img.imageUrl}
-                    alt={img.altTag}
-                    className='max-h-full m-auto'
-                    title={img.altTag}
-                  />
-                </div>
-              );
-            })}
+          {selectedColor?.moreImages.length > 1 &&
+            selectedColor?.moreImages
+              ?.map((img, index) => ({ ...img, id: index }))
+              .map((img) => {
+                const highlight =
+                  img.id === selectedImage.id
+                    ? 'border-primary'
+                    : 'border-slate-200';
+                return (
+                  <div
+                    key={img.id + img.imageUrl}
+                    className={`bg-white md:border hover:border-primary p-[3px] mt-[5px] mb-[5px] last:mb-0 ${highlight} testingclassnametest cursor-pointer`}
+                    onClick={() => selectImgHandler(img)}
+                  >
+                    <NxtImage
+                      src={img.imageUrl}
+                      alt={img.altTag}
+                      className='max-h-full m-auto'
+                      title={img.altTag}
+                    />
+                  </div>
+                );
+              })}
         </div>
       </div>
       <div className='col-span-12 flex flex-wrap justify-center'>

@@ -6,12 +6,14 @@ import CheckoutController from '@controllers/checkoutController';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import { useEffect, useState } from 'react';
 
+interface _HandlerProps {
+  name: string;
+  value: string;
+}
 interface _Props {
   /* eslint-disable no-unused-vars */
   setPaymentMethod: (arg: paymentMethodCustom.netNumber) => void;
-  changeHandler: (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-  ) => void;
+  changeHandler: (e: _HandlerProps) => void;
   detectCardType: () => string;
   cardDetails: {
     cardNumber: string;
@@ -40,27 +42,27 @@ const CO5_CreditCardOption: React.FC<_Props> = ({
   const { blockInvalidChar } = CheckoutController();
 
   const handleCard = (e: any) => {
-    if (!Number(e.target.value) || e.target.value.length == 0) {
+    if (!Number(e.currentTarget.value) || e.currentTarget.value.length == 0) {
       setcardCheck(false);
       setInput('');
 
       return;
     } else {
-      if (e.target.value.length < e.target.maxLength + 1) {
-        setInput(e.target.value);
+      if (e.currentTarget.value.length < e.currentTarget.maxLength + 1) {
+        setInput(e.currentTarget.value);
         setcardCheck(true);
       }
     }
   };
 
   const handleCVV = (e: any) => {
-    const regex = new RegExp('[0-9]').test(e.target.value);
+    const regex = new RegExp('[0-9]').test(e.currentTarget.value);
     if (!regex) {
       setcvv('');
       return;
     } else {
-      if (e.target.value.length < e.target.maxLength + 1) {
-        setcvv(e.target.value);
+      if (e.currentTarget.value.length < e.currentTarget.maxLength + 1) {
+        setcvv(e.currentTarget.value);
       }
     }
   };
@@ -72,14 +74,21 @@ const CO5_CreditCardOption: React.FC<_Props> = ({
 
   const handledefault = (e: any) => {
     const d = new Date().getMonth() + 1;
-    e.target.setAttribute('value', e.target.value);
-    if (e.target.value >= d) {
-      e.target.classList.remove('border', 'border-solid', 'border-red-700');
-      e.target.classList.add('border-0');
-      setyearMonth({ ...yearMonth, [e.target.name]: e.target.value });
+    e.currentTarget.setAttribute('value', e.currentTarget.value);
+    if (e.currentTarget.value >= d) {
+      e.currentTarget.classList.remove(
+        'border',
+        'border-solid',
+        'border-red-700',
+      );
+      e.currentTarget.classList.add('border-0');
+      setyearMonth({
+        ...yearMonth,
+        [e.currentTarget.name]: e.currentTarget.value,
+      });
     } else {
-      e.target.classList.remove('border-0');
-      e.target.classList.add('border', 'border-red-700', 'border-solid');
+      e.currentTarget.classList.remove('border-0');
+      e.currentTarget.classList.add('border', 'border-red-700', 'border-solid');
       // console.log('non');
     }
   };
@@ -124,17 +133,25 @@ const CO5_CreditCardOption: React.FC<_Props> = ({
         className={`relative z-0 w-full mb-[20px] border border-gray-border rounded `}
       >
         <input
-          onBlur={changeHandler}
+          autoComplete='cc-number'
+          onBlur={(e) => {
+            changeHandler({
+              name: e.target.name,
+              value: e.target.value,
+            });
+          }}
           onKeyDown={blockInvalidChar}
-          onChange={(e) => {
-            changeHandler(e);
+          onInput={(e) => {
+            changeHandler({
+              name: e.currentTarget.name,
+              value: e.currentTarget.value,
+            });
             handleCard(e);
           }}
           name='cardNumber'
           placeholder=' '
           required={true}
           value={input}
-          autoComplete='off'
           onContextMenu={(e) => e.preventDefault()}
           maxLength={
             +`${detectCardType && detectCardType() === 'AMEX' ? 15 : 16}`
@@ -179,8 +196,20 @@ const CO5_CreditCardOption: React.FC<_Props> = ({
         <div className='md:w-3/12 w-6/12 pl-[12px] pr-[12px]'>
           <div className='relative z-0 w-full mb-[20px] border border-gray-border rounded'>
             <select
-              onBlur={changeHandler}
-              onChange={handledefault}
+              onBlur={(e) => {
+                changeHandler({
+                  name: e.target.name,
+                  value: e.target.value,
+                });
+              }}
+              onInput={(e) => {
+                changeHandler({
+                  name: e.currentTarget.name,
+                  value: e.currentTarget.value,
+                });
+                handledefault(e);
+              }}
+              autoComplete='cc-exp-month'
               name='cardExpirationMonth'
               data-value={yearMonth.cardExpirationMonth}
               className='selectFiled pt-[15px] pb-[0px] block w-full px-[8px] h-[48px] mt-[0px] text-sub-text text-[18px] text-[#000000] bg-transparent border-0 appearance-none focus:outline-none focus:ring-0'
@@ -216,8 +245,20 @@ const CO5_CreditCardOption: React.FC<_Props> = ({
         <div className='md:w-3/12 w-6/12 pl-[12px] pr-[12px]'>
           <div className='relative z-0 w-full mb-[20px] border border-gray-border rounded'>
             <select
-              onBlur={changeHandler}
-              onChange={handledefault}
+              onBlur={(e) => {
+                changeHandler({
+                  name: e.target.name,
+                  value: e.target.value,
+                });
+              }}
+              onInput={(e) => {
+                changeHandler({
+                  name: e.currentTarget.name,
+                  value: e.currentTarget.value,
+                });
+                handledefault(e);
+              }}
+              autoComplete='cc-exp-year'
               name='cardExpirationYear'
               data-value={yearMonth.cardExpirationYear}
               className='selectFiled pt-[15px] pb-[0px] block w-full px-[8px] h-[48px] mt-[0px] text-sub-text text-[18px] text-[#000000] bg-transparent border-0 appearance-none focus:outline-none focus:ring-0'
@@ -255,8 +296,20 @@ const CO5_CreditCardOption: React.FC<_Props> = ({
         <div className='md:w-6/12 w-full pl-[12px] pr-[12px]'>
           <div className='relative z-0 w-full mb-[20px] border border-gray-border rounded'>
             <input
-              onBlur={changeHandler}
-              onChange={handleCVV}
+              onBlur={(e) => {
+                changeHandler({
+                  name: e.target.name,
+                  value: e.target.value,
+                });
+              }}
+              onInput={(e) => {
+                changeHandler({
+                  name: e.currentTarget.name,
+                  value: e.currentTarget.value,
+                });
+                handleCVV(e);
+              }}
+              autoComplete='cc-csc'
               name='cardVarificationCode'
               onKeyDown={blockInvalidChar}
               placeholder=' '

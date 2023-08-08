@@ -1,5 +1,6 @@
 import LoginModal from '@appComponents/modals/loginModal';
-import { UNITI_CODE } from '@constants/global.constant';
+import ThirdPartyLogin from '@appComponents/modals/loginModal/ThirdPartyLogin';
+import { SIMPLI_SAFE_CODE, UCA, UNITI_CODE } from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
 import { _MenuCategory } from '@definations/header.type';
 import { _modals } from '@definations/product.type';
@@ -32,6 +33,7 @@ const SubMenuItem: React.FC<_props> = ({
   const { id: customerId } = useTypedSelector_v2((state) => state.user);
   const [openModal, setOpenModal] = useState<null | _modals>(null);
   const { code } = useTypedSelector_v2((state) => state.store);
+  const { thirdPartyLogin } = useTypedSelector_v2((state) => state.store);
 
   const router = useRouter();
   const modalHandler = (param: null | _modals) => {
@@ -60,7 +62,7 @@ const SubMenuItem: React.FC<_props> = ({
           onClick={() => toggleSideMenu('CLOSE')}
         >
           <Link
-            href={`/${itemUrl}`}
+            href={`/${itemUrl}.html`}
             className='text-anchor hover:text-anchor-hover '
           >
             <a
@@ -79,15 +81,15 @@ const SubMenuItem: React.FC<_props> = ({
           onClick={(e) => {
             e.stopPropagation();
 
-            if (code === 'CYX' || code === UNITI_CODE) {
+            if (code === 'CYX' || code === UNITI_CODE || code === UCA) {
               if (customerId) {
-                router.push(`/${itemUrl}`);
+                router.push(`/${itemUrl}.html`);
               } else {
-                setRedirectPagePath(`/${itemUrl}`);
+                setRedirectPagePath(`/${itemUrl}.html`);
                 setOpenModal('login');
               }
             } else {
-              router.push(`/${itemUrl}`);
+              router.push(`/${itemUrl}.html`);
             }
           }}
         >
@@ -96,13 +98,23 @@ const SubMenuItem: React.FC<_props> = ({
             {__pagesText.Headers.rightArrowIcon}
           </span> */}
             <span
-              className='block text-[14px] text-primary font-[400] tracking-[1px] leading-[18px] uppercase hover:text-white hover:bg-secondary px-[10px] py-[7px] hover:pl-[20px] transition-all duration-700'
+              className={`block text-[14px] text-primary font-[400] tracking-[1px] leading-[18px] uppercase  hover:bg-primary px-[10px] py-[7px] hover:pl-[20px] transition-all duration-700  ${
+                code == UNITI_CODE ? 'hover:text-white' : 'hover:text-primary'
+              } `}
               title={itemLabel}
             >
               {itemLabel}
             </span>
           </li>
-          {openModal === 'login' && <LoginModal modalHandler={modalHandler} />}
+          {openModal === 'login' && (
+            <>
+              {thirdPartyLogin ? (
+                <ThirdPartyLogin modalHandler={modalHandler} />
+              ) : (
+                <LoginModal modalHandler={modalHandler} />
+              )}
+            </>
+          )}
         </div>
       );
     }
@@ -133,7 +145,7 @@ const SubMenuItem: React.FC<_props> = ({
                 onClick={() => toggleSideMenu('CLOSE')}
                 href='javascript:void(0);'
               >
-                <Link href={`/${itemUrl}`}>
+                <Link href={`/${itemUrl}.html`}>
                   {__pagesText.Headers.mobileViewAll}
                 </Link>
               </a>
@@ -194,27 +206,43 @@ const SubMenuItem: React.FC<_props> = ({
             <div
               onClick={(e) => {
                 e.stopPropagation();
-                if (code === 'CYX' || code == UNITI_CODE) {
+                if (code === 'CYX' || code == UNITI_CODE || code === UCA) {
                   if (customerId) {
-                    router.push(`/${itemUrl}`);
+                    router.push(`/${itemUrl}.html`);
                   } else {
-                    setRedirectPagePath(`/${itemUrl}`);
+                    setRedirectPagePath(`/${itemUrl}.html`);
                     setOpenModal('login');
                   }
                 } else {
-                  router.push(`/${itemUrl}`);
+                  router.push(`/${itemUrl}.html`);
                 }
               }}
             >
               <span
-                className='block text-[14px] text-primary font-[400] tracking-[1px] leading-[18px] uppercase  hover:bg-secondary px-[10px] py-[7px] hover:pl-[20px] transition-all duration-700 hover:text-primary'
+                className={`block text-[14px] text-primary font-[400] tracking-[1px] leading-[18px] uppercase  ${
+                  code == SIMPLI_SAFE_CODE
+                    ? 'hover:bg-quaternary'
+                    : 'hover:bg-secondary'
+                } px-[10px] py-[7px] hover:pl-[20px] transition-all duration-700  ${
+                  code == UNITI_CODE || code == SIMPLI_SAFE_CODE
+                    ? 'hover:text-white'
+                    : 'hover:text-primary '
+                } `}
                 title={itemLabel}
               >
                 {itemLabel}
               </span>
             </div>
           </li>
-          {openModal === 'login' && <LoginModal modalHandler={modalHandler} />}
+          {openModal === 'login' && (
+            <>
+              {thirdPartyLogin ? (
+                <ThirdPartyLogin modalHandler={modalHandler} />
+              ) : (
+                <LoginModal modalHandler={modalHandler} />
+              )}
+            </>
+          )}
         </>
       );
     }

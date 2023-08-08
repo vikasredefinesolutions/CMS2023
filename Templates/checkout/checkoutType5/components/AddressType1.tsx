@@ -44,7 +44,7 @@ const CheckoutAddress = ({
             </button>
           </div>
         )}
-        {useShippingAddress && (
+        {/* {!useShippingAddress && (
           <div>
             <button
               onClick={editShipping}
@@ -54,7 +54,7 @@ const CheckoutAddress = ({
               Edit
             </button>
           </div>
-        )}
+        )} */}
       </div>
       {addressType === 2 && (
         <div className='mb-3 font-semibold text-lg'>

@@ -1,6 +1,6 @@
+import NxtImage from '@appComponents/reUsable/Image';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import React from 'react';
-import { _globalStore } from 'store.global';
 
 interface _props {
   firstLogoFree: boolean;
@@ -21,7 +21,7 @@ interface _props {
     } | null>
   >;
 }
-let mediaBaseUrl = _globalStore.blobUrl;
+
 const LogoContainer: React.FC<_props> = ({
   firstLogoFree,
   id,
@@ -33,7 +33,6 @@ const LogoContainer: React.FC<_props> = ({
 }) => {
   const store = useTypedSelector_v2((state) => state.store);
   const logo = useTypedSelector_v2((state) => state.product.toCheckout.logos);
-  mediaBaseUrl = mediaBaseUrl || store.mediaBaseUrl;
 
   return (
     <div
@@ -49,8 +48,10 @@ const LogoContainer: React.FC<_props> = ({
       }
     >
       <div className='mb-[10px] flex flex-wrap items-center justify-center h-[120px] px-[10px]'>
-        <img
-          src={`${mediaBaseUrl}${image}`}
+        <NxtImage
+          useNextImage={false}
+          alt={''}
+          src={image}
           className='max-h-[120px] w-auto mx-auto'
         />
       </div>

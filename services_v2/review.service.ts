@@ -1,7 +1,7 @@
 import { SendAsync } from '@utils/axios.util';
 import {
-  ProductReviewCounts,
-  ProductReviewDetailsRes,
+  _ProductRatings,
+  _ProductReview,
   ProductReviewType,
   ReviewHelpfull,
 } from './review';
@@ -16,18 +16,18 @@ export const AddProductReview = async (payload: ProductReviewType) => {
 
   return res;
 };
-export const FetchProductReview = async (payload: number) => {
+export const FetchProductRatings = async (payload: number) => {
   const url = `/StoreProduct/getproductreviews/${payload}.json`;
-  const res: ProductReviewCounts = await SendAsync({
+  const res: _ProductRatings = await SendAsync({
     url: url,
     method: 'GET',
   });
   return res;
 };
 
-export const FetchProductReviewDetails = async (payload: number) => {
+export const FetchProductReviews = async (payload: number) => {
   const url = `/StoreProduct/getproductreviewsdetail/${payload}.json`;
-  const res: ProductReviewDetailsRes[] = await SendAsync({
+  const res: _ProductReview[] = await SendAsync({
     url: url,
     method: 'GET',
   });

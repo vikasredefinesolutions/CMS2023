@@ -1,3 +1,4 @@
+import NxtImage from '@appComponents/reUsable/Image';
 import { storeBuilderTypeId } from '@configs/page.config';
 import { paths } from '@constants/paths.constant';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
@@ -37,22 +38,46 @@ const PageNotFoundType1: React.FC = () => {
           </div> */}
           {storeCode === 'CG' && (
             <>
-              <img src='/assets/images/404/cg-404.png' />
+              <NxtImage
+                alt=''
+                useNextImage={false}
+                isStatic={true}
+                className=''
+                src='/assets/images/404/cg-404.png'
+              />
             </>
           )}
           {storeCode === 'GG' && (
             <>
-              <img src='/assets/images/404/gg-404.png' />
+              <NxtImage
+                alt=''
+                className=''
+                useNextImage={false}
+                isStatic={true}
+                src='/assets/images/404/gg-404.png'
+              />
             </>
           )}
           {storeCode === 'PKHG' && (
             <>
-              <img src='/assets/images/404/pkh-404.png' />
+              <NxtImage
+                alt=''
+                isStatic={true}
+                useNextImage={false}
+                className=''
+                src='/assets/images/404/pkh-404.png'
+              />
             </>
           )}
           {storeCode === 'DI' && (
             <>
-              <img src='/assets/images/404/di-404.png' />
+              <NxtImage
+                alt=''
+                isStatic={true}
+                useNextImage={false}
+                className=''
+                src='/assets/images/404/di-404.png'
+              />
             </>
           )}
 

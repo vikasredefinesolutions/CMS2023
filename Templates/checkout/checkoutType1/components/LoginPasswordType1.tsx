@@ -13,13 +13,11 @@ const LoginPassword: FC<{
   return (
     <>
       <div id='LoginPassword'>
-        <div className='text-title-text font-semibold pb-[20px] mb-[20px] border-b border-gray-border'>
-          Welcome Back!
-        </div>
+        
         <div className='flex flex-wrap justify-between'>
           <div className='w-full lg:max-w-[600px]'>
             <div className='text-sub-text font-normal mb-[20px] tracking-normal'>
-              Please log in to your account
+            Welcome Back! Please log into your account to place your custom order.
             </div>
             <Formik
               validationSchema={validationSchema}

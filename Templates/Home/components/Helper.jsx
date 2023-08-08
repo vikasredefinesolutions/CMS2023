@@ -33,6 +33,7 @@ export const updateSetProperties = (element) => {
   let x = document.getElementById('div' + element.no);
   if (element.selectedVal != undefined && element.selectedVal != '') {
     if (element.properties.leftBoxBg) {
+      console.log(element.selectedVal);
       let cArr = ['leftBoxBg', 'centerBoxBg', 'rightBoxBg'];
       cArr.map((cvalue) => {
         let bgValue = '';
@@ -89,10 +90,10 @@ export const updateSetProperties = (element) => {
           }
         }
 
-        // if(bLink)
-        // {
-        //   x.querySelectorAll('#'+cvalue+"Link")[0].href = bLink;
-        // }
+        if(bLink)
+        {
+          x.querySelectorAll('#'+cvalue+"Link")[0].href = bLink;
+        }
       });
     }
     let elProperties;
@@ -121,6 +122,14 @@ export const updateSetProperties = (element) => {
     let btn3Padding = false;
 
     Object.entries(element.selectedVal).map(([key, value]) => {
+      if (value.type == 'btn_width') {
+        buttonId = key.replace('_width', '');
+
+        if (buttonId === 'Button') Button_className += ' ' + value.value;
+        else if (buttonId === 'Button1') Button1_className += ' ' + value.value;
+        else if (buttonId === 'Button2') Button2_className += ' ' + value.value;
+      }
+
       if (value.type == 'btn_size') {
         buttonId = key.replace('_size', '');
 
@@ -677,7 +686,7 @@ export const updateSetProperties = (element) => {
               objName = valueq;
             }
           });
-
+          // console.log(element.selectedVal);
           if (Object.keys(element.selectedVal).includes(key + '_alt')) {
             Object.entries(element.selectedVal).map(([keyq, valueq]) => {
               if (keyq == key + '_alt') {
@@ -1533,11 +1542,9 @@ export const updateSetProperties = (element) => {
       if (
         element.selectedVal.ElementConfiguration_final_class.value.trim() !== ''
       ) {
-        if (!imgDisplay)
-          x.querySelectorAll('#right-section')[0].className =
-            element.selectedVal.ElementConfiguration_final_class.value.trim() +
-            ' w-full';
-        else
+        if (!imgDisplay) {
+          x.querySelectorAll('#right-section')[0].className = 'w-full';
+        } else
           x.querySelectorAll('#right-section')[0].className =
             element.selectedVal.ElementConfiguration_final_class.value.trim();
       }
@@ -1613,7 +1620,10 @@ export const updateSetProperties = (element) => {
         }
       }
 
-      if (layoutAdjust || Object.keys(element.selectedVal).includes('Layout')) {
+      if (
+        imgDisplay &&
+        (layoutAdjust || Object.keys(element.selectedVal).includes('Layout'))
+      ) {
         let layout = 50;
         if (Object.keys(element.selectedVal).includes('Layout')) {
           layout = element.selectedVal.Layout.value;
@@ -1808,14 +1818,18 @@ export const displaySection = (obj, side, x) => {
 
 export const removeWidthClass = (x, type = 'Both') => {
   if (type == 'Left' || type == 'Both') {
-    x.querySelectorAll('#left-section')[0].classList.remove('lg:w-1/2');
-    x.querySelectorAll('#left-section')[0].classList.remove('lg:w-1/3');
-    x.querySelectorAll('#left-section')[0].classList.remove('lg:w-1/4');
+    if (x && x.querySelectorAll('#left-section').length > 0) {
+      x.querySelectorAll('#left-section')[0].classList.remove('lg:w-1/2');
+      x.querySelectorAll('#left-section')[0].classList.remove('lg:w-1/3');
+      x.querySelectorAll('#left-section')[0].classList.remove('lg:w-1/4');
+    }
   }
   if (type == 'Left' || type == 'Both') {
-    x.querySelectorAll('#right-section')[0].classList.remove('lg:w-1/2');
-    x.querySelectorAll('#right-section')[0].classList.remove('lg:w-2/3');
-    x.querySelectorAll('#right-section')[0].classList.remove('lg:w-3/4');
+    if (x && x.querySelectorAll('#right-section').length > 0) {
+      x.querySelectorAll('#right-section')[0].classList.remove('lg:w-1/2');
+      x.querySelectorAll('#right-section')[0].classList.remove('lg:w-2/3');
+      x.querySelectorAll('#right-section')[0].classList.remove('lg:w-3/4');
+    }
   }
 };
 

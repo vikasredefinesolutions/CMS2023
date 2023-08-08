@@ -49,14 +49,16 @@ const allClass = () => {
                 className='main-image max-w-lg mx-auto'
                 style='position: relative; overflow: hidden;'
               >
-                <img
-                  src='http://ystore.us/HTML/RedefineCommerce/Ecom-front/corporategear/images/1040623_25528_STH_large.jpg'
+                <NxtImage
                   alt=''
+                  isStatic={true}
+                  src='http://ystore.us/HTML/RedefineCommerce/Ecom-front/corporategear/images/1040623_25528_STH_large.jpg'
                   className='w-full object-center object-cover sm:rounded-lg main_image'
                 />
-                <img
+                <NxtImage
                   role='presentation'
                   alt=''
+                  isStatic={true}
                   src='http://ystore.us/HTML/RedefineCommerce/Ecom-front/corporategear/images/1040623_25528_STH_large.jpg'
                   className='zoomImg'
                   style='position: absolute; top: -644.341px; left: -91.3086px; opacity: 0; width: 1260px; height: 1726px; border: medium none; max-width: none; max-height: none;'
@@ -64,28 +66,32 @@ const allClass = () => {
               </div>
               <div className='sub-image md:absolute md:left-2 md:top-4 md:w-20 md:block'>
                 <div className='md:border hover:border-secondary p-1 mb-1 last:mb-0 border-secondary'>
-                  <img
+                  <NxtImage
+                    isStatic={true}
                     src='http://ystore.us/HTML/RedefineCommerce/Ecom-front/corporategear/images/1040623_25528_STH.jpg'
                     alt=''
                     className='w-full object-center object-cover'
                   />
                 </div>
                 <div className='md:border hover:border-secondary p-1 mb-1 last:mb-0 border-slate-200'>
-                  <img
+                  <NxtImage
+                    isStatic={true}
                     src='images/1040623_25528_sth_1.jpg'
                     alt=''
                     className='w-full object-center object-cover'
                   />
                 </div>
                 <div className='md:border hover:border-secondary p-1 mb-1 last:mb-0 border-slate-200'>
-                  <img
+                  <NxtImage
+                    isStatic={true}
                     src='http://ystore.us/HTML/RedefineCommerce/Ecom-front/corporategear/images/1040623_25528_sth_2.jpg'
                     alt=''
                     className='w-full object-center object-cover'
                   />
                 </div>
                 <div className='md:border hover:border-secondary p-1 mb-1 last:mb-0 border-slate-200'>
-                  <img
+                  <NxtImage
+                    isStatic={true}
                     src='http://ystore.us/HTML/RedefineCommerce/Ecom-front/corporategear/ images/1040623_25528_sth_3.jpg'
                     alt=''
                     className='w-full object-center object-cover'
@@ -93,7 +99,8 @@ const allClass = () => {
                 </div>
               </div>
               <div className='absolute right-2 top-4 w-6 h-6'>
-                <img
+                <NxtImage
+                  isStatic={true}
                   src='images/outline_favorite_border_black_24dp.png'
                   title=''
                   alt=''
@@ -135,7 +142,8 @@ const allClass = () => {
               <div className='flex flex-wrap gap-5 text-sm text-center px-2 available-colors'>
                 <div className='w-20'>
                   <div className='border-2 border-secondary hover:border-secondary mb-1 last:mb-0'>
-                    <img
+                    <NxtImage
+                      isStatic={true}
                       src='images/1040623_25528_STH.jpg'
                       alt=''
                       className='w-full object-center object-cover'
@@ -145,7 +153,8 @@ const allClass = () => {
                 </div>
                 <div className='w-20'>
                   <div className='border-2 border-slate-200 hover:border-secondary mb-1 last:mb-0'>
-                    <img
+                    <NxtImage
+                      isStatic={true}
                       src='images/1040623_25528_STH.jpg'
                       alt=''
                       className='w-full object-center object-cover'
@@ -155,7 +164,8 @@ const allClass = () => {
                 </div>
                 <div className='w-20'>
                   <div className='border-2 border-slate-200 hover:border-secondary mb-1 last:mb-0'>
-                    <img
+                    <NxtImage
+                      isStatic={true}
                       src='images/1040623_25528_STH.jpg'
                       alt=''
                       className='w-full object-center object-cover'
@@ -165,7 +175,8 @@ const allClass = () => {
                 </div>
                 <div className='w-20'>
                   <div className='border-2 border-slate-200 hover:border-secondary mb-1 last:mb-0'>
-                    <img
+                    <NxtImage
+                      isStatic={true}
                       src='images/1040623_25528_STH.jpg'
                       alt=''
                       className='w-full object-center object-cover'
@@ -175,7 +186,8 @@ const allClass = () => {
                 </div>
                 <div className='w-20'>
                   <div className='border-2 border-slate-200 hover:border-secondary mb-1 last:mb-0'>
-                    <img
+                    <NxtImage
+                      isStatic={true}
                       src='images/1040623_25528_STH.jpg'
                       alt=''
                       className='w-full object-center object-cover'
@@ -185,7 +197,8 @@ const allClass = () => {
                 </div>
                 <div className='w-20'>
                   <div className='border-2 border-slate-200 hover:border-secondary mb-1 last:mb-0'>
-                    <img
+                    <NxtImage
+                      isStatic={true}
                       src='images/1040623_25528_STH.jpg'
                       alt=''
                       className='w-full object-center object-cover'
@@ -195,7 +208,8 @@ const allClass = () => {
                 </div>
                 <div className='w-20 sr-only'>
                   <div className='border-2 border-slate-200 hover:border-secondary mb-1 last:mb-0'>
-                    <img
+                    <NxtImage
+                      isStatic={true}
                       src='images/1040623_25528_STH.jpg'
                       alt=''
                       className='w-full object-center object-cover'
@@ -205,7 +219,8 @@ const allClass = () => {
                 </div>
                 <div className='w-20 sr-only'>
                   <div className='border-2 border-slate-200 hover:border-secondary mb-1 last:mb-0'>
-                    <img
+                    <NxtImage
+                      isStatic={true}
                       src='images/1040623_25528_STH.jpg'
                       alt=''
                       className='w-full object-center object-cover'
@@ -215,7 +230,8 @@ const allClass = () => {
                 </div>
                 <div className='w-20 sr-only'>
                   <div className='border-2 border-slate-200 hover:border-secondary mb-1 last:mb-0'>
-                    <img
+                    <NxtImage
+                      isStatic={true}
                       src='images/1040623_25528_STH.jpg'
                       alt=''
                       className='w-full object-center object-cover'
@@ -225,7 +241,8 @@ const allClass = () => {
                 </div>
                 <div className='w-20 sr-only'>
                   <div className='border-2 border-slate-200 hover:border-secondary mb-1 last:mb-0'>
-                    <img
+                    <NxtImage
+                      isStatic={true}
                       src='images/1040623_25528_STH.jpg'
                       alt=''
                       className='w-full object-center object-cover'
@@ -235,7 +252,8 @@ const allClass = () => {
                 </div>
                 <div className='w-20 sr-only'>
                   <div className='border-2 border-slate-200 hover:border-secondary mb-1 last:mb-0'>
-                    <img
+                    <NxtImage
+                      isStatic={true}
                       src='images/1040623_25528_STH.jpg'
                       alt=''
                       className='w-full object-center object-cover'
@@ -245,7 +263,8 @@ const allClass = () => {
                 </div>
                 <div className='w-20 sr-only'>
                   <div className='border-2 border-slate-200 hover:border-secondary mb-1 last:mb-0'>
-                    <img
+                    <NxtImage
+                      isStatic={true}
                       src='images/1040623_25528_STH.jpg'
                       alt=''
                       className='w-full object-center object-cover'

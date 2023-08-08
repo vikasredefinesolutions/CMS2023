@@ -5,6 +5,10 @@ import { __pagesText } from '@constants/pages.text';
 import { useState } from 'react';
 import { paymentProps } from '..';
 
+export interface _CustomEvent extends Event {
+  inputType: 'deleteContentBackward';
+}
+
 const CardPaymentType1: paymentProps = ({
   updatePaymentMethod,
   changeHandler,
@@ -32,8 +36,32 @@ const CardPaymentType1: paymentProps = ({
       </div>
       <div className='relative z-0 w-full mb-[20px] border border-gray-border rounded'>
         <input
-          onChange={changeHandler}
-          autoComplete='off'
+          onInput={(e) => {
+            if (
+              (e.nativeEvent as _CustomEvent).inputType ===
+              'deleteContentBackward'
+            ) {
+              if (e.currentTarget.value.length <= 3) {
+                changeHandler({
+                  name: 'cardExpirationMonth',
+                  value: '',
+                });
+                changeHandler({
+                  name: 'cardExpirationYear',
+                  value: '',
+                });
+                changeHandler({
+                  name: 'cardVarificationCode',
+                  value: '',
+                });
+              }
+            }
+            changeHandler({
+              name: e.currentTarget.name,
+              value: e.currentTarget.value,
+            });
+          }}
+          autoComplete='cc-number'
           onContextMenu={(e) => e.preventDefault()}
           name='cardNumber'
           placeholder=' '
@@ -54,7 +82,13 @@ const CardPaymentType1: paymentProps = ({
                 detectCardType && detectCardType() === res.name ? '100' : '40'
               } ml-[4px] w-[32px]`}
             >
-              <NxtImage isStatic={true} className='' src={res.url} alt='' />
+              <NxtImage
+                isStatic={true}
+                useNextImage={false}
+                className=''
+                src={res.url}
+                alt=''
+              />
             </div>
           ))}
         </div>
@@ -63,7 +97,13 @@ const CardPaymentType1: paymentProps = ({
         <div className='md:w-3/12 w-6/12 pl-[12px] pr-[12px]'>
           <div className='relative z-0 w-full mb-[20px] border border-gray-border rounded'>
             <select
-              onChange={changeHandler}
+              onInput={(e) => {
+                changeHandler({
+                  name: e.currentTarget.name,
+                  value: e.currentTarget.value,
+                });
+              }}
+              autoComplete='cc-exp-month'
               name='cardExpirationMonth'
               className='pt-[15px] pb-[0px] block w-full px-[8px] h-[48px] mt-[0px] text-sub-text text-[18px] text-[#000000] bg-transparent border-0 appearance-none focus:outline-none focus:ring-0'
             >
@@ -85,7 +125,13 @@ const CardPaymentType1: paymentProps = ({
         <div className='md:w-3/12 w-6/12 pl-[12px] pr-[12px]'>
           <div className='relative z-0 w-full mb-[20px] border border-gray-border rounded'>
             <select
-              onChange={changeHandler}
+              onInput={(e) => {
+                changeHandler({
+                  name: e.currentTarget.name,
+                  value: e.currentTarget.value,
+                });
+              }}
+              autoComplete='cc-exp-year'
               name='cardExpirationYear'
               className='pt-[15px] pb-[0px] block w-full px-[8px] h-[48px] mt-[0px] text-sub-text text-[18px] text-[#000000] bg-transparent border-0 appearance-none focus:outline-none focus:ring-0'
             >
@@ -110,8 +156,14 @@ const CardPaymentType1: paymentProps = ({
         <div className='md:w-6/12 w-6/12 pl-[12px] pr-[12px]'>
           <div className='relative z-0 w-full mb-[20px] border border-gray-border rounded'>
             <input
-              onChange={changeHandler}
+              onInput={(e) => {
+                changeHandler({
+                  name: e.currentTarget.name,
+                  value: e.currentTarget.value,
+                });
+              }}
               name='cardVarificationCode'
+              autoComplete='cc-csc'
               placeholder=' '
               required={true}
               className='pt-[15px] pb-[0px] block w-full px-[8px] h-[48px] mt-[0px] text-sub-text text-[18px] text-[#000000] bg-transparent border-0 appearance-none focus:outline-none focus:ring-0'

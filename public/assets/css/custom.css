@@ -1,5 +1,5 @@
 .carousel .slide img {
-  width: auto !important;
+  width: auto;
   max-width: 100% !important;
 }
 

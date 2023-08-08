@@ -21,7 +21,6 @@ const AccountSettingPage = () => {
         .catch(() => setShowLoader(false));
     }
   }, [storeId]);
-
   return <>{seType && !showLoader && <AccountSetting id={seType} />}</>;
 };
 

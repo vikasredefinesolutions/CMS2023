@@ -98,7 +98,7 @@ const MobileSubMenu: React.FC<_props> = ({ content, type, view, url }) => {
               className='text-[12px] mr-[5px] underline'
               onClick={() => toggleSideMenu('CLOSE')}
             >
-              <Link href={`${url}.html`}>
+              <Link href={`/${url}.html`}>
                 {__pagesText.Headers.mobileViewAll}
               </Link>
             </div>
@@ -117,7 +117,7 @@ const MobileSubMenu: React.FC<_props> = ({ content, type, view, url }) => {
                     {content &&
                       content[0].brandDetails.map((subCat, index) => {
                         return (
-                          <Link href={subCat.seName}>
+                          <Link href={`/${subCat.seName}`}>
                             <SubCategoryItem
                               key={`${index}_${subCat.id}`}
                               itemLabel={subCat.brandName}

@@ -1,4 +1,5 @@
 import LoginModal from '@appComponents/modals/loginModal';
+import { _Store } from '@configs/page.config';
 import { UCA } from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
 import { _MenuCategory } from '@definations/header.type';
@@ -205,7 +206,11 @@ const SubMenuItem: React.FC<_props> = ({
               }}
             >
               <span
-                className='block text-[14px] text-primary hover:text-primary font-[400] tracking-[1px] leading-[18px] uppercase  hover:bg-secondary px-[10px] py-[7px] hover:pl-[20px] transition-all duration-700'
+                className={`block text-[14px] text-primary  ${
+                  code == _Store.type6
+                    ? 'hover:text-white'
+                    : 'hover:text-primary'
+                } font-[400] tracking-[1px] leading-[18px] uppercase  hover:bg-quaternary px-[10px] py-[7px] hover:pl-[20px] transition-all duration-700`}
                 title={itemLabel}
               >
                 {itemLabel}

@@ -106,14 +106,13 @@ const TemplateFiveListing = ({
                 className='relative cursor-pointer'
               >
                 <div>
-                <a href={`/${product.sename}.html`} title={product.name} style={{display: "block"}}>
-               
-                  <NxtImage
-                    src={mainImageUrl}
-                    alt={product.name}
-                    className='max-h-full'
-                    key={currentProduct?.id}
-                  />
+                  <a title={product.name} style={{ display: 'block' }}>
+                    <NxtImage
+                      src={mainImageUrl}
+                      alt={product.name}
+                      className='max-h-full'
+                      key={currentProduct?.id}
+                    />
                   </a>
                 </div>
               </Link>
@@ -140,7 +139,8 @@ const TemplateFiveListing = ({
                   href={`${origin}/${product.sename}.html`}
                 >
                   <span>
-                    <img
+                    <NxtImage
+                      isStatic={true}
                       src='/assets/images/personalize-icon.png'
                       className='max-h-6'
                       alt=''
@@ -290,7 +290,7 @@ const TemplateFiveListing = ({
                         className={`w-7 h-7 border-2 border-primary hover:border-tertiary`}
                       >
                         <NxtImage
-                          src={`${mediaBaseUrl}${currentProduct.imageName}`}
+                          src={currentProduct?.imageName || null}
                           alt=''
                           className='max-h-full m-auto'
                           title={currentProduct.colorName}
@@ -314,7 +314,7 @@ const TemplateFiveListing = ({
                             }
                           >
                             <NxtImage
-                              src={`${mediaBaseUrl}${subRow.imageurl}`}
+                              src={subRow?.imageurl || null}
                               alt=''
                               className='max-h-full m-auto'
                               title={subRow.colorName}
@@ -357,7 +357,7 @@ const TemplateFiveListing = ({
                         key={`${index}_${subRow.id}`}
                       >
                         <NxtImage
-                          src={`${mediaBaseUrl}${subRow.imageName}`}
+                          src={subRow?.imageName || null}
                           alt=''
                           className='max-h-full m-auto'
                           title={subRow.colorName}

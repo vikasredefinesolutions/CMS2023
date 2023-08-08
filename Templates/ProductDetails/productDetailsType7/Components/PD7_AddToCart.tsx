@@ -63,8 +63,9 @@ const PD7_AddToCart: React.FC<_Props> = ({
     cartId: number | null,
     location: _location,
     customerId: number,
-  ): Promise<number> => {
-    if (!cartId || !customFields) return customerId;
+  ): Promise<number | 'skip cart fetching'> => {
+    if (!cartId || !customFields || customFields.length === 0)
+      return 'skip cart fetching';
 
     const payload = customFields.map((item) => {
       return {
@@ -122,8 +123,9 @@ const PD7_AddToCart: React.FC<_Props> = ({
   };
 
   const fetchShoppingCartId = async (
-    customerId: number,
+    customerId: number | 'skip cart fetching',
   ): Promise<number | null> => {
+    if (customerId === 'skip cart fetching') return null;
     if (!customerId) return null;
 
     saveTemporaryCustomerId(customerId);
@@ -143,7 +145,7 @@ const PD7_AddToCart: React.FC<_Props> = ({
       return {
         attributeOptionId: item.sizeAttributeOptionId,
         attributeOptionValue: item.size,
-        price: details!.msrp,
+        price: unitPrice,
         quantity: item.qty,
         // not to touch
         id: 0,
@@ -161,7 +163,7 @@ const PD7_AddToCart: React.FC<_Props> = ({
         ipAddress: location.ip_address,
 
         shoppingCartItemModel: {
-          price: details!.msrp,
+          price: unitPrice,
           quantity: selectedSizeQtys.totalQty,
           // color image details don't get confused with name
           logoTitle: activeColor!.name,
@@ -200,7 +202,7 @@ const PD7_AddToCart: React.FC<_Props> = ({
     await addToCart(payload)
       .then((customerId) => fetchShoppingCartId(+customerId))
       .then((cartId) => saveCustomFieldsValue(cartId, location, +customerId))
-      .then((customerId) => fetchShoppingCartId(+customerId))
+      .then((customerId) => fetchShoppingCartId(customerId))
       .then((response) => {
         if (!response) return null;
         showModal({
@@ -222,8 +224,8 @@ const PD7_AddToCart: React.FC<_Props> = ({
 
   const ifNoQuantitiesAdded = () => {
     showModal({
-      message: 'Please Select Any One Size',
-      title: 'Required Size',
+      message: 'You have not selected any quantities to add to the cart',
+      title: 'Required Quantity(s)',
     });
   };
 
@@ -263,7 +265,12 @@ const PD7_AddToCart: React.FC<_Props> = ({
 
   const priceToShow = () => {
     if (numbers.grandTotal === 0) {
-      return details?.msrp || 0;
+      if (details?.salePrice) {
+        return +details.salePrice;
+      }
+      if (details?.msrp) {
+        return +details?.msrp;
+      }
     }
 
     return numbers.grandTotal;
@@ -279,18 +286,19 @@ const PD7_AddToCart: React.FC<_Props> = ({
           </span>
         </div>
         <div className=''>
-          {selectedSizeQtys.stockAvailable === false ? <>
+          {selectedSizeQtys.stockAvailable === false ? (
+            <button className='btn btn-lg btn-secondary' disabled={true}>
+              Out of Stock
+            </button>
+          ) : (
             <button
-            className='btn btn-lg btn-secondary'
-            disabled={true}
-          >Out of Stock</button>
-          </> : <>
-          <a href="javascript:void(0)" title="Add to Cart"
-            className='btn btn-lg btn-secondary'
-            onClick={() => addToCartHandler()}
-          >Add to Cart</a>
-          </>}
-          
+              title='Add to Cart'
+              className='btn btn-lg btn-secondary'
+              onClick={() => addToCartHandler()}
+            >
+              Add to Cart
+            </button>
+          )}
         </div>
       </div>
     </div>

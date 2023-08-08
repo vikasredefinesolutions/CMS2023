@@ -89,6 +89,7 @@ const OrD_UploadImagePopup: React.FC<_props> = ({
         description: values.description,
         logoPositionImage: orderLogoPositionImage,
         orderedCartLogoDetailId: orderedCartLogoDetailId,
+        locationName: '',
       });
       updateOrderItems();
       showModal({

@@ -32,9 +32,9 @@ const LoggedInMenu: React.FC = () => {
     }
 
     setFocus(false);
-    logoutClearCart();
     setWishListEmpty([]);
     Logout(logInUser);
+    logoutClearCart();
   };
 
   if (!loggedIn) return <></>;

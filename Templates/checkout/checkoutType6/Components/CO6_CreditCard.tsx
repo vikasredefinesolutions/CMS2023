@@ -66,7 +66,7 @@ const CO6_CreditCard: React.FC<_Props> = ({
     handleChange(event);
   };
 
-  const handleExpiryMonth = (event: React.FocusEvent<any, Element>) => {
+  const handleExpiryMonthOnBlur = (event: React.FocusEvent<any, Element>) => {
     const month = +event.target.value;
 
     if (event.target.value.trim().length === 1) {
@@ -96,6 +96,7 @@ const CO6_CreditCard: React.FC<_Props> = ({
           value={values.nameOnCard}
           onChange={handleChange}
           onBlur={handleBlur}
+          autoComplete='cc-name'
           touched={!!touched.nameOnCard}
           error={errors?.nameOnCard ? errors.nameOnCard : null}
         />
@@ -103,15 +104,12 @@ const CO6_CreditCard: React.FC<_Props> = ({
           label='Credit Card Number'
           additionalClass={'md:w-6/12'}
           type={'text'}
+          autoComplete='cc-number'
           name={'ccNumber'}
           required={true}
           length={maxLengthCalculator('ccNumber', values.ccNumber)}
           value={values.ccNumber}
-          onChange={(event) => {
-            if (isNumberKey(event)) {
-              handleChange(event);
-            }
-          }}
+          onChange={handleChange}
           creditCard={true}
           onBlur={handleBlur}
           touched={!!touched.ccNumber}
@@ -137,9 +135,10 @@ const CO6_CreditCard: React.FC<_Props> = ({
           <div className='flex items-center justify-start'>
             <CO6_CreditCardInput
               value={values.expiryMonth}
+              autoComplete='cc-exp-month'
               onChange={handleExpiryMonthOnChange}
               name={'expiryMonth'}
-              onBlur={handleExpiryMonth}
+              onBlur={handleExpiryMonthOnBlur}
               valid={
                 !!touched.expiryMonth &&
                 values.expiryMonth !== '' &&
@@ -156,6 +155,7 @@ const CO6_CreditCard: React.FC<_Props> = ({
               onChange={handleChange}
               name={'expiryYear'}
               onBlur={handleBlur}
+              autoComplete='cc-exp-year'
               valid={
                 !!touched.expiryYear &&
                 values.expiryYear !== '' &&
@@ -173,6 +173,7 @@ const CO6_CreditCard: React.FC<_Props> = ({
           label='Security Code(CVV/CVC)'
           additionalClass={'md:w-6/12'}
           type={'text'}
+          autoComplete=''
           name={'cvc'}
           required={true}
           value={values.cvc}

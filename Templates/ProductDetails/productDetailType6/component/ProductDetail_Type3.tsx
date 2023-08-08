@@ -1,6 +1,6 @@
 import ProductDescription_Type3 from './ProductDescription_Type3';
 import ProductImg_Type3 from './ProductImg_Type3';
-import ProductInfo_Type3 from './ProductInfo_Type3';
+import ProductInfo_Type3 from './ProductInfo_Type6';
 import { _ProductDetailsProps } from './productDetailsComponents';
 const ProductDetail_Type3: React.FC<_ProductDetailsProps> = ({
   product,

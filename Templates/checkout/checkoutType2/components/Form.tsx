@@ -1,3 +1,4 @@
+import NxtImage from '@appComponents/reUsable/Image';
 import { AddressType } from '@controllers/checkoutController/CheckoutAddressForm';
 import { _Country, _State } from '@definations/app.type';
 import { FetchCountriesList, FetchStatesList } from '@services/general.service';
@@ -85,11 +86,21 @@ const AddressFormPk: React.FC<_Props> = ({
                   className='form-input !w-[calc(100%-40px)]'
                 />
                 {!!touched.firstname && errors?.firstname === undefined && (
-                  <img className='ml-[5px] ' src='/yes.png' />
+                  <NxtImage
+                    alt=''
+                    isStatic={true}
+                    className='ml-[5px] '
+                    src='/yes.png'
+                  />
                 )}
 
                 {!!touched.firstname && errors?.firstname && (
-                  <img className='ml-[5px]' src='/no.png' />
+                  <NxtImage
+                    alt=''
+                    isStatic={true}
+                    className='ml-[5px]'
+                    src='/no.png'
+                  />
                 )}
               </div>
             </div>
@@ -105,11 +116,21 @@ const AddressFormPk: React.FC<_Props> = ({
                   className='form-input !w-[calc(100%-40px)]'
                 />
                 {!!touched.lastName && errors?.lastName === undefined && (
-                  <img className='ml-[5px] ' src='/yes.png' />
+                  <NxtImage
+                    alt=''
+                    isStatic={true}
+                    className='ml-[5px] '
+                    src='/yes.png'
+                  />
                 )}
 
                 {!!touched.lastName && errors?.lastName && (
-                  <img className='ml-[5px]' src='/no.png' />
+                  <NxtImage
+                    alt=''
+                    isStatic={true}
+                    className='ml-[5px]'
+                    src='/no.png'
+                  />
                 )}
               </div>
             </div>
@@ -131,11 +152,21 @@ const AddressFormPk: React.FC<_Props> = ({
                 {!!touched.address1 &&
                   values.address1 !== '' &&
                   errors?.address1 === undefined && (
-                    <img className='ml-[5px] ' src='/yes.png' />
+                    <NxtImage
+                      alt=''
+                      isStatic={true}
+                      className='ml-[5px] '
+                      src='/yes.png'
+                    />
                   )}
 
                 {!!touched.address1 && values.address1 === '' && (
-                  <img className='ml-[5px]' src='/no.png' />
+                  <NxtImage
+                    alt=''
+                    isStatic={true}
+                    className='ml-[5px]'
+                    src='/no.png'
+                  />
                 )}
               </div>
             </div>
@@ -146,9 +177,9 @@ const AddressFormPk: React.FC<_Props> = ({
               <input
                 onBlur={addressformik.handleBlur}
                 onChange={addressformik.handleChange}
-                name='address2'
+                name='suite'
                 placeholder=' '
-                value={values.address2}
+                value={values.suite}
                 className='form-input !w-[calc(100%-40px)]'
               />
             </div>
@@ -166,11 +197,21 @@ const AddressFormPk: React.FC<_Props> = ({
                 {!!touched.postalCode &&
                   values.postalCode !== '' &&
                   errors?.postalCode === undefined && (
-                    <img className='ml-[5px] ' src='/yes.png' />
+                    <NxtImage
+                      alt=''
+                      isStatic={true}
+                      className='ml-[5px] '
+                      src='/yes.png'
+                    />
                   )}
 
                 {!!touched.postalCode && values.postalCode === '' && (
-                  <img className='ml-[5px]' src='/no.png' />
+                  <NxtImage
+                    alt=''
+                    isStatic={true}
+                    className='ml-[5px]'
+                    src='/no.png'
+                  />
                 )}
               </div>
             </div>
@@ -188,11 +229,21 @@ const AddressFormPk: React.FC<_Props> = ({
                   className='form-input  !w-[calc(100%-40px)]'
                 />
                 {!!touched.city && errors?.city === undefined && (
-                  <img className='ml-[5px] ' src='/yes.png' />
+                  <NxtImage
+                    alt=''
+                    isStatic={true}
+                    className='ml-[5px] '
+                    src='/yes.png'
+                  />
                 )}
 
                 {!!touched.city && errors?.city && (
-                  <img className='ml-[5px]' src='/no.png' />
+                  <NxtImage
+                    alt=''
+                    isStatic={true}
+                    className='ml-[5px]'
+                    src='/no.png'
+                  />
                 )}
               </div>
             </div>
@@ -224,11 +275,21 @@ const AddressFormPk: React.FC<_Props> = ({
                 {!!touched.state &&
                   values.state !== '' &&
                   errors?.state === undefined && (
-                    <img className='ml-[5px] ' src='/yes.png' />
+                    <NxtImage
+                      alt=''
+                      isStatic={true}
+                      className='ml-[5px] '
+                      src='/yes.png'
+                    />
                   )}
 
                 {!!touched.state && values.state === '' && (
-                  <img className='ml-[5px]' src='/no.png' />
+                  <NxtImage
+                    alt=''
+                    isStatic={true}
+                    className='ml-[5px]'
+                    src='/no.png'
+                  />
                 )}
               </div>
             </div>
@@ -278,11 +339,21 @@ const AddressFormPk: React.FC<_Props> = ({
                 {!!touched.countryName &&
                   values.countryName !== '' &&
                   errors?.countryName === undefined && (
-                    <img className='ml-[5px] ' src='/yes.png' />
+                    <NxtImage
+                      alt=''
+                      isStatic={true}
+                      className='ml-[5px] '
+                      src='/yes.png'
+                    />
                   )}
 
                 {!!touched.countryName && values.countryName === '' && (
-                  <img className='ml-[5px]' src='/no.png' />
+                  <NxtImage
+                    alt=''
+                    isStatic={true}
+                    className='ml-[5px]'
+                    src='/no.png'
+                  />
                 )}
               </div>
             </div>
@@ -298,11 +369,21 @@ const AddressFormPk: React.FC<_Props> = ({
                   className='form-input  !w-[calc(100%-40px)]'
                 />
                 {!!touched.phone && errors?.phone === undefined && (
-                  <img className='ml-[5px] ' src='/yes.png' />
+                  <NxtImage
+                    alt=''
+                    isStatic={true}
+                    className='ml-[5px] '
+                    src='/yes.png'
+                  />
                 )}
 
                 {!!touched.phone && errors?.phone && (
-                  <img className='ml-[5px]' src='/no.png' />
+                  <NxtImage
+                    alt=''
+                    isStatic={true}
+                    className='ml-[5px]'
+                    src='/no.png'
+                  />
                 )}
               </div>
             </div>

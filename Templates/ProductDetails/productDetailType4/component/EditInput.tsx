@@ -89,6 +89,10 @@ const EditInput: React.FC<_SelectOrInputProps> = ({
                   <input
                     type='number'
                     name='itemCount'
+                    onKeyDown={(event) =>
+                      ['e', 'E', '+', '-', '.'].includes(event.key) &&
+                      event.preventDefault()
+                    }
                     min={0}
                     placeholder='0'
                     max={isEmployeeLoggedIn ? '' : qty}

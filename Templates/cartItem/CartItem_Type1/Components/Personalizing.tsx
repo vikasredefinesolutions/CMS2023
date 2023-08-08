@@ -1,3 +1,4 @@
+import NxtImage from '@appComponents/reUsable/Image';
 import {
   maximumWordsUnderChestLogo,
   maximumWordsUnderSleeveLogo,
@@ -369,7 +370,7 @@ const Personalizing: FC<_Props> = ({
                       ...s,
                       linetext: e.target.value,
                       linefont: selectedFont,
-                      linecolor: selectedColor,
+                      linecolor: selectedColor || availableColor[0]['name'],
                     };
                   }
                   return s;
@@ -402,7 +403,7 @@ const Personalizing: FC<_Props> = ({
                         ...s,
                         linetext: e.target.value,
                         linefont: selectedFont,
-                        linecolor: selectedColor,
+                        linecolor: selectedColor || availableColor[0]['name'],
                       };
                     }
                     return s;
@@ -439,7 +440,28 @@ const Personalizing: FC<_Props> = ({
     let availableIndex = newArr.findIndex((item) => item.id === id);
 
     if (availableIndex !== -1) {
-      newArr[availableIndex].lineText = lineObject.linetext;
+      newArr[availableIndex].lineText =
+        lineObject.linetext.trim() === '' ? '' : lineObject.linetext;
+      newArr[availableIndex].lineTotal =
+        lineObject.linetext.trim() === ''
+          ? 0
+          : newArr[availableIndex].lineNumber === 1
+          ? firstLineCharges
+          : secondLineCharges;
+      newArr[availableIndex].linePrice =
+        lineObject.linetext.trim() === ''
+          ? 0
+          : newArr[availableIndex].lineNumber === 1
+          ? firstLineCharges
+          : secondLineCharges;
+      newArr[availableIndex].lineFont =
+        lineObject.linetext.trim() === '' ? '' : selectedFont;
+      newArr[availableIndex].lineColor =
+        lineObject.linetext.trim() === ''
+          ? ''
+          : selectedColor || availableColor[0]['name'];
+      newArr[availableIndex].personalizeLocation =
+        lineObject.linetext.trim() === '' ? '' : selectedLocation;
       setCartLinePersonModels(newArr);
     } else {
       setCartLinePersonModels((prev: _CartLinePersonDetailModel[] | []) => [
@@ -449,7 +471,7 @@ const Personalizing: FC<_Props> = ({
           cartLinePersonId: lineObject.cartLinePersonId,
           shoppingCartItemsId: shoppingCartItemsId,
           linePrice:
-            lineObject.linetext !== ''
+            lineObject.linetext.trim() !== ''
               ? name === 'lineone'
                 ? firstLineCharges
                 : secondLineCharges
@@ -458,19 +480,25 @@ const Personalizing: FC<_Props> = ({
           lineAboveLogo: 0,
           lineIndividually: 1,
           lineNumber: name === 'lineone' ? 1 : 2,
-          lineText: lineObject.linetext,
+          lineText: lineObject.linetext.trim(),
           lineTotal:
-            lineObject.linetext !== ''
+            lineObject.linetext.trim() !== ''
               ? name === 'lineone'
                 ? firstLineCharges
                 : secondLineCharges
               : 0,
-          lineFont: lineObject.linetext !== '' ? lineObject.linefont : '',
-          lineColor: lineObject.linetext !== '' ? lineObject.linecolor : '',
+          lineFont:
+            lineObject.linetext.trim() !== ''
+              ? selectedFont || availableColor[0]['name']
+              : '',
+          lineColor:
+            lineObject.linetext.trim() !== ''
+              ? selectedColor || availableColor[0]['name']
+              : '',
           linePriceDouble: 0,
           logoCartId: 0,
           personalizeLocation:
-            lineObject.linetext !== '' ? selectedLocation : '',
+            lineObject.linetext.trim() !== '' ? selectedLocation : '',
           parentId: lineObject.parentId,
         },
       ]);
@@ -510,7 +538,12 @@ const Personalizing: FC<_Props> = ({
                       selectedFont === item.name ? 'border-secondary' : ''
                     }`}
                   >
-                    <img src={`${mediaBaseUrl}${item.image}`} alt='' />
+                    <NxtImage
+                      useNextImage={false}
+                      className=''
+                      src={item.image}
+                      alt=''
+                    />
                   </div>
                 </div>
               </>
@@ -520,12 +553,14 @@ const Personalizing: FC<_Props> = ({
         <div className='w-full pl-[15px] pr-[15px] border-b border-gray-border mt-[20px] mb-[20px]'></div>
         <div className='pt-5 flex flex-wrap gap-2 gap-x-8 '>
           <div className='w-[80px] h-[80px]'>
-            <img
+            <NxtImage
               src={
-                item.shoppingCartLogoPersonViewModels[0].logoImagePath !== ''
-                  ? `${mediaBaseUrl}${item.shoppingCartLogoPersonViewModels[0].logoImagePath}`
-                  : '/assets/images/logolater.png'
+                item.shoppingCartLogoPersonViewModels[0].logoImagePath ||
+                '/assets/images/logolater.png'
               }
+              className=''
+              useNextImage={false}
+              isStatic={!item.shoppingCartLogoPersonViewModels[0].logoImagePath}
               alt=''
             />
           </div>
@@ -555,31 +590,46 @@ const Personalizing: FC<_Props> = ({
                   );
                 },
               )}
-              {showColorPelette && (
-                <div
-                  className={`w-[32px] h-[32px] border-2 pl-[4px] pr-[4px] pb-[4px] pt-[4px] ${
-                    selectedColor.startsWith('#') ? 'border-secondary' : ''
-                  }`}
-                >
-                  <input
-                    className='w-full h-full'
-                    value={selectedColor}
-                    type='color'
-                    onChange={(e) => {
-                      setSelectedColor(e.target.value);
-                    }}
-                    onBlur={(e) =>
-                      changeLocationForAll(e.target.value, 'color')
-                    }
-                  />
-                </div>
-              )}
+              {/* <div
+                className={`w-[32px] h-[32px] border-2 pl-[4px] pr-[4px] pb-[4px] pt-[4px] ${
+                  selectedColor.startsWith('#') ? 'border-secondary' : ''
+                }`}
+              >
+                {' '}
+                <input
+                  className='w-full h-full'
+                  value={selectedColor}
+                  type='color'
+                  onChange={(e) => {
+                    setSelectedColor(e.target.value);
+                  }}
+                  onBlur={(e) => changeLocationForAll(e.target.value, 'color')}
+                />
+              </div> */}
+
               <button
                 className='h-[32px] btn btn-sm text-sm border-2 btn-primary cursor-pointer'
-                onClick={() => setShowColorPelette(!showColorPelette)}
+                onClick={() => {
+                  setSelectedColor(
+                    !showColorPelette ? '' : availableColor[0].name,
+                  );
+                  setShowColorPelette(!showColorPelette);
+                }}
               >
                 {showColorPelette ? 'Close Custom Color' : 'Open Custom Color'}
               </button>
+              {showColorPelette && (
+                <input
+                  value={selectedColor}
+                  type='text'
+                  onChange={(e) => {
+                    setSelectedColor(e.target.value);
+                  }}
+                  onBlur={(e) => changeLocationForAll(e.target.value, 'color')}
+                  className='form-input inline-block w-40 h-[32px]'
+                  placeholder=''
+                />
+              )}
             </div>
           </div>
         </div>

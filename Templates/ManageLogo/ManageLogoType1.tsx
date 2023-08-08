@@ -75,7 +75,7 @@ const ManageLogoType1: NextPage<_ManageLogoProps> = ({ logoList }) => {
                     {__pagesText.ManageLogo.Status}
                   </th>
                 </tr>
-                {logoList &&
+                {logoList?.items?.length ? (
                   logoList.items.map((logo) => (
                     <tr
                       key={logo.logo}
@@ -86,18 +86,18 @@ const ManageLogoType1: NextPage<_ManageLogoProps> = ({ logoList }) => {
                       <td className='border-b border-r border-[#ddd] p-[16px]'>
                         <div className='w-24 h-24 mx-auto'>
                           <NxtImage
-                            src={`${mediaBaseUrl + logo.logo}`}
+                            src={logo?.logo || null}
                             alt=''
-                            className='img-responsive max-h-[100px]'
+                            className='img-responsive'
                           />
                         </div>
                       </td>
                       <td className='border-b border-r border-[#ddd] p-[16px]'>
                         <div className='w-24 h-24'>
                           <NxtImage
-                            src={`${mediaBaseUrl + logo.approvedLogo}`}
+                            src={logo?.approvedLogo || null}
                             alt=''
-                            className='img-responsive max-h-[100px]'
+                            className='img-responsive'
                           />
                         </div>
                       </td>
@@ -116,11 +116,11 @@ const ManageLogoType1: NextPage<_ManageLogoProps> = ({ logoList }) => {
                         </div>
                       </td>
                       <td className='border-b border-r border-[#ddd] p-[16px]'>
-                        <div className='overflow-hidden'>
+                        <div className='w-24 h-24 m-auto'>
                           <NxtImage
-                            src={`${logo.logoLocationImage}`}
+                            src={logo?.logoLocationImage || null}
                             alt=''
-                            className='max-h-[100px]'
+                            className=''
                           />{' '}
                         </div>
                       </td>
@@ -161,7 +161,14 @@ const ManageLogoType1: NextPage<_ManageLogoProps> = ({ logoList }) => {
                         )}
                       </td>
                     </tr>
-                  ))}
+                  ))
+                ) : (
+                  <tr>
+                    <td className='text-center p-5 w-full ' colSpan={8}>
+                      No record found.
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>

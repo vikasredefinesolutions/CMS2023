@@ -97,17 +97,17 @@ const MyAccountSetting_Type6 = () => {
   const updatePassword = async (setFieldValue: any) => {
     try {
       const res = await UpdateUserPassword({
-        email: customer?.email || '',
-        password: editPassword,
+        newPassword: editPassword,
+        confirmNewPassword: editPassword,
+        currentPassword: currentPass,
         customerId: customer?.id || 0,
       });
       if (res) {
+        setCurrentPass(editPassword);
+        setInitialValues({ ...initialValues, password: editPassword });
         setNewPassword('');
         setEditPassword('');
-        passDecryptFunction(res?.password).then((res) => {
-          setInitialValues({ ...initialValues, password: res ? res : '' });
-          setCurrentPass(res ? res : '');
-        });
+
         setShowPasswordUpdate(false);
         showModal({
           message: 'Password Updated Successfully',
@@ -344,7 +344,7 @@ const MyAccountSetting_Type6 = () => {
                         {__pagesText.accountPage.birthDay}{' '}
                       </label>
                       <div className='grow'>
-                        <div className='flex flex-wrap mx-[-10px]'>
+                        <div className='flex flex-wrap ml-[-10px] mr-[-10px] '>
                           <div className='w-1/3 px-[10px]'>
                             <select
                               onChange={(e) => setMonth(e.target.value)}
@@ -629,6 +629,7 @@ const MyAccountSetting_Type6 = () => {
                               type='button'
                               onClick={(e) => {
                                 setActiveEditBox(false);
+                                setEditPassword('');
                                 handleReset(e);
                                 setGenderId(
                                   customer?.gender ? customer.gender : '',
@@ -660,7 +661,74 @@ const MyAccountSetting_Type6 = () => {
           <div className='bg-[#ffffff] w-full'>
             <div className='text-title-text mb-[20px]'>Shipping Address</div>
             <div className=''>
-              <table className='table table-auto w-full text-default-text'>
+              {shipAddress.map((ele: any) => {
+                return (
+                  <div className='flex flex-wrap text-default-text ml-[-15px] mr-[-15px] gap-y-2 mb-[20px] last:mb-[0px]'>
+                    <div className='w-6/12 lg:w-2/12 md:w-3/12 px-[15px]'>
+                      {' '}
+                      {ele.firstname} {ele.lastName}
+                    </div>
+                    <div className='w-6/12 lg:w-6/12 md:w-6/12 px-[15px]'>
+                      <>{ele.address1}, </>
+                      {ele.suite && ele.suite.trim() != '' && (
+                        <> {ele.suite}, </>
+                      )}
+                      {[
+                        ele.state,
+                        ele.city,
+                        ele.countryName,
+                        ele.postalCode,
+                      ].join(', ')}{' '}
+                    </div>
+                    <div className='w-full lg:w-4/12 md:w-3/12 px-[15px] flex flex-wrap gap-2'>
+                      <button
+                        className='btn btn-sm btn-primary '
+                        type='button'
+                        onClick={() => {
+                          router.push({
+                            pathname: paths.myAccount.edit_shipping_address,
+                            query: {
+                              Customer: ele.id,
+                            },
+                          });
+                        }}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        className='btn btn-sm btn-primary '
+                        type='button'
+                        onClick={() => {
+                          deleteAddress(ele.id, ele.rowVersion);
+                        }}
+                      >
+                        Delete
+                      </button>
+                      {ele.isDefault ? (
+                        <div className='text-default-text flex items-center'>
+                          <div className='text-primary flex items-center gap-1'>
+                            <span className='material-icons-outlined text-[16px]'>
+                              star
+                            </span>
+                            PRIMARY
+                          </div>{' '}
+                        </div>
+                      ) : (
+                        <button
+                          className='btn btn-sm btn-primary '
+                          type='button'
+                          onClick={() => {
+                            updatePrimaryStatus(ele);
+                          }}
+                        >
+                          Make Primary
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+              {/* <table className='table table-auto w-full text-default-text'>
                 <tbody>
                   {shipAddress.map((ele: any) => {
                     return (
@@ -669,9 +737,12 @@ const MyAccountSetting_Type6 = () => {
                           {ele.firstname} {ele.lastName}
                         </td>
                         <td className='text-left p-[10px]'>
+                          <>{ele.address1}, </>
+                          {ele.suite && ele.suite.trim() != '' && (
+                            <> {ele.suite}, </>
+                          )}
                           {[
-                            ele.address1,
-                            ele.address2,
+                            ele.state,
                             ele.city,
                             ele.countryName,
                             ele.postalCode,
@@ -719,7 +790,7 @@ const MyAccountSetting_Type6 = () => {
                     );
                   })}
                 </tbody>
-              </table>
+              </table> */}
               <div className='my-[30px]'>
                 <button
                   onClick={() => {
@@ -739,64 +810,74 @@ const MyAccountSetting_Type6 = () => {
           <div className='bg-[#ffffff] w-full'>
             <div className='text-title-text mb-[20px]'>Billing Address</div>
             <div className=''>
-              <table className='table table-auto w-full text-default-text'>
-                <tbody>
-                  {billingAddress.map((ele: any) => {
-                    return (
-                      <tr>
-                        <td className='text-left p-[10px]'>{ele.firstname}</td>
-                        <td className='text-left p-[10px]'>
-                          {[
-                            ele.address1,
-                            ele.address2,
-                            ele.city,
-                            ele.countryName,
-                            ele.postalCode,
-                          ].join(', ')}{' '}
-                        </td>
-                        <td className='text-left p-[10px] w-[300px]'>
-                          <button
-                            className='btn btn-sm btn-primary text-default-text mr-[5px]'
-                            type='button'
-                            onClick={() => {
-                              router.push({
-                                pathname: paths.myAccount.edit_billing_address,
-                                query: {
-                                  Customer: ele.id,
-                                },
-                              });
-                            }}
-                          >
-                            Edit
-                          </button>
-                          <button
-                            className='btn btn-sm btn-primary text-default-text mr-[5px]'
-                            type='button'
-                            onClick={() => {
-                              deleteAddress(ele.id, ele.rowVersion);
-                            }}
-                          >
-                            Delete
-                          </button>
-                          {ele.isDefault ? (
-                            'Primary Address'
-                          ) : (
-                            <button
-                              className='btn btn-sm btn-primary text-default-text mr-[5px]'
-                              type='button'
-                              onClick={() => {
-                                updatePrimaryStatus(ele);
-                              }}
-                            >
-                              Make Primary
-                            </button>
-                          )}
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
+              {billingAddress.map((ele: any) => {
+                return (
+                  <div className='flex flex-wrap text-default-text ml-[-15px] mr-[-15px] gap-y-2 mb-[20px] last:mb-[0px]'>
+                    <div className='w-6/12 lg:w-2/12 md:w-3/12 px-[15px]'>
+                      {' '}
+                      {ele.firstname} {ele.lastName}
+                    </div>
+                    <div className='w-6/12 lg:w-6/12 md:w-6/12 px-[15px]'>
+                      <>{ele.address1}, </>
+                      {ele.suite && ele.suite.trim() != '' && (
+                        <> {ele.suite}, </>
+                      )}
+                      {[
+                        ele.state,
+                        ele.city,
+                        ele.countryName,
+                        ele.postalCode,
+                      ].join(', ')}{' '}
+                    </div>
+                    <div className='w-full lg:w-4/12 md:w-3/12 px-[15px] flex flex-wrap gap-2'>
+                      <button
+                        className='btn btn-sm btn-primary '
+                        type='button'
+                        onClick={() => {
+                          router.push({
+                            pathname: paths.myAccount.edit_billing_address,
+                            query: {
+                              Customer: ele.id,
+                            },
+                          });
+                        }}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        className='btn btn-sm btn-primary '
+                        type='button'
+                        onClick={() => {
+                          deleteAddress(ele.id, ele.rowVersion);
+                        }}
+                      >
+                        Delete
+                      </button>
+                      {ele.isDefault ? (
+                        <div className='text-default-text flex items-center'>
+                          <div className='text-primary flex items-center gap-1'>
+                            <span className='material-icons-outlined text-[16px]'>
+                              star
+                            </span>
+                            PRIMARY
+                          </div>{' '}
+                        </div>
+                      ) : (
+                        <button
+                          className='btn btn-sm btn-primary'
+                          type='button'
+                          onClick={() => {
+                            updatePrimaryStatus(ele);
+                          }}
+                        >
+                          Make Primary
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+
               <div className='my-[30px]'>
                 <button
                   onClick={() => {

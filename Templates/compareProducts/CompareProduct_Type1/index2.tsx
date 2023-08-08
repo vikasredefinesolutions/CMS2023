@@ -15,8 +15,6 @@ import AllSizes from './Components/AllSizes';
 import DisplayCompareImage from './Components/DisplayCompareImage';
 
 const CompareProduct_Type2: React.FC<_CompareProductprops> = (props) => {
-  console.log('this is working');
-
   const router = useRouter();
   const [products, setProducts] = useState<_CompareProducts | null>(
     props.products,
@@ -30,7 +28,6 @@ const CompareProduct_Type2: React.FC<_CompareProductprops> = (props) => {
     email: Yup.string().email().required(__ValidationText.email.required),
   });
   const images = useTypedSelector_v2((state) => state.compare.selectedImages);
-  console.log('products ', products);
 
   const removeSkuFromQueryParams = (skuToKeep: string[] | 'REMOVE ALL') => {
     if (skuToKeep === 'REMOVE ALL') {

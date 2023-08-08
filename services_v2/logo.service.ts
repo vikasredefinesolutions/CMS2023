@@ -122,6 +122,7 @@ interface _UploadLogoWithDetails {
   location: string;
   ipAddress: string;
   macAddress: string;
+  locationName?: string;
 }
 
 interface _UploadLogoWithDetails_Payload {
@@ -147,6 +148,7 @@ export const UploadLogoWithDetails = async (payload: {
   description: string;
   orderedCartLogoDetailId: number;
   logoPositionImage: string;
+  locationName?: string;
 }): Promise<_UploadLogoWithDetails | null> => {
   const url = `/StoreCustomerLogo/create.json`;
 

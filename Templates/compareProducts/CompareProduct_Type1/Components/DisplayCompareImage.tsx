@@ -18,12 +18,12 @@ const DisplayCompareImage: React.FC<_props> = ({ onRemove }) => {
 
       {images?.map((item, index) => (
         <td key={index} className='relative'>
-          <div className='w-96 text-center'>
+          <div className='w-96 text-center m-auto'>
             <div
               onClick={() => onRemove(index)}
               className='absolute right-[20px] top-[20px]'
             >
-              <span className='material-icons-outlined text-anchor hover:text-anchor-hover'>
+              <span className='material-icons-outlined text-anchor hover:text-anchor-hover cursor-pointer'>
                 close
               </span>
             </div>
@@ -31,7 +31,7 @@ const DisplayCompareImage: React.FC<_props> = ({ onRemove }) => {
               <NxtImage
                 src={item.url}
                 alt={item.label}
-                className='w-full m-auto'
+                className='max-h-[348px] m-auto'
                 useNextImage={false}
               />
             </a>

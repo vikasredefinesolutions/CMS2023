@@ -96,11 +96,11 @@ const CL2_Item: React.FC<_CartItem & _Props> = (props) => {
         attributeOptionId: +item.attributeOptionId,
       },
     };
+    if (props.shoppingCartItemDetailsViewModels.length === 1) {
+      return handleRemoveItem(props.shoppingCartItemsId);
+    }
     const confirmRes = confirm(cartRemoveConfirmMessage);
     if (confirmRes) {
-      if (props.shoppingCartItemDetailsViewModels.length === 1) {
-        return handleRemoveItem(props.shoppingCartItemsId);
-      }
       removeParticularSizeProduct(payload)
         .then((res) => {
           setShowLoader(true);
@@ -224,6 +224,7 @@ const CL2_Item: React.FC<_CartItem & _Props> = (props) => {
         });
     }
   };
+
   return (
     <li
       key={`${props.shoppingCartItemsId}`}
@@ -232,14 +233,10 @@ const CL2_Item: React.FC<_CartItem & _Props> = (props) => {
       <div className='flex flex-wrap pb-[20px] -mx-3'>
         <div className='w-full lg:w-1/4 pl-[12px] pr-[12px] mb-[10px] max-w-[300px] mx-auto'>
           <NxtImage
-            src={
-              props.colorImage
-                ? `${mediaBaseUrl}${props.colorImage}`
-                : '/assets/images/image_not_available.jpg'
-            }
+            src={props.colorImage || '/assets/images/image_not_available.jpg'}
             alt="Patagonia Men's Better Sweater Jacket"
-            isStatic={props.colorImage ? false : true}
-            className='max-h-[348px] !inline-black m-auto'
+            isStatic={!!!props.colorImage}
+            className='sm:w-52 sm:h-52 m-auto'
           />
         </div>
         <div className='w-full lg:w-3/4 pl-[12px] pr-[12px]'>
@@ -262,7 +259,8 @@ const CL2_Item: React.FC<_CartItem & _Props> = (props) => {
             </div>
             <div className='text-default-text mb-[10px]'>
               <span className='font-semibold'>
-                Total <Price value={props.totalPrice} />
+                Total <Price value={props.productTotal} />
+                {/* Total <Price value={props.totalPrice} /> */}
               </span>
             </div>
           </div>
@@ -392,26 +390,26 @@ const CL2_Item: React.FC<_CartItem & _Props> = (props) => {
                           <div className='text-default-text'>
                             Location {_item.logoLocation}
                           </div>
-                          {props.shoppingCartLogoPersonViewModels.length >
-                            1 && (
-                            <div className='text-default-text'>
-                              <span
-                                className='!text-anchor hover:!text-anchor-hover cursor-pointer'
-                                onClick={() => {
-                                  handleLogoUpdate(
-                                    _item.id,
-                                    props.shoppingCartItemsId,
-                                  );
-                                }}
-                              >
-                                {__pagesText.cart.remove}
-                              </span>
-                            </div>
-                          )}
+                          {props.shoppingCartLogoPersonViewModels.length > 1 &&
+                            currentPage !== 'CHECKOUT' && (
+                              <div className='text-default-text'>
+                                <span
+                                  className='!text-anchor hover:!text-anchor-hover cursor-pointer'
+                                  onClick={() => {
+                                    handleLogoUpdate(
+                                      _item.id,
+                                      props.shoppingCartItemsId,
+                                    );
+                                  }}
+                                >
+                                  {__pagesText.cart.remove}
+                                </span>
+                              </div>
+                            )}
                         </div>
                         <div className='w-[80px] h-[80px]'>
                           <NxtImage
-                            src={`${mediaBaseUrl}${_item.logoPositionImage}`}
+                            src={_item.logoPositionImage}
                             alt=''
                             className='max-h-full'
                           />
@@ -425,15 +423,17 @@ const CL2_Item: React.FC<_CartItem & _Props> = (props) => {
                               <div className='text-default-text font-semibold'>
                                 Logo {_index + 1}:
                               </div>
-                              <div className='w-[80px] h-[80px]'>
+                              <div className='w-[50px] h-[50px] flex items-center justify-center'>
                                 {_item.logoImagePath !== '' ? (
                                   <NxtImage
-                                    src={`${mediaBaseUrl}${_item.logoImagePath}`}
+                                    src={_item.logoImagePath}
                                     className='max-h-full'
                                     alt=''
                                   />
                                 ) : (
-                                  <img
+                                  <NxtImage
+                                    isStatic={true}
+                                    useNextImage={false}
                                     src={'/assets/images/logolater.png'}
                                     className='max-h-full'
                                     alt=''
@@ -520,7 +520,9 @@ const CL2_Item: React.FC<_CartItem & _Props> = (props) => {
                                       alt=''
                                     />
                                   ) : (
-                                    <img
+                                    <NxtImage
+                                     useNextImage={false}
+
                                       src={'/assets/images/logolater.png'}
                                       className='max-h-full'
                                       alt=''

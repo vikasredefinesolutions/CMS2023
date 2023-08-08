@@ -5,6 +5,7 @@ import checkoutReducer from './slices/checkout.slice';
 import compareReducer from './slices/compare.slice';
 import employeeReducer from './slices/employee.slice';
 import homeReducer from './slices/home.slice';
+import listingReducer from './slices/listing.slice';
 import loaderReducer from './slices/loader.slice';
 import modalsReducer from './slices/modals.slice';
 import productReducer from './slices/product.slice';
@@ -29,6 +30,7 @@ const rootReducer = combineReducers({
   compare: compareReducer,
   sbStore: sbStore,
   checkout: checkoutReducer,
+  listing: listingReducer,
 });
 
 // const rootReducer = combineReducers({

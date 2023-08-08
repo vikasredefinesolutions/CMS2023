@@ -119,16 +119,15 @@ const Header_Type5: NextPage<_HeaderProps> = ({
 
                     {isMobileView ? null : <SearchBar screen={'DESKTOP'} />}
 
-                    {islogo &&
-                      (isMobileView ? (
-                        <Logo
-                          // screen='MOBILE'
-                          logo={{
-                            desktop: logoUrl.desktop,
-                            mobile: logoUrl.desktop,
-                          }}
-                        />
-                      ) : null)}
+                    {isMobileView ? (
+                      <Logo
+                        // screen='MOBILE'
+                        logo={{
+                          desktop: logoUrl.desktop,
+                          mobile: logoUrl.desktop,
+                        }}
+                      />
+                    ) : null}
                     <div className='w-1/2 md:w-1/3 flex items-center justify-end'>
                       <div className='flex divide-x gap-[10px]'>
                         {/* <div className='flex items-center '> */}

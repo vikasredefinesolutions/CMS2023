@@ -204,8 +204,8 @@ export const getServerSideProps: GetServerSideProps = async (
     // stories ===>  category Page
     categoryProps.data.list = await GetStoriesByCategoryURL({
       storeId: _globalStore.storeId!,
-      pageType: __pageTypeConstant.stories,
-      categoryurl: storySlug,
+      pageType: __pageTypeConstant.blog,
+      categoryurl: pageMetaData.slug,
     });
 
     return { props: categoryProps };

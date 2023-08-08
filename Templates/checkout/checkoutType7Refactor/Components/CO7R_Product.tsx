@@ -8,6 +8,9 @@ interface _Props {
 }
 
 const CO7R_Product: React.FC<_Props> = ({ item }) => {
+  const isGiftCardItem = (seName: string) => {
+    return seName.toLowerCase().includes('gift');
+  };
   return (
     <li className='bg-white pt-0 mb-[20px]'>
       <div className='border border-gray-border p-[15px] w-full '>
@@ -22,7 +25,13 @@ const CO7R_Product: React.FC<_Props> = ({ item }) => {
           >
             <div className='flex flex-wrap mb-[10px] md:mb-[0px] -mx-[10px]'>
               <div className='w-2/6 md:w-1/4 px-[10px]'>
-                <Link href={`/${item.seName}.html`}>
+                <Link
+                  href={
+                    isGiftCardItem(item.seName)
+                      ? `/gift-card/${item.seName}`
+                      : `/${item.seName}.html`
+                  }
+                >
                   <a>
                     <NxtImage
                       src={
@@ -39,37 +48,72 @@ const CO7R_Product: React.FC<_Props> = ({ item }) => {
 
               <div className='w-4/6 md:w-3/4 px-[10px]'>
                 <div className='text-medium-text  mb-[10px]'>
-                  <Link href={`/${item.seName}.html`}>
+                  <Link
+                    href={
+                      isGiftCardItem(item.seName)
+                        ? `/gift-card/${item.seName}`
+                        : `/${item.seName}.html`
+                    }
+                  >
                     <a className='text-black hover:text-secondary font-semibold'>
                       {item.productName}
                     </a>
                   </Link>
                 </div>
-                <div className='text-default-text mb-[5px]'>
-                  Color:{' '}
-                  <span className='font-semibold'>
-                    {item.attributeOptionValue}
-                  </span>
-                </div>
-                <div className=''>
-                  {item.shoppingCartItemDetailsViewModels.map(
-                    (view, viewIndex) => {
-                      return (
-                        <div
-                          key={viewIndex}
-                          className='text-default-text mb-[5px] flex items-center flex-wrap gap-y-[5px]'
-                        >
-                          Size :{' '}
-                          <strong className='mx-[2px]'>
-                            {view.attributeOptionValue} -
-                          </strong>
-                          <strong className='mx-[2px]'>{view.qty}</strong>
-                          <strong className='mx-[2px]'>Qty</strong>
-                        </div>
-                      );
-                    },
-                  )}
-                </div>
+                {isGiftCardItem(item.seName) ? (
+                  <>
+                    <div className='text-default-text mb-[5px]'>
+                      Name:{' '}
+                      <span className='font-semibold'>
+                        {item.attributeOptionValue.split('^')[0]}
+                      </span>
+                    </div>{' '}
+                    <div className='text-default-text mb-[5px]'>
+                      Email:{' '}
+                      <span className='font-semibold'>
+                        {item.attributeOptionValue.split('^')[1]}
+                      </span>
+                    </div>
+                    <div className='text-default-text mb-[5px]'>
+                      Message:{' '}
+                      <span className='font-semibold'>
+                        {item?.attributeOptionValue?.split('^')[2] || ''}
+                      </span>
+                    </div>
+                    <div className='text-default-text mb-[5px]'>
+                      Qty:{' '}
+                      <span className='font-semibold'>{item?.totalQty}</span>
+                    </div>
+                  </>
+                ) : (
+                  <div className='text-default-text mb-[5px]'>
+                    Color:{' '}
+                    <span className='font-semibold'>
+                      {item.attributeOptionValue}
+                    </span>
+                  </div>
+                )}
+                {!isGiftCardItem(item.seName) && (
+                  <div className=''>
+                    {item.shoppingCartItemDetailsViewModels.map(
+                      (view, viewIndex) => {
+                        return (
+                          <div
+                            key={viewIndex}
+                            className='text-default-text mb-[5px] flex items-center flex-wrap gap-y-[5px]'
+                          >
+                            Size :{' '}
+                            <strong className='mx-[2px]'>
+                              {view.attributeOptionValue} -
+                            </strong>
+                            <strong className='mx-[2px]'>{view.qty}</strong>
+                            <strong className='mx-[2px]'>Qty</strong>
+                          </div>
+                        );
+                      },
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           </div>

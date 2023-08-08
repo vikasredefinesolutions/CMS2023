@@ -31,7 +31,9 @@ const OrderInvoice_type1: React.FC<_propsOrder> = ({ order }) => {
                         title='Print Invoice'
                         onClick={() => window.print()}
                       >
-                        <img
+                        <NxtImage
+                          isStatic={true}
+                          useNextImage={false}
                           src={'/assets/images/print-invoice.png'}
                           className=''
                           alt={'print invoice'}
@@ -59,10 +61,8 @@ const OrderInvoice_type1: React.FC<_propsOrder> = ({ order }) => {
                           >
                             <Link href={'/'}>
                               <div title=''>
-                                <img
-                                  src={
-                                    logoUrl ? `${mediaBaseUrl}${logoUrl}` : ''
-                                  }
+                                <NxtImage
+                                  src={logoUrl || ''}
                                   className=''
                                   alt={'logo'}
                                 />
@@ -308,18 +308,21 @@ const OrderInvoice_type1: React.FC<_propsOrder> = ({ order }) => {
                                                     >
                                                       {item.logoImagePath ===
                                                       '' ? (
-                                                        <img
+                                                        <NxtImage
                                                           className='w-14 h-12'
                                                           src='/assets/images/logo-to-be-submitted.webp'
+                                                          isStatic
                                                           title=''
                                                           alt={
                                                             item.logoPositionImage
                                                           }
                                                         />
                                                       ) : (
-                                                        <img
+                                                        <NxtImage
                                                           className='w-14 h-12'
-                                                          src={`${mediaBaseUrl}${item.logoImagePath}`}
+                                                          src={
+                                                            item.logoImagePath
+                                                          }
                                                           title=''
                                                           alt={
                                                             item.logoImagePath

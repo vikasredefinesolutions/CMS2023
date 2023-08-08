@@ -1,5 +1,5 @@
 import { FetchPageThemeConfigs } from '@services/product.service';
-import { GetlAllProductList } from '@templates/ProductListings/ProductListingType';
+import { _ListingPageProduct } from '@templates/ProductListings/ProductListingType';
 import { _Banner } from '@templates/banner';
 
 // FUNCTIONS
@@ -39,9 +39,15 @@ export const getConfigs = async <T>(
 // TYPES
 export interface _ProductList_PropsData {
   filters: _Filter[];
-  product: GetlAllProductList[];
+  list: {
+    visible: _ListingPageProduct[];
+    totalAvailable: number;
+    currentPage: number;
+    allProducts: _ListingPageProduct[];
+    jumpBy: number;
+    filterOptionforfaceteds: _NameValuePairs[];
+  };
   checkedFilters: _CheckedFilter[];
-  brandId: number;
   googleTagManagerResponseCommonData: any | null;
   categoryComponents: string | null;
   banner: _Banner[] | null;

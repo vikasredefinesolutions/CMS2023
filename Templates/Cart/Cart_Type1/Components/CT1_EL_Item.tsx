@@ -1,4 +1,4 @@
-import NxtImage, { default as Image } from '@appComponents/reUsable/Image';
+import NxtImage from '@appComponents/reUsable/Image';
 import Price from '@appComponents/reUsable/Price';
 import { CustomizeLaterMain } from '@constants/common.constant';
 import { cartRemoveConfirmMessage } from '@constants/global.constant';
@@ -43,13 +43,9 @@ const CT1_EL_Item: React.FC<_CartItem & _Props> = (item) => {
   const isEmployeeLoggedIn = useTypedSelector_v2(
     (state) => state.employee.loggedIn,
   );
-  const {
-    isLinepersonalization,
-    code: storeCode,
-    mediaBaseUrl: clientSideMediaBaseUrl,
-    isAttributeSaparateProduct,
-    id: storeId,
-  } = useTypedSelector_v2((state) => state.store);
+  const { isLinepersonalization, id: storeId } = useTypedSelector_v2(
+    (state) => state.store,
+  );
   const { lastUpdate } = useTypedSelector_v2((state) => state.cart);
 
   const [keepPersonalizing, setKeepPersonalizing] = useState<boolean>(false);
@@ -197,7 +193,7 @@ const CT1_EL_Item: React.FC<_CartItem & _Props> = (item) => {
     }
 
     return (
-      <Link href={`/${seName}`}>
+      <Link href={`/${seName}.html`}>
         <span className='text-[#000000]'>{name}</span>
       </Link>
     );
@@ -207,15 +203,11 @@ const CT1_EL_Item: React.FC<_CartItem & _Props> = (item) => {
     <li className='flex flex-wrap pl-[20px] pr-[20px] ml-[-15px] mr-[-15px] mb-[40px]'>
       <div className='w-full lg:w-2/6 pl-[15px] pr-[15px]'>
         <div className='w-full'>
-          <Image
-            src={
-              item.colorImage
-                ? item.colorImage
-                : '/assets/images/image_not_available.jpg'
-            }
+          <NxtImage
+            src={item.colorImage || '/assets/images/image_not_available.jpg'}
             alt={item.productName}
             className=''
-            isStatic={!Boolean(item.colorImage)}
+            isStatic={!item.colorImage}
           />
         </div>
       </div>
@@ -327,12 +319,12 @@ const CT1_EL_Item: React.FC<_CartItem & _Props> = (item) => {
                       <div className='text-base'>
                         <div className='mb-3 flex'>
                           {logo.logoImagePath === '' ? (
-                            <NxtImage
+                            <img
                               className='w-14 h-12'
                               src='/assets/images/logo-to-be-submitted.webp'
                               title=''
                               alt={logo.logoImagePath}
-                              isStatic={true}
+                              
                             />
                           ) : (
                             <NxtImage

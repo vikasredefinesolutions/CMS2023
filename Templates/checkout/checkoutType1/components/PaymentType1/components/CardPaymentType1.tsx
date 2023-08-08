@@ -1,4 +1,3 @@
-import NxtImage from '@appComponents/reUsable/Image';
 import { cardType } from '@constants/common.constant';
 import { paymentMethodCustom } from '@constants/enum';
 import { __pagesText } from '@constants/pages.text';
@@ -7,6 +6,10 @@ import { useTypedSelector_v2 } from '@hooks_v2/index';
 import { useEffect, useState } from 'react';
 import { paymentProps } from '..';
 import CT1_EL_PaymentOption from '../../CO1_EL_PaymentOption';
+
+export interface _CustomEvent extends Event {
+  inputType: 'deleteContentBackward';
+}
 
 const CardPaymentType1: paymentProps = ({
   updatePaymentMethod,
@@ -31,27 +34,27 @@ const CardPaymentType1: paymentProps = ({
   const { el: employeeLogin } = useTypedSelector_v2((state) => state.checkout);
 
   const handleCard = (e: any) => {
-    if (!Number(e.target.value) || e.target.value.length == 0) {
+    if (!Number(e.currentTarget.value) || e.currentTarget.value.length == 0) {
       setcardCheck(false);
       setInput('');
 
       return;
     } else {
-      if (e.target.value.length < e.target.maxLength + 1) {
-        setInput(e.target.value);
+      if (e.currentTarget.value.length < e.currentTarget.maxLength + 1) {
+        setInput(e.currentTarget.value);
         setcardCheck(true);
       }
     }
   };
 
   const handleCVV = (e: any) => {
-    const regex = new RegExp('[0-9]').test(e.target.value);
+    const regex = new RegExp('[0-9]').test(e.currentTarget.value);
     if (!regex) {
       setcvv('');
       return;
     } else {
-      if (e.target.value.length < e.target.maxLength + 1) {
-        setcvv(e.target.value);
+      if (e.currentTarget.value.length < e.currentTarget.maxLength + 1) {
+        setcvv(e.currentTarget.value);
       }
     }
   };
@@ -63,14 +66,21 @@ const CardPaymentType1: paymentProps = ({
 
   const handledefault = (e: any) => {
     const d = new Date().getMonth() + 1;
-    e.target.setAttribute('value', e.target.value);
-    if (e.target.value >= d) {
-      e.target.classList.remove('border', 'border-solid', 'border-red-700');
-      e.target.classList.add('border-0');
-      setyearMonth({ ...yearMonth, [e.target.name]: e.target.value });
+    e.currentTarget.setAttribute('value', e.currentTarget.value);
+    if (e.currentTarget.value >= d) {
+      e.currentTarget.classList.remove(
+        'border',
+        'border-solid',
+        'border-red-700',
+      );
+      e.currentTarget.classList.add('border-0');
+      setyearMonth({
+        ...yearMonth,
+        [e.currentTarget.name]: e.currentTarget.value,
+      });
     } else {
-      e.target.classList.remove('border-0');
-      e.target.classList.add('border', 'border-red-700', 'border-solid');
+      e.currentTarget.classList.remove('border-0');
+      e.currentTarget.classList.add('border', 'border-red-700', 'border-solid');
       // console.log('non');
     }
   };
@@ -120,12 +130,36 @@ const CardPaymentType1: paymentProps = ({
         }`}
       >
         <input
-          autoComplete='off'
+          autoComplete='cc-number'
           onContextMenu={(e) => e.preventDefault()}
-          onBlur={changeHandler}
+          onBlur={(e) => {
+            changeHandler({
+              name: e.target.name,
+              value: e.target.value,
+            });
+          }}
           onKeyDown={blockInvalidChar}
-          onChange={(e) => {
-            changeHandler(e);
+          onInput={(e) => {
+            if (
+              (e.nativeEvent as _CustomEvent).inputType ===
+              'deleteContentBackward'
+            ) {
+              if (e.currentTarget.value.length <= 3) {
+                changeHandler({
+                  name: 'cardExpirationMonth',
+                  value: '',
+                });
+                changeHandler({
+                  name: 'cardExpirationYear',
+                  value: '',
+                });
+                setcvv('');
+              }
+            }
+            changeHandler({
+              name: e.currentTarget.name,
+              value: e.currentTarget.value,
+            });
             handleCard(e);
           }}
           name='cardNumber'
@@ -143,13 +177,13 @@ const CardPaymentType1: paymentProps = ({
           htmlFor='CreditCardNumber'
           className='left-[8px] absolute duration-300 top-[11px] -z-1 origin-0 text-[#000000] text-[18px]'
         >
-          Credit Card Number *
+          Credit Card Number*
         </label>
         <div className={`${!checkCard ? 'block' : 'hidden'}`}>
           <div className='absolute top-[14px] right-[8px] flex items-center'>
             {cardType.map((res) => (
               <div key={res.name} className={`opacity-70 ml-[4px] w-[32px]`}>
-                <NxtImage isStatic={true} className='' src={res.url} alt='' />
+                <img className='' src={`${res.url}`} alt='' />
               </div>
             ))}
           </div>
@@ -165,7 +199,7 @@ const CardPaymentType1: paymentProps = ({
                     : '40 hidden'
                 } ml-[4px] w-[32px]`}
               >
-                <NxtImage isStatic={true} className='' src={res.url} alt='' />
+                <img className='' src={`${res.url}`} alt='' />
               </div>
             ))}
           </div>
@@ -180,8 +214,20 @@ const CardPaymentType1: paymentProps = ({
         <div className='md:w-3/12 w-6/12 pl-[12px] pr-[12px]'>
           <div className='relative z-0 w-full mb-[20px] border border-gray-border rounded'>
             <select
-              onBlur={changeHandler}
-              onChange={handledefault}
+              onBlur={(e) => {
+                changeHandler({
+                  name: e.target.name,
+                  value: e.target.value,
+                });
+              }}
+              onInput={(e) => {
+                changeHandler({
+                  name: e.currentTarget.name,
+                  value: e.currentTarget.value,
+                });
+                handledefault(e);
+              }}
+              autoComplete='cc-exp-month'
               name='cardExpirationMonth'
               disabled={employeeLogin.isPaymentPending}
               data-value={yearMonth.cardExpirationMonth}
@@ -227,16 +273,28 @@ const CardPaymentType1: paymentProps = ({
               htmlFor='Month'
               className='left-[8px] absolute duration-300 top-[11px] -z-1 origin-0 text-[#000000] text-[18px]'
             >
-              Month *
+              Month*
             </label>
           </div>
         </div>
         <div className='md:w-3/12 w-6/12 pl-[12px] pr-[12px]'>
           <div className='relative z-0 w-full mb-[20px] border border-gray-border rounded'>
             <select
-              onBlur={changeHandler}
-              onChange={handledefault}
+              onBlur={(e) => {
+                changeHandler({
+                  name: e.target.name,
+                  value: e.target.value,
+                });
+              }}
+              onInput={(e) => {
+                changeHandler({
+                  name: e.currentTarget.name,
+                  value: e.currentTarget.value,
+                });
+                handledefault(e);
+              }}
               name='cardExpirationYear'
+              autoComplete='cc-exp-year'
               disabled={employeeLogin.isPaymentPending}
               data-value={yearMonth.cardExpirationYear}
               className='selectFiled pt-[15px] pb-[0px] block w-full px-[8px] h-[48px] mt-[0px] text-sub-text text-[18px] text-[#000000] bg-transparent border-0 appearance-none focus:outline-none focus:ring-0'
@@ -267,16 +325,28 @@ const CardPaymentType1: paymentProps = ({
               htmlFor='Year'
               className='left-[8px] absolute duration-300 top-[11px] -z-1 origin-0 text-[#000000] text-[18px]'
             >
-              Year *
+              Year*
             </label>
           </div>
         </div>
         <div className='md:w-6/12 w-6/12 pl-[12px] pr-[12px]'>
           <div className='relative z-0 w-full mb-[20px] border border-gray-border rounded'>
             <input
-              onBlur={changeHandler}
-              onChange={handleCVV}
+              onBlur={(e) => {
+                changeHandler({
+                  name: e.target.name,
+                  value: e.target.value,
+                });
+              }}
               name='cardVarificationCode'
+              autoComplete='cc-csc'
+              onInput={(e) => {
+                changeHandler({
+                  name: e.currentTarget.name,
+                  value: e.currentTarget.value,
+                });
+                handleCVV(e);
+              }}
               onKeyDown={blockInvalidChar}
               placeholder=' '
               disabled={employeeLogin.isPaymentPending}
@@ -293,7 +363,7 @@ const CardPaymentType1: paymentProps = ({
               htmlFor='SecurityCode'
               className='left-[8px] absolute duration-300 top-[11px] -z-1 origin-0 text-[#000000] text-[18px]'
             >
-              Security Code (CCV) *
+              Security Code (CCV)*
             </label>
             <div className='absolute top-[12px] right-[8px]'>
               <div className='relative' x-data='{ open: false }'>

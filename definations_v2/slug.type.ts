@@ -10,16 +10,31 @@ export type _PageTypesAvailable =
   | __pageTypeConstant.blog; // ===> Individual Story
 
 export interface _GetPageType {
+  id: number;
   name: string;
-  description: null;
+  type: string;
+  meta_Title: string;
+  meta_Description: string;
+  meta_Keywords: string;
   storeId: number;
   slug: string;
-  id: number;
-  type: _PageTypesAvailable;
-  meta_Title: string;
-  meta_Keywords: string;
-  meta_Description: string;
-  isbreadcrumbShow: string;
+  description: null;
+  isbreadcrumbShow: null;
+  openGraphImagePath: string;
+  openGraphTitle: string;
+  openGraphDescription: string;
+  twitterImagePath: string;
+  twitterOpenGraphTitle: string;
+  twitterOpenGraphDescription: string;
+  pinterestImagePath: string;
+  pinterestOpenGraphTitle: string;
+  pinterestOpenGraphDescription: string;
+  facebookImagePath: string;
+  facebookOpenGraphTitle: string;
+  facebookOpenGraphDescription: string;
+  linkedinImagePath: string;
+  linkedinOpenGraphTitle: string;
+  linkedinOpenGraphDescription: string;
 }
 
 export interface _StoreCache {

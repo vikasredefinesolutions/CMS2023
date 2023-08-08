@@ -4,14 +4,13 @@ import { _defaultTemplates } from '@configs/template.config';
 import { _Brand } from '@definations/brand';
 import { newFetauredItemResponse } from '@definations/productList.type';
 import { _GetPageType } from '@definations/slug.type';
-import { removeDuplicates } from '@helpers/common.helper';
 import { useActions_v2 } from '@hooks_v2/index';
 import { FetchDataByBrand } from '@services/brand.service';
-import { FetchBrands } from '@services/header.service';
 import { getPageComponents } from '@services/home.service';
 import { FetchPageType } from '@services/slug.service';
 import BrandsListingTemplate from '@templates/Brands';
 import { _SelectedTab } from '@templates/ProductDetails/productDetailsTypes/storeDetails.res';
+
 import { GetServerSideProps, GetServerSidePropsResult } from 'next';
 import { useEffect } from 'react';
 import { _globalStore } from 'store.global';
@@ -47,7 +46,7 @@ export default Brands;
 export const getServerSideProps: GetServerSideProps = async (
   context,
 ): Promise<GetServerSidePropsResult<_Props>> => {
-  const { storeId } = _globalStore;
+  const { storeId, code } = _globalStore;
   let brands: _Brand[] | null = null;
   let alphabets: string[] = [];
   let accordian: any = [];
@@ -58,10 +57,22 @@ export const getServerSideProps: GetServerSideProps = async (
   let allTabingData: any = [];
   let bodyArr: any = [];
 
-  pageMetaData = await FetchPageType({
-    storeId: _globalStore.storeId!,
-    slug: 'brands',
-  });
+  if(code === 'CG')
+  {
+    pageMetaData = await FetchPageType({
+      storeId: _globalStore.storeId!,
+      slug: 'brands.html',
+    });
+  
+  }
+  else
+  {
+    pageMetaData = await FetchPageType({
+      storeId: _globalStore.storeId!,
+      slug: 'brands',
+    });
+  
+  }
   if (pageMetaData) {
     accordian = await getPageComponents({
       pageId: pageMetaData.id,
@@ -173,35 +184,9 @@ export const getServerSideProps: GetServerSideProps = async (
         }
       }
     }
-  }
+    
 
-  if (storeId) {
-    const albhabetSet = new Set();
-    await FetchBrands({ storeId: storeId }).then((result) => {
-      if (!result?.brands) {
-        return;
-      }
-      brands = result.brands.sort(
-        (a: { brandName: string }, b: { brandName: string }) => {
-          albhabetSet.add(a.brandName[0].toLowerCase());
-          return a.brandName
-            .toLowerCase()
-            .localeCompare(b.brandName.toLowerCase());
-        },
-      );
-      if (brands) {
-        brands = removeDuplicates(brands);
-        brands = brands.map((brd) => {
-          const firstLetter = brd.brandName.charAt(0).toUpperCase();
-          const remainingLetter = brd.brandName.slice(1);
-          return { ...brd, brandName: firstLetter + remainingLetter };
-        });
-      }
-
-      alphabets = albhabetSet?.size
-        ? (Array.from(albhabetSet) as string[])
-        : [];
-    });
+  
   }
 
   return {

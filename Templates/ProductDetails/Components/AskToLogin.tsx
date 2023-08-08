@@ -6,13 +6,13 @@ import React from 'react';
 const AskToLogin: React.FC<_AskToLoginprops> = ({ modalHandler }) => {
   const isUserLoggedIn = useTypedSelector_v2((state) => state.user.id);
   const showLoginOption = !isUserLoggedIn;
-
+  const code  = useTypedSelector_v2((state) => state.store.code);
   return (
     <>
       {showLoginOption && (
         <>
           <div className='p-[10px] mt-[15px] border border-gray-700'>
-            <div className='flex flex-wrap justify-between gap-y-[8px] '>
+            <div className='flex flex-wrap justify-between gap-y-[8px] items-center'>
               <div className='w-full md:w-1/2  text-sub-text'>
                 <span className='w-full block text-sub-text '>
                   {' '}
@@ -21,12 +21,13 @@ const AskToLogin: React.FC<_AskToLoginprops> = ({ modalHandler }) => {
                       .loginOrCreateAnAccount
                   }
                 </span>{' '}
-                <span className='w-full block text-default-text'>
+                {code === 'CG' && <span className='w-full block text-default-text'>
                   {
                     __pagesText.productInfo.startOrderModal.askToLogin
                       .toSeeDiscountPricing
                   }
-                </span>
+                </span>}
+                
               </div>
               <div className='w-full md:w-1/2  text-left'>
                 <button

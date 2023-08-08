@@ -1,3 +1,4 @@
+import NxtImage from '@appComponents/reUsable/Image';
 import { _ProductColor } from '@definations/APIs/colors.res';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import React, { useEffect } from 'react';
@@ -34,17 +35,21 @@ const AllColors: React.FC<_props> = ({ color, index, seName }) => {
         });
         return;
       }
-
-      updateCompareDisplayImage({
-        type: 'ADD',
-        data: {
-          index: index,
-          label: color[0].name,
-          url: color[0].imageUrl,
-          seName: seName,
-          attibuteOptionId: color[0].attributeOptionId,
-        },
-      });
+color.map((el) => {
+  if (el.productSEName == seName) {
+    updateCompareDisplayImage({
+      type: 'ADD',
+      data: {
+        index: index,
+        label: el.name,
+        url: el.imageUrl,
+        seName: seName,
+        attibuteOptionId: el.attributeOptionId,
+      },
+    });
+  }
+});
+     
     }
   }, []);
 
@@ -62,24 +67,25 @@ const AllColors: React.FC<_props> = ({ color, index, seName }) => {
         {color.map((color) => (
           <div
             key={index}
-            onClick={() =>
-              updateCompareDisplayImage({
-                type: 'ADD',
-                data: {
-                  index,
-                  label: color.name,
-                  url: color.imageUrl,
-                  attibuteOptionId: color.attributeOptionId,
-                  seName: seName,
-                },
-              })
-            }
+            // onClick={() =>
+            //   updateCompareDisplayImage({
+            //     type: 'ADD',
+            //     data: {
+            //       index,
+            //       label: color.name,
+            //       url: color.imageUrl,
+            //       attibuteOptionId: color.attributeOptionId,
+            //       seName: seName,
+            //     },
+            //   })
+            // }
             className='w-[40px] h-[40px] border border-gray-border p-1 flex items-center justify-center'
           >
-            <img
+            <NxtImage
               className={'m-auto max-h-full'}
-              src={mediaBaseUrl + color.imageUrl}
+              src={color.imageUrl}
               alt={color.name}
+              useNextImage={false}
               title={color.name || ''}
             />
           </div>

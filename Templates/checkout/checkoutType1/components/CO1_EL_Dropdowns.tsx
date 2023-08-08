@@ -1,5 +1,6 @@
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import {
+  FetchEmpOrderSubTypeList,
   FetchEmpSourceList,
   FetchEmpSourceMediumList,
   FetchEmployeesList,
@@ -22,6 +23,9 @@ export const CO1_EL_ValidationSchema = Yup.object().shape({});
 const CO1_EL_Dropdowns: React.FC<_Props> = () => {
   const [employeesList, setEmployeesList] = useState<_ValueLabelPair[]>([]);
   const [sourcesList, setSourcesList] = useState<_ValueLabelPair[]>([]);
+  const [orderSubTypeList, setOrderSubTypeList] = useState<_ValueLabelPair[]>(
+    [],
+  );
   const [sourceMediumList, setSourceMedium] = useState<_ValueLabelPair[]>([]);
 
   const { update_CheckoutEmployeeLogin } = useActions_v2();
@@ -43,6 +47,15 @@ const CO1_EL_Dropdowns: React.FC<_Props> = () => {
       });
     }
 
+    if (inputs.orderSubType) {
+      update_CheckoutEmployeeLogin({
+        type: 'ORDER_SUB_TYPE',
+        value: orderSubTypeList.find(
+          (item) => item.value === inputs.orderSubType,
+        )!,
+      });
+    }
+
     if (inputs.sourceMedium) {
       update_CheckoutEmployeeLogin({
         type: 'SOURCE_MEDIUM',
@@ -57,12 +70,15 @@ const CO1_EL_Dropdowns: React.FC<_Props> = () => {
     await Promise.allSettled([
       FetchEmpSourceList(storeId),
       FetchEmployeesList(),
+      FetchEmpOrderSubTypeList(),
     ])
       .then((values) => {
         const tempEmpSourceList =
           values[0].status === 'fulfilled' ? values[0].value : [];
         const tempEmployeesList =
           values[1].status === 'fulfilled' ? values[1].value : [];
+        const tempEmpOrderSubTypeList =
+          values[2].status === 'fulfilled' ? values[2].value : [];
 
         if (tempEmpSourceList.length > 0) {
           setSourcesList(tempEmpSourceList);
@@ -76,6 +92,10 @@ const CO1_EL_Dropdowns: React.FC<_Props> = () => {
 
         if (tempEmployeesList) {
           setEmployeesList(tempEmployeesList);
+        }
+
+        if (tempEmpOrderSubTypeList.length > 0) {
+          setOrderSubTypeList(tempEmpOrderSubTypeList);
         }
       })
       .catch()
@@ -107,6 +127,9 @@ const CO1_EL_Dropdowns: React.FC<_Props> = () => {
                         break;
                       case 'source':
                         options = sourcesList;
+                        break;
+                      case 'orderSubType':
+                        options = orderSubTypeList;
                         break;
                       case 'sourceMedium':
                         options = sourceMediumList;

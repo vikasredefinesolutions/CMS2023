@@ -1,17 +1,32 @@
-import { BACARDI, CG_STORE_CODE, __Cookie } from '@constants/global.constant';
+import { _Store } from '@configs/page.config';
+import {
+  BACARDI,
+  CG_STORE_CODE,
+  _Store_CODES,
+  __Cookie,
+} from '@constants/global.constant';
 import * as _AppController from '@controllers/_AppController.async';
 import { _Expected_AppProps } from '@definations/app.type';
-import { _MenuItems } from '@definations/header.type';
+import { _StoreMenu } from '@definations/header.type';
+import { _GetPageType } from '@definations/slug.type';
 import {
   _FetchStoreConfigurations,
   _StoreReturnType,
 } from '@definations/store.type';
 import {
   FetchCompanyConfiguration,
+  FetchStoreConfigurations,
   getAllConfigurations,
 } from '@services/app.service';
+import { getGTMScript } from '@services/header.service';
+import { FetchPageType } from '@services/slug.service';
 import { fetchThirdpartyservice } from '@services/thirdparty.service';
 import { IncomingMessage, ServerResponse } from 'http';
+import { _Slug_CMS_Props } from 'pages';
+import {
+  _Slug_ProductDetails_Props,
+  _Slug_ProductListing_Props,
+} from 'pages/[...slug-id]';
 import { _globalStore } from 'store.global';
 import { extractCookies, nextJsSetCookie } from './common.helper';
 
@@ -117,19 +132,73 @@ const parseJson = <T>(arg: string | undefined | null): T | null => {
   return null;
 };
 
+const handlePageTypeAPIResponse = async (response: null | _GetPageType) => {
+  _globalStore.set({
+    key: 'pageMetaData',
+    value: response,
+  });
+};
+
+const handleGTMscriptsResponse = async (
+  headerTopScript: null | string,
+  headerBottomScript: null | string,
+  bodyTopScript: null | string,
+) => {
+  if (headerTopScript) {
+    _globalStore.set({
+      key: 'topHeaderScriptGTM',
+      value: headerTopScript
+        ? headerTopScript?.replace('<script>', '').replace('</script>', '')
+        : '',
+    });
+  }
+
+  if (headerBottomScript) {
+    _globalStore.set({
+      key: 'bottomHeaderScriptGTM',
+      value: headerBottomScript
+        ? headerBottomScript?.replace('<script>', '').replace('</script>', '')
+        : '',
+    });
+  }
+
+  if (bodyTopScript) {
+    _globalStore.set({
+      key: 'topBodySnippetGTM',
+      value: bodyTopScript
+        ? bodyTopScript
+            ?.replace('<!-- Google Tag Manager (noscript) --><noscript>', '')
+            .replace(
+              '</noscript><!-- End Google Tag Manager (noscript) -->',
+              '',
+            )
+        : '',
+    });
+  }
+};
+
+const gtmWrapper = async (
+  storeId: number,
+  scriptName: 'GetTopHeadScript' | 'GetBottomHeadScript' | 'GetTopBodySnippet',
+) => {
+  if (_globalStore.code !== _Store.type1) return null;
+  return await getGTMScript(storeId, scriptName);
+};
+
 export const callConfigsAndRemainingStoreAPIsAndSetURls = async (
   storeDetails: _StoreReturnType,
+  seName: string,
 ): Promise<{
   store: _StoreReturnType;
   footerHTML: _FetchStoreConfigurations | null;
   headerConfig: _FetchStoreConfigurations | null;
-  menuItems: _MenuItems | null;
+  menuItems: _StoreMenu[] | null;
   companyId: number;
   templateIDs: _templateIds;
 }> => {
   let companyId = 0;
   let footerHTML: _FetchStoreConfigurations | null = null;
-  let menuItems: _MenuItems | null = null;
+  let menuItems: _StoreMenu[] | null = null;
   let contactInfo: _contactInfo = {
     email_address: '',
     phone_number: '',
@@ -141,46 +210,70 @@ export const callConfigsAndRemainingStoreAPIsAndSetURls = async (
   };
   let headerConfig: _FetchStoreConfigurations | null = null;
 
-  const callMenuItemsAPI = async (): Promise<_MenuItems | null> => {
-    // if (storeDetails.storeTypeId === storeBuilderTypeId) {
-    //   return null;
-    // }
-
-    return await _AppController.fetchMenuItems(
-      storeDetails.storeId!,
-      storeDetails.code,
-    );
-  };
-
   await Promise.allSettled([
     FetchCompanyConfiguration(),
-    getAllConfigurations({
+    _AppController.fetchMenuItems(storeDetails.storeId!),
+    gtmWrapper(storeDetails.storeId!, 'GetTopHeadScript'),
+    gtmWrapper(storeDetails.storeId!, 'GetBottomHeadScript'),
+    gtmWrapper(storeDetails.storeId!, 'GetTopBodySnippet'),
+    FetchPageType({
       storeId: storeDetails.storeId!,
-      configNames: ['footer', 'contactInfo', 'header_config', 'productListing'],
+      slug: seName,
     }),
-    callMenuItemsAPI(),
+    FetchStoreConfigurations({
+      storeId: storeDetails.storeId!,
+      configname: 'footer',
+    }),
+    FetchStoreConfigurations({
+      storeId: storeDetails.storeId!,
+      configname:
+        storeDetails.code === _Store_CODES.PETERMILLAR
+          ? 'contactinfo'
+          : 'contactInfo',
+    }),
+    FetchStoreConfigurations({
+      storeId: storeDetails.storeId!,
+      configname: 'header_config',
+    }),
+    FetchStoreConfigurations({
+      storeId: storeDetails.storeId!,
+      configname: 'productListing',
+    }),
   ])
     .then((values) => {
       companyId =
         values[0].status === 'fulfilled' ? values[0].value.companyId : 0;
 
-      if (values[1].status === 'fulfilled') {
-        const configs = values[1].value;
-        footerHTML = configs[0];
-        headerConfig = configs[2];
+      menuItems = values[1].status === 'fulfilled' ? values[1].value : null;
+      handleGTMscriptsResponse(
+        values[2].status === 'fulfilled' ? values[2].value : null,
+        values[3].status === 'fulfilled' ? values[3].value : null,
+        values[4].status === 'fulfilled' ? values[4].value : null,
+      );
+      handlePageTypeAPIResponse(
+        values[5].status === 'fulfilled' ? values[5].value : null,
+      );
+
+      if (values[6].status === 'fulfilled') {
+        footerHTML = values[6].value;
+      }
+      if (values[7].status === 'fulfilled') {
         contactInfo =
-          parseJson<_contactInfo>(configs[1]?.config_value) || contactInfo;
-
+          parseJson<_contactInfo>(values[7].value?.config_value) || contactInfo;
+      }
+      if (values[8].status === 'fulfilled') {
+        headerConfig = values[8].value;
         templateIDs.headerTemplateId =
-          parseJson<{ template_Id: string }>(configs[2]?.config_value)
+          parseJson<{ template_Id: string }>(values[8].value?.config_value)
             ?.template_Id || '';
-
-        templateIDs.breadCrumbsTemplateId =
-          parseJson<{ breadCrumbTemplateId: string }>(configs[3]?.config_value)
-            ?.breadCrumbTemplateId || '';
       }
 
-      menuItems = values[2].status === 'fulfilled' ? values[2].value : null;
+      if (values[9].status === 'fulfilled') {
+        templateIDs.breadCrumbsTemplateId =
+          parseJson<{ breadCrumbTemplateId: string }>(
+            values[9].value?.config_value,
+          )?.breadCrumbTemplateId || '';
+      }
     })
     .catch(() => {
       throw new Error(
@@ -457,3 +550,24 @@ export const configsToCallEveryTime = async (
   };
 };
 export const getTemplateIDs = () => {};
+
+export const forwardProductImage = (
+  pageProps:
+    | _Slug_ProductDetails_Props
+    | _Slug_ProductListing_Props
+    | _Slug_CMS_Props,
+  colorSEName: string,
+) => {
+  if (pageProps?.page === 'PRODUCT_DETAILS') {
+    if (pageProps.data.colors) {
+      const color = pageProps.data.colors.find(
+        (color) => color.productSEName === colorSEName,
+      );
+
+      if (color) {
+        return color.imageUrl || '';
+      }
+    }
+  }
+  return null;
+};

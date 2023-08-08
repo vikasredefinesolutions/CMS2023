@@ -71,6 +71,12 @@ export const addressMessages = {
   companyName: {
     required: 'Company Name is required',
   },
+  shippingAddress: {
+    required: 'Shipping address is required',
+  },
+  shippingAddressLine2: {
+    required: 'Shipping address line 2 is required',
+  },
 };
 
 export const addUserMessages = {

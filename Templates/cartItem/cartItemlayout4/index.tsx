@@ -1,8 +1,13 @@
 import Price from '@appComponents/Price';
 import NxtImage from '@appComponents/reUsable/Image';
 import {
-  cartRemoveConfirmMessage,
+  BACARDI,
+  BOSTONBEAR,
+  HEALTHYPOINTS,
   SIMPLI_SAFE_CODE,
+  UCA,
+  _Store_CODES,
+  cartRemoveConfirmMessage,
 } from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
 import { paths } from '@constants/paths.constant';
@@ -11,16 +16,21 @@ import {
   commonMessage,
 } from '@constants/successError.text';
 import { captureRemoveItemEvent } from '@controllers/cartController';
+import { extractCookies } from '@helpers/common.helper';
 import {
   GetCustomerId,
   useActions_v2,
   useTypedSelector_v2,
 } from '@hooks_v2/index';
 import { _CartItem } from '@services/cart';
-import { deleteItemCart, updateCartQuantity } from '@services/cart.service';
+import {
+  deleteItemCart,
+  removeParticularSizeProduct,
+  updateCartQuantity,
+} from '@services/cart.service';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { FC, useRef, useState } from 'react';
+import { FC, useState } from 'react';
 import { _globalStore } from 'store.global';
 // import { CI_Props } from './cartItem';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -37,12 +47,19 @@ const CIlayout4: FC<any> = ({ removeCartItem, isEditable = true }) => {
   const { id: storeId, code: storeCode } = useTypedSelector_v2(
     (state) => state.store,
   );
-  const valueRef = useRef<Record<string, undefined | number>>({});
+  const [qtyValues, setQtyValues] = useState<Record<string, string | number>>(
+    {},
+  );
 
   const [sizeId, setSizeId] = useState<number[]>([]);
   const isEmployeeLoggedIn = useTypedSelector_v2(
     (state) => state.employee.loggedIn,
   );
+
+  const selectedBacardiStor = extractCookies(
+    'BacardiSelectedStore',
+    'browserCookie',
+  ).BacardiSelectedStore;
 
   const customerId = GetCustomerId();
 
@@ -79,13 +96,25 @@ const CIlayout4: FC<any> = ({ removeCartItem, isEditable = true }) => {
     cQuantity: number | undefined,
   ) => {
     e.preventDefault();
-    if (storeCode === SIMPLI_SAFE_CODE && !cQuantity) return;
-    if (storeCode === SIMPLI_SAFE_CODE && cQuantity && cQuantity > 1) {
-      return showModal({
-        message: __pagesText.cart.simpliSafeQtyLimit,
-        title: '',
-      });
-    }
+    if (
+      (storeCode === SIMPLI_SAFE_CODE ||
+        storeCode === _Store_CODES.USAAHEALTHYPOINTS) &&
+      !cQuantity
+    )
+      return;
+
+    if (
+      storeCode === _Store_CODES.USAAHEALTHYPOINTS &&
+      cQuantity &&
+      cQuantity > 1
+    )
+      return alert(__pagesText.cart.usaaQtyLimit);
+    // if (storeCode === SIMPLI_SAFE_CODE && cQuantity && cQuantity > 1) {
+    //   return showModal({
+    //     message: __pagesText.cart.simpliSafeQtyLimit,
+    //     title: '',
+    //   });
+    // }
     const payload = {
       updateCartLinePersonModel: {
         cartLogoPersonId: cartLogoPersonId,
@@ -124,6 +153,45 @@ const CIlayout4: FC<any> = ({ removeCartItem, isEditable = true }) => {
 
   mediaBaseUrl = mediaBaseUrl || clientSideMediaBaseUrl;
 
+  const isGiftCardItem = (seName: string) => {
+    return seName.toLowerCase().includes('gift');
+  };
+
+  const handleSizeRemove = (view: any, item: any) => {
+    const payload = {
+      deletecartlogopersonmodel: {
+        cartLogoPersonId: view.id,
+        attributeOptionId: +item.attributeOptionId,
+      },
+    };
+
+    const confirmRes = confirm(cartRemoveConfirmMessage);
+    if (confirmRes) {
+      removeParticularSizeProduct(payload)
+        .then((res) => {
+          setShowLoader(true);
+          if (res) {
+            setShowLoader(false);
+            fetchCartDetails({
+              customerId: customerId ? customerId : 0,
+              isEmployeeLoggedIn,
+            });
+            showModal({
+              message: commonMessage.removed,
+              title: __SuccessErrorText.Success,
+            });
+          }
+        })
+        .catch((el) => {
+          setShowLoader(false);
+          showModal({
+            message: el[''],
+            title: commonMessage.failed,
+          });
+        });
+    }
+  };
+
   return (
     <>
       <ul className='overflow-hidden '>
@@ -136,19 +204,18 @@ const CIlayout4: FC<any> = ({ removeCartItem, isEditable = true }) => {
               >
                 <div className='border border-gray-border p-[15px] w-full '>
                   <div className='flex flex-wrap -mx-[10px]'>
-                    <div
-                      className={` ${
-                        // // storeCode == _Store.type6
-                        //   ? 'w-full md:w-7/12 px-[10px]'
-                        //   : 'w-full lg:w-1/12 pl-[12px] pr-[12px] mb-[10px] max-w-[300px] mx-auto'
-                        'w-full md:w-7/12 px-[10px]'
-                      }`}
-                    >
+                    <div className='w-full md:w-7/12 px-[10px]'>
                       <div className='flex flex-wrap mb-[10px] md:mb-[0px] -mx-[10px]'>
                         <div className='w-2/6 md:w-1/4 px-[10px]'>
-                          <Link href={`/${item.seName}.html`}>
+                          <Link
+                            href={
+                              isGiftCardItem(item.seName)
+                                ? `/gift-card/${item.seName}`
+                                : `/${item.seName}.html`
+                            }
+                          >
                             <NxtImage
-                              src={`${mediaBaseUrl}${item.colorImage}`}
+                              src={item.colorImage}
                               alt={item.productName}
                               className='max-h-[348px] !inline-black m-auto'
                             />
@@ -157,77 +224,202 @@ const CIlayout4: FC<any> = ({ removeCartItem, isEditable = true }) => {
 
                         <div className='w-4/6 md:w-3/4 px-[10px]'>
                           <div className='text-medium-text  mb-[10px]'>
-                            <Link href={`/${item.seName}.html`}>
-                              <a className='text-black hover:text-secondary font-semibold'>
+                            <Link
+                              href={
+                                isGiftCardItem(item.seName)
+                                  ? `/gift-card/${item.seName}`
+                                  : `/${item.seName}.html`
+                              }
+                            >
+                              <a
+                                className={`${
+                                  storeCode === _Store_CODES.UNITi
+                                    ? 'text-anchor hover:text-anchor font-semibold'
+                                    : 'text-black hover:text-secondary font-semibold'
+                                } `}
+                              >
                                 {item.productName}
                               </a>
                             </Link>
                           </div>
-                          <div className='text-default-text mb-[5px]'>
-                            Color:{' '}
-                            <span className='font-semibold'>
-                              {item.attributeOptionValue}
-                            </span>
-                          </div>
-                          <div className=''>
-                            {item.shoppingCartItemDetailsViewModels.map(
-                              (view, viewIndex) => {
-                                return (
-                                  <>
-                                    <div className='text-default-text mb-[5px] flex items-center flex-wrap gap-y-[5px]'>
-                                      Size :{' '}
-                                      <strong className='mx-[2px]'>
-                                        {' '}
-                                        {view.attributeOptionValue} -
-                                      </strong>
-                                      {isEditable ? (
-                                        <form className=''>
-                                          <input
-                                            className='form-input max-w-[100px] mx-[2px]'
-                                            defaultValue={view.qty}
-                                            data-valueofinput={view.qty}
-                                            onChange={(e) => {
-                                              valueRef.current = {
-                                                ...valueRef.current,
-                                                [`${view.id}`]: +e.target.value,
-                                              };
-                                            }}
-                                            onBlur={(e) => {
-                                              handleUpdateQuantity(
-                                                e,
-                                                +item.attributeOptionId,
-                                                view.id,
-                                                valueRef.current[
-                                                  view.id.toString()
-                                                ],
-                                              );
-                                            }}
-                                          />
-                                        </form>
-                                      ) : (
-                                        <strong className='mx-[2px]'>
-                                          {view.qty}
+                          {isGiftCardItem(item.seName) ? (
+                            <>
+                              <div className='text-default-text mb-[5px]'>
+                                Name:{' '}
+                                <span className='font-semibold'>
+                                  {item.attributeOptionValue.split('^')[0]}
+                                </span>
+                              </div>{' '}
+                              <div className='text-default-text mb-[5px]'>
+                                Email:{' '}
+                                <span className='font-semibold'>
+                                  {item.attributeOptionValue.split('^')[1]}
+                                </span>
+                              </div>
+                              <div className='text-default-text mb-[5px]'>
+                                Message:{' '}
+                                <span className='font-semibold'>
+                                  {item?.attributeOptionValue?.split('^')[2] ||
+                                    ''}
+                                </span>
+                              </div>
+                              <div className='text-default-text mb-[5px]'>
+                                Qty:{' '}
+                                <span className='font-semibold'>
+                                  {item?.totalQty}
+                                </span>
+                              </div>
+                              <div className='text-default-text'>
+                                <div
+                                  onClick={() =>
+                                    handleRemoveItem(item.shoppingCartItemsId)
+                                  }
+                                  className='text-default hover:text-secondary cursor-pointer'
+                                >
+                                  <strong>Remove Item</strong>
+                                </div>
+                              </div>
+                            </>
+                          ) : (
+                            <div className='text-default-text mb-[5px]'>
+                              Color:{' '}
+                              <span className='font-semibold'>
+                                {item.attributeOptionValue}
+                              </span>
+                            </div>
+                          )}
+
+                          {!isGiftCardItem(item.seName) && (
+                            <div className=''>
+                              {item.shoppingCartItemDetailsViewModels.map(
+                                (view) => {
+                                  return (
+                                    <>
+                                      <div className='text-default-text mb-[5px] flex items-center flex-wrap gap-y-[5px]'>
+                                        Size :{' '}
+                                        <strong className='mx-[2px] w-[50px]'>
+                                          {' '}
+                                          {view.attributeOptionValue} -
                                         </strong>
-                                      )}
-                                      <strong className='mx-[2px]'>Qty</strong>
-                                    </div>
-                                    <div className='text-default-text'>
-                                      <div
-                                        onClick={() =>
-                                          handleRemoveItem(
-                                            item.shoppingCartItemsId,
-                                          )
-                                        }
-                                        className='primary-link hover:hover-primary-link'
-                                      >
-                                        <strong>Remove Item</strong>
+                                        {isEditable &&
+                                        !item.seName
+                                          .toLowerCase()
+                                          .includes('gift-card') ? (
+                                          <form className=''>
+                                            <input
+                                              className='form-input max-w-[100px] mx-[2px]'
+                                              defaultValue={
+                                                qtyValues[view.id.toString()] ||
+                                                view.qty
+                                              }
+                                              type='number'
+                                              value={
+                                                qtyValues[view.id.toString()]
+                                              }
+                                              min={1}
+                                              onKeyDown={(e) => {
+                                                [
+                                                  'e',
+                                                  'E',
+                                                  '+',
+                                                  '-',
+                                                  '.',
+                                                ].includes(e.key) &&
+                                                  e.preventDefault();
+                                              }}
+                                              onChange={(e) => {
+                                                if (
+                                                  e.target.value.toString() ===
+                                                  '0'
+                                                ) {
+                                                  return setQtyValues({
+                                                    ...qtyValues,
+                                                    [`${view.id}`]: 1,
+                                                  });
+                                                }
+
+                                                setQtyValues({
+                                                  ...qtyValues,
+                                                  [`${view.id}`]:
+                                                    e.target.value,
+                                                });
+                                              }}
+                                              onBlur={(e) => {
+                                                if (!e.target.value) {
+                                                  setQtyValues({
+                                                    ...qtyValues,
+                                                    [`${view.id}`]: 1,
+                                                  });
+                                                  return handleUpdateQuantity(
+                                                    e,
+                                                    +item.attributeOptionId,
+                                                    view.id,
+                                                    1,
+                                                  );
+                                                } else {
+                                                  return handleUpdateQuantity(
+                                                    e,
+                                                    +item.attributeOptionId,
+                                                    view.id,
+                                                    +qtyValues[
+                                                      view.id.toString()
+                                                    ],
+                                                  );
+                                                }
+                                              }}
+                                            />
+                                          </form>
+                                        ) : (
+                                          <strong className='mx-[2px]'>
+                                            {view.qty}
+                                          </strong>
+                                        )}
+                                        <strong className='mx-[2px]'>
+                                          Qty
+                                        </strong>
+                                        {storeCode == BACARDI && (
+                                          <i
+                                            onClick={() =>
+                                              handleSizeRemove(view, item)
+                                            }
+                                            className='fa-solid fa-trash-can mx-[5px]'
+                                          ></i>
+                                        )}
                                       </div>
-                                    </div>
-                                  </>
-                                );
-                              },
-                            )}
-                          </div>
+                                      {item.shoppingCartItemDetailsViewModels
+                                        .length == 1 && (
+                                        <div className='text-default-text'>
+                                          <div
+                                            onClick={() =>
+                                              handleRemoveItem(
+                                                item.shoppingCartItemsId,
+                                              )
+                                            }
+                                            className='text-default hover:text-secondary cursor-pointer'
+                                          >
+                                            <strong>Remove Item</strong>
+                                          </div>
+                                        </div>
+                                      )}
+                                    </>
+                                  );
+                                },
+                              )}
+                            </div>
+                          )}
+                          {item.shoppingCartItemDetailsViewModels.length >
+                            1 && (
+                            <div className='text-default-text'>
+                              <div
+                                onClick={() =>
+                                  handleRemoveItem(item.shoppingCartItemsId)
+                                }
+                                className='text-default hover:text-secondary cursor-pointer'
+                              >
+                                <strong>Remove Item</strong>
+                              </div>
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -252,12 +444,37 @@ const CIlayout4: FC<any> = ({ removeCartItem, isEditable = true }) => {
             );
           })}
       </ul>
-      {router.pathname !== paths.CHECKOUT && (
-        <div className='mt-[20px]'>
-          <Link href={'/'}>
-            <a className='btn btn-primary '>Continue Shopping</a>
-          </Link>
-        </div>
+      {storeCode == BOSTONBEAR ? (
+        <></>
+      ) : (
+        router.pathname !== paths.CHECKOUT && (
+          <div className=''>
+            <Link
+              href={
+                storeCode == BACARDI
+                  ? selectedBacardiStor === 'Bacardi'
+                    ? paths.bacardi.bacardi
+                    : selectedBacardiStor === 'GreyGoose'
+                    ? paths.bacardi.greyGoose
+                    : paths.bacardi.bacardi
+                  : paths.HOME
+              }
+            >
+              <a
+                className={`btn btn-${
+                  storeCode == SIMPLI_SAFE_CODE ||
+                  storeCode == UCA ||
+                  storeCode === HEALTHYPOINTS ||
+                  storeCode === BACARDI
+                    ? 'secondary'
+                    : 'primary'
+                }`}
+              >
+                Continue Shopping
+              </a>
+            </Link>
+          </div>
+        )
       )}
     </>
   );

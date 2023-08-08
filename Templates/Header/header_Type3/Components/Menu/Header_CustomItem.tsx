@@ -1,4 +1,5 @@
 import LoginModal from '@appComponents/modals/loginModal';
+import { _Store } from '@configs/page.config';
 import { UCA } from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
 import { _modals } from '@definations/product.type';
@@ -26,10 +27,12 @@ const Custom: React.FC<_props> = ({
   const { view, code } = useTypedSelector_v2((state) => state.store);
   const [openModal, setOpenModal] = useState<null | _modals>(null);
   const router = useRouter();
-  const { toggleSideMenu } = useActions_v2();
+  const { toggleSideMenu, setRedirectPagePath } = useActions_v2();
   const [focus, setFocus] = useState(false);
   const [showAllItems, setShowAllItems] = useState<boolean>(false);
   const [showtab, setShowTab] = useState<boolean>(false);
+  const { redirectPath } = useTypedSelector_v2((state) => state.home);
+
   useEffect(() => {
     if (openTab == title) {
       setShowTab(true);
@@ -103,8 +106,9 @@ const Custom: React.FC<_props> = ({
           onClick={() => {
             if (code === 'CYX' || code === UCA) {
               if (customerId) {
-                router.push(`/${url}.html`);
+                router.push(`/${url}`);
               } else {
+                setRedirectPagePath(redirectPath || `/${url}`);
                 setOpenModal('login');
               }
             } else {
@@ -120,9 +124,15 @@ const Custom: React.FC<_props> = ({
               type='button'
               className={`relative text-[12px] xl:text-[14px] xl:ml-[12px] xl:mr-[12px] ml-[5px] mr-[5px] tracking-[2px] z-10 flex items-center font-[400] pt-[10px] pb-[10px] border-b-[4px] ${
                 focus
-                  ? 'border-secondary text-secondary'
-                  : 'border-transparent text-primary'
-              }`}
+                  ? `border-secondary ${
+                      code == _Store.type6
+                        ? 'primary-link hover:primary-link'
+                        : 'text-secondary'
+                    } `
+                  : `border-transparent  ${
+                      code == _Store.type6 ? '' : 'text-primary'
+                    } `
+              } border-primary-link`}
             >
               <span
                 className='uppercase '

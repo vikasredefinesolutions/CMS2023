@@ -7,6 +7,7 @@ import {
 import { GetShippingmethod } from '@services/address.service';
 import { FetchSalesTax } from '@services/checkout.service';
 
+import { HEALTHYPOINTS } from '@constants/global.constant';
 import React, { useEffect, useState } from 'react';
 import { _CO7R_Screens } from '../CO7R_Extras';
 
@@ -25,7 +26,7 @@ const CO7R_ChooseShippingMethods: React.FC<_Props> = ({
   state,
   postalCode,
   countryName,
-  // setScreenToShow,
+  setScreenToShow,
   handleGoToPaymentScreen,
 }) => {
   const customerId = GetCustomerId();
@@ -40,6 +41,8 @@ const CO7R_ChooseShippingMethods: React.FC<_Props> = ({
     cartCharges,
   } = useTypedSelector_v2((state) => state.store);
   const cartItems = useTypedSelector_v2((state) => state.cart.cart);
+
+  const storeCode = useTypedSelector_v2((state) => state.store.code);
 
   const calculateSubTotal = () => {
     let subTotal = 0;
@@ -109,12 +112,13 @@ const CO7R_ChooseShippingMethods: React.FC<_Props> = ({
       .then((response) => {
         if (!response) return 0;
         if (response.length === 0) return 0;
-        if (response[0].price) {
+        if (response[0].price >= 0) {
+          setAvailableShippingMethods(response);
           update_CheckoutShippingMethod({
             type: 'method',
             value: response[0],
           });
-          setAvailableShippingMethods(response);
+
           return response[0].price;
         }
 
@@ -206,7 +210,10 @@ const CO7R_ChooseShippingMethods: React.FC<_Props> = ({
                         htmlFor={`radio-${index}`}
                         className='ml-2 text-default-text'
                       >
-                        {method.name}({<Price value={method.price} />})
+                        {method.name.toLowerCase() === 'free shipping'
+                          ? 'Fedex Ground'
+                          : method.name}
+                        ({<Price value={method.price} />})
                       </label>
                     </>
                   </div>
@@ -219,10 +226,17 @@ const CO7R_ChooseShippingMethods: React.FC<_Props> = ({
         <div className='mt-[20px]'>
           <button
             id='GoToPaymentDetailsBtn'
-            onClick={handleGoToPaymentScreen}
+            onClick={() => {
+              if (storeCode == HEALTHYPOINTS) {
+                return setScreenToShow('completeOrderDetails');
+              }
+              handleGoToPaymentScreen();
+            }}
             className='btn btn-lg btn-secondary'
           >
-            GO TO PAYMENT DETAILS
+            {storeCode == HEALTHYPOINTS
+              ? 'GO TO REVIEW ORDER'
+              : 'GO TO PAYMENT DETAILS'}
           </button>
         </div>
       </div>

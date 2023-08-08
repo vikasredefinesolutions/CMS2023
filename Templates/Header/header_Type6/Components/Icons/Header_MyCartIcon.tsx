@@ -1,28 +1,24 @@
 // Husain - Added Static Values for now - 20-3-23
 import NxtImage from '@appComponents/reUsable/Image';
 import Price from '@appComponents/reUsable/Price';
+import {
+  SIMPLI_SAFE_CODE,
+  UCA,
+  _Store_CODES,
+  __LocalStorage,
+} from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
 import { paths } from '@constants/paths.constant';
 import { fetchThirdpartyservice } from '@services/thirdparty.service';
-import {
-  GetCartTotals,
-  GetCustomerId,
-  useActions_v2,
-  useTypedSelector_v2,
-} from 'hooks_v2';
+import { GetCartTotals, useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 
 const MyCartIcon: React.FC = () => {
-  const { fetchCartDetails } = useActions_v2();
+  const { cart_UpdateItems, setShowLoader } = useActions_v2();
   const [totalCartQty, setTotalCartQty] = useState(0);
 
-  const customerId = GetCustomerId();
-
-  const isEmployeeLoggedIn = useTypedSelector_v2(
-    (state) => state.employee.loggedIn,
-  );
   const cartData = useTypedSelector_v2((state) => state.cart.cart);
 
   //
@@ -34,25 +30,54 @@ const MyCartIcon: React.FC = () => {
   );
   const router = useRouter();
   const storeId = useTypedSelector_v2((state) => state.store.id);
-  useEffect(() => {
-    if (customerId) {
-      fetchCartDetails({
-        customerId: customerId,
-        isEmployeeLoggedIn,
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [customerId, isEmployeeLoggedIn]);
+  const storeCode = useTypedSelector_v2((state) => state.store.code);
 
   useEffect(() => {
     setTotalCartQty(totalQty);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [totalQty]);
-  const SamlloginHandler = () => {
+  const cartItems = useTypedSelector_v2((state) => state.cart.cart);
+  const couponAmt = 0;
+  const calculateSubTotal = () => {
+    let subTotal = 0;
+    if (!cartItems) return 0;
+
+    cartItems.forEach((item) => {
+      subTotal += item.totalPrice + item.totalCustomFieldsCharges;
+    });
+
+    return subTotal;
+  };
+  const calculateCouponAmount = () => {
+    const subTotal = calculateSubTotal();
+
+    if (couponAmt > subTotal) {
+      return subTotal;
+    }
+
+    return couponAmt;
+  };
+  const cost = {
+    subTotal: calculateSubTotal(),
+    couponDiscount: calculateCouponAmount(),
+
+    totalToShow: function () {
+      const toAdd = this.subTotal;
+      const toSubtract = this.couponDiscount;
+
+      const estimated = toAdd - toSubtract;
+      return estimated > 0 ? estimated : 0;
+    },
+  };
+  const OktaloginHandler = () => {
     fetchThirdpartyservice({ storeId }).then((ThirdpartyServices) => {
       ThirdpartyServices.map((service) => {
         if (service.thirdPartyServiceName == 'Okta')
-          router.push(ThirdpartyServices[0].url);
+          localStorage.setItem(
+            __LocalStorage.thirdPartyServiceName,
+            service.thirdPartyServiceName,
+          );
+        router.push(service.url);
       });
     });
   };
@@ -64,13 +89,22 @@ const MyCartIcon: React.FC = () => {
       x-data='{ open: false }'
     >
       <Link href={paths.CART}>
-        <a className='text-primary hover:text-secondary group flex items-center relative pt-[8px] pb-[8px]'>
+        <a
+          className={
+            storeCode == SIMPLI_SAFE_CODE ||
+            storeCode === _Store_CODES.USAAHEALTHYPOINTS ||
+            storeCode == UCA
+              ? 'primary-link hover:primary-link group flex items-center relative pt-[8px] pb-[8px]'
+              : 'text-primary hover:text-secondary group flex items-center relative pt-[8px] pb-[8px]'
+          }
+        >
           {/* <span className='inline-flex items-center justify-center w-[30px] h-[30px]'> */}
           {/*  img link  */}
-          <span className='material-icons'>
+          {/* <span className='material-icons'>
             {' '}
             {__pagesText.Headers.shoppingCartIcon}
-          </span>
+          </span> */}
+          <i className='fa-solid fa-cart-shopping text-[22px]'></i>
           {/* </span>{' '} */}
           <span className='absolute right-[-7px] top-[-4px] rounded-full flex items-center justify-center bg-[#dddddd] text-[9px] text-[#000000] pl-[6px] pr-[4px] pt-[2px] pb-[2px]'>
             {totalCartQty}
@@ -138,14 +172,15 @@ const MyCartIcon: React.FC = () => {
                   {totalCartQty} {__pagesText.Headers.totalItemInCartMessage}
                 </div>
                 <div className='text-[16px]'>
-                  {__pagesText.Headers.total} <Price value={totalPrice} />
+                  {__pagesText.Headers.total}{' '}
+                  <Price value={cost.totalToShow()} />
                 </div>
               </div>
               {thirdPartyLogin && !loggedIn ? (
                 <div className=''>
                   <button
                     className='btn btn-secondary w-full text-center'
-                    onClick={SamlloginHandler}
+                    onClick={OktaloginHandler}
                     type='button'
                   >
                     {__pagesText.Headers.samllogin}
@@ -153,7 +188,7 @@ const MyCartIcon: React.FC = () => {
                 </div>
               ) : (
                 <div className=''>
-                  <Link href={paths.CHECKOUT} className=''>
+                  <Link href={paths.CART} className=''>
                     <a className='btn btn-secondary w-full text-center'>
                       {__pagesText.Headers.checkoutNow}
                     </a>

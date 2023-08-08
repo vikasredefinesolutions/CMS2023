@@ -3,7 +3,7 @@ import yesImg from '@images/yes.png';
 
 import NxtImage from '@appComponents/reUsable/Image';
 import { ErrorMessage } from 'formik';
-import React, { useEffect, useState } from 'react';
+import React, { KeyboardEventHandler, useEffect, useState } from 'react';
 
 interface _props {
   name: string;
@@ -17,6 +17,7 @@ interface _props {
   error?: string | null;
   showIcon?: boolean;
   onBlur?: (e: React.FocusEvent<any, Element>) => void;
+  onKeyDown?: KeyboardEventHandler<HTMLInputElement>;
 }
 
 const CustomInput: React.FC<_props> = ({
@@ -29,6 +30,7 @@ const CustomInput: React.FC<_props> = ({
   required = false,
   touched,
   error,
+  onKeyDown,
   showIcon = true,
   onBlur = (value: any) => value,
 }) => {
@@ -57,6 +59,7 @@ const CustomInput: React.FC<_props> = ({
               placeholder={placeHolder}
               value={value}
               onChange={handleChange}
+              onKeyDown={(e) => e.preventDefault()}
               onBlur={onBlur}
               className='form-input mr-8'
               min={new Date().toISOString().split('T')[0]}
@@ -65,6 +68,7 @@ const CustomInput: React.FC<_props> = ({
             <input
               type={type}
               id={name}
+              onKeyDown={onKeyDown}
               name={name}
               placeholder={placeHolder}
               value={value}

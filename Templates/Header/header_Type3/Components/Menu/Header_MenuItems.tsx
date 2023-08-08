@@ -1,4 +1,3 @@
-import { companyInfo } from '@constants/common.constant';
 import { _MenuItems } from '@definations/header.type';
 import MenuItem from '@header/header_Type3/Components/Menu//Header_MenuItem';
 import Backdrop from '@templates/Header/header_Type3/Components/Backdrop';
@@ -36,10 +35,10 @@ const MenuItems: React.FC<_props> = ({
   if (screen === 'MOBILE') {
     return (
       <div
-        className='fixed z-[100] lg:hidden inset-0 bg-[#000000] bg-opacity-50 '
+        className='fixed z-[100] inset-0 bg-[#000000] bg-opacity-50 '
         id='mobile_menu_box'
       >
-       <Backdrop setOpenTab={setOpenTab} />
+        <Backdrop setOpenTab={setOpenTab} />
         <div className='w-full max-w-xs bg-[#ffffff] h-screen overflow-x-scroll'>
           <div
             className='header-nav relative tracking-[1px]'
@@ -47,9 +46,9 @@ const MenuItems: React.FC<_props> = ({
           >
             <CloseIcon />
 
-            <div className='pt-[15px] pb-[15px] px-[10px] text-right'>
+            {/* <div className='pt-[15px] pb-[15px] px-[10px] text-right'>
               {companyInfo.phoneNumber}
-            </div>
+            </div> */}
             {menuItems.items_content?.map((menu, index) => {
               if (menu === null) {
                 return <></>;

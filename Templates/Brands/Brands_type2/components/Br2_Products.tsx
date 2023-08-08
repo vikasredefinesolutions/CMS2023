@@ -1,3 +1,4 @@
+import NxtImage from '@appComponents/reUsable/Image';
 import React from 'react';
 
 const Br2_Products: React.FC = () => {
@@ -15,7 +16,8 @@ const Br2_Products: React.FC = () => {
                   <div className='bg-[#ffffff] p-[20px] h-full'>
                     <div className='w-full overflow-hidden'>
                       <div className='w-auto h-auto m-auto max-h-[400px]'>
-                        <img
+                        <NxtImage
+                          useNextImage={false}
                           alt=''
                           src="https://media.corporategear.com/resources/assets/library/Adidas-Men's-Creator-T-Shirt.jpg"
                           className='max-h-full'

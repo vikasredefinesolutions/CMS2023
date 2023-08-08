@@ -13,6 +13,7 @@ export type _modals =
 
 export interface _ModalProps {
   modalHandler: (val: null | _modals) => void;
+  closeHandler?: () => void;
 }
 
 export interface _MessageContainerProps {

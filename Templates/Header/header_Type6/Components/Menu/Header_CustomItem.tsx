@@ -1,5 +1,6 @@
 import LoginModal from '@appComponents/modals/loginModal';
-import { CYXTERA_CODE, UNITI_CODE } from '@constants/global.constant';
+import ThirdPartyLogin from '@appComponents/modals/loginModal/ThirdPartyLogin';
+import { CYXTERA_CODE, UCA, UNITI_CODE } from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
 import { _modals } from '@definations/product.type';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
@@ -30,6 +31,7 @@ const Custom: React.FC<_props> = ({
   const [focus, setFocus] = useState(false);
   const [showAllItems, setShowAllItems] = useState<boolean>(false);
   const [showtab, setShowTab] = useState<boolean>(false);
+  const { thirdPartyLogin } = useTypedSelector_v2((state) => state.store);
   useEffect(() => {
     if (openTab == title) {
       setShowTab(true);
@@ -53,7 +55,11 @@ const Custom: React.FC<_props> = ({
           <button
             className='relative text-[14px] pl-[25px] mr-[5px] flex items-center pt-[15px] pb-[15px] grow'
             onClick={() => {
-              if (code === CYXTERA_CODE || code === UNITI_CODE) {
+              if (
+                code === CYXTERA_CODE ||
+                code === UNITI_CODE ||
+                code === UCA
+              ) {
                 if (customerId) {
                   setOpenTab(title);
                   setShowAllItems((show) => !show);
@@ -80,7 +86,9 @@ const Custom: React.FC<_props> = ({
             className='text-[12px] mr-[5px] underline'
             onClick={() => toggleSideMenu('CLOSE')}
           >
-            <Link href={`${url}`}>{__pagesText.Headers.mobileViewAll}</Link>
+            <Link href={`${url}.html`}>
+              {__pagesText.Headers.mobileViewAll}
+            </Link>
           </a>
         </div>
         {showAllItems && showtab && (
@@ -91,7 +99,15 @@ const Custom: React.FC<_props> = ({
             />
           </div>
         )}
-        {openModal === 'login' && <LoginModal modalHandler={modalHandler} />}
+        {openModal === 'login' && (
+          <>
+            {thirdPartyLogin ? (
+              <ThirdPartyLogin modalHandler={modalHandler} />
+            ) : (
+              <LoginModal modalHandler={modalHandler} />
+            )}
+          </>
+        )}
       </>
     );
   }
@@ -100,14 +116,14 @@ const Custom: React.FC<_props> = ({
       <>
         <div
           onClick={() => {
-            if (code === CYXTERA_CODE || code === UNITI_CODE) {
+            if (code === CYXTERA_CODE || code === UNITI_CODE || code === UCA) {
               if (customerId) {
                 router.push(`/${url}.html`);
               } else {
                 setOpenModal('login');
               }
             } else {
-              router.push(`/${url}`);
+              router.push(`/${url}.html`);
             }
           }}
         >

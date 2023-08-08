@@ -46,8 +46,7 @@ const ProductListing: React.FC<_props> = ({ brandsData, brandId }) => {
               role='list'
               className={'flex justify-center items-center mb-8 flex-wrap'}
             >
-              {brandsData &&
-                brandsData?.length > 0 &&
+              {brandsData?.length > 0 &&
                 brandsData.map(
                   (product: newFetauredItemResponse, index: number) => (
                     <Fragment key={`${product.productId}${index}`}>

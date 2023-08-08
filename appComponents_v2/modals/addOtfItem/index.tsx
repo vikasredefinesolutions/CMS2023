@@ -1,5 +1,8 @@
+import NxtImage from '@appComponents/reUsable/Image';
+import { __Cookie } from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
 import { __SuccessErrorText } from '@constants/successError.text';
+import { setCookie } from '@helpers/common.helper';
 import {
   GetCustomerId,
   useActions_v2,
@@ -31,7 +34,6 @@ const AddOTFItemNo = ({ closeModal }: { closeModal: () => void }) => {
   const { id: storeId, imageFolderPath } = useTypedSelector_v2(
     (state) => state.store,
   );
-  const mediaBaseUrl = useTypedSelector_v2((state) => state.store.mediaBaseUrl);
 
   // COMPONENT STATES
   const [otfItemNo, setOtfItemNo] = useState<OTFItem[]>([]);
@@ -67,6 +69,15 @@ const AddOTFItemNo = ({ closeModal }: { closeModal: () => void }) => {
   };
 
   const fileReader = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (
+      event.target.files &&
+      !['image/png', 'image/jpeg', 'image/jpg'].includes(
+        event.target.files[0].type,
+      )
+    ) {
+      alert('Please select an image file.');
+      return;
+    }
     if (event.currentTarget?.files === null) return;
     setShowLoader(true);
 
@@ -136,7 +147,7 @@ const AddOTFItemNo = ({ closeModal }: { closeModal: () => void }) => {
         fileToUpload?.serverURL || '',
       );
 
-      const { totalPrice, totalQty } = calculateTotals({
+      const { totalQty } = calculateTotals({
         qty: otfResponse.qty,
         responsePrice: otfResponse.price,
       });
@@ -150,7 +161,7 @@ const AddOTFItemNo = ({ closeModal }: { closeModal: () => void }) => {
           ipAddress: '192.168.1.1',
           isForm: false,
           shoppingCartItemModel: {
-            price: totalPrice,
+            price: +otfResponse.price,
             quantity: totalQty,
             isEmployeeLoginPrice: true, // Questionable
             logoTitle: otfResponse.name,
@@ -180,7 +191,7 @@ const AddOTFItemNo = ({ closeModal }: { closeModal: () => void }) => {
             attributeOptionValue: item.name,
             //
             isEmployeeLoginPrice: 1,
-            price: otfResponse.price,
+            price: +otfResponse.price,
             quantity: otfResponse.qty[index],
             // Static
             id: 0,
@@ -192,11 +203,14 @@ const AddOTFItemNo = ({ closeModal }: { closeModal: () => void }) => {
         },
       };
 
-      await addToCart(payload);
+      const cardResponseWithGuestID = await addToCart(payload);
+      const guestId = customerId ? customerId : cardResponseWithGuestID;
+      setCookie(__Cookie.tempCustomerId, '' + guestId, 'Session');
       await fetchCartDetails({
-        customerId: customerId,
+        customerId: +cardResponseWithGuestID || +customerId,
         isEmployeeLoggedIn: true,
       });
+
       closeModal();
     } catch (error: any) {
       const err = JSON.parse(error.message);
@@ -325,9 +339,10 @@ const AddOTFItemNo = ({ closeModal }: { closeModal: () => void }) => {
                             <div className='flex flex-wrap items-center justify-between bg-white border border-gray-300 text-sm p-1'>
                               {fileToUpload?.serverURL ? (
                                 <>
-                                  <img
+                                  <NxtImage
+                                    useNextImage={false}
                                     className='w-14 max-h-14'
-                                    src={`${mediaBaseUrl}${fileToUpload?.serverURL}`}
+                                    src={fileToUpload?.serverURL}
                                     alt={fileToUpload?.name || ''}
                                   />
                                   <button

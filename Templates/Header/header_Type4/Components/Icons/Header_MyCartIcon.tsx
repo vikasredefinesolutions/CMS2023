@@ -55,7 +55,10 @@ const MyCartIcon: React.FC = () => {
           <span className='mr-[8px] text-[14px] hidden xl:inline-block whitespace-nowrap tracking-[1.25px]'>
             My Cart
           </span>
-          <span className='material-icons xl:hidden'>
+          <span
+            className='material-icons xl:hidden'
+            onClick={() => setFocus(false)}
+          >
             {' '}
             {__pagesText.Headers.shoppingCartIcon}
           </span>

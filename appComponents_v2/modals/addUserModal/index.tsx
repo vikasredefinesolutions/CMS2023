@@ -123,12 +123,15 @@ const AddUserModal = ({
                   <div className='p-6'>
                     <div className='flex flex-wrap -mx-3 gap-y-6'>
                       <div className='w-full lg:w-1/2 px-3'>
-                        <label
-                          htmlFor='First Name'
-                          className='block text-base font-medium text-gray-700'
-                        >
-                          First Name
-                        </label>
+                        <div className='flex'>
+                          <label
+                            htmlFor='First Name'
+                            className='block text-base font-medium text-gray-700'
+                          >
+                            First Name
+                          </label>
+                          <span className='text-red-600'>*</span>
+                        </div>
                         <div className='mt-2'>
                           <input
                             type='text'
@@ -149,12 +152,15 @@ const AddUserModal = ({
                         )}
                       </div>
                       <div className='w-full lg:w-1/2 px-3'>
-                        <label
-                          htmlFor='Last Name'
-                          className='block text-base font-medium text-gray-700'
-                        >
-                          Last Name
-                        </label>
+                        <div className='flex'>
+                          <label
+                            htmlFor='Last Name'
+                            className='block text-base font-medium text-gray-700'
+                          >
+                            Last Name
+                          </label>
+                          <span className='text-red-600'>*</span>
+                        </div>
                         <div className='mt-2'>
                           <input
                             type='text'
@@ -175,12 +181,15 @@ const AddUserModal = ({
                         )}
                       </div>
                       <div className='w-full lg:w-1/2 px-3'>
-                        <label
-                          htmlFor='email-address'
-                          className='block text-base font-medium text-gray-700'
-                        >
-                          Email Address
-                        </label>
+                        <div className='flex'>
+                          <label
+                            htmlFor='email-address'
+                            className='block text-base font-medium text-gray-700'
+                          >
+                            Email Address
+                          </label>
+                          <span className='text-red-600'>*</span>
+                        </div>
                         <div className='mt-2'>
                           <input
                             type='email'
@@ -202,12 +211,15 @@ const AddUserModal = ({
                         )}
                       </div>
                       <div className='w-full lg:w-1/2 px-3'>
-                        <label
-                          htmlFor='state'
-                          className='block text-base font-medium text-gray-700'
-                        >
-                          Role
-                        </label>
+                        <div className='flex'>
+                          <label
+                            htmlFor='state'
+                            className='block text-base font-medium text-gray-700'
+                          >
+                            Role
+                          </label>
+                          <span className='text-red-600'>*</span>
+                        </div>
                         <div className='mt-2'>
                           <select
                             className='form-input'

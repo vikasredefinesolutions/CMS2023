@@ -264,3 +264,4 @@ export enum _PASS_FIELD {
   UCA = 'usaa',
   PKHG = 'pkhg',
 }
+export const minAgerequired = 16;

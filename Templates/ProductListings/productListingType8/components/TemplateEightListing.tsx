@@ -122,14 +122,20 @@ const TemplateEightListing = ({
                 product.productTagViewModel.length > 0 &&
                 (product.productTagViewModel[0].productTagName === 'sale' ? (
                   <div className='absolute top-1 left-2 text-gray-800 p-1 z-5"'>
-                    <img
-                      src={`${mediaBaseUrl}${product?.productTagViewModel[0].imagename}`}
+                    <NxtImage
+                      useNextImage={false}
+                      className=''
+                      alt=''
+                      src={product?.productTagViewModel[0].imagename}
                     />
                   </div>
                 ) : (
                   <div className='absolute top-1 left-2 text-gray-800 p-1 z-5"'>
-                    <img
-                      src={`${mediaBaseUrl}${product?.productTagViewModel[0].imagename}`}
+                    <NxtImage
+                      className=''
+                      useNextImage={false}
+                      alt=''
+                      src={product?.productTagViewModel[0].imagename}
                     />
                   </div>
                 ))}
@@ -142,10 +148,11 @@ const TemplateEightListing = ({
                     !isbrand ? `${product.brandUrl}.html` : 'javascript:void(0)'
                   }
                 >
-                  <img
+                  <NxtImage
                     className='inline-block max-h-full'
-                    src={`${mediaBaseUrl}${product.productBrandlogo}`}
-                    alt={product.brandlogo}
+                    useNextImage={false}
+                    src={product.productBrandlogo}
+                    alt={product?.brandlogo || ''}
                     title={product.brandName || ''}
                   />
                 </Link>
@@ -185,7 +192,7 @@ const TemplateEightListing = ({
                         className={`w-[28px] h-[28px] border-2 border-secondary hover:border-secondary cursor-pointer`}
                       >
                         <NxtImage
-                          src={`${mediaBaseUrl}${currentProduct.imageName}`}
+                          src={currentProduct?.imageName || null}
                           alt=''
                           className='max-h-full m-auto'
                           title={currentProduct.colorName}
@@ -209,7 +216,7 @@ const TemplateEightListing = ({
                             }
                           >
                             <NxtImage
-                              src={`${mediaBaseUrl}${subRow.imageurl}`}
+                              src={subRow?.imageurl || null}
                               alt=''
                               className='max-h-full m-auto'
                               title={subRow.colorName}
@@ -252,7 +259,7 @@ const TemplateEightListing = ({
                         key={`${index}_${subRow.id}`}
                       >
                         <NxtImage
-                          src={`${mediaBaseUrl}${subRow.imageName}`}
+                          src={subRow?.imageName || null}
                           alt=''
                           className='max-h-full m-auto'
                           title={subRow.colorName}

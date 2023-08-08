@@ -4,7 +4,7 @@ import { __pagesText } from '@constants/pages.text';
 import { _ProductColor } from '@definations/APIs/colors.res';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 const AvailableColors: React.FC = () => {
   const router = useRouter();
   const { setColor, clearToCheckout } = useActions_v2();
@@ -21,6 +21,19 @@ const AvailableColors: React.FC = () => {
     clearToCheckout();
     router.push(`${product.productSEName}.html`);
   };
+
+  useEffect(() => {
+    if (colors && colors.length > 7) {
+      for (let i = 0; i < colors.length; i++) {
+        if (
+          colors[i].attributeOptionId === selectedColor.attributeOptionId &&
+          i > 6
+        ) {
+          setShowAllColors(true);
+        }
+      }
+    }
+  }, [selectedColor.attributeOptionId]);
   if (colors === null) return <></>;
   const colorsCount = colors.length;
   const showAllColorsButton =

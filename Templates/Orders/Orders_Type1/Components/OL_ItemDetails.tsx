@@ -36,12 +36,12 @@ const OL_ItemDetails: React.FC<_props> = ({ item }) => {
   };
 
   return (
-    <li className='p-4 sm:p-6 border-b border-[#d2d2d2] last:border-0'>
+    <li className='p-4 sm:p-6 border-b border-gray-border last:border-0'>
       <div className='flex flex-wrap justify-between -mx-3'>
         <Link href={`/${item.seName}.html`}>
-          <a>
+          <a className='w-full sm:w-3/12 xl:w-2/12'>
             <div className='px-3 cursor-pointer'>
-              <div className='lg:flex-shrink-0 sm:w-52 sm:h-52 w-full h-auto overflow-hidden rounded-lg text-center'>
+              <div className='lg:flex-shrink-0 sm:w-full sm:h-52 lg:w-52 w-full h-auto overflow-hidden rounded-lg text-center'>
                 <NxtImage
                   src={item.colorImage}
                   alt={item.productName}
@@ -51,7 +51,7 @@ const OL_ItemDetails: React.FC<_props> = ({ item }) => {
             </div>
           </a>
         </Link>
-        <div className='flex-1 sm:mt-0 mt-6 text-default-text text-center sm:text-left px-3'>
+        <div className='w-full sm:w-7/12 xl:w-9/12 flex-1 sm:mt-0 mt-6 text-default-text px-3'>
           <div className='mb-6 font-bold text-sub-text cursor-pointer'>
             <Link href={`/${item.seName}.html`}>
               <a>{item.productName}</a>
@@ -76,13 +76,13 @@ const OL_ItemDetails: React.FC<_props> = ({ item }) => {
               key={index}
               className='mt-4 flex flex-wrap md:justify-between lg:justify-start -mx-3'
             >
-              <div className='w-full md:w-1/3 lg:w-1/4 px-3'>
+              <div className='w-1/3 lg:w-1/4 px-3'>
                 <div className='font-[600] mb-4'>
                   {__pagesText.OrderPage.size}
                 </div>
                 <div className='mb-4'>{product.attributeOptionValue}</div>
               </div>
-              <div className='w-full md:w-1/3 lg:w-1/4 px-3'>
+              <div className='w-1/3 lg:w-1/4 px-3'>
                 <div className='font-[600] mb-4'>
                   {__pagesText.OrderPage.price}
                 </div>
@@ -90,7 +90,7 @@ const OL_ItemDetails: React.FC<_props> = ({ item }) => {
                   <Price value={product.price} />
                 </div>
               </div>
-              <div className='w-full md:w-1/3 lg:w-1/4 px-3'>
+              <div className='w-1/3 lg:w-1/4 px-3'>
                 <div className='font-[600] mb-4'>
                   {' '}
                   {__pagesText.OrderPage.qty}
@@ -121,7 +121,7 @@ const OL_ItemDetails: React.FC<_props> = ({ item }) => {
             </div>
           </div>
         </div>
-        <div className='!text-anchor !hover:text-anchor'>
+        <div className='w-full sm:w-2/12 xl:w-1/12 !text-anchor !hover:text-anchor'>
           <Link
             href={`${paths.WRITE_A_REVIEW}?ProductId=${item.productId}&attributeId=${item.attributeOptionId}`}
             title='Write A Review'

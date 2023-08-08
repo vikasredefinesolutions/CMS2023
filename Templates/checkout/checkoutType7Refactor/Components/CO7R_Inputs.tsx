@@ -1,5 +1,7 @@
 import NxtImage from '@appComponents/reUsable/Image';
-import { isNumberKey } from '@helpers/common.helper';
+import { HEALTHYPOINTS, UCA } from '@constants/global.constant';
+import { useTypedSelector_v2 } from '@hooks_v2/index';
+import { KeyboardEvent } from 'react';
 interface _InputProps {
   additionalClass: string;
   label: string;
@@ -14,6 +16,7 @@ interface _InputProps {
   touched: boolean;
   readonly?: boolean;
   creditCard?: boolean;
+  autoComplete: string;
   children?: React.ReactNode;
 }
 export const CO7R_Input: React.FC<_InputProps> = ({
@@ -29,12 +32,36 @@ export const CO7R_Input: React.FC<_InputProps> = ({
   required,
   touched,
   error,
+  autoComplete,
   readonly = false,
   creditCard = false,
 }) => {
   const right = required && touched && error === null;
   const wrong = required && touched && error;
-
+  const { code: storeCode } = useTypedSelector_v2((state) => state.store);
+  const phoneNumberCheck = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (name === 'phone') {
+      console.log('backspace ==>', event.key);
+      if (
+        ![
+          'Tab',
+          'Backspace',
+          '0',
+          '1',
+          '2',
+          '3',
+          '4',
+          '5',
+          '6',
+          '7',
+          '8',
+          '9',
+        ].includes(event.key)
+      )
+        return event.preventDefault();
+    }
+    return ['.'].includes(event.key) && event.preventDefault();
+  };
   return (
     <div className={`mb-[15px] w-full pl-[15px] pr-[15px] ${additionalClass}`}>
       <label htmlFor={name} className='mb-[4px] text-normal-text'>{`${label} ${
@@ -51,13 +78,15 @@ export const CO7R_Input: React.FC<_InputProps> = ({
           value={value}
           readOnly={readonly}
           onBlur={onBlur}
-          onKeyDown={(event) =>
-            ['.'].includes(event.key) && event.preventDefault()
-          }
+          onKeyDown={phoneNumberCheck}
           maxLength={length}
           onChange={onChange}
-          className='form-input !w-[calc(100%-40px)]'
-          autoComplete={creditCard ? 'off' : ''}
+          className={`form-input !w-[calc(100%-40px)] ${
+            wrong && (storeCode === UCA || storeCode === HEALTHYPOINTS)
+              ? 'has-error'
+              : ''
+          }`}
+          autoComplete={autoComplete}
           onContextMenu={(e) => {
             if (creditCard) {
               e.preventDefault();
@@ -98,6 +127,7 @@ interface _SelectProps {
   valid: boolean;
   inValid: boolean;
   disabled: boolean;
+  autoComplete: string;
 }
 
 export const CO7R_Select: React.FC<_SelectProps> = ({
@@ -112,6 +142,7 @@ export const CO7R_Select: React.FC<_SelectProps> = ({
   inValid,
   disabled,
   initialOption,
+  autoComplete,
   additionalClass,
 }) => {
   return (
@@ -125,6 +156,7 @@ export const CO7R_Select: React.FC<_SelectProps> = ({
           value={value}
           disabled={disabled}
           onChange={onChange}
+          autoComplete={autoComplete}
           onBlur={onBlur}
           className='form-input !w-[calc(100%-40px)]'
         >
@@ -162,7 +194,29 @@ export const CO7R_CreditCardInput: React.FC<{
   inValid: boolean;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur: (event: React.FocusEvent<HTMLInputElement, Element>) => void;
-}> = ({ name, value, onBlur, onChange, valid, inValid }) => {
+  autoComplete: string;
+}> = ({ name, value, onBlur, onChange, valid, inValid, autoComplete }) => {
+  const numberCheck = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (
+      ![
+        'Tab',
+        'Backspace',
+        '0',
+        '1',
+        '2',
+        '3',
+        '4',
+        '5',
+        '6',
+        '7',
+        '8',
+        '9',
+      ].includes(event.key)
+    ) {
+      return event.preventDefault();
+    }
+  };
+
   return (
     <>
       <div className='flex flex-wrap justify-between items-center'>
@@ -171,11 +225,9 @@ export const CO7R_CreditCardInput: React.FC<{
           value={value}
           onBlur={onBlur}
           maxLength={2}
-          onChange={(event) => {
-            if (isNumberKey(event)) {
-              onChange(event);
-            }
-          }}
+          onKeyDown={numberCheck}
+          onChange={onChange}
+          autoComplete={autoComplete}
           className='form-input !w-[calc(100%-40px)]'
         />
         {valid && (

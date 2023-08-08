@@ -165,6 +165,7 @@ const Header_Category: React.FC<_props> = ({
                         {content &&
                           content[0].brandDetails &&
                           content[0]?.brandDetails?.map((item, index) => {
+                            const newSeName = item.seName.split('-').join(' ');
                             if (index > 9) return <></>;
                             return (
                               <SubMenuItem
@@ -173,7 +174,7 @@ const Header_Category: React.FC<_props> = ({
                                 itemLabel={capitalizeFirstLetter(
                                   item.brandName,
                                 )}
-                                itemUrl={`Brand/${item.seName}/${item.brandId}/${url}.html`}
+                                itemUrl={`Brand/${newSeName}/${item.brandId}/${url}.html`}
                                 type={'CATEGORY'}
                               />
                             );
@@ -192,7 +193,7 @@ const Header_Category: React.FC<_props> = ({
                             <a
                               className='inline-block text-[15px] text-tertiary hover:text-tertiary-hover font-[500] tracking-[1px] leading-[18px]'
                               title=''
-                              href='product-listing.html'
+                              href={`/${url}.html`}
                             >
                               All {title} Apparel &amp; Footwear
                             </a>
@@ -207,7 +208,7 @@ const Header_Category: React.FC<_props> = ({
                             <a
                               className='inline-block text-[15px] text-tertiary hover:text-tertiary-hover font-[500] tracking-[1px] leading-[18px]'
                               title=''
-                              href='product-listing.html'
+                              href={`/${url}.html`}
                             >
                               All Brands
                             </a>

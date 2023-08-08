@@ -38,7 +38,7 @@ export const showOrderReview = (screenToShow: _CO7R_Screens) => {
   if (screenToShow === 'enterEmailAddress') return false;
   if (screenToShow === 'addShipping') return false;
   if (screenToShow === 'completeOrderDetails') return true;
-  if (screenToShow === 'addPaymentMethodAndBilling') return true;
+  if (screenToShow === 'addPaymentMethodAndBilling') return false;
   // default
   return false;
 };
@@ -260,7 +260,7 @@ export const CO7R_creditCardValidationSchema = Yup.object({
       if (this.parent.expiredYear < currentYear) return false;
       //
       if (this.parent.expiryYear === currentYear) {
-        if (+enteredMonth > currentMonth) return true;
+        if (+enteredMonth >= currentMonth) return true;
         //
         return false;
       }
@@ -422,9 +422,11 @@ export const shippingFields = (address: _CO7R_AddressFields) => {
 };
 
 export const paymentFields = (payment: {
+  useCreditBalance: boolean;
+  paymentRequired: boolean;
   creditCard: {
     nameOnCard: string;
-    cardName: string;
+    cardName: '' | 'VISA' | 'MASTERCARD' | 'AMEX' | 'DISCOVER';
     year: string;
     ccNumber: string;
     month: string;
@@ -443,7 +445,7 @@ export const paymentFields = (payment: {
   paymentGateway: string;
   paymentMethod: string;
 } => {
-  if (payment.method === 'CREDIT_CARD') {
+  if (payment.paymentRequired && payment.method === 'CREDIT_CARD') {
     return {
       authorizationPNREF: payment.poNumber,
       cardType: payment.creditCard.cardName,
@@ -457,7 +459,7 @@ export const paymentFields = (payment: {
     };
   }
 
-  if (payment.method === 'PURCHASE_ORDER') {
+  if (payment.paymentRequired && payment.method === 'PURCHASE_ORDER') {
     return {
       cardName: '',
       cardType: '',

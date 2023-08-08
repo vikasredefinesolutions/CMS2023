@@ -6,6 +6,7 @@ import {
   useTypedSelector_v2,
 } from '@hooks_v2/index';
 
+import Price from '@appComponents/reUsable/Price';
 import { useFormik } from 'formik';
 import React, { useEffect, useState } from 'react';
 import {
@@ -26,11 +27,12 @@ interface _Props {
 const CO7_PaymentMethod: React.FC<_Props> = ({ setScreenToShow }) => {
   const { update_CheckoutAddress, update_PaymentDetails } = useActions_v2();
   const customerId = GetCustomerId();
-  const { address, user, payment } = useTypedSelector_v2(
-    (state) => state.checkout,
+  const { address, user, payment, shippingMethod, charges } =
+    useTypedSelector_v2((state) => state.checkout);
+  const { cart: cartItems, discount } = useTypedSelector_v2(
+    (state) => state.cart,
   );
-  const { code: storeCode } = useTypedSelector_v2((state) => state.store);
-  const { customer } = useTypedSelector_v2((state) => state.user);
+
   const methodsToShow = useTypedSelector_v2(
     (state) => state.store.storeXPaymetnOptionListViewModels,
   );
@@ -144,9 +146,16 @@ const CO7_PaymentMethod: React.FC<_Props> = ({ setScreenToShow }) => {
   });
 
   const handleGoToOrderReviewBtn = () => {
+    billingAddress.submitForm();
+
     if (!address.useShippingAddressForBilling) {
       billingAddress.submitForm();
       if (!billingAddress.isValid) return;
+    }
+
+    if (!payment.paymentRequired) {
+      setScreenToShow('completeOrderDetails');
+      return;
     }
 
     if (paymentMethod === null) {
@@ -154,7 +163,7 @@ const CO7_PaymentMethod: React.FC<_Props> = ({ setScreenToShow }) => {
     }
 
     if (paymentMethod === 'CC') {
-      if (creditCard.values.ccNumber.length === 0) {
+      if (!creditCard.dirty && creditCard.values.nameOnCard.length === 0) {
         creditCard.submitForm();
         return;
       }
@@ -163,7 +172,7 @@ const CO7_PaymentMethod: React.FC<_Props> = ({ setScreenToShow }) => {
     }
 
     if (paymentMethod === 'PO') {
-      if (purchaseOrder.values.poNumber.length === 0) {
+      if (!purchaseOrder.dirty && purchaseOrder.values.poNumber.length === 0) {
         purchaseOrder.submitForm();
         return;
       }
@@ -196,6 +205,49 @@ const CO7_PaymentMethod: React.FC<_Props> = ({ setScreenToShow }) => {
     }
   };
 
+  const itemsTotal = () => {
+    let subTotal = 0;
+    if (!cartItems) return 0;
+
+    cartItems.forEach((item) => {
+      subTotal += item.totalPrice + item.totalCustomFieldsCharges;
+    });
+
+    return subTotal;
+  };
+
+  const isPaymentMethodRequired = (useCreditBalance: boolean) => {
+    if (useCreditBalance) {
+      const subTotal = itemsTotal() + shippingMethod.price + charges.salesTax;
+      const credits =
+        user.creditBalance +
+        (discount?.amount || 0) +
+        (discount?.giftCardAmt || 0);
+
+      //
+      if (subTotal > credits) return true;
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleCreditCheck = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+  ) => {
+    const useCreditBalance = (event.target as _AdditionalEvent).checked;
+
+    update_PaymentDetails({
+      method: 'PAYMENT_REQUIRED',
+      value: isPaymentMethodRequired(useCreditBalance),
+    });
+
+    update_PaymentDetails({
+      method: 'USE_CREDIT_BALANCE',
+      value: useCreditBalance,
+    });
+  };
+
   useEffect(() => {
     if (methodsToShow.length > 0) setInitialPaymentMethod(methodsToShow[0]);
   }, []);
@@ -212,7 +264,7 @@ const CO7_PaymentMethod: React.FC<_Props> = ({ setScreenToShow }) => {
                   isStatic
                   className='w-full h-full'
                   alt=''
-                  src='/assets/images/secure-card.jpg'
+                  src='/assets/images/secure-card.png'
                 />
               </div>
             </div>
@@ -228,7 +280,12 @@ const CO7_PaymentMethod: React.FC<_Props> = ({ setScreenToShow }) => {
                 All fields marked with * are required fields.
               </div>
               <div className='pb-[10px]'>
-               
+                <NxtImage
+                  isStatic
+                  alt=''
+                  src='/assets/images/norton.png'
+                  className='inline-block'
+                />
               </div>
             </div>
             <div className='mb-[20px] ' id='BillingShippingAddress'>
@@ -263,49 +320,73 @@ const CO7_PaymentMethod: React.FC<_Props> = ({ setScreenToShow }) => {
                   setFieldTouched={billingAddress.setFieldTouched}
                 />
               )}
-              {methodsToShow.map((method) => {
-                if (method.paymentOptionId === 1) {
+
+              {user.creditBalance > 0 && (
+                <div className='flex flex-wrap ml-[-15px] mr-[-15px] mb-[30px]'>
+                  <div className='mb-[20px] pl-[15px] pr-[15px]'>
+                    <input
+                      onClick={handleCreditCheck}
+                      type='checkbox'
+                      checked={payment.useCreditBalance}
+                      id='CreditChk'
+                      name=''
+                    />{' '}
+                    <label
+                      className='font-bold text-green-600'
+                      htmlFor='CreditChk'
+                    >
+                      Use Credit ? Available credit amount:{' '}
+                      {user.creditBalance.toFixed(2)} credits (
+                      {<Price value={user.creditBalance} />})
+                    </label>
+                  </div>
+                </div>
+              )}
+
+              {payment.paymentRequired &&
+                methodsToShow.map((method) => {
+                  if (method.paymentOptionId === 1) {
+                    return null;
+                  }
+
+                  if (method.paymentOptionId === 2) {
+                    return (
+                      <div className='mb-[15px] max-w-[278px]'>
+                        <button
+                          id='SelectPurchaseOrderBtn'
+                          onClick={() => setPaymentMethod('PO')}
+                          className='bg-[#ffffff] font-semibold text-normal-text pl-[10px] pr-[10px] pb-[10px] pt-[10px] text-center border border-[#000000] block'
+                        >
+                          <span>SELECT PURCHASE ORDER</span>
+                        </button>
+                      </div>
+                    );
+                  }
+
+                  if (method.paymentOptionId === 3) {
+                    return (
+                      <div className='mb-[15px] max-w-[278px]'>
+                        <button
+                          id='SelectCreditCardBtn'
+                          onClick={() => setPaymentMethod('CC')}
+                          className='bg-[#ffffff] flex flex-wrap items-center font-semibold text-normal-text pl-[10px] pr-[10px] pb-[10px] pt-[10px] border border-[#000000]'
+                        >
+                          <span className='mr-[10px]'>
+                            <NxtImage
+                              className=''
+                              alt=''
+                              src='/assets/images/cards.jpg'
+                              isStatic
+                            />
+                          </span>
+                          <span>SELECT CREDIT CARD</span>
+                        </button>
+                      </div>
+                    );
+                  }
                   return null;
-                }
-
-                if (method.paymentOptionId === 2) {
-                  return (
-                    <div className='mb-[15px] max-w-[278px]'>
-                      <button
-                        id='SelectPurchaseOrderBtn'
-                        onClick={() => setPaymentMethod('PO')}
-                        className='bg-[#ffffff] font-semibold text-normal-text pl-[10px] pr-[10px] pb-[10px] pt-[10px] text-center border border-[#000000] block'
-                      >
-                        <span>SELECT PURCHASE ORDER</span>
-                      </button>
-                    </div>
-                  );
-                }
-
-                if (method.paymentOptionId === 3) {
-                  return (
-                    <div className='mb-[15px] max-w-[278px]'>
-                      <button
-                        id='SelectCreditCardBtn'
-                        onClick={() => setPaymentMethod('CC')}
-                        className='bg-[#ffffff] flex flex-wrap items-center font-semibold text-normal-text pl-[10px] pr-[10px] pb-[10px] pt-[10px] border border-[#000000]'
-                      >
-                        <span className='mr-[10px]'>
-                          <NxtImage
-                            className=''
-                            alt=''
-                            src='/assets/images/cards.jpg'
-                            isStatic
-                          />
-                        </span>
-                        <span>SELECT CREDIT CARD</span>
-                      </button>
-                    </div>
-                  );
-                }
-                return null;
-              })}
-              {paymentMethod == 'CC' && (
+                })}
+              {payment.paymentRequired && paymentMethod == 'CC' && (
                 <CO7_CreditCard
                   values={creditCard.values}
                   errors={creditCard.errors}
@@ -317,7 +398,7 @@ const CO7_PaymentMethod: React.FC<_Props> = ({ setScreenToShow }) => {
                   setFieldError={creditCard.setFieldError}
                 />
               )}
-              {paymentMethod == 'PO' && (
+              {payment.paymentRequired && paymentMethod == 'PO' && (
                 <CO7R_PurchaseOrder
                   values={purchaseOrder.values}
                   errors={purchaseOrder.errors}
@@ -325,17 +406,6 @@ const CO7_PaymentMethod: React.FC<_Props> = ({ setScreenToShow }) => {
                   handleBlur={purchaseOrder.handleBlur}
                   handleChange={purchaseOrder.handleChange}
                 />
-              )}
-              {user.creditBalance > 0 && (
-                <div className='flex flex-wrap ml-[-15px] mr-[-15px] mb-[30px]'>
-                  <div className='mb-[20px] pl-[15px] pr-[15px]' id='CreditChk'>
-                    <input type='checkbox' id='CreditChk' name='' />{' '}
-                    <label className='' htmlFor='CreditChk'>
-                      Use Credit ? Available credit amount: {user.creditBalance}{' '}
-                      credits (${user.creditBalance})
-                    </label>
-                  </div>
-                </div>
               )}
             </div>
             <div className='max-w-[278px]'>
@@ -367,3 +437,7 @@ const CO7_PaymentMethod: React.FC<_Props> = ({ setScreenToShow }) => {
 };
 
 export default CO7_PaymentMethod;
+
+export interface _AdditionalEvent extends EventTarget {
+  checked: boolean;
+}

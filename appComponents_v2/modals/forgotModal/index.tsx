@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { _ModalProps } from '@appComponents/modals/modal';
+import { _Store_CODES } from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import { ForgetCustomerPassword } from '@services/customerUser.service';
@@ -12,6 +13,7 @@ const ForgotModal: React.FC<_ModalProps> = ({ modalHandler }) => {
   const [FinalMessage, setFinalMessage] = useState(false);
   const [Error, setError] = useState(false);
   const [errorStatement, setErrorStatement] = useState(false);
+  const storeCode = useTypedSelector_v2((state) => state.store.code);
 
   const forgotPassword = async (email: string) => {
     if (email) {
@@ -20,9 +22,9 @@ const ForgotModal: React.FC<_ModalProps> = ({ modalHandler }) => {
       );
       if (email.match(regex)) {
         try {
-          setShowLoader(true)
+          setShowLoader(true);
           const res = await ForgetCustomerPassword({ email, storeId });
-          setShowLoader(false)
+          setShowLoader(false);
           if (res?.issend) {
             setError(false);
             setFinalMessage(true);
@@ -32,7 +34,7 @@ const ForgotModal: React.FC<_ModalProps> = ({ modalHandler }) => {
             setFinalMessage(false);
           }
         } catch (error) {
-          setShowLoader(false)
+          setShowLoader(false);
           console.log(error);
         }
       } else {
@@ -98,7 +100,13 @@ const ForgotModal: React.FC<_ModalProps> = ({ modalHandler }) => {
               </div>
 
               <div className='p-[25px]'>
-                <div className='mb-[10px] font-[700] text-lg text-center uppercase'>
+                <div
+                  className={`mb-[10px] font-[700]  text-center uppercase ${
+                    storeCode === _Store_CODES.USAAHEALTHYPOINTS
+                      ? 'text-title-text'
+                      : 'text-lg'
+                  }`}
+                >
                   {__pagesText.productInfo.forgotModal.forgotPassword}
                 </div>
 

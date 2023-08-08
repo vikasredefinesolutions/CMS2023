@@ -13,10 +13,13 @@ import {
   CYXTERA_CODE,
   SIMPLI_SAFE_CODE,
   THD_STORE_CODE,
+  UCA,
   UNITI_CODE,
+  _Store_CODES,
 } from '@constants/global.constant';
 import { _modals } from '@definations/product.type';
 import BuyNowHandler from './BuyNowHandler';
+import InStock_Type3 from './InStock_Type3';
 import Inventory_Type3 from './ProductInventory_Type3';
 import Inventory_Type3_2 from './ProductInventory_Type3_2';
 import SizeQtyInput from './SizeQtyInput';
@@ -29,6 +32,7 @@ const ProductInfo_Type3: React.FC<_ProductInfoProps> = ({ product }) => {
   const selectedColor = useTypedSelector_v2(
     (state) => state.product.selected.color,
   );
+  const { inventory } = useTypedSelector_v2((state) => state.product.product);
 
   const { code: storeCode } = useTypedSelector_v2((state) => state.store);
   const modalHandler = (param: null | _modals) => {
@@ -52,6 +56,9 @@ const ProductInfo_Type3: React.FC<_ProductInfoProps> = ({ product }) => {
   };
 
   const [selectSize, setSelectSize] = useState('');
+  useEffect(() => {
+    setSelectSize('');
+  }, [selectedColor]);
   const { price } = useTypedSelector_v2((state) => state.product.product);
   const [showSingleInv, setShowSingleInv] = useState(true);
   const { updatePrice } = useActions_v2();
@@ -59,22 +66,41 @@ const ProductInfo_Type3: React.FC<_ProductInfoProps> = ({ product }) => {
     updatePrice({ price: price?.msrp || 0 });
   }, [price?.msrp]);
 
+  const sizeChart = useTypedSelector_v2(
+    (state) => state.product.product.sizeChart,
+  );
+
   const { code } = useTypedSelector_v2((state) => state.store);
 
   return (
     <>
-      <div className='lg:col-end-13 lg:col-span-5 mt-[15px] md:mt-[40px] px-0 lg:px-[15px] sm:px-0 sm:mt-[64px] lg:mt-0'>
-        <div className='mb-[15px] border-b border-b-gray-border'>
+      <div className='lg:col-end-13 lg:col-span-5 mt-[15px] md:mt-[40px] px-0 lg:px-[15px] sm:px-0 sm:mt-[64px] lg:mt-0 link-custom'>
+        <div
+          className={`mb-[15px] border-b border-b-gray-border ${
+            storeCode === _Store_CODES.UNITi ? 'hidden lg:block ' : ''
+          }`}
+        >
           <div
             className={`${
               store_Code == _Store.type6
-                ? 'text-medium-text '
-                : 'text-title-text '
-            } md:text-sub-text lg:text-title-text mb-[15px]`}
+                ? 'text-title-text mb-[15px]'
+                : storeCode === _Store_CODES.UNITi
+                ? `text-large-text md:text-sub-text lg:${
+                    storeCode === _Store_CODES.UNITi
+                      ? 'text-large-text'
+                      : 'text-title-text'
+                  } mb-[15px]`
+                : `text-title-text md:text-sub-text lg:${
+                    storeCode === _Store_CODES.UNITi
+                      ? 'text-large-text'
+                      : 'text-title-text'
+                  } mb-[15px] `
+            }`}
           >
             {product?.name}
           </div>
         </div>
+
         <div className='mb-[15px]'>
           <div
             className={`${
@@ -83,10 +109,13 @@ const ProductInfo_Type3: React.FC<_ProductInfoProps> = ({ product }) => {
           >
             <span className='inline-block w-[128px] font-semibold'>
               {storeCode === THD_STORE_CODE ||
+              storeCode === SIMPLI_SAFE_CODE ||
               storeCode === CYXTERA_CODE ||
               store_Code == _Store.type6 ||
               store_Code == UNITI_CODE ||
-              store_Code == BACARDI
+              storeCode === UCA ||
+              store_Code == BACARDI ||
+              storeCode == SIMPLI_SAFE_CODE
                 ? __pagesText.productInfo.product_code
                 : __pagesText.productInfo.sku}
             </span>
@@ -102,7 +131,13 @@ const ProductInfo_Type3: React.FC<_ProductInfoProps> = ({ product }) => {
             </div>
           )}
         </div>
+        {storeCode == SIMPLI_SAFE_CODE || storeCode == BACARDI ? (
+          <InStock_Type3 />
+        ) : (
+          <></>
+        )}
         <AvailableColors_Type3 />
+
         {storeCode !== BACARDI ? (
           <>
             <div
@@ -119,32 +154,31 @@ const ProductInfo_Type3: React.FC<_ProductInfoProps> = ({ product }) => {
                 setSelectSize={setSelectSize}
               />
 
-              {storeCode !== THD_STORE_CODE &&
-                storeCode !== SIMPLI_SAFE_CODE && (
-                  <div className='pb-[0px]'>
-                    {storeCode !== BACARDI ? (
-                      <button
-                        type='button'
-                        className='text-anchor hover:text-anchor-hover font-[600] underline text-default-text'
-                        onClick={() => modalHandler('sizeChart')}
-                      >
-                        {__pagesText.productInfo.sizeChart}
-                      </button>
-                    ) : (
-                      <div
-                        className='size-chart p-t-20 ml-[10px]'
-                        onClick={() => modalHandler('sizeChart')}
-                      >
-                        <NxtImage
-                          isStatic={true}
-                          src={'/assets/images/size-chart.jpg'}
-                          alt={'size-chart'}
-                          className={''}
-                        />
-                      </div>
-                    )}
-                  </div>
-                )}
+              {storeCode !== THD_STORE_CODE && sizeChart && (
+                <div className='pb-[10px] ml-[10px]'>
+                  {storeCode !== BACARDI ? (
+                    <button
+                      type='button'
+                      className='text-anchor hover:text-anchor-hover font-[600] underline text-default-text'
+                      onClick={() => modalHandler('sizeChart')}
+                    >
+                      {__pagesText.productInfo.sizeChart}
+                    </button>
+                  ) : (
+                    <div
+                      className='size-chart p-t-20 ml-[10px]'
+                      onClick={() => modalHandler('sizeChart')}
+                    >
+                      <NxtImage
+                        isStatic={true}
+                        src={'/assets/images/size-chart.jpg'}
+                        alt={'size-chart'}
+                        className={''}
+                      />
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
             <SizeQtyInput price={price?.msrp} size={selectSize} />
           </>
@@ -181,6 +215,7 @@ const ProductInfo_Type3: React.FC<_ProductInfoProps> = ({ product }) => {
                           className='size-chart p-t-20 ml-[10px]'
                           onClick={() => modalHandler('sizeChart')}
                         >
+                          {/* sizeChart */}
                           <NxtImage
                             isStatic={true}
                             src={'/assets/images/size-chart.jpg'}
@@ -207,7 +242,14 @@ const ProductInfo_Type3: React.FC<_ProductInfoProps> = ({ product }) => {
                 <div className='mt-[15px]'>
                   <div className='flex flex-wrap justify-between items-center'>
                     <div onClick={() => setShowSingleInv(true)}>
-                      <a className='' id='ShowSingleSize'>
+                      <a
+                        className={` ${
+                          storeCode == BACARDI
+                            ? 'text-default hover:text-default cursor-pointer'
+                            : ''
+                        }`}
+                        id='ShowSingleSize'
+                      >
                         Click here to add single size
                       </a>
                     </div>
@@ -239,7 +281,7 @@ const ProductInfo_Type3: React.FC<_ProductInfoProps> = ({ product }) => {
         )}
 
         <div>
-          <div className={`mt-[15px] bg-light-gray  p-[20px]`}>
+          <div className={`mt-[15px] bg-light-gray  p-[10px]`}>
             <div
               className={`${
                 store_Code == _Store.type6 ? 'text-sm' : 'text-default-text'
@@ -263,7 +305,15 @@ const ProductInfo_Type3: React.FC<_ProductInfoProps> = ({ product }) => {
                 </span>
               </div>
             </div>
-            <div className='w-full text-left flex justify-end mt-[20px]'>
+            <div
+            // className={`${
+            //   storeCode == UNITI_CODE ||
+            //   storeCode == UCA ||
+            //   storeCode == SIMPLI_SAFE_CODE
+            //     ? ''
+            //     : 'w-full text-left flex justify-end mt-[20px '
+            // }`}
+            >
               <BuyNowHandler size='k' />
             </div>
           </div>
@@ -272,7 +322,10 @@ const ProductInfo_Type3: React.FC<_ProductInfoProps> = ({ product }) => {
 
       {openModal === 'login' && <LoginModal modalHandler={modalHandler} />}
       {openModal === 'sizeChart' && (
-        <SizeChartModal storeCode={storeCode} modalHandler={modalHandler} />
+        <SizeChartModal
+          storeCode={storeCode || ''}
+          modalHandler={modalHandler}
+        />
       )}
     </>
   );

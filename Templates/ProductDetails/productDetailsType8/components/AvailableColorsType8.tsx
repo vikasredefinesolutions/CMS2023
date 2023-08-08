@@ -1,18 +1,21 @@
-import Image from '@appComponents/reUsable/Image';
+import NxtImage from '@appComponents/reUsable/Image';
 import { __pagesConstant } from '@constants/pages.constant';
 import { __pagesText } from '@constants/pages.text';
-import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
-import { useRouter } from 'next/router';
+import { _ProductColor } from '@definations/APIs/colors.res';
 import React, { useState } from 'react';
 
-const AvailableColorsType8: React.FC = () => {
-  const { setColor } = useActions_v2();
-  const router = useRouter();
-  const selectedColor = useTypedSelector_v2(
-    (state) => state.product.selected.color,
-  );
+interface _Props {
+  selectedColor: _ProductColor;
+  setSelectedColor: (color: _ProductColor) => void;
+  colors: _ProductColor[];
+}
+
+const AvailableColorsType8: React.FC<_Props> = ({
+  selectedColor,
+  setSelectedColor,
+  colors,
+}) => {
   const [showAllColors, setShowAllColors] = useState(false);
-  const colors = useTypedSelector_v2((state) => state.product.product.colors);
 
   if (colors === null) return <></>;
   const colorsCount = colors.length;
@@ -43,13 +46,13 @@ const AvailableColorsType8: React.FC = () => {
                 show === false && 'sr-only'
               } mx-[10px] mb-[10px]`}
               key={product.attributeOptionId}
-              onClick={() => setColor(product)}
+              onClick={() => setSelectedColor(product)}
             >
               <div
                 className={`w-[80px] h-[80px] mx-auto border-2  hover:border-secondary mb-[6px] cursor-pointer ${highlight}`}
               >
-                <Image
-                  title={`${product.name}`}
+                <NxtImage
+                  title={product.name}
                   src={product.imageUrl}
                   alt={product.altTag}
                   className='max-h-full m-auto'

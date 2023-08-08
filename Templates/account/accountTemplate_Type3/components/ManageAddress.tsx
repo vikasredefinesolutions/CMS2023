@@ -195,8 +195,11 @@ const ManageAddress = () => {
                           </div>
                           <div className='border-b last:border-b-0 border-[#d2d2d2] flex flex-wrap px-[20px] py-[10px]'>
                             <div className='w-2/5 text-right'>Address:</div>
-                            <div className='ml-[10px]'>
-                              {address_obj.address1} {address_obj.address2}
+                            <div className='w-3/5 pl-[10px]'>
+                              {address_obj.address1},
+                              {address_obj.address2.trim() !== ''
+                                ? `${address_obj.address2},`
+                                : ''}
                               <br />
                               {address_obj.city},
                               <br />

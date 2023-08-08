@@ -2,9 +2,10 @@ import NxtImage from '@appComponents/reUsable/Image';
 import { THD_STORE_CODE } from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
 import { paths } from '@constants/paths.constant';
-import { Logout } from '@helpers/common.helper';
+import { BacardiLogout, extractCookies } from '@helpers/common.helper';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { __StaticImg } from '../../../../../public/assets/images.asset';
 
@@ -14,12 +15,25 @@ const LoggedInMenu: React.FC = () => {
   const { code: storeCode } = useTypedSelector_v2((state) => state.store);
   const [focus, setFocus] = useState(false);
   const view = useTypedSelector_v2((state) => state.store.view);
+  const router = useRouter();
+  const selectedBacardiStor = extractCookies(
+    'BacardiSelectedStore',
+    'browserCookie',
+  ).BacardiSelectedStore;
+  const { setShowLoader } = useActions_v2();
 
   const logoutHandler = () => {
     setFocus(false);
     logoutClearCart();
     setWishListEmpty([]);
-    Logout(logInUser);
+    BacardiLogout(logInUser);
+    if (selectedBacardiStor?.toLowerCase() == 'bacardi') {
+      router.push(paths.bacardi.bacardi);
+    } else if (selectedBacardiStor?.toLowerCase() == 'greygoose') {
+      router.push(paths.bacardi.greyGoose);
+    } else {
+      router.push(paths.bacardi.bacardi);
+    }
   };
   if (storeCode === THD_STORE_CODE) return null;
 

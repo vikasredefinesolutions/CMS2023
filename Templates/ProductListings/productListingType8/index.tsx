@@ -4,6 +4,7 @@ import { __pagesText } from '@constants/pages.text';
 import React, { Fragment, useEffect, useRef } from 'react';
 // import { GetlAllProductList, _ListingProps } from '../productListing';
 
+import NxtImage from '@appComponents/reUsable/Image';
 import Home from '@templates/Home';
 import { GetlAllProductList, _ListingProps } from '../ProductListingType';
 import FilterChips from './components/FilterChips';
@@ -156,7 +157,8 @@ const ProductListingType8: React.FC<_ListingProps> = ({
                           style={{ opacity: 0 }}
                         >
                           <span className='inline-block w-[20px] h-[20px]'>
-                            <img
+                            <NxtImage
+                              isStatic={true}
                               className='max-h-full'
                               src='/assets/images/load-more-arrow.webp'
                               alt=''
@@ -166,7 +168,8 @@ const ProductListingType8: React.FC<_ListingProps> = ({
                             {__pagesText.productListing.loadMoreButton}
                           </span>
                           <span className='inline-block w-[20px] h-[20px]'>
-                            <img
+                            <NxtImage
+                              isStatic={true}
                               className='max-h-full'
                               src='/assets/images/load-more-arrow.webp'
                               alt=''

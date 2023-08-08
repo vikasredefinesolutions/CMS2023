@@ -1,4 +1,5 @@
 import Price from '@appComponents/Price';
+import { _Store_CODES } from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
 import { _MyAcc_OrderBillingDetails } from '@definations/APIs/user.res';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
@@ -35,7 +36,7 @@ const ThankYouSubTotal: React.FC<_props> = ({ billing }) => {
               </div>
             ) : null}
 
-            {storeCode !== 'DI' && (
+            {(storeCode !== 'DI' && storeCode !== 'PMCG') && (
               <div className='flex justify-between pt-[8px]'>
                 <dt className='font-[600]'>
                   {__pagesText.ThankYouPage.TotalSummary.LinePersonalization}
@@ -45,13 +46,28 @@ const ThankYouSubTotal: React.FC<_props> = ({ billing }) => {
                 </dd>
               </div>
             )}
-            {storeCode !== 'DI' && (
+            {(storeCode !== 'DI' && storeCode !== 'PMCG') && (
               <div className='flex justify-between pt-[8px]'>
                 <dt className='font-[600]'>
                   {__pagesText.ThankYouPage.TotalSummary.LogoCost}
                 </dt>
                 <dd>
                   <Price value={billing?.logoFinalTotal} />
+                </dd>
+              </div>
+            )}
+            {storeCode === _Store_CODES.PKHG && (
+              <div className='flex justify-between pt-[8px]'>
+                <dt className='font-[600]'>
+                  {__pagesText.ThankYouPage.TotalSummary.smallRunningFee}
+                </dt>
+                <dd className=''>
+                  {billing?.orderSmallRunFee &&
+                  billing?.orderSmallRunFee > 0 ? (
+                    <Price value={billing?.orderSmallRunFee} />
+                  ) : (
+                    'FREE'
+                  )}
                 </dd>
               </div>
             )}
@@ -73,7 +89,9 @@ const ThankYouSubTotal: React.FC<_props> = ({ billing }) => {
                 </dd>
               </div>
             )}
-            {storeCode !== 'DI' && (
+            {storeCode !== 'DI' &&
+            billing?.sewoutTotal &&
+            billing?.sewoutTotal > 0 ? (
               <div className='flex justify-between pt-[8px]'>
                 <dt className='font-[600]'>
                   {__pagesText.ThankYouPage.TotalSummary.SewOut}
@@ -82,7 +100,7 @@ const ThankYouSubTotal: React.FC<_props> = ({ billing }) => {
                   <Price value={billing?.sewoutTotal} />
                 </dd>
               </div>
-            )}
+            ) : null}
             {billing?.orderSmallRunFee && billing?.orderSmallRunFee > 0 ? (
               <div className='flex justify-between pt-[8px]'>
                 <dt className='font-[600]'>
@@ -106,7 +124,7 @@ const ThankYouSubTotal: React.FC<_props> = ({ billing }) => {
 
             <div className='flex justify-between border-t mt-[8px] border-gray-border pt-[8px]'>
               <dt className='font-[600] pt-[8px]'>
-                {__pagesText.ThankYouPage.TotalSummary.GrandTotal}
+                {__pagesText.ThankYouPage.TotalSummary.GrandTotalPMCG}
               </dt>
               <dd className='font-[600] pt-[8px]'>
                 <Price value={billing?.orderTotal} />

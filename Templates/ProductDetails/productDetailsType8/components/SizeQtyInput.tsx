@@ -1,57 +1,35 @@
 // import { useTypedSelector_v2 } from 'hooks_v2';
-import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
-interface _props {
-  price?: number;
+interface _SelectedSizeQty {
+  colorAttributeOptionId: number; // colorId,
+  totalQty: number;
   size: string;
+  sizeAttributeOptionId: number;
+  minQty: number;
+  stockAvailable: boolean;
 }
 
-let lastSize_stored: string = '';
+interface _props {
+  selectedSizeQty: _SelectedSizeQty;
+  setSelectedSizeQty: React.Dispatch<React.SetStateAction<_SelectedSizeQty>>;
+}
 
-const SizeQtyInputType8: React.FC<_props> = ({ price, size }) => {
-  const { updateQuantitieSingle } = useActions_v2();
-  const [qty, setQty] = useState<number>(1);
-  const inventory = useTypedSelector_v2(
-    (state) => state.product.product.inventory?.inventory,
-  );
-  const { color } = useTypedSelector_v2((state) => state.product.selected);
-  const current: any = inventory?.filter(
-    (res) =>
-      res.name === size &&
-      res.colorAttributeOptionId === color.attributeOptionId,
-  );
-  const quantityHandler = (enteredQty: number) => {
-    let newQuantity = 0;
+const SizeQtyInputType8: React.FC<_props> = ({
+  selectedSizeQty,
+  setSelectedSizeQty,
+}) => {
+  const [qty, setQty] = useState<number>(0);
 
-    if (enteredQty >= current[0].inventory) {
-      newQuantity = current[0].inventory;
-    } else {
-      newQuantity = enteredQty;
-    }
+  const quantityHandler = (enteredQty: any) => {
+    setQty(enteredQty);
+    if (!enteredQty) return;
 
-    setQty(newQuantity);
-    updateQuantitieSingle({
-      attributeOptionId: current[0].attributeOptionId,
-      size: size,
-      qty: newQuantity,
-      price: price ? price : 0,
-    });
+    setSelectedSizeQty((prev) => ({
+      ...prev,
+      totalQty: +enteredQty,
+    }));
   };
-
-  useEffect(() => {
-    setQty(1);
-    if (!size) return;
-
-    updateQuantitieSingle({
-      attributeOptionId: current[0].attributeOptionId,
-      size: lastSize_stored || size,
-      qty: 1,
-      price: price ? price : 0,
-    });
-    lastSize_stored = size;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [size]);
 
   return (
     <>
@@ -65,15 +43,23 @@ const SizeQtyInputType8: React.FC<_props> = ({ price, size }) => {
               id='QTY'
               value={qty}
               min={1}
-              max={size ? current[0].inventory : 0}
               onKeyDown={(e) => {
                 ['e', 'E', '+', '-', '.'].includes(e.key) && e.preventDefault();
               }}
               onChange={(ev) => {
-                if (size) {
-                  quantityHandler(+ev.target.value);
-                } else {
+                if (!selectedSizeQty.stockAvailable) {
                   alert('select One size');
+                  return;
+                }
+                if (ev.target.value.toString() === '0') {
+                  return quantityHandler(1);
+                }
+
+                quantityHandler(ev.target.value);
+              }}
+              onBlur={(event) => {
+                if (!event.target.value) {
+                  quantityHandler(1);
                 }
               }}
               placeholder=''

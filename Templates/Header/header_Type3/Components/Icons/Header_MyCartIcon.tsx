@@ -1,62 +1,34 @@
 // Husain - Added Static Values for now - 20-3-23
 import { paths } from '@constants/paths.constant';
-import {
-  GetCartTotals,
-  GetCustomerId,
-  useActions_v2,
-  useTypedSelector_v2
-} from 'hooks_v2';
+import { GetCartTotals, useTypedSelector_v2 } from 'hooks_v2';
 // import { useActions_v2, useTypedSelector_v2 } from '@src/hooks';
 import NxtImage from '@appComponents/reUsable/Image';
 import Price from '@appComponents/reUsable/Price';
+import { _Store } from '@configs/page.config';
+import { BOSTONBEAR } from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
-import { fetchThirdpartyservice } from '@services/thirdparty.service';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 
 const MyCartIcon: React.FC = () => {
-  const { fetchCartDetails } = useActions_v2();
   const [totalCartQty, setTotalCartQty] = useState(0);
-
-  const customerId = GetCustomerId();
-
-  const isEmployeeLoggedIn = useTypedSelector_v2(
-    (state) => state.employee.loggedIn,
-  );
   const cartData = useTypedSelector_v2((state) => state.cart.cart);
 
   //
   const { totalPrice, totalQty } = GetCartTotals();
   const [Focus, setFocus] = useState(false);
-  const { id: loggedIn } = useTypedSelector_v2((state) => state.user);
   const thirdPartyLogin = useTypedSelector_v2(
     (state) => state.store.thirdPartyLogin,
   );
-  const router = useRouter();
-  const storeId = useTypedSelector_v2((state) => state.store.id);
-  useEffect(() => {
-    if (customerId) {
-      fetchCartDetails({
-        customerId: customerId,
-        isEmployeeLoggedIn,
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [customerId, isEmployeeLoggedIn]);
+  const { id: storeId, code: storeCode } = useTypedSelector_v2(
+    (state) => state.store,
+  );
 
   useEffect(() => {
     setTotalCartQty(totalQty);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [totalQty]);
-  const SamlloginHandler = () => {
-    fetchThirdpartyservice({ storeId }).then((ThirdpartyServices) => {
-      ThirdpartyServices.map((service) => {
-        if (service.thirdPartyServiceName == 'Okta')
-          router.push(ThirdpartyServices[0].url);
-      });
-    });
-  };
+
   return (
     <div
       onMouseOver={() => setFocus(true)}
@@ -64,20 +36,29 @@ const MyCartIcon: React.FC = () => {
       className='flow-root relative pl-[15px]'
       x-data='{ open: false }'
     >
-        <Link href={paths.CART}>
-          <a className='text-primary hover:text-secondary group flex items-center relative pt-[8px] pb-[8px]'>
-            {/* <span className='inline-flex items-center justify-center w-[30px] h-[30px]'> */}
-            {/*  img link  */}
+      <Link
+        href={
+          totalCartQty == 0 && storeCode == BOSTONBEAR
+            ? 'javascript:void(0)'
+            : paths.CART
+        }
+      >
+        <a className='text-primary hover:text-secondary group flex items-center relative pt-[8px] pb-[8px]'>
+          {/* <span className='inline-flex items-center justify-center w-[30px] h-[30px]'> */}
+          {/*  img link  */}
+          {storeCode == _Store.type6 ? (
+            <i className='fa-solid fa-cart-shopping text-[22px]'></i>
+          ) : (
             <span className='material-icons'>
-              {' '}
               {__pagesText.Headers.shoppingCartIcon}
             </span>
-            {/* </span>{' '} */}
-            <span className='absolute right-[-7px] top-[-4px] rounded-full flex items-center justify-center bg-[#dddddd] text-[9px] text-[#000000] pl-[6px] pr-[4px] pt-[2px] pb-[2px]'>
-              {totalCartQty}
-            </span>
-          </a>
-        </Link>
+          )}
+          {/* </span>{' '} */}
+          <span className='absolute right-[-7px] top-[-4px] rounded-full flex items-center justify-center bg-[#dddddd] text-[9px] text-[#000000] pl-[6px] pr-[4px] pt-[2px] pb-[2px]'>
+            {totalCartQty}
+          </span>
+        </a>
+      </Link>
       {Focus && totalCartQty > 0 && (
         <div className='absolute top-full right-0 w-80 text-sm shadow-[0_0px_5px_rgb(0,0,0,0.5)] border border-[#f4ede6] tracking-[1px]'>
           <div
@@ -142,17 +123,7 @@ const MyCartIcon: React.FC = () => {
                   {__pagesText.Headers.total} <Price value={totalPrice} />
                 </div>
               </div>
-              {thirdPartyLogin && !loggedIn ? (
-                <div className=''>
-                  <button
-                    className='btn btn-secondary w-full text-center'
-                    onClick={SamlloginHandler}
-                    type='button'
-                  >
-                    {__pagesText.Headers.samllogin}
-                  </button>
-                </div>
-              ) : (
+              {
                 <div className=''>
                   <Link href={paths.CART} className=''>
                     <a className='btn btn-secondary w-full text-center'>
@@ -160,7 +131,7 @@ const MyCartIcon: React.FC = () => {
                     </a>
                   </Link>
                 </div>
-              )}
+              }
             </div>
           </div>
         </div>

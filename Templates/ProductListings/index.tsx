@@ -1,12 +1,5 @@
-import ProductListController from '@controllers/productListController';
-import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 
-import { __pagesText } from '@constants/pages.text';
-import {
-  GoogleAnalyticsTrackerForAllStore,
-  GoogleAnalyticsTrackerForCG,
-} from '@helpers/common.helper';
 import {
   _ProductListingProps,
   _ProductListingTemplates,
@@ -33,101 +26,102 @@ const productListingTemplates: _ProductListingTemplates = {
 const ProductListing: React.FC<_ProductListingProps & { id: string }> = ({
   id,
   pageData,
-  seType,
+  // seType,
   CMS,
-  slug,
+  // slug,
 }) => {
-  const isCaptured = useRef(false);
-  const { updateBrandId } = useActions_v2();
+  // const isCaptured = useRef(false);
+  // const { updateBrandId } = useActions_v2();
 
-  useEffect(() => {
-    updateBrandId({ brandId: pageData?.brandId });
-  }, [pageData]);
-  const { checkedFilters } = pageData;
-  const {
-    filters,
-    product,
-    totalCount,
-    productView,
-    showFilter,
-    showSortMenu,
-    skuList,
-    compareCheckBoxHandler,
-    handleChange,
-    colorChangeHandler,
-    loadMore,
-    sortProductJson,
-    setShowSortMenu,
-    setProductView,
-    setShowFilter,
-    clearFilters,
-    sorting,
-    clearFilterSection,
-  } = ProductListController(pageData, slug, checkedFilters, pageData?.brandId);
-  const { id: storeId } = useTypedSelector_v2((state) => state.store);
+  // useEffect(() => {
+  //   updateBrandId({ brandId: CMS.pageId });
+  // }, [pageData]);
+  // const { checkedFilters } = pageData;
+  // const {
+  //   filters,
+  //   product,
+  //   totalCount,
+  //   productView,
+  //   showFilter,
+  //   showSortMenu,
+  //   skuList,
+  //   compareCheckBoxHandler,
+  //   handleChange,
+  //   colorChangeHandler,
+  //   loadMore,
+  //   sortProductJson,
+  //   setShowSortMenu,
+  //   setProductView,
+  //   setShowFilter,
+  //   clearFilters,
+  //   sorting,
+  //   clearFilterSection,
+  // } = ProductListController(pageData, slug, checkedFilters, pageData?.brandId);
+  // const { id: storeId } = useTypedSelector_v2((state) => state.store);
 
-  useEffect(() => {
-    if (pageData?.googleTagManagerResponseCommonData && !isCaptured.current) {
-      isCaptured.current = true;
-      GoogleAnalyticsTrackerForCG(
-        '',
-        storeId,
-        pageData.googleTagManagerResponseCommonData,
-      );
-      GoogleAnalyticsTrackerForAllStore(
-        '',
-        storeId,
-        pageData.googleTagManagerResponseCommonData,
-      );
-    }
-  }, [pageData?.googleTagManagerResponseCommonData]);
+  // useEffect(() => {
+  //   if (pageData?.googleTagManagerResponseCommonData && !isCaptured.current) {
+  //     isCaptured.current = true;
+  //     GoogleAnalyticsTrackerForCG(
+  //       '',
+  //       storeId,
+  //       pageData.googleTagManagerResponseCommonData,
+  //     );
+  //     GoogleAnalyticsTrackerForAllStore(
+  //       '',
+  //       storeId,
+  //       pageData.googleTagManagerResponseCommonData,
+  //     );
+  //   }
+  // }, [pageData?.googleTagManagerResponseCommonData]);
 
-  const Component =
-    productListingTemplates[
-      (`type${id}` as 'type1') || 'type2' || 'type3' || 'type4' || 'type6'
-    ];
+  // const Component =
+  //   productListingTemplates[
+  //     (`type${id}` as 'type1') || 'type2' || 'type3' || 'type4' || 'type6'
+  //   ];
 
-  if (product.length === 0 && !pageData.product.length) {
-    return (
-      <section id=''>
-        <div className='bg-[#ffffff]'>
-          <div className='h-80 flex items-center justify-center'>
-            <div className='text-2xl-text'>
-              {__pagesText.productListing.noProductsFound}
-            </div>
-          </div>
-        </div>
-      </section>
-    );
-  }
+  // if (product.length === 0 && !pageData.product.length) {
+  //   return (
+  //     <section id=''>
+  //       <div className='bg-[#ffffff]'>
+  //         <div className='h-80 flex items-center justify-center'>
+  //           <div className='text-2xl-text'>
+  //             {__pagesText.productListing.noProductsFound}
+  //           </div>
+  //         </div>
+  //       </div>
+  //     </section>
+  //   );
+  // }
 
-  return (
-    <Component
-      showSortMenu={showSortMenu}
-      filters={filters}
-      products={product}
-      checkedFilters={checkedFilters}
-      totalCount={totalCount}
-      productView={productView}
-      showFilter={showFilter}
-      skuList={skuList}
-      colorChangeHandler={colorChangeHandler}
-      handleChange={handleChange}
-      loadMore={loadMore}
-      sortProductJson={sortProductJson}
-      setShowSortMenu={setShowSortMenu}
-      setProductView={setProductView}
-      setShowFilter={setShowFilter}
-      clearFilters={clearFilters}
-      compareCheckBoxHandler={compareCheckBoxHandler}
-      slug={slug}
-      seType={seType}
-      brandId={pageData?.brandId}
-      sortingType={sorting}
-      clearFilterSection={clearFilterSection}
-      CMS={CMS}
-    />
-  );
+  // return (
+  //   <Component
+  //     showSortMenu={showSortMenu}
+  //     filters={filters}
+  //     products={product}
+  //     checkedFilters={checkedFilters}
+  //     totalCount={totalCount}
+  //     productView={productView}
+  //     showFilter={showFilter}
+  //     skuList={skuList}
+  //     colorChangeHandler={colorChangeHandler}
+  //     handleChange={handleChange}
+  //     loadMore={loadMore}
+  //     sortProductJson={sortProductJson}
+  //     setShowSortMenu={setShowSortMenu}
+  //     setProductView={setProductView}
+  //     setShowFilter={setShowFilter}
+  //     clearFilters={clearFilters}
+  //     compareCheckBoxHandler={compareCheckBoxHandler}
+  //     slug={slug}
+  //     seType={seType}
+  //     brandId={pageData?.brandId}
+  //     sortingType={sorting}
+  //     clearFilterSection={clearFilterSection}
+  //     CMS={CMS}
+  //   />
+  // );
+  return <></>;
 };
 
 export default ProductListing;

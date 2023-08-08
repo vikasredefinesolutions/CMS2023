@@ -51,8 +51,16 @@ const ThankYouProduct: React.FC<_props> = ({ product }) => {
                 <img
                   alt='products'
                   sizes='100vw'
-                  srcSet={mediaBaseUrl + product.colorImage}
-                  src={mediaBaseUrl + product.colorImage}
+                  srcSet={
+                    !product.colorImage
+                      ? '/assets/images/image_not_available.jpg'
+                      : mediaBaseUrl + product.colorImage
+                  }
+                  src={
+                    !product.colorImage
+                      ? '/assets/images/image_not_available.jpg'
+                      : mediaBaseUrl + product.colorImage
+                  }
                   decoding='async'
                   data-nimg='responsive'
                   style={{

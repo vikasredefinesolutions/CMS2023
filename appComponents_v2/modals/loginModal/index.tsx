@@ -4,10 +4,16 @@ import { _Store } from '@configs/page.config';
 import { _STORE_EMAIL, __Login } from '@constants/common.constant';
 import { __length, __messages } from '@constants/form.config';
 import {
+  BACARDI,
+  HEALTHYPOINTS,
+  SIMPLI_SAFE_CODE,
+  UCA,
+  _Store_CODES,
   __Cookie,
   __Cookie_Expiry,
   __LocalStorage,
 } from '@constants/global.constant';
+import { thirdPartyLoginService } from '@constants/pages.constant';
 import { __pagesText } from '@constants/pages.text';
 import { fetchCartDetails } from '@redux/asyncActions/cart.async';
 import { updateCartByNewUserId } from '@services/cart.service';
@@ -16,6 +22,7 @@ import { getCustomerAllowBalance } from '@services/payment.service';
 import { fetchThirdpartyservice } from '@services/thirdparty.service';
 import { GetStoreCustomer, signInUser } from '@services/user.service';
 import { getWishlist } from '@services/wishlist.service';
+import SignUp_type6 from '@templates/SignUp/SignUP_Type6';
 import SignUp_type5 from '@templates/SignUp/SignUp_Type5';
 import { paths } from 'constants_v2/paths.constant';
 import { Form, Formik, FormikValues } from 'formik';
@@ -23,12 +30,13 @@ import {
   KlaviyoScriptTag,
   deleteCookie,
   extractCookies,
+  handleTabKey,
   setCookie,
 } from 'helpers_v2/common.helper';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import * as Yup from 'yup';
 import Input from '../../ui/switch/Input';
 import { _ModalProps } from '../modal';
@@ -43,13 +51,18 @@ const validationSchema = Yup.object().shape({
   password: Yup.string().required(__messages.password.required).nullable(),
 });
 
+const selectedBacardiStor = extractCookies(
+  'BacardiSelectedStore',
+  'browserCookie',
+).BacardiSelectedStore;
+
 const empGuestvalidationSchema = Yup.object().shape({
   userName: Yup.string()
     .email(__messages.email.validRequest)
     .required(__messages.email.required),
 });
 
-const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
+const LoginModal: React.FC<_ModalProps> = ({ modalHandler, closeHandler }) => {
   const router = useRouter();
   const {
     logInUser,
@@ -74,8 +87,28 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
   const { empId } = useTypedSelector_v2((state) => state.employee);
 
   const [showSection, setShowSection] = useState<
-    'Login' | 'Register' | 'Submit' | 'Success'
+    'Login' | 'Register' | 'Submit' | 'Success' | 'UCA Register' | 'BACARDI'
   >('Login');
+
+  const modalRef = useRef<HTMLDivElement>(null);
+  const closeBtnRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    // Add event listener to handle tab key press
+    document.addEventListener('keydown', (e) => handleTabKey(e, modalRef));
+    if (modalRef.current) {
+      modalRef.current.addEventListener(
+        'keydown',
+        (e) => e.key === 'Escape' && modalHandler(null),
+      );
+    }
+    if (closeBtnRef.current) closeBtnRef.current.focus();
+
+    // Remove event listener on component unmount
+    return () => {
+      document.removeEventListener('keydown', (e) => handleTabKey(e, modalRef));
+    };
+  }, []);
 
   const signInHandler = (enteredInputs: {
     userName: string;
@@ -100,61 +133,72 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
             id: +user.id,
           });
           setCookie(__Cookie.userId, user.id, __Cookie_Expiry.userId);
-          if (storeCode !== 'PKHG') {
-            GetStoreCustomer(+user.id).then((res) => {
-              if (res === null) return;
-              if (localStorage) {
-                const tempCustomerId = extractCookies(
-                  __Cookie.tempCustomerId,
-                  'browserCookie',
-                ).tempCustomerId;
 
-                if (tempCustomerId) {
+          GetStoreCustomer(+user.id).then((res) => {
+            if (res === null) return;
+            if (localStorage) {
+              const tempCustomerId = extractCookies(
+                __Cookie.tempCustomerId,
+                'browserCookie',
+              ).tempCustomerId;
+
+              if (tempCustomerId) {
+                if (storeCode !== 'PKHG') {
                   updateCartByNewUserId(~~tempCustomerId, res.id);
-                  fetchCartDetails({
-                    customerId: res.id,
-                    isEmployeeLoggedIn: false,
-                  });
-                  if (router.pathname === paths.CART) {
-                    router.reload();
-                  }
-
-                  deleteCookie(__Cookie.tempCustomerId);
                 }
+                fetchCartDetails({
+                  customerId: res.id,
+                  isEmployeeLoggedIn: false,
+                });
+                if (router.pathname === paths.CART) {
+                  router.reload();
+                }
+
+                deleteCookie(__Cookie.tempCustomerId);
               }
+            }
 
-              const userInfo = {
-                $email: res.email,
-                $first_name: res.firstname,
-                $last_name: res.lastName,
-                $phone_number: '',
-                $organization: res.companyName,
-                $title: 'title',
-                $timestamp: new Date(),
-              };
+            const userInfo = {
+              $email: res.email,
+              $first_name: res.firstname,
+              $last_name: res.lastName,
+              $phone_number: '',
+              $organization: res.companyName,
+              $title: 'title',
+              $timestamp: new Date(),
+            };
 
-              KlaviyoScriptTag(['identify', userInfo]);
-              updateCustomer({ customer: res });
-              getWishlist(res.id).then((wishListResponse) => {
-                updateWishListData(wishListResponse);
-              });
-              if (res.id) {
-                getCustomerAllowBalance(res.id)
-                  .then((response) => {
-                    if (response && typeof response === 'number') {
-                      customerCreditBalanceUpdate(response);
-                      customerUseCreditBalance(true);
-                    }
-                  })
-                  .finally(() => {
-                    if (redirectPath) {
-                      setRedirectPagePath('');
+            KlaviyoScriptTag(['identify', userInfo]);
+            updateCustomer({ customer: res });
+            getWishlist(res.id).then((wishListResponse) => {
+              updateWishListData(wishListResponse);
+            });
+            if (res.id) {
+              getCustomerAllowBalance(res.id)
+                .then((response) => {
+                  if (response && typeof response === 'number') {
+                    customerCreditBalanceUpdate(response);
+                    customerUseCreditBalance(true);
+                  }
+                })
+                .finally(() => {
+                  if (redirectPath) {
+                    setRedirectPagePath('');
+                    if (storeCode == BACARDI) {
+                      if (selectedBacardiStor?.toLowerCase() == 'bacardi') {
+                        router.push(paths.bacardi.bacardi);
+                      } else if (
+                        selectedBacardiStor?.toLowerCase() == 'greygoose'
+                      ) {
+                        router.push(paths.bacardi.greyGoose);
+                      }
+                    } else {
                       router.push(redirectPath);
                     }
-                  });
-              }
-            });
-          }
+                  }
+                });
+            }
+          });
         }
       })
       .finally(() => {
@@ -166,8 +210,24 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
   const SamlloginHandler = () => {
     fetchThirdpartyservice({ storeId }).then((ThirdpartyServices) => {
       ThirdpartyServices.map((service) => {
-        if (service.thirdPartyServiceName == 'Okta')
-          router.push(ThirdpartyServices[0].url);
+        if (
+          service.thirdPartyServiceName.toLocaleLowerCase() ==
+          thirdPartyLoginService.oktaLogin.toLocaleLowerCase()
+        ) {
+          localStorage.setItem(
+            __LocalStorage.thirdPartyServiceName,
+            service.thirdPartyServiceName,
+          );
+          return router.push(service.url);
+        } else if (
+          service.thirdPartyServiceName.toLocaleLowerCase() ==
+          thirdPartyLoginService.samlLogin.toLocaleLowerCase()
+        ) {
+          const jsonDate = new Date().toJSON();
+          const datejson = jsonDate.split('.')[0] + 'Z';
+          // console.log(datejson, 'datejson', jsonDate);
+          return router.push(service.url + encodeURIComponent(datejson));
+        }
       });
     });
   };
@@ -236,7 +296,7 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
     domain: _STORE_EMAIL | undefined,
   ) => {
     if (!domain) return;
-    const result = new RegExp("^\\w+([-+.']w+)*@" + domain + '.com$').test(
+    const result = new RegExp(`[a-zA-Z0-9._%+-]+@` + domain + `\.com$`).test(
       email.trim(),
     );
     if (!result) {
@@ -248,6 +308,10 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
   return (
     <>
       <div
+        ref={modalRef}
+        role='dialog'
+        tabIndex={-1}
+        aria-modal='true'
         id='LoginModal'
         className=' overflow-y-auto overflow-x-hidden fixed z-50 justify-center items-center h-modal inset-0 text-default-text'
       >
@@ -256,12 +320,17 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
             <div className='relative bg-[#ffffff] shadow max-h-screen overflow-y-auto h-full rounded-md'>
               <div className='flex justify-between items-center p-[15px] rounded-t border-b sticky top-0 left-0 bg-[#ffffff] z-50'>
                 <div className='font-[600] text-medium-text'>
-                  {__pagesText.productInfo.loginModal.signIn}
+                  {showSection == 'Login'
+                    ? __pagesText.productInfo.loginModal.signIn
+                    : __pagesText.productInfo.loginModal.signUp}
                 </div>
                 <button
+                  ref={closeBtnRef}
                   type='button'
                   className='text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-[14px] p-[6px] ml-auto inline-flex items-center'
-                  onClick={() => modalHandler(null)}
+                  onClick={() =>
+                    closeHandler ? closeHandler() : modalHandler(null)
+                  }
                 >
                   <svg
                     className='w-[24px] h-[24px]'
@@ -291,6 +360,10 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
                           }}
                         />
                       </>
+                    ) : storeCode === _Store_CODES.USAAHEALTHYPOINTS ? (
+                      <p className='text-title-text uppercase'>
+                        {__pagesText.productInfo.loginModal.signIn}
+                      </p>
                     ) : (
                       <>{__pagesText.productInfo.loginModal.signIn}</>
                     )}
@@ -303,7 +376,7 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
                       onSubmit={empGuestSignInHandler}
                       validationSchema={empGuestvalidationSchema}
                     >
-                      {({ values, handleChange }) => {
+                      {({ values, handleChange, errors }) => {
                         return (
                           <>
                             <Form>
@@ -325,6 +398,7 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
                                   onChange={handleChange}
                                   type={'email'}
                                   required={true}
+                                  error={errors}
                                 />
 
                                 <div className='mb-[20px]'>
@@ -382,16 +456,26 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
                       onSubmit={signInHandler}
                       validationSchema={validationSchema}
                     >
-                      {({ values, handleChange, handleSubmit }) => {
+                      {({
+                        values,
+                        handleChange,
+                        validateForm,
+                        setTouched,
+                        errors,
+                        handleBlur,
+                      }) => {
                         return (
                           <>
                             <Form>
-                              {showErroMsg && (
-                                <span className='mb-1 text-rose-500'>
-                                  {showErroMsg}
-                                </span>
-                              )}
                               <div className='Login-Main'>
+                                <div className='w-full md:w-2/6'>
+                                  <label
+                                    className='text-default-text font-[600] w-full md:w-full md:text-left'
+                                    htmlFor='email-address-login'
+                                  >
+                                    Email:*
+                                  </label>
+                                </div>
                                 <Input
                                   label={''}
                                   id='email-address-login'
@@ -409,14 +493,27 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
                                   }}
                                   type={'email'}
                                   required={false}
-                                  onBlur={(e) =>
+                                  onBlur={(e) => {
+                                    handleBlur(e);
                                     checkCustomEmail(
                                       e.target.value,
                                       (_STORE_EMAIL as any)[storeCode],
-                                    )
-                                  }
+                                    );
+                                  }}
+                                  validateForm={validateForm}
+                                  setTouched={setTouched}
+                                  error={errors}
+                                  showErroMsg={showErroMsg}
                                 />
 
+                                <div className='w-full md:w-2/6'>
+                                  <label
+                                    className='text-default-text font-[600] w-full md:w-full md:text-left'
+                                    htmlFor='email-address-login'
+                                  >
+                                    Password:*
+                                  </label>
+                                </div>
                                 <Input
                                   label={''}
                                   placeHolder={
@@ -432,8 +529,10 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
                                     }
                                     handleChange(ev);
                                   }}
+                                  onBlur={handleBlur}
                                   type={'password'}
                                   required={false}
+                                  error={errors}
                                 />
 
                                 <div className='mb-[20px]'>
@@ -475,7 +574,7 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
                                   <div className='mb-[10px]'>
                                     <button
                                       onClick={() => modalHandler('forgot')}
-                                      className='text-anchor'
+                                      className='text-anchor hover:text-anchor'
                                     >
                                       {
                                         __pagesText.productInfo.loginModal
@@ -504,6 +603,15 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
                                     onClick={() => {
                                       if (storeCode == _Store.type3) {
                                         setShowSection('Register');
+                                      } else if (
+                                        storeCode == UCA ||
+                                        storeCode == SIMPLI_SAFE_CODE ||
+                                        storeCode ===
+                                          _Store_CODES.USAAHEALTHYPOINTS
+                                      ) {
+                                        setShowSection('UCA Register');
+                                      } else if (storeCode == BACARDI) {
+                                        setShowSection('BACARDI');
                                       } else {
                                         modalHandler(null);
                                         router.push(paths.SIGN_UP);
@@ -553,7 +661,9 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
 
                                 {(storeCode === 'PKHG' ||
                                   storeCode === 'DI' ||
-                                  storeCode === 'CG') && (
+                                  storeCode === 'CG' ||
+                                  storeCode === SIMPLI_SAFE_CODE ||
+                                  storeCode === UCA) && (
                                   <div className='mt-[10px] text-extra-small-text text-center'>
                                     {
                                       __pagesText.productInfo.loginModal
@@ -567,7 +677,7 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
                                       }`}
                                     >
                                       <a
-                                        className='text-anchor'
+                                        className='secondary-link hover:secondary-link'
                                         onClick={() => modalHandler(null)}
                                       >
                                         {
@@ -579,7 +689,7 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
                                     {__pagesText.productInfo.loginModal.and}{' '}
                                     <a
                                       href={paths?.PRIVACY_POLICY}
-                                      className='text-anchor'
+                                      className='secondary-link hover:secondary-link'
                                     >
                                       {
                                         __pagesText.productInfo.loginModal
@@ -595,6 +705,28 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
                       }}
                     </Formik>
                   )}
+                  {storeCode === _Store_CODES.USAAHEALTHYPOINTS && (
+                    <div className='text-center'>
+                      <small>
+                        By Clicking "SHOP NOW", you agree to our{' '}
+                        <a
+                          href={paths.termsAndConditions}
+                          title=''
+                          className='text-red-600 '
+                        >
+                          Terms of use
+                        </a>{' '}
+                        and{' '}
+                        <a
+                          href={paths.privacyPolicy}
+                          title=''
+                          className='text-red-600'
+                        >
+                          Privacy policy.
+                        </a>
+                      </small>
+                    </div>
+                  )}
                 </div>
               )}
 
@@ -602,6 +734,16 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
               {(showSection === 'Register' || showSection === 'Submit') && (
                 <div className='pt-[15px] pb-[15px]'>
                   <SignUp_type5
+                    setShowSection={setShowSection}
+                    showSection={showSection}
+                    modalHandler={modalHandler}
+                  />
+                </div>
+              )}
+              {(showSection === 'UCA Register' ||
+                showSection === 'BACARDI') && (
+                <div className='pt-[15px] pb-[15px]'>
+                  <SignUp_type6
                     setShowSection={setShowSection}
                     showSection={showSection}
                     modalHandler={modalHandler}

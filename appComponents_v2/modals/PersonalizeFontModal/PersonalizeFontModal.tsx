@@ -28,10 +28,7 @@ const PersonalizeFontModal: React.FC<_SizeChartModalProps> = ({
         setShowLoader(false);
       });
   }, []);
-  const clientSideMediaBaseUrl = useTypedSelector_v2(
-    (state) => state.store.mediaBaseUrl,
-  );
-  // console.log(clientSideMediaBaseUrl);
+
   return (
     <div
       id='PersonalizeFontsModal'

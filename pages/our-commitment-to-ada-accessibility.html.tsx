@@ -1,4 +1,5 @@
 import RequestConsultationForm from '@appComponents/AdaAccessiblityRequestConsultation/RequestConsultationForm';
+import NxtImage from '@appComponents/reUsable/Image';
 import { __pagesText } from '@constants/pages.text';
 
 const AdaAccessibility = () => {
@@ -10,7 +11,13 @@ const AdaAccessibility = () => {
             <div className='w-full lg:w-8/12 px-[15px] mb-[30px]'>
               <div className='bg-light-gray md:p-[78px] p-[15px] h-full'>
                 <div className='md:mb-[70px] mb-[24px]'>
-                  <img src='/ada.webp' />
+                  <NxtImage
+                    isStatic={true}
+                    useNextImage={false}
+                    alt={''}
+                    src='/ada.webp'
+                    className=''
+                  />
                 </div>
                 <div className='text-[24px] sm:text-[32px] lg:text-[45px] font-semibold mb-[18px] leading-[22px] sm:leading-[35px] lg:leading-[50px] tracking-[1px]'>
                   {__pagesText.adaCorporateGear.header}

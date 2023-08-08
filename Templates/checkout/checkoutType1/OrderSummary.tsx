@@ -95,7 +95,7 @@ const OrderSummaryType1: FC<_props> = ({ selectedShippingModel }) => {
       return (
         <div className='border-t border-gray-200 flex items-center justify-between pt-[10px] pb-[10px]'>
           <dt className='text-normal-text flex items-center tracking-normal pb-[10px]'>
-            <span>Shipping</span>
+            <span>Shipping:</span>
           </dt>
           <dd className='text-normal-text tracking-normal'>
             <div className='form-group m-b-10 pl-[15px] relative max-w-[100px]'>
@@ -151,7 +151,7 @@ const OrderSummaryType1: FC<_props> = ({ selectedShippingModel }) => {
     return (
       <div className='border-t border-gray-200 flex items-center justify-between pt-[10px] pb-[10px]'>
         <dt className='text-normal-text flex items-center'>
-          <span>Shipping</span>
+          <span>Shipping:</span>
         </dt>
         <dd className='text-normal-text'>
           {userShippingPrice === 0 ? (
@@ -202,7 +202,7 @@ const OrderSummaryType1: FC<_props> = ({ selectedShippingModel }) => {
       </div>
       <div className='px-[15px] py-[15px]'>
         <dl className=''>
-          <div className='font-[600] text-medium-text'>Products Price</div>
+          <div className='font-[600] text-medium-text hidden'>Products Price</div>
           <div className='flex items-center justify-between pt-[15px] pb-[20px]'>
             <dt className='text-normal-text'>Subtotal:</dt>
             <dd className='text-normal-text'>

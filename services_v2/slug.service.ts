@@ -25,7 +25,7 @@ export const FetchPageType = async (Req: {
       data: Req,
     },
   });
-
+console.log("REQ", Req)
   if (response === null) {
     return null;
   }

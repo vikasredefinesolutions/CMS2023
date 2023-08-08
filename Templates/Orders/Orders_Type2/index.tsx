@@ -137,9 +137,13 @@ const Orders_Type2: React.FC = () => {
     return pageNumbers;
   };
 
-  const handleOrder = (action: 'orderDate' | 'orderNumber' | 'orderStatus') => {
+  const handleOrder = (
+    action: 'orderDate' | 'orderNumber' | 'orderStatus',
+    type?: 'asc' | 'desc',
+  ) => {
     const itemOrd = action;
-    const itemAscDesc = itemsOrder?.order === action ? 'desc' : 'asc';
+    // const itemAscDesc = itemsOrder?.order === action ? 'desc' : 'asc';
+    const itemAscDesc = type === 'asc' ? 'asc' : 'desc';
 
     if (orderDetails.length > 0) {
     }
@@ -154,7 +158,7 @@ const Orders_Type2: React.FC = () => {
         //   return 1;
         // });
         return orders.sort((orderA, orderB) => {
-          if (sortAsc === 'asc') {
+          if (type === 'asc') {
             if (moment(orderA!.orderDate) > moment(orderB!.orderDate)) {
               return 1;
             } else if (moment(orderB!.orderDate) > moment(orderA!.orderDate)) {
@@ -162,7 +166,7 @@ const Orders_Type2: React.FC = () => {
             } else {
               return 0;
             }
-          } else if (sortAsc === 'desc') {
+          } else if (type === 'desc') {
             if (moment(orderA!.orderDate) < moment(orderB!.orderDate)) {
               return 1;
             } else if (moment(orderB!.orderDate) < moment(orderA!.orderDate)) {
@@ -178,7 +182,7 @@ const Orders_Type2: React.FC = () => {
 
       if (itemOrd === 'orderNumber') {
         return orders.sort((orderA, orderB) => {
-          if (sortAsc === 'asc') {
+          if (type === 'asc') {
             if (orderA!.orderNumber > orderB!.orderNumber) {
               return 1;
             } else if (orderB!.orderNumber > orderA!.orderNumber) {
@@ -186,7 +190,7 @@ const Orders_Type2: React.FC = () => {
             } else {
               return 0;
             }
-          } else if (sortAsc === 'desc') {
+          } else if (type === 'desc') {
             if (orderA!.orderNumber < orderB!.orderNumber) {
               return 1;
             } else if (orderB!.orderNumber < orderA!.orderNumber) {
@@ -201,7 +205,7 @@ const Orders_Type2: React.FC = () => {
       }
       if (itemOrd === 'orderStatus') {
         return orders.sort((orderA, orderB) => {
-          if (sortAsc === 'asc') {
+          if (type === 'asc') {
             if (orderA!.orderStatus > orderB!.orderStatus) {
               return 1;
             } else if (orderB!.orderStatus > orderA!.orderStatus) {
@@ -209,7 +213,7 @@ const Orders_Type2: React.FC = () => {
             } else {
               return 0;
             }
-          } else if (sortAsc === 'desc') {
+          } else if (type === 'desc') {
             if (orderA!.orderStatus < orderB!.orderStatus) {
               return 1;
             } else if (orderB!.orderStatus < orderA!.orderStatus) {
@@ -335,7 +339,7 @@ const Orders_Type2: React.FC = () => {
                   <tr>
                     <th
                       className='p-[10px] border-r last:border-r-0 border-gray-border'
-                      onClick={() => handleOrder('orderDate')}
+                      // onClick={() => handleOrder('orderDate')}
                     >
                       <div className='font-semibold text-left w-48 flex items-center'>
                         <span>Order Date</span>
@@ -345,20 +349,20 @@ const Orders_Type2: React.FC = () => {
                               itemsOrder?.order === 'orderDate' &&
                               itemsOrder?.ascDesc !== 'asc'
                                 ? 'visible'
-                                : 'invisible'
+                                : 'visible'
                             }`}
-                            onClick={() => setSortAsc('asc')}
+                            onClick={() => handleOrder('orderDate', 'asc')}
                           >
                             keyboard_arrow_up
                           </span>
                           <span
                             className={`material-icons-outlined text-sm h-2 leading-[10px] cursor-pointer ${
                               itemsOrder?.order === 'orderDate' &&
-                              itemsOrder?.ascDesc !== 'asc'
+                              itemsOrder?.ascDesc !== 'desc'
                                 ? 'visible'
-                                : 'invisible'
+                                : 'visible'
                             }`}
-                            onClick={() => setSortAsc('desc')}
+                            onClick={() => handleOrder('orderDate', 'desc')}
                           >
                             keyboard_arrow_down
                           </span>
@@ -367,7 +371,7 @@ const Orders_Type2: React.FC = () => {
                     </th>
                     <th
                       className='p-[10px] border-r last:border-r-0 border-gray-border'
-                      onClick={() => handleOrder('orderNumber')}
+                      // onClick={() => handleOrder('orderNumber')}
                     >
                       <div className='font-semibold text-left w-48 flex items-center'>
                         <span>Order #</span>
@@ -377,10 +381,10 @@ const Orders_Type2: React.FC = () => {
                               itemsOrder?.order === 'orderNumber' &&
                               itemsOrder?.ascDesc !== 'asc'
                                 ? 'visible'
-                                : 'invisible'
+                                : 'visible'
                             }`}
                             onClick={(e) => {
-                              setSortAsc('asc');
+                              handleOrder('orderNumber', 'asc');
                             }}
                           >
                             keyboard_arrow_up
@@ -389,12 +393,13 @@ const Orders_Type2: React.FC = () => {
                           <span
                             className={`material-icons-outlined text-sm h-2 cursor-pointer leading-[10px] ${
                               itemsOrder?.order === 'orderNumber' &&
-                              itemsOrder?.ascDesc !== 'asc'
+                              itemsOrder?.ascDesc !== 'desc'
                                 ? 'visible'
-                                : 'invisible'
+                                : 'visible'
                             }`}
                             onClick={(e) => {
-                              setSortAsc('desc');
+                              // setSortAsc('desc');
+                              handleOrder('orderNumber', 'desc');
                             }}
                           >
                             keyboard_arrow_down
@@ -404,7 +409,7 @@ const Orders_Type2: React.FC = () => {
                     </th>
                     <th
                       className='p-[10px] border-r last:border-r-0 border-gray-border'
-                      onClick={() => handleOrder('orderStatus')}
+                      // onClick={() => handleOrder('orderStatus')}
                     >
                       <div className='font-semibold text-left w-48 flex items-center'>
                         <span>Order Status</span>
@@ -414,18 +419,20 @@ const Orders_Type2: React.FC = () => {
                               itemsOrder?.order === 'orderStatus' &&
                               itemsOrder?.ascDesc !== 'asc'
                                 ? 'visible'
-                                : 'invisible'
+                                : 'visible'
                             }`}
+                            onClick={() => handleOrder('orderStatus', 'asc')}
                           >
                             keyboard_arrow_up
                           </span>
                           <span
                             className={`material-icons-outlined text-sm h-2 cursor-pointer leading-[10px] ${
                               itemsOrder?.order === 'orderStatus' &&
-                              itemsOrder?.ascDesc !== 'asc'
+                              itemsOrder?.ascDesc !== 'desc'
                                 ? 'visible'
-                                : 'invisible'
+                                : 'visible'
                             }`}
+                            onClick={() => handleOrder('orderStatus', 'desc')}
                           >
                             keyboard_arrow_down
                           </span>

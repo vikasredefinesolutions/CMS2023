@@ -36,7 +36,7 @@ const MenuItems: React.FC<_props> = ({
   if (screen === 'MOBILE') {
     return (
       <div
-        className='fixed z-[100] lg:hidden inset-0 bg-[#000000] bg-opacity-50 '
+        className='fixed z-[100] inset-0 bg-[#000000] bg-opacity-50 '
         id='mobile_menu_box'
       >
         <Backdrop setOpenTab={setOpenTab} />

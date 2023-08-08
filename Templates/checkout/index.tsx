@@ -25,6 +25,7 @@ interface _Props {
 
 enum _CHECKOUT_TEMPLATE_ID {
   CG = 1,
+  PMCG = 1,
   CYX = 7,
   PKHG = 2,
   UHP = 7,
@@ -34,6 +35,7 @@ enum _CHECKOUT_TEMPLATE_ID {
   USE = 6,
   porsche = 7,
   Uniti = 7,
+  UCA = 7,
 }
 export interface CTTemplates {
   type1: FC<_Props>;

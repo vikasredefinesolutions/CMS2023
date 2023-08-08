@@ -7,7 +7,7 @@ import { _globalStore } from 'store.global';
 interface _Props {
   colors: null | _ProductColor[];
   activeColor: _ProductColor | null;
-  setActiveColor: React.Dispatch<React.SetStateAction<_ProductColor | null>>;
+  setActiveColor: (color: _ProductColor | null) => void;
 }
 
 let mediaBaseUrl = _globalStore.blobUrl;
@@ -74,20 +74,15 @@ const PD7_ColorInfo: React.FC<_Props> = ({
                     ? 'border-secondary'
                     : ''
                 }`}
-              ><a href="javascript:void(0)" title={color.name} onClick={() => {
-                setImage_2({
-                  id: 0,
-                  altTag: '',
-                  imageUrl: mediaBaseUrl + color.imageUrl,
-                });
-                setActiveColor(color);
-              }}>
-                <NxtImage
-                  src={color.imageUrl}
-                  alt={color.name}
-                  title={color.name}
-                  className='max-h-full m-auto cursor-pointer'
-                /></a>
+              >
+                <span title={color.name} onClick={() => setActiveColor(color)}>
+                  <NxtImage
+                    src={color.imageUrl}
+                    alt={color.name}
+                    title={color.name}
+                    className='max-h-full m-auto cursor-pointer'
+                  />
+                </span>
               </li>
             );
           })}

@@ -41,7 +41,7 @@ const BannerType5: React.FC<{
               <NxtImage
                 title={content[0].name}
                 className='lg:object-cover lg:max-w-none bg-white'
-                src={content[0].brandLogo || content[0].banner}
+                src={content[0].brandLogo || content[0].banner || null}
                 alt={''}
                 useNextImage={false}
               />

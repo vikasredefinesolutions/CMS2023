@@ -4,6 +4,7 @@ import {
   PORSCHE,
   SIMPLI_SAFE_CODE,
   UNITI_CODE,
+  _Store_CODES,
 } from '@constants/global.constant';
 import {
   _MyAcc_OrderBillingDetails,
@@ -20,6 +21,7 @@ import ThankYouType1 from './ThankYouType1/ThankYou_Type1';
 import ThankYouType2 from './ThankYouType2/ThankYou_Type2';
 import ThankYouType3 from './ThankYouType3/ThankYou_Type3';
 import ThankYouType5 from './ThankYouType5';
+import ThankYouType6 from './ThankYouType6';
 import ThankYouType4 from './ThankYou_Type4';
 
 interface _props {
@@ -82,6 +84,13 @@ const ThankYouTemplate: React.FC<_props> = ({ order, id }) => {
 
   if (storeTypeId === storeBuilderTypeId) {
     return <ThankYouType5 order={order} />;
+  }
+
+  if (
+    storeCode === _Store_CODES.USAAHEALTHYPOINTS ||
+    storeCode === _Store_CODES.USAACLAIMS
+  ) {
+    return <ThankYouType6 order={order} />;
   }
 
   return storeCode === SIMPLI_SAFE_CODE ||

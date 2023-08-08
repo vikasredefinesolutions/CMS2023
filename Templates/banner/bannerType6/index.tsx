@@ -1,11 +1,12 @@
 import ForgotModal from '@appComponents/modals/forgotModal';
 import LoginModal from '@appComponents/modals/loginModal';
+import NxtImage from '@appComponents/reUsable/Image';
 import { __pagesText } from '@constants/pages.text';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import React, { useState } from 'react';
 import { _Banner } from '..';
 
-const BannerType5: React.FC<{
+const BannerType6: React.FC<{
   storeId: number;
   content: _Banner[] | null;
 }> = ({ content }) => {
@@ -34,10 +35,21 @@ const BannerType5: React.FC<{
         </div>
       )}
       <div className='container pl-[15px] pr-[15px] mx-auto'>
-        <div className='bg-white'>
+        <div className='bg-light-gray'>
           <div className='flex flex-wrap items-center gap-y-[40px]'>
             <div className='w-full lg:w-1/2 sm:flex'>
-              <img src='https://pkheadlessstorage.blob.core.windows.net/storagemedia/1/store/45/images/porsche-category-image.jpg' />
+              {content[0].banner ? <NxtImage
+                useNextImage={false}
+                alt=''
+                className=''
+                src={content[0].banner}
+              /> : <NxtImage
+              useNextImage={false}
+              alt=''
+              className=''
+              src='https://pkheadlessstorage.blob.core.windows.net/storagemedia/1/store/45/images/porsche-category-image.jpg'
+            />}
+              
             </div>
             <div className='w-full lg:w-1/2'>
               <div className='pl-[20px] sm:pl-[30px] lg:pl-[40px] pr-[20px] sm:pr-[30px] lg:pr-[40px]'>
@@ -66,4 +78,4 @@ const BannerType5: React.FC<{
   );
 };
 
-export default BannerType5;
+export default BannerType6;

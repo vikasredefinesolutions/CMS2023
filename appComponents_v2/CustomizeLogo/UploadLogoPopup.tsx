@@ -1,23 +1,28 @@
+import NxtImage from '@appComponents/reUsable/Image';
+import { ApprovedLogoItem } from '@definations/APIs/logo.res';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import { UploadImage } from '@services/general.service';
+import {
+  UploadLogoWithDetails,
+  getApprovedLogoWithPosition,
+} from '@services/logo.service';
 import React, { useState } from 'react';
 
 interface _props {
   id: string;
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
   // eslint-disable-next-line no-unused-vars
-  logoToShow: (val: {
-    name: string;
-    type: string;
-    previewURL: string;
-    logoPathURL: string | null;
-  }) => void;
+  setAvailableLogos: (args: ApprovedLogoItem[]) => void;
+  selectedLocationName: string;
+  selectedLocationImage: string;
 }
 
 const UploadLogoPopup: React.FC<_props> = ({
   id,
   setOpenModal,
-  logoToShow,
+  setAvailableLogos,
+  selectedLocationImage,
+  selectedLocationName,
 }) => {
   const [fileToUpload, setFileToUpload] = useState<{
     logoPathURL: string | null;
@@ -25,6 +30,7 @@ const UploadLogoPopup: React.FC<_props> = ({
     type: string;
     previewURL: string;
   } | null>(null);
+  const { id: customerId } = useTypedSelector_v2((state) => state.user);
   const { showModal } = useActions_v2();
   const { id: storeId, imageFolderPath } = useTypedSelector_v2(
     (state) => state.store,
@@ -66,11 +72,39 @@ const UploadLogoPopup: React.FC<_props> = ({
     }
   };
 
-  const continueHandler = () => {
+  const fetchLogoLibrary = async () => {
+    try {
+      if (storeId && customerId && selectedLocationName) {
+        await getApprovedLogoWithPosition({
+          customerid: customerId,
+          storeid: storeId,
+          LogoPosition: selectedLocationName,
+        }).then((res) => {
+          if (res) {
+            setAvailableLogos(res);
+          }
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const continueHandler = async () => {
     if (fileToUpload === null) {
       return;
     }
-    logoToShow(fileToUpload);
+    await UploadLogoWithDetails({
+      id: 0,
+      customerId: customerId || 0,
+      logo: fileToUpload.logoPathURL || '',
+      logoName: fileToUpload.name,
+      description: '',
+      logoPositionImage: selectedLocationImage,
+      orderedCartLogoDetailId: 0,
+      locationName: selectedLocationName,
+    });
+    fetchLogoLibrary();
     setOpenModal(false);
   };
 
@@ -140,9 +174,11 @@ const UploadLogoPopup: React.FC<_props> = ({
                       )}
                       {fileToUpload?.previewURL && (
                         <div className='border border-gray bg-light-gray w-full h-full flex items-center justify-center text-center'>
-                          <img
+                          <NxtImage
+                            isStatic={true}
                             src={fileToUpload?.previewURL}
                             alt=''
+                            useNextImage={false}
                             className='img-responsive'
                           />
                         </div>

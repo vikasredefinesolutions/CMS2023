@@ -82,9 +82,7 @@ const TemplateThreeListing = ({
                 href={`${origin}/${product.sename}.html`}
               >
                 <NxtImage
-                  src={
-                    currentProduct?.imageName ? currentProduct?.imageName : ''
-                  }
+                  src={currentProduct?.imageName || null}
                   alt={product.name}
                   className={`${
                     storeCode === BACARDI
@@ -102,10 +100,12 @@ const TemplateThreeListing = ({
                   data-imageUrl={`${tagsdetails.imagename}`}
                 >
                   <div className='h-8'>
-                    <img
-                      src={`${mediaBaseUrl}${tagsdetails.imagename}`}
+                    <NxtImage
+                      alt={''}
+                      useNextImage={false}
+                      src={tagsdetails.imagename}
                       className='max-h-full inline-block'
-                    ></img>
+                    />
                   </div>
                 </div>
               );
@@ -196,7 +196,7 @@ const TemplateThreeListing = ({
                       index < listing_max_showcolors ? (
                         <Link key={product.id} href={`/${subRow.seName}.html`}>
                           <li
-                            className={`w-[30px] h-[30px] p-[1px] border-2 ${
+                            className={`w-[30px] h-[30px] p-[1px] border ${
                               storeCode === BACARDI
                                 ? ' hover:border-primary'
                                 : 'hover:border-secondary'
@@ -210,7 +210,7 @@ const TemplateThreeListing = ({
                             key={subRow.prodcutId}
                           >
                             <NxtImage
-                              src={`${mediaBaseUrl}${subRow.imageurl}`}
+                              src={subRow?.imageurl || null}
                               alt={subRow.colorName}
                               className='m-auto max-h-full'
                               title={subRow.colorName}
@@ -226,7 +226,7 @@ const TemplateThreeListing = ({
                     (subRow: GetProductImageOptionList, index: number) =>
                       index < listing_max_showcolors ? (
                         <li
-                          className={`w-[30px] h-[30px] p-[1px] border-2   ${
+                          className={`w-[30px] h-[30px] p-[1px] border   ${
                             storeCode === BACARDI
                               ? ' hover:border-primary'
                               : 'hover:border-secondary'
@@ -248,7 +248,7 @@ const TemplateThreeListing = ({
                           key={subRow.id}
                         >
                           <NxtImage
-                            src={`${mediaBaseUrl}${subRow.imageName}`}
+                            src={subRow?.imageName || null}
                             alt=''
                             className='m-auto max-h-full'
                             title={subRow.colorName}
@@ -261,7 +261,7 @@ const TemplateThreeListing = ({
               {flag ? (
                 <Link key={product.id} href={`/${product.sename}.html`}>
                   <li
-                    className={`w-[28px] h-[28px] border-2 border-light-gray${
+                    className={`w-[28px] h-[28px] border border-light-gray${
                       storeCode === BACARDI
                         ? ' hover:border-primary'
                         : 'hover:border-secondary'
@@ -313,9 +313,7 @@ const TemplateThreeListing = ({
             >
               <a href='' className='cursor-pointer w-full '>
                 <NxtImage
-                  src={
-                    currentProduct?.imageName ? currentProduct?.imageName : ''
-                  }
+                  src={currentProduct?.imageName || null}
                   alt=''
                   className='w-full h-auto max-h-max'
                   key={currentProduct?.id}
@@ -325,15 +323,15 @@ const TemplateThreeListing = ({
             {product?.productTagViewModel?.map((tagsdetails) => {
               return (
                 <div
-                  className={`${tagsdetails.tagPosition} h-8 flex gap-1 absolute`}
+                  className={`${tagsdetails.tagPosition}`}
                   data-imageUrl={`${tagsdetails.imagename}`}
                 >
-                  <div className='h-8'>
-                    <img
-                      src={`${mediaBaseUrl}${tagsdetails.imagename}`}
-                      className='max-h-full inline-block'
-                    ></img>
-                  </div>
+                  <NxtImage
+                    useNextImage={false}
+                    alt={''}
+                    src={tagsdetails.imagename}
+                    className='max-h-full inline-block'
+                  />
                 </div>
               );
             })}
@@ -403,7 +401,7 @@ const TemplateThreeListing = ({
                 <>
                   <Link key={product.id} href={`/${product.sename}.html`}>
                     <li
-                      className={`w-[30px] h-[30px] p-[1px] border-2  hover:border-secondary cursor-pointer ${
+                      className={`w-[30px] h-[30px] p-[1px] border hover:border-secondary cursor-pointer ${
                         product.id === currentProduct.id
                           ? ' border-secondary'
                           : ''
@@ -411,7 +409,7 @@ const TemplateThreeListing = ({
                       key={product.id}
                     >
                       <NxtImage
-                        src={`${mediaBaseUrl}${currentProduct.imageName}`}
+                        src={currentProduct.imageName || null}
                         alt=''
                         className='m-auto max-h-full cursor-pointer'
                         title={product.name}
@@ -423,7 +421,7 @@ const TemplateThreeListing = ({
                     index < listing_max_showcolors - 1 ? (
                       <Link key={product.id} href={`/${subRow.seName}.html`}>
                         <li
-                          className={`w-[30px] h-[30px] p-[1px] border-2  hover:border-secondary cursor-pointer ${
+                          className={`w-[30px] h-[30px] p-[1px] border  hover:border-secondary cursor-pointer ${
                             product.id === currentProduct.id
                               ? 'border-secondary'
                               : ''
@@ -431,7 +429,7 @@ const TemplateThreeListing = ({
                           key={subRow.prodcutId}
                         >
                           <NxtImage
-                            src={`${mediaBaseUrl}${subRow.imageurl}`}
+                            src={subRow.imageurl || null}
                             alt={subRow.colorName}
                             className='m-auto max-h-full'
                             title={subRow.colorName}
@@ -448,7 +446,7 @@ const TemplateThreeListing = ({
                 product.getProductImageOptionList.map((subRow, index) =>
                   index < listing_max_showcolors ? (
                     <li
-                      className={`w-[30px] h-[30px] p-[1px] border-2  hover:border-secondary cursor-pointer ${
+                      className={`w-[30px] h-[30px] p-[1px] border  hover:border-secondary cursor-pointer ${
                         subRow.id === currentProduct.id
                           ? 'border-secondary'
                           : ''
@@ -464,7 +462,7 @@ const TemplateThreeListing = ({
                       key={subRow.id}
                     >
                       <NxtImage
-                        src={`${mediaBaseUrl}${subRow.imageName}`}
+                        src={subRow.imageName || null}
                         alt=''
                         className='m-auto max-h-full'
                         title={subRow.colorName}
@@ -477,7 +475,7 @@ const TemplateThreeListing = ({
               )}
               {flag ? (
                 <Link key={product.id} href={`/${product.sename}.html`}>
-                  <li className='w-[28px] h-[28px] border-2 border-light-gray hover:border-secondary relative cursor-pointer'>
+                  <li className='w-[28px] h-[28px] border border-light-gray hover:border-secondary relative cursor-pointer'>
                     <span
                       className='absolute inset-0 bg-primary text-xs bg-[#003a70] font-semibold flex items-center justify-center text-[#ffffff]'
                       title={` See Additional ${

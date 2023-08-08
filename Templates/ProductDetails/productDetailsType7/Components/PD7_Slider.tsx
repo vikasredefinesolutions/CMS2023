@@ -1,10 +1,22 @@
 import Price from '@appComponents/Price';
 import NxtImage from '@appComponents/reUsable/Image';
-import { __pagesConstant } from '@constants/pages.constant';
 import { _ProductsAlike } from '@definations/APIs/productDetail.res';
+import { useWindowDimensions_v2 } from '@hooks_v2/index';
 import Link from 'next/link';
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Slider from 'react-slick';
+
+interface _carouselProps {
+  sliderSettings: {
+    dots: boolean;
+    infinite: boolean;
+    speed: number;
+    slidesToShow: number;
+    slidesToScroll: number;
+    arrows: boolean;
+  };
+  carouselCounter: number;
+}
 
 interface _Props {
   products: _ProductsAlike[] | null;
@@ -12,6 +24,72 @@ interface _Props {
 
 const PD7_Slider: React.FC<_Props> = ({ products }) => {
   const sliderRef = useRef<null | Slider>(null);
+
+  const { width } = useWindowDimensions_v2();
+  const Settings = {
+    sliderSettings: {
+      dots: false,
+      infinite: true,
+      speed: 500,
+      slidesToShow: width <= 418 ? 1 : width <= 768 ? 2 : width <= 1024 ? 3 : 5,
+      slidesToScroll: 1,
+      arrows: false,
+    },
+    carouselCounter:
+      width <= 418 ? 1 : width <= 768 ? 2 : width <= 1024 ? 3 : 5,
+  };
+
+  const [featuredProductCarouselSetting, setFeaturedProductCarouselSetting] =
+    useState<_carouselProps>(Settings);
+
+  useEffect(() => {
+    if (width <= 480) {
+      setFeaturedProductCarouselSetting({
+        sliderSettings: {
+          ...featuredProductCarouselSetting?.sliderSettings,
+          slidesToShow: 1,
+          infinite: true,
+        },
+        carouselCounter: 1,
+      });
+    } else if (width <= 768) {
+      setFeaturedProductCarouselSetting({
+        sliderSettings: {
+          ...featuredProductCarouselSetting?.sliderSettings,
+          slidesToShow: 2,
+          infinite: true,
+        },
+        carouselCounter: 2,
+      });
+    } else if (products && products?.length <= 5 && width >= 768) {
+      setFeaturedProductCarouselSetting({
+        sliderSettings: {
+          ...featuredProductCarouselSetting?.sliderSettings,
+          slidesToShow: 5,
+          infinite: false,
+        },
+        carouselCounter: 5,
+      });
+    } else if (products && products?.length >= 5 && width <= 1024) {
+      setFeaturedProductCarouselSetting({
+        sliderSettings: {
+          ...featuredProductCarouselSetting?.sliderSettings,
+          slidesToShow: 3,
+          infinite: true,
+        },
+        carouselCounter: 3,
+      });
+    } else {
+      setFeaturedProductCarouselSetting({
+        sliderSettings: {
+          ...featuredProductCarouselSetting?.sliderSettings,
+          slidesToShow: 5,
+          infinite: true,
+        },
+        carouselCounter: 5,
+      });
+    }
+  }, [width, products]);
 
   const goToNextProduct = () => {
     sliderRef.current?.slickNext();
@@ -24,7 +102,13 @@ const PD7_Slider: React.FC<_Props> = ({ products }) => {
   if (!products || products.length === 0) return null;
 
   return (
-    <section className='mainsection mt-[50px]'>
+    <section
+      className={`mainsection mt-10 ${
+        products?.length <= 5 && width >= 768
+          ? 'you-may-also-like-slider-2'
+          : ''
+      }`}
+    >
       <div className='container mx-auto'>
         <div className='text-center text-sub-text pb-[20px] uppercase font-bold'>
           Related Products
@@ -33,7 +117,8 @@ const PD7_Slider: React.FC<_Props> = ({ products }) => {
           <div className=''>
             <div
               className={`${
-                products.length > __pagesConstant._productAlike.carouselCounter
+                products.length >
+                featuredProductCarouselSetting?.carouselCounter
                   ? 'absolute'
                   : 'hidden'
               } top-1/2 -translate-y-1/2 z-10 flex items-center left-0`}
@@ -49,8 +134,7 @@ const PD7_Slider: React.FC<_Props> = ({ products }) => {
             </div>
             <Slider
               ref={(c) => (sliderRef.current = c)}
-              {...__pagesConstant._productDetails.similarProducts
-                .sliderSettings}
+              {...featuredProductCarouselSetting.sliderSettings}
             >
               {products.map((item) => {
                 return (
@@ -80,8 +164,9 @@ const PD7_Slider: React.FC<_Props> = ({ products }) => {
                             <Link
                               href={`/${item.seName}.html`}
                               className='relative'
-                            ><a className='!font-bold uppercase'>
-                              {item.name}
+                            >
+                              <a className='!font-bold uppercase'>
+                                {item.name}
                               </a>
                             </Link>
                           </div>
@@ -99,7 +184,8 @@ const PD7_Slider: React.FC<_Props> = ({ products }) => {
             </Slider>
             <div
               className={`${
-                products.length > __pagesConstant._productAlike.carouselCounter
+                products.length >
+                featuredProductCarouselSetting?.carouselCounter
                   ? 'absolute'
                   : 'hidden'
               }  top-1/2 -translate-y-1/2 right-0 z-10 flex items-center`}

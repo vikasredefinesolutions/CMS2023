@@ -62,9 +62,9 @@ export const __pagesConstant = {
     },
   },
   _header: {
-    mobileBreakPoint: 1025,
+    mobileBreakPoint: 1024,
     imagesToShowInBrandDropdown: 5,
-    brandImage: ['patagonia', 'nike', 'peter-millar', 'yeti'], // [49, 9, 28, 10], //[198, 11, 187, 27],
+    brandImage: ['peter-millar', 'patagonia', 'nike',  'yeti'], // [49, 9, 28, 10], //[198, 11, 187, 27],
     PKbrandImage: ['Patagonia', 'Nike', 'Peter-Millar', 'YETI'], // [49, 9, 28, 10], //[198, 11, 187, 27],
     dibrandImage: ['Patagonia', 'Peter-Millar'],
   },
@@ -96,6 +96,7 @@ export const __pagesConstant = {
     orderDetails: {
       dateFormat: 'DD-MM-YYYY',
       dFormat: 'MM/DD/YYYY',
+      PkdFormat: 'MM-DD-YYYY',
     },
     userManagement: {
       dateFormat: 'MM/DD/YYYY',
@@ -119,5 +120,8 @@ export const __pagesConstant = {
   },
 };
 
-
 export const klaviyosearchStoreCodeArray = ['CG', 'GG', 'PKHG', 'DI'];
+export const thirdPartyLoginService = {
+  oktaLogin: 'okta',
+  samlLogin: 'saml',
+};

@@ -1,9 +1,13 @@
 import { _Country, _State } from '@definations/app.type';
-import { isNumberKey } from '@helpers/common.helper';
-import { useActions_v2 } from '@hooks_v2/index';
+import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import { FetchCountriesList, FetchStatesList } from '@services/general.service';
 import { getLocationWithZipCode } from '@services/user.service';
 
+import {
+  HEALTHYPOINTS,
+  SIMPLI_SAFE_CODE,
+  UCA,
+} from '@constants/global.constant';
 import { FormikErrors, FormikTouched } from 'formik';
 import React, { useEffect, useState } from 'react';
 import { _CO7R_AddressFields } from '../CO7R_Extras';
@@ -48,6 +52,9 @@ const CO7_AddAddress: React.FC<_Props> = ({
   const [countries, setCountries] = useState<_Country[]>([]);
   const [states, setStates] = useState<_State[]>([]);
   const title = addressType === 'BILL' ? 'Billing' : 'Shipping';
+  const { id: storeId, code: storeCode } = useTypedSelector_v2(
+    (state) => state.store,
+  );
 
   const callStatesAPI = async (id: number, setDefault: boolean) => {
     await FetchStatesList(id).then((response) => {
@@ -102,6 +109,21 @@ const CO7_AddAddress: React.FC<_Props> = ({
   const fetchCountriesNstates = async () => {
     await FetchCountriesList().then((response) => {
       if (!response) return;
+      const alreadyStateNCountryIsSelected = values.state.length > 0;
+      if (alreadyStateNCountryIsSelected) {
+        setCountries(response);
+        const country = response.find(
+          (country) => country.name === values.countryName,
+        );
+
+        setFieldValue('countryName', country?.name || response[0].name);
+        setFieldValue('countryCode', country?.id || response[0].id);
+        setFieldValue('state', values.state);
+
+        callStatesAPI(country?.id || response[0].id, false);
+
+        return;
+      }
 
       // Country
       setCountries(response);
@@ -134,6 +156,7 @@ const CO7_AddAddress: React.FC<_Props> = ({
           required={true}
           value={values.firstname}
           onChange={handleChange}
+          autoComplete='given-name'
           onBlur={handleBlur}
           touched={!!touched.firstname}
           error={errors?.firstname ? errors.firstname : null}
@@ -143,6 +166,7 @@ const CO7_AddAddress: React.FC<_Props> = ({
           additionalClass={'md:w-6/12'}
           type={'text'}
           name={'lastName'}
+          autoComplete='family-name'
           required={true}
           value={values.lastName}
           onChange={handleChange}
@@ -161,21 +185,29 @@ const CO7_AddAddress: React.FC<_Props> = ({
           value={values.address1}
           onChange={handleChange}
           onBlur={handleBlur}
+          autoComplete='address-line3'
           touched={!!touched.address1}
           error={errors?.address1 ? errors.address1 : null}
         />
       </div>
       <div className='flex flex-wrap ml-[-15px] mr-[-15px]'>
-        <div className='mb-[15px] w-full md:w-6/12 pl-[15px] pr-[15px]'>
-          <label className='mb-[4px] text-normal-text'>APT, SUITE</label>{' '}
-          <input
-            name={'address2'}
-            value={values.address2}
-            onChange={handleChange}
-            onBlur={handleBlur}
-            className='form-input !w-[calc(100%-40px)]'
-          />
-        </div>
+        {storeCode == SIMPLI_SAFE_CODE ||
+        storeCode == UCA ||
+        storeCode == HEALTHYPOINTS ? (
+          ''
+        ) : (
+          <div className='mb-[15px] w-full md:w-6/12 pl-[15px] pr-[15px]'>
+            <label className='mb-[4px] text-normal-text'>APT, SUITE</label>{' '}
+            <input
+              name={'address2'}
+              autoComplete='address-line4'
+              value={values.address2}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              className='form-input !w-[calc(100%-40px)]'
+            />
+          </div>
+        )}
         <CO7R_Input
           label='ZIP CODE'
           additionalClass={'md:w-6/12'}
@@ -183,6 +215,7 @@ const CO7_AddAddress: React.FC<_Props> = ({
           name={'postalCode'}
           required={true}
           value={values.postalCode}
+          autoComplete='postal-code'
           onChange={handleChange}
           onBlur={postalCodeHandler}
           touched={!!touched.postalCode}
@@ -195,6 +228,7 @@ const CO7_AddAddress: React.FC<_Props> = ({
           additionalClass={'md:w-6/12'}
           type={'text'}
           name={'city'}
+          autoComplete='address-level2'
           required={true}
           value={values.city}
           onChange={handleChange}
@@ -208,6 +242,7 @@ const CO7_AddAddress: React.FC<_Props> = ({
           name={'state'}
           required={true}
           initialOption={'Select State'}
+          autoComplete='address-level1'
           value={values.state}
           onChange={handleChange}
           onBlur={handleBlur}
@@ -225,6 +260,7 @@ const CO7_AddAddress: React.FC<_Props> = ({
         <CO7R_Select
           label='COUNTRY'
           additionalClass={'md:w-6/12'}
+          autoComplete='country-name'
           name={'countryName'}
           initialOption={'Select Country'}
           required={true}
@@ -238,10 +274,12 @@ const CO7_AddAddress: React.FC<_Props> = ({
               setFieldValue('countryCode', country.id);
 
               if (country.name !== values.countryName) {
+                callStatesAPI(country.id, true);
                 setFieldValue('state', '');
                 setFieldTouched('state', true);
               }
             } else {
+              setStates([]);
               setFieldValue('countryName', '');
               setFieldValue('countryCode', '');
               setFieldValue('state', '');
@@ -264,12 +302,9 @@ const CO7_AddAddress: React.FC<_Props> = ({
           type={'text'}
           name={'phone'}
           required={true}
+          autoComplete='tel'
           value={values.phone}
-          onChange={(event) => {
-            if (isNumberKey(event)) {
-              handleChange(event);
-            }
-          }}
+          onChange={handleChange}
           onBlur={handleBlur}
           touched={!!touched.phone}
           error={errors?.phone ? errors.phone : null}

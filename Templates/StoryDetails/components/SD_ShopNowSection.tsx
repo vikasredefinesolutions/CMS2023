@@ -1,3 +1,4 @@
+import NxtImage from '@appComponents/reUsable/Image';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
@@ -66,10 +67,11 @@ const SD_ShopNowSection: React.FC<_Props> = ({ productSku }) => {
                     <Link className='' href={ele.link}>
                       <a>
                         <span className='sr-only'>{ele.name} </span>
-                        <img
+                        <NxtImage
                           className='w-full mx-auto'
-                          src={store.mediaBaseUrl + ele.image || ''}
+                          src={ele?.image || null}
                           alt='product image'
+                          useNextImage={false}
                           data-aos='none'
                           role='presentation'
                         />
@@ -85,9 +87,11 @@ const SD_ShopNowSection: React.FC<_Props> = ({ productSku }) => {
                     <div className='mb-[8px] text-medium-text'>
                       <strong></strong>
                     </div>
-                    <Link href={ele.link} className='custbtn custbtn-primary btn-md'>
+                    <Link
+                      href={ele.link}
+                      className='custbtn custbtn-primary btn-md'
+                    >
                       <a className='custbtn custbtn-primary'>
-                        
                         {ele.buttonText}
                       </a>
                     </Link>

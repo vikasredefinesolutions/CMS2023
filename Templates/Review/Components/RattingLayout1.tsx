@@ -1,17 +1,23 @@
 import { __pagesText } from '@constants/pages.text';
+import { useTypedSelector_v2 } from '@hooks_v2/index';
+import { ReviewImages, _ProductReview } from '@services/review';
 import { _ProductReviewRatingProps } from '@templates/ProductDetails/Components/productDetailsComponents';
 import React from 'react';
 
 const RattingLayout1: React.FC<_ProductReviewRatingProps> = ({
-  reviewsCount,
+  ratings,
+  reviewsDeatils,
 }) => {
+  const { mediaBaseUrl } = useTypedSelector_v2((state) => state.store);
+
   const reviewRatingarray = [
-    reviewsCount?.fiveStarRatingCount,
-    reviewsCount?.fourStarRatingCount,
-    reviewsCount?.threeStarRatingCount,
-    reviewsCount?.twoStarRatingCount,
-    reviewsCount?.oneStarRatingCount,
+    ratings.fiveStarRatingCount,
+    ratings.fourStarRatingCount,
+    ratings.threeStarRatingCount,
+    ratings.twoStarRatingCount,
+    ratings.oneStarRatingCount,
   ];
+
   return (
     <>
       <div className='flex flex-wrap'>
@@ -28,8 +34,7 @@ const RattingLayout1: React.FC<_ProductReviewRatingProps> = ({
                     <svg
                       key={index}
                       className={`h-5 w-5 flex-shrink-0 text-${
-                        reviewsCount?.ratingAverage &&
-                        index < reviewsCount?.ratingAverage
+                        ratings.ratingAverage && index < ratings.ratingAverage
                           ? 'yellow-400'
                           : 'gray-300'
                       }`}
@@ -43,12 +48,12 @@ const RattingLayout1: React.FC<_ProductReviewRatingProps> = ({
                   );
                 })}
               <span className='text-[#ffffff] text-title-text ml-[8px]'>
-                {reviewsCount?.ratingAverage}
+                {ratings.ratingAverage}
               </span>
             </div>
             <div className='mb-[20px] text-[#ffffff] text-default-text text-left'>
               {__pagesText.productInfo.productReviewRating.basedOn}{' '}
-              {reviewsCount?.totalRatingCount}
+              {ratings.totalRatingCount}
               {__pagesText.productInfo.productReviewRating.reviews}
             </div>
           </div>
@@ -86,10 +91,10 @@ const RattingLayout1: React.FC<_ProductReviewRatingProps> = ({
                         <div
                           style={{
                             width: ` ${
-                              reviewsCount?.totalRatingCount &&
+                              ratings.totalRatingCount &&
                               value &&
                               `calc(${
-                                (value / reviewsCount?.totalRatingCount) * 100
+                                (value / ratings.totalRatingCount) * 100
                               }%)`
                             }
                               `,
@@ -99,13 +104,12 @@ const RattingLayout1: React.FC<_ProductReviewRatingProps> = ({
                       </div>
                     </div>
                   </dt>
-
                   <dd className='ml-[5px] w-[40px] text-[#ffffff] text-default-text tabular-nums'>
                     {/* (
-                    {reviewsCount?.totalRatingCount &&
+                    {ratings.totalRatingCount &&
                       value &&
                       Math.abs(
-                        (value / reviewsCount?.totalRatingCount) * 100,
+                        (value / ratings.totalRatingCount) * 100,
                       ).toFixed(0)}
                     {'%'}) */}
                     {`(${reviewRatingarray[index]})`}
@@ -114,6 +118,26 @@ const RattingLayout1: React.FC<_ProductReviewRatingProps> = ({
               );
             })}
           </dl>
+        </div>
+        <div className='flex-1'>
+          <h2 className='mb-[20px] text-[#ffffff] text-default-text font-bold text-left uppercase'>
+            {__pagesText.productInfo.productReviewRating.customerPhotos}
+          </h2>
+          <div className='flex-1 flex items-center'>
+            {reviewsDeatils?.map((review: _ProductReview) => {
+              return review.images.map((image: ReviewImages) => (
+                <div className='mx-2'>
+                  <img
+                    src={`${mediaBaseUrl}${image.ImageName}`}
+                    className='mr-[15px]'
+                    width={'100px'}
+                    height={'100px'}
+                    alt='review image'
+                  />
+                </div>
+              ));
+            })}
+          </div>
         </div>
       </div>
     </>

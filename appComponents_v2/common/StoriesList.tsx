@@ -9,12 +9,16 @@ interface _Props {
   stories: _Story[];
   showByDefault: number;
   buttonType: 'LoadMore' | 'PrevNext';
+  next?: string;
+  prev?: string;
 }
 
 const StoriesList: React.FC<_Props> = ({
   stories: leftStories,
   showByDefault,
   buttonType,
+  next,
+  prev,
 }) => {
   const [stories, setStories] = useState<{
     showButton: boolean;
@@ -112,7 +116,7 @@ const StoriesList: React.FC<_Props> = ({
   //     // if(document.body.classList.contains('index-page') || storeCode === 'DI')
   //     // {
   //     let x = document.querySelector('#load_btn');
-  //     if (x instanceof HTMLElement) 
+  //     if (x instanceof HTMLElement)
   //     {
   //       // alert(x)
   //      //console.log((window.pageYOffset + document.documentElement.clientHeight),  x?.offsetTop);
@@ -120,11 +124,11 @@ const StoriesList: React.FC<_Props> = ({
   //           if(buttonRef.current)
   //            {
   //             buttonRef?.current.click();
-  //            } 
+  //            }
   //         }
-  
+
   //     }
-      
+
   //     //}
   //   }
   // };
@@ -144,7 +148,7 @@ const StoriesList: React.FC<_Props> = ({
               <div className='w-full sm:w-1/2 xl:w-1/4 px-[15px] md:w-1/3 mt-6 mb-14'>
                 <div className='border border-gray-border bg-[#ffffff] relative'>
                   <div className='flex justify-center max-h-[450px] overflow-hidden'>
-                    <Link href={`${paths.STORIES}/${story.slug}`}>
+                    <Link href={`${paths.STORIES}/${story.slug}.html`}>
                       <a>
                         <NxtImage
                           alt=''
@@ -157,10 +161,10 @@ const StoriesList: React.FC<_Props> = ({
                   </div>
                   <div className='absolute left-5 top-5'>
                     <div className='mb-4'>
-                      <Link href={story.categoryUrl}>
+                      <Link href={`${story.categoryUrl}.html`}><a>
                         <span className='btn bg-white hover:bg-tertiary-hover hover:text-anchor-hover text-anchor pl-[20px] pr-[20px] pt-[10px] pb-[10px] !uppercase text-default-text'>
                           {story.categoryName}
-                        </span>
+                        </span></a>
                       </Link>
                     </div>
                   </div>
@@ -171,15 +175,17 @@ const StoriesList: React.FC<_Props> = ({
                     <div className='mt-[12px] mb-[12px] text-default-text'>
                       <Link
                         className='no-underline text-[#000000]'
-                        href={`${paths.STORIES}/${story.slug}`}
+                        href={`${paths.STORIES}/${story.slug}.html`}
                       >
                         <a>
                           {story.name}
-                          <img
+                          <NxtImage
                             alt='Next arrow'
                             className='w-auto inline-flex'
                             src={__StaticImg.storiesNextArrow}
                             role='presentation'
+                            useNextImage={false}
+                            isStatic={true}
                           />
                         </a>
                       </Link>
@@ -195,7 +201,7 @@ const StoriesList: React.FC<_Props> = ({
               <div className='w-full'>
                 <div className='p-2 text-center text-large-text'>
                   <button
-                    id='load_btn'  
+                    id='load_btn'
                     // ref={buttonRef}
                     className='text-primary font-[600] inline-flex items-center load_more no-underline'
                     onClick={() => handleLoadStories('loadMore', showByDefault)}
@@ -216,7 +222,27 @@ const StoriesList: React.FC<_Props> = ({
             </div>
           )}
         </div>
-        {buttonType === 'PrevNext' && stories.showButton && (
+
+        {buttonType === 'PrevNext' && (
+          <div className='flex flex-wrap justify-center gap-[10px]'>
+            {prev && prev !== '' && (
+              <Link className='' href={`${prev}.html`}>
+                <a className='uppercase btn btn-tertiary text-default-text  w-28'>
+                  Previous
+                </a>
+              </Link>
+            )}
+            {next && next !== '' && (
+              <Link href={`${next}.html`}>
+                <a className='uppercase btn btn-tertiary text-default-text text-center  w-28'>
+                  Next
+                </a>
+              </Link>
+            )}
+          </div>
+        )}
+
+        {/* {buttonType === 'PrevNext' && stories.showButton && (
           <div className='flex flex-wrap justify-center pt-[40px] pb-[40px]'>
             {stories.currentPage > 1 && (
               <button
@@ -236,7 +262,7 @@ const StoriesList: React.FC<_Props> = ({
               </button>
             )}
           </div>
-        )}
+        )} */}
       </div>
     </section>
   );

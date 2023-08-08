@@ -1,11 +1,26 @@
 import { __pagesText } from '@constants/pages.text';
 import SU1_StateNcountries from '@templates/SignUp/SignUp_Type1/Components/SU1_StateNcountries';
 import { FormikValues, useFormikContext } from 'formik';
+import { useEffect } from 'react';
 import { signupFourFormFields } from '../SU4_Extras';
 import SU4_Input from './SU4_Input';
 
 const AddressSection = () => {
-  const { values, setFieldValue }: FormikValues = useFormikContext();
+  const { values, setFieldValue, isSubmitting, errors }: FormikValues =
+    useFormikContext();
+  useEffect(() => {
+    const Erorrs = Object.keys(errors);
+    if (isSubmitting && Erorrs.length > 0) {
+      const FirstErrorid = Object.keys(errors)[0];
+      var access = document.getElementById(`${FirstErrorid}`);
+      access &&
+        access.scrollIntoView({
+          behavior: 'smooth',
+          block: 'end',
+        });
+    }
+  }, [isSubmitting]);
+
   return (
     <div className='w-full mx-auto'>
       <div className='text-xl md:text-2xl lg:text-sub-title font-sub-title text-color-sub-title pb-2 mb-4 border-b border-b-gray-300'>
@@ -20,6 +35,8 @@ const AddressSection = () => {
               stateName={'storeCustomerAddress[0].state'}
               stateValue={values.storeCustomerAddress[0].state}
               setFieldValue={setFieldValue}
+              labelClass='mb-[4px] text-normal-text'
+              order='2'
             />
           ) : (
             <SU4_Input

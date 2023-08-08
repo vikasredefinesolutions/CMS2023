@@ -7,7 +7,7 @@ import SubMenuItem from '@header/header_Type2/Components/Menu/Header_SubMenuItem
 import { capitalizeFirstLetter } from '@helpers/common.helper';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
 import Link from 'next/link';
-import React, { useState,useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 interface _props {
   url: string;
@@ -17,8 +17,13 @@ interface _props {
   setOpenTab: (arg: string) => void;
 }
 
-const Brand: React.FC<_props> = ({ url, title, content,  openTab,
-  setOpenTab, }) => {
+const Brand: React.FC<_props> = ({
+  url,
+  title,
+  content,
+  openTab,
+  setOpenTab,
+}) => {
   const { toggleSideMenu } = useActions_v2();
 
   // -------------------------------------------------------------------
@@ -69,7 +74,7 @@ const Brand: React.FC<_props> = ({ url, title, content,  openTab,
             {/* </div> */}
           </div>
         </div>
-        {showAllItems&& showtab  && (
+        {showAllItems && showtab && (
           <div className='text-[14px]' x-show='open' x-cloak>
             <div className='relative bg-light-gray'>
               <div className=''>

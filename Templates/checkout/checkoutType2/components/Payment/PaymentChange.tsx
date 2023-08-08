@@ -1,13 +1,14 @@
+import NxtImage from '@appComponents/reUsable/Image';
 import { paymentMethodCustom } from '@constants/enum';
 import { AddressType } from '@controllers/checkoutController/CheckoutAddressForm';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
-import { ChangeEvent } from 'react';
+import { _HandlerProps } from '../..';
 import CO2_EL_PaymentOption from '../CO2_EL_PaymentOption';
 import AddressFormPk from '../Form';
 
 interface _PaymentProps {
   updatePaymentMethod: (arg: paymentMethodCustom) => void;
-  changeHandler: (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
+  changeHandler: (e: _HandlerProps) => void;
   detectCardType?: () => string;
   changeBillingAddress?: boolean;
   BillingFormik: any;
@@ -24,7 +25,8 @@ interface _PaymentProps {
   setUseShippingAddress: (args: boolean) => void;
   useShippingAddress: boolean;
   billingAddress: AddressType | null;
-  setShippingAddress: (args: any) => void;
+  ShippingFormik: any;
+  setBillingAddress: (args: any) => void;
 }
 
 const PaymentChange: React.FC<_PaymentProps> = ({
@@ -36,7 +38,8 @@ const PaymentChange: React.FC<_PaymentProps> = ({
   paymentMethod,
   useShippingAddress,
   billingAddress,
-  setShippingAddress,
+  setBillingAddress,
+  ShippingFormik,
 }) => {
   const employeeLogin = useTypedSelector_v2((state) => state.employee.loggedIn);
   const { el } = useTypedSelector_v2((state) => state.checkout);
@@ -50,7 +53,13 @@ const PaymentChange: React.FC<_PaymentProps> = ({
               All fields marked with * are required fields.
             </div>
             <div className='pb-[10px]'>
-              <img src='/norton.png' />
+              <NxtImage
+                useNextImage={false}
+                className=''
+                alt=''
+                isStatic={true}
+                src='/norton.png'
+              />
             </div>
           </div>
           {changeBillingAddress && (
@@ -62,7 +71,7 @@ const PaymentChange: React.FC<_PaymentProps> = ({
                 checked={useShippingAddress}
                 onChange={(e) => {
                   if (e.target.checked) {
-                    setShippingAddress(BillingFormik.values);
+                    setBillingAddress(ShippingFormik.values);
                     setUseShippingAddress(e.target.checked);
                   } else {
                     setChangeBillingAddress(true);
@@ -165,7 +174,13 @@ const PaymentChange: React.FC<_PaymentProps> = ({
             onClick={() => updatePaymentMethod(paymentMethodCustom.creditCard)}
           >
             <span className='mr-[10px]'>
-              <img className='' src='/cards.jpg' alt='/credit card' />
+              <NxtImage
+                useNextImage={false}
+                isStatic={true}
+                className=''
+                src='/cards.jpg'
+                alt='/credit card'
+              />
             </span>
             <span>SELECT CREDIT CARD</span>
           </button>

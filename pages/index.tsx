@@ -18,6 +18,7 @@ import { _SelectedTab } from '@templates/ProductDetails/productDetailsTypes/stor
 import { GetServerSideProps, GetServerSidePropsResult, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
+// import { getDataFromRedis, setDataInRedis } from 'redis';
 import { _globalStore } from 'store.global';
 
 export interface _Slug_CMS_Props {
@@ -60,7 +61,7 @@ const DefaultHomePage: NextPage<_HomeProps> = (props) => {
       let featuredProduct =
         props &&
         props.data?.components.find(
-          (comp: any) => comp.name == 'Featured Products',
+          (comp: any) => comp.name == 'Fe00atured Products',
         );
       if (featuredProduct) {
         localStorage.setItem(
@@ -151,10 +152,15 @@ export const getServerSideProps: GetServerSideProps = async (): Promise<
   }
 
   // ---------------------------------------------------------------
-  const pageMetaData: _GetPageType | null = await FetchPageType({
-    storeId: store.storeId,
-    slug: '/',
-  });
+
+  let pageMetaData: _GetPageType | null = _globalStore.pageMetaData;
+
+  //if (!pageMetaData) {
+    pageMetaData = await FetchPageType({
+      storeId: store.storeId,
+      slug: '',
+    });
+  //}
   let allFeaturedProductComponentData: any = [];
   let allFeaturedProductComponentBody: any = [];
   let allTabingData: any = [];
@@ -261,12 +267,23 @@ export const getServerSideProps: GetServerSideProps = async (): Promise<
               return TabingApiArray;
             },
           );
+
           if (AllTabingApiArray.length > 0) {
+            /*const cachedData = await getDataFromRedis('featuredProductData');
+            if (cachedData) {
+              allTabingData = JSON.parse(cachedData);
+            } else {*/
             allTabingData = await Promise.all(
               AllTabingApiArray.map(async (TabingApiArray: any) => {
                 return await Promise.all(TabingApiArray);
               }),
             );
+            /*await setDataInRedis(
+                'featuredProductData',
+                JSON.stringify(allTabingData),
+                3600,
+              );
+            }*/
 
             if (featuredProducts?.length > 0) {
               allFeaturedProductComponentData = featuredProducts?.map(

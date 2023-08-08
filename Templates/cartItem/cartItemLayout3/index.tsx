@@ -1,4 +1,4 @@
-import { default as Image } from '@appComponents/reUsable/Image';
+import NxtImage from '@appComponents/reUsable/Image';
 import Price from '@appComponents/reUsable/Price';
 import {
   cartQuantityUpdateConfirmMessage,
@@ -17,7 +17,7 @@ import {
 import { _CartItem } from '@services/cart';
 import { deleteItemCart, updateCartQuantity } from '@services/cart.service';
 import Link from 'next/link';
-import { FC, useRef, useState } from 'react';
+import { FC, useState } from 'react';
 import { _globalStore } from 'store.global';
 // import { CI_Props } from './cartItem';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -27,7 +27,9 @@ const CIlayout3: FC<any> = ({ isEditable, removeCartItem, loadProduct }) => {
   );
   const cartData = useTypedSelector_v2((state) => state.cart.cart);
   const { setShowLoader, showModal, fetchCartDetails } = useActions_v2();
-  const valueRef = useRef<Record<string, undefined | number>>({});
+  const [qtyValues, setQtyValues] = useState<Record<string, string | number>>(
+    {},
+  );
   const isEmployeeLoggedIn = useTypedSelector_v2(
     (state) => state.employee.loggedIn,
   );
@@ -135,16 +137,17 @@ const CIlayout3: FC<any> = ({ isEditable, removeCartItem, loadProduct }) => {
             <div className='w-full lg:w-1/4 px-[10px]'>
               {/* <div className='w-full'> */}
               <Link href={`/${item.seName}`}>
-                <Image
-                  src={
-                    item.colorImage
-                      ? item.colorImage
-                      : '/assets/images/image_not_available.jpg'
-                  }
-                  alt={item.productName}
-                  className='max-h-64 m-auto'
-                  isStatic={!Boolean(item.colorImage)}
-                />
+                <a>
+                  <NxtImage
+                    src={
+                      item.colorImage ||
+                      '/assets/images/image_not_available.jpg'
+                    }
+                    alt={item.productName}
+                    className='max-h-64 m-auto'
+                    isStatic={!item.colorImage}
+                  />
+                </a>
               </Link>
               {/* </div> */}
             </div>
@@ -217,20 +220,51 @@ const CIlayout3: FC<any> = ({ isEditable, removeCartItem, loadProduct }) => {
                                   <div className='flex'>
                                     <input
                                       className='text-default-text pl-[5px] pr-[5px] pt-[5px] pb-[5px] w-[60px] mr-2 rounded border-[#000000]'
-                                      defaultValue={view.qty}
-                                      data-valueofinput={view.qty}
+                                      defaultValue={
+                                        qtyValues[view.id.toString()] ||
+                                        view.qty
+                                      }
+                                      type='number'
+                                      value={qtyValues[view.id.toString()]}
+                                      min={1}
+                                      onKeyDown={(e) => {
+                                        ['e', 'E', '+', '-', '.'].includes(
+                                          e.key,
+                                        ) && e.preventDefault();
+                                      }}
                                       onChange={(e) => {
-                                        valueRef.current = {
-                                          ...valueRef.current,
-                                          [`${view.id}`]: +e.target.value,
-                                        };
+                                        if (e.target.value.toString() === '0') {
+                                          return setQtyValues({
+                                            ...qtyValues,
+                                            [`${view.id}`]: 1,
+                                          });
+                                        }
+
+                                        setQtyValues({
+                                          ...qtyValues,
+                                          [`${view.id}`]: e.target.value,
+                                        });
                                       }}
                                       onBlur={(e) => {
-                                        handleUpdate(
-                                          e.target.value,
-                                          view.qty,
-                                          view.id,
-                                        );
+                                        if (!e.target.value) {
+                                          setQtyValues({
+                                            ...qtyValues,
+                                            [`${view.id}`]: 1,
+                                          });
+                                          return handleUpdateQuantity(
+                                            e,
+                                            +item.attributeOptionId,
+                                            view.id,
+                                            1,
+                                          );
+                                        } else {
+                                          return handleUpdateQuantity(
+                                            e,
+                                            +item.attributeOptionId,
+                                            view.id,
+                                            +qtyValues[view.id.toString()],
+                                          );
+                                        }
                                       }}
                                     />
                                     {sizeId.find((el) => el === view.id) && (
@@ -240,9 +274,7 @@ const CIlayout3: FC<any> = ({ isEditable, removeCartItem, loadProduct }) => {
                                             e,
                                             +item.attributeOptionId,
                                             view.id,
-                                            valueRef.current[
-                                              view.id.toString()
-                                            ],
+                                            +qtyValues[view.id.toString()],
                                           );
                                         }}
                                         className='btn btn-sm btn-primary'

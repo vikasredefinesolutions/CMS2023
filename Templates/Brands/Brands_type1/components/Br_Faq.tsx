@@ -11,7 +11,7 @@ const Br_Faq: React.FC = () => {
         <div className='container'>
           <div className='absolute top-[40%] left-[0px] right-[0px] text-center'>
             <div className='flex justify-center items-center max-w-4xl mx-auto'>
-              <div className='text-2xl-text text-white text-[20px] lg:text-[96px] sm:text-[40px] mb-[8px]'>
+              <div className='!text-white !text-[96px] mb-[8px]'>
                 Brand FAQ
               </div>
             </div>

@@ -15,5 +15,7 @@ export interface _InputProps {
   onBlur?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   type: 'text' | 'number' | 'password' | 'email';
   required: boolean;
+  error?: any;
   id: string;
+  showErroMsg?: string | null;
 }

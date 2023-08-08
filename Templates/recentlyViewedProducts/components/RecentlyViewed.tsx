@@ -1,6 +1,5 @@
-import { __pagesConstant } from '@constants/pages.constant';
 import getLocation from '@helpers/getLocation';
-import { useTypedSelector_v2 } from '@hooks_v2/index';
+import { useTypedSelector_v2, useWindowDimensions_v2 } from '@hooks_v2/index';
 import {
   FetchProductRecentlyViewed,
   InsertProductRecentlyViewed,
@@ -11,6 +10,18 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useRef, useState } from 'react';
 import Slider from 'react-slick';
 import ProductCard from './ProductCard';
+
+interface _carouselProps {
+  sliderSettings: {
+    dots: boolean;
+    infinite: boolean;
+    speed: number;
+    slidesToShow: number;
+    slidesToScroll: number;
+    arrows: boolean;
+  };
+  carouselCounter: number;
+}
 
 const RecentlyViewed: React.FC<_ProductRecentlyViewedProps> = ({
   title,
@@ -29,15 +40,85 @@ const RecentlyViewed: React.FC<_ProductRecentlyViewedProps> = ({
   const { productId } = useTypedSelector_v2((state) => state.product.selected);
   const [showProductImg, setShowProductImg] = useState();
 
-  const [products] = useState(
-    Array.isArray(recentlyViewedProduct)
-      ? recentlyViewedProduct.map((productdata) => ({
-          ...productdata,
-          selected: productdata.image,
-        }))
-      : [],
-  );
+  // const [products] = useState(
+  //   Array.isArray(recentlyViewedProduct)
+  //     ? recentlyViewedProduct.map((productdata) => ({
+  //         ...productdata,
+  //         selected: productdata.image,
+  //       }))
+  //     : [],
+  // );
   const sliderRef = useRef<null | Slider>(null);
+  const { width } = useWindowDimensions_v2();
+
+  const Settings = {
+    sliderSettings: {
+      dots: false,
+      infinite: true,
+      speed: 500,
+      slidesToShow: width <= 418 ? 1 : width <= 768 ? 2 : width <= 1024 ? 3 : 5,
+      slidesToScroll: 1,
+      arrows: false,
+    },
+    carouselCounter:
+      width <= 418 ? 1 : width <= 768 ? 2 : width <= 1024 ? 3 : 5,
+  };
+
+  const [featuredProductCarouselSetting, setFeaturedProductCarouselSetting] =
+    useState<_carouselProps>(Settings);
+
+  useEffect(() => {
+    if (width <= 480) {
+      setFeaturedProductCarouselSetting({
+        sliderSettings: {
+          ...featuredProductCarouselSetting?.sliderSettings,
+          slidesToShow: 1,
+          infinite: true,
+        },
+        carouselCounter: 1,
+      });
+    } else if (width <= 768) {
+      setFeaturedProductCarouselSetting({
+        sliderSettings: {
+          ...featuredProductCarouselSetting?.sliderSettings,
+          slidesToShow: 2,
+          infinite: true,
+        },
+        carouselCounter: 2,
+      });
+    } else if (width <= 1024) {
+      setFeaturedProductCarouselSetting({
+        sliderSettings: {
+          ...featuredProductCarouselSetting?.sliderSettings,
+          slidesToShow: 3,
+          infinite: true,
+        },
+        carouselCounter: 3,
+      });
+    } else if (
+      recentlyViewedProduct &&
+      recentlyViewedProduct?.length <= 5 &&
+      width >= 1024
+    ) {
+      setFeaturedProductCarouselSetting({
+        sliderSettings: {
+          ...featuredProductCarouselSetting?.sliderSettings,
+          slidesToShow: 5,
+          infinite: false,
+        },
+        carouselCounter: 5,
+      });
+    } else {
+      setFeaturedProductCarouselSetting({
+        sliderSettings: {
+          ...featuredProductCarouselSetting?.sliderSettings,
+          slidesToShow: 5,
+          infinite: true,
+        },
+        carouselCounter: 5,
+      });
+    }
+  }, [width, recentlyViewedProduct]);
 
   const goToNextProduct = () => {
     sliderRef?.current?.slickNext();
@@ -104,7 +185,7 @@ const RecentlyViewed: React.FC<_ProductRecentlyViewedProps> = ({
                 <div
                   className={`${
                     recentlyViewedProduct.length >
-                    __pagesConstant._productAlike.carouselCounter
+                    featuredProductCarouselSetting?.carouselCounter
                       ? 'absolute'
                       : 'hidden'
                   }  top-1/2  -translate-y-1/2 z-10 flex items-center left-0`}
@@ -120,8 +201,7 @@ const RecentlyViewed: React.FC<_ProductRecentlyViewedProps> = ({
                 </div>
                 <Slider
                   ref={(c) => (sliderRef.current = c)}
-                  {...__pagesConstant._productDetails.recentlyViewed
-                    .sliderSettings}
+                  {...featuredProductCarouselSetting.sliderSettings}
                 >
                   {recentlyViewedProduct.map((product) => {
                     return <ProductCard product={product} />;
@@ -130,7 +210,7 @@ const RecentlyViewed: React.FC<_ProductRecentlyViewedProps> = ({
                 <div
                   className={`${
                     recentlyViewedProduct.length >
-                    __pagesConstant._productAlike.carouselCounter
+                    featuredProductCarouselSetting?.carouselCounter
                       ? 'absolute'
                       : 'hidden'
                   }  top-1/2  -translate-y-1/2 right-0 z-10 flex items-center`}

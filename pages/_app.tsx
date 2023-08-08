@@ -2,7 +2,7 @@
 import { __domain, _Store, storeBuilderTypeId } from '@configs/page.config';
 import * as _AppController from '@controllers/_AppController.async';
 import { TrackFile } from '@services/tracking.service';
-import 'material-icons/iconfont/material-icons.css';
+//import 'material-icons/iconfont/material-icons.css';
 import App, { AppContext, AppInitialProps, AppProps } from 'next/app';
 import { useRouter } from 'next/router';
 import 'public/assets/css/custom.css';
@@ -12,11 +12,12 @@ import { getWishlist } from '@services/wishlist.service';
 import {
   domainToShow,
   extractCookies,
+  extractSlugName,
   Logout,
   setCookie,
 } from 'helpers_v2/common.helper';
 import { useActions_v2 } from 'hooks_v2';
-import 'material-icons/iconfont/material-icons.css';
+//import 'material-icons/iconfont/material-icons.css';
 import 'public/assets/css/accordian_pkhg.css';
 import 'public/assets/css/spinner.css';
 import { useEffect, useRef } from 'react';
@@ -34,13 +35,14 @@ import {
 import { paths } from '@constants/paths.constant';
 import EmployeeController from '@controllers/EmployeeController';
 import { PageResponseType } from '@definations/app.type';
-import { _MenuItems } from '@definations/header.type';
+import { _StoreTypeNames } from '@definations/common.type';
+import { _StoreMenu } from '@definations/header.type';
 import {
   _FetchStoreConfigurations,
   _SbStoreConfiguration,
   _StoreReturnType,
 } from '@definations/store.type';
-import '@fortawesome/fontawesome-free/js/all.js';
+//import '@fortawesome/fontawesome-free/js/all.js';
 import {
   _PropsToStoreAndGetFromCookies,
   _templateIds,
@@ -48,44 +50,51 @@ import {
   configsToCallEveryTime,
   expectedProps,
   extractAndfillCookiesIntoProps,
+  forwardProductImage,
   passPropsToDocumentFile,
   storeCookiesToDecreaseNoOfAPIRecalls,
 } from '@helpers/app.extras';
 import { conditionalLog_V2 } from '@helpers/console.helper';
 import getLocation from '@helpers/getLocation';
+import { GetStoreID } from '@services/app.service';
 import { CustomerRoles } from '@services/customerUser.service';
+import { getCustomerAllowBalance } from '@services/payment.service';
 import { FetchSbStoreConfiguration } from '@services/sb.service';
 import { fetchThirdpartyservice } from '@services/thirdparty.service';
 import { GetStoreCustomer } from '@services/user.service';
 import Redefine_Layout from '@templates//TemplateComponents/Redefine_Layout';
 import AuthGuard from 'Guard/AuthGuard';
 import uuid from 'react-uuid';
+import { _globalStore } from 'store.global';
 import DcTags from 'tags/DcTags';
 import TwitterTags from 'tags/TwitterTags';
 import { _Slug_Props } from './[...slug-id]';
 
 type AppOwnProps = {
   store: _StoreReturnType | null;
-  menuItems: _MenuItems | null;
+  menuItems: _StoreMenu[] | null;
   footerHTML: _FetchStoreConfigurations | null;
   pageProps: _Slug_Props | null;
   sbStore: _SbStoreConfiguration | null;
   headerConfig: _FetchStoreConfigurations | null;
   templateIDs: _templateIds;
+  domain: string | null;
 };
 
 const RedefineCustomApp = ({
   Component,
   pageProps,
   store,
-  menuItems,
   footerHTML,
   sbStore,
   headerConfig,
   templateIDs,
+  menuItems,
+  domain,
 }: AppProps & AppOwnProps) => {
   EmployeeController();
   const router = useRouter();
+  const pageUrl = `https://${__domain.localDomain}${router.asPath}`;
   const {
     updateCustomerV2,
     logInUser,
@@ -95,11 +104,17 @@ const RedefineCustomApp = ({
     setKlaviyoKey,
     setCustomerRoles,
     updateGclId,
+    updateStoreTypeName,
   } = useActions_v2();
-
   const isVisitorCreated = useRef(false);
 
-  const { updatePageType, setShowLoader } = useActions_v2();
+  const {
+    updatePageType,
+    setShowLoader,
+    customerCreditBalanceUpdate,
+    customerUseCreditBalance,
+    product_UpdateSelectedValues,
+  } = useActions_v2();
   const trackingFile = async (storeId: number) => {
     if (isVisitorCreated.current && storeId !== CG_STORE_CODE) return;
     isVisitorCreated.current = true;
@@ -174,6 +189,10 @@ const RedefineCustomApp = ({
       .finally(() => {
         setShowLoader(false);
       });
+    getCustomerAllowBalance(userId).then((response) => {
+      customerCreditBalanceUpdate(response);
+      customerUseCreditBalance(true);
+    });
   };
 
   useEffect(() => {
@@ -221,7 +240,14 @@ const RedefineCustomApp = ({
     }
   };
 
+  const setStoreTypeName = async (domain: string) => {
+    const response = await GetStoreID(domain);
+    if (response?.storeType)
+      updateStoreTypeName(response?.storeType.name as _StoreTypeNames);
+  };
+
   useEffect(() => {
+    if (domain) setStoreTypeName(domain);
     if (store?.code === BACARDI && window.location.pathname === '/') {
       const selectedStore = extractCookies(
         'BacardiSelectedStore',
@@ -240,6 +266,9 @@ const RedefineCustomApp = ({
     }
   }, [store?.code]);
   useEffect(() => {
+    if ('error' in pageProps) {
+      return;
+    }
     const cookies = extractCookies('', 'browserCookie');
     const tempCustomerId = extractCookies(
       __Cookie.tempCustomerId,
@@ -257,6 +286,14 @@ const RedefineCustomApp = ({
     //     store.company_address = contactInfo.company_address;
     //   }
     // });
+
+    if (pageProps?.page === 'PRODUCT_DETAILS') {
+      product_UpdateSelectedValues({
+        type: 'PINTERESET_IMAGE_PATH',
+        path: pageProps?.metaData?.pinterestImagePath || '',
+      });
+    }
+
     if (store) {
       store_storeDetails({
         store: store,
@@ -293,6 +330,13 @@ const RedefineCustomApp = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      window.addEventListener('scroll', handleScroll);
+    }
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   if (!store) {
     return <>Store Details not found</>;
   }
@@ -317,35 +361,36 @@ const RedefineCustomApp = ({
     }
   };
 
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      window.addEventListener('scroll', handleScroll);
-    }
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
   return (
     <>
       <Spinner>
         <Metatags
           storeName={store.storeName}
+          mediaBaseUrl={store.mediaBaseUrl}
           pageMetaData={pageProps?.metaData}
-          routepath={router.asPath}
+          pageUrl={pageUrl}
+          imageUrl={
+            forwardProductImage(pageProps, pageProps.metaData?.slug) ||
+            store.urls.logo ||
+            ''
+          }
         />
         <DcTags />
         <TwitterTags
           pageMetaData={pageProps?.metaData}
-          routepath={router.asPath}
+          pageUrl={pageUrl}
           logoUrl={store.urls.logo}
         />
         <Redefine_Layout
-          logoUrl={store.urls.logo}
-          storeCode={store.code}
-          storeTypeId={store.storeTypeId!}
-          configs={{ footer: footerHTML }}
-          menuItems={menuItems}
-          sbStore={sbStore}
-          headerConfig={headerConfig}
+          store={{
+            code: store.code,
+            id: store.storeId!,
+            sbStore: sbStore,
+            logoUrl: store.urls.logo,
+            typeId: store.storeTypeId || 0,
+            menuItems: menuItems,
+          }}
+          configs={{ footer: footerHTML, header: headerConfig }}
           templateIDs={templateIDs}
           pageMetaData={pageProps.metaData}
         >
@@ -393,12 +438,12 @@ RedefineCustomApp.getInitialProps = async (
 
   //------------------------------------
   const ctx = await App.getInitialProps(context);
-  const isUpperCase = (string: any) => /[A-Z]/.test(string);
 
   if (req && req.headers) {
     if ('x-nextjs-data' in req.headers) {
       // Checking if old tab has made the request If yes then we won't call StoreDetails APIs
       oldTab = true;
+      _globalStore.set({ key: 'newTab', value: false });
     }
 
     domain = domainToShow({
@@ -431,17 +476,35 @@ RedefineCustomApp.getInitialProps = async (
       }
     }
   }
-  // if (res) {
-  //   if (
-  //     !req?.headers.host?.includes('www') &&
-  //     req?.headers.host !== 'localhost:3000'  && req?.headers.host !== 'corporategear.online'
-  //   ) {
-  //   res.writeHead(301, {
-  //       Location: 'https://www.' + req?.headers.host + req?.url,
-  //     });
-  //     res.end();
-  //   }
+  // if(res && req)
+  // {
+
+  //   const proto =
+  //   req.headers["x-forwarded-proto"] || req?.connection?.encrypted
+  //     ? "https"
+  //     : "http";
+  //     if(proto === 'http')
+  //     {
+  //        res.writeHead(301, {
+  //               Location: 'https://' + req?.headers.host + req?.url,
+  //             });
+  //             res.end();
+  //     }
   // }
+
+  if (res) {
+    if (
+      !req?.headers.host?.includes('www') &&
+      req?.headers.host !== 'localhost:3000' &&
+      req?.headers.host !== 'localhost:3001' &&
+      req?.headers.host !== 'corporategear.online'
+    ) {
+      res.writeHead(301, {
+        Location: 'https://www.' + req?.headers.host + req?.url,
+      });
+      res.end();
+    }
+  }
 
   if (res && currentPath) {
     const currentPage = AuthGuard({
@@ -466,6 +529,8 @@ RedefineCustomApp.getInitialProps = async (
         const { store: storeDetails, adminConfig } = details;
         const response = await callConfigsAndRemainingStoreAPIsAndSetURls(
           storeDetails,
+          extractSlugName(storeDetails.code, context.router.query)
+            .seNameForSearch,
         );
 
         expectedProps.store = response.store;
@@ -595,6 +660,7 @@ RedefineCustomApp.getInitialProps = async (
     sbStore: expectedProps.sbStore,
     headerConfig: expectedProps.headerConfig,
     templateIDs: expectedProps.templateIDs,
+    domain,
   };
 };
 

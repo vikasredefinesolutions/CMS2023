@@ -1,9 +1,9 @@
 import { __Login } from '@constants/global.constant';
 import { SendAsync } from '@utils/axios.util';
-import { _profileModel } from './saml';
+import { _OktaLogoutModel, _profileModel } from './saml';
 
 export const FetchSAMPLProfile = async (payload: _profileModel) => {
-  const url = `/Okta/SAMPLProfile.json`;
+  const url = `Okta/SAMPLProfile.json`;
   try {
     const res = await SendAsync({
       url: url,
@@ -29,11 +29,12 @@ export const FetchSAMPLProfile = async (payload: _profileModel) => {
   }
 };
 
-export const SAMLLogout = async () => {
-  const url = `Okta/SAMLLogout`;
+export const OktaLogout = async (payload: _OktaLogoutModel) => {
+  const url = `/Okta/Logout`;
   const res = await SendAsync({
     url: url,
-    method: 'GET',
+    method: 'POST',
+    data: payload,
   });
 
   return res;

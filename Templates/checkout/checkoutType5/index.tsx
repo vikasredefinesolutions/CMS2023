@@ -53,10 +53,12 @@ import CartItem from '@templates/cartItem';
 import { maxLengthCalculator } from '@templates/checkout/checkoutType6/CO6_Extras';
 import _, { isEmpty } from 'lodash';
 import { useRouter } from 'next/router';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import CheckoutAddress from './components/AddressType1';
 import CO5_AddAddressForm from './components/CO5_AddAddressForm';
-import CO5_AvailablePaymentMethods from './components/CO5_AvailablePaymentMethods';
+import CO5_AvailablePaymentMethods, {
+  _HandlerProps,
+} from './components/CO5_AvailablePaymentMethods';
 import CO5_PoReferenceNumber from './components/CO5_PoReferenceNumber';
 import OrderSummaryType5 from './components/OrderSummary';
 
@@ -442,6 +444,23 @@ const ChekoutType5: React.FC<_Props> = ({ templateId }) => {
       console.log(error);
     }
   };
+  const compareaddress = (address1: CustomerAddress, address2: AddressType) => {
+    if (
+      address1.firstname.trim() == address2.firstname.trim() &&
+      address1.lastName.trim() == address2.lastName.trim() &&
+      address1.companyName.trim() == address2.companyName?.trim() &&
+      address1.address1.trim() == address2.address1.trim() &&
+      address1.address2.trim() == address2.address2.trim() &&
+      address1.city.trim() == address2.city.trim() &&
+      address1.postalCode.trim() == address2.postalCode.trim() &&
+      address1.state.trim() == address2.state.trim() &&
+      address1.countryName?.trim() == address2.countryName?.trim() &&
+      address1.phone.trim() == address2.phone.trim()
+    ) {
+      return true;
+    }
+    return false;
+  };
 
   const reviewOrder = async () => {
     if (!employeeLogin.isPaymentPending) {
@@ -530,6 +549,24 @@ const ChekoutType5: React.FC<_Props> = ({ templateId }) => {
                 });
               })
               .catch((error) => console.log(error)));
+          if (useShippingAddress) {
+            const billobj = {
+              storeCustomerAddressModel: {
+                ...obj.storeCustomerAddressModel,
+                addressType: UserAddressType.BILLINGADDRESS,
+              },
+            };
+
+            billobj.storeCustomerAddressModel.email &&
+              (await CreateUserAddress(billobj)
+                .then(() => {
+                  GetStoreCustomer(+customerId).then((res) => {
+                    if (res === null) return;
+                    updateCustomer({ customer: res });
+                  });
+                })
+                .catch((error) => console.log(error)));
+          }
           if (!useShippingAddress && !billingAdress && billingForm) {
             const billObj = {
               storeCustomerAddressModel: {
@@ -587,7 +624,58 @@ const ChekoutType5: React.FC<_Props> = ({ templateId }) => {
       if (shippingAdress && billingAdress && checkPayment()) {
         if (useShippingAddress) {
           // setBillAddress(shippingAdress);
+          const billingAddressArray = addressArray.filter(
+            (address) => address.addressType === UserAddressType.BILLINGADDRESS,
+          );
+          const addresdata = billingAddressArray.map((billaddress) => {
+            const data = compareaddress(billaddress, shippingAdress);
+            return data;
+          });
+          const addShipaddresstoBilladdress = addresdata.reduce(
+            (a, b) => a && !b,
+            true,
+          );
 
+          if (addShipaddresstoBilladdress) {
+            const data = await getLocation();
+            const billObj = {
+              storeCustomerAddressModel: {
+                id: 0,
+                rowVersion: '',
+                location: `${data.city}, ${data.region}, ${data.country}, ${data.postal_code}`,
+                ipAddress: data.ip_address,
+                macAddress: '00-00-00-00-00-00',
+                customerId: +customerId,
+                firstname: shippingAdress.firstname,
+                lastName: shippingAdress.lastName,
+                email: customer?.email || '',
+                address1: shippingAdress.address1,
+                address2: shippingAdress.address2 || ' ',
+                suite: ' ',
+                city: shippingAdress.city,
+                state: shippingAdress.state,
+                postalCode: shippingAdress.postalCode,
+                phone: shippingAdress.phone,
+                fax: shippingAdress.fax ? shippingAdress.fax : '',
+                countryName: shippingAdress.countryName,
+                countryCode: shippingAdress.countryCode || '',
+                addressType: UserAddressType.BILLINGADDRESS,
+                isDefault: true,
+                recStatus: 'A',
+                companyName: shippingAdress.companyName || ' ',
+              },
+            };
+
+            billObj.storeCustomerAddressModel.email &&
+              (await CreateUserAddress(billObj)
+                .then(() => {
+                  GetStoreCustomer(+customerId).then((res) => {
+                    if (res === null) return;
+                    updateCustomer({ customer: res });
+                  });
+                })
+                .catch((error) => console.log(error)));
+          }
           setBillingAdress(shippingAdress);
         }
 
@@ -784,10 +872,8 @@ const ChekoutType5: React.FC<_Props> = ({ templateId }) => {
     }
   };
 
-  const paymentFieldUpdateHandler = (
-    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-  ) => {
-    const { name, value } = e.target;
+  const paymentFieldUpdateHandler = (e: _HandlerProps) => {
+    const { name, value } = e;
 
     switch (paymentMethod) {
       case paymentEnum.creditCard:
@@ -802,9 +888,8 @@ const ChekoutType5: React.FC<_Props> = ({ templateId }) => {
       disable = !!!employeeLogin.salesRep.value;
     }
     if (!shippingAdress || !billingAdress) disable = true;
-    if (!isEmpty(billingForm.errors) || !isEmpty(shippingForm.errors))
-      disable = true;
-
+    if (!isEmpty(shippingForm.errors)) disable = true;
+    if (!isEmpty(billingForm.errors) && !useShippingAddress) disable = true;
     return disable;
   };
 
@@ -819,12 +904,10 @@ const ChekoutType5: React.FC<_Props> = ({ templateId }) => {
     if (!shippingAdress && isEmpty(shippingForm.touched)) {
       return true;
     }
-    if (!isEmpty(billingForm.errors) || !isEmpty(shippingForm.errors))
-      return true;
+    if (!isEmpty(shippingForm.errors)) return true;
+    if (!isEmpty(billingForm.errors) && !useShippingAddress) return true;
     return false;
   };
-
-  // console.log('purchase porder', purchaseOrder);
 
   return (
     <>
@@ -858,7 +941,7 @@ const ChekoutType5: React.FC<_Props> = ({ templateId }) => {
                                   setCurrentPage(checkoutPages.address);
                                 }
                               }}
-                              className='!text-anchor hover:!text-anchor-hover '
+                              className='hover:text-secondary text-tertiary underline'
                             >
                               {__pagesText.CheckoutPage.Edit}
                             </div>
@@ -911,7 +994,7 @@ const ChekoutType5: React.FC<_Props> = ({ templateId }) => {
                               onClick={() =>
                                 setCurrentPage(checkoutPages.address)
                               }
-                              className='!text-anchor hover:!text-anchor-hover '
+                              className='hover:text-secondary text-tertiary underline '
                             >
                               {__pagesText.CheckoutPage.Edit}
                             </div>
@@ -994,27 +1077,27 @@ const ChekoutType5: React.FC<_Props> = ({ templateId }) => {
                           <div className='pb-[10px] text-title-text'>
                             {__pagesText.CheckoutPage.BillingAddress}
                           </div>
-                          {!useShippingAddress && (
-                            <div className='text-default-text'>
-                              <div
-                                onClick={() => {
-                                  if (userId) {
-                                    setAddressType(
-                                      UserAddressType.BILLINGADDRESS,
-                                    );
-                                  } else {
-                                    setShippingAddress(false);
-                                    setShowAddAddress(true);
-                                    setBillingAdress(null);
-                                    setCurrentPage(checkoutPages.address);
-                                  }
-                                }}
-                                className='!text-anchor hover:!text-anchor-hover '
-                              >
-                                {__pagesText.CheckoutPage.Edit}
-                              </div>
+                          {/* {!useShippingAddress && ( */}
+                          <div className='text-default-text'>
+                            <div
+                              onClick={() => {
+                                if (userId) {
+                                  setAddressType(
+                                    UserAddressType.BILLINGADDRESS,
+                                  );
+                                } else {
+                                  setShippingAddress(false);
+                                  setShowAddAddress(true);
+                                  setBillingAdress(null);
+                                  setCurrentPage(checkoutPages.address);
+                                }
+                              }}
+                              className='hover:text-secondary text-tertiary underline'
+                            >
+                              {__pagesText.CheckoutPage.Edit}
                             </div>
-                          )}
+                          </div>
+                          {/* )} */}
                         </div>
                         <div className='mb-3 font-semibold text-lg'>
                           <div className='flex items-center'>

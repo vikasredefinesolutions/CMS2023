@@ -1,4 +1,5 @@
 import Price from '@appComponents/Price';
+import NxtImage from '@appComponents/reUsable/Image';
 import React from 'react';
 
 interface _Props {}
@@ -92,9 +93,10 @@ const SD_ProductsSlider: React.FC<_Props> = () => {
                       >
                         Scroll Page{' '}
                       </span>
-                      <img
+                      <NxtImage
                         className='w-full mx-auto'
                         src={ele.src}
+                        useNextImage={false}
                         alt='Text'
                       />
                     </a>

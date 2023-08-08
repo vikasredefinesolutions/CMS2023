@@ -11,6 +11,10 @@ export const __SuccessErrorText = {
     valid: 'Coupon Code Successfully Updated!',
     invalid: `Enter a valid Promo code.`,
   },
+  giftCardCode: {
+    valid: 'Gift Card Code Successfully Updated!',
+    invalid: `Enter a valid gift card code.`,
+  },
   invalidCrendentials: 'The username or password is incorrect.',
 };
 

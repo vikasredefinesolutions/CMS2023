@@ -5,7 +5,9 @@ function OutOfStockComponent({ elem }: any) {
       <div className='w-1/3 pt-[10px] pb-[10px] text-center text-red-700 font-[600]'>
         OUT OF STOCK
       </div>
-      <div className='w-1/3 pt-[10px] pb-[10px] text-right'>-</div>
+      <div className='w-1/3 pt-[10px] pb-[10px] text-right'>
+        <span className='inline-block !w-[65px] text-center'>-</span>
+      </div>
     </div>
   );
 }

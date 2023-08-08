@@ -124,7 +124,7 @@ const BrandsByCategoriesType1: React.FC<_Props> = ({ brands }) => {
                                       <a>
                                         <NxtImage
                                           className='w-full mx-auto'
-                                          src={brand.imagePath}
+                                          src={brand?.imagePath || null}
                                           title={brand.name}
                                           alt={brand.name}
                                           useNextImage={false}

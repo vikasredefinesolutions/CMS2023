@@ -3,6 +3,8 @@ import yesImg from '@images/yes.png';
 import { ErrorMessage } from 'formik';
 
 import NxtImage from '@appComponents/reUsable/Image';
+import { HEALTHYPOINTS } from '@constants/global.constant';
+import { useTypedSelector_v2 } from '@hooks_v2/index';
 import React from 'react';
 
 interface _props {
@@ -16,6 +18,7 @@ interface _props {
   touched: boolean;
   error: string | null;
   onBlur: (e: React.FocusEvent<any, Element>) => void;
+  className?: string;
 }
 
 const SU1_Input: React.FC<_props> = ({
@@ -29,12 +32,14 @@ const SU1_Input: React.FC<_props> = ({
   touched,
   error,
   onBlur,
+  className,
 }) => {
   const right = required && touched && error === null;
   const wrong = required && touched && error;
+  const { code: storeCode } = useTypedSelector_v2((state) => state.store);
 
   return (
-    <div className='w-full lg:w-1/2 px-[15px]'>
+    <div className={`w-full lg:w-1/2 px-[15px] ${className}`}>
       <label htmlFor={name} className='block text-default-text'>
         {label} {required && <span className='text-rose-500'>*</span>}
       </label>
@@ -48,7 +53,9 @@ const SU1_Input: React.FC<_props> = ({
             value={value}
             onChange={handleChange}
             onBlur={onBlur}
-            className='form-input mr-8'
+            className={`form-input mr-8 ${
+              wrong && storeCode === HEALTHYPOINTS ? 'has-error' : ''
+            }`}
           />
           <div className='absolute w-6 h-6 right-0 top-2'>
             {right && (

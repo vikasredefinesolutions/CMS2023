@@ -10,6 +10,7 @@ const CO5_PoReferenceNumber: React.FC<_Props> = ({ onChange, poRefNumber }) => {
         className={`relative z-0 w-full mb-[20px] border border-gray-border rounded `}
       >
         <input
+          maxLength={10}
           onChange={onChange}
           name='EnterPONumber'
           placeholder=' '

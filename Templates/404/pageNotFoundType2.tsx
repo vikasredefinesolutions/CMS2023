@@ -10,9 +10,10 @@ const SomethingWentWrong: React.FC = () => {
             <div className='text-center mb-[40px] w-full h-full'>
               <NxtImage
                 className=''
+                isStatic={true}
                 src='/assets/images/404.png'
+                useNextImage={false}
                 alt=''
-                isStatic
               />
             </div>
 

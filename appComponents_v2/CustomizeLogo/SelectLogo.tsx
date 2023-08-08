@@ -1,3 +1,4 @@
+import NxtImage from '@appComponents/reUsable/Image';
 import { ApprovedLogoItem } from '@definations/APIs/logo.res';
 import { _LogoSteps } from '@definations/product.type';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
@@ -27,6 +28,7 @@ const SelectLogo: React.FC<_props> = ({
     name: string;
     id: number;
   }>(null);
+  const [fetchedLogo, setFetchedLogo] = useState<ApprovedLogoItem[]>([]);
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [showError, setShowError] = useState<boolean>(false);
 
@@ -55,7 +57,10 @@ const SelectLogo: React.FC<_props> = ({
           addOrRemove: 'REMOVE',
         });
         updateLogoDetails({
-          location: selectedLocation,
+          location: {
+            ...selectedLocation,
+            reusableLocationId: selected.id,
+          },
           url: selected.url,
           name: selected.name,
         });
@@ -79,6 +84,7 @@ const SelectLogo: React.FC<_props> = ({
         }).then((res) => {
           if (res) {
             setAvailableLogos(res);
+            setFetchedLogo(res);
           }
         });
       }
@@ -126,7 +132,9 @@ const SelectLogo: React.FC<_props> = ({
           onClick={() => setOpenModal(true)}
         >
           <div className='mb-[10px] flex flex-wrap items-center justify-center h-[120px] px-[10px]'>
-            <img
+            <NxtImage
+              useNextImage={false}
+              isStatic={true}
               src='/assets/images/logo-addnewLogo.jpg'
               alt='add-new-Logo'
               className='max-h-[120px] w-auto mx-auto'
@@ -159,20 +167,9 @@ const SelectLogo: React.FC<_props> = ({
         <UploadLogoPopup
           id={'upload'}
           setOpenModal={setOpenModal}
-          logoToShow={(logo) =>
-            setAvailableLogos((logos) => [
-              ...logos,
-              {
-                id: logos.length + 1,
-                customerId: customerId ? customerId : 0,
-                storeId: storeId,
-                logo: logo.logoPathURL || '',
-                logoName: logo.name,
-                locationName: selectedLocation?.name || '',
-                logoPositionImage: '',
-              },
-            ])
-          }
+          setAvailableLogos={setAvailableLogos}
+          selectedLocationName={selectedLocation?.name || ''}
+          selectedLocationImage={selectedLocation?.image || ''}
         />
       )}
     </>

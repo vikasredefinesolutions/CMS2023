@@ -8,6 +8,7 @@ import {
   __Cookie_Expiry,
   __LocalStorage,
 } from '@constants/global.constant';
+import { thirdPartyLoginService } from '@constants/pages.constant';
 import { __pagesText } from '@constants/pages.text';
 import { fetchCartDetails } from '@redux/asyncActions/cart.async';
 import { updateCartByNewUserId } from '@services/cart.service';
@@ -160,8 +161,26 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
   const SamlloginHandler = () => {
     fetchThirdpartyservice({ storeId }).then((ThirdpartyServices) => {
       ThirdpartyServices.map((service) => {
-        if (service.thirdPartyServiceName == 'Okta')
-          router.push(ThirdpartyServices[0].url);
+        if (
+          service.thirdPartyServiceName.toLocaleLowerCase() ==
+          thirdPartyLoginService.oktaLogin.toLocaleLowerCase()
+        ) {
+          localStorage.setItem(
+            __LocalStorage.thirdPartyServiceName,
+            service.thirdPartyServiceName,
+          );
+          service.url && router.push(service.url);
+        } else if (
+          service.thirdPartyServiceName.toLocaleLowerCase() ==
+          thirdPartyLoginService.samlLogin.toLocaleLowerCase()
+        ) {
+          const jsonDate = new Date().toJSON();
+          const datejson = jsonDate.split('.')[0] + 'Z';
+          // console.log(datejson, 'datejson', jsonDate);
+
+          service.url &&
+            router.push(service.url + encodeURIComponent(datejson));
+        }
       });
     });
   };
@@ -230,7 +249,7 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
     domain: _STORE_EMAIL | undefined,
   ) => {
     if (!domain) return;
-    const result = new RegExp("^\\w+([-+.']w+)*@" + domain + '.com$').test(
+    const result = new RegExp(`[a-zA-Z0-9._%+-]+@` + domain + `\.com$`).test(
       email.trim(),
     );
     if (!result) {
@@ -296,7 +315,7 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
                     onSubmit={empGuestSignInHandler}
                     validationSchema={empGuestvalidationSchema}
                   >
-                    {({ values, handleChange }) => {
+                    {({ values, handleChange, errors }) => {
                       return (
                         <>
                           <Form>
@@ -318,6 +337,7 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
                                 onChange={handleChange}
                                 type={'email'}
                                 required={true}
+                                error={errors}
                               />
 
                               <div className='mb-[20px]'>
@@ -375,7 +395,7 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
                     onSubmit={signInHandler}
                     validationSchema={validationSchema}
                   >
-                    {({ values, handleChange, handleSubmit }) => {
+                    {({ values, handleChange, handleSubmit, errors }) => {
                       return (
                         <>
                           <Form>
@@ -408,6 +428,7 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
                                     (_STORE_EMAIL as any)[storeCode],
                                   )
                                 }
+                                error={errors}
                               />
 
                               <Input
@@ -427,6 +448,7 @@ const LoginModal: React.FC<_ModalProps> = ({ modalHandler }) => {
                                 }}
                                 type={'password'}
                                 required={false}
+                                error={errors}
                               />
 
                               <div className='mb-[20px]'>

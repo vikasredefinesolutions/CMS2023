@@ -1,10 +1,7 @@
 import ForgotModal from '@appComponents/modals/forgotModal';
 import LoginModal from '@appComponents/modals/loginModal';
 import StartOrderModal from '@appComponents/modals/startOrderModal/StartOrderModal';
-import {
-  default as Image,
-  default as NxtImage,
-} from '@appComponents/reUsable/Image';
+import { default as NxtImage } from '@appComponents/reUsable/Image';
 import Price from '@appComponents/reUsable/Price';
 import { _Store } from '@configs/page.config';
 import { CustomizeLaterMain } from '@constants/common.constant';
@@ -46,10 +43,7 @@ import {
 import { _CartLinePersonDetailModel } from '@services/product.service.type';
 import Link from 'next/link';
 import { useState } from 'react';
-import { _globalStore } from 'store.global';
 import Personalizing from './Personalizing';
-
-let mediaBaseUrl = _globalStore.blobUrl; // for server side
 
 type _Props = {
   availableFont: [] | PersonalizationFont[];
@@ -76,7 +70,6 @@ const CI1_Item: React.FC<_CartItem & _Props> = (props) => {
   const {
     isLinepersonalization,
     code: storeCode,
-    mediaBaseUrl: clientSideMediaBaseUrl,
     isAttributeSaparateProduct,
     id: storeId,
   } = useTypedSelector_v2((state) => state.store);
@@ -84,7 +77,6 @@ const CI1_Item: React.FC<_CartItem & _Props> = (props) => {
   const isEmployeeLoggedIn = useTypedSelector_v2(
     (state) => !!state.employee.empId,
   );
-  mediaBaseUrl = mediaBaseUrl || clientSideMediaBaseUrl;
 
   // Local State
   const [productForSOM, setProductForSOM] = useState<_ProductDetails | null>(
@@ -102,7 +94,7 @@ const CI1_Item: React.FC<_CartItem & _Props> = (props) => {
   >([]);
 
   const customer = useTypedSelector_v2((state) => state.user.customer);
-
+  const code  = useTypedSelector_v2((state) => state.store.code);
   // Imported Functions
   const customerId = GetCustomerId();
 
@@ -278,21 +270,17 @@ const CI1_Item: React.FC<_CartItem & _Props> = (props) => {
       <li className='flex flex-wrap pl-[20px] pr-[20px] ml-[-15px] mr-[-15px] mb-[40px]'>
         <div className='w-full lg:w-2/6 pl-[15px] pr-[15px]'>
           <div className='w-full text-center'>
-            <Image
-              src={
-                props.colorImage
-                  ? props.colorImage
-                  : '/assets/images/image_not_available.jpg'
-              }
+            <NxtImage
+              src={props.colorImage || '/assets/images/image_not_available.jpg'}
               alt={props.productName}
               className='max-h-[348px] m-auto'
-              isStatic={!Boolean(props.colorImage)}
+              isStatic={!props.colorImage}
             />
           </div>
         </div>
         <div className='w-full lg:w-4/6 pl-[0px] pr-[0px] flex flex-wrap lg:justify-between'>
           <div className='text-title-text font-semibold mb-[10px]'>
-            <Link href={`/${props.seName}`} className='text-[#000000]'>
+            <Link href={`/${props.seName}.html`} className='text-[#000000]'>
               {props.productName}
             </Link>
           </div>
@@ -300,13 +288,13 @@ const CI1_Item: React.FC<_CartItem & _Props> = (props) => {
             <div className='lg:w-2/3 w-full'>
               <div className='flex justify-between'>
                 <div className='text-medium-text'>
-                  <span className='font-semibold'>SKU :</span>
+                  <span className='font-semibold'>SKU: </span>
                   {props.sku}
                 </div>
               </div>
               <div className='mt-[4px] flex'>
                 <div className='text-medium-text'>
-                  <span className='font-semibold'>Color :</span>
+                  <span className='font-semibold'>Color: </span>
                   {props.attributeOptionValue}
                 </div>
               </div>
@@ -333,11 +321,11 @@ const CI1_Item: React.FC<_CartItem & _Props> = (props) => {
                   <div className='text-normal-text font-semibold w-16 text-center'>
                     Qty
                   </div>
-                  {isEmployeeLoggedIn && (
-                    <div className='text-normal-text font-semibold w-16 text-center'>
-                      Unit Price
-                    </div>
-                  )}
+                  {/* {isEmployeeLoggedIn && ( */}
+                  <div className='text-normal-text font-semibold w-16 text-center'>
+                    Unit Price
+                  </div>
+                  {/* )} */}
                   <div className='text-normal-text font-semibold w-20 text-right'>
                     Price
                   </div>
@@ -351,11 +339,11 @@ const CI1_Item: React.FC<_CartItem & _Props> = (props) => {
                       <div className='text-normal-text w-16 text-center'>
                         {view.qty}
                       </div>
-                      {isEmployeeLoggedIn && (
-                        <div className='text-normal-text w-16 text-center'>
-                          {view.price / view.qty}
-                        </div>
-                      )}
+                      {/* {isEmployeeLoggedIn && ( */}
+                      <div className='text-normal-text w-16 text-center'>
+                        <Price value={view.price / view.qty} />
+                      </div>
+                      {/* )} */}
                       <div className='text-normal-text w-20 text-right'>
                         <Price value={view.price} />
                       </div>
@@ -367,11 +355,11 @@ const CI1_Item: React.FC<_CartItem & _Props> = (props) => {
                   <div className='text-normal-text w-16 text-center'>
                     {props.totalQty}
                   </div>
-                  {isEmployeeLoggedIn && (
-                    <div className='text-normal-text w-16 text-center'>
-                      {/* EMPTY */}
-                    </div>
-                  )}
+                  {/* {isEmployeeLoggedIn && ( */}
+                  <div className='text-normal-text w-16 text-center'>
+                    {/* EMPTY */}
+                  </div>
+                  {/* )} */}
                   <div className='text-normal-text w-20 text-right'>
                     <Price value={props.productTotal} />
                   </div>
@@ -394,16 +382,18 @@ const CI1_Item: React.FC<_CartItem & _Props> = (props) => {
                       return _item.logoName === CustomizeLaterMain ? (
                         <div className='flex justify-start items-center mt-3'>
                           <div>
+                            {code === 'PMCG' ? <><img src='/assets/images/petermiller/crown.svg' /></> : 
                             <span className='material-icons text-[60px] mr-3'>
                               support_agent
-                            </span>
+                            </span>}
+                            
                           </div>
                           <div>
                             <div className='text-lg font-semibold'>
                               {CustomizeLaterMain}
                             </div>
                             <div className='text-base'>
-                              {__pagesText.CustomizeLater}
+                              {code == 'PMCG' ? __pagesText.CustomizeLaterPM : __pagesText.CustomizeLater}
                             </div>
                           </div>
                         </div>
@@ -415,16 +405,15 @@ const CI1_Item: React.FC<_CartItem & _Props> = (props) => {
                           <div className='text-base'>
                             <div className='mb-3 flex'>
                               {_item.logoImagePath === '' ? (
-                                <NxtImage
-                                  className='w-[60px]'
+                                <img
+                                  className='w-[70px] max-h-[70px] flex items-center justify-center'
                                   src='/assets/images/logo-to-be-submitted.webp'
                                   title=''
                                   alt={_item.logoImagePath}
-                                  isStatic={true}
                                 />
                               ) : (
                                 <NxtImage
-                                  className='w-[60px]'
+                                  className='w-[70px] max-h-[70px] flex items-center justify-center'
                                   src={_item.logoImagePath}
                                   title=''
                                   alt={_item.logoImagePath}
@@ -551,7 +540,7 @@ const CI1_Item: React.FC<_CartItem & _Props> = (props) => {
                   <button
                     type='button'
                     data-modal-toggle='startorderModal'
-                    className='btn btn-primary !w-full  text-center uppercase'
+                    className='btn btn-secondary !w-full  text-center uppercase'
                     onClick={() => {
                       handleEditItem(props);
                       keepPersonalizing ? setKeepPersonalizing(false) : '';

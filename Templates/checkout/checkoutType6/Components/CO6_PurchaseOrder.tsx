@@ -36,6 +36,7 @@ const CO6_PurchaseOrder: React.FC<_Props> = ({
               onBlur={handleBlur}
               value={values.poNumber}
               name={'poNumber'}
+              maxLength={10}
             />
             {isValid && (
               <NxtImage

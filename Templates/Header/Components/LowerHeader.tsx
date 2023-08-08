@@ -2,17 +2,15 @@ import { _AnnouncementRow } from '@definations/header.type';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import React from 'react';
 interface _props {
-  headerContent: _AnnouncementRow;
+  content: _AnnouncementRow[];
 }
-const LowerHeader: React.FC<_props> = (headerContent) => {
-  const leftcontent = headerContent.headerContent.leftSideText
-    ? headerContent.headerContent.leftSideText
-    : '';
-  const rightContent = headerContent.headerContent.rightSideText
-    ? headerContent.headerContent.rightSideText
-    : '';
-
+const LowerHeader: React.FC<_props> = ({ content }) => {
   const storeCode = useTypedSelector_v2((state) => state.store.code);
+
+  if (content.length <= 1) return null;
+  const leftcontent = content[1].leftSideText || '';
+  const rightContent = content[1].rightSideText || '';
+
   return (
     <>
       {/* <div
@@ -27,8 +25,8 @@ const LowerHeader: React.FC<_props> = (headerContent) => {
             {!rightContent ? (
               <div
                 style={{
-                  backgroundColor: `${headerContent.headerContent.backgroundColor}`,
-                  color: `${headerContent.headerContent.textColor}`,
+                  backgroundColor: `${content[1].backgroundColor}`,
+                  color: `${content[1].textColor}`,
                 }}
                 className='w-full mx-auto text-center pt-[10px] pb-[10px]'
                 dangerouslySetInnerHTML={{ __html: leftcontent }}
@@ -49,8 +47,8 @@ const LowerHeader: React.FC<_props> = (headerContent) => {
             {!rightContent ? (
               <div
                 style={{
-                  backgroundColor: `${headerContent.headerContent.backgroundColor}`,
-                  color: `${headerContent.headerContent.textColor}`,
+                  backgroundColor: `${content[1].backgroundColor}`,
+                  color: `${content[1].textColor}`,
                 }}
                 className='w-full mx-auto text-center pt-[10px] pb-[10px]'
                 dangerouslySetInnerHTML={{ __html: leftcontent }}

@@ -125,6 +125,7 @@ const PL1_BillingAddress: React.FC<_Props> = ({
                         required={input.required}
                         value={values[input.name]}
                         fullWidth={input.fullWidth}
+                        autoFillText={input.autoFillText}
                         onBlur={(e) => {
                           handleBlur(e);
                         }}
@@ -152,6 +153,7 @@ const PL1_BillingAddress: React.FC<_Props> = ({
                       required={input.required}
                       value={values[input.name]}
                       fullWidth={input.fullWidth}
+                      autoFillText={input.autoFillText}
                       onBlur={(event) => {
                         handleBlur(event);
                         if (input.name === 'zipcode') {

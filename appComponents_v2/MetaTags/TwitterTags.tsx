@@ -12,7 +12,7 @@ const TwitterTags: React.FC<_Props> = (props) => {
   const { pageMetaData, routeUrl, storeName } = props;
   return (
     <Head>
-      <meta name={`${TwitterTagsData?.tagName}:card`} content='Summary' />
+     <meta name={`${TwitterTagsData?.tagName}:card`} content='Summary' />
       <meta
         name={`${TwitterTagsData?.tagName}:site`}
         content={`${storeName}`}

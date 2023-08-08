@@ -11,7 +11,8 @@ const ColorImage: React.FC<_props> = ({ product }) => {
       title={`${product.name}`}
       src={product.imageUrl}
       alt={product.altTag}
-      className='w-full object-center object-cover cursor-pointer'
+      useNextImage={false}
+      className='max-h-full m-auto'
     />
   );
 };

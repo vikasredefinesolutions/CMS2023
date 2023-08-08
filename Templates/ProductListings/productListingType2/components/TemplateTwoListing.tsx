@@ -7,8 +7,8 @@ import { __pagesText } from '@constants/pages.text';
 import { getCompareLink } from '@helpers/compare.helper';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import {
-  GetlAllProductList,
-  GetProductImageOptionList,
+    GetlAllProductList,
+    GetProductImageOptionList,
 } from '@templates/ProductListings/ProductListingType';
 import ProductBoxController from '@templates/ProductListings/productListingType1/components/productBoxController';
 import Link from 'next/link';
@@ -84,7 +84,7 @@ const TemplateTwoListing = ({
                   style={{ display: 'block' }}
                 >
                   <NxtImage
-                    src={mainImageUrl}
+                    src={mainImageUrl || null}
                     alt={product.name}
                     className='max-h-[348px] !inline-black m-auto cursor-pointer'
                     cKey={currentProduct.id}
@@ -92,7 +92,6 @@ const TemplateTwoListing = ({
                 </a>
               </div>
             </Link>
-            
           </div>
           <div className='mt-[20px] relative md:px-[30px] px-[15px]'>
             <div className='mb-[10px] mt-[10px] h-[46px] text-anchor hover:text-anchor-hover text-medium-text overflow-hidden'>
@@ -153,7 +152,7 @@ const TemplateTwoListing = ({
                       className={`w-[28px] h-[28px] border-2 border-primary hover:border-primary cursor-pointer`}
                     >
                       <NxtImage
-                        src={`${mediaBaseUrl}${currentProduct.imageName}`}
+                        src={currentProduct?.imageName || null}
                         alt=''
                         className='max-h-full m-auto'
                         title={currentProduct.colorName}
@@ -177,7 +176,7 @@ const TemplateTwoListing = ({
                       >
                         <Link href={`/${subRow.seName}.html`}>
                           <NxtImage
-                            src={`${mediaBaseUrl}${subRow.imageurl}`}
+                            src={subRow.imageurl || null}
                             alt=''
                             className='max-h-full m-auto'
                             title={subRow.colorName}
@@ -211,7 +210,7 @@ const TemplateTwoListing = ({
                         key={subRow.id}
                       >
                         <NxtImage
-                          src={`${mediaBaseUrl}${subRow.imageName}`}
+                          src={subRow.imageName || null}
                           alt=''
                           className=''
                           title={subRow.colorName}
@@ -249,16 +248,19 @@ const TemplateTwoListing = ({
               href={`${origin}/${product.sename}.html?v=product-detail&altview=1`}
               className='relative cursor-pointer'
             >
-              <NxtImage
-                src={mainImageUrl}
-                alt=''
-                className='max-h-[348px] !inline-black m-auto'
-                key={currentProduct?.id}
-              />
+              <a>
+                <NxtImage
+                  src={mainImageUrl}
+                  alt=''
+                  className='max-h-[348px] !inline-black m-auto'
+                  key={currentProduct?.id}
+                />
+              </a>
             </Link>
             <div className='absolute left-7 top-7 h-8 flex gap-1'>
               <div className='h-8'>
-                <img
+                <NxtImage
+                  isStatic={true}
                   className='max-h-full inline-block'
                   src='images/Sale.webp'
                   alt=''
@@ -328,7 +330,7 @@ const TemplateTwoListing = ({
                   >
                     <Link key={product.id} href={`/${product.sename}.html`}>
                       <NxtImage
-                        src={`${mediaBaseUrl}${currentProduct.imageName}`}
+                        src={currentProduct?.imageName || null}
                         alt=''
                         className='max-h-full m-auto'
                         title={product.name}
@@ -352,7 +354,7 @@ const TemplateTwoListing = ({
                       >
                         <Link key={product.id} href={`/${subRow.seName}.html`}>
                           <NxtImage
-                            src={`${mediaBaseUrl}${subRow.imageurl}`}
+                            src={subRow.imageurl || null}
                             alt=''
                             className='max-h-full m-auto'
                             title={subRow.colorName}
@@ -385,7 +387,7 @@ const TemplateTwoListing = ({
                       key={subRow.id}
                     >
                       <NxtImage
-                        src={`${mediaBaseUrl}${subRow.imageName}`}
+                        src={subRow.imageName || null}
                         alt=''
                         className=''
                         title={subRow.colorName}

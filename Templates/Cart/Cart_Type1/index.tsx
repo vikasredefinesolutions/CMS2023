@@ -139,7 +139,7 @@ const CartType1: React.FC<_CartProps> = ({
                     <div className='mt-[20px] bg-light-gray px-4 py-4'>
                       <div className='flex items-center justify-center mb-[15px]'>
                         <img
-                          src='/order-risk-free-icon.jpg'
+                          src='/assets/images/order-risk-free-icon.jpg'
                           alt=''
                           className='mr-2 w-5 h-5'
                         />

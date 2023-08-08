@@ -1,3 +1,4 @@
+import NxtImage from '@appComponents/reUsable/Image';
 import { __pagesText } from '@constants/pages.text';
 import Link from 'next/link';
 import React from 'react';
@@ -33,11 +34,13 @@ const Ecommerce_RequestSubmitted: React.FC = () => {
               </div>
               <div className='text-center mb-[30px]'>
                 <a href='javascript:void(0);'>
-                  <img
-                    alt=''
-                    height='47'
-                    className='mb-[5px] inline-block'
+                  <NxtImage
                     src='/contact-us.webp'
+                    isStatic={true}
+                    //
+                    alt=''
+                    className='mb-[5px] inline-block'
+                    height='47'
                     title=''
                     width='47'
                   />
@@ -48,9 +51,10 @@ const Ecommerce_RequestSubmitted: React.FC = () => {
               </div>
               <div className='text-center mb-[30px]'>
                 <a href='tel:888-293-5648' title='CALL'>
-                  <img
+                  <NxtImage
                     alt=''
                     height='47'
+                    isStatic={true}
                     className='mb-[5px] inline-block'
                     src='/call.webp'
                     title=''

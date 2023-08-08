@@ -19,8 +19,6 @@ interface _ConsultationPayload {
 }
 
 const SD_FaqSection: React.FC<_Props> = ({ page }) => {
-  const handleStartReview = () => {};
-
   return (
     <section className='relative pt-[40px] pb-[40px] bg-light-gray'>
       <div className='container mx-auto px-[16px]'>
@@ -40,7 +38,7 @@ const SD_FaqSection: React.FC<_Props> = ({ page }) => {
             <div className='w-full bg-white p-[20px] sm:p-[30px] lg:p-[40px]'>
               <div className='w-full'>
                 <div
-                  className='bg-blue-900 text-white p-[20px] sm:p-[30px] lg:p-[40px] text-large-text font-semibold'
+                  className='bg-blue-900 p-[20px] sm:p-[30px] lg:p-[40px] text-large-text font-semibold text-white '
                   role='heading'
                 >
                   <div>
@@ -106,12 +104,12 @@ const SD_FaqSection: React.FC<_Props> = ({ page }) => {
                     </div>
                   </div>
                   <form>
-                    <button
-                      className='btn btn-primary btn-md w-full mt-[14px]'
-                      onClick={handleStartReview}
+                    <a
+                      className='btn btn-primary btn-md w-full mt-[14px] text-center'
+                      href='https://g.page/r/CS-uHHojlBSDEAg/review'
                     >
                       START REVIEW
-                    </button>
+                    </a>
                   </form>
                 </div>
               </div>

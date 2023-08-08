@@ -17,6 +17,11 @@ import {
   FetchSimilartProducts,
   FetchSizeChartById,
 } from '@services/product.service';
+import { _ProductRatings, _ProductReview } from '@services/review';
+import {
+  FetchProductRatings,
+  FetchProductReviews,
+} from '@services/review.service';
 import { _globalStore } from 'store.global';
 import {
   _FetchPageThemeConfigs_ProductDetails,
@@ -37,6 +42,8 @@ export interface _FetchProductDetails {
   alike: null | _ProductsAlike[];
   views: string[];
   templateId: string;
+  reviews: _ProductReview[] | null;
+  ratings: _ProductRatings | null;
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -48,6 +55,7 @@ export interface _FetchProductDetails {
 export const getProductDetailProps = async (payload: {
   storeId: number;
   seName: string;
+  productId: number;
   isAttributeSaparateProduct: boolean;
 }) => {
   return await FetchProductDetails(payload);
@@ -56,9 +64,12 @@ export const getProductDetailProps = async (payload: {
 export const FetchProductDetails = async (payload: {
   storeId: number;
   seName: string;
+  productId: number;
   isAttributeSaparateProduct: boolean;
 }): Promise<_FetchProductDetails> => {
   let productColors: null | _ProductColor[] = null;
+  let productReviews: null | _ProductReview[] = null;
+  let productRatings: null | _ProductRatings = null;
   let productDetails: null | _ProductDetails | _ProductDoNotExist = null;
   let productSizeChart: null | _SizeChartTransformed = null;
   let productSEOtags: null | _ProductSEO = null;
@@ -67,49 +78,50 @@ export const FetchProductDetails = async (payload: {
     productDetailTemplateId: _defaultTemplates.productDetails,
   } as _FetchPageThemeConfigs_ProductDetails;
   let views: string[] = [];
-
   try {
-    // Request - 1
-    productDetails = await FetchProductById({
-      seName: payload.seName,
-      storeId: payload.storeId,
-      productId: 0, // Not required when fetching details by seName
+    // Request 1
+    await Promise.allSettled([
+      FetchProductById({
+        seName: payload.seName,
+        storeId: payload.storeId,
+        productId: 0, // Not required when fetching details by seName
+      }),
+      FetchColors({
+        productId: payload.productId,
+        storeId: payload.storeId,
+        isAttributeSaparateProduct: payload.isAttributeSaparateProduct,
+      }),
+      FetchSizeChartById(payload.productId),
+      FetchProductSEOtags({
+        seName: payload.seName,
+        storeId: payload.storeId,
+      }),
+      FetchSimilartProducts({
+        productId: payload.productId,
+        storeId: payload.storeId,
+      }),
+      getConfigs<_FetchPageThemeConfigs_ProductDetails>(
+        payload.storeId,
+        'productDetail',
+      ),
+      FetchProductRatings(payload.productId),
+      FetchProductReviews(payload.productId),
+    ]).then((values) => {
+      productDetails =
+        values[0].status === 'fulfilled' ? values[0].value : null;
+      productColors = values[1].status === 'fulfilled' ? values[1].value : null;
+      productSizeChart =
+        values[2].status === 'fulfilled' ? values[2].value : null;
+      productSEOtags =
+        values[3].status === 'fulfilled' ? values[3].value : null;
+      productsAlike = values[4].status === 'fulfilled' ? values[4].value : null;
+      productConfigs =
+        values[5].status === 'fulfilled' ? values[5].value : null;
+      productRatings =
+        values[6].status === 'fulfilled' ? values[6].value : null;
+      productReviews =
+        values[7].status === 'fulfilled' ? values[7].value : null;
     });
-
-    if (productDetails?.id) {
-      // Request - 2,3,4,5,6 based on 1
-      await Promise.allSettled([
-        FetchColors({
-          productId: productDetails.id,
-          storeId: payload.storeId,
-          isAttributeSaparateProduct: payload.isAttributeSaparateProduct,
-        }),
-        FetchSizeChartById(productDetails.id),
-        FetchProductSEOtags({
-          seName: payload.seName,
-          storeId: payload.storeId,
-        }),
-        FetchSimilartProducts({
-          productId: productDetails.id,
-          storeId: payload.storeId,
-        }),
-        getConfigs<_FetchPageThemeConfigs_ProductDetails>(
-          payload.storeId,
-          'productDetail',
-        ),
-      ]).then((values) => {
-        productColors =
-          values[0].status === 'fulfilled' ? values[0].value : null;
-        productSizeChart =
-          values[1].status === 'fulfilled' ? values[1].value : null;
-        productSEOtags =
-          values[2].status === 'fulfilled' ? values[2].value : null;
-        productsAlike =
-          values[3].status === 'fulfilled' ? values[3].value : null;
-        productConfigs =
-          values[4].status === 'fulfilled' ? values[4].value : null;
-      });
-    }
 
     if (productConfigs) {
       productConfigs.sectionDisplay &&
@@ -143,6 +155,8 @@ export const FetchProductDetails = async (payload: {
     SEO: productSEOtags,
     alike: productsAlike,
     views: views,
+    reviews: productReviews,
     templateId: templateId,
+    ratings: productRatings,
   };
 };

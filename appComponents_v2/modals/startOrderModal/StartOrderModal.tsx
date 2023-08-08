@@ -172,6 +172,7 @@ const StartOrderModal: React.FC<_startOrderModalProps> = (props) => {
       updateDiscountPrice(payload);
     }
   }, [currentPresentQty]);
+  
   return (
     <div
       id='startorderModal'
@@ -210,7 +211,7 @@ const StartOrderModal: React.FC<_startOrderModalProps> = (props) => {
                   <div className='w-full lg:w-1/2'>
                     <div className=''>
                       <span className='font-[600]'>
-                        {__pagesText.productInfo.sku} :
+                        {__pagesText.productInfo.sku}:
                       </span>
                       <span> {product?.sku}</span>
                     </div>

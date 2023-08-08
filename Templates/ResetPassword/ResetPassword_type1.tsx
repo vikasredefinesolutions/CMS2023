@@ -1,5 +1,4 @@
-import { Form, Formik } from 'formik';
-import { isEmpty } from 'lodash';
+import { ErrorMessage, Form, Formik } from 'formik';
 import { useEffect } from 'react';
 
 import { paths } from '@constants/paths.constant';
@@ -16,16 +15,19 @@ import * as Yup from 'yup';
 const validationSchema = Yup.object().shape({
   password: Yup.string()
     .trim()
-    .required(__ValidationText.resetPassword.password)
+    .required(__ValidationText.resetPassword.password.required)
     .min(__ValidationText.signUp.password.minLength)
     .max(__ValidationText.signUp.password.maxLength),
-  cPassword: Yup.string().test(
-    'passwords-match',
-    __ValidationText.resetPassword.confirmPassword.mustMatch,
-    function (value) {
-      return this.parent.password === value;
-    },
-  ),
+  cPassword: Yup.string()
+    .trim()
+    .required(__ValidationText.resetPassword.confirmPassword.mustMatch)
+    .test(
+      'passwords-match',
+      __ValidationText.resetPassword.confirmPassword.mustMatch,
+      function (value) {
+        return this.parent.password === value;
+      },
+    ),
 });
 
 const _initialValues: _ResetPassword_InitialValues = {
@@ -77,15 +79,7 @@ const ResetPassword_type1: React.FC<{ token: string }> = ({ token }) => {
           onSubmit={submitHandler}
           validationSchema={validationSchema}
         >
-          {({
-            values,
-            handleBlur,
-            handleChange,
-            validateForm,
-            setTouched,
-            touched,
-            errors,
-          }) => {
+          {({ values, handleBlur, handleChange }) => {
             return (
               <Form>
                 <div className='text-2xl-text text-center'>RESET PASSWORD</div>
@@ -107,16 +101,11 @@ const ResetPassword_type1: React.FC<{ token: string }> = ({ token }) => {
                               className='form-input'
                               placeholder='New Password'
                             />
-                            {/* <ErrorMessage
+                            <ErrorMessage
                               name={'password'}
-                              className='text-rose-500'
-                              component={'p'}
-                            /> */}
-                            <div className='text-red-500 text-s mt-1'>
-                              {touched.password && errors.password
-                                ? Object.values(errors.password)[0]
-                                : ''}
-                            </div>
+                              className='text-red-500 text-s mt-1'
+                              component='p'
+                            />
                           </div>
                         </div>
                         <div className='mt-[15px] flex flex-wrap items-center gap-[8px]'>
@@ -131,39 +120,19 @@ const ResetPassword_type1: React.FC<{ token: string }> = ({ token }) => {
                               className='form-input'
                               placeholder='Re-Enter Password'
                             />
-                            {/* <ErrorMessage
+                            <ErrorMessage
                               name={'cPassword'}
-                              className='text-rose-500'
-                              component={'p'}
-                            /> */}
-                            <div className='text-red-500 text-s mt-1'>
-                              {touched.cPassword && errors.cPassword
-                                ? errors.cPassword
-                                : ''}
-                            </div>
+                              className='text-red-500 text-s mt-1'
+                              component='p'
+                            />
                           </div>
                         </div>
                         <div className='mt-[15px]'>
                           <button
-                            type={'button'}
+                            type={'submit'}
                             className={`btn ${
                               storeId === 7 ? 'btn-primary' : 'btn-secondary'
                             } btn-md w-full`}
-                            onClick={async () => {
-                              console.log('async working');
-                              const validate = await validateForm();
-
-                              if (!isEmpty(validate)) {
-                                // console.log(
-                                //   'validate ',
-                                //   validate,
-                                //   'errors',
-                                //   errors,
-                                // );
-                                return;
-                              }
-                              submitHandler(values);
-                            }}
                           >
                             RESET PASSWORD
                           </button>

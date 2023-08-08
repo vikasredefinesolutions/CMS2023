@@ -88,7 +88,7 @@ const ProductCompanion: React.FC<_ProductCompanion> = ({
                             key={subRow.prodcutId}
                           >
                             <NxtImage
-                              src={`${mediaBaseUrl}${subRow.imageurl}`}
+                              src={subRow.imageurl}
                               alt=''
                               className='max-h-full m-auto'
                               title={subRow.colorName}
@@ -116,7 +116,7 @@ const ProductCompanion: React.FC<_ProductCompanion> = ({
                       key={index}
                     >
                       <NxtImage
-                        src={`${mediaBaseUrl}${subRow.imageUrl}`}
+                        src={subRow.imageUrl}
                         alt=''
                         className='max-h-full m-auto'
                         title={subRow.altTag}

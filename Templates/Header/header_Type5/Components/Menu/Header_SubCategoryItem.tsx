@@ -33,7 +33,7 @@ const SubCategoryItem: React.FC<_props> = ({ type, itemLabel, view, url }) => {
     if (view === 'MOBILE') {
       return (
         <li className='py-[12px] border-b border-b-gray-border'>
-          <Link href={url ? url : 'javascript:void(0);'} passHref>
+          <Link href={url ? `/${url}` : 'javascript:void(0);'} passHref>
             <a
               className='inline-block pl-[70px] leading-[18px] text-[#000000]'
               title=''

@@ -257,9 +257,8 @@ const SignUp_type2: React.FC = () => {
         })
         .finally(() => {
           setShowLoader(false);
-          // CartController();
+          router.push(paths.HOME);
         });
-      router.push(paths.HOME);
     });
   };
 
