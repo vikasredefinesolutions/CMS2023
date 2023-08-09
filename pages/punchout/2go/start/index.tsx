@@ -21,7 +21,7 @@ const Punchout = (props: any) => {
         let str1 = str.split('<URL>');
         let str2 = str1[1].split('</URL>');
         console.log(str2[0]);
-        window.open(str2[0], '_blank');
+        return window.open(str2[0], '_blank');
       })
       .catch((err) => console.log(err));
   }, []);
