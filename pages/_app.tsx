@@ -492,7 +492,7 @@ RedefineCustomApp.getInitialProps = async (
   //     }
   // }
 
-  if (res) {
+ /* if (res) {
     if (
       !req?.headers.host?.includes('www') &&
       req?.headers.host !== 'localhost:3000' &&
@@ -504,7 +504,7 @@ RedefineCustomApp.getInitialProps = async (
       });
       res.end();
     }
-  }
+  }*/
 
   if (res && currentPath) {
     const currentPage = AuthGuard({
