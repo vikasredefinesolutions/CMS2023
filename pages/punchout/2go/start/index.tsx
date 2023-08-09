@@ -32,6 +32,7 @@ export default Punchout;
 
 export const getServerSideProps = async (context: any) => {
   const body = await getRawBody(context?.req);
+  console.log(body, 'this is body');
   return {
     props: { body: body.toString(), returnUrl: context.req.headers.host },
   };
