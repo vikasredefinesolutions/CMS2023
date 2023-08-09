@@ -1,5 +1,4 @@
 import { PunchoutPostApi } from '@services/punchout.service';
-import axios from 'axios';
 import getRawBody from 'raw-body';
 import { useEffect, useState } from 'react';
 
@@ -16,6 +15,7 @@ const Punchout = (props: any) => {
       return_url: params.get('return_url'),
       params: JSON.parse(params.get('params') || ''),
     };
+    console.log(obj.return_url, 'return url');
     let a = `${JSON.stringify(obj)}`;
     let b = '';
     const fetchData = async (a: any) => {
@@ -26,23 +26,23 @@ const Punchout = (props: any) => {
         );
     };
     fetchData(a);
-    let config = {
-      method: 'post',
-      maxBodyLength: Infinity,
-      url: obj.return_url,
-      withCredentials: false,
-      headers: {
-        'Content-Type': 'application/xml',
-        'Access-Control-Allow-Origin': '*',
-      },
-      data: returnXml,
-    };
-    axios
-      .request(config)
-      .then((response) => {
-        console.log(JSON.stringify(response.data));
-      })
-      .catch((err) => console.log(err));
+    //   let config = {
+    //     method: 'post',
+    //     maxBodyLength: Infinity,
+    //     url: obj.return_url,
+    //     withCredentials: false,
+    //     headers: {
+    //       'Content-Type': 'application/xml',
+    //       'Access-Control-Allow-Origin': '*',
+    //     },
+    //     data: returnXml,
+    //   };
+    //   axios
+    //     .request(config)
+    //     .then((response) => {
+    //       console.log(JSON.stringify(response.data));
+    //     })
+    //     .catch((err) => console.log(err));
   }, []);
 
   console.log(returnXml, 'xmllllll');
