@@ -28,7 +28,7 @@ export const SiteMap_Type2: React.FC<_Sitemap_ExpectedProps> = ({
                             className='relative ml-[35px] before:bg-primary before:h-px before:w-[38px] before:absolute before:left-[-55px] before:top-[9px] my-[15px]'
                             key={index}
                           >
-                            <Link href={cat.sename}>
+                             <Link href={`${cat.sename}.html`}>
                               <a className='text-default hover:text-tertiary before:absolute before:bg-primary before:rounded-full before:w-[4px] before:h-[4px] before:left-[-20px] before:inline-block before:top-2'>
                                 {cat.name}
                               </a>
