@@ -3,6 +3,7 @@ import getRawBody from 'raw-body';
 import { useEffect } from 'react';
 
 const Punchout = (props: any) => {
+  console.log(props, 'this is props');
   useEffect(() => {
     const params = new URLSearchParams(props.body);
     let obj: Record<string, any> = {};
