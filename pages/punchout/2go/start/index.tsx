@@ -1,5 +1,4 @@
 import { PunchoutPostApi } from '@services/punchout.service';
-import axios from 'axios';
 import getRawBody from 'raw-body';
 import { useEffect, useState } from 'react';
 
@@ -26,23 +25,23 @@ const Punchout = (props: any) => {
         );
     };
     fetchData(a);
-    let config = {
-      method: 'post',
-      maxBodyLength: Infinity,
-      url: obj.return_url,
-      withCredentials: false,
-      headers: {
-        'Content-Type': 'application/xml',
-        'Access-Control-Allow-Origin': '*',
-      },
-      data: returnXml,
-    };
-    axios
-      .request(config)
-      .then((response) => {
-        console.log(JSON.stringify(response.data));
-      })
-      .catch((err) => console.log(err));
+    //   let config = {
+    //     method: 'post',
+    //     maxBodyLength: Infinity,
+    //     url: obj.return_url,
+    //     withCredentials: false,
+    //     headers: {
+    //       'Content-Type': 'application/xml',
+    //       'Access-Control-Allow-Origin': '*',
+    //     },
+    //     data: returnXml,
+    //   };
+    //   axios
+    //     .request(config)
+    //     .then((response) => {
+    //       console.log(JSON.stringify(response.data));
+    //     })
+    //     .catch((err) => console.log(err));
   }, []);
 
   console.log(returnXml, 'xmllllll');
