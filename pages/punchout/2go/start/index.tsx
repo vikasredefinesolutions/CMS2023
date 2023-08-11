@@ -9,7 +9,9 @@ const Punchout = (props: any) => {
   // let returnxml = '';
 
   useEffect(() => {
-    console.log("RT", returnXml);
+    if(returnXml !== "" && returnXml !== "<empty string>")
+    {
+      
     const params = new URLSearchParams(props.body);
     console.log(params, 'params');
     let obj: Record<string, any> = {};
@@ -48,6 +50,7 @@ const Punchout = (props: any) => {
         console.log(JSON.stringify(response.data));
       })
       .catch((err) => console.log(err));
+    }
   }, [returnXml]);
 
  console.log(returnXml, 'xmllllll');
