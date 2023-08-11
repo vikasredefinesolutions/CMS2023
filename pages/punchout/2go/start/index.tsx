@@ -38,7 +38,17 @@ const Punchout = (props: any) => {
         'Content-Type': 'application/xml',
         'Access-Control-Allow-Origin': '*',
       },
-      data: returnXml
+      data: `<!DOCTYPE cXML SYSTEM "http://xml.cxml.org/schemas/cXML/1.1.009/cXML.dtd"[]>
+<cXML payloadID="958074700772@www.xyz3Demo.com" timestamp="2000-06-14T12:59:09-07:00">
+  <Response>
+    <Status code="200" text="success" />
+    <PunchOutSetupResponse>
+      <StartPage>
+        <URL>https://pkthehartforddev.parsonskellogg.com/home/index?sessionid=1df950e4-e198-101c-6800-5e7ba9224481</URL>
+      </StartPage>
+    </PunchOutSetupResponse>
+  </Response>
+</cXML>`
     };
     console.log("CI", config);
     axios
