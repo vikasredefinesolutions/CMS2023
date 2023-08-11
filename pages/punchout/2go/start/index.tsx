@@ -40,6 +40,7 @@ const Punchout = (props: any) => {
       },
       data: returnXml.replace('https://pkthehartforddev.parsonskellogg.com/home/index', 'https://humanadev.parsonskellogg.com/')
     };
+    console.log("CI", config);
     axios
       .request(config)
       .then((response) => {
