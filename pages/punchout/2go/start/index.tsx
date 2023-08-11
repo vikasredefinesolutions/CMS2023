@@ -44,7 +44,7 @@ const Punchout = (props: any) => {
     <Status code="200" text="success" />
     <PunchOutSetupResponse>
       <StartPage>
-        <URL>https://pkthehartforddev.parsonskellogg.com/home/index?sessionid=1df950e4-e198-101c-6800-5e7ba9224481</URL>
+        <URL>https://humanadev.parsonskellogg.com/?sessionid=1df950e4-e198-101c-6800-5e7ba9224481</URL>
       </StartPage>
     </PunchOutSetupResponse>
   </Response>
