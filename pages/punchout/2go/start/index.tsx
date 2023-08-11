@@ -38,7 +38,7 @@ const Punchout = (props: any) => {
         'Content-Type': 'application/xml',
         'Access-Control-Allow-Origin': '*',
       },
-      data: returnXml
+      data: returnXml.replace('https://pkthehartforddev.parsonskellogg.com/home/index', 'https://humanadev.parsonskellogg.com')
     };
     console.log("CI", config);
     axios
@@ -47,7 +47,7 @@ const Punchout = (props: any) => {
         console.log(JSON.stringify(response.data));
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, [returnXml]);
 
  console.log(returnXml, 'xmllllll');
 
