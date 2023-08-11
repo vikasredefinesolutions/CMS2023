@@ -48,7 +48,7 @@ const Punchout = (props: any) => {
       .catch((err) => console.log(err));
   }, []);
 
-  console.log("config", config, returnXml, 'xmllllll');
+  console.log("config", obj.return_url, returnXml, 'xmllllll');
 
   // const myHeaders = new Headers();
   // myHeaders.append('Content-Type', 'application/xml');
