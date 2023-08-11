@@ -9,6 +9,7 @@ const Punchout = (props: any) => {
   // let returnxml = '';
 
   useEffect(() => {
+    console.log("RT", returnXml);
     const params = new URLSearchParams(props.body);
     console.log(params, 'params');
     let obj: Record<string, any> = {};
