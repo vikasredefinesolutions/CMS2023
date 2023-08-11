@@ -38,7 +38,7 @@ const Punchout = (props: any) => {
         'Content-Type': 'application/xml',
         'Access-Control-Allow-Origin': '*',
       },
-      data: returnXml,
+      data: returnXml.replace('https://pkthehartforddev.parsonskellogg.com/home/index', 'https://humanadev.parsonskellogg.com/')
     };
     axios
       .request(config)
@@ -48,7 +48,7 @@ const Punchout = (props: any) => {
       .catch((err) => console.log(err));
   }, []);
 
-  console.log("config", obj.return_url, returnXml, 'xmllllll');
+ // console.log("config", obj.return_url, returnXml, 'xmllllll');
 
   // const myHeaders = new Headers();
   // myHeaders.append('Content-Type', 'application/xml');
