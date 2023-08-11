@@ -38,17 +38,7 @@ const Punchout = (props: any) => {
         'Content-Type': 'application/xml',
         'Access-Control-Allow-Origin': '*',
       },
-      data: `<!DOCTYPE cXML SYSTEM "http://xml.cxml.org/schemas/cXML/1.1.009/cXML.dtd"[]>
-<cXML payloadID="958074700772@www.xyz3Demo.com" timestamp="2000-06-14T12:59:09-07:00">
-  <Response>
-    <Status code="200" text="success" />
-    <PunchOutSetupResponse>
-      <StartPage>
-        <URL>https://humanadev.parsonskellogg.com/?sessionid=1df950e4-e198-101c-6800-5e7ba9224481</URL>
-      </StartPage>
-    </PunchOutSetupResponse>
-  </Response>
-</cXML>`
+      data: returnXml
     };
     console.log("CI", config);
     axios
@@ -59,7 +49,7 @@ const Punchout = (props: any) => {
       .catch((err) => console.log(err));
   }, []);
 
- // console.log("config", obj.return_url, returnXml, 'xmllllll');
+ console.log(returnXml, 'xmllllll');
 
   // const myHeaders = new Headers();
   // myHeaders.append('Content-Type', 'application/xml');
