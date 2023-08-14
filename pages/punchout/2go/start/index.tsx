@@ -4,10 +4,10 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 
 const Punchout = (props: any) => {
-  console.log(props.returnUrl);
+  const router = useRouter();
+
 
 function parseXmlToJson(xml: any) {
-  const router = useRouter();
     const json: any = {};
     for (const res of xml.matchAll(/(?:<(\w*)(?:\s[^>]*)*>)((?:(?!<\1).)*)(?:<\/\1>)|<(\w*)(?:\s*)*\/>/gm)) {
         const key = res[1] || res[3];
@@ -34,6 +34,7 @@ function parseXmlToJson(xml: any) {
         .replace('###StoreUrl###', `https://${props.returnUrl}`);
       const xmlJson = parseXmlToJson(xml)
       const url = xmlJson.cXML.Response.PunchOutSetupResponse.StartPage.URL
+      console.log(url);
       router.push(url)
     })();
   }, []);
