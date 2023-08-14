@@ -1,22 +1,22 @@
 import { PunchoutPostApi } from '@services/punchout.service';
+import { useRouter } from 'next/router';
 import getRawBody from 'raw-body';
 import { useEffect } from 'react';
-import { useRouter } from 'next/router';
 
 const Punchout = (props: any) => {
   const router = useRouter();
 
-
-function parseXmlToJson(xml: any) {
+  function parseXmlToJson(xml: any) {
     const json: any = {};
-    for (const res of xml.matchAll(/(?:<(\w*)(?:\s[^>]*)*>)((?:(?!<\1).)*)(?:<\/\1>)|<(\w*)(?:\s*)*\/>/gm)) {
-        const key = res[1] || res[3];
-        const value = res[2] && parseXmlToJson(res[2]);
-        json[key] = ((value && Object.keys(value).length) ? value : res[2]) || null;
-
+    for (const res of xml.matchAll(
+      /(?:<(\w*)(?:\s[^>]*)*>)((?:(?!<\1).)*)(?:<\/\1>)|<(\w*)(?:\s*)*\/>/gm,
+    )) {
+      const key = res[1] || res[3];
+      const value = res[2] && parseXmlToJson(res[2]);
+      json[key] = (value && Object.keys(value).length ? value : res[2]) || null;
     }
     return json;
-}
+  }
 
   useEffect(() => {
     (async () => {
@@ -32,10 +32,10 @@ function parseXmlToJson(xml: any) {
       const xml = b
         .toString()
         .replace('###StoreUrl###', `https://${props.returnUrl}`);
-      const xmlJson = parseXmlToJson(xml)
-      const url = xmlJson.cXML.Response.PunchOutSetupResponse.StartPage.URL
+      const xmlJson = parseXmlToJson(xml);
+      const url = xmlJson.cXML.Response.PunchOutSetupResponse.StartPage.URL;
       console.log(url);
-      router.push(url)
+      window.open(url);
     })();
   }, []);
 
