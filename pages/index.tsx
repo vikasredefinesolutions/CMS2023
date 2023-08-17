@@ -13,6 +13,7 @@ import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import { FetchDataByBrand } from '@services/brand.service';
 import { getPageComponents } from '@services/home.service';
 import { FetchPageType } from '@services/slug.service';
+import { punchoutLogin } from '@services/user.service';
 import Home from '@templates/Home';
 import { _SelectedTab } from '@templates/ProductDetails/productDetailsTypes/storeDetails.res';
 import { GetServerSideProps, GetServerSidePropsResult, NextPage } from 'next';
@@ -94,6 +95,21 @@ const DefaultHomePage: NextPage<_HomeProps> = (props) => {
     slug: metaData.slug,
   };
 
+  useEffect(() => {
+    const sessionid = router.query.sessionid;
+    if (sessionid && storeId) {
+      const punchoutLoginPayload = {
+        sessionId: sessionid,
+        storeId: storeId,
+        customerId: 0,
+        browserInfo: Buffer.from(navigator.userAgent, 'base64').toString(),
+      };
+      punchoutLogin(punchoutLoginPayload).then((customerRes) =>
+        console.log(customerRes),
+      );
+    }
+  }, [router.query.sessionid, storeId]);
+
   return (
     <>
       <SeoHead
@@ -156,10 +172,10 @@ export const getServerSideProps: GetServerSideProps = async (): Promise<
   let pageMetaData: _GetPageType | null = _globalStore.pageMetaData;
 
   //if (!pageMetaData) {
-    pageMetaData = await FetchPageType({
-      storeId: store.storeId,
-      slug: '',
-    });
+  pageMetaData = await FetchPageType({
+    storeId: store.storeId,
+    slug: '',
+  });
   //}
   let allFeaturedProductComponentData: any = [];
   let allFeaturedProductComponentBody: any = [];

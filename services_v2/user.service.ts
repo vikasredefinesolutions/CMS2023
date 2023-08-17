@@ -589,3 +589,20 @@ export const UpdatePaymentLater = async (payload: {
 
   return response;
 };
+
+export const punchoutLogin = async (payload: {
+  sessionId: string | string[];
+  storeId: number;
+  customerId: number;
+  browserInfo: string;
+}) => {
+  const url = `Punchout/home${payload.sessionId}/${payload.storeId}/${payload.customerId}/${payload.browserInfo}.json`;
+
+  const response = await SendAsync<any>({
+    url,
+    method: 'GET',
+    data: payload,
+  });
+
+  return response;
+};

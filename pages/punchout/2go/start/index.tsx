@@ -1,46 +1,41 @@
-import { PunchoutPostApi } from "@services/punchout.service";
-import axios from "axios";
-import getRawBody from "raw-body";
-import { useEffect, useState } from "react";
+import { PunchoutPostApi } from '@services/punchout.service';
+import { useRouter } from 'next/router';
+import getRawBody from 'raw-body';
+import { useEffect } from 'react';
 
 const Punchout = (props: any) => {
-  console.log(props.returnUrl);
+  const router = useRouter();
+
+  function parseXmlToJson(xml: any) {
+    const json: any = {};
+    for (const res of xml.matchAll(
+      /(?:<(\w*)(?:\s[^>]*)*>)((?:(?!<\1).)*)(?:<\/\1>)|<(\w*)(?:\s*)*\/>/gm,
+    )) {
+      const key = res[1] || res[3];
+      const value = res[2] && parseXmlToJson(res[2]);
+      json[key] = (value && Object.keys(value).length ? value : res[2]) || null;
+    }
+    return json;
+  }
 
   useEffect(() => {
     (async () => {
       const params = new URLSearchParams(props.body);
       let obj: Record<string, any> = {
-        pos: params.get("pos"),
-        return_url: params.get("return_url"),
-        params: JSON.parse(params.get("params") || ""),
+        pos: params.get('pos'),
+        return_url: params.get('return_url'),
+        params: JSON.parse(params.get('params') || ''),
       };
 
       let a = `${JSON.stringify(obj)}`;
       const b = await PunchoutPostApi(a);
-      const xml = b.toString().replace("###StoreUrl###", `https://${props.returnUrl}`)
-      console.log(a, b, xml);
-      
-      let config = {
-        method: "post",
-        maxBodyLength: Infinity,
-        url: obj.return_url,
-        withCredentials: false,
-        headers: {
-          "Content-Type": "application/xml",
-          "Access-Control-Allow-Origin": "*",
-        },
-        data: xml.replace(
-          "https://pkthehartforddev.parsonskellogg.com/home/index",
-          "https://humanadev.parsonskellogg.com"
-        ),
-      };
-      console.log("CI", config);
-      axios
-        .request(config)
-        .then((response) => {
-          console.log(JSON.stringify(response.data));
-        })
-        .catch((err) => console.log(err));
+      const xml = b
+        .toString()
+        .replace('###StoreUrl###', `https://${props.returnUrl}`);
+      const xmlJson = parseXmlToJson(xml);
+      const url = xmlJson.cXML.Response.PunchOutSetupResponse.StartPage.URL;
+      console.log(url);
+      window.open(url);
     })();
   }, []);
 
