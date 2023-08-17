@@ -34,7 +34,6 @@ const Punchout = (props: any) => {
         .replace('###StoreUrl###', `https://${props.returnUrl}`);
       const xmlJson = parseXmlToJson(xml);
       const url = xmlJson.cXML.Response.PunchOutSetupResponse.StartPage.URL;
-      console.log(url);
       window.open(url);
     })();
   }, []);
