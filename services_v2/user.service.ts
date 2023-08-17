@@ -596,7 +596,7 @@ export const punchoutLogin = async (payload: {
   customerId: number;
   browserInfo: string;
 }) => {
-  const url = `Punchout/home${payload.sessionId}/${payload.storeId}/${payload.customerId}/${payload.browserInfo}.json`;
+  const url = `Punchout/home/${payload.sessionId}/${payload.storeId}/${payload.customerId}/${payload.browserInfo}.json`;
 
   const response = await SendAsync<any>({
     url,
