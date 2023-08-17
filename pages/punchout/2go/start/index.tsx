@@ -26,16 +26,17 @@ const Punchout = (props: any) => {
         return_url: params.get('return_url'),
         params: JSON.parse(params.get('params') || ''),
       };
-
-      let a = `${JSON.stringify(obj)}`;
-      const b = await PunchoutPostApi(a);
-      const xml = b
-        .toString()
-        .replace('###StoreUrl###', `https://${props.returnUrl}`);
-      const xmlJson = parseXmlToJson(xml);
-      const url = xmlJson.cXML.Response.PunchOutSetupResponse.StartPage.URL;
-      console.log(url);
-      window.open(url);
+      console.log(obj);
+      
+      // let a = `${JSON.stringify(obj)}`;
+      // const b = await PunchoutPostApi(a);
+      // const xml = b
+      //   .toString()
+      //   .replace('###StoreUrl###', `https://${props.returnUrl}`);
+      // const xmlJson = parseXmlToJson(xml);
+      // const url = xmlJson.cXML.Response.PunchOutSetupResponse.StartPage.URL;
+      // console.log(url);
+      // window.open(url);
     })();
   }, []);
 
