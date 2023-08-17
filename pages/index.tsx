@@ -102,7 +102,7 @@ const DefaultHomePage: NextPage<_HomeProps> = (props) => {
         sessionId: sessionid,
         storeId: storeId,
         customerId: 0,
-        browserInfo: Buffer.from(navigator.userAgent, 'base64').toString(),
+        browserInfo: 'Chrome',
       };
       punchoutLogin(punchoutLoginPayload).then((customerRes) =>
         console.log(customerRes),
