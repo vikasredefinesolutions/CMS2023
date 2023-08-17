@@ -1,19 +1,30 @@
 import ConfirmModal from '@appComponents/modals/paymentSuccessfullModal/paymentSuccessfullModal';
 import SeoHead from '@appComponents/reUsable/SeoHead';
-import { __Error, __pageTypeConstant } from '@constants/global.constant';
+import {
+  __Cookie,
+  __Cookie_Expiry,
+  __Error,
+  __pageTypeConstant,
+} from '@constants/global.constant';
 import { paths } from '@constants/paths.constant';
 import { newFetauredItemResponse } from '@definations/productList.type';
 import { _GetPageType } from '@definations/slug.type';
 import {
   GTMHomeScriptForAllStores,
   GTMHomeScriptForCG,
+  KlaviyoScriptTag,
+  deleteCookie,
+  extractCookies,
+  setCookie,
 } from '@helpers/common.helper';
 import { highLightError } from '@helpers/console.helper';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import { FetchDataByBrand } from '@services/brand.service';
+import { updateCartByNewUserId } from '@services/cart.service';
 import { getPageComponents } from '@services/home.service';
 import { FetchPageType } from '@services/slug.service';
-import { punchoutLogin } from '@services/user.service';
+import { GetStoreCustomer, punchoutLogin } from '@services/user.service';
+import { getWishlist } from '@services/wishlist.service';
 import Home from '@templates/Home';
 import { _SelectedTab } from '@templates/ProductDetails/productDetailsTypes/storeDetails.res';
 import { GetServerSideProps, GetServerSidePropsResult, NextPage } from 'next';
@@ -41,7 +52,13 @@ const DefaultHomePage: NextPage<_HomeProps> = (props) => {
   const { id: customerId } = useTypedSelector_v2((state) => state.user);
   const { id: storeId } = useTypedSelector_v2((state) => state.store);
   const isCaptured = useRef(false);
-  const { hideModal } = useActions_v2();
+  const {
+    hideModal,
+    logInUser,
+    setShowLoader,
+    updateCustomer,
+    updateWishListData,
+  } = useActions_v2();
   const [modalopen, setmodalopen] = useState<boolean>(false);
   const router = useRouter();
 
@@ -104,9 +121,48 @@ const DefaultHomePage: NextPage<_HomeProps> = (props) => {
         customerId: 0,
         browserInfo: 'Chrome',
       };
-      punchoutLogin(punchoutLoginPayload).then((customerRes) =>
-        console.log(customerRes),
-      );
+      punchoutLogin(punchoutLoginPayload).then((customerId) => {
+        logInUser({
+          id: +customerId,
+        });
+        setCookie(__Cookie.userId, customerId, __Cookie_Expiry.userId);
+        setShowLoader(true);
+        GetStoreCustomer(+customerId)
+          .then((res) => {
+            if (res === null) return;
+            if (localStorage) {
+              const tempCustomerId = extractCookies(
+                __Cookie.tempCustomerId,
+                'browserCookie',
+              ).tempCustomerId;
+
+              if (tempCustomerId) {
+                updateCartByNewUserId(~~tempCustomerId, res.id);
+                deleteCookie(__Cookie.tempCustomerId);
+              }
+            }
+
+            const userInfo = {
+              $email: res.email,
+              $first_name: res.firstname,
+              $last_name: res.lastName,
+              $phone_number: '',
+              $organization: res.companyName,
+              $title: 'title',
+              $timestamp: new Date(),
+            };
+
+            KlaviyoScriptTag(['identify', userInfo]);
+            updateCustomer({ customer: res });
+            getWishlist(res.id).then((wishListResponse) => {
+              updateWishListData(wishListResponse);
+            });
+          })
+          .finally(() => {
+            setShowLoader(false);
+            setTimeout(() => router.push('/'), 2000);
+          });
+      });
     }
   }, [router.query.sessionid, storeId]);
 
