@@ -122,6 +122,7 @@ const DefaultHomePage: NextPage<_HomeProps> = (props) => {
         browserInfo: 'Chrome',
       };
       punchoutLogin(punchoutLoginPayload).then((customerId) => {
+        console.log(punchoutLoginPayload, customerId);
         logInUser({
           id: +customerId,
         });
