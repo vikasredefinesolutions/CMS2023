@@ -28,8 +28,9 @@ const Punchout = (props: any) => {
         payloadID:
           '200308221150.1061578208432.5888140454604746680@punchout2go.com',
         timestamp: '2003-08-22T11:50:27',
+        lang: 'en-US',
       };
-
+      console.log(obj);
       let a = `${JSON.stringify(obj)}`;
       const b = await PunchoutPostApi(a);
       const xml = b

@@ -115,7 +115,7 @@ export const FetchSalesTax = async ({
 
 export const punchoutCheckout = async (payload: {
   sessionId: string;
-  customerId: string;
+  customerId: string | number;
 }): Promise<any> => {
   const url = `Punchout/cart/${payload.sessionId}/${payload.customerId}.json`;
   return await SendAsync({
