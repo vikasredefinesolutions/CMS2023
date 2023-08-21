@@ -64,7 +64,7 @@ export const __pagesConstant = {
   _header: {
     mobileBreakPoint: 1024,
     imagesToShowInBrandDropdown: 5,
-    brandImage: ['peter-millar', 'patagonia', 'nike',  'yeti'], // [49, 9, 28, 10], //[198, 11, 187, 27],
+    brandImage: ['peter-millar', 'patagonia', 'nike', 'yeti'], // [49, 9, 28, 10], //[198, 11, 187, 27],
     PKbrandImage: ['Patagonia', 'Nike', 'Peter-Millar', 'YETI'], // [49, 9, 28, 10], //[198, 11, 187, 27],
     dibrandImage: ['Patagonia', 'Peter-Millar'],
   },
@@ -124,4 +124,5 @@ export const klaviyosearchStoreCodeArray = ['CG', 'GG', 'PKHG', 'DI'];
 export const thirdPartyLoginService = {
   oktaLogin: 'okta',
   samlLogin: 'saml',
+  punchoutLogin: 'punchout',
 };

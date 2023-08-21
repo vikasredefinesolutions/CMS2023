@@ -6,6 +6,7 @@ import {
   __Error,
   __pageTypeConstant,
 } from '@constants/global.constant';
+import { thirdPartyLoginService } from '@constants/pages.constant';
 import { paths } from '@constants/paths.constant';
 import { newFetauredItemResponse } from '@definations/productList.type';
 import { _GetPageType } from '@definations/slug.type';
@@ -122,7 +123,6 @@ const DefaultHomePage: NextPage<_HomeProps> = (props) => {
         browserInfo: 'Chrome',
       };
       punchoutLogin(punchoutLoginPayload).then((customerId) => {
-        console.log(punchoutLoginPayload, customerId);
         logInUser({
           id: +customerId,
         });
@@ -136,7 +136,11 @@ const DefaultHomePage: NextPage<_HomeProps> = (props) => {
                 __Cookie.tempCustomerId,
                 'browserCookie',
               ).tempCustomerId;
-
+              localStorage.setItem(
+                'thirdPartyServices',
+                thirdPartyLoginService.punchoutLogin,
+              );
+              localStorage.setItem('P_SID', btoa(sessionid.toString()));
               if (tempCustomerId) {
                 updateCartByNewUserId(~~tempCustomerId, res.id);
                 deleteCookie(__Cookie.tempCustomerId);

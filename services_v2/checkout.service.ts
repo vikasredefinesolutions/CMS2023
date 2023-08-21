@@ -112,3 +112,14 @@ export const FetchSalesTax = async ({
 
   return response;
 };
+
+export const punchoutCheckout = async (payload: {
+  sessionId: string;
+  customerId: string;
+}): Promise<any> => {
+  const url = `Punchout/cart/${payload.sessionId}/${payload.customerId}.json`;
+  return await SendAsync({
+    url,
+    method: 'GET',
+  });
+};

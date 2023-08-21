@@ -1,7 +1,12 @@
 import { SpinnerComponent } from '@appComponents/ui/spinner';
+import { thirdPartyLoginService } from '@constants/pages.constant';
 import { paths } from '@constants/paths.constant';
 import CheckoutController from '@controllers/checkoutController';
-import { GetCartTotals, useTypedSelector_v2 } from '@hooks_v2/index';
+import {
+  GetCartTotals,
+  GetCustomerId,
+  useTypedSelector_v2,
+} from '@hooks_v2/index';
 import {
   PersonalizationColor,
   PersonalizationFont,
@@ -12,6 +17,7 @@ import {
   getPersonalizationFont,
   getPersonalizationLocation,
 } from '@services/cart.service';
+import { punchoutCheckout } from '@services/checkout.service';
 import CartSummarry from '@templates/cartSummarry';
 import CartItem from 'Templates/cartItem';
 import Link from 'next/link';
@@ -29,7 +35,8 @@ const CartType1: React.FC<_CartProps> = ({
     (state) => state.employee.loggedIn,
   );
   const storeId = useTypedSelector_v2((state) => state.store.id);
-
+  const [showCheckoutButton, setShowCheckoutButton] = useState(true);
+  const customerId = GetCustomerId();
   // Local States
   const [availableFont, setAvailableFont] = useState<
     PersonalizationFont[] | []
@@ -55,6 +62,13 @@ const CartType1: React.FC<_CartProps> = ({
       });
     }
   }, [storeId]);
+
+  useEffect(() => {
+    const service = localStorage.getItem('thirdPartyServices');
+    if (service === thirdPartyLoginService.punchoutLogin) {
+      setShowCheckoutButton(false);
+    }
+  }, []);
 
   const { totalPrice } = GetCartTotals();
   const { fetchShipping, shippingAdress, selectedShipping } =
@@ -90,6 +104,42 @@ const CartType1: React.FC<_CartProps> = ({
 
   // console.log('shipping all', shippingMethod);
   // console.log('slected', selectedShipping);
+
+  const postData = (path: string, params: { [key: string]: string }) => {
+    const hidden_form = document.createElement('form');
+    hidden_form.method = 'POST';
+    hidden_form.action = path;
+
+    for (const key in params) {
+      if (params.hasOwnProperty(key)) {
+        const hidden_input = document.createElement('input');
+        hidden_input.type = 'hidden';
+        hidden_input.name = key;
+        hidden_input.value = params[key];
+
+        hidden_form.appendChild(hidden_input);
+      }
+    }
+
+    document.body.appendChild(hidden_form);
+    hidden_form.submit();
+  };
+
+  const punchoutHandler = async () => {
+    const SID = localStorage.getItem('P_SID');
+    if (SID) {
+      const sessionId = atob(SID);
+      const punchoutResponse = await punchoutCheckout({
+        sessionId,
+        customerId,
+      });
+      console.log(punchoutResponse);
+      postData(punchoutResponse.actionUrl, {
+        'cxml-urlencoded': punchoutResponse.cartXml,
+        Aribauser: 'AribaUser',
+      });
+    }
+  };
 
   return (
     <>
@@ -127,14 +177,26 @@ const CartType1: React.FC<_CartProps> = ({
                   <div className='sticky top-32'>
                     <CartSummarry selectedShippingModel={selectedShipping} />
                     <div className='mt-4'>
-                      <Link className='' href={paths.CHECKOUT}>
-                        <a className='btn btn-lg btn-secondary !flex items-center justify-center w-full'>
+                      {showCheckoutButton ? (
+                        <Link className='' href={paths.CHECKOUT}>
+                          <a className='btn btn-lg btn-secondary !flex items-center justify-center w-full'>
+                            <span className='material-icons text-lg mr-[2px]'>
+                              shopping_cart
+                            </span>
+                            CHECKOUT NOW
+                          </a>
+                        </Link>
+                      ) : (
+                        <button
+                          onClick={punchoutHandler}
+                          className='btn btn-lg btn-secondary !flex items-center justify-center w-full'
+                        >
                           <span className='material-icons text-lg mr-[2px]'>
                             shopping_cart
                           </span>
-                          CHECKOUT NOW
-                        </a>
-                      </Link>
+                          PUNCHOUT CHECKOUT
+                        </button>
+                      )}
                     </div>
                     <div className='mt-[20px] bg-light-gray px-4 py-4'>
                       <div className='flex items-center justify-center mb-[15px]'>

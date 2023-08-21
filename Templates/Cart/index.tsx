@@ -26,7 +26,7 @@ const CartTemplate: FC<_CartProps> = (props) => {
         'type5' ||
         'type6'
     ];
-    
+  console.log(props.templateId);
   return <Cart {...props} />;
 };
 

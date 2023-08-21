@@ -25,6 +25,9 @@ const Punchout = (props: any) => {
         pos: params.get('pos'),
         return_url: params.get('return_url'),
         params: JSON.parse(params.get('params') || ''),
+        payloadID:
+          '200308221150.1061578208432.5888140454604746680@punchout2go.com',
+        timestamp: '2003-08-22T11:50:27',
       };
 
       let a = `${JSON.stringify(obj)}`;
