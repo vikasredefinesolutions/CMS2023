@@ -8,7 +8,6 @@ import {
 import { thirdPartyLoginService } from '@constants/pages.constant';
 import { __pagesText } from '@constants/pages.text';
 import { paths } from '@constants/paths.constant';
-import { LogoutWithoutRedirect } from '@helpers/common.helper';
 import { OktaLogout } from '@services/saml.service';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
 import Link from 'next/link';
@@ -29,7 +28,6 @@ const LoggedInMenu: React.FC = () => {
     setFocus(false);
     logoutClearCart();
     setWishListEmpty([]);
-    LogoutWithoutRedirect(logInUser);
 
     const thirdParytLogin = localStorage.getItem(
       __LocalStorage.thirdPartyServiceName,
