@@ -1,4 +1,6 @@
+import { THD_STORE_CODE } from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
+import { useTypedSelector_v2 } from '@hooks_v2/index';
 import { Form, Formik } from 'formik';
 import React, { useRef } from 'react';
 
@@ -12,6 +14,7 @@ const SearchBar: React.FC<_props> = ({
   screen = 'DESKTOP',
   onSearchInput = () => {},
 }) => {
+  const storeCode = useTypedSelector_v2((store) => store.store.code);
   const searchRef = useRef<HTMLInputElement>(null);
   const searchHandler = (values: any) => {
     onSearchInput(values.text as string);
@@ -22,7 +25,7 @@ const SearchBar: React.FC<_props> = ({
         x?.value == 'Enter Search here' ||
         x?.value.toString().toLowerCase().indexOf('enter search') > -1
       ) {
-        alert('Please enter something to search');
+        return alert('Please enter something to search');
       }
       var str = x.value.replace(/^\s+|\s+$/g, '');
       while (str.substring(str.length - 1, str.length) == ' ') {
@@ -63,6 +66,7 @@ const SearchBar: React.FC<_props> = ({
                       />
                       <button
                         className='w-[24px] h-[24px] absolute right-[6px] top-[6px]'
+                        type='button'
                         onClick={() => {
                           handleSubmit();
                           handleReset();
@@ -89,7 +93,7 @@ const SearchBar: React.FC<_props> = ({
           return (
             <Form className='hidden sm:flex max-w-[140px] xl:max-w-[240px] ml-[8px]'>
               <div>
-                <div className='border border-primary pt-[5px] pb-[4px] pl-[15px] pr-[24px] rounded-full text-primary relative'>
+                <div className='border border-primary-link pt-[5px] pb-[4px] pl-[15px] pr-[24px] rounded-full text-primary relative bg-white'>
                   <input
                     ref={searchRef}
                     type='text'
@@ -98,19 +102,28 @@ const SearchBar: React.FC<_props> = ({
                     id='txtSearch'
                     placeholder={__pagesText.Headers.searchPlaceholder}
                     onChange={handleChange}
-                    className='outline-none w-full border-0 focus:ring-0 text-[14px] tracking-[1px] text-primary h-[26px]'
+                    className={`outline-none w-full border-0 focus:ring-0 text-[14px] tracking-[1px] ${
+                      storeCode === THD_STORE_CODE
+                        ? 'text-quaternary'
+                        : 'text-primary'
+                    }  h-[26px]`}
                     autoComplete='off'
                     maxLength={255}
                     defaultValue={values.text}
                   />
                   <button
                     className='w-[24px] h-[24px] absolute right-[6px] top-[6px]'
+                    type='button'
                     onClick={() => {
                       handleSubmit();
                       handleReset();
                     }}
                   >
-                    <span className='material-icons text-primary font-[900] hover:text-secondary'>
+                    <span
+                      className={`material-icons text-primary font-[900] ${
+                        storeCode !== THD_STORE_CODE && 'hover:text-secondary'
+                      } `}
+                    >
                       {__pagesText.Headers.searchIcon}
                     </span>
                   </button>

@@ -1,5 +1,4 @@
 import LoginModal from '@appComponents/modals/loginModal';
-import { _Store } from '@configs/page.config';
 import { CYXTERA_CODE, UCA, UNITI_CODE } from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
 import { _MenuCategory } from '@definations/header.type';
@@ -148,17 +147,13 @@ const Header_Category: React.FC<_props> = ({
                   router.push(`/${url}`);
                 }
               }}
-              className={`relative text-[12px] xl:text-[14px] xl:ml-[12px] xl:mr-[12px] ml-[5px] mr-[5px] tracking-[2px] z-10 flex items-center font-[400] pt-[10px] pb-[10px] border-b-[4px] ${
-                focus
-                  ? `border-secondary ${
-                      code == _Store.type6
-                        ? 'primary-link hover:primary-link'
-                        : 'text-secondary'
-                    } `
-                  : `border-transparent  ${
-                      code == _Store.type6 ? '' : 'text-primary'
-                    } `
-              } border-primary-link`}
+              className={`relative text-[12px] xl:text-[14px] 
+                 xl:ml-[12px] xl:mr-[12px] ml-[5px] mr-[5px]
+               tracking-['2px'] z-10 flex items-center font-[400] pt-[10px] pb-[10px] border-b-[4px] ${
+                 focus
+                   ? `border-primary-link primary-link `
+                   : `border-transparent primary-link hover:primary-link hover:border-primary-link `
+               }`}
             >
               <span
                 className='uppercase '

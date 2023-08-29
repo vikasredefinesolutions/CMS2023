@@ -1,6 +1,7 @@
 import {
   CYXTERA_CODE,
   SIMPLI_SAFE_CODE,
+  THD_STORE_CODE,
   UCA,
   UNITI_CODE,
   _Store_CODES,
@@ -64,7 +65,11 @@ const PL3_Refactored: React.FC<_Props> = ({
     if (pageType.slug === 'ships-in-2-days')
       return __pagesText.productListing
         .Uinit_Shipping_In_2_Days_Header_Description;
-    if (pageType.slug === 'minimums' || pageType.slug === 'bulk-orders')
+    if (
+      pageType.slug === 'minimums' ||
+      pageType.slug === 'bulk-orders' ||
+      pageType.slug === 'accessories-bulk-orders'
+    )
       return __pagesText.productListing.Uniti_Minimum_Bulk_Header_Description;
     return null;
   }, [pageType.slug]);
@@ -74,10 +79,21 @@ const PL3_Refactored: React.FC<_Props> = ({
       {/* <FreeBanner /> */}
       <section id='layout3' className=''>
         <div className='container mx-auto'>
-          <div className='bg-[#ffffff]'>
+          <div
+            className={`bg-[#ffffff] ${
+              (storeCode === THD_STORE_CODE ||
+                storeCode === _Store_CODES.USAAPUNCHOUT) &&
+              'mx-[10px]'
+            }`}
+          >
             <div
               aria-labelledby='products-heading'
-              className='pt-[20px] px-[15px]'
+              className={`pt-[20px] ${
+                storeCode !== THD_STORE_CODE &&
+                storeCode !== _Store_CODES.USAAPUNCHOUT
+                  ? 'px-[15px]'
+                  : ''
+              } `}
             >
               <h2
                 id='products-heading'
@@ -148,15 +164,22 @@ const PL3_Refactored: React.FC<_Props> = ({
                     storeCode === _Store_CODES.USAAHEALTHYPOINTS ||
                     storeCode === SIMPLI_SAFE_CODE
                       ? 'w-full'
+                      : storeCode === THD_STORE_CODE ||
+                        storeCode === _Store_CODES.USAAPUNCHOUT
+                      ? 'w-full xl:w-10/12 lg:w-9/12 lg:pl-[15px]'
                       : 'w-full xl:w-10/12 lg:w-9/12 lg:pl-[0px]'
                   }`}
                 >
                   <PL3_FilterBar length={list.totalAvailable} />
-                  <PL3_FilterChips
-                    slug={CMS.slug}
-                    pageId={CMS.pageId}
-                    checkedFilters={checkedFilters}
-                  />
+                  {storeCode !== THD_STORE_CODE &&
+                    storeCode !== _Store_CODES.USAAPUNCHOUT && (
+                      <PL3_FilterChips
+                        slug={CMS.slug}
+                        pageId={CMS.pageId}
+                        checkedFilters={checkedFilters}
+                      />
+                    )}
+
                   <PL3_Listing
                     pageId={CMS.pageId}
                     brandOrCategory={CMS.type}

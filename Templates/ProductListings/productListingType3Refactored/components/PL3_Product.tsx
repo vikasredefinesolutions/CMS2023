@@ -3,13 +3,16 @@
 import NxtImage from '@appComponents/reUsable/Image';
 import Price from '@appComponents/reUsable/Price';
 import {
-  _Store_CODES,
   BACARDI,
+  BOSTONBEAR,
   CYXTERA_CODE,
-  listing_max_showcolors,
+  THD_STORE_CODE,
   UCA,
   UNITI_CODE,
+  _Store_CODES,
+  listing_max_showcolors,
 } from '@constants/global.constant';
+
 import { splitproductList } from '@definations/productList.type';
 import {
   AddRemoveToCompare,
@@ -18,8 +21,8 @@ import {
 } from '@helpers/compare.helper';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import {
-  GetlAllProductList,
   GetProductImageOptionList,
+  GetlAllProductList,
 } from '@templates/ProductListings/ProductListingType';
 import ProductBoxController from '@templates/ProductListings/productListingType1/components/productBoxController';
 import Link from 'next/link';
@@ -130,18 +133,15 @@ const PL3_Product: React.FC<_Props> = (props) => {
             <Link href={`${origin}/${product.sename}.html`}>
               <a
                 title={product.name}
-                className='block'
+                className='flex justify-center items-center h-[348px]'
                 href={`${origin}/${product.sename}.html`}
               >
                 <NxtImage
                   src={mainImageUrl || null}
                   alt={product.name}
-                  className={`${
-                    storeCode === BACARDI
-                      ? 'w-auto h-auto max-h-max'
-                      : 'max-h-[348px] m-auto cursor-pointer'
-                  }`}
+                  className={`${'max-h-[348px] mx-auto'}`}
                   key={currentProduct?.id}
+                  title={product.name}
                 />
               </a>
             </Link>
@@ -172,20 +172,26 @@ const PL3_Product: React.FC<_Props> = (props) => {
             <div
               className={`mb-[10px] mt-[10px] ${
                 storeCode == UNITI_CODE ||
-                storeCode === _Store_CODES.USAAHEALTHYPOINTS
+                storeCode === _Store_CODES.USAAHEALTHYPOINTS ||
+                storeCode === THD_STORE_CODE ||
+                storeCode === _Store_CODES.USAAPUNCHOUT
                   ? 'h-[44px] text-default-text'
-                  : ' h-[46px] text-medium-text'
+                  : ' h-[42px] text-medium-text'
               } overflow-hidden `}
             >
               <Link href={`${origin}/${product.sename}.html`}>
                 <a
                   className={`relative ${
                     storeCode === BACARDI
-                      ? 'text-default hover:default-hover'
+                      ? 'text-default hover:text-default'
                       : storeCode === UNITI_CODE
                       ? 'text-anchor hover:text-anchor'
+                      : storeCode === THD_STORE_CODE ||
+                        storeCode === _Store_CODES.USAAPUNCHOUT
+                      ? 'text-anchor hover:text-anchor font-semibold'
                       : 'text-anchor hover:text-anchor'
                   } `}
+                  title={product.name}
                 >
                   {product.name}
                 </a>
@@ -269,11 +275,7 @@ const PL3_Product: React.FC<_Props> = (props) => {
                                 : 'hover:border-quaternary'
                             }  cursor-pointer ${
                               product.id === currentProduct?.id
-                                ? storeCode === BACARDI
-                                  ? 'border-primary'
-                                  : storeCode === _Store_CODES.UNITi
-                                  ? 'border-secondary'
-                                  : 'border-quaternary'
+                                ? 'border-secondary'
                                 : ''
                             }`}
                             key={subRow.prodcutId}
@@ -295,17 +297,31 @@ const PL3_Product: React.FC<_Props> = (props) => {
                     (subRow: GetProductImageOptionList, index: number) =>
                       index < listing_max_showcolors ? (
                         <li
-                          className={`w-[30px] h-[30px] p-[1px] border   ${
+                          className={`w-[30px] h-[30px] p-[1px] ${
+                            storeCode === THD_STORE_CODE ||
+                            storeCode === _Store_CODES.USAAPUNCHOUT
+                              ? 'border-2'
+                              : 'border'
+                          } ${
+                            (storeCode === THD_STORE_CODE ||
+                              storeCode === _Store_CODES.USAAPUNCHOUT) &&
+                            subRow.id !== currentProduct.id
+                              ? ' hover:border-primary'
+                              : ''
+                          } ${
                             storeCode === BACARDI
                               ? ' hover:border-quaternary'
                               : storeCode === _Store_CODES.UNITi
-                              ? 'hover:border-secondary '
+                              ? 'hover:border-secondary  '
                               : 'hover:border-quaternary'
                           } cursor-pointer ${
                             subRow.id === currentProduct?.id
                               ? storeCode === BACARDI
                                 ? 'border-default'
                                 : storeCode === _Store_CODES.UNITi
+                                ? 'border-secondary '
+                                : storeCode === THD_STORE_CODE ||
+                                  storeCode === _Store_CODES.USAAPUNCHOUT
                                 ? 'border-secondary'
                                 : 'border-quaternary'
                               : ''
@@ -323,6 +339,9 @@ const PL3_Product: React.FC<_Props> = (props) => {
                               product.id,
                               product.sename || '',
                               subRow.colorName,
+                            );
+                            setMainImageUrl(
+                              subRow?.imageName ? subRow?.imageName : '',
                             );
                             setCurrentProduct(subRow);
                           }}
@@ -385,19 +404,31 @@ const PL3_Product: React.FC<_Props> = (props) => {
     </li>
   ) : (
     <li className=''>
-      <div className='w-full border border-gray-border hover:border-gray-border'>
+      <div
+        className={`${
+          storeCode == BACARDI
+            ? ''
+            : 'border border-gray-border hover:border-gray-border'
+        } w-full `}
+      >
         <div className='w-full flex flex-wrap m-[15px]'>
-          <div className='w-auto '>
+          <div
+            className={`${
+              storeCode == BACARDI ? 'w-[30%] lg:w-[25%]' : 'w-auto'
+            }`}
+          >
             <Link
               key={product.id}
-              href={`${origin}/${product.sename}.html?v=product-detail&altview=1`}
+              href={`${origin}/${product.sename}.html`}
+              passHref
             >
-              <a href='' className='cursor-pointer w-full '>
+              <a className='cursor-pointer w-full '>
                 <NxtImage
                   src={mainImageUrl || null}
                   alt=''
                   className='m-auto cursor-pointer max-h-[348px]'
                   key={currentProduct?.id}
+                  title={product.name}
                 />
               </a>
             </Link>
@@ -418,18 +449,41 @@ const PL3_Product: React.FC<_Props> = (props) => {
             })}
           </div>
 
-          <div className='mt-[20px] relative md:px-[30px]'>
+          <div
+            className={`${
+              storeCode == BACARDI
+                ? 'md:mt-[20px] relative px-[30px] w-[70%] lg:w-[75%]'
+                : 'mt-[20px] relative md:px-[30px]'
+            } `}
+          >
             <div
-              className={`mb-[10px] mt-[10px] ${
+              className={`mb-[10px] ${
+                storeCode == BACARDI ? 'md:mt-[10px]' : 'mt-[10px]'
+              } ${
                 storeCode == UNITI_CODE
                   ? 'h-[44px] text-default-text'
-                  : ' h-[46px] text-medium-text'
-              } overflow-hidden `}
+                  : `${
+                      storeCode == BOSTONBEAR || storeCode === BACARDI
+                        ? ''
+                        : 'h-[42px]'
+                    }${
+                      storeCode === THD_STORE_CODE ||
+                      storeCode === _Store_CODES.USAAPUNCHOUT
+                        ? 'text-default-text'
+                        : 'text-medium-text'
+                    } `
+              } overflow-hidden`}
             >
               <a
                 key={product.id}
-                href={`${origin}/${product.sename}.html?v=product-detail&altview=1`}
-                className='relative text-anchor hover:text-anchor '
+                href={`${origin}/${product.sename}.html`}
+                className={`relative text-anchor hover:text-anchor ${
+                  storeCode === THD_STORE_CODE ||
+                  storeCode === _Store_CODES.USAAPUNCHOUT
+                    ? 'font-semibold'
+                    : ''
+                }  `}
+                title={product.name}
               >
                 {product.name}
               </a>
@@ -439,6 +493,8 @@ const PL3_Product: React.FC<_Props> = (props) => {
                 className={`${
                   storeCode === _Store_CODES.UNITi
                     ? 'text-quaternary !font-normal'
+                    : storeCode == BACARDI
+                    ? 'text-secondary !font-bold'
                     : 'text-primary'
                 }`}
               >
@@ -494,7 +550,7 @@ const PL3_Product: React.FC<_Props> = (props) => {
                 <>
                   <Link key={product.id} href={`/${product.sename}.html`}>
                     <li
-                      className={`w-[30px] h-[30px] p-[1px] border hover:border-secondary cursor-pointer ${
+                      className={`w-[30px] h-[30px] p-[1px] border  hover:border-secondary cursor-pointer ${
                         product.id === currentProduct?.id
                           ? ' border-secondary'
                           : ''
@@ -547,11 +603,16 @@ const PL3_Product: React.FC<_Props> = (props) => {
                 product.getProductImageOptionList.map((subRow, index) =>
                   index < listing_max_showcolors ? (
                     <li
-                      className={`w-[30px] h-[30px] p-[1px] border  hover:border-secondary cursor-pointer ${
+                      className={`w-[30px] h-[30px] p-[1px] ${
+                        storeCode === THD_STORE_CODE ||
+                        storeCode === _Store_CODES.USAAPUNCHOUT
+                          ? 'border-2 hover:border-quaternary'
+                          : 'border hover:border-secondary'
+                      }   cursor-pointer ${
                         subRow.id === currentProduct?.id
                           ? 'border-secondary'
                           : ''
-                      }`}
+                      } `}
                       onMouseOver={() => setMainImageUrl(subRow.imageName)}
                       onMouseLeave={() =>
                         setMainImageUrl(
@@ -565,6 +626,9 @@ const PL3_Product: React.FC<_Props> = (props) => {
                           product.id,
                           product.sename || '',
                           subRow.colorName,
+                        );
+                        setMainImageUrl(
+                          subRow?.imageName ? subRow?.imageName : '',
                         );
                         setCurrentProduct(subRow);
                       }}

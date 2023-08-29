@@ -2,6 +2,7 @@ import ForgotModal from '@appComponents/modals/forgotModal';
 import LoginModal from '@appComponents/modals/loginModal';
 import NxtImage from '@appComponents/reUsable/Image';
 import { _Store } from '@configs/page.config';
+import { THD_STORE_CODE, _Store_CODES } from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import React, { useState } from 'react';
@@ -45,7 +46,10 @@ const BannerType4: React.FC<{
           className={`${
             content[0] && content[0].brandImage
               ? 'items-center sm:pl-[20px] sm:pr-[20px] sm:pt-[20px] sm:pb-[20px] md:pl-[20px] md:pr-[0px] md:pt-[20px] md:pb-[15px] pl-[0px] pr-[0px] pt-[16px] pb-[16px] bg-light-gray'
-              : 'items-center sm:pl-[40px] sm:pr-[40px] sm:pt-[40px] sm:pb-[40px] md:pl-[40px] md:pr-[0px] md:pt-[35px] md:pb-[40px] pl-[0px] pr-[0px] pt-[16px] pb-[16px] bg-light-gray'
+              : storeCode === THD_STORE_CODE ||
+                storeCode === _Store_CODES.USAAPUNCHOUT
+              ? 'items-center justify-between w-full group relative pb-[20px] pt-[20px]'
+              : `items-center sm:pl-[40px] sm:pr-[40px] sm:pt-[40px] sm:pb-[40px] md:pl-[40px] md:pr-[0px] md:pt-[35px] md:pb-[40px] pl-[0px] pr-[0px] pt-[16px] pb-[16px] bg-light-gray`
           }`}
         >
           <div className='flex flex-wrap items-center gap-y-[40px]'>
@@ -60,7 +64,15 @@ const BannerType4: React.FC<{
                   />
                 </div>
               ) : (
-                <div className='text-2xl-text pb-[10px]'>{content[0].name}</div>
+                <div
+                  className={`${
+                    storeCode === THD_STORE_CODE || _Store_CODES.USAAPUNCHOUT
+                      ? 'text-2xl-text pb-[15px] after:h-[1px] after:w-[150px] after:absolute after:top-full after:bg-primary before:mx-auto after:left-0 after:right-0 text-center relative font-lora center-title-sub'
+                      : 'text-2xl-text pb-[10px]'
+                  }`}
+                >
+                  {content[0].name}
+                </div>
               )}
               {content[0].h2 && (
                 <div className='text-sub-text pb-[5px]'>{content[0].h2}</div>

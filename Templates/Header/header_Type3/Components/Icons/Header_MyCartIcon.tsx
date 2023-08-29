@@ -23,7 +23,39 @@ const MyCartIcon: React.FC = () => {
   const { id: storeId, code: storeCode } = useTypedSelector_v2(
     (state) => state.store,
   );
+  const cartItems = useTypedSelector_v2((state) => state.cart.cart);
+  const couponAmt = 0;
+  const calculateSubTotal = () => {
+    let subTotal = 0;
+    if (!cartItems) return 0;
 
+    cartItems.forEach((item) => {
+      subTotal += item.totalPrice + item.totalCustomFieldsCharges;
+    });
+
+    return subTotal;
+  };
+  const calculateCouponAmount = () => {
+    const subTotal = calculateSubTotal();
+
+    if (couponAmt > subTotal) {
+      return subTotal;
+    }
+
+    return couponAmt;
+  };
+  const cost = {
+    subTotal: calculateSubTotal(),
+    couponDiscount: calculateCouponAmount(),
+
+    totalToShow: function () {
+      const toAdd = this.subTotal;
+      const toSubtract = this.couponDiscount;
+
+      const estimated = toAdd - toSubtract;
+      return estimated > 0 ? estimated : 0;
+    },
+  };
   useEffect(() => {
     setTotalCartQty(totalQty);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -43,7 +75,11 @@ const MyCartIcon: React.FC = () => {
             : paths.CART
         }
       >
-        <a className='text-primary hover:text-secondary group flex items-center relative pt-[8px] pb-[8px]'>
+        <a
+          className={`primary-link hover:primary-link  group flex items-center relative 
+           pt-[8px] pb-[8px]
+          `}
+        >
           {/* <span className='inline-flex items-center justify-center w-[30px] h-[30px]'> */}
           {/*  img link  */}
           {storeCode == _Store.type6 ? (
@@ -120,7 +156,8 @@ const MyCartIcon: React.FC = () => {
                   {totalCartQty} {__pagesText.Headers.totalItemInCartMessage}
                 </div>
                 <div className='text-[16px]'>
-                  {__pagesText.Headers.total} <Price value={totalPrice} />
+                  {__pagesText.Headers.total}{' '}
+                  <Price value={cost.totalToShow()} />
                 </div>
               </div>
               {

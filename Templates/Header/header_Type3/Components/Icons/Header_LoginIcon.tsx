@@ -1,7 +1,12 @@
 import ForgotModal from '@appComponents/modals/forgotModal';
 import LoginModal from '@appComponents/modals/loginModal';
 import { _Store } from '@configs/page.config';
-import { THD_STORE_CODE, __LocalStorage } from '@constants/global.constant';
+import {
+  BOSTONBEAR,
+  THD_STORE_CODE,
+  _Store_CODES,
+  __LocalStorage,
+} from '@constants/global.constant';
 import { thirdPartyLoginService } from '@constants/pages.constant';
 import { _modals } from '@definations/product.type';
 import { fetchThirdpartyservice } from '@services/thirdparty.service';
@@ -29,6 +34,7 @@ const LoginIcon: React.FC = () => {
   );
 
   if (storeCode === THD_STORE_CODE) return null;
+  if (storeCode === _Store_CODES.USAAPUNCHOUT) return null;
   if (loggedIn) return <></>;
   const SamlloginHandler = () => {
     fetchThirdpartyservice({ storeId }).then((ThirdpartyServices) => {
@@ -54,13 +60,20 @@ const LoginIcon: React.FC = () => {
       });
     });
   };
+
+  console.log(' ia m running');
   return (
     <>
       {thirdPartyLogin ? (
         <div className='pl-[15px]'>
           <div className='flex relative tracking-[1px]'>
             <button
-              className='text-primary hover:text-secondary flex items-center gap-1'
+              className={`text-secondary hover:text-${
+                storeCode == BOSTONBEAR ||
+                storeCode === _Store_CODES.USAAPUNCHOUT
+                  ? 'primary'
+                  : 'secondary'
+              } flex items-center gap-1`}
               onClick={SamlloginHandler}
               type='button'
             >

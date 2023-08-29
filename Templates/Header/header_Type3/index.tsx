@@ -1,5 +1,5 @@
 import { storeBuilderTypeId } from '@configs/page.config';
-import { THD_STORE_CODE } from '@constants/global.constant';
+import { THD_STORE_CODE, _Store_CODES } from '@constants/global.constant';
 import { __pagesConstant } from '@constants/pages.constant';
 import { paths } from '@constants/paths.constant';
 import { _HeaderProps, _MenuItems } from '@definations/header.type';
@@ -31,6 +31,7 @@ const Header_Type3: NextPage<_HeaderProps> = ({
   headerBgColor,
   headerTextColor,
 }) => {
+  const storeCode = useTypedSelector_v2((state) => state.store.code);
   const { store_setAppView, cart_UpdateItems, setShowLoader } = useActions_v2();
   const { width } = useWindowDimensions_v2();
   const router = useRouter();
@@ -53,7 +54,6 @@ const Header_Type3: NextPage<_HeaderProps> = ({
   const isEmployeeLoggedIn = useTypedSelector_v2(
     (state) => state.employee.loggedIn,
   );
-
   const fetchCartDetails = async () => {
     return await FetchSbStoreCartDetails(+customerId, isEmployeeLoggedIn).then(
       (response) => {
@@ -96,7 +96,11 @@ const Header_Type3: NextPage<_HeaderProps> = ({
   };
   return (
     <div
-      className={`bg-[${headerBgColor}] sticky top-7 z-40  shadow-[0_0px_5px_rgba(0,0,0,0.12)]`}
+      className={`bg-[${headerBgColor}] sticky top-7 z-40  ${
+        storeCode === THD_STORE_CODE
+          ? ''
+          : 'shadow-[0_0px_5px_rgba(0,0,0,0.12)]'
+      }`}
       id='mobile_menu_box'
     >
       {/* <NotificationBar /> */}
@@ -118,8 +122,12 @@ const Header_Type3: NextPage<_HeaderProps> = ({
               className={`${headerBgColor ? '' : 'bg-[#ffffff]'}]`}
               style={{ backgroundColor: headerBgColor }}
             >
-              <div className='p-[10px]'>
-                {isMobileView ? (
+              <div
+                className={
+                  storeCode === THD_STORE_CODE ? 'py-[10px]' : 'p-[10px]'
+                }
+              >
+                {isMobileView && code !== THD_STORE_CODE ? (
                   <CompanyInfo
                     phoneNumber={storePhoneNumber}
                     email={storeEmail}
@@ -127,7 +135,13 @@ const Header_Type3: NextPage<_HeaderProps> = ({
                 ) : null}
                 <div className=''>
                   <div className='flex  items-center justify-between'>
-                    <div className='sm:flex sm:items-center w-full w-[50%] md:w-[25%] relative'>
+                    <div
+                      className={`sm:flex sm:items-center ${
+                        storeCode === THD_STORE_CODE ? '' : 'w-full'
+                      }  ${
+                        storeCode === THD_STORE_CODE ? 'w-[40%]' : 'w-[50%]'
+                      }  md:w-[25%] relative `}
+                    >
                       {storeTypeId == storeBuilderTypeId ? (
                         islogo && (
                           <Logo
@@ -152,7 +166,7 @@ const Header_Type3: NextPage<_HeaderProps> = ({
                     {showMenu() && (
                       <div className='w-1/2 flex flex-wrap items-center justify-end max-w-[286px]'>
                         <div className='flex flex-wrap items-center justify-end '>
-                          {isMobileView ? null : (
+                          {isMobileView || code === THD_STORE_CODE ? null : (
                             <CompanyInfo
                               phoneNumber={storePhoneNumber}
                               email={storeEmail}
@@ -195,6 +209,15 @@ const Header_Type3: NextPage<_HeaderProps> = ({
                   {menuHeading}
                 </div>
               )}
+              {(storeCode === THD_STORE_CODE ||
+                storeCode === _Store_CODES.USAAPUNCHOUT) &&
+                showMenu() && (
+                  <div className='text-center font-medium text-secondary text-base py-[8px] bg-white'>
+                    This site can only take orders via procurement. Please make
+                    sure you are logging into the site from your internal
+                    portal.
+                  </div>
+                )}
               {showMenu() && isMobileView && <SearchBar screen={'MOBILE'} />}
             </div>
           </nav>

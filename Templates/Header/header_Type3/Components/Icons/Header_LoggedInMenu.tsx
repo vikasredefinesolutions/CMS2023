@@ -1,25 +1,54 @@
 import NxtImage from '@appComponents/reUsable/Image';
 import { _Store } from '@configs/page.config';
-import { THD_STORE_CODE } from '@constants/global.constant';
+import {
+  BOSTONBEAR,
+  THD_STORE_CODE,
+  __LocalStorage,
+} from '@constants/global.constant';
+import { thirdPartyLoginService } from '@constants/pages.constant';
 import { __pagesText } from '@constants/pages.text';
 import { paths } from '@constants/paths.constant';
-import { Logout } from '@helpers/common.helper';
+import { LogoutWithoutRedirect } from '@helpers/common.helper';
+import { OktaLogout } from '@services/saml.service';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { __StaticImg } from '../../../../../public/assets/images.asset';
 
 const LoggedInMenu: React.FC = () => {
+  const router = useRouter();
   const { logInUser, logoutClearCart, setWishListEmpty } = useActions_v2();
   const { id: loggedIn, customer } = useTypedSelector_v2((state) => state.user);
-  const { code: storeCode } = useTypedSelector_v2((state) => state.store);
+  const { code: storeCode, id: storeId } = useTypedSelector_v2(
+    (state) => state.store,
+  );
   const [focus, setFocus] = useState(false);
 
-  const logoutHandler = () => {
+  const logoutHandler = async () => {
     setFocus(false);
     logoutClearCart();
     setWishListEmpty([]);
-    Logout(logInUser);
+    LogoutWithoutRedirect(logInUser);
+
+    const thirdParytLogin = localStorage.getItem(
+      __LocalStorage.thirdPartyServiceName,
+    );
+
+    if (
+      thirdParytLogin?.toLocaleLowerCase() ===
+      thirdPartyLoginService.samlLogin.toLocaleLowerCase()
+    ) {
+      const payload = {
+        oktaLogoutModel: {
+          storeId: +storeId,
+        },
+      };
+      const url = await OktaLogout(payload);
+      url && router.push(url);
+    } else {
+      router.push('/');
+    }
   };
   if (storeCode === THD_STORE_CODE) return null;
 
@@ -34,7 +63,9 @@ const LoggedInMenu: React.FC = () => {
       >
         <Link href={paths.loggedInMenu.title}>
           <a
-            className='text-primary hover:text-secondary flex items-center gap-1'
+            className={`text-primary hover:text-${
+              storeCode == BOSTONBEAR ? 'primary' : 'secondary'
+            } flex items-center gap-1`}
             title={__pagesText.Headers.myAccountTittle}
           >
             {/* <span className='text-[12px] hidden xl:inline-block whitespace-nowrap tracking-[1px]'>

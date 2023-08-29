@@ -74,7 +74,7 @@ const MenuItems: React.FC<_props> = ({
   }
   if (screen === 'DESKTOP') {
     return (
-      <div className='hidden lg:block border-y border-y-gray-border ml-[10px] mr-[10px]'>
+      <div className='hidden lg:block border-y border-y-gray-border bg-primary'>
         <div className='h-full flex justify-center header-nav relative'>
           {menuItems.items_content?.map((menu, index) => {
             if (menu === null) {

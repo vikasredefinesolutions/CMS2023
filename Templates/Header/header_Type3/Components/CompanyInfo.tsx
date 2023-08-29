@@ -1,4 +1,8 @@
-import { CYXTERA_CODE, UNITI_CODE } from '@constants/global.constant';
+import {
+  BOSTONBEAR,
+  CYXTERA_CODE,
+  UNITI_CODE,
+} from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 
@@ -15,11 +19,12 @@ const CompanyInfo: React.FC<_props> = ({ phoneNumber, email }) => {
   const { view } = useTypedSelector_v2((state) => state.store);
   if (view == 'MOBILE')
     return (
-      <div className='block text-center pb-[10px] break-words border-b border-b-gray-border mb-[10px] text-default-text'>
+      <div className='block text-center pb-[10px] break-words border-b border-b-gray-border mb-[10px] text-default-text text-[#ffffff]'>
         {__pagesText.Headers.companyPhoneQuestion}{' '}
         <a href={`tel:${phoneNumber}`} className='break-words'>
           {phoneNumber}
         </a>{' '}
+        {store_Code == BOSTONBEAR && <span>or</span>}{' '}
         {__pagesText.Headers.companyEmailQuestion}{' '}
         <a href={`mailto:${email}`} className='break-words'>
           {email}
@@ -31,16 +36,24 @@ const CompanyInfo: React.FC<_props> = ({ phoneNumber, email }) => {
 
   if (view == 'DESKTOP')
     return (
-      <div className='break-words w-full text-right hidden sm:block pb-[10px] text-default-text'>
+      <div className='break-words w-full text-right hidden sm:block pb-[10px] text-default-text text-[#ffffff]'>
         <div>
           {__pagesText.Headers.companyPhoneQuestion}{' '}
-          <a href={`tel:${phoneNumber}`} className='break-words'>
+          <a
+            href={`tel:${phoneNumber}`}
+            className='break-words primary-link hover:primary-link '
+          >
             {phoneNumber}
           </a>{' '}
+          {store_Code == BOSTONBEAR && <span>or</span>}
         </div>
+
         <div>
           {__pagesText.Headers.companyEmailQuestion}{' '}
-          <a href={`mailto:${email}`} className='break-words'>
+          <a
+            href={`mailto:${email}`}
+            className='break-words primary-link hover:primary-link'
+          >
             {email}
           </a>
           {(store_Code == CYXTERA_CODE || store_Code == UNITI_CODE) &&

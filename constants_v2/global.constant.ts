@@ -129,6 +129,7 @@ export enum _Store_CODES {
   USAAHEALTHYPOINTS = 'UHP',
   USAACLAIMS = 'UCA',
   BCGG = 'BCGG',
+  USAAPUNCHOUT = 'UPOUT',
 }
 
 export const states: Option[] = [

@@ -2,6 +2,7 @@ import {
   BACARDI,
   BOSTONBEAR,
   CYXTERA_CODE,
+  THD_STORE_CODE,
   UCA,
   UNITI_CODE,
   _Store_CODES,
@@ -72,7 +73,13 @@ const PL3_SideFilters: React.FC<_Props> = ({
     router.replace(`/${slug}.html${sortQuery}`);
   };
 
-  const handleChange = (name: string, value: string, checked: boolean) => {
+  const handleChange = (
+    name: string,
+    value: string,
+    checked: boolean,
+    seName?: string,
+  ) => {
+    if (name === 'Category') return router.push(`/${seName}.html`);
     const index = checkedFilters.findIndex(
       (filter: { name: string; value: string }) =>
         filter.name === name && filter.value === value,
@@ -92,17 +99,12 @@ const PL3_SideFilters: React.FC<_Props> = ({
     updateFilter(newArray);
   };
 
-  const clearFilterSection = (name: string) => {
-    const modifiedFilters = checkedFilters.filter(
-      (filter) => filter.name !== name,
-    );
-    updateFilter(modifiedFilters);
-  };
-
   const dontShowBrandFilters = useCallback(
     (label: string) =>
       storeCode !== _Store_CODES.UNITi &&
       storeCode !== BOSTONBEAR &&
+      storeCode !== THD_STORE_CODE &&
+      storeCode !== _Store_CODES.USAAPUNCHOUT &&
       storeCode !== BACARDI &&
       label === 'Brand',
     [storeCode, filters],
@@ -115,6 +117,9 @@ const PL3_SideFilters: React.FC<_Props> = ({
       className={` ${
         storeCode === BACARDI
           ? 'pb-[0] px-[0] border-none'
+          : storeCode === THD_STORE_CODE ||
+            storeCode === _Store_CODES.USAAPUNCHOUT
+          ? 'pb-[16px] pr-[16px] pl-[16px]'
           : ' pb-[16px] lg:pr-[16px]'
       }  ${
         storeCode == CYXTERA_CODE ||
@@ -128,7 +133,7 @@ const PL3_SideFilters: React.FC<_Props> = ({
       <form className='filter-box filter-type'>
         <div>
           {filters &&
-            filters.map((filter, index) => {
+            filters.map((filter) => {
               if (
                 filter.label.toLowerCase() == 'category' &&
                 storeCode == BOSTONBEAR
@@ -148,6 +153,9 @@ const PL3_SideFilters: React.FC<_Props> = ({
                         storeCode === BOSTONBEAR ||
                         storeCode === UCA
                           ? 'pb-[16px]'
+                          : storeCode === THD_STORE_CODE ||
+                            storeCode === _Store_CODES.USAAPUNCHOUT
+                          ? 'pb-[16px] last:pb-[0px]'
                           : 'py-[16px]'
                       }`}
                     >
@@ -163,8 +171,18 @@ const PL3_SideFilters: React.FC<_Props> = ({
                         }`}
                       >
                         <span
-                          className={`text-sub-text ${
-                            storeCode === BACARDI ? 'py-[2px]' : 'py-[7px]'
+                          className={`${
+                            storeCode === THD_STORE_CODE ||
+                            storeCode === _Store_CODES.USAAPUNCHOUT
+                              ? 'text-medium-text'
+                              : 'text-sub-text'
+                          } ${
+                            storeCode === BACARDI
+                              ? 'py-[2px] uppercase !font-[600]'
+                              : storeCode === THD_STORE_CODE ||
+                                storeCode === _Store_CODES.USAAPUNCHOUT
+                              ? 'p-[7px]'
+                              : 'py-[7px]'
                           }`}
                         >
                           {filter.label}
@@ -201,9 +219,22 @@ const PL3_SideFilters: React.FC<_Props> = ({
                                   filter.label === 'Color' ||
                                   filter.label == 'Size' ? (
                                     <li
-                                      className={`flex items-center justify-center w-[30px] h-[30px] cursor-pointer p-[1px] border  hover:border-primary  ${
+                                      className={`flex items-center justify-center w-[30px] h-[30px] cursor-pointer p-[1px] ${
+                                        (storeCode === THD_STORE_CODE ||
+                                          storeCode ===
+                                            _Store_CODES.USAAPUNCHOUT) &&
+                                        filter.label == 'Size'
+                                          ? 'border-2'
+                                          : 'border-2'
+                                      }  hover:border-black ${
+                                        storeCode == BOSTONBEAR ||
+                                        storeCode === THD_STORE_CODE ||
+                                        storeCode === _Store_CODES.USAAPUNCHOUT
+                                          ? 'bg-light-gray'
+                                          : ''
+                                      } ${
                                         checked
-                                          ? 'border-secondary'
+                                          ? 'border-black'
                                           : 'border-gray-border'
                                       } `}
                                       title={val.name}
@@ -221,6 +252,7 @@ const PL3_SideFilters: React.FC<_Props> = ({
                                             filter.label,
                                             val.name,
                                             !checked,
+                                            val.sename,
                                           );
                                         }}
                                       >
@@ -233,27 +265,47 @@ const PL3_SideFilters: React.FC<_Props> = ({
                                         className='flex items-center cursor-pointer'
                                         key={index}
                                       >
-                                        <input
-                                          id={`${val.name}-${index}`}
-                                          name={filter.label}
-                                          value={val.name}
-                                          checked={checked}
-                                          type='checkbox'
-                                          onChange={(e) => {
-                                            const { name, value, checked } =
-                                              e.target;
-                                            handleChange(name, value, checked);
-                                          }}
-                                          className='h-[16px] w-[16px] border-gray-300 rounded text-indigo-600'
-                                        />
-
-                                        <label
-                                          htmlFor={`${val.name}-${index}`}
-                                          className='ml-[10px]'
-                                        >
-                                          {capitalizeFirstLetter(val.name)} (
-                                          {val.productCount})
-                                        </label>
+                                        {val.productCount == 0 ? (
+                                          <></>
+                                        ) : (
+                                          <>
+                                            <input
+                                              id={`${val.name}-${index}`}
+                                              name={filter.label}
+                                              value={val.name}
+                                              checked={
+                                                filter.label === 'Category' &&
+                                                val.sename &&
+                                                router.asPath.includes(
+                                                  `/${val.sename}.html`,
+                                                )
+                                                  ? true
+                                                  : checked
+                                              }
+                                              type='checkbox'
+                                              onChange={(e) => {
+                                                const { name, value, checked } =
+                                                  e.target;
+                                                handleChange(
+                                                  name,
+                                                  value,
+                                                  checked,
+                                                  val.sename,
+                                                );
+                                              }}
+                                              className='h-[16px] w-[16px] border-gray-300 rounded text-indigo-600'
+                                            />
+                                            <label
+                                              htmlFor={`${val.name}-${index}`}
+                                              className='ml-[10px]'
+                                            >
+                                              {capitalizeFirstLetter(val.name)}{' '}
+                                              {storeCode === BOSTONBEAR
+                                                ? ''
+                                                : `(${val.productCount})`}
+                                            </label>
+                                          </>
+                                        )}
                                       </li>
                                     </>
                                   )

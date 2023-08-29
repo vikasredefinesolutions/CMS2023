@@ -1,6 +1,6 @@
 import LoginModal from '@appComponents/modals/loginModal';
 import { _Store } from '@configs/page.config';
-import { UCA } from '@constants/global.constant';
+import { THD_STORE_CODE, UCA, _Store_CODES } from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
 import { _MenuCategory } from '@definations/header.type';
 import { _modals } from '@definations/product.type';
@@ -206,11 +206,19 @@ const SubMenuItem: React.FC<_props> = ({
               }}
             >
               <span
-                className={`block text-[14px] text-primary  ${
-                  code == _Store.type6
+                className={`block text-[14px]     ${
+                  code == _Store.type6 ||
+                  code === THD_STORE_CODE ||
+                  code === _Store_CODES.USAAPUNCHOUT
                     ? 'hover:text-white'
                     : 'hover:text-primary'
-                } font-[400] tracking-[1px] leading-[18px] uppercase  hover:bg-quaternary px-[10px] py-[7px] hover:pl-[20px] transition-all duration-700`}
+                } 
+                ${
+                  code == _Store.type6 || code == _Store_CODES.USAAPUNCHOUT
+                    ? 'text-primary hover:bg-primary'
+                    : 'text-primary hover:bg-quaternary'
+                } 
+                font-[400] tracking-[1px] leading-[18px] uppercase   px-[10px] py-[7px] hover:pl-[20px] transition-all duration-700 cursor-pointer `}
                 title={itemLabel}
               >
                 {itemLabel}

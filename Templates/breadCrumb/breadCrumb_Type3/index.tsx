@@ -15,7 +15,7 @@ const BreadCrumb_Type3: NextPage<_BreadCrumbProps> = ({
             className='flex bg-light-gray px-[10px] py-[5px]'
             aria-label='Breadcrumb'
           >
-            <ol className='inline-flex items-center space-x-1 md:space-x-3 text-sm flex-wrap gap-y-1'>
+            <ol className='inline-flex items-center space-x-1 md:space-x-1 font-bold text-sm flex-wrap gap-y-1'>
               <>
                 {breadCrumbs.map((item, index) => (
                   <li
@@ -33,7 +33,7 @@ const BreadCrumb_Type3: NextPage<_BreadCrumbProps> = ({
                             className={` ml-[5px] md:ml-[10px] ${
                               index == breadCrumbs.length - 1
                                 ? 'ml-[6px] text-gray-text'
-                                : ' text-quaternary hover:text-quaternary-hover'
+                                : 'tertiary-link hover:tertiary-link'
                             } `}
                           >
                             {item.name}

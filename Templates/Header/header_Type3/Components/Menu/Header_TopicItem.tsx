@@ -1,6 +1,11 @@
 import LoginModal from '@appComponents/modals/loginModal';
 import { _Store } from '@configs/page.config';
-import { UCA } from '@constants/global.constant';
+import {
+  BOSTONBEAR,
+  THD_STORE_CODE,
+  UCA,
+  _Store_CODES,
+} from '@constants/global.constant';
 import { _modals } from '@definations/product.type';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
 import { useRouter } from 'next/router';
@@ -41,7 +46,7 @@ const Topic: React.FC<_props> = ({ title, url }) => {
               title={title}
               onClick={() => {
                 toggleSideMenu('CLOSE');
-                router.push(`/${url}`);
+                router.push(`/${url}.html`);
               }}
               className=''
             >
@@ -57,49 +62,90 @@ const Topic: React.FC<_props> = ({ title, url }) => {
     return (
       <>
         {' '}
-        <div
-          className='flex'
-          onClick={() => {
-            if (code === 'CYX' || code === UCA) {
-              if (customeId) {
-                router.push(`/${url}`);
-              } else {
-                setRedirectPagePath(redirectPath || `/${url}`);
-                setOpenModal('login');
-                // router.push(`/${url}`);
-              }
-            } else {
-              router.push(`/${url}`);
-            }
-          }}
-        >
-          <div className=''>
-            <button
-              title={title}
-              onMouseOver={() => setFocus(true)}
-              onMouseOut={() => setFocus(false)}
-              type='button'
-              className={`relative text-[12px] xl:text-[14px] xl:ml-[12px] xl:mr-[12px] ml-[5px] mr-[5px] tracking-[2px] z-10 flex items-center font-[400] pt-[10px] pb-[10px] border-b-[4px] ${
-                focus
-                  ? `border-secondary ${
-                      code == _Store.type6
-                        ? 'primary-link hover:primary-link'
-                        : 'text-secondary'
-                    } `
-                  : `border-transparent  ${
-                      code == _Store.type6 ? '' : 'text-primary'
-                    } `
-              } border-primary-link`}
-            >
-              <span
-                className='uppercase'
-                style={{ textTransform: 'uppercase' }}
+        {title.toUpperCase() == 'CUSTOM ITEM REQUEST' ? (
+          <div className='flex'>
+            <div className=''>
+              <a
+                className={`relative text-[12px] xl:text-[14px] xl:ml-[12px] xl:mr-[12px] ml-[5px] mr-[5px] tracking-[0px] z-10 flex items-center font-[400] pt-[10px] pb-[10px] border-b-[4px] ${
+                  focus
+                    ? `border-secondary ${
+                        code == _Store.type6 ||
+                        code == _Store_CODES.USAAHEALTHYPOINTS
+                          ? 'primary-link hover:primary-link'
+                          : 'text-secondary'
+                      } `
+                    : `border-transparent  ${
+                        code == _Store.type6 ? '' : 'text-primary'
+                      } `
+                } border-primary-link`}
+                href={`/${url}.html`}
               >
-                {title}
-              </span>
-            </button>
+                <span
+                  className='uppercase'
+                  style={{ textTransform: 'uppercase' }}
+                >
+                  {title}
+                </span>
+              </a>
+            </div>
           </div>
-        </div>
+        ) : (
+          <div
+            className='flex'
+            onClick={() => {
+              if (code === 'CYX' || code === UCA) {
+                if (customeId) {
+                  router.push(`/${url}.html`);
+                } else {
+                  setRedirectPagePath(redirectPath || `/${url}.html`);
+                  setOpenModal('login');
+                  // router.push(`/${url}`);
+                }
+              } else {
+                router.push(`/${url}.html`);
+              }
+            }}
+          >
+            <div className=''>
+              <button
+                title={title}
+                onMouseOver={() => setFocus(true)}
+                onMouseOut={() => setFocus(false)}
+                type='button'
+                className={`relative text-[12px] xl:text-[14px]  ${
+                  code === THD_STORE_CODE
+                    ? 'xl:ml-[20px] xl:mr-[20px] ml-[15px] mr-[15px]'
+                    : 'xl:ml-[12px] xl:mr-[12px] ml-[5px] mr-[5px]'
+                } tracking-[${
+                  code == BOSTONBEAR ? '0px' : '2px'
+                }] z-10 flex items-center font-[400] pt-[10px] pb-[10px] border-b-[4px] ${
+                  focus
+                    ? `border-secondary ${
+                        code == _Store.type6 ||
+                        code == THD_STORE_CODE ||
+                        code === _Store_CODES.USAAPUNCHOUT
+                          ? 'primary-link hover:primary-link'
+                          : 'text-secondary'
+                      } `
+                    : `border-transparent  ${
+                        code == _Store.type6
+                          ? ''
+                          : code === THD_STORE_CODE
+                          ? 'text-quaternary'
+                          : 'text-primary'
+                      } `
+                } border-primary-link`}
+              >
+                <span
+                  className='uppercase'
+                  style={{ textTransform: 'uppercase' }}
+                >
+                  {title}
+                </span>
+              </button>
+            </div>
+          </div>
+        )}
         {openModal === 'login' && <LoginModal modalHandler={modalHandler} />}
       </>
     );

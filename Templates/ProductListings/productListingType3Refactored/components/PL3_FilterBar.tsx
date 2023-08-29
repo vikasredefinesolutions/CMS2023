@@ -1,5 +1,9 @@
 import { SortingMethod } from '@constants/common.constant';
-import { SIMPLI_SAFE_CODE, _Store_CODES } from '@constants/global.constant';
+import {
+  SIMPLI_SAFE_CODE,
+  THD_STORE_CODE,
+  _Store_CODES,
+} from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import { useRouter } from 'next/router';
@@ -19,11 +23,8 @@ const PL3_FilterBar: React.FC<_Props> = ({ length }) => {
   // const totalCount = useTypedSelector_v2(
   //   (state) => state.listing.totalVisibleProducts,
   // );
-  const sort: number =
-    (router.query.sort as unknown as number) ||
-    (router.query.Sort as unknown as number) ||
-    1;
-  const [sorting, setSorting] = useState<number>(+sort || 1);
+
+  const [sorting, setSorting] = useState<number>(1);
 
   const sortProductJson = (type: number) => {
     setShowLoader(true);
@@ -39,8 +40,22 @@ const PL3_FilterBar: React.FC<_Props> = ({ length }) => {
     setShowSortMenu(false);
   }, [router.asPath]);
 
+  useEffect(() => {
+    const sort: number =
+      (router.query.sort as unknown as number) ||
+      (router.query.Sort as unknown as number) ||
+      1;
+    setSorting(+sort);
+  }, [router.query]);
+
   return (
-    <div className='relative z-10 mt-[20px] lg:mt-[0px] py-[5px]'>
+    <div
+      className={`relative z-10 mt-[20px] lg:mt-[0px] ${
+        storeCode !== THD_STORE_CODE && storeCode !== _Store_CODES.USAAPUNCHOUT
+          ? ' py-[5px]'
+          : ''
+      }`}
+    >
       <hr />
       <div className='flex flex-wrap justify-between items-center text-sm gap-2 py-[5px]'>
         <div className='flex flex-wrap items-center gap-2'>
@@ -100,7 +115,7 @@ const PL3_FilterBar: React.FC<_Props> = ({ length }) => {
         </div>
         {storeCode !== SIMPLI_SAFE_CODE &&
           storeCode !== _Store_CODES.USAAHEALTHYPOINTS && (
-            <div className='relative w-full max-w-[200px]'>
+            <div className='relative w-full max-w-[260px]'>
               <div className=''>
                 <button
                   type='button'

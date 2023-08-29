@@ -1,6 +1,11 @@
 import LoginModal from '@appComponents/modals/loginModal';
 import { _Store } from '@configs/page.config';
-import { UCA } from '@constants/global.constant';
+import {
+  BOSTONBEAR,
+  THD_STORE_CODE,
+  UCA,
+  _Store_CODES,
+} from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
 import { _Brand } from '@definations/brand';
 import { _modals } from '@definations/product.type';
@@ -147,15 +152,23 @@ const Brand: React.FC<_props> = ({
               type='button'
               onMouseOver={() => setFocus(true)}
               onMouseLeave={() => setFocus(false)}
-              className={`relative text-[12px] xl:text-[14px] xl:ml-[12px] xl:mr-[12px] ml-[5px] mr-[5px] tracking-[2px] z-10 flex items-center font-[400] pt-[10px] pb-[10px] border-b-[4px] ${
+              className={`relative text-[12px] xl:text-[14px] xl:ml-[12px] xl:mr-[12px] ml-[5px] mr-[5px] tracking-[${
+                code == BOSTONBEAR ? '0px' : '2px'
+              }] z-10 flex items-center font-[400] pt-[10px] pb-[10px] border-b-[4px] ${
                 focus
                   ? `border-secondary ${
-                      code == _Store.type6
+                      code == _Store.type6 ||
+                      code == THD_STORE_CODE ||
+                      code == _Store_CODES.USAAPUNCHOUT
                         ? 'primary-link hover:primary-link'
                         : 'text-secondary'
                     } `
                   : `border-transparent  ${
-                      code == _Store.type6 ? '' : 'text-primary'
+                      code == _Store.type6
+                        ? ''
+                        : code === THD_STORE_CODE
+                        ? 'text-quaternary'
+                        : 'text-primary'
                     } `
               } border-primary-link`}
             >
