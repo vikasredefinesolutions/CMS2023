@@ -6,13 +6,20 @@ import {
   UCA,
   _Store_CODES,
 } from '@constants/global.constant';
+import { thirdPartyLoginService } from '@constants/pages.constant';
 import { __pagesText } from '@constants/pages.text';
 import { paths } from '@constants/paths.constant';
 import { _shippingMethod } from '@controllers/checkoutController';
 import SummarryController from '@controllers/summarryController';
-import { GetCartTotals, useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
+import { punchoutCheckout } from '@services/checkout.service';
+import {
+  GetCartTotals,
+  GetCustomerId,
+  useActions_v2,
+  useTypedSelector_v2,
+} from 'hooks_v2';
 import { useRouter } from 'next/router';
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 
 interface _props {
   selectedShippingModel: _shippingMethod;
@@ -52,6 +59,17 @@ const CartSummarryType2: FC<_props> = ({ selectedShippingModel }) => {
     removeCouponCodeHandler,
   } = SummarryController();
   const cartItems = useTypedSelector_v2((state) => state.cart.cart);
+  const customerId = GetCustomerId();
+
+  const [showCheckoutButton, setShowCheckoutButton] = useState(true);
+
+  useEffect(() => {
+    const service = localStorage.getItem('thirdPartyServices');
+    if (service === thirdPartyLoginService.punchoutLogin) {
+      setShowCheckoutButton(false);
+    }
+  }, []);
+
   const couponAmt = couponDetails?.amount || 0;
   const calculateSubTotal = () => {
     let subTotal = 0;
@@ -84,6 +102,43 @@ const CartSummarryType2: FC<_props> = ({ selectedShippingModel }) => {
       return estimated > 0 ? estimated : 0;
     },
   };
+
+  const postData = (path: string, params: { [key: string]: string }) => {
+    const hidden_form = document.createElement('form');
+    hidden_form.method = 'POST';
+    hidden_form.action = path;
+
+    for (const key in params) {
+      if (params.hasOwnProperty(key)) {
+        const hidden_input = document.createElement('input');
+        hidden_input.type = 'hidden';
+        hidden_input.name = key;
+        hidden_input.value = params[key];
+
+        hidden_form.appendChild(hidden_input);
+      }
+    }
+
+    document.body.appendChild(hidden_form);
+    hidden_form.submit();
+  };
+
+  const punchoutHandler = async () => {
+    const SID = localStorage.getItem('P_SID');
+    if (SID) {
+      const sessionId = atob(SID);
+      const punchoutResponse = await punchoutCheckout({
+        sessionId,
+        customerId,
+      });
+      console.log(punchoutResponse);
+      postData(punchoutResponse.actionUrl, {
+        'cxml-urlencoded': punchoutResponse.cartXml,
+        Aribauser: 'AribaUser',
+      });
+    }
+  };
+
   return (
     <>
       <div className='border border-gray-border p-[15px]'>
@@ -256,37 +311,56 @@ const CartSummarryType2: FC<_props> = ({ selectedShippingModel }) => {
           <div className=''>
             {loggedIn && (
               <div className='mt-[16px]'>
-                <button
-                  type='button'
-                  onClick={() => {
-                    if (
-                      !isEmployeeLoggedIN &&
-                      totalQty < PKHG_MINIMUM_QTY &&
-                      storeCode !== SIMPLI_SAFE_CODE &&
-                      storeCode !== UCA &&
-                      storeCode !== _Store_CODES.USAAPUNCHOUT &&
-                      storeCode !== BACARDI
-                    ) {
-                      showModal({
-                        title: 'Min Quantity Alert',
-                        message:
-                          'Cart Quantity must be greater then or equal to 10',
-                      });
-                    } else {
-                      router.push(paths.CHECKOUT);
-                    }
-                  }}
-                  className={`btn btn-lg btn-${
-                    storeCode === SIMPLI_SAFE_CODE ||
-                    storeCode === UCA ||
-                    storeCode === _Store_CODES.USAAPUNCHOUT ||
-                    storeCode === BACARDI
-                      ? 'secondary'
-                      : 'primary'
-                  } w-full !flex flex-wrap justify-center items-center `}
-                >
-                  CHECKOUT NOW
-                </button>
+                {showCheckoutButton ? (
+                  <button
+                    type='button'
+                    onClick={() => {
+                      if (
+                        !isEmployeeLoggedIN &&
+                        totalQty < PKHG_MINIMUM_QTY &&
+                        storeCode !== SIMPLI_SAFE_CODE &&
+                        storeCode !== UCA &&
+                        storeCode !== _Store_CODES.USAAPUNCHOUT &&
+                        storeCode !== BACARDI
+                      ) {
+                        showModal({
+                          title: 'Min Quantity Alert',
+                          message:
+                            'Cart Quantity must be greater then or equal to 10',
+                        });
+                      } else {
+                        router.push(paths.CHECKOUT);
+                      }
+                    }}
+                    className={`btn btn-lg btn-${
+                      storeCode === SIMPLI_SAFE_CODE ||
+                      storeCode === UCA ||
+                      storeCode === _Store_CODES.USAAPUNCHOUT ||
+                      storeCode === BACARDI
+                        ? 'secondary'
+                        : 'primary'
+                    } w-full !flex flex-wrap justify-center items-center `}
+                  >
+                    CHECKOUT NOW
+                  </button>
+                ) : (
+                  <button
+                    onClick={punchoutHandler}
+                    className={`btn btn-lg btn-${
+                      storeCode === SIMPLI_SAFE_CODE ||
+                      storeCode === UCA ||
+                      storeCode === _Store_CODES.USAAPUNCHOUT ||
+                      storeCode === BACARDI
+                        ? 'secondary'
+                        : 'primary'
+                    } w-full !flex flex-wrap justify-center items-center `}
+                  >
+                    <span className='material-icons text-lg mr-[2px]'>
+                      shopping_cart
+                    </span>
+                    PUNCHOUT CHECKOUT
+                  </button>
+                )}
               </div>
             )}
           </div>
