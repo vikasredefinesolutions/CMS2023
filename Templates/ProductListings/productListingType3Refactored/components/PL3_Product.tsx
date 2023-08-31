@@ -105,9 +105,10 @@ const PL3_Product: React.FC<_Props> = (props) => {
   );
 
   useEffect(() => {
-    setCurrentProduct(
-      product.getProductImageOptionList && product.getProductImageOptionList[0],
-    );
+    if (product.getProductImageOptionList) {
+      setCurrentProduct(product.getProductImageOptionList[0]);
+      setMainImageUrl(product.getProductImageOptionList[0].imageName);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [product]);
 
