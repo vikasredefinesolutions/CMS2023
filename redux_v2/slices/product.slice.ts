@@ -423,7 +423,8 @@ export const productSlice = createSlice({
       if (state.product.inventory) {
         const inventoryToShowByColor =
           state.product.inventory?.inventory.filter(
-            (int) => int.attributeOptionId === action.payload?.attributeOptionId,
+            (int) =>
+              int.attributeOptionId === action.payload?.attributeOptionId,
           );
 
         const sizesToShowByColor = state.product.inventory?.sizes.filter(
@@ -473,12 +474,15 @@ export const productSlice = createSlice({
           id: number;
           imageUrl: string;
           altTag: string;
+          mediaBaseUrl?: string;
         };
       },
     ) => {
       state.selected.image = {
         ...action.payload,
-        imageUrl: `${config.baseUrl.media}${action.payload.imageUrl}`,
+        imageUrl: `${config.baseUrl.media || action.payload.mediaBaseUrl}${
+          action.payload.imageUrl
+        }`,
       };
     },
 

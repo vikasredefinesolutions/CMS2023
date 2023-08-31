@@ -4,6 +4,7 @@ import {
   HEALTHYPOINTS,
   SIMPLI_SAFE_CODE,
   UCA,
+  _Store_CODES,
   __Cookie,
 } from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
@@ -90,7 +91,6 @@ const BuyNowHandler: React.FC<_Props> = (size) => {
     };
     await checkAvailablityInCart(payload)
       .then(async (res) => {
-        console.log(res, 'this is res');
         if (!res) {
           await buyNowAction();
         } else {
@@ -197,7 +197,10 @@ const BuyNowHandler: React.FC<_Props> = (size) => {
               title: 'Success',
             });
             // router.push(paths.CART);
-            await fetchCartDetails({ customerId, isEmployeeLoggedIn });
+            await fetchCartDetails({
+              customerId: customerId || res,
+              isEmployeeLoggedIn,
+            });
           }
         })
         .catch((err) => {
@@ -235,7 +238,9 @@ const BuyNowHandler: React.FC<_Props> = (size) => {
       <div className='w-full text-left flex justify-end mt-[20px] cursor-pointer '>
         <button
           onClick={() => {
-            storeCode === UCA || storeCode == BOSTONBEAR
+            storeCode === UCA ||
+            storeCode == BOSTONBEAR ||
+            storeCode === _Store_CODES.USAAPUNCHOUT
               ? checkProductSizeAvailable()
               : buyNowAction();
           }}

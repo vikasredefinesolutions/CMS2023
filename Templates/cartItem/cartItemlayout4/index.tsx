@@ -5,6 +5,7 @@ import {
   BOSTONBEAR,
   HEALTHYPOINTS,
   SIMPLI_SAFE_CODE,
+  THD_STORE_CODE,
   UCA,
   _Store_CODES,
   cartRemoveConfirmMessage,
@@ -94,6 +95,7 @@ const CIlayout4: FC<any> = ({ removeCartItem, isEditable = true }) => {
     attributeOptionId: string | number,
     cartLogoPersonId: number,
     cQuantity: number | undefined,
+    apiQty: number,
   ) => {
     e.preventDefault();
     if (
@@ -143,11 +145,26 @@ const CIlayout4: FC<any> = ({ removeCartItem, isEditable = true }) => {
         }
       })
       .catch((el) => {
-        setShowLoader(false);
-        showModal({
-          message: el[''],
-          title: commonMessage.failed,
+        setQtyValues({
+          ...qtyValues,
+          [`${cartLogoPersonId}`]: apiQty,
         });
+        setShowLoader(false);
+        // showModal({
+        //   message: el[''],
+        //   title: commonMessage.failed,
+        // });
+        if (el[''] == 'Inventory not available.') {
+          showModal({
+            message: el[''],
+            title: 'Inventory',
+          });
+        } else {
+          showModal({
+            message: el[''],
+            title: commonMessage.failed,
+          });
+        }
       });
   };
 
@@ -194,7 +211,11 @@ const CIlayout4: FC<any> = ({ removeCartItem, isEditable = true }) => {
 
   return (
     <>
-      <ul className='overflow-hidden '>
+      <ul
+        className={`overflow-hidden ${
+          storeCode === THD_STORE_CODE && 'border border-gray-border mb-[20px]'
+        }`}
+      >
         {cartData &&
           cartData.map((item: _CartItem, cartItemIndex: number) => {
             return (
@@ -202,7 +223,13 @@ const CIlayout4: FC<any> = ({ removeCartItem, isEditable = true }) => {
                 className='bg-white pt-0 mb-[20px]'
                 key={`${item.shoppingCartItemsId}_${cartItemIndex}`}
               >
-                <div className='border border-gray-border p-[15px] w-full '>
+                <div
+                  className={`${
+                    storeCode === THD_STORE_CODE
+                      ? ''
+                      : 'border border-gray-border'
+                  } p-[15px] w-full `}
+                >
                   <div className='flex flex-wrap -mx-[10px]'>
                     <div className='w-full md:w-7/12 px-[10px]'>
                       <div className='flex flex-wrap mb-[10px] md:mb-[0px] -mx-[10px]'>
@@ -235,8 +262,13 @@ const CIlayout4: FC<any> = ({ removeCartItem, isEditable = true }) => {
                                 className={`${
                                   storeCode === _Store_CODES.UNITi
                                     ? 'text-anchor hover:text-anchor font-semibold'
-                                    : 'text-black hover:text-secondary font-semibold'
-                                } `}
+                                    : 'text-black  font-semibold'
+                                } ${
+                                  storeCode === THD_STORE_CODE ||
+                                  storeCode === _Store_CODES.UNITi
+                                    ? 'hover:text-anchor'
+                                    : 'hover:text-secondary'
+                                }`}
                               >
                                 {item.productName}
                               </a>
@@ -274,7 +306,11 @@ const CIlayout4: FC<any> = ({ removeCartItem, isEditable = true }) => {
                                   onClick={() =>
                                     handleRemoveItem(item.shoppingCartItemsId)
                                   }
-                                  className='text-default hover:text-secondary cursor-pointer'
+                                  className={`${
+                                    storeCode === _Store_CODES.UNITi
+                                      ? 'text-primary'
+                                      : 'text-default'
+                                  } hover:text-secondary cursor-pointer`}
                                 >
                                   <strong>Remove Item</strong>
                                 </div>
@@ -283,7 +319,7 @@ const CIlayout4: FC<any> = ({ removeCartItem, isEditable = true }) => {
                           ) : (
                             <div className='text-default-text mb-[5px]'>
                               Color:{' '}
-                              <span className='font-semibold'>
+                              <span className='font-bold'>
                                 {item.attributeOptionValue}
                               </span>
                             </div>
@@ -296,8 +332,8 @@ const CIlayout4: FC<any> = ({ removeCartItem, isEditable = true }) => {
                                   return (
                                     <>
                                       <div className='text-default-text mb-[5px] flex items-center flex-wrap gap-y-[5px]'>
-                                        Size :{' '}
-                                        <strong className='mx-[2px] w-[50px]'>
+                                        Size:{' '}
+                                        <strong className='mx-[2px] w-[100px]'>
                                           {' '}
                                           {view.attributeOptionValue} -
                                         </strong>
@@ -305,7 +341,10 @@ const CIlayout4: FC<any> = ({ removeCartItem, isEditable = true }) => {
                                         !item.seName
                                           .toLowerCase()
                                           .includes('gift-card') ? (
-                                          <form className=''>
+                                          <form
+                                            className=''
+                                            onSubmit={(e) => e.preventDefault()}
+                                          >
                                             <input
                                               className='form-input max-w-[100px] mx-[2px]'
                                               defaultValue={
@@ -355,16 +394,21 @@ const CIlayout4: FC<any> = ({ removeCartItem, isEditable = true }) => {
                                                     +item.attributeOptionId,
                                                     view.id,
                                                     1,
+                                                    view.qty,
                                                   );
                                                 } else {
-                                                  return handleUpdateQuantity(
-                                                    e,
-                                                    +item.attributeOptionId,
-                                                    view.id,
-                                                    +qtyValues[
-                                                      view.id.toString()
-                                                    ],
-                                                  );
+                                                  if (
+                                                    view.qty != +e.target.value
+                                                  )
+                                                    return handleUpdateQuantity(
+                                                      e,
+                                                      +item.attributeOptionId,
+                                                      view.id,
+                                                      +qtyValues[
+                                                        view.id.toString()
+                                                      ],
+                                                      view.qty,
+                                                    );
                                                 }
                                               }}
                                             />
@@ -377,14 +421,16 @@ const CIlayout4: FC<any> = ({ removeCartItem, isEditable = true }) => {
                                         <strong className='mx-[2px]'>
                                           Qty
                                         </strong>
-                                        {storeCode == BACARDI && (
-                                          <i
-                                            onClick={() =>
-                                              handleSizeRemove(view, item)
-                                            }
-                                            className='fa-solid fa-trash-can mx-[5px]'
-                                          ></i>
-                                        )}
+                                        {storeCode == BACARDI &&
+                                          item.shoppingCartItemDetailsViewModels
+                                            .length > 1 && (
+                                            <i
+                                              onClick={(event) => {
+                                                handleSizeRemove(view, item);
+                                              }}
+                                              className='fa-solid fa-trash-can mx-[5px] cursor-pointer'
+                                            ></i>
+                                          )}
                                       </div>
                                       {item.shoppingCartItemDetailsViewModels
                                         .length == 1 && (
@@ -395,7 +441,15 @@ const CIlayout4: FC<any> = ({ removeCartItem, isEditable = true }) => {
                                                 item.shoppingCartItemsId,
                                               )
                                             }
-                                            className='text-default hover:text-secondary cursor-pointer'
+                                            className={`${
+                                              storeCode === _Store_CODES.UNITi
+                                                ? 'text-primary'
+                                                : 'text-default'
+                                            } ${
+                                              storeCode === THD_STORE_CODE
+                                                ? 'pl-8 hover:text-anchor'
+                                                : 'hover:text-secondary'
+                                            } cursor-pointer`}
                                           >
                                             <strong>Remove Item</strong>
                                           </div>
@@ -414,7 +468,11 @@ const CIlayout4: FC<any> = ({ removeCartItem, isEditable = true }) => {
                                 onClick={() =>
                                   handleRemoveItem(item.shoppingCartItemsId)
                                 }
-                                className='text-default hover:text-secondary cursor-pointer'
+                                className={`${
+                                  storeCode === _Store_CODES.UNITi
+                                    ? 'text-primary'
+                                    : 'text-default'
+                                } hover:text-secondary cursor-pointer`}
                               >
                                 <strong>Remove Item</strong>
                               </div>
@@ -425,14 +483,21 @@ const CIlayout4: FC<any> = ({ removeCartItem, isEditable = true }) => {
                     </div>
                     <div className='w-full flax-wrap md:w-5/12 px-[10px]'>
                       <div className='flex justify-between'>
-                        <div className='text-default-text'>
+                        <div className='text-default-text my-[8px]'>
                           <span>
                             ${(item.totalPrice / item.totalQty).toFixed(2)} /
                             QTY {item.totalQty}
                           </span>
                         </div>
-                        <div className='text-default-text mb-[10px]'>
-                          <span className='font-semibold'>
+                        <div className='text-default-text my-[8px]'>
+                          <span
+                            className={`${
+                              storeCode === THD_STORE_CODE ||
+                              storeCode === _Store_CODES.USAAPUNCHOUT
+                                ? 'font-bold'
+                                : 'font-semibold'
+                            }`}
+                          >
                             Total <Price value={item.totalPrice} />
                           </span>
                         </div>
@@ -465,7 +530,8 @@ const CIlayout4: FC<any> = ({ removeCartItem, isEditable = true }) => {
                   storeCode == SIMPLI_SAFE_CODE ||
                   storeCode == UCA ||
                   storeCode === HEALTHYPOINTS ||
-                  storeCode === BACARDI
+                  storeCode === BACARDI ||
+                  storeCode === _Store_CODES.USAAPUNCHOUT
                     ? 'secondary'
                     : 'primary'
                 }`}

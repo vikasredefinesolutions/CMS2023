@@ -32,7 +32,7 @@ const ProductInfo_Type3: React.FC<_ProductInfoProps> = ({ product }) => {
   const selectedColor = useTypedSelector_v2(
     (state) => state.product.selected.color,
   );
-  const { inventory } = useTypedSelector_v2((state) => state.product.product);
+  const [selectSize, setSelectSize] = useState('');
 
   const { code: storeCode } = useTypedSelector_v2((state) => state.store);
   const modalHandler = (param: null | _modals) => {
@@ -48,20 +48,27 @@ const ProductInfo_Type3: React.FC<_ProductInfoProps> = ({ product }) => {
       if (selectSize === '') {
         return price?.msrp;
       } else {
-        return toCheckout.totalPrice.toFixed();
+        return toCheckout.totalPrice.toFixed(2);
       }
     } else {
-      return toCheckout.totalPrice.toFixed();
+      if (toCheckout.totalPrice.toFixed() == '0') {
+        return price?.msrp;
+      } else {
+        return toCheckout.totalPrice.toFixed(2);
+      }
     }
   };
 
-  const [selectSize, setSelectSize] = useState('');
   useEffect(() => {
     setSelectSize('');
   }, [selectedColor]);
   const { price } = useTypedSelector_v2((state) => state.product.product);
+  const { minQuantity } = useTypedSelector_v2(
+    (state) => state.product.selected.color,
+  );
+  // console.log(data, 'asdlkflksadfjksalkdjfkjaslkdfjklksadjflksdajf');
   const [showSingleInv, setShowSingleInv] = useState(true);
-  const { updatePrice } = useActions_v2();
+  const { updatePrice, clearToCheckout } = useActions_v2();
   useEffect(() => {
     updatePrice({ price: price?.msrp || 0 });
   }, [price?.msrp]);
@@ -74,7 +81,13 @@ const ProductInfo_Type3: React.FC<_ProductInfoProps> = ({ product }) => {
 
   return (
     <>
-      <div className='lg:col-end-13 lg:col-span-5 mt-[15px] md:mt-[40px] px-0 lg:px-[15px] sm:px-0 sm:mt-[64px] lg:mt-0 link-custom'>
+      <div
+        className={`${
+          storeCode === THD_STORE_CODE
+            ? 'col-span-1 mt-[15px] pl-[8px] pr-[8px] md:pl-[15px] md:pr-[15px] sm:pl-[0px] sm:pr-[0px] lg:mt-[0px]'
+            : 'lg:col-end-13 lg:col-span-5 mt-[15px] md:mt-[40px] px-0 lg:px-[15px] sm:px-0 sm:mt-[64px] lg:mt-0 link-custom'
+        }`}
+      >
         <div
           className={`mb-[15px] border-b border-b-gray-border ${
             storeCode === _Store_CODES.UNITi ? 'hidden lg:block ' : ''
@@ -107,7 +120,7 @@ const ProductInfo_Type3: React.FC<_ProductInfoProps> = ({ product }) => {
               store_Code == _Store.type6 ? 'text-sm' : 'text-default-text'
             }`}
           >
-            <span className='inline-block w-[128px] font-semibold'>
+            <span className='inline-block w-[128px] font-bold'>
               {storeCode === THD_STORE_CODE ||
               storeCode === SIMPLI_SAFE_CODE ||
               storeCode === CYXTERA_CODE ||
@@ -115,7 +128,8 @@ const ProductInfo_Type3: React.FC<_ProductInfoProps> = ({ product }) => {
               store_Code == UNITI_CODE ||
               storeCode === UCA ||
               store_Code == BACARDI ||
-              storeCode == SIMPLI_SAFE_CODE
+              storeCode == SIMPLI_SAFE_CODE ||
+              storeCode === _Store_CODES.USAAPUNCHOUT
                 ? __pagesText.productInfo.product_code
                 : __pagesText.productInfo.sku}
             </span>
@@ -131,12 +145,16 @@ const ProductInfo_Type3: React.FC<_ProductInfoProps> = ({ product }) => {
             </div>
           )}
         </div>
-        {storeCode == SIMPLI_SAFE_CODE || storeCode == BACARDI ? (
-          <InStock_Type3 />
-        ) : (
-          <></>
-        )}
+        {storeCode == SIMPLI_SAFE_CODE ? <InStock_Type3 /> : <></>}
         <AvailableColors_Type3 />
+        {minQuantity > 0 && (
+          <div>
+            <div className='!text-default-text text-red-500 mb-[10px]'>
+              The minimum order requirement for this piece is {minQuantity} for
+              this color.
+            </div>
+          </div>
+        )}
 
         {storeCode !== BACARDI ? (
           <>
@@ -149,12 +167,12 @@ const ProductInfo_Type3: React.FC<_ProductInfoProps> = ({ product }) => {
             >
               <Inventory_Type3
                 attributeOptionId={selectedColor.attributeOptionId}
-                storeCode={''}
+                storeCode={storeCode}
                 selectSize={selectSize}
                 setSelectSize={setSelectSize}
               />
 
-              {storeCode !== THD_STORE_CODE && sizeChart && (
+              {sizeChart && (
                 <div className='pb-[10px] ml-[10px]'>
                   {storeCode !== BACARDI ? (
                     <button
@@ -210,7 +228,8 @@ const ProductInfo_Type3: React.FC<_ProductInfoProps> = ({ product }) => {
                         >
                           {__pagesText.productInfo.sizeChart}
                         </button>
-                      ) : (
+                      ) : sizeChart &&
+                        Object.keys(sizeChart?.sizeChartView).length != 0 ? (
                         <div
                           className='size-chart p-t-20 ml-[10px]'
                           onClick={() => modalHandler('sizeChart')}
@@ -223,6 +242,8 @@ const ProductInfo_Type3: React.FC<_ProductInfoProps> = ({ product }) => {
                             className={''}
                           />
                         </div>
+                      ) : (
+                        ''
                       )}
                     </div>
                   }
@@ -241,7 +262,12 @@ const ProductInfo_Type3: React.FC<_ProductInfoProps> = ({ product }) => {
                 />
                 <div className='mt-[15px]'>
                   <div className='flex flex-wrap justify-between items-center'>
-                    <div onClick={() => setShowSingleInv(true)}>
+                    <div
+                      onClick={() => {
+                        clearToCheckout();
+                        setShowSingleInv(true);
+                      }}
+                    >
                       <a
                         className={` ${
                           storeCode == BACARDI

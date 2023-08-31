@@ -196,7 +196,7 @@ const PL3_SideFilters: React.FC<_Props> = ({
                           </span>
                         )} */}
                       </div>
-                      <div className='text-xs mt-[15px] mb-[3px]'>
+                      <div className='text-md mt-[15px] mb-[3px]'>
                         <ul
                           className={
                             filter.label === 'Color' || filter.label === 'Size'

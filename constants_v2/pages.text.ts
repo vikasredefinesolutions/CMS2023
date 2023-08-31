@@ -185,7 +185,7 @@ export const __pagesText = {
     additionalDetails: 'Additional details',
     requestAFreeConsulation:
       'Or request a free consultation with one of our experts',
-    sku: 'SKU',
+    sku: 'SKU:',
     ProductCode: 'Product Code:',
     msrp: 'MSRP',
     product_code: 'Product Code:',

@@ -1,9 +1,15 @@
 import NxtImage from '@appComponents/reUsable/Image';
-import { UCA, UNITI_CODE, _Store_CODES } from '@constants/global.constant';
-import { _OtherImage, _ProductColor } from '@definations/APIs/colors.res';
+import {
+  BACARDI,
+  BOSTONBEAR,
+  THD_STORE_CODE,
+  UCA,
+  UNITI_CODE,
+  _Store_CODES,
+} from '@constants/global.constant';
+import { _OtherImage } from '@definations/APIs/colors.res';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
-import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import InnerImageZoom from 'react-inner-image-zoom';
 import { _globalStore } from 'store.global';
 import { _ProductImgProps } from './productDetailsComponents';
@@ -11,19 +17,8 @@ import { _ProductImgProps } from './productDetailsComponents';
 let mediaBaseUrl = _globalStore.blobUrl; // for server side rendering
 
 const ProductImg_Type3: React.FC<_ProductImgProps> = ({ product }) => {
-  const router = useRouter();
-  const { setImage, setImage_2 } = useActions_v2();
-  const [wishlistId, setWishlistId] = useState<number>(0);
-  const [wishlistPresent, setWishlistPresent] = useState<boolean>(false);
+  const { setImage, setImage_2, clearToCheckout } = useActions_v2();
   const colors = useTypedSelector_v2((state) => state.product?.product.colors);
-  const handleChooseColor = (product: _ProductColor) => {
-    if (!product.productSEName || product.productSEName === '') {
-      setColor(product);
-      return;
-    }
-    router.push(product.productSEName);
-  };
-  const brandId = useTypedSelector_v2((state) => state.wishlist.brandId);
   const selectedColor = useTypedSelector_v2(
     (state) => state.product?.selected.color,
   );
@@ -40,7 +35,6 @@ const ProductImg_Type3: React.FC<_ProductImgProps> = ({ product }) => {
   const selectImgHandler = (img: _OtherImage) => {
     setImage_2({ ...img, imageUrl: mediaBaseUrl + img.imageUrl });
   };
-
   useEffect(() => {
     setImage({
       id: 0,
@@ -50,7 +44,13 @@ const ProductImg_Type3: React.FC<_ProductImgProps> = ({ product }) => {
   }, [selectedColor?.attributeOptionId, product?.id]);
 
   return (
-    <div className='lg:col-start-2 lg:col-end-7 grid grid-cols-12 gap-6 '>
+    <div
+      className={`${
+        storeCode === THD_STORE_CODE
+          ? 'col-span-1 grid grid-cols-12 gap-[24px] pr-[15px] pt-[8px]'
+          : 'lg:col-start-2 lg:col-end-7 grid grid-cols-12 gap-6'
+      }`}
+    >
       {storeCode === _Store_CODES.UNITi && (
         <div className='col-span-12 relative mt-[15px] border-b border-b-gray-border block lg:hidden'>
           <div className='text-large-text md:text-sub-text lg:text-large-text pb-[20px]'>
@@ -59,7 +59,36 @@ const ProductImg_Type3: React.FC<_ProductImgProps> = ({ product }) => {
         </div>
       )}
       <div className='col-span-12 relative'>
-        <div className='main-image mb-[5px]'>
+        {storeCode === THD_STORE_CODE &&
+          selectedColor.moreImages.length > 0 && (
+            <div className='hidden md:block sub-image absolute left-[10px] top-[15px] w-[70px]'>
+              {selectedColor.moreImages.map((img, index) => {
+                const highlight =
+                  index === selectedImage.id ? 'border-secondary' : '';
+                return (
+                  <div
+                    key={img.id + img.imageUrl}
+                    className={`md:border hover:border-secondary p-[3px] mt-[5px] mb-[5px] last:mb-0 cursor-pointer ${highlight}`}
+                    onClick={() => selectImgHandler(img)}
+                  >
+                    <NxtImage
+                      src={img.imageUrl}
+                      alt={img.altTag}
+                      className='w-full object-center object-cover'
+                      title={img.altTag}
+                    />
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        <div
+          className={`${
+            storeCode === THD_STORE_CODE
+              ? 'main-image max-w-lg mx-auto'
+              : 'main-image mb-[5px]'
+          }`}
+        >
           <InnerImageZoom
             src={selectedImage?.imageUrl}
             zoomType='hover'
@@ -71,25 +100,41 @@ const ProductImg_Type3: React.FC<_ProductImgProps> = ({ product }) => {
         </div>
         {/* https://redefinecommerce.blob.core.windows.net/rdcbeta/1/product/attributeimages/attribute_10887_10887_1.jpg */}
         <div className='sub-image w-full flex justify-center text-center'>
-          {storeCode === UCA || storeCode === UNITI_CODE ? (
+          {storeCode === UCA ||
+          storeCode === UNITI_CODE ||
+          storeCode === BOSTONBEAR ||
+          storeCode === THD_STORE_CODE ||
+          storeCode == BACARDI ? (
             <>
               {' '}
               {colors?.map((img, index) => {
                 const highlight =
                   img.attributeOptionId === selectedColor?.attributeOptionId
-                    ? 'border-quaternary'
+                    ? storeCode == BACARDI
+                      ? 'border-default'
+                      : 'border-quaternary'
                     : 'border-slate-200';
                 return (
                   <div
                     key={img.attributeOptionId + img.imageUrl}
                     className={`w-[80px] h-[80px] overflow-hidden mr-[5px] mb-[15px] border gray-border hover:border-quaternary p-[5px] ${highlight}`}
                     onClick={() => {
+                      if (
+                        selectedColor.name == img.name &&
+                        storeCode == BOSTONBEAR
+                      ) {
+                        return;
+                      }
+
                       setColor(img);
                       setImage_2({
                         id: img.attributeOptionId,
-                        imageUrl: mediaBaseUrl + img.imageUrl,
+                        imageUrl: img.imageUrl,
                         altTag: img.altTag,
+                        mediaBaseUrl,
                       });
+                      clearToCheckout();
+                      return;
                     }}
                   >
                     <NxtImage
@@ -131,24 +176,6 @@ const ProductImg_Type3: React.FC<_ProductImgProps> = ({ product }) => {
           )}
         </div>
       </div>
-      {/* <div className='col-span-12 flex flex-wrap justify-center'>
-        {colors &&
-          colors.map((product, index) => {
-            return (
-              <div
-                className='border border-gray-border hover:border-secondary mx-[5px] mb-[10px] p-[1px] w-[70px] max-h-[70px] cursor-pointer'
-                key={product.attributeOptionId}
-                onClick={() => handleChooseColor(product)}
-              >
-                <ColorImage_Type3 product={product} />
-              </div>
-            );
-          })}
-      </div> */}
-
-      {/* {product?.companionProductName !== null ? (
-        <ProductCompanion_Type3 product={product} />
-      ) : null} */}
     </div>
   );
 };

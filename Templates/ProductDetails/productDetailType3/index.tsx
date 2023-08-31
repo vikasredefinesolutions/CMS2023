@@ -24,12 +24,17 @@ const ProductDetails_Type3: React.FC<_Props> = (product) => {
     setShowLoader,
     product_storeData,
     product_UpdateSelectedValues,
+    clearToCheckout,
   } = useActions_v2();
   const {
     id: storeId,
     pageType,
     code: storeCode,
   } = useTypedSelector_v2((state) => state.store);
+
+  useEffect(() => {
+    clearToCheckout();
+  }, []);
 
   // const getCategoriesArr = (): string[] => {
   //   let categories: CategoriesByPid = [];
@@ -46,6 +51,9 @@ const ProductDetails_Type3: React.FC<_Props> = (product) => {
   const categoriesArr = useTypedSelector_v2(
     (state) => state.product.categoryArr,
   );
+  // useEffect(() => {
+  //   clearToCheckout();
+  // }, []);
 
   useEffect(() => {
     if (product.details && storeId && pageType.id) {

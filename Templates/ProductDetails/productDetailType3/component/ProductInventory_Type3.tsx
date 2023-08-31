@@ -1,10 +1,14 @@
 // import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
-// import { useEffect } from 'react';
 // import InventoryAvailability from './InventoryAvailability_Type3';
 // import OutOfStockComponent from './OutOfStockComponent_Type3';
 
 import { _Store } from '@configs/page.config';
-import { BACARDI } from '@constants/global.constant';
+import {
+  BACARDI,
+  BOSTONBEAR,
+  THD_STORE_CODE,
+  _Store_CODES,
+} from '@constants/global.constant';
 import { useTypedSelector_v2 } from '@hooks_v2/index';
 import { Fragment } from 'react';
 
@@ -14,8 +18,10 @@ const Inventory_Type3: React.FC<{
   setSelectSize: (name: string) => void;
   selectSize: string;
 }> = ({ storeCode, attributeOptionId, setSelectSize, selectSize }) => {
+  const { price } = useTypedSelector_v2((state) => state.product.product);
   const { inventory } = useTypedSelector_v2((state) => state.product.product);
   const store_Code = useTypedSelector_v2((state) => state.store.code);
+
   return (
     <>
       <div className='flex flex-wrap mb-[15px]'>
@@ -27,7 +33,7 @@ const Inventory_Type3: React.FC<{
           <span
             className={`${
               store_Code == _Store.type6 ? 'text-sm' : ''
-            } font-semibold`}
+            } font-bold`}
           >
             Size:
           </span>
@@ -35,7 +41,9 @@ const Inventory_Type3: React.FC<{
         <div
           className={`${
             store_Code == _Store.type6 ? 'text-sm' : 'text-default-text'
-          } flex flex-wrap items-center gap-1`}
+          } flex flex-wrap items-center gap-1  ${
+            store_Code === THD_STORE_CODE ? 'max-w-[calc(100%-128px)]' : ''
+          }`}
         >
           {store_Code !== BACARDI ? (
             inventory?.inventory
@@ -50,26 +58,40 @@ const Inventory_Type3: React.FC<{
                       onClick={() => {
                         setSelectSize(elem.name);
                       }}
-                      className={`border  h-[32px] w-[46px] flex items-center justify-center cursor-pointers 454545 ${
+                      className={`${
+                        storeCode === THD_STORE_CODE ||
+                        storeCode === _Store_CODES.USAAPUNCHOUT
+                          ? 'border-2'
+                          : 'border'
+                      }  h-[32px] w-[46px] flex items-center justify-center cursor-pointers relative ${
                         selectSize === elem.name
                           ? store_Code == _Store.type6
                             ? 'bg-light-gray border-primary'
                             : 'border-secondary'
                           : `border-gray-border bg-light-gray ${
-                              store_Code == _Store.type6
-                                ? 'hover:border-secondary'
+                              store_Code == _Store.type6 && elem.inventory
+                                ? 'hover:border-secondary' //remove hover:b
                                 : ''
                             } `
                       }  ${
                         elem.inventory
                           ? store_Code == _Store.type6
                             ? ''
-                            : 'hover:bg-secondary hover:text-white'
+                            : 'hover:border-quaternary'
                           : 'opacity-50 outOfStockProduct'
                       } `}
                       disabled={!elem.inventory ? true : false}
                     >
                       {elem.name}
+                      {elem.inventory ? (
+                        <></>
+                      ) : (
+                        store_Code == BOSTONBEAR && (
+                          <span className='absolute text-[30px] z-10 inset-0 flex justify-center bg-gray-50 bg-opacity-70 quaternary-link items-center disabled '>
+                            X
+                          </span>
+                        )
+                      )}
                     </button>
                   </Fragment>
                 );
@@ -87,8 +109,12 @@ const Inventory_Type3: React.FC<{
                 .map((elem, index) => {
                   return (
                     <Fragment key={`${elem.inventoryId}${index}`}>
-                      <option id='selectSize' value={elem.name}>
-                        {elem.name}
+                      <option
+                        id='selectSize'
+                        value={elem.name}
+                        disabled={elem.inventory == 0 ? true : false}
+                      >
+                        {elem.name} (${price?.msrp})
                       </option>
                     </Fragment>
                   );

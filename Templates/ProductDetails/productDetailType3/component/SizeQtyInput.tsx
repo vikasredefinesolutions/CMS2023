@@ -13,18 +13,22 @@ let lastSize_stored: string = '';
 
 const SizeQtyInput: React.FC<_props> = (props) => {
   const { price, size, setShowSingleInv } = props;
-  const { updateQuantitieSingle } = useActions_v2();
+  const selected = useTypedSelector_v2((state) => state.product.selected);
+  const { updateQuantitieSingle, clearToCheckout } = useActions_v2();
   const [qty, setQty] = useState<number>(0);
   const inventory = useTypedSelector_v2(
     (state) => state.product.product.inventory?.inventory,
   );
   const store_Code = useTypedSelector_v2((state) => state.store.code);
   const { color } = useTypedSelector_v2((state) => state.product.selected);
-  const current: any = inventory?.filter(
-    (res) =>
-      res.name === size &&
-      res.colorAttributeOptionId === color.attributeOptionId,
-  );
+  const [current, setCurrent] = useState<any>([]);
+
+  useEffect(() => {
+    let filtered = inventory?.filter(
+      (el) => el.colorAttributeOptionId == selected.color.attributeOptionId,
+    );
+    setCurrent(filtered ? filtered : []);
+  }, [inventory, selected]);
 
   const quantityHandler = (enteredQty: any) => {
     if (!enteredQty) return setQty(enteredQty);
@@ -38,28 +42,36 @@ const SizeQtyInput: React.FC<_props> = (props) => {
       setQty(+enteredQty);
     }
 
+    const currentOptionId = inventory?.find((el) => el.name === size);
+
     updateQuantitieSingle({
-      attributeOptionId: current[0].attributeOptionId,
-      size: size,
+      attributeOptionId: +(currentOptionId?.attributeOptionId || 0),
+      size: currentOptionId?.name || size,
       qty: newQuantity,
       price: price ? price : 0,
     });
   };
-
+  // const selectedColor = useTypedSelector_v2(
+  //   (state) => state.product.selected.color,
+  // );
   useEffect(() => {
     setQty(1);
-    if (!size) return;
+    if (!inventory || inventory.length === 0 || !size) return;
 
     setQty(1);
+    const currentOptionId = inventory.find((el) => el.name === size);
+
     updateQuantitieSingle({
-      attributeOptionId: current[0].attributeOptionId,
-      size: lastSize_stored || size,
+      attributeOptionId: +(currentOptionId?.attributeOptionId || 0),
+      size: currentOptionId?.name || size,
       qty: 1,
       price: price ? price : 0,
     });
     lastSize_stored = size;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [size]);
+  // selectedColor
+  // console.log(qty, 'qtyqtyqtqyqyq');
 
   return (
     <>
@@ -72,7 +84,7 @@ const SizeQtyInput: React.FC<_props> = (props) => {
           <span
             className={`${
               store_Code == _Store.type6 ? 'text-sm' : ''
-            } font-semibold`}
+            } font-bold`}
           >
             Qty:
           </span>
@@ -89,7 +101,7 @@ const SizeQtyInput: React.FC<_props> = (props) => {
               id='QTY'
               value={qty}
               min={1}
-              max={size ? current[0].inventory : 0}
+              max={size ? current[0]?.inventory : 0}
               onKeyDown={(e) => {
                 ['e', 'E', '+', '-', '.'].includes(e.key) && e.preventDefault();
               }}
@@ -111,10 +123,11 @@ const SizeQtyInput: React.FC<_props> = (props) => {
             />
           </div>
         </div>
-        {store_Code == BACARDI && (
+        {store_Code == BACARDI && current.length > 1 && (
           <div
             className='ml-[10px]'
             onClick={() => {
+              clearToCheckout();
               setShowSingleInv && setShowSingleInv(false);
             }}
           >

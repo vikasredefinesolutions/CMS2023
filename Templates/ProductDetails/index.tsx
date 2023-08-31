@@ -45,7 +45,7 @@ const ProductDetails: React.FC<_Props> = (props) => {
     (state) => state.store.mediaBaseUrl,
   );
   mediaBaseUrl = mediaBaseUrl || clientSideMediaUrl;
-  useEffect(()=> {
+  useEffect(() => {
     document.body.classList.add('product_details');
   }, []);
 
@@ -63,7 +63,6 @@ const ProductDetails: React.FC<_Props> = (props) => {
         | 'type8'
         | 'type9'
     ];
-console.log(props.productDetailsTemplateId);
   useEffect(() => {
     if (details && storeId && categoryArr.length && !isCaptured.current) {
       isCaptured.current = true;

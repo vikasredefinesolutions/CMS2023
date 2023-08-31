@@ -174,6 +174,8 @@ const Header_Type3: NextPage<_HeaderProps> = ({
                           )}
 
                           <div className='flex items-center justify-end w-full'>
+                            <span className='text-white text-md'>Search:</span>
+
                             {isMobileView ? null : (
                               <SearchBar screen={'DESKTOP'} />
                             )}
@@ -193,6 +195,11 @@ const Header_Type3: NextPage<_HeaderProps> = ({
                     )}
                   </div>
                 </div>
+                {!showMenu() && (
+                  <div className='text-title-text text-center uppercase !text-white'>
+                    {menuHeading}
+                  </div>
+                )}
               </div>
               {isMobileView
                 ? null
@@ -204,11 +211,6 @@ const Header_Type3: NextPage<_HeaderProps> = ({
                       menuItems={menuItems as _MenuItems}
                     />
                   )}
-              {!showMenu() && (
-                <div className='text-title-text  text-center uppercase'>
-                  {menuHeading}
-                </div>
-              )}
               {(storeCode === THD_STORE_CODE ||
                 storeCode === _Store_CODES.USAAPUNCHOUT) &&
                 showMenu() && (

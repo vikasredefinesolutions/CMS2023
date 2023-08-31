@@ -1,4 +1,5 @@
 import { pkhealthmax } from '@constants/enum';
+import { BACARDI } from '@constants/global.constant';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import { useEffect, useState } from 'react';
 interface _props {
@@ -24,6 +25,7 @@ const InventoryAvailability_Type3_2: React.FC<_props> = ({
   const { multipleQuantity } = useTypedSelector_v2(
     (state) => state.product.selected.color,
   );
+  const { code: store_Code } = useTypedSelector_v2((state) => state.store);
   const { sizeQtys } = useTypedSelector_v2((state) => state.product.toCheckout);
   const { empId } = useTypedSelector_v2((state) => state.employee);
 
@@ -95,7 +97,7 @@ const InventoryAvailability_Type3_2: React.FC<_props> = ({
       return '250+';
     }
 
-    if (userId) {
+    if (userId && store_Code != BACARDI) {
       if (inventoryInStock > pkhealthmax) {
         return '250+';
       }

@@ -4,6 +4,7 @@ import {
   PKHG_MINIMUM_QTY,
   SIMPLI_SAFE_CODE,
   UCA,
+  _Store_CODES,
 } from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
 import { paths } from '@constants/paths.constant';
@@ -24,6 +25,7 @@ const CartSummarryType2: FC<_props> = ({ selectedShippingModel }) => {
   const isEmployeeLoggedIN = useTypedSelector_v2(
     (state) => !!state.employee.empId,
   );
+  const { id: loggedIn } = useTypedSelector_v2((state) => state.user);
   const couponDetails = useTypedSelector_v2((state) => state.cart.discount);
   const { code: storeCode } = useTypedSelector_v2((state) => state.store);
   // Functions
@@ -92,6 +94,7 @@ const CartSummarryType2: FC<_props> = ({ selectedShippingModel }) => {
         <dl className='text-default-text'>
           {storeCode !== SIMPLI_SAFE_CODE &&
             storeCode !== UCA &&
+            storeCode !== _Store_CODES.USAAPUNCHOUT &&
             storeCode !== BACARDI && (
               <>
                 {' '}
@@ -123,6 +126,7 @@ const CartSummarryType2: FC<_props> = ({ selectedShippingModel }) => {
           </div>
           {storeCode !== SIMPLI_SAFE_CODE &&
             storeCode !== UCA &&
+            storeCode !== _Store_CODES.USAAPUNCHOUT &&
             storeCode !== BACARDI && (
               <div className='flex items-center justify-between pt-[15px]'>
                 <dt className=''>
@@ -222,7 +226,9 @@ const CartSummarryType2: FC<_props> = ({ selectedShippingModel }) => {
 
           {couponDetails?.amount != 0 &&
             couponDetails?.amount != undefined &&
-            (storeCode == SIMPLI_SAFE_CODE || storeCode == UCA) && (
+            (storeCode == SIMPLI_SAFE_CODE ||
+              storeCode == UCA ||
+              storeCode === _Store_CODES.USAAPUNCHOUT) && (
               <div className='flex items-center justify-between pt-[10px] pb-[20px]'>
                 <dt className='text-base'>
                   Promo{' '}
@@ -240,45 +246,49 @@ const CartSummarryType2: FC<_props> = ({ selectedShippingModel }) => {
             )}
           <div className='w-full pl-[15px] pr-[15px] border-b border-gray-border mt-[10px]'></div>
           <div className='flex items-center justify-between pt-[15px] mb-[30px]'>
-            <dt className='font-semibold'>
+            <dt className='font-bold'>
               <span>Estimated Total</span>
             </dt>
-            <dd className='font-semibold'>
+            <dd className='font-bold'>
               <Price value={cost.totalToShow()} />
             </dd>
           </div>
           <div className=''>
-            <div className='mt-[16px]'>
-              <button
-                type='button'
-                onClick={() => {
-                  if (
-                    !isEmployeeLoggedIN &&
-                    totalQty < PKHG_MINIMUM_QTY &&
-                    storeCode !== SIMPLI_SAFE_CODE &&
-                    storeCode !== UCA &&
-                    storeCode !== BACARDI
-                  ) {
-                    showModal({
-                      title: 'Min Quantity Alert',
-                      message:
-                        'Cart Quantity must be greater then or equal to 10',
-                    });
-                  } else {
-                    router.push(paths.CHECKOUT);
-                  }
-                }}
-                className={`btn btn-lg btn-${
-                  storeCode === SIMPLI_SAFE_CODE ||
-                  storeCode === UCA ||
-                  storeCode === BACARDI
-                    ? 'secondary'
-                    : 'primary'
-                } w-full !flex flex-wrap justify-center items-center `}
-              >
-                CHECKOUT NOW
-              </button>
-            </div>
+            {loggedIn && (
+              <div className='mt-[16px]'>
+                <button
+                  type='button'
+                  onClick={() => {
+                    if (
+                      !isEmployeeLoggedIN &&
+                      totalQty < PKHG_MINIMUM_QTY &&
+                      storeCode !== SIMPLI_SAFE_CODE &&
+                      storeCode !== UCA &&
+                      storeCode !== _Store_CODES.USAAPUNCHOUT &&
+                      storeCode !== BACARDI
+                    ) {
+                      showModal({
+                        title: 'Min Quantity Alert',
+                        message:
+                          'Cart Quantity must be greater then or equal to 10',
+                      });
+                    } else {
+                      router.push(paths.CHECKOUT);
+                    }
+                  }}
+                  className={`btn btn-lg btn-${
+                    storeCode === SIMPLI_SAFE_CODE ||
+                    storeCode === UCA ||
+                    storeCode === _Store_CODES.USAAPUNCHOUT ||
+                    storeCode === BACARDI
+                      ? 'secondary'
+                      : 'primary'
+                  } w-full !flex flex-wrap justify-center items-center `}
+                >
+                  CHECKOUT NOW
+                </button>
+              </div>
+            )}
           </div>
         </dl>
       </div>

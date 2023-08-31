@@ -1,4 +1,5 @@
 import { _Store } from '@configs/page.config';
+import { THD_STORE_CODE, _Store_CODES } from '@constants/global.constant';
 import { __pagesConstant } from '@constants/pages.constant';
 import { __pagesText } from '@constants/pages.text';
 import { _ProductColor } from '@definations/APIs/colors.res';
@@ -36,7 +37,7 @@ const AvailableColors_Type3: React.FC = () => {
 
   return (
     <>
-      <div className='flex align-top mb-[15px]'>
+      <div className='flex align-top mb-[15px] items-center'>
         <div
           className={`w-[128px] ${
             store_Code == _Store.type6 ? 'text-sm' : ' text-default-text'
@@ -45,7 +46,7 @@ const AvailableColors_Type3: React.FC = () => {
           <span
             className={`${
               store_Code == _Store.type6 ? 'text-sm' : ''
-            }  font-semibold`}
+            }  font-bold`}
           >
             {' '}
             {__pagesText.productInfo.availableColors.colors}
@@ -62,11 +63,16 @@ const AvailableColors_Type3: React.FC = () => {
               index < __pagesConstant._productDetails.imagesInRow;
             const highlight =
               product.attributeOptionId === selectedColor?.attributeOptionId
-                ? 'border-quaternary'
+                ? 'border-secondary'
                 : 'border-slate-200 border-gray-border';
             return (
               <div
-                className={`border hover:border-quaternary p-[1px] w-[32px] h-[32px] cursor-pointer 111 ${highlight}`}
+                className={` ${
+                  store_Code === THD_STORE_CODE ||
+                  store_Code === _Store_CODES.USAAPUNCHOUT
+                    ? 'border-2'
+                    : 'border'
+                } hover:border-quaternary p-[1px] w-[32px] h-[32px] cursor-pointer 111 ${highlight}`}
                 key={product.attributeOptionId}
                 onClick={() => handleChooseColor(product)}
               >
