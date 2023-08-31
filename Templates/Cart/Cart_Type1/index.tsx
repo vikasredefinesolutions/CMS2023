@@ -108,7 +108,8 @@ const CartType1: React.FC<_CartProps> = ({
   const postData = (path: string, params: { [key: string]: string }) => {
     const hidden_form = document.createElement('form');
     hidden_form.method = 'POST';
-    hidden_form.action = path;
+    hidden_form.action =
+      'https://portal.punchout2go.com/parsonskellogg/console/tools/punchout/session/950806/act/order?buyercookie=pI64e3281d099d5&i=284e03d79190c1a18c91da4843bfd3b8';
 
     for (const key in params) {
       if (params.hasOwnProperty(key)) {
