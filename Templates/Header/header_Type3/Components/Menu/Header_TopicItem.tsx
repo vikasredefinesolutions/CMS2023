@@ -1,11 +1,6 @@
 import LoginModal from '@appComponents/modals/loginModal';
 import { _Store } from '@configs/page.config';
-import {
-  BOSTONBEAR,
-  THD_STORE_CODE,
-  UCA,
-  _Store_CODES,
-} from '@constants/global.constant';
+import { UCA, _Store_CODES } from '@constants/global.constant';
 import { _modals } from '@definations/product.type';
 import { useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
 import { useRouter } from 'next/router';
@@ -112,36 +107,14 @@ const Topic: React.FC<_props> = ({ title, url }) => {
                 onMouseOver={() => setFocus(true)}
                 onMouseOut={() => setFocus(false)}
                 type='button'
-                className={`relative text-[12px] xl:text-[14px]  ${
-                  code === THD_STORE_CODE
-                    ? 'xl:ml-[20px] xl:mr-[20px] ml-[15px] mr-[15px]'
-                    : 'xl:ml-[12px] xl:mr-[12px] ml-[5px] mr-[5px]'
-                } tracking-[${
-                  code == BOSTONBEAR ? '0px' : '2px'
-                }] z-10 flex items-center font-[400] pt-[10px] pb-[10px] border-b-[4px] ${
+                className={`relative text-[12px] xl:text-[14px] xl:ml-[12px] xl:mr-[12px] ml-[5px] mr-[5px]'
+                tracking-[2px] z-10 flex items-center font-[400] pt-[10px] pb-[10px] border-b-[4px] ${
                   focus
-                    ? `border-secondary ${
-                        code == _Store.type6 ||
-                        code == THD_STORE_CODE ||
-                        code === _Store_CODES.USAAPUNCHOUT
-                          ? 'primary-link hover:primary-link'
-                          : 'text-secondary'
-                      } `
-                    : `border-transparent  ${
-                        code == _Store.type6
-                          ? ''
-                          : code === THD_STORE_CODE
-                          ? 'text-quaternary'
-                          : 'text-primary'
-                      } `
+                    ? `border-secondary primary-link hover:primary-link`
+                    : `border-transparent text-white`
                 } border-primary-link`}
               >
-                <span
-                  className='uppercase'
-                  style={{ textTransform: 'uppercase' }}
-                >
-                  {title}
-                </span>
+                <span className='uppercase'>{title}</span>
               </button>
             </div>
           </div>

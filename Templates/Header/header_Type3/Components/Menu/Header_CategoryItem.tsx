@@ -147,20 +147,14 @@ const Header_Category: React.FC<_props> = ({
                   router.push(`/${url}`);
                 }
               }}
-              className={`relative text-[12px] xl:text-[14px] 
-                 xl:ml-[12px] xl:mr-[12px] ml-[5px] mr-[5px]
-               tracking-['2px'] z-10 flex items-center font-[400] pt-[10px] pb-[10px] border-b-[4px] ${
+              className={`relative text-[12px] xl:text-[14px] xl:ml-[12px] xl:mr-[12px] ml-[5px] mr-[5px]'
+               tracking-[2px] z-10 flex items-center font-[400] pt-[10px] pb-[10px] border-b-[4px] ${
                  focus
-                   ? `border-primary-link primary-link `
-                   : `border-transparent primary-link hover:primary-link hover:border-primary-link `
-               }`}
+                   ? `border-secondary primary-link hover:primary-link`
+                   : `border-transparent text-white`
+               } border-primary-link`}
             >
-              <span
-                className='uppercase '
-                style={{ textTransform: 'uppercase' }}
-              >
-                {title}
-              </span>
+              <span className='uppercase '>{title}</span>
             </button>
             {focus && (
               <div
