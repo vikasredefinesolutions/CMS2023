@@ -205,7 +205,7 @@ export const getServerSideProps: GetServerSideProps = async (
 ): Promise<GetServerSidePropsResult<_HomeProps>> => {
   const body = await getRawBody(context?.req);
   if (body) {
-    console.log('body ====> ', body);
+    console.log('body ====> ', body.toString());
   }
   let store = {
     storeCode: _globalStore.code,
