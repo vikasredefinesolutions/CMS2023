@@ -151,7 +151,7 @@ const Header_Category: React.FC<_props> = ({
                tracking-[2px] z-10 flex items-center font-[400] pt-[10px] pb-[10px] border-b-[4px] ${
                  focus
                    ? `border-secondary primary-link hover:primary-link`
-                   : `border-transparent text-white`
+                   : `border-transparent primary-link hover:primary-link`
                } border-primary-link`}
             >
               <span className='uppercase '>{title}</span>
