@@ -48,9 +48,9 @@ const SearchBar: React.FC<_props> = ({
           {({ values, handleSubmit, handleChange, handleReset }) => {
             return (
               <Form>
-                <div className='p-[10px]'>
+                <div className='p-[5px]'>
                   <div className=''>
-                    <div className='border border-[#003a70] pt-[5px] pb-[4px] pl-[15px] pr-[24px] text-primary relative'>
+                    <div className='border border-[#003a70] pt-[5px] pb-[4px] pl-[15px] pr-[24px] text-primary relative bg-white'>
                       <input
                         ref={searchRef}
                         type='text'

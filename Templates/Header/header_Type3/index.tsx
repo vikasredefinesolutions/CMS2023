@@ -174,7 +174,9 @@ const Header_Type3: NextPage<_HeaderProps> = ({
                           )}
 
                           <div className='flex items-center justify-end w-full'>
-                            <span className='text-white text-md'>Search:</span>
+                            <span className='text-white text-md hidden lg:block'>
+                              Search:
+                            </span>
 
                             {isMobileView ? null : (
                               <SearchBar screen={'DESKTOP'} />

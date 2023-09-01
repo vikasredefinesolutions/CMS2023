@@ -66,23 +66,29 @@ const AvailableColors_Type3: React.FC = () => {
                 ? 'border-secondary'
                 : 'border-slate-200 border-gray-border';
             return (
-              <div
-                className={` ${
-                  store_Code === THD_STORE_CODE ||
-                  store_Code === _Store_CODES.USAAPUNCHOUT
-                    ? 'border-2'
-                    : 'border'
-                } hover:border-quaternary p-[1px] w-[32px] h-[32px] cursor-pointer 111 ${highlight}`}
-                key={product.attributeOptionId}
-                onClick={() => handleChooseColor(product)}
-              >
-                <ColorImage_Type3 product={product} />
-              </div>
+              <>
+                {show ? (
+                  <div
+                    className={` ${
+                      store_Code === THD_STORE_CODE ||
+                      store_Code === _Store_CODES.USAAPUNCHOUT
+                        ? 'border-2'
+                        : 'border'
+                    } hover:border-quaternary p-[1px] w-[32px] h-[32px] cursor-pointer 111 ${highlight}`}
+                    key={product.attributeOptionId}
+                    onClick={() => handleChooseColor(product)}
+                  >
+                    <ColorImage_Type3 product={product} />
+                  </div>
+                ) : (
+                  <></>
+                )}
+              </>
             );
           })}
         </div>
         {showAllColorsButton && (
-          <div className='text-right text-anchor hover:text-anchor-hover'>
+          <div className='text-right text-anchor hover:text-anchor-hover ml-[10px]'>
             <button
               onClick={() => setShowAllColors((showAll) => !showAll)}
               className=' underline'
