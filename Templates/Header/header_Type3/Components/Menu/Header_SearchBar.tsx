@@ -72,7 +72,7 @@ const SearchBar: React.FC<_props> = ({
                           handleReset();
                         }}
                       >
-                        <span className='material-icons text-primary font-[900]'>
+                        <span className='material-icons text-primary font-[900] hover:primary-link'>
                           {__pagesText.Headers.searchIcon}
                         </span>
                       </button>
@@ -120,9 +120,7 @@ const SearchBar: React.FC<_props> = ({
                     }}
                   >
                     <span
-                      className={`material-icons text-primary font-[900] ${
-                        storeCode !== THD_STORE_CODE && 'hover:text-secondary'
-                      } `}
+                      className={`material-icons text-primary font-[900] hover:primary-link`}
                     >
                       {__pagesText.Headers.searchIcon}
                     </span>
