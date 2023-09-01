@@ -30,6 +30,7 @@ import Home from '@templates/Home';
 import { _SelectedTab } from '@templates/ProductDetails/productDetailsTypes/storeDetails.res';
 import { GetServerSideProps, GetServerSidePropsResult, NextPage } from 'next';
 import { useRouter } from 'next/router';
+import getRawBody from 'raw-body';
 import { useEffect, useRef, useState } from 'react';
 // import { getDataFromRedis, setDataInRedis } from 'redis';
 import { _globalStore } from 'store.global';
@@ -199,9 +200,13 @@ const DefaultHomePage: NextPage<_HomeProps> = (props) => {
 
 export default DefaultHomePage;
 
-export const getServerSideProps: GetServerSideProps = async (): Promise<
-  GetServerSidePropsResult<_HomeProps>
-> => {
+export const getServerSideProps: GetServerSideProps = async (
+  context,
+): Promise<GetServerSidePropsResult<_HomeProps>> => {
+  const body = await getRawBody(context?.req);
+  if (body) {
+    console.log('body ====> ', body.toString());
+  }
   let store = {
     storeCode: _globalStore.code,
     storeTypeId: _globalStore.storeTypeId,

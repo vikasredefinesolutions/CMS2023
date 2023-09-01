@@ -6,11 +6,17 @@ import { __pagesText } from '@constants/pages.text';
 import { paths } from '@constants/paths.constant';
 import { _shippingMethod } from '@controllers/checkoutController';
 import SummarryController from '@controllers/summarryController';
+import { punchoutCheckout } from '@services/checkout.service';
 import { fetchThirdpartyservice } from '@services/thirdparty.service';
-import { GetCartTotals, useActions_v2, useTypedSelector_v2 } from 'hooks_v2';
+import {
+  GetCartTotals,
+  GetCustomerId,
+  useActions_v2,
+  useTypedSelector_v2,
+} from 'hooks_v2';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 
 interface _props {
   selectedShippingModel: _shippingMethod;
@@ -31,9 +37,20 @@ const CartSummarryType4: FC<_props> = ({ selectedShippingModel }) => {
     (state) => state.store.thirdPartyLogin,
   );
   const { showModal } = useActions_v2();
+  const customerId = GetCustomerId();
+
   const currentPage = useTypedSelector_v2((state) => state.store.currentPage);
   const { el: employeeLogin } = useTypedSelector_v2((state) => state.checkout);
   const [textOrNumber, setTextOrNumber] = useState<'number' | 'text'>('text');
+  const [showCheckoutButton, setShowCheckoutButton] = useState(true);
+
+  useEffect(() => {
+    const service = localStorage.getItem('thirdPartyServices');
+    if (service === thirdPartyLoginService.punchoutLogin) {
+      setShowCheckoutButton(false);
+    }
+  }, []);
+
   // Functions
   const {
     coupon,
@@ -131,6 +148,42 @@ const CartSummarryType4: FC<_props> = ({ selectedShippingModel }) => {
     return shippingCost;
   };
 
+  const postData = (path: string, params: { [key: string]: string }) => {
+    const hidden_form = document.createElement('form');
+    hidden_form.method = 'POST';
+    hidden_form.action = path;
+
+    for (const key in params) {
+      if (params.hasOwnProperty(key)) {
+        const hidden_input = document.createElement('input');
+        hidden_input.type = 'hidden';
+        hidden_input.name = key;
+        hidden_input.value = params[key];
+
+        hidden_form.appendChild(hidden_input);
+      }
+    }
+
+    document.body.appendChild(hidden_form);
+    hidden_form.submit();
+  };
+
+  const punchoutHandler = async () => {
+    const SID = localStorage.getItem('P_SID');
+    if (SID) {
+      const sessionId = atob(SID);
+      const punchoutResponse = await punchoutCheckout({
+        sessionId,
+        customerId,
+      });
+      console.log(punchoutResponse);
+      postData(punchoutResponse.actionUrl, {
+        'cxml-urlencoded': `<!DOCTYPE cXML SYSTEM 'http://xml.cxml.org/schemas/cXML/1.1.009/cXML.dtd'><cXML payloadID='200308221150.1061578208432.5888140454604746680@punchout2go.com' timestamp='2003-08-22T11:50:27'><Header><From><Credential domain='DUNS'><Identity>1085</Identity></Credential></From><To><Credential domain='NetworkId'><Identity>1085</Identity></Credential></To><Sender><Credential domain='https://humanadev.parsonskellogg.com/ '><Identity>testing@punchout2go.com</Identity></Credential><UserAgent>PunchOut2Go Test Client v1</UserAgent></Sender></Header><Message><PunchOutOrderMessage><BuyerCookie>pI64e3281d099d5</BuyerCookie><PunchOutOrderMessageHeader operationAllowed='edit'><Total><Money currency='USD'>28.00</Money></Total></PunchOutOrderMessageHeader><ItemIn quantity='14'><ItemID><SupplierPartID>77277</SupplierPartID><SupplierPartAuxiliaryID>orderid=1500707#CustomerID=77277#Color:Peppermint Polo#Size:SM</SupplierPartAuxiliaryID></ItemID><ItemDetail><UnitPrice><Money currency='USD'>100.00</Money></UnitPrice><Description xml:lang='en'>Men's Peter Millar Drum Performance Jersey Polo</Description><UnitOfMeasure>EA</UnitOfMeasure><Classification domain='UNSPSC'>80141605</Classification><ManufacturerName>Peter Millar</ManufacturerName></ItemDetail></ItemIn><ItemIn quantity='14'><ItemID><SupplierPartID>77277</SupplierPartID><SupplierPartAuxiliaryID>orderid=1500707# CustomerID=77277#Color:Peppermint Polo#Size:SM</SupplierPartAuxiliaryID></ItemID><ItemDetail><UnitPrice><Money currency='USD'>100.00</Money></UnitPrice><Description xml:lang='en'>Men's Peter Millar Drum Performance Jersey Polo</Description><UnitOfMeasure>EA</UnitOfMeasure><Classification domain='UNSPSC'>80141605</Classification><ManufacturerName>Peter Millar</ManufacturerName></ItemDetail></ItemIn></PunchOutOrderMessage></Message></cXML>`,
+        Aribauser: 'AribaUser',
+      });
+    }
+  };
+
   return (
     <div className='border border-gray-border bg-white p-[15px]'>
       <div
@@ -208,7 +261,7 @@ const CartSummarryType4: FC<_props> = ({ selectedShippingModel }) => {
             LOGIN VIA SAML
           </button>
         </div>
-      ) : (
+      ) : showCheckoutButton ? (
         <div className='mt-4'>
           <Link className='' href={paths.CHECKOUT}>
             <a className='btn btn-lg btn-secondary !flex items-center justify-center w-full'>
@@ -219,6 +272,14 @@ const CartSummarryType4: FC<_props> = ({ selectedShippingModel }) => {
             </a>
           </Link>
         </div>
+      ) : (
+        <button
+          onClick={punchoutHandler}
+          className='btn btn-lg btn-secondary !flex items-center justify-center w-full'
+        >
+          <span className='material-icons text-lg mr-[2px]'>shopping_cart</span>
+          PUNCHOUT CHECKOUT
+        </button>
       )}
     </div>
   );
