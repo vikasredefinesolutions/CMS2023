@@ -1,10 +1,6 @@
 import NxtImage from '@appComponents/reUsable/Image';
 import { _Store } from '@configs/page.config';
-import {
-  BOSTONBEAR,
-  THD_STORE_CODE,
-  __LocalStorage,
-} from '@constants/global.constant';
+import { THD_STORE_CODE, __LocalStorage } from '@constants/global.constant';
 import { thirdPartyLoginService } from '@constants/pages.constant';
 import { __pagesText } from '@constants/pages.text';
 import { paths } from '@constants/paths.constant';
@@ -61,9 +57,8 @@ const LoggedInMenu: React.FC = () => {
       >
         <Link href={paths.loggedInMenu.title}>
           <a
-            className={`text-primary hover:text-${
-              storeCode == BOSTONBEAR ? 'primary' : 'secondary'
-            } flex items-center gap-1`}
+            className={`primary-link hover:primary-link  group flex items-center relative 
+            pt-[8px] pb-[8px]`}
             title={__pagesText.Headers.myAccountTittle}
           >
             {/* <span className='text-[12px] hidden xl:inline-block whitespace-nowrap tracking-[1px]'>
