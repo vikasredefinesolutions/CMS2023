@@ -104,7 +104,8 @@ const ProductImg_Type3: React.FC<_ProductImgProps> = ({ product }) => {
           storeCode === UNITI_CODE ||
           storeCode === BOSTONBEAR ||
           storeCode === THD_STORE_CODE ||
-          storeCode == BACARDI ? (
+          storeCode == BACARDI ||
+          storeCode == _Store_CODES.USAAPUNCHOUT ? (
             <>
               {' '}
               {colors?.map((img, index) => {
