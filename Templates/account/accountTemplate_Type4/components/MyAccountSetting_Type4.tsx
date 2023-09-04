@@ -1,4 +1,4 @@
-import { BACARDI } from '@constants/global.constant';
+import { BACARDI, BOSTONBEAR, _Store_CODES } from '@constants/global.constant';
 import { __pagesText } from '@constants/pages.text';
 import { paths } from '@constants/paths.constant';
 import { __ValidationText } from '@constants/validation.text';
@@ -14,6 +14,7 @@ import {
   getDecryptPassword,
 } from '@services/user.service';
 import { Form, Formik } from 'formik';
+import moment from 'moment';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import * as Yup from 'yup';
@@ -73,8 +74,6 @@ const MyAccountSetting_Type6 = () => {
       setShowPasswordUpdate(false);
     }
   }, [editPassword, activeEditBox]);
-  console.log(customer?.birthDate);
-
   useEffect(() => {
     let shippingAddressArr = customer?.customerAddress?.filter(
       (res) => res.addressType === 'S',
@@ -264,7 +263,7 @@ const MyAccountSetting_Type6 = () => {
               customerId: customer?.id || 0,
               gender: value.gender === 'Gender' ? '' : value.gender,
               birthDate: new Date(
-                `${value.birthDay}-${value.birthMonth}-${value.birthYear}`,
+                `${value.birthYear}/${value.birthDay}/${value.birthMonth}`,
               ),
             }
           : {
@@ -341,13 +340,7 @@ const MyAccountSetting_Type6 = () => {
                 </label>
                 {customer && customer?.birthDate && (
                   <div className='text-default-text'>
-                    {__pagesText.accountPage.monthOption[
-                      parseInt(customer.birthDate.split('-')[1])
-                    ] +
-                      ' ' +
-                      customer.birthDate.split('-')[2].slice(0, 2) +
-                      ', ' +
-                      customer.birthDate.split('-')[0]}
+                    {moment(customer.birthDate).format('MMM DD, YYYY')}
                   </div>
                 )}
               </div>
@@ -785,6 +778,7 @@ const MyAccountSetting_Type6 = () => {
           <div className='mb-[40px] flex flex-wrap gap-y-2'>
             <button
               type='button'
+              disabled={storeCode === _Store_CODES.USAAPUNCHOUT}
               onClick={(e) => {
                 e.preventDefault();
                 setActiveEditBox(true);
@@ -796,19 +790,22 @@ const MyAccountSetting_Type6 = () => {
             >
               {__pagesText.accountPage.profileEdit}
             </button>
-            <button
-              type='button'
-              onClick={(e) => {
-                e.preventDefault();
-                setActiveEditBox(false);
-                setActivePasswordChange(true);
-              }}
-              className={`btn btn-${
-                storeCode === BACARDI ? 'secondary' : 'primary'
-              }`}
-            >
-              Change Password
-            </button>
+            {storeCode !== BOSTONBEAR && (
+              <button
+                type='button'
+                disabled={storeCode === _Store_CODES.USAAPUNCHOUT}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setActiveEditBox(false);
+                  setActivePasswordChange(true);
+                }}
+                className={`btn btn-${
+                  storeCode === BACARDI ? 'secondary' : 'primary'
+                }`}
+              >
+                Change Password
+              </button>
+            )}
           </div>
 
           <hr className='mb-[40px]' />
@@ -840,6 +837,7 @@ const MyAccountSetting_Type6 = () => {
                         className={`btn btn-sm btn-${
                           storeCode === BACARDI ? 'secondary' : 'primary'
                         }`}
+                        disabled={storeCode === _Store_CODES.USAAPUNCHOUT}
                         onClick={() => {
                           router.push({
                             pathname: paths.myAccount.edit_shipping_address,
@@ -853,6 +851,7 @@ const MyAccountSetting_Type6 = () => {
                       </button>
                       <button
                         type='button'
+                        disabled={storeCode === _Store_CODES.USAAPUNCHOUT}
                         className={`btn btn-sm btn-${
                           storeCode === BACARDI ? 'secondary' : 'primary'
                         }`}
@@ -877,6 +876,7 @@ const MyAccountSetting_Type6 = () => {
                           className={`btn btn-sm btn-${
                             storeCode === BACARDI ? 'secondary' : 'primary'
                           }`}
+                          disabled={storeCode === _Store_CODES.USAAPUNCHOUT}
                           onClick={() => {
                             updatePrimaryStatus(ele);
                           }}
@@ -895,6 +895,7 @@ const MyAccountSetting_Type6 = () => {
                       pathname: paths.myAccount.edit_shipping_address,
                     });
                   }}
+                  disabled={storeCode === _Store_CODES.USAAPUNCHOUT}
                   type='button'
                   className={`btn btn-${
                     storeCode === BACARDI ? 'secondary' : 'primary'
@@ -934,6 +935,7 @@ const MyAccountSetting_Type6 = () => {
                         className={`btn btn-sm btn-${
                           storeCode === BACARDI ? 'secondary' : 'primary'
                         }`}
+                        disabled={storeCode === _Store_CODES.USAAPUNCHOUT}
                         type='button'
                         onClick={() => {
                           router.push({
@@ -950,6 +952,7 @@ const MyAccountSetting_Type6 = () => {
                         className={`btn btn-sm btn-${
                           storeCode === BACARDI ? 'secondary' : 'primary'
                         }`}
+                        disabled={storeCode === _Store_CODES.USAAPUNCHOUT}
                         type='button'
                         onClick={() => {
                           deleteAddress(ele.id, ele.rowVersion);
@@ -972,6 +975,7 @@ const MyAccountSetting_Type6 = () => {
                           className={`btn btn-sm btn-${
                             storeCode === BACARDI ? 'secondary' : 'primary'
                           }`}
+                          disabled={storeCode === _Store_CODES.USAAPUNCHOUT}
                           onClick={() => {
                             updatePrimaryStatus(ele);
                           }}
@@ -991,6 +995,7 @@ const MyAccountSetting_Type6 = () => {
                       pathname: paths.myAccount.edit_billing_address,
                     });
                   }}
+                  disabled={storeCode === _Store_CODES.USAAPUNCHOUT}
                   type='button'
                   className={`btn btn-${
                     storeCode === BACARDI ? 'secondary' : 'primary'
