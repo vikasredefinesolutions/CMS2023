@@ -20,15 +20,14 @@ const AvailableColors_Type3: React.FC = () => {
   const colors = useTypedSelector_v2((state) => state.product.product.colors);
   const handleChooseColor = (product: _ProductColor) => {
     if (
-      !product.productSEName ||
-      product.productSEName === '' ||
-      selectedColor.productSEName == product.productSEName
+      (!product.productSEName ||
+        product.productSEName === '' ||
+        selectedColor.productSEName == product.productSEName) &&
+      selectedColor.attributeOptionId !== product.attributeOptionId
     ) {
-      setColor(product);
       clearToCheckout();
-      return;
+      setColor(product);
     }
-    router.push(product.productSEName);
   };
   if (colors === null) return <></>;
   const colorsCount = colors.length;
