@@ -118,7 +118,7 @@ const ProductImg_Type3: React.FC<_ProductImgProps> = ({ product }) => {
                 return (
                   <div
                     key={img.attributeOptionId + img.imageUrl}
-                    className={`w-[80px] h-[80px] overflow-hidden mr-[5px] mb-[15px] border gray-border hover:border-quaternary p-[5px] ${highlight}`}
+                    className={`w-[80px] h-[80px] overflow-hidden mr-[5px] mb-[15px] border-2 gray-border hover:border-quaternary p-[5px] ${highlight}`}
                     onClick={() => {
                       if (
                         selectedColor.name == img.name &&
