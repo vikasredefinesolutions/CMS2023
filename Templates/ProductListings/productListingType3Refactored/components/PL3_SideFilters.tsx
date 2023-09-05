@@ -240,14 +240,15 @@ const PL3_SideFilters: React.FC<_Props> = ({
                                       title={val.name}
                                     >
                                       {' '}
-                                      <div
-                                        className={` w-full h-full flex items-center justify-center`}
+                                      <button
+                                        className={`w-full h-full flex items-center justify-center`}
                                         style={
                                           filter.label == 'Color'
                                             ? { backgroundColor: val.colorCode }
                                             : {}
                                         }
-                                        onClick={() => {
+                                        onClick={(e) => {
+                                          e.preventDefault();
                                           handleChange(
                                             filter.label,
                                             val.name,
@@ -257,7 +258,7 @@ const PL3_SideFilters: React.FC<_Props> = ({
                                         }}
                                       >
                                         {filter.label == 'Size' ? val.name : ''}
-                                      </div>
+                                      </button>
                                     </li>
                                   ) : (
                                     <>

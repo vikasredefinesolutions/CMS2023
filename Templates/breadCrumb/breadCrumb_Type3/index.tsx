@@ -30,7 +30,7 @@ const BreadCrumb_Type3: NextPage<_BreadCrumbProps> = ({
                             chevron_right
                           </span>
                           <div
-                            className={` ml-[5px] md:ml-[10px] ${
+                            className={` ml-[5px] md:ml-[10px] cursor-pointer ${
                               index == breadCrumbs.length - 1
                                 ? 'ml-[6px] text-gray-text'
                                 : 'tertiary-link hover:tertiary-link'
