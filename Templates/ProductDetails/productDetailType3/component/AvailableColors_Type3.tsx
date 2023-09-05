@@ -67,7 +67,7 @@ const AvailableColors_Type3: React.FC = () => {
             return (
               <>
                 {show ? (
-                  <div
+                  <button
                     className={` ${
                       store_Code === THD_STORE_CODE ||
                       store_Code === _Store_CODES.USAAPUNCHOUT
@@ -75,10 +75,13 @@ const AvailableColors_Type3: React.FC = () => {
                         : 'border'
                     } hover:border-quaternary p-[1px] w-[32px] h-[32px] cursor-pointer 111 ${highlight}`}
                     key={product.attributeOptionId}
-                    onClick={() => handleChooseColor(product)}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleChooseColor(product);
+                    }}
                   >
                     <ColorImage_Type3 product={product} />
-                  </div>
+                  </button>
                 ) : (
                   <></>
                 )}
