@@ -242,6 +242,7 @@ const PL3_SideFilters: React.FC<_Props> = ({
                                       {' '}
                                       <button
                                         className={`w-full h-full flex items-center justify-center`}
+                                        id={`${val.name}`}
                                         style={
                                           filter.label == 'Color'
                                             ? { backgroundColor: val.colorCode }
