@@ -18,6 +18,7 @@ export enum __Cookie {
   visitorId = 'visitorId',
   BacardiSelectedStore = 'BacardiSelectedStore',
   storeBuilderInfo = 'storeBuilderInfo',
+  categoryId = 'categoryId',
 }
 
 // cookie_expiry in days
@@ -121,14 +122,21 @@ export const BOSTONBEAR = 'BB';
 
 export const PKHG_MINIMUM_QTY = 10;
 
+export enum USAA_Store_CODES {
+  USAAHEALTHYPOINTS = 'UHP',
+  USAACLAIMS = 'UCA',
+}
+
 export enum _Store_CODES {
   PKHG = 'PKHG',
   UNITi = 'Uniti',
   PORSCHE = 'PORSCHE',
   PETERMILLAR = 'PMCG',
   USAAHEALTHYPOINTS = 'UHP',
+  USAAALPHAHEALTHYPOINTS = 'UAHP',
   USAACLAIMS = 'UCA',
   BCGG = 'BCGG',
+  BOSTONBEAR = 'BB',
   USAAPUNCHOUT = 'UPOUT',
 }
 
@@ -290,4 +298,5 @@ export const customRequestStoreTypes: Map<string, string> = new Map([
   ['GG', '5'],
   ['SMH', '4'],
   ['Uniti', '4'],
+  ['BCGG', '4'],
 ]);
