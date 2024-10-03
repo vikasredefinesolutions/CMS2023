@@ -12,6 +12,7 @@ import { paths } from '@constants/paths.constant';
 import { _shippingMethod } from '@controllers/checkoutController';
 import SummarryController from '@controllers/summarryController';
 import { punchoutCheckout } from '@services/checkout.service';
+import axios from 'axios';
 import {
   GetCartTotals,
   GetCustomerId,
@@ -105,6 +106,10 @@ const CartSummarryType2: FC<_props> = ({ selectedShippingModel }) => {
 
   const postData = (path: string, params: { [key: string]: string }) => {
     console.log(path, params);
+    axios
+      .post(path, params)
+      .then((response: any) => console.log(response))
+      .catch((error: any) => console.error(error));
     // const hidden_form = document.createElement('form');
     // hidden_form.method = 'POST';
     // hidden_form.action = path;
