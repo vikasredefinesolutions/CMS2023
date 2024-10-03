@@ -13,6 +13,7 @@ import { _shippingMethod } from '@controllers/checkoutController';
 import SummarryController from '@controllers/summarryController';
 import { punchoutCheckout } from '@services/checkout.service';
 import axios from 'axios';
+
 import {
   GetCartTotals,
   GetCustomerId,
@@ -107,10 +108,6 @@ const CartSummarryType2: FC<_props> = ({ selectedShippingModel }) => {
   const postData = (path: string, params: { [key: string]: string }) => {
     console.log(path, params);
 
-    // const hidden_form = document.createElement('form');
-    // hidden_form.method = 'POST';
-    // hidden_form.action = path;
-
     var bodyFormData = new FormData();
 
     for (const key in params) {
@@ -118,17 +115,38 @@ const CartSummarryType2: FC<_props> = ({ selectedShippingModel }) => {
         bodyFormData.append(key, params[key]);
       }
     }
-    axios({
+
+    let config = {
       method: 'post',
+      maxBodyLength: Infinity,
       url: path,
-      data: bodyFormData,
       headers: {
-        'Content-Type': 'multipart/form-data',
-        'Access-Control-Allow-Origin': '*',
+        Cookie: 'PHPSESSID=ru3cren2losnfgt5r8u5mrlhud',
+        // ...bodyFormData.getHeaders(),
       },
-    })
-      .then((response: any) => console.log(response))
-      .catch((error: any) => console.error(error));
+      data: bodyFormData,
+    };
+
+    axios
+      .request(config)
+      .then((response: any) => {
+        console.log(JSON.stringify(response.data));
+      })
+      .catch((error: any) => {
+        console.log(error);
+      });
+
+    // axios({
+    //   method: 'post',
+    //   url: path,
+    //   data: bodyFormData,
+    //   headers: {
+    //     'Content-Type': 'multipart/form-data',
+    //     'Access-Control-Allow-Origin': '*',
+    //   },
+    // })
+    //   .then((response: any) => console.log(response))
+    //   .catch((error: any) => console.error(error));
     // document.body.appendChild(hidden_form);
     // hidden_form.submit();
   };
