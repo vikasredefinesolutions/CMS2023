@@ -118,8 +118,15 @@ const CartSummarryType2: FC<_props> = ({ selectedShippingModel }) => {
         bodyFormData.append(key, params[key]);
       }
     }
-    axios
-      .post(path, bodyFormData)
+    axios({
+      method: 'post',
+      url: path,
+      data: bodyFormData,
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        'Access-Control-Allow-Origin': '*',
+      },
+    })
       .then((response: any) => console.log(response))
       .catch((error: any) => console.error(error));
     // document.body.appendChild(hidden_form);
