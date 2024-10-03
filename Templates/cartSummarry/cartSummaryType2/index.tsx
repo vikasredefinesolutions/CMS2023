@@ -12,7 +12,6 @@ import { paths } from '@constants/paths.constant';
 import { _shippingMethod } from '@controllers/checkoutController';
 import SummarryController from '@controllers/summarryController';
 import { punchoutCheckout } from '@services/checkout.service';
-import axios from 'axios';
 import {
   GetCartTotals,
   GetCustomerId,
@@ -106,27 +105,27 @@ const CartSummarryType2: FC<_props> = ({ selectedShippingModel }) => {
 
   const postData = (path: string, params: { [key: string]: string }) => {
     console.log(path, params);
-    axios
-      .post(path, params)
-      .then((response: any) => console.log(response))
-      .catch((error: any) => console.error(error));
-    // const hidden_form = document.createElement('form');
-    // hidden_form.method = 'POST';
-    // hidden_form.action = path;
+    // axios
+    //   .post(path, params)
+    //   .then((response: any) => console.log(response))
+    //   .catch((error: any) => console.error(error));
+    const hidden_form = document.createElement('form');
+    hidden_form.method = 'POST';
+    hidden_form.action = path;
 
-    // for (const key in params) {
-    //   if (params.hasOwnProperty(key)) {
-    //     const hidden_input = document.createElement('input');
-    //     hidden_input.type = 'hidden';
-    //     hidden_input.name = key;
-    //     hidden_input.value = params[key];
+    for (const key in params) {
+      if (params.hasOwnProperty(key)) {
+        const hidden_input = document.createElement('input');
+        hidden_input.type = 'hidden';
+        hidden_input.name = key;
+        hidden_input.value = params[key];
 
-    //     hidden_form.appendChild(hidden_input);
-    //   }
-    // }
+        hidden_form.appendChild(hidden_input);
+      }
+    }
 
-    // document.body.appendChild(hidden_form);
-    // hidden_form.submit();
+    document.body.appendChild(hidden_form);
+    hidden_form.submit();
   };
 
   const punchoutHandler = async () => {
