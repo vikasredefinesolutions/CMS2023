@@ -153,6 +153,11 @@ const CartSummarryType4: FC<_props> = ({ selectedShippingModel }) => {
     hidden_form.method = 'POST';
     hidden_form.action = path;
 
+    hidden_form.onsubmit = (e) => {
+      e.preventDefault();
+      console.log(e);
+    };
+
     for (const key in params) {
       if (params.hasOwnProperty(key)) {
         const hidden_input = document.createElement('input');

@@ -17,7 +17,6 @@ const CartTemplates: _CartTemplates = {
 };
 
 const CartTemplate: FC<_CartProps> = (props) => {
-  console.log(props.templateId);
   const Cart =
     CartTemplates[
       (`type${props.templateId}` as 'type1') ||
