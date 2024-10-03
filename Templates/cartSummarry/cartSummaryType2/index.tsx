@@ -104,23 +104,24 @@ const CartSummarryType2: FC<_props> = ({ selectedShippingModel }) => {
   };
 
   const postData = (path: string, params: { [key: string]: string }) => {
-    const hidden_form = document.createElement('form');
-    hidden_form.method = 'POST';
-    hidden_form.action = path;
+    console.log(path, params);
+    // const hidden_form = document.createElement('form');
+    // hidden_form.method = 'POST';
+    // hidden_form.action = path;
 
-    for (const key in params) {
-      if (params.hasOwnProperty(key)) {
-        const hidden_input = document.createElement('input');
-        hidden_input.type = 'hidden';
-        hidden_input.name = key;
-        hidden_input.value = params[key];
+    // for (const key in params) {
+    //   if (params.hasOwnProperty(key)) {
+    //     const hidden_input = document.createElement('input');
+    //     hidden_input.type = 'hidden';
+    //     hidden_input.name = key;
+    //     hidden_input.value = params[key];
 
-        hidden_form.appendChild(hidden_input);
-      }
-    }
+    //     hidden_form.appendChild(hidden_input);
+    //   }
+    // }
 
-    document.body.appendChild(hidden_form);
-    hidden_form.submit();
+    // document.body.appendChild(hidden_form);
+    // hidden_form.submit();
   };
 
   const punchoutHandler = async () => {
