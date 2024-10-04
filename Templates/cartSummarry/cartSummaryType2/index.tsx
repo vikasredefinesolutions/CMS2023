@@ -117,9 +117,12 @@ const CartSummarryType2: FC<_props> = ({ selectedShippingModel }) => {
       method: 'post',
       maxBodyLength: Infinity,
       url: path,
+      withCredentials: true,
       headers: {
-        Cookie: 'PHPSESSID=ru3cren2losnfgt5r8u5mrlhud',
         'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': '',
+        'Access-Control-Allow-Credentials': true,
+        'Access-Control-Allow-Headers': 'Content-Type,Authorization',
       },
       data: bodyFormData,
     };
