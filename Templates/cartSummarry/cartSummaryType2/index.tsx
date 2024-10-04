@@ -106,10 +106,7 @@ const CartSummarryType2: FC<_props> = ({ selectedShippingModel }) => {
   };
 
   const postData = (path: string, params: { [key: string]: string }) => {
-    console.log(path, params);
-
     var bodyFormData = new FormData();
-
     for (const key in params) {
       if (params.hasOwnProperty(key)) {
         bodyFormData.append(key, params[key]);
@@ -122,7 +119,7 @@ const CartSummarryType2: FC<_props> = ({ selectedShippingModel }) => {
       url: path,
       headers: {
         Cookie: 'PHPSESSID=ru3cren2losnfgt5r8u5mrlhud',
-        // ...bodyFormData.getHeaders(),
+        'Access-Control-Allow-Origin': '*',
       },
       data: bodyFormData,
     };
