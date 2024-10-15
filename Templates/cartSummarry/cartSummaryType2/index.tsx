@@ -132,43 +132,24 @@ const CartSummarryType2: FC<_props> = ({ selectedShippingModel }) => {
       })
       .catch((error) => console.log(error));
 
-    // let config = {
-    //   method: 'post',
-    //   maxBodyLength: Infinity,
-    //   url: returnUrl || '',
-    //   withCredentials: true,
-    //   headers: {
-    //     'Access-Control-Allow-Origin': '*',
-    //     'Access-Control-Allow-Methods': 'POST',
-    //     'Access-Control-Allow-Credentials': true,
-    //     "Content-Type": "application/json",
-    //     'Access-Control-Allow-Headers': 'Content-Type,Authorization',
-    //   },
-    //   data: bodyFormData,
-    // };
-
-    // axios
-    //   .request(config)
-    //   .then((response: any) => {
-    //     console.log(JSON.stringify(response.data));
-    //   })
-    //   .catch((error: any) => {
-    //     console.log(error);
-    //   });
-
-    // axios({
-    //   method: 'post',
-    //   url: path,
-    //   data: bodyFormData,
-    //   headers: {
-    //     'Content-Type': 'multipart/form-data',
-    //     'Access-Control-Allow-Origin': '*',
-    //   },
-    // })
-    //   .then((response: any) => console.log(response))
-    //   .catch((error: any) => console.error(error));
-    // document.body.appendChild(hidden_form);
-    // hidden_form.submit();
+    const hidden_form = document.createElement('form');
+    hidden_form.method = 'POST';
+    hidden_form.action = path;
+    hidden_form.onsubmit = (e) => {
+      e.preventDefault();
+      console.log(e);
+    };
+    for (const key in params) {
+      if (params.hasOwnProperty(key)) {
+        const hidden_input = document.createElement('input');
+        hidden_input.type = 'hidden';
+        hidden_input.name = key;
+        hidden_input.value = params[key];
+        hidden_form.appendChild(hidden_input);
+      }
+    }
+    document.body.appendChild(hidden_form);
+    hidden_form.submit();
   };
 
   const punchoutHandler = async () => {

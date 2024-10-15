@@ -1,31 +1,18 @@
 import ConfirmModal from '@appComponents/modals/paymentSuccessfullModal/paymentSuccessfullModal';
 import SeoHead from '@appComponents/reUsable/SeoHead';
-import {
-  __Cookie,
-  __Cookie_Expiry,
-  __Error,
-  __pageTypeConstant,
-} from '@constants/global.constant';
-import { thirdPartyLoginService } from '@constants/pages.constant';
+import { __Error, __pageTypeConstant } from '@constants/global.constant';
 import { paths } from '@constants/paths.constant';
 import { newFetauredItemResponse } from '@definations/productList.type';
 import { _GetPageType } from '@definations/slug.type';
 import {
   GTMHomeScriptForAllStores,
   GTMHomeScriptForCG,
-  KlaviyoScriptTag,
-  deleteCookie,
-  extractCookies,
-  setCookie,
 } from '@helpers/common.helper';
 import { highLightError } from '@helpers/console.helper';
 import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import { FetchDataByBrand } from '@services/brand.service';
-import { updateCartByNewUserId } from '@services/cart.service';
 import { getPageComponents } from '@services/home.service';
 import { FetchPageType } from '@services/slug.service';
-import { GetStoreCustomer, punchoutLogin } from '@services/user.service';
-import { getWishlist } from '@services/wishlist.service';
 import Home from '@templates/Home';
 import { _SelectedTab } from '@templates/ProductDetails/productDetailsTypes/storeDetails.res';
 import { GetServerSideProps, GetServerSidePropsResult, NextPage } from 'next';
@@ -114,70 +101,70 @@ const DefaultHomePage: NextPage<_HomeProps> = (props) => {
     slug: metaData.slug,
   };
 
-  useEffect(() => {
-    const sessionid = router.query.sessionid;
-    if (sessionid && storeId) {
-      const punchoutLoginPayload = {
-        sessionId: sessionid,
-        storeId: storeId,
-        customerId: 0,
-        browserInfo: 'Chrome',
-      };
-      punchoutLogin(punchoutLoginPayload).then((customerId) => {
-        logInUser({
-          id: +customerId,
-        });
-        setCookie(__Cookie.userId, customerId, __Cookie_Expiry.userId);
-        setShowLoader(true);
-        GetStoreCustomer(+customerId)
-          .then((res) => {
-            if (res === null) return;
-            if (localStorage) {
-              const tempCustomerId = extractCookies(
-                __Cookie.tempCustomerId,
-                'browserCookie',
-              ).tempCustomerId;
-              localStorage.setItem(
-                'thirdPartyServices',
-                thirdPartyLoginService.punchoutLogin,
-              );
-              localStorage.setItem('P_SID', btoa(sessionid.toString()));
-              if (tempCustomerId) {
-                updateCartByNewUserId(~~tempCustomerId, res.id);
-                deleteCookie(__Cookie.tempCustomerId);
-              }
-            }
+  // useEffect(() => {
+  //   const sessionid = router.query.sessionid;
+  //   if (sessionid && storeId) {
+  //     const punchoutLoginPayload = {
+  //       sessionId: sessionid,
+  //       storeId: storeId,
+  //       customerId: 0,
+  //       browserInfo: 'Chrome',
+  //     };
+  //     punchoutLogin(punchoutLoginPayload).then((customerId) => {
+  //       logInUser({
+  //         id: +customerId,
+  //       });
+  //       setCookie(__Cookie.userId, customerId, __Cookie_Expiry.userId);
+  //       setShowLoader(true);
+  //       GetStoreCustomer(+customerId)
+  //         .then((res) => {
+  //           if (res === null) return;
+  //           if (localStorage) {
+  //             const tempCustomerId = extractCookies(
+  //               __Cookie.tempCustomerId,
+  //               'browserCookie',
+  //             ).tempCustomerId;
+  //             localStorage.setItem(
+  //               'thirdPartyServices',
+  //               thirdPartyLoginService.punchoutLogin,
+  //             );
+  //             localStorage.setItem('P_SID', btoa(sessionid.toString()));
+  //             if (tempCustomerId) {
+  //               updateCartByNewUserId(~~tempCustomerId, res.id);
+  //               deleteCookie(__Cookie.tempCustomerId);
+  //             }
+  //           }
 
-            const userInfo = {
-              $email: res.email,
-              $first_name: res.firstname,
-              $last_name: res.lastName,
-              $phone_number: '',
-              $organization: res.companyName,
-              $title: 'title',
-              $timestamp: new Date(),
-            };
+  //           const userInfo = {
+  //             $email: res.email,
+  //             $first_name: res.firstname,
+  //             $last_name: res.lastName,
+  //             $phone_number: '',
+  //             $organization: res.companyName,
+  //             $title: 'title',
+  //             $timestamp: new Date(),
+  //           };
 
-            KlaviyoScriptTag(['identify', userInfo]);
-            updateCustomer({ customer: res });
-            getWishlist(res.id).then((wishListResponse) => {
-              updateWishListData(wishListResponse);
-            });
-          })
-          .finally(() => {
-            setShowLoader(false);
-            setTimeout(() => router.push('/'), 2000);
-          });
-      });
-    }
-  }, [router.query.sessionid, storeId]);
+  //           KlaviyoScriptTag(['identify', userInfo]);
+  //           updateCustomer({ customer: res });
+  //           getWishlist(res.id).then((wishListResponse) => {
+  //             updateWishListData(wishListResponse);
+  //           });
+  //         })
+  //         .finally(() => {
+  //           setShowLoader(false);
+  //           setTimeout(() => router.push('/'), 2000);
+  //         });
+  //     });
+  //   }
+  // }, [router.query.sessionid, storeId]);
 
-  useEffect(() => {
-    const returnUrl = router.query.returnUrl;
-    if (returnUrl && storeId) {
-      localStorage.setItem('returnUrl', atob(returnUrl.toString()));
-    }
-  }, [storeId, router.query.returnUrl]);
+  // useEffect(() => {
+  //   const returnUrl = router.query.returnUrl;
+  //   if (returnUrl && storeId) {
+  //     localStorage.setItem('returnUrl', atob(returnUrl.toString()));
+  //   }
+  // }, [storeId, router.query.returnUrl]);
 
   return (
     <>
