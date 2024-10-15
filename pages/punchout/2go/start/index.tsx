@@ -70,7 +70,7 @@ const Punchout = (props: any) => {
         );
         localStorage.setItem('returnUrl', obj.return_url);
 
-        const sessionid = urlSearch.get('sessionid');
+        const sessionid = getParameterByName('sessionid', url);
         console.log(urlSearch, obj, getParameterByName('sessionid', url));
         if (sessionid && storeId) {
           const punchoutLoginPayload = {
