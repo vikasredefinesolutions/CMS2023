@@ -12,7 +12,6 @@ import { paths } from '@constants/paths.constant';
 import { _shippingMethod } from '@controllers/checkoutController';
 import SummarryController from '@controllers/summarryController';
 import { punchoutCheckout } from '@services/checkout.service';
-import axios from 'axios';
 
 import {
   GetCartTotals,
@@ -114,28 +113,38 @@ const CartSummarryType2: FC<_props> = ({ selectedShippingModel }) => {
     }
     const returnUrl = localStorage.getItem('returnUrl');
     console.log(returnUrl);
-    let config = {
-      method: 'post',
-      maxBodyLength: Infinity,
-      url: returnUrl || '',
-      withCredentials: true,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'POST',
-        'Access-Control-Allow-Credentials': true,
-        'Access-Control-Allow-Headers': 'Content-Type,Authorization',
-      },
-      data: bodyFormData,
-    };
 
-    axios
-      .request(config)
-      .then((response: any) => {
-        console.log(JSON.stringify(response.data));
-      })
-      .catch((error: any) => {
-        console.log(error);
-      });
+    fetch(returnUrl || '', {
+      method: 'POST',
+      body: JSON.stringify(bodyFormData),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    // let config = {
+    //   method: 'post',
+    //   maxBodyLength: Infinity,
+    //   url: returnUrl || '',
+    //   withCredentials: true,
+    //   headers: {
+    //     'Access-Control-Allow-Origin': '*',
+    //     'Access-Control-Allow-Methods': 'POST',
+    //     'Access-Control-Allow-Credentials': true,
+    //     "Content-Type": "application/json",
+    //     'Access-Control-Allow-Headers': 'Content-Type,Authorization',
+    //   },
+    //   data: bodyFormData,
+    // };
+
+    // axios
+    //   .request(config)
+    //   .then((response: any) => {
+    //     console.log(JSON.stringify(response.data));
+    //   })
+    //   .catch((error: any) => {
+    //     console.log(error);
+    //   });
 
     // axios({
     //   method: 'post',
