@@ -31,6 +31,7 @@ const Punchout = (props: any) => {
         lang: 'en-US',
       };
       console.log(obj);
+      sessionStorage.setItem('json', JSON.stringify(obj));
       let a = `${JSON.stringify(obj)}`;
       const b = await PunchoutPostApi(a);
       const xml = b
