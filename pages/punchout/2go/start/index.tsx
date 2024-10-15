@@ -1,14 +1,13 @@
 import { __Cookie_Expiry } from '@constants/common.constant';
 import { __Cookie } from '@constants/global.constant';
 import { thirdPartyLoginService } from '@constants/pages.constant';
-import { WishlistType } from '@definations/wishlist.type';
 import {
   deleteCookie,
   extractCookies,
   KlaviyoScriptTag,
   setCookie,
 } from '@helpers/common.helper';
-import { useTypedSelector_v2 } from '@hooks_v2/index';
+import { useActions_v2, useTypedSelector_v2 } from '@hooks_v2/index';
 import { updateCartByNewUserId } from '@services/cart.service';
 import { PunchoutPostApi } from '@services/punchout.service';
 import { GetStoreCustomer, punchoutLogin } from '@services/user.service';
@@ -20,7 +19,13 @@ import { useEffect } from 'react';
 const Punchout = (props: any) => {
   const router = useRouter();
   const { id: storeId } = useTypedSelector_v2((state) => state.store);
-
+  const {
+    hideModal,
+    logInUser,
+    setShowLoader,
+    updateCustomer,
+    updateWishListData,
+  } = useActions_v2();
   function parseXmlToJson(xml: any) {
     const json: any = {};
     for (const res of xml.matchAll(
@@ -143,20 +148,3 @@ export const getServerSideProps = async (context: any) => {
     props: { body: body.toString(), returnUrl: context.req.headers.host },
   };
 };
-function logInUser(arg0: { id: number }) {
-  throw new Error('Function not implemented.');
-}
-
-function setShowLoader(arg0: boolean) {
-  throw new Error('Function not implemented.');
-}
-
-function updateCustomer(arg0: {
-  customer: import('../../../../definations_v2/APIs/user.res').UserType;
-}) {
-  throw new Error('Function not implemented.');
-}
-
-function updateWishListData(wishListResponse: WishlistType) {
-  throw new Error('Function not implemented.');
-}
