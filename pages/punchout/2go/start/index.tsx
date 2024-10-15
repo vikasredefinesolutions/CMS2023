@@ -30,15 +30,16 @@ const Punchout = (props: any) => {
         timestamp: '2003-08-22T11:50:27',
         lang: 'en-US',
       };
-      console.log(obj);
-      sessionStorage.setItem('json', JSON.stringify(obj));
+
       let a = `${JSON.stringify(obj)}`;
       const b = await PunchoutPostApi(a);
       const xml = b
         .toString()
         .replace('###StoreUrl###', `https://${props.returnUrl}`);
       const xmlJson = parseXmlToJson(xml);
-      const url = xmlJson.cXML.Response.PunchOutSetupResponse.StartPage.URL;
+      const url = `${
+        xmlJson.cXML.Response.PunchOutSetupResponse.StartPage.URL
+      }&returnUrl=${btoa(obj.return_url)}`;
       window.open(url);
     })();
   }, []);

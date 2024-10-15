@@ -172,6 +172,13 @@ const DefaultHomePage: NextPage<_HomeProps> = (props) => {
     }
   }, [router.query.sessionid, storeId]);
 
+  useEffect(() => {
+    const returnUrl = router.query.returnUrl;
+    if (returnUrl && storeId) {
+      console.log(atob(returnUrl));
+    }
+  }, [storeId, router.query.returnUrl]);
+
   return (
     <>
       <SeoHead
