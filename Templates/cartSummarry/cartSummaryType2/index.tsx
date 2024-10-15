@@ -116,9 +116,9 @@ const CartSummarryType2: FC<_props> = ({ selectedShippingModel }) => {
 
     fetch(returnUrl || '', {
       method: 'POST',
-      body: JSON.stringify(bodyFormData),
+      body: bodyFormData,
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/x-www-form-urlencoded',
       },
     });
 
