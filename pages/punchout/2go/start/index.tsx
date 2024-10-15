@@ -122,7 +122,7 @@ const Punchout = (props: any) => {
               })
               .finally(() => {
                 setShowLoader(false);
-                setTimeout(() => router.push('/'), 2000);
+                // setTimeout(() => router.push('/'), 2000);
               });
           });
         }
