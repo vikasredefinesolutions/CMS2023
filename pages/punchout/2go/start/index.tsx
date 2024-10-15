@@ -33,6 +33,15 @@ const Punchout = (props: any) => {
     return json;
   }
 
+  function getParameterByName(name: string, url = window.location.href) {
+    name = name.replace(/[\[\]]/g, '\\$&');
+    var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+      results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, ' '));
+  }
+
   useEffect(() => {
     if (storeId) {
       (async () => {
@@ -62,7 +71,7 @@ const Punchout = (props: any) => {
         localStorage.setItem('returnUrl', obj.return_url);
 
         const sessionid = urlSearch.get('sessionid');
-        console.log(sessionid);
+        console.log(urlSearch, obj, getParameterByName('sessionid', url));
         if (sessionid && storeId) {
           const punchoutLoginPayload = {
             sessionId: sessionid,
