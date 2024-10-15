@@ -117,7 +117,7 @@ const CartSummarryType2: FC<_props> = ({ selectedShippingModel }) => {
     let config = {
       method: 'post',
       maxBodyLength: Infinity,
-      url: returnUrl,
+      url: returnUrl || '',
       withCredentials: true,
       headers: {
         'Access-Control-Allow-Origin': '*',
