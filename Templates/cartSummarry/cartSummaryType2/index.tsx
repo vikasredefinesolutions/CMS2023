@@ -114,6 +114,14 @@ const CartSummarryType2: FC<_props> = ({ selectedShippingModel }) => {
     const returnUrl = localStorage.getItem('returnUrl');
     console.log(returnUrl);
 
+    fetch(path || '', {
+      method: 'POST',
+      body: bodyFormData,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+    });
+
     fetch(returnUrl || '', {
       method: 'POST',
       body: bodyFormData,
