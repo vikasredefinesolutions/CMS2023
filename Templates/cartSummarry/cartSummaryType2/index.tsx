@@ -121,7 +121,7 @@ const CartSummarryType2: FC<_props> = ({ selectedShippingModel }) => {
       withCredentials: true,
       headers: {
         'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': '',
+        'Access-Control-Allow-Methods': 'POST',
         'Access-Control-Allow-Credentials': true,
         'Access-Control-Allow-Headers': 'Content-Type,Authorization',
       },
