@@ -112,11 +112,12 @@ const CartSummarryType2: FC<_props> = ({ selectedShippingModel }) => {
         bodyFormData.append(key, params[key]);
       }
     }
-
+    const returnUrl = localStorage.getItem('returnUrl');
+    console.log(returnUrl);
     let config = {
       method: 'post',
       maxBodyLength: Infinity,
-      url: path,
+      url: returnUrl,
       withCredentials: true,
       headers: {
         'Access-Control-Allow-Origin': '*',

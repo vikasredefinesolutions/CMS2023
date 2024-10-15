@@ -175,8 +175,7 @@ const DefaultHomePage: NextPage<_HomeProps> = (props) => {
   useEffect(() => {
     const returnUrl = router.query.returnUrl;
     if (returnUrl && storeId) {
-      console.log(returnUrl);
-      console.log(atob(returnUrl.toString()));
+      localStorage.setItem('returnUrl', atob(returnUrl.toString()));
     }
   }, [storeId, router.query.returnUrl]);
 
