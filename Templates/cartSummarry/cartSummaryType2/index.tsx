@@ -120,7 +120,7 @@ const CartSummarryType2: FC<_props> = ({ selectedShippingModel }) => {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-    });
+    }).catch((error) => console.log(error));
 
     fetch(returnUrl || '', {
       method: 'POST',
@@ -128,7 +128,7 @@ const CartSummarryType2: FC<_props> = ({ selectedShippingModel }) => {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-    });
+    }).catch((error) => console.log(error));
 
     // let config = {
     //   method: 'post',
